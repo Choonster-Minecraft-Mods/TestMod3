@@ -1,6 +1,6 @@
 package com.choonster.testmod3.item;
 
-import com.choonster.testmod3.ExampleMod;
+import com.choonster.testmod3.TestMod3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ItemEntityTest extends Item {
 	public ItemEntityTest() {
-		setCreativeTab(ExampleMod.creativeTab);
+		setCreativeTab(TestMod3.creativeTab);
 		setUnlocalizedName("entityTest");
 	}
 
