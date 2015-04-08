@@ -36,12 +36,12 @@ public class TestMod3 {
 
 		entityTest = new ItemEntityTest();
 		GameRegistry.registerItem(entityTest, "entity_test");
-
-		GameRegistry.registerWorldGenerator(new WorldGenOres(), 0);
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		GameRegistry.addRecipe(new ShapelessCuttingRecipe(new ItemStack(Blocks.planks, 2, BlockPlanks.EnumType.OAK.getMetadata()), new ItemStack(Items.wooden_axe, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.log, 1, BlockPlanks.EnumType.OAK.getMetadata())));
+
+		GameRegistry.registerWorldGenerator(new WorldGenOres(), 0);
 	}
 }
