@@ -17,6 +17,9 @@ buildscript {
 
 apply plugin: 'forge'
 
+srcCompat = JavaVersion.VERSION_1_8
+targetCompat = JavaVersion.VERSION_1_8
+
 version = "1.0"
 group= "com.choonster.testmod3" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "TestMod3"
