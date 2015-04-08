@@ -1,5 +1,6 @@
-package com.choonster.testmod3;
+package com.choonster.testmod3.item;
 
+import com.choonster.testmod3.ExampleMod;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;

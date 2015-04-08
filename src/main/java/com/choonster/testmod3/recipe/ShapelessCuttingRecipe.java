@@ -1,4 +1,4 @@
-package com.choonster.testmod3;
+package com.choonster.testmod3.recipe;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemAxe;

@@ -1,4 +1,4 @@
-package com.choonster.testmod3;
+package com.choonster.testmod3.item;
 
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;

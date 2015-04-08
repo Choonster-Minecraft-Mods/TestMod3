@@ -1,5 +1,8 @@
 package com.choonster.testmod3;
 
+import com.choonster.testmod3.item.ItemEntityTest;
+import com.choonster.testmod3.item.ToolWoodAxe;
+import com.choonster.testmod3.recipe.ShapelessCuttingRecipe;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;

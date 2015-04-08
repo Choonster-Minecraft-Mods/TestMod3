@@ -1,4 +1,4 @@
-package com.choonster.testmod3;
+package com.choonster.testmod3.util;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;

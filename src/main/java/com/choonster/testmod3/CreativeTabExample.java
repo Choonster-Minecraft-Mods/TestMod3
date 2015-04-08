@@ -1,5 +1,6 @@
 package com.choonster.testmod3;
 
+import com.choonster.testmod3.util.SwordUpgrades;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
