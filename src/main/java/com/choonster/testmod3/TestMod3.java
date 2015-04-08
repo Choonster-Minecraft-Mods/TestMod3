@@ -3,6 +3,7 @@ package com.choonster.testmod3;
 import com.choonster.testmod3.item.ItemEntityTest;
 import com.choonster.testmod3.item.ToolWoodAxe;
 import com.choonster.testmod3.recipe.ShapelessCuttingRecipe;
+import com.choonster.testmod3.worldgen.WorldGenOres;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -35,6 +36,8 @@ public class TestMod3 {
 
 		entityTest = new ItemEntityTest();
 		GameRegistry.registerItem(entityTest, "entity_test");
+
+		GameRegistry.registerWorldGenerator(new WorldGenOres(), 0);
 	}
 
 	@EventHandler
