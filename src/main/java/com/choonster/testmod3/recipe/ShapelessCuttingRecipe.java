@@ -4,8 +4,8 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapelessRecipes;
-import scala.actors.threadpool.Arrays;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class ShapelessCuttingRecipe extends ShapelessRecipes {
