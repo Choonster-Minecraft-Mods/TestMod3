@@ -1,0 +1,13 @@
+{
+	"records.solaris": {
+		"category": "record",
+		"sounds": [
+			{
+				"name": "records/solaris",
+				"stream": true
+			}
+		]
+	}
+
+	aaaaa
+}

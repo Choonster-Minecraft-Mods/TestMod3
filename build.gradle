@@ -71,3 +71,10 @@ processResources
         exclude 'mcmod.info'
     }
 }
+
+// Fix resources not being loaded in IDEA
+// http://stackoverflow.com/a/27624502
+sourceSets {
+    main { output.resourcesDir = output.classesDir }
+}
+

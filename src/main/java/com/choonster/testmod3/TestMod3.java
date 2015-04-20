@@ -1,6 +1,7 @@
 package com.choonster.testmod3;
 
 import com.choonster.testmod3.item.ItemEntityTest;
+import com.choonster.testmod3.item.ItemRecordSolaris;
 import com.choonster.testmod3.item.ToolWoodAxe;
 import com.choonster.testmod3.recipe.ShapelessCuttingRecipe;
 import com.choonster.testmod3.worldgen.WorldGenOres;
@@ -10,6 +11,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -26,6 +28,9 @@ public class TestMod3 {
 
 	public static Item woodenAxe;
 	public static Item entityTest;
+	public static Item solarisRecord;
+
+	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -36,6 +41,12 @@ public class TestMod3 {
 
 		entityTest = new ItemEntityTest();
 		GameRegistry.registerItem(entityTest, "entity_test");
+
+		solarisRecord = new ItemRecordSolaris();
+		GameRegistry.registerItem(solarisRecord, "solaris_record");
+
+
+		TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10).setRepairItem(new ItemStack(Items.glowstone_dust));
 	}
 
 	@EventHandler
