@@ -4,6 +4,7 @@ import com.choonster.testmod3.item.ItemEntityTest;
 import com.choonster.testmod3.item.ItemRecordSolaris;
 import com.choonster.testmod3.item.ToolWoodAxe;
 import com.choonster.testmod3.recipe.ShapelessCuttingRecipe;
+import com.choonster.testmod3.util.BiomeBlockReplacer;
 import com.choonster.testmod3.worldgen.WorldGenOres;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.creativetab.CreativeTabs;
@@ -11,10 +12,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -54,5 +57,10 @@ public class TestMod3 {
 		GameRegistry.addRecipe(new ShapelessCuttingRecipe(new ItemStack(Blocks.planks, 2, BlockPlanks.EnumType.OAK.getMetadata()), new ItemStack(Items.wooden_axe, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.log, 1, BlockPlanks.EnumType.OAK.getMetadata())));
 
 		GameRegistry.registerWorldGenerator(new WorldGenOres(), 0);
+	}
+
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event) {
+		MinecraftForge.TERRAIN_GEN_BUS.register(new BiomeBlockReplacer());
 	}
 }
