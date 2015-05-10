@@ -20,7 +20,7 @@ public class ItemHeavy extends Item {
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 
-		if (entityIn instanceof EntityLivingBase){ // If the Entity is an instance of EntityLivingBase,
+		if (entityIn instanceof EntityLivingBase) { // If the Entity is an instance of EntityLivingBase,
 			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 10, 1)); // Apply Slowness 2 (amplifier = 1) for 10 ticks (0.5 seconds)
 		}
 	}
