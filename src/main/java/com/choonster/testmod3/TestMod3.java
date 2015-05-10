@@ -1,6 +1,7 @@
 package com.choonster.testmod3;
 
 import com.choonster.testmod3.item.ItemEntityTest;
+import com.choonster.testmod3.item.ItemHeavy;
 import com.choonster.testmod3.item.ItemRecordSolaris;
 import com.choonster.testmod3.item.ToolWoodAxe;
 import com.choonster.testmod3.recipe.ShapelessCuttingRecipe;
@@ -32,6 +33,7 @@ public class TestMod3 {
 	public static Item woodenAxe;
 	public static Item entityTest;
 	public static Item solarisRecord;
+	public static Item heavy;
 
 	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE;
 
@@ -48,6 +50,8 @@ public class TestMod3 {
 		solarisRecord = new ItemRecordSolaris();
 		GameRegistry.registerItem(solarisRecord, "solaris_record");
 
+		heavy = new ItemHeavy();
+		GameRegistry.registerItem(heavy, "heavy");
 
 		TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10).setRepairItem(new ItemStack(Items.glowstone_dust));
 	}
