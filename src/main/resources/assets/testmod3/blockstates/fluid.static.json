@@ -1,0 +1,22 @@
+{
+	"variants": {
+		"normal": { "model": "testmod3:fluid_static" },
+		"inventory": { "model": "testmod3:fluid_static" },
+		"level=0": { "model": "testmod3:fluid_static" },
+		"level=1": { "model": "testmod3:fluid_static" },
+		"level=2": { "model": "testmod3:fluid_static" },
+		"level=3": { "model": "testmod3:fluid_static" },
+		"level=4": { "model": "testmod3:fluid_static" },
+		"level=5": { "model": "testmod3:fluid_static" },
+		"level=6": { "model": "testmod3:fluid_static" },
+		"level=7": { "model": "testmod3:fluid_static" },
+		"level=8": { "model": "testmod3:fluid_static" },
+		"level=9": { "model": "testmod3:fluid_static" },
+		"level=10": { "model": "testmod3:fluid_static" },
+		"level=11": { "model": "testmod3:fluid_static" },
+		"level=12": { "model": "testmod3:fluid_static" },
+		"level=13": { "model": "testmod3:fluid_static" },
+		"level=14": { "model": "testmod3:fluid_static" },
+		"level=15": { "model": "testmod3:fluid_static" }
+	}
+}

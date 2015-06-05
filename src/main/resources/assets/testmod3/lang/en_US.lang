@@ -1,2 +1,6 @@
+fluid.static=Static Fluid
+
+tile.fluid.static.name=Static Fluid
+
 item.record.solaris.desc=Solaris (Path of Exile)
 item.heavy.name=Heavy Item

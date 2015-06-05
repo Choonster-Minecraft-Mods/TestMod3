@@ -1,6 +1,7 @@
 package com.choonster.testmod3;
 
 import com.choonster.testmod3.init.ModBlocks;
+import com.choonster.testmod3.init.ModFluids;
 import com.choonster.testmod3.init.ModItems;
 import com.choonster.testmod3.util.BiomeBlockReplacer;
 import com.choonster.testmod3.worldgen.WorldGenOres;
@@ -25,6 +26,7 @@ public class TestMod3 {
 	public void preInit(FMLPreInitializationEvent event) {
 		creativeTab = new CreativeTabExample();
 
+		ModFluids.registerFluids();
 		ModBlocks.registerBlocks();
 		ModItems.registerItems();
 	}
