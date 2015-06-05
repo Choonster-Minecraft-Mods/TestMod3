@@ -2,9 +2,6 @@ package com.choonster.testmod3.block;
 
 import com.choonster.testmod3.TestMod3;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fluids.BlockFluidFinite;
 import net.minecraftforge.fluids.Fluid;
 
@@ -19,8 +16,9 @@ public class BlockFluidStatic extends BlockFluidFinite {
 		setUnlocalizedName(fluid.getUnlocalizedName());
 	}
 
+	// Use the JSON model renderer instead of the non-functional Forge Fluid renderer
 	@Override
-	public Vec3 getFlowVector(IBlockAccess world, BlockPos pos) {
-		return new Vec3(0, 0, 0);
+	public int getRenderType() {
+		return 3;
 	}
 }
