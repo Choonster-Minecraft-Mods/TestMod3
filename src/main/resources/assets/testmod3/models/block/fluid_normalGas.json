@@ -1,0 +1,7 @@
+{
+	"parent": "block/cube_all",
+	"textures": {
+		"all": "testmod3:blocks/fluid_normalGas_still",
+		"flowing": "testmod3:blocks/fluid_normalGas_flow"
+	}
+}

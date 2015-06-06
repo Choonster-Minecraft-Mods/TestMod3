@@ -1,7 +1,7 @@
 {
 	"variants": {
 		"normal": {
-			"model": "testmod3:fluid_static"
+			"model": "testmod3:fluid_normal"
 		}
 	}
 }

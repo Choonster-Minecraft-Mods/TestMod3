@@ -1,6 +1,7 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"all": "testmod3:blocks/fluid_static"
+		"all": "testmod3:blocks/fluid_static",
+		"flowing": "testmod3:blocks/fluid_static"
 	}
 }

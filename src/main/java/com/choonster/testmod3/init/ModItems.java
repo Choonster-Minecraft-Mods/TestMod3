@@ -1,10 +1,7 @@
 package com.choonster.testmod3.init;
 
 import com.choonster.testmod3.TestMod3;
-import com.choonster.testmod3.item.ItemEntityTest;
-import com.choonster.testmod3.item.ItemHeavy;
-import com.choonster.testmod3.item.ItemRecordSolaris;
-import com.choonster.testmod3.item.ToolWoodAxe;
+import com.choonster.testmod3.item.*;
 import com.choonster.testmod3.recipe.ShapelessCuttingRecipe;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.init.Blocks;
@@ -21,6 +18,7 @@ public class ModItems {
 	public static Item entityTest;
 	public static Item solarisRecord;
 	public static Item heavy;
+	public static ItemBucketTestMod3 bucket;
 
 	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE;
 
@@ -37,7 +35,14 @@ public class ModItems {
 		heavy = new ItemHeavy();
 		GameRegistry.registerItem(heavy, "heavy");
 
+		bucket = registerItem(new ItemBucketTestMod3());
+
 		TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10).setRepairItem(new ItemStack(Items.glowstone_dust));
+	}
+
+	private static <T extends Item> T registerItem(T item) {
+		GameRegistry.registerItem(item, item.getUnlocalizedName().replace("item.", ""));
+		return item;
 	}
 
 	public static void addRecipes() {
