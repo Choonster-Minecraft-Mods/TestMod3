@@ -19,6 +19,7 @@ public class ModItems {
 	public static Item solarisRecord;
 	public static Item heavy;
 	public static ItemBucketTestMod3 bucket;
+	public static ItemEntityInteractionTest entityInteractionTest;
 
 	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE;
 
@@ -36,6 +37,8 @@ public class ModItems {
 		GameRegistry.registerItem(heavy, "heavy");
 
 		bucket = registerItem(new ItemBucketTestMod3());
+
+		entityInteractionTest = registerItem(new ItemEntityInteractionTest());
 
 		TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10).setRepairItem(new ItemStack(Items.glowstone_dust));
 	}

@@ -44,6 +44,7 @@ public class ModModelManager {
 	public void registerItemModels() {
 		itemModelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 
+		registerItemModel(ModItems.entityInteractionTest);
 		registerItemModel(ModItems.solarisRecord);
 		registerItemModel(ModItems.woodenAxe);
 
