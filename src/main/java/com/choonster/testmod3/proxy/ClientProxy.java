@@ -13,4 +13,11 @@ public class ClientProxy extends CommonProxy {
 		ModModelManager.INSTANCE.registerVariants();
 		MinecraftForge.EVENT_BUS.register(ModModelManager.INSTANCE);
 	}
+
+	@Override
+	public void init() {
+		super.init();
+
+		ModModelManager.INSTANCE.registerItemModels();
+	}
 }

@@ -53,10 +53,14 @@ public class TestMod3 {
 		ModItems.addRecipes();
 
 		GameRegistry.registerWorldGenerator(new WorldGenOres(), 0);
+
+		proxy.init();
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		MinecraftForge.TERRAIN_GEN_BUS.register(new BiomeBlockReplacer());
+
+		proxy.postInit();
 	}
 }

@@ -3,11 +3,15 @@ package com.choonster.testmod3.client.util;
 import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.fluid.FluidTestMod3;
 import com.choonster.testmod3.init.ModFluids;
+import com.choonster.testmod3.init.ModItems;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.Item;
 import net.minecraft.util.IRegistry;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.BlockFluidBase;
@@ -32,6 +36,22 @@ public class ModModelManager {
 
 	private void registerFluidBlock(BlockFluidBase fluidBlock) {
 		ModelLoader.setCustomStateMapper(fluidBlock, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
+	}
+
+
+	private ItemModelMesher itemModelMesher;
+
+	public void registerItemModels() {
+		itemModelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+
+		registerItemModel(ModItems.solarisRecord);
+		registerItemModel(ModItems.woodenAxe);
+
+		itemModelMesher = null;
+	}
+
+	private void registerItemModel(Item item) {
+		itemModelMesher.register(item, 0, new ModelResourceLocation((ResourceLocation) Item.itemRegistry.getNameForObject(item), "inventory"));
 	}
 
 	private IRegistry modelRegistry;
