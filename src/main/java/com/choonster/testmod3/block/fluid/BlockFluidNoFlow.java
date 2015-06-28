@@ -4,11 +4,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.BlockFluidFinite;
 import net.minecraftforge.fluids.Fluid;
 
 import java.util.Random;
 
-public class BlockFluidNoFlow extends BlockFluidFiniteWithModel {
+public class BlockFluidNoFlow extends BlockFluidFinite {
 	public BlockFluidNoFlow(Fluid fluid, Material material) {
 		super(fluid, material);
 	}

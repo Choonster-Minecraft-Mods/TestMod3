@@ -1,6 +1,5 @@
 package com.choonster.testmod3.event;
 
-import com.choonster.testmod3.block.fluid.IFluidBlockWithModel;
 import com.choonster.testmod3.init.ModItems;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,6 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -40,8 +40,8 @@ public class BucketFillHandler {
 
 				IBlockState iblockstate = world.getBlockState(blockpos);
 
-				if (iblockstate.getBlock() instanceof IFluidBlockWithModel) {
-					IFluidBlockWithModel fluidBlock = (IFluidBlockWithModel) iblockstate.getBlock();
+				if (iblockstate.getBlock() instanceof IFluidBlock) {
+					IFluidBlock fluidBlock = (IFluidBlock) iblockstate.getBlock();
 
 					if (fluidBlock.canDrain(world, blockpos) && fluidBlock.drain(world, blockpos, false).amount == FluidContainerRegistry.BUCKET_VOLUME) {
 						FluidStack fluidStack = fluidBlock.drain(world, blockpos, true);

@@ -1,7 +1,6 @@
 package com.choonster.testmod3.item;
 
 import com.choonster.testmod3.TestMod3;
-import com.choonster.testmod3.block.fluid.BlockFluidFiniteWithModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -119,7 +118,7 @@ public class ItemBucketTestMod3 extends ItemFluidContainer {
 				Block block = getFluid(stack).getFluid().getBlock();
 				IBlockState state = block.getDefaultState();
 
-				if (block instanceof BlockFluidFiniteWithModel) {
+				if (block instanceof BlockFluidFinite) {
 					state = state.withProperty(BlockFluidBase.LEVEL, 7);
 				}
 
