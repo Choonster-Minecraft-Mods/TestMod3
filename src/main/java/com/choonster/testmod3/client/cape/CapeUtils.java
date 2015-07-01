@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class CapeUtils {
-	public static ResourceLocation CAPE_LOCATION = new ResourceLocation(TestMod3.MODID, "textures/capes/testmod3.png");
+	public static final ResourceLocation CAPE_LOCATION = new ResourceLocation(TestMod3.MODID, "textures/capes/testmod3.png");
 	public static final UUID UUID_CHOONSTER = UUID.fromString("12bbe833-bf2b-4daa-adb0-9a7f6e2f4f38");
 
 	// Copied from SkinManager
