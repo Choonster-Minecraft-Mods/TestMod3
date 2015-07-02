@@ -11,6 +11,8 @@ item.bucket.testmod3.normal.name=Bucket of Normal Fluid
 item.record.solaris.desc=Solaris (Path of Exile)
 item.heavy.name=Heavy Item
 item.entityInteractionTest.name=Entity Interaction Test
+item.subscripts.name=Subscripts
 
 message.entityInteractCount=Interact count: %s
 message.blockDestroyer.destroy=Destroyed Wheat with Age >= 6
+message.subscripts.rightClick=Subscripts: %s

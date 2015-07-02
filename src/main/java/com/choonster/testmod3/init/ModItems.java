@@ -21,6 +21,7 @@ public class ModItems {
 	public static ItemBucketTestMod3 bucket;
 	public static ItemEntityInteractionTest entityInteractionTest;
 	public static ItemBlockDestroyer blockDestroyer;
+	public static ItemWithSubscripts subscripts;
 
 	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE;
 
@@ -42,6 +43,8 @@ public class ModItems {
 		entityInteractionTest = registerItem(new ItemEntityInteractionTest());
 
 		blockDestroyer = registerItem(new ItemBlockDestroyer());
+
+		subscripts = registerItem(new ItemWithSubscripts());
 
 		TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10).setRepairItem(new ItemStack(Items.glowstone_dust));
 	}
