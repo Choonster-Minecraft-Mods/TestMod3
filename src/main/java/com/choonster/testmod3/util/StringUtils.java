@@ -13,16 +13,18 @@ public class StringUtils {
 	}
 
 	/**
-	 * Gets a subscript String from the specified positive number using Unicode subscript characters (U+2080 - U+2089).
+	 * Gets a subscript String from the specified number using Unicode subscript characters (U+2080 - U+2089, U+208B).
 	 *
 	 * @param number The number
 	 * @return The subscript String
 	 */
 	public static String subscript(int number) {
-		number = Math.abs(number);
-
 		// 0 requires a special case
 		if (number == 0) return new String(subscriptForDigit(0));
+
+		boolean isNegative = number < 0;
+
+		number = Math.abs(number);
 
 		StringBuilder builder = new StringBuilder();
 
@@ -32,6 +34,10 @@ public class StringUtils {
 		while (number > 0) {
 			builder.append(subscriptForDigit(number % 10));
 			number /= 10;
+		}
+
+		if (isNegative) {
+			builder.append("₋");
 		}
 
 		return builder.reverse().toString();

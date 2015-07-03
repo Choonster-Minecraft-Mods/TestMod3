@@ -15,6 +15,14 @@ public class ItemWithSubscripts extends Item {
 		setHasSubtypes(true);
 	}
 
+	private int getNumber(ItemStack stack) {
+		if (stack.hasTagCompound()) {
+			return stack.getTagCompound().getInteger("Number");
+		} else {
+			return -1337;
+		}
+	}
+
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		return super.getItemStackDisplayName(stack) + StringUtils.subscript(stack.getItemDamage());
@@ -23,7 +31,7 @@ public class ItemWithSubscripts extends Item {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
 		if (!worldIn.isRemote) {
-			playerIn.addChatComponentMessage(new ChatComponentTranslation("message.subscripts.rightClick", StringUtils.subscript(itemStackIn.getItemDamage())));
+			playerIn.addChatComponentMessage(new ChatComponentTranslation("message.subscripts.rightClick", StringUtils.subscript(getNumber(itemStackIn))));
 		}
 
 		return super.onItemRightClick(itemStackIn, worldIn, playerIn);
