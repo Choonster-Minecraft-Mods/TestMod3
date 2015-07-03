@@ -8,10 +8,11 @@ public class StringUtils {
 	 * Builds a String by applying the specified Function to each digit of the number.
 	 *
 	 * @param function The function to call for each digit
+	 * @param minus    The String to prefix negative numbers with
 	 * @param number   The number
 	 * @return The built String
 	 */
-	private static String buildDigitString(Function<Integer, char[]> function, int number) {
+	private static String buildDigitString(Function<Integer, char[]> function, String minus, int number) {
 		// 0 requires a special case
 		if (number == 0) return new String(function.apply(0));
 
@@ -30,7 +31,7 @@ public class StringUtils {
 		}
 
 		if (isNegative) {
-			builder.append("₋");
+			builder.append(minus);
 		}
 
 		return builder.reverse().toString();
@@ -53,7 +54,7 @@ public class StringUtils {
 	 * @return The subscript String
 	 */
 	public static String subscript(int number) {
-		return buildDigitString(StringUtils::subscriptForDigit, number);
+		return buildDigitString(StringUtils::subscriptForDigit, "₋", number);
 	}
 
 	private static final char[] SUPERSCRIPT_1 = "¹".toCharArray(), SUPERSCRIPT_2 = "²".toCharArray(), SUPERSCRIPT_3 = "³".toCharArray();
@@ -85,6 +86,6 @@ public class StringUtils {
 	 * @return The subscript String
 	 */
 	public static String superscript(int number) {
-		return buildDigitString(StringUtils::superscriptForDigit, number);
+		return buildDigitString(StringUtils::superscriptForDigit, "⁻", number);
 	}
 }
