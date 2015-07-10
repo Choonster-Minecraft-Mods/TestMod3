@@ -23,6 +23,7 @@ public class ModItems {
 	public static ItemBlockDestroyer blockDestroyer;
 	public static ItemWithSubscripts subscripts;
 	public static ItemWithSuperscripts superscripts;
+	public static ItemModelTest modelTest;
 
 	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE;
 
@@ -47,6 +48,8 @@ public class ModItems {
 
 		subscripts = registerItem(new ItemWithSubscripts());
 		superscripts = registerItem(new ItemWithSuperscripts());
+
+		modelTest = registerItem(new ItemModelTest());
 
 		TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10).setRepairItem(new ItemStack(Items.glowstone_dust));
 	}

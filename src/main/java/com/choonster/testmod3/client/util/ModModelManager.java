@@ -46,12 +46,17 @@ public class ModModelManager {
 	}
 
 	public void registerItemVariants() {
+		ModelBakery.addVariantName(ModItems.modelTest, "testmod3:modeltest"); // Add a variant for the default model
+		for (int stage = 0; stage < 3; stage++) { // Add a variant for each stage's model
+			ModelBakery.addVariantName(ModItems.modelTest, "testmod3:modeltest_" + stage);
+		}
 	}
 
 	public void registerItemModels() {
 		registerItemModel(ModItems.entityInteractionTest);
 		registerItemModel(ModItems.solarisRecord);
 		registerItemModel(ModItems.woodenAxe);
+		registerItemModel(ModItems.modelTest); // Only use the default model, the stages are handled by ItemModelTest#getModel
 	}
 
 	private void registerItemModel(Item item) {
