@@ -5,8 +5,6 @@ import com.choonster.testmod3.init.ModItems;
 import com.choonster.testmod3.util.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -22,7 +20,6 @@ public class ModModelManager {
 	private static final String FLUID_MODEL_PATH = Constants.RESOURCE_PREFIX + "fluid";
 
 	private ModModelManager() {
-
 	}
 
 	public void registerFluidModels() {
@@ -48,19 +45,17 @@ public class ModModelManager {
 		});
 	}
 
-	private ItemModelMesher itemModelMesher;
+	public void registerItemVariants() {
+	}
 
 	public void registerItemModels() {
-		itemModelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-
 		registerItemModel(ModItems.entityInteractionTest);
 		registerItemModel(ModItems.solarisRecord);
 		registerItemModel(ModItems.woodenAxe);
-
-		itemModelMesher = null;
 	}
 
 	private void registerItemModel(Item item) {
-		itemModelMesher.register(item, 0, new ModelResourceLocation((ResourceLocation) Item.itemRegistry.getNameForObject(item), "inventory"));
+		final ModelResourceLocation modelLocation = new ModelResourceLocation((ResourceLocation) Item.itemRegistry.getNameForObject(item), "inventory");
+		ModelLoader.setCustomMeshDefinition(item, stack -> modelLocation);
 	}
 }
