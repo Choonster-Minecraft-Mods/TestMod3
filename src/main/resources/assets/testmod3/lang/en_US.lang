@@ -1,9 +1,12 @@
+# Fluids
 fluid.static=Static Fluid
 fluid.normal=Normal Fluid
 
+# Blocks
 tile.fluid.static.name=Static Fluid
 tile.fluid.normal.name=Normal Fluid
 
+# Items
 item.bucket.testmod3.empty.name=Bucket
 item.bucket.testmod3.static.name=Bucket of Static Fluid
 item.bucket.testmod3.normal.name=Bucket of Normal Fluid
@@ -15,7 +18,13 @@ item.subscripts.name=Subscripts
 item.superscript.name=Superscripts
 item.modeltest.name=Model Test
 
+# Chat messages
 message.entityInteractCount=Interact count: %s
 message.blockDestroyer.destroy=Destroyed Wheat with Age >= 6
 message.subscripts.rightClick=Subscripts: %s
 message.superscripts.rightClick=Superscripts: %s
+
+# Config GUI strings
+testmod3.config.title=TestMod3 Config
+testmod3.config.general=General
+testmod3.config.biomes=Biome IDs
