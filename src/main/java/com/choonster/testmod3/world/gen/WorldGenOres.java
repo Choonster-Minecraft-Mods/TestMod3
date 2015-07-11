@@ -1,4 +1,4 @@
-package com.choonster.testmod3.worldgen;
+package com.choonster.testmod3.world.gen;
 
 import net.minecraft.block.state.pattern.BlockHelper;
 import net.minecraft.init.Blocks;
