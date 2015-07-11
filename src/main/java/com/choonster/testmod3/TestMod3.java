@@ -44,6 +44,7 @@ public class TestMod3 {
 		ModBlocks.registerBlocks();
 		ModItems.registerItems();
 		ModFluids.registerBuckets();
+		ModBiomes.registerBiomes();
 
 		proxy.preInit();
 	}

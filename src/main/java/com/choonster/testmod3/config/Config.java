@@ -13,6 +13,8 @@ public class Config {
 
 	public static Configuration config;
 
+	public static int desertBiomeID;
+
 	public static void load(FMLPreInitializationEvent event) {
 		config = new Configuration(event.getSuggestedConfigurationFile());
 		reloadConfig();
@@ -21,6 +23,7 @@ public class Config {
 	}
 
 	public static void reloadConfig() {
+		desertBiomeID = getBiomeID("desert", 50, "Desert Test");
 
 		if (config.hasChanged()) {
 			config.save();
@@ -40,4 +43,3 @@ public class Config {
 		}
 	}
 }
-
