@@ -30,7 +30,7 @@ public class Config {
 		}
 	}
 
-	private static int getBiomeID(String name, int defaultValue, String comment){
+	private static int getBiomeID(String name, int defaultValue, String comment) {
 		Property property = config.get(CATEGORY_BIOME, name, defaultValue, comment, 40, 255);
 		property.setRequiresMcRestart(true);
 		return property.getInt();
