@@ -65,7 +65,8 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 	}
 
 	public static class Start extends MapGenScatteredFeature.Start {
-		public Start() {}
+		public Start() {
+		}
 
 		@SuppressWarnings("unchecked")
 		public Start(World worldIn, Random random, int chunkX, int chunkZ) {
@@ -80,14 +81,10 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 			if (BiomeDictionary.isBiomeOfType(biomegenbase, BiomeDictionary.Type.SANDY)) {
 				ComponentScatteredFeaturePieces.DesertPyramid desertpyramid = new ComponentScatteredFeaturePieces.DesertPyramid(random, chunkX * 16, chunkZ * 16);
 				this.components.add(desertpyramid);
-			}
-
-			if (BiomeDictionary.isBiomeOfType(biomegenbase, BiomeDictionary.Type.JUNGLE)) {
+			} else if (BiomeDictionary.isBiomeOfType(biomegenbase, BiomeDictionary.Type.JUNGLE)) {
 				ComponentScatteredFeaturePieces.JunglePyramid junglepyramid = new ComponentScatteredFeaturePieces.JunglePyramid(random, chunkX * 16, chunkZ * 16);
 				this.components.add(junglepyramid);
-			}
-
-			if (BiomeDictionary.isBiomeOfType(biomegenbase, BiomeDictionary.Type.SWAMP)) {
+			} else if (BiomeDictionary.isBiomeOfType(biomegenbase, BiomeDictionary.Type.SWAMP)) {
 				ComponentScatteredFeaturePieces.SwampHut swamphut = new ComponentScatteredFeaturePieces.SwampHut(random, chunkX * 16, chunkZ * 16);
 				this.components.add(swamphut);
 			}
