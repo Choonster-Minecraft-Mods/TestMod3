@@ -3,13 +3,16 @@ package com.choonster.testmod3.world.gen.structure;
 import com.choonster.testmod3.Logger;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.structure.ComponentScatteredFeaturePieces;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
+import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
 import net.minecraftforge.common.BiomeDictionary;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -64,6 +67,15 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 		return new Start(worldObj, rand, chunkX, chunkZ);
 	}
 
+	public static class WeightedRandomScatteredFeature extends WeightedRandom.Item {
+		public final StructureComponent feature;
+
+		public WeightedRandomScatteredFeature(StructureComponent feature, int itemWeightIn) {
+			super(itemWeightIn);
+			this.feature = feature;
+		}
+	}
+
 	public static class Start extends MapGenScatteredFeature.Start {
 		public Start() {
 		}
@@ -72,22 +84,31 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 		public Start(World worldIn, Random random, int chunkX, int chunkZ) {
 			super(worldIn, random, chunkX, chunkZ);
 
-			Logger.info("Scattered feature at %d, %d", chunkX * 16, chunkZ * 16);
-
 			this.components.clear();
 
 			BiomeGenBase biomegenbase = worldIn.getBiomeGenForCoords(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
 
+			List<WeightedRandomScatteredFeature> possibleFeatures = new ArrayList<>();
+
 			if (BiomeDictionary.isBiomeOfType(biomegenbase, BiomeDictionary.Type.SANDY)) {
 				ComponentScatteredFeaturePieces.DesertPyramid desertpyramid = new ComponentScatteredFeaturePieces.DesertPyramid(random, chunkX * 16, chunkZ * 16);
-				this.components.add(desertpyramid);
-			} else if (BiomeDictionary.isBiomeOfType(biomegenbase, BiomeDictionary.Type.JUNGLE)) {
-				ComponentScatteredFeaturePieces.JunglePyramid junglepyramid = new ComponentScatteredFeaturePieces.JunglePyramid(random, chunkX * 16, chunkZ * 16);
-				this.components.add(junglepyramid);
-			} else if (BiomeDictionary.isBiomeOfType(biomegenbase, BiomeDictionary.Type.SWAMP)) {
-				ComponentScatteredFeaturePieces.SwampHut swamphut = new ComponentScatteredFeaturePieces.SwampHut(random, chunkX * 16, chunkZ * 16);
-				this.components.add(swamphut);
+				possibleFeatures.add(new WeightedRandomScatteredFeature(desertpyramid, 100));
 			}
+
+			if (BiomeDictionary.isBiomeOfType(biomegenbase, BiomeDictionary.Type.JUNGLE)) {
+				ComponentScatteredFeaturePieces.JunglePyramid junglepyramid = new ComponentScatteredFeaturePieces.JunglePyramid(random, chunkX * 16, chunkZ * 16);
+				possibleFeatures.add(new WeightedRandomScatteredFeature(junglepyramid, 100));
+			}
+
+			if (BiomeDictionary.isBiomeOfType(biomegenbase, BiomeDictionary.Type.SWAMP)) {
+				ComponentScatteredFeaturePieces.SwampHut swamphut = new ComponentScatteredFeaturePieces.SwampHut(random, chunkX * 16, chunkZ * 16);
+				possibleFeatures.add(new WeightedRandomScatteredFeature(swamphut, 100));
+			}
+
+			WeightedRandomScatteredFeature featureToGenerate = (WeightedRandomScatteredFeature) WeightedRandom.getRandomItem(random, possibleFeatures);
+			this.components.add(featureToGenerate.feature);
+
+			Logger.info("Scattered feature %s at %d, %d", featureToGenerate.feature.toString(), chunkX * 16, chunkZ * 16);
 
 			this.updateBoundingBox();
 		}
