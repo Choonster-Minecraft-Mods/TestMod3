@@ -11,9 +11,7 @@ public class ClientProxy extends CommonProxy {
 	public void preInit() {
 		super.preInit();
 
-		ModModelManager.INSTANCE.registerFluidModels();
-		ModModelManager.INSTANCE.registerItemVariants();
-		ModModelManager.INSTANCE.registerItemModels();
+		ModModelManager.INSTANCE.registerAllModels();
 		MinecraftForge.EVENT_BUS.register(new CapeEventHandler());
 	}
 }

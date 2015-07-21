@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.IFluidBlock;
 
@@ -22,7 +21,15 @@ public class ModModelManager {
 	private ModModelManager() {
 	}
 
-	public void registerFluidModels() {
+	public void registerAllModels() {
+		registerFluidModels();
+		registerBlockModels();
+
+		registerItemVariants();
+		registerItemModels();
+	}
+
+	private void registerFluidModels() {
 		for (IFluidBlock fluidBlock : ModFluids.fluidBlocks) {
 			registerFluidModel(fluidBlock);
 		}
@@ -45,14 +52,25 @@ public class ModModelManager {
 		});
 	}
 
-	public void registerItemVariants() {
+	private void registerBlockModels() {
+	}
+
+	private void registerBlockItemModel(Block block) {
+		registerItemModel(Item.getItemFromBlock(block));
+	}
+
+	private void registerBlockItemModel(Block block, String modelLocation) {
+		registerItemModel(Item.getItemFromBlock(block), modelLocation);
+	}
+
+	private void registerItemVariants() {
 		ModelBakery.addVariantName(ModItems.modelTest, "testmod3:modeltest"); // Add a variant for the default model
 		for (int stage = 0; stage < 3; stage++) { // Add a variant for each stage's model
 			ModelBakery.addVariantName(ModItems.modelTest, "testmod3:modeltest_" + stage);
 		}
 	}
 
-	public void registerItemModels() {
+	private void registerItemModels() {
 		registerItemModel(ModItems.entityInteractionTest);
 		registerItemModel(ModItems.solarisRecord);
 		registerItemModel(ModItems.woodenAxe);
@@ -60,7 +78,11 @@ public class ModModelManager {
 	}
 
 	private void registerItemModel(Item item) {
-		final ModelResourceLocation modelLocation = new ModelResourceLocation((ResourceLocation) Item.itemRegistry.getNameForObject(item), "inventory");
-		ModelLoader.setCustomMeshDefinition(item, stack -> modelLocation);
+		registerItemModel(item, Item.itemRegistry.getNameForObject(item).toString());
+	}
+
+	private void registerItemModel(Item item, String modelLocation) {
+		final ModelResourceLocation fullModelLocation = new ModelResourceLocation(modelLocation, "inventory");
+		ModelLoader.setCustomMeshDefinition(item, stack -> fullModelLocation);
 	}
 }
