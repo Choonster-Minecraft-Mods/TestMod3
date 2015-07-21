@@ -1,6 +1,6 @@
 {
 	"parent": "testmod3:item/modeltest_base",
 	"textures": {
-        "layer0": "testmod3:items/modeltest_0"
-    }
+		"layer0": "testmod3:items/modeltest_0"
+	}
 }
