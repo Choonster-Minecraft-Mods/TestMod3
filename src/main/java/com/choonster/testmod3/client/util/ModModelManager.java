@@ -1,10 +1,13 @@
 package com.choonster.testmod3.client.util;
 
+import com.choonster.testmod3.init.ModBlocks;
 import com.choonster.testmod3.init.ModFluids;
 import com.choonster.testmod3.init.ModItems;
 import com.choonster.testmod3.util.Constants;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -53,6 +56,8 @@ public class ModModelManager {
 	}
 
 	private void registerBlockModels() {
+		ModelLoader.setCustomStateMapper(ModBlocks.waterGrass, new StateMap.Builder().addPropertiesToIgnore(BlockLiquid.LEVEL).build());
+		registerBlockItemModel(ModBlocks.waterGrass, "tall_grass");
 	}
 
 	private void registerBlockItemModel(Block block) {
