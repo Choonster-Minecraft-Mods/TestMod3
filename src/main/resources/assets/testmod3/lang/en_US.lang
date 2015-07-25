@@ -18,6 +18,7 @@ item.entityInteractionTest.name=Entity Interaction Test
 item.subscripts.name=Subscripts
 item.superscript.name=Superscripts
 item.modeltest.name=Model Test
+item.snowballLauncher.name=Snowball Launcher
 
 # Chat messages
 message.entityInteractCount=Interact count: %s

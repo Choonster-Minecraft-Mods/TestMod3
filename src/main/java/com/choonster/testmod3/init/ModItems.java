@@ -24,6 +24,7 @@ public class ModItems {
 	public static ItemWithSubscripts subscripts;
 	public static ItemWithSuperscripts superscripts;
 	public static ItemModelTest modelTest;
+	public static ItemSnowballLauncher snowballLauncher;
 
 	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE;
 
@@ -50,6 +51,8 @@ public class ModItems {
 		superscripts = registerItem(new ItemWithSuperscripts());
 
 		modelTest = registerItem(new ItemModelTest());
+
+		snowballLauncher = registerItem(new ItemSnowballLauncher());
 
 		TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10).setRepairItem(new ItemStack(Items.glowstone_dust));
 	}

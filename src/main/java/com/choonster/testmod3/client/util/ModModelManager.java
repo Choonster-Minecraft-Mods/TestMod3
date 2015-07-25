@@ -80,6 +80,7 @@ public class ModModelManager {
 		registerItemModel(ModItems.solarisRecord);
 		registerItemModel(ModItems.woodenAxe);
 		registerItemModel(ModItems.modelTest); // Only use the default model, the stages are handled by ItemModelTest#getModel
+		registerItemModel(ModItems.snowballLauncher, "minecraft:fishing_rod");
 	}
 
 	private void registerItemModel(Item item) {
