@@ -73,6 +73,8 @@ public class ModModelManager {
 		for (int stage = 0; stage < 3; stage++) { // Add a variant for each stage's model
 			ModelBakery.addVariantName(ModItems.modelTest, "testmod3:modeltest_" + stage);
 		}
+
+		ModelBakery.addVariantName(ModItems.slingshot, "testmod3:slingshot", "testmod3:slingshot_pulled");
 	}
 
 	private void registerItemModels() {
@@ -81,6 +83,7 @@ public class ModModelManager {
 		registerItemModel(ModItems.woodenAxe);
 		registerItemModel(ModItems.modelTest); // Only use the default model, the stages are handled by ItemModelTest#getModel
 		registerItemModel(ModItems.snowballLauncher, "minecraft:fishing_rod");
+		registerItemModel(ModItems.slingshot);
 	}
 
 	private void registerItemModel(Item item) {
