@@ -1,6 +1,7 @@
 package com.choonster.testmod3;
 
 import com.choonster.testmod3.config.Config;
+import com.choonster.testmod3.event.BlockEventHandler;
 import com.choonster.testmod3.event.BucketFillHandler;
 import com.choonster.testmod3.init.*;
 import com.choonster.testmod3.proxy.CommonProxy;
@@ -39,6 +40,7 @@ public class TestMod3 {
 		RecipeSorter.register("testmod3:shapelesscutting", ShapelessCuttingRecipe.class, SHAPELESS, "after:minecraft:shapeless");
 
 		MinecraftForge.EVENT_BUS.register(new BucketFillHandler());
+		MinecraftForge.EVENT_BUS.register(new BlockEventHandler());
 
 		ModFluids.registerFluids();
 		ModBlocks.registerBlocks();
