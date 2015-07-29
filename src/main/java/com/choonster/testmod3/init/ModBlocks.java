@@ -1,5 +1,6 @@
 package com.choonster.testmod3.init;
 
+import com.choonster.testmod3.block.BlockLargeCollisionTest;
 import com.choonster.testmod3.block.BlockWaterGrass;
 import com.choonster.testmod3.item.block.ItemColoredMod;
 import net.minecraft.block.Block;
@@ -9,9 +10,11 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ModBlocks {
 
 	public static BlockWaterGrass waterGrass;
+	public static BlockLargeCollisionTest largeCollisionTest;
 
 	public static void registerBlocks() {
 		waterGrass = registerBlock(new BlockWaterGrass(), ItemColoredMod.class, true);
+		largeCollisionTest = registerBlock(new BlockLargeCollisionTest());
 	}
 
 	// Register a Block with the default ItemBlock class

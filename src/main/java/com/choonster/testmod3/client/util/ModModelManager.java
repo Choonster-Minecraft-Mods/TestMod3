@@ -58,6 +58,8 @@ public class ModModelManager {
 	private void registerBlockModels() {
 		ModelLoader.setCustomStateMapper(ModBlocks.waterGrass, new StateMap.Builder().addPropertiesToIgnore(BlockLiquid.LEVEL).build());
 		registerBlockItemModel(ModBlocks.waterGrass, "tall_grass");
+
+		registerBlockItemModel(ModBlocks.largeCollisionTest, "white_wool");
 	}
 
 	private void registerBlockItemModel(Block block) {

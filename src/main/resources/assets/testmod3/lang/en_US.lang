@@ -4,6 +4,8 @@ fluid.normal=Normal Fluid
 
 # Blocks
 tile.watergrass.name=Water Grass
+tile.largeCollisionTest.name=Large Collision Test
+
 tile.fluid.static.name=Static Fluid
 tile.fluid.normal.name=Normal Fluid
 
