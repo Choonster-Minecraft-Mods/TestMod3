@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 /**
  * Based on Vastatio's ARKSlingshot code.
- *
+ * <p>
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2483633-custom-bow-animation-and-projectiles
  */
 public class ItemSlingshot extends Item {
