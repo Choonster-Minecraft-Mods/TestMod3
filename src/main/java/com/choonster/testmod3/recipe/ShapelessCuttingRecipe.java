@@ -4,6 +4,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraftforge.common.ForgeHooks;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -34,7 +35,7 @@ public class ShapelessCuttingRecipe extends ShapelessRecipes {
 			if (itemstack != null && itemstack.getItem() instanceof ItemAxe) {
 				remainingItems[i] = damageAxe(itemstack.copy());
 			} else {
-				remainingItems[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack);
+				remainingItems[i] = ForgeHooks.getContainerItem(itemstack);
 			}
 		}
 
