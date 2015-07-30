@@ -5,6 +5,7 @@ import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -19,6 +20,7 @@ public class ShapelessCuttingRecipe extends ShapelessRecipes {
 
 	private ItemStack damageAxe(ItemStack stack) {
 		if (stack.attemptDamageItem(1, random)) {
+			ForgeEventFactory.onPlayerDestroyItem(ForgeHooks.getCraftingPlayer(), stack);
 			return null;
 		}
 
