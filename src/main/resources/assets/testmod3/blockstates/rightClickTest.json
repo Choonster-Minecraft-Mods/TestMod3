@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"has_ender_eye=true": {
+			"model": "glass_white"
+		},
+		"has_ender_eye=false": {
+			"model": "glass_black"
+		}
+	}
+}

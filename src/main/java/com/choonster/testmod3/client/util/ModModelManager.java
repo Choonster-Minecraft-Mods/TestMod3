@@ -60,6 +60,7 @@ public class ModModelManager {
 		registerBlockItemModel(ModBlocks.waterGrass, "tall_grass");
 
 		registerBlockItemModel(ModBlocks.largeCollisionTest, "white_wool");
+		registerBlockItemModel(ModBlocks.rightClickTest, "black_stained_glass");
 	}
 
 	private void registerBlockItemModel(Block block) {
