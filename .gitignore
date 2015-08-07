@@ -5,6 +5,7 @@ eclipse/
 *.iml
 *.iws
 *.ipr
+out/
 
 # Ignore Gradle GUI config
 gradle-app.setting
