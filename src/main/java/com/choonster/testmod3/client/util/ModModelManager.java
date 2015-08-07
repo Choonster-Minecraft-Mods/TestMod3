@@ -83,10 +83,11 @@ public class ModModelManager {
 	private void registerItemModels() {
 		registerItemModel(ModItems.entityInteractionTest);
 		registerItemModel(ModItems.solarisRecord);
-		registerItemModel(ModItems.woodenAxe);
+		//registerItemModel(ModItems.woodenAxe);
 		registerItemModel(ModItems.modelTest); // Only use the default model, the stages are handled by ItemModelTest#getModel
 		registerItemModel(ModItems.snowballLauncher, "minecraft:fishing_rod");
 		registerItemModel(ModItems.slingshot);
+		ModelLoader.setCustomModelResourceLocation(ModItems.woodenAxe, 0, new ModelResourceLocation("testmod3:wooden_axe_test", "inventory"));
 	}
 
 	private void registerItemModel(Item item) {
