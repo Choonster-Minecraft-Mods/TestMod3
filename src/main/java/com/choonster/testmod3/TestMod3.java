@@ -28,7 +28,7 @@ public class TestMod3 {
 
 	public static CreativeTabs creativeTab;
 
-	@SidedProxy(clientSide = "com.choonster.testmod3.proxy.ClientProxy", serverSide = "com.choonster.testmod3.proxy.ServerProxy")
+	@SidedProxy(clientSide = "com.choonster.testmod3.proxy.CombinedClientProxy", serverSide = "com.choonster.testmod3.proxy.DedicatedServerProxy")
 	public static CommonProxy proxy;
 
 

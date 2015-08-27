@@ -5,7 +5,7 @@ import com.choonster.testmod3.client.cape.CapeEventHandler;
 import com.choonster.testmod3.client.util.ModModelManager;
 import net.minecraftforge.common.MinecraftForge;
 
-public class ClientProxy extends CommonProxy {
+public class CombinedClientProxy extends CommonProxy {
 
 	@Override
 	public void preInit() {

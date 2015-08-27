@@ -1,6 +1,6 @@
 package com.choonster.testmod3.proxy;
 
-public class CommonProxy {
+public abstract class CommonProxy {
 	public void preInit() {
 
 	}
