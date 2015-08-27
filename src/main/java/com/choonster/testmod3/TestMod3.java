@@ -31,7 +31,6 @@ public class TestMod3 {
 	@SidedProxy(clientSide = "com.choonster.testmod3.proxy.CombinedClientProxy", serverSide = "com.choonster.testmod3.proxy.DedicatedServerProxy")
 	public static CommonProxy proxy;
 
-
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		creativeTab = new CreativeTabExample();
