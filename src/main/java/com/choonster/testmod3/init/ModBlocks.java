@@ -1,5 +1,6 @@
 package com.choonster.testmod3.init;
 
+import com.choonster.testmod3.block.BlockClientPlayerRightClick;
 import com.choonster.testmod3.block.BlockLargeCollisionTest;
 import com.choonster.testmod3.block.BlockRightClickTest;
 import com.choonster.testmod3.block.BlockWaterGrass;
@@ -13,11 +14,13 @@ public class ModBlocks {
 	public static BlockWaterGrass waterGrass;
 	public static BlockLargeCollisionTest largeCollisionTest;
 	public static BlockRightClickTest rightClickTest;
+	public static BlockClientPlayerRightClick clientPlayerRightClick;
 
 	public static void registerBlocks() {
 		waterGrass = registerBlock(new BlockWaterGrass(), ItemColoredMod.class, true);
 		largeCollisionTest = registerBlock(new BlockLargeCollisionTest());
 		rightClickTest = registerBlock(new BlockRightClickTest());
+		clientPlayerRightClick = registerBlock(new BlockClientPlayerRightClick());
 	}
 
 	// Register a Block with the default ItemBlock class
