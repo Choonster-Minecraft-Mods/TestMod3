@@ -2,16 +2,11 @@ package com.choonster.testmod3.init;
 
 import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.item.*;
-import com.choonster.testmod3.recipe.ShapelessCuttingRecipe;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class ModItems {
 	public static Item woodenAxe;
@@ -63,21 +58,5 @@ public class ModItems {
 	private static <T extends Item> T registerItem(T item) {
 		GameRegistry.registerItem(item, item.getUnlocalizedName().replace("item.", ""));
 		return item;
-	}
-
-	public static void addRecipes() {
-		GameRegistry.addRecipe(new ShapelessCuttingRecipe(new ItemStack(Blocks.planks, 2, BlockPlanks.EnumType.OAK.getMetadata()), new ItemStack(Items.wooden_axe, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.log, 1, BlockPlanks.EnumType.OAK.getMetadata())));
-
-		// Recipe for Guardian Spawner - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2424619-help-needed-creating-non-pig-mob-spawners
-		NBTTagCompound tileEntityData = new NBTTagCompound();
-		tileEntityData.setString("EntityId", "Guardian");
-
-		NBTTagCompound stackTagCompound = new NBTTagCompound();
-		stackTagCompound.setTag("BlockEntityTag", tileEntityData);
-
-		ItemStack guardianSpawner = new ItemStack(Blocks.mob_spawner);
-		guardianSpawner.setTagCompound(stackTagCompound);
-
-		GameRegistry.addRecipe(guardianSpawner, "SSS", "SFS", "SSS", 'S', Items.stick, 'F', Items.fish);
 	}
 }

@@ -5,7 +5,6 @@ import com.choonster.testmod3.event.BlockEventHandler;
 import com.choonster.testmod3.event.BucketFillHandler;
 import com.choonster.testmod3.init.*;
 import com.choonster.testmod3.proxy.CommonProxy;
-import com.choonster.testmod3.recipe.ShapelessCuttingRecipe;
 import com.choonster.testmod3.util.BiomeBlockReplacer;
 import com.choonster.testmod3.world.gen.WorldGenOres;
 import net.minecraft.creativetab.CreativeTabs;
@@ -17,9 +16,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.RecipeSorter;
-
-import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPELESS;
 
 @Mod(modid = TestMod3.MODID, version = TestMod3.VERSION, guiFactory = "com.choonster.testmod3.config.GuiConfigFactoryTestMod3")
 public class TestMod3 {
@@ -36,8 +32,6 @@ public class TestMod3 {
 		creativeTab = new CreativeTabExample();
 		Config.load(event);
 
-		RecipeSorter.register("testmod3:shapelesscutting", ShapelessCuttingRecipe.class, SHAPELESS, "after:minecraft:shapeless");
-
 		MinecraftForge.EVENT_BUS.register(new BucketFillHandler());
 		MinecraftForge.EVENT_BUS.register(new BlockEventHandler());
 
@@ -53,7 +47,7 @@ public class TestMod3 {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		ModItems.addRecipes();
+		ModRecipes.registerRecipes();
 
 		GameRegistry.registerWorldGenerator(new WorldGenOres(), 0);
 
