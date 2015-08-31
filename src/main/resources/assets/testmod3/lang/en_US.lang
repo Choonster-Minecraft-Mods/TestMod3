@@ -10,6 +10,8 @@ tile.clientPlayerRightClick.name=Client Player Right Click Block
 
 tile.fluid.static.name=Static Fluid
 tile.fluid.normal.name=Normal Fluid
+tile.fluid.staticgas.name=Static Gas
+tile.fluid.normalgas.name=Normal Gas
 
 # Items
 item.bucket.testmod3.empty.name=Bucket
@@ -22,10 +24,13 @@ item.record.solaris.desc=Solaris (Path of Exile)
 item.heavy.name=Heavy Item
 item.entityInteractionTest.name=Entity Interaction Test
 item.subscripts.name=Subscripts
-item.superscript.name=Superscripts
+item.superscripts.name=Superscripts
 item.modeltest.name=Model Test
 item.snowballLauncher.name=Snowball Launcher
 item.slingshot.name=Slingshot
+item.entityTest.name=Entity Test
+item.blockDestroyer.name=Block Destroyer
+item.woodenAxe.name=Wooden Cutting Axe
 
 # Chat messages
 message.entityInteractCount=Interact count: %s
