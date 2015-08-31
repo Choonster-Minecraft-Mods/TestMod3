@@ -15,6 +15,8 @@ tile.fluid.normal.name=Normal Fluid
 item.bucket.testmod3.empty.name=Bucket
 item.bucket.testmod3.static.name=Bucket of Static Fluid
 item.bucket.testmod3.normal.name=Bucket of Normal Fluid
+item.bucket.testmod3.staticgas.name=Bucket of Static Gas
+item.bucket.testmod3.normalgas.name=Bucket of Normal Gas
 
 item.record.solaris.desc=Solaris (Path of Exile)
 item.heavy.name=Heavy Item

@@ -1,7 +1,6 @@
 package com.choonster.testmod3.init;
 
 import com.choonster.testmod3.block.fluid.BlockFluidNoFlow;
-import com.choonster.testmod3.item.ItemBucketTestMod3;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.MaterialLiquid;
@@ -10,9 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class ModFluids {
@@ -29,7 +26,6 @@ public class ModFluids {
 	public static BlockFluidClassic blockNormalGas;
 
 	public static Set<IFluidBlock> fluidBlocks = new HashSet<>();
-	public static Map<Fluid, ItemBucketTestMod3> buckets = new HashMap<>();
 
 	public static void registerFluids() {
 		fluidStatic = createFluid("static", "testmod3:blocks/fluid_static", false).setLuminosity(10).setDensity(800).setViscosity(1500);
@@ -53,10 +49,6 @@ public class ModFluids {
 	}
 
 	private static Fluid createFluid(String name, String textureName, boolean hasFlowIcon) {
-		return createFluid(name, textureName, hasFlowIcon, 1, 1, 1, 1);
-	}
-
-	private static Fluid createFluid(String name, String textureName, boolean hasFlowIcon, int r, int g, int b, int a) {
 		ResourceLocation still = new ResourceLocation(textureName + "_still");
 		ResourceLocation flowing = hasFlowIcon ? new ResourceLocation(textureName + "_flow") : still;
 

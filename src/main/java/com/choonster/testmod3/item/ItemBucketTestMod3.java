@@ -17,11 +17,12 @@ import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ItemBucketTestMod3 extends ItemFluidContainer {
-	private static List<FluidStack> fluids = new ArrayList<>();
+	public final Set<FluidStack> fluids = new HashSet<>();
 
 	public ItemBucketTestMod3() {
 		super(-1, FluidContainerRegistry.BUCKET_VOLUME);

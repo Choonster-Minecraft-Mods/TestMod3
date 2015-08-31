@@ -13,6 +13,7 @@ import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 
 
@@ -26,6 +27,8 @@ public class ModModelManager {
 
 	public void registerAllModels() {
 		registerFluidModels();
+		registerBucketModels();
+
 		registerBlockModels();
 
 		registerItemVariants();
@@ -53,6 +56,16 @@ public class ModModelManager {
 				return modelResourceLocation;
 			}
 		});
+	}
+
+	private void registerBucketModels() {
+		for (FluidStack fluidStack : ModItems.bucket.fluids) {
+			ModelBakery.addVariantName(ModItems.bucket, "testmod3:bucket/" + fluidStack.getFluid().getName());
+		}
+
+		ModelLoader.setCustomMeshDefinition(ModItems.bucket, stack ->
+						new ModelResourceLocation("testmod3:bucket/" + ModItems.bucket.getFluid(stack).getFluid().getName(), "inventory")
+		);
 	}
 
 	private void registerBlockModels() {
