@@ -1,5 +1,6 @@
 package com.choonster.testmod3;
 
+import com.choonster.testmod3.compat.nei.NEICompat;
 import com.choonster.testmod3.config.Config;
 import com.choonster.testmod3.event.BlockEventHandler;
 import com.choonster.testmod3.event.BucketFillHandler;
@@ -9,6 +10,7 @@ import com.choonster.testmod3.util.BiomeBlockReplacer;
 import com.choonster.testmod3.world.gen.WorldGenOres;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -22,7 +24,7 @@ public class TestMod3 {
 	public static final String MODID = "testmod3";
 	public static final String VERSION = "1.0";
 
-	public static CreativeTabs creativeTab;
+	public static CreativeTabExample creativeTab;
 
 	@SidedProxy(clientSide = "com.choonster.testmod3.proxy.CombinedClientProxy", serverSide = "com.choonster.testmod3.proxy.DedicatedServerProxy")
 	public static CommonProxy proxy;
@@ -41,6 +43,10 @@ public class TestMod3 {
 		ModFluids.registerBuckets();
 		ModBiomes.registerBiomes();
 		ModMapGen.registerMapGen();
+
+		if (Loader.isModLoaded("NotEnoughItems")) {
+			NEICompat.init();
+		}
 
 		proxy.preInit();
 	}
