@@ -24,10 +24,27 @@ repositories {
 
 dependencies {
     //runtime "mcp.mobius.waila:Waila:${waila_version}"
-    runtime "codechicken:CodeChickenCore:${mc_version}-${ccc_version}:dev"
-    runtime "codechicken:CodeChickenLib:${mc_version}-${ccl_version}:dev"
-    runtime "codechicken:NotEnoughItems:${mc_version}-${nei_version}:dev"
+    //compile "codechicken:CodeChickenLib:${mc_version}-${ccl_version}:dev"
+    //compile "codechicken:CodeChickenLib:${mc_version}-${ccl_version}:src"
+
+    compile "codechicken:CodeChickenCore:${mc_version}-${ccc_version}:dev"
+    compile "codechicken:CodeChickenCore:${mc_version}-${ccc_version}:src"
+
+    compile "codechicken:NotEnoughItems:${mc_version}-${nei_version}:dev"
+    compile "codechicken:NotEnoughItems:${mc_version}-${nei_version}:src"
 }
+
+// Adapted from AE2: https://github.com/AppliedEnergistics/Applied-Energistics-2
+task copyChicken(type: Copy, dependsOn: "extractUserdev") {
+    from { configurations.compile }
+    include "**/*Chicken*.jar", "**/*NotEnoughItems*.jar"
+    exclude "**/CodeChickenLib*" // because CCC downloads it anyway
+    into file(minecraft.runDir + "/mods")
+    mustRunAfter "recompileMc"
+}
+
+setupDecompWorkspace.finalizedBy copyChicken
+setupDevWorkspace.finalizedBy copyChicken
 
 processResources
 {
