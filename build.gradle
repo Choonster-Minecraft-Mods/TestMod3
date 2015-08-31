@@ -1,21 +1,6 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-    }
+plugins {
+    id "net.minecraftforge.gradle.forge" version "2.0.1"
 }
-
-apply plugin: 'forge'
 
 srcCompat = JavaVersion.VERSION_1_8
 targetCompat = JavaVersion.VERSION_1_8
@@ -26,7 +11,7 @@ archivesBaseName = "${mod_name}"
 
 minecraft {
     version = "${mc_version}-${forge_version}"
-    runDir = "eclipse"
+    runDir = "run"
 
     if (project.hasProperty('mappings_version'))
         mappings = project.mappings_version
@@ -38,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    runtime "mcp.mobius.waila:Waila:${waila_version}"
+    //runtime "mcp.mobius.waila:Waila:${waila_version}"
     runtime "codechicken:CodeChickenCore:${mc_version}-${ccc_version}:dev"
     runtime "codechicken:CodeChickenLib:${mc_version}-${ccl_version}:dev"
     runtime "codechicken:NotEnoughItems:${mc_version}-${nei_version}:dev"
