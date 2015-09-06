@@ -1,15 +1,24 @@
 package com.choonster.testmod3.init;
 
+import com.choonster.testmod3.Logger;
 import com.choonster.testmod3.recipe.ShapedArmourUpgradeRecipe;
 import com.choonster.testmod3.recipe.ShapelessCuttingRecipe;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.RecipeFireworks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
+
+import java.util.Iterator;
+import java.util.List;
 
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPELESS;
@@ -42,5 +51,72 @@ public class ModRecipes {
 		guardianSpawner.setTagCompound(stackTagCompound);
 
 		GameRegistry.addRecipe(guardianSpawner, "SSS", "SFS", "SSS", 'S', Items.stick, 'F', Items.fish);
+	}
+
+	public static void removeCraftingRecipes() {
+		removeRecipeClass(RecipeFireworks.class);
+		removeRecipe(Items.dye);
+		removeRecipe(Blocks.stained_hardened_clay);
+	}
+
+	private static void removeRecipe(Block output) {
+		removeRecipe(Item.getItemFromBlock(output));
+	}
+
+	/**
+	 * Remove all recipes with the specified output Item.
+	 * <p>
+	 * Adapted from Rohzek's code in this post:
+	 * http://www.minecraftforge.net/forum/index.php/topic,33631.0.html
+	 *
+	 * @param output The output Item
+	 */
+	@SuppressWarnings("unchecked")
+	private static void removeRecipe(Item output) {
+		int recipesRemoved = 0;
+
+		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
+		Iterator<IRecipe> remover = recipes.iterator();
+
+		while (remover.hasNext()) {
+
+			ItemStack itemstack = remover.next().getRecipeOutput();
+
+			// If the recipe's output Item is the specified Item,
+			if (itemstack != null && itemstack.getItem() == output) {
+				// Remove the recipe
+				remover.remove();
+				recipesRemoved++;
+			}
+		}
+
+		Logger.info("Removed %d recipes for %s", recipesRemoved, Item.itemRegistry.getNameForObject(output));
+	}
+
+	/**
+	 * Remove all recipes that are instances of the specified class.
+	 * <p>
+	 * Test for this thread:
+	 * http://www.minecraftforge.net/forum/index.php/topic,33631.0.html
+	 *
+	 * @param recipeClass The recipe class
+	 */
+	@SuppressWarnings("unchecked")
+	private static void removeRecipeClass(Class<? extends IRecipe> recipeClass) {
+		int recipesRemoved = 0;
+
+		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
+		Iterator<IRecipe> remover = recipes.iterator();
+
+		while (remover.hasNext()) {
+			// If the recipe is an instance of the specified class,
+			if (recipeClass.isInstance(remover.next())) {
+				// Remove the recipe
+				remover.remove();
+				recipesRemoved++;
+			}
+		}
+
+		Logger.info("Removed %d recipes for %s", recipesRemoved, recipeClass);
 	}
 }

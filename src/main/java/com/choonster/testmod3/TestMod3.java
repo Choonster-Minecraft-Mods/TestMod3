@@ -8,7 +8,6 @@ import com.choonster.testmod3.init.*;
 import com.choonster.testmod3.proxy.CommonProxy;
 import com.choonster.testmod3.util.BiomeBlockReplacer;
 import com.choonster.testmod3.world.gen.WorldGenOres;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -56,6 +55,8 @@ public class TestMod3 {
 		ModRecipes.registerRecipes();
 
 		GameRegistry.registerWorldGenerator(new WorldGenOres(), 0);
+
+		ModRecipes.removeCraftingRecipes();
 
 		proxy.init();
 	}
