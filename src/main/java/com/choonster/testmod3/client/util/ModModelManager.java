@@ -86,12 +86,11 @@ public class ModModelManager {
 	}
 
 	private void registerItemVariants() {
-		ModelBakery.addVariantName(ModItems.modelTest, "testmod3:modeltest"); // Add a variant for the default model
 		for (int stage = 0; stage < 3; stage++) { // Add a variant for each stage's model
 			ModelBakery.addVariantName(ModItems.modelTest, "testmod3:modeltest_" + stage);
 		}
 
-		ModelBakery.addVariantName(ModItems.slingshot, "testmod3:slingshot", "testmod3:slingshot_pulled");
+		ModelBakery.addVariantName(ModItems.slingshot, "testmod3:slingshot_pulled");
 	}
 
 	private void registerItemModels() {
@@ -109,6 +108,7 @@ public class ModModelManager {
 
 	private void registerItemModel(Item item, String modelLocation) {
 		final ModelResourceLocation fullModelLocation = new ModelResourceLocation(modelLocation, "inventory");
+		ModelBakery.addVariantName(item, modelLocation); // Ensure the custom model is loaded and prevent the default model from being loaded
 		ModelLoader.setCustomMeshDefinition(item, stack -> fullModelLocation);
 	}
 }
