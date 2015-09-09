@@ -1,0 +1,6 @@
+{
+	"parent": "block/orientable_vertical",
+	"textures": {
+		"top": "#side"
+	}
+}

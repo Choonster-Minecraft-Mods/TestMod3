@@ -1,6 +1,5 @@
 package com.choonster.testmod3.block;
 
-import com.choonster.testmod3.Logger;
 import com.choonster.testmod3.TestMod3;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
@@ -31,6 +30,7 @@ public class BlockRotatableLamp extends Block {
 		super(Material.redstoneLight);
 		setUnlocalizedName("rotatableLamp");
 		setCreativeTab(TestMod3.creativeTab);
+		setDefaultState(getBlockState().getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(LIT, false));
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class BlockRotatableLamp extends Block {
 	@Override
 	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		EnumFacing newFacing = BlockPistonBase.getFacingFromEntity(worldIn, pos, placer);
-		Logger.info("Facing: %s", newFacing);
+
 		return super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, newFacing);
 	}
 
@@ -84,10 +84,5 @@ public class BlockRotatableLamp extends Block {
 		IBlockState state = world.getBlockState(pos);
 
 		return (boolean) state.getValue(LIT) ? 15 : 0;
-	}
-
-	@Override
-	public IBlockState getStateForEntityRender(IBlockState state) {
-		return state.withProperty(FACING, EnumFacing.NORTH).withProperty(LIT, true);
 	}
 }

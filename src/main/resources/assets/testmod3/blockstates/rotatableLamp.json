@@ -1,40 +1,38 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "cube_top",
-		"y": 90,
+		"model": "testmod3:orientable_single",
 		"uvlock": true
 	},
 	"variants": {
 		"lit": {
 			"true": {
 				"textures": {
-					"top": "testmod3:blocks/rotatable_lamp_on",
+					"front": "testmod3:blocks/rotatable_lamp_on",
 					"side": "minecraft:blocks/redstone_lamp_on"
 				}
 			},
 			"false": {
 				"textures": {
-					"top": "testmod3:blocks/rotatable_lamp_off",
+					"front": "testmod3:blocks/rotatable_lamp_off",
 					"side": "minecraft:blocks/redstone_lamp_off"
 				}
 			}
 		},
 		"facing": {
 			"down": {
+				"model": "testmod3:orientable_single_vertical",
 				"x": 180
 			},
 			"up": {
-				"x": 0
+				"model": "testmod3:orientable_single_vertical"
 			},
-			"north": {
-				"y": 0
-			},
+			"north": {},
 			"south": {
-				"y": 90
+				"y": 180
 			},
 			"east": {
-				"y": 180
+				"y": 90
 			},
 			"west": {
 				"y": 270

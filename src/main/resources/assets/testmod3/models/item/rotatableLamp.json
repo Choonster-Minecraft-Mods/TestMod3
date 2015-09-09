@@ -1,0 +1,26 @@
+{
+	"parent": "testmod3:block/orientable_single",
+	"textures": {
+		"front": "testmod3:blocks/rotatable_lamp_off",
+		"side": "minecraft:blocks/redstone_lamp_off"
+	},
+	"display": {
+		"thirdperson": {
+			"rotation": [
+				10,
+				-45,
+				170
+			],
+			"translation": [
+				0,
+				1.5,
+				-2.75
+			],
+			"scale": [
+				0.375,
+				0.375,
+				0.375
+			]
+		}
+	}
+}
