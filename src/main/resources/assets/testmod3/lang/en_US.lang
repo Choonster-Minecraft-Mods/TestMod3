@@ -9,6 +9,8 @@ tile.rightClickTest.name=Right Click Test
 tile.clientPlayerRightClick.name=Client Player Right Click Block
 tile.rotatableLamp.name=Rotatable Lamp
 
+tile.basicPipe.name=Basic Pipe
+
 tile.fluid.static.name=Static Fluid
 tile.fluid.normal.name=Normal Fluid
 tile.fluid.staticgas.name=Static Gas

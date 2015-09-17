@@ -1,0 +1,84 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"textures": {
+			"centre": "blocks/brick",
+			"side": "blocks/brick"
+		},
+		"model": "testmod3:pipe/pipe_centre",
+		"uvlock": true
+	},
+	"variants": {
+		"down": {
+			"true": {
+				"submodel": {
+					"pipe_down": {
+						"model": "testmod3:pipe/pipe_part",
+						"x": 90,
+						"uvlock": true
+					}
+				}
+			},
+			"false": { }
+		},
+		"up": {
+			"true": {
+				"submodel": {
+					"pipe_up": {
+						"model": "testmod3:pipe/pipe_part",
+						"x": -90,
+						"uvlock": true
+					}
+				}
+			},
+			"false": { }
+		},
+		"north": {
+			"true": {
+				"submodel": {
+					"pipe_north": {
+						"model": "testmod3:pipe/pipe_part",
+						"uvlock": true
+					}
+				}
+			},
+			"false": { }
+		},
+		"south": {
+			"true": {
+				"submodel": {
+					"pipe_south": {
+						"model": "testmod3:pipe/pipe_part",
+						"y": 180,
+						"uvlock": true
+					}
+				}
+			},
+			"false": { }
+		},
+		"east": {
+			"true": {
+				"submodel": {
+					"pipe_east": {
+						"model": "testmod3:pipe/pipe_part",
+						"y": 90,
+						"uvlock": true
+					}
+				}
+			},
+			"false": { }
+		},
+		"west": {
+			"true": {
+				"submodel": {
+					"pipe_west": {
+						"model": "testmod3:pipe/pipe_part",
+						"y": -90,
+						"uvlock": true
+					}
+				}
+			},
+			"false": { }
+		}
+	}
+}
