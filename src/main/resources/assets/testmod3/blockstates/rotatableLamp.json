@@ -27,7 +27,7 @@
 			"up": {
 				"model": "testmod3:orientable_single_vertical"
 			},
-			"north": {},
+			"north": { },
 			"south": {
 				"y": 180
 			},
