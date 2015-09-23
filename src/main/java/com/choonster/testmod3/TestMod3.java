@@ -7,6 +7,7 @@ import com.choonster.testmod3.event.BucketFillHandler;
 import com.choonster.testmod3.init.*;
 import com.choonster.testmod3.proxy.CommonProxy;
 import com.choonster.testmod3.util.BiomeBlockReplacer;
+import com.choonster.testmod3.util.BlockDumper;
 import com.choonster.testmod3.world.gen.WorldGenOres;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
@@ -64,6 +65,8 @@ public class TestMod3 {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		MinecraftForge.TERRAIN_GEN_BUS.register(new BiomeBlockReplacer());
+
+		BlockDumper.dump();
 
 		proxy.postInit();
 	}
