@@ -8,6 +8,7 @@ tile.largeCollisionTest.name=Large Collision Test
 tile.rightClickTest.name=Right Click Test
 tile.clientPlayerRightClick.name=Client Player Right Click Block
 tile.rotatableLamp.name=Rotatable Lamp
+tile.itemCollisionTest.name=Item Collision Test
 
 tile.basicPipe.name=Basic Pipe
 

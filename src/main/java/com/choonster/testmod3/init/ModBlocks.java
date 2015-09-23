@@ -14,6 +14,7 @@ public class ModBlocks {
 	public static BlockRightClickTest rightClickTest;
 	public static BlockClientPlayerRightClick clientPlayerRightClick;
 	public static BlockRotatableLamp rotatableLamp;
+	public static BlockItemCollisionTest itemCollisionTest;
 
 	public static BlockPipeBasic pipeBasic;
 
@@ -23,6 +24,7 @@ public class ModBlocks {
 		rightClickTest = registerBlock(new BlockRightClickTest());
 		clientPlayerRightClick = registerBlock(new BlockClientPlayerRightClick());
 		rotatableLamp = registerBlock(new BlockRotatableLamp());
+		itemCollisionTest = registerBlock(new BlockItemCollisionTest());
 
 		pipeBasic = registerBlock(new BlockPipeBasic());
 	}

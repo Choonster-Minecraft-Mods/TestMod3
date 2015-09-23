@@ -76,6 +76,7 @@ public class ModModelManager {
 		registerBlockItemModel(ModBlocks.rightClickTest, "black_stained_glass");
 		registerBlockItemModel(ModBlocks.clientPlayerRightClick, "heavy_weighted_pressure_plate");
 		registerBlockItemModel(ModBlocks.rotatableLamp);
+		registerBlockItemModel(ModBlocks.itemCollisionTest);
 	}
 
 	private void registerBlockItemModel(Block block) {
