@@ -102,6 +102,7 @@ public class ModModelManager {
 		registerItemModel(ModItems.modelTest); // Only use the default model, the stages are handled by ItemModelTest#getModel
 		registerItemModel(ModItems.snowballLauncher, "minecraft:fishing_rod");
 		registerItemModel(ModItems.slingshot);
+		registerItemModel(ModItems.unicodeTooltips, "minecraft:rabbit");
 	}
 
 	private void registerItemModel(Item item) {

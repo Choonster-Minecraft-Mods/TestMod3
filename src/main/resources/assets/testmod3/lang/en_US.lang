@@ -35,6 +35,12 @@ item.slingshot.name=Slingshot
 item.entityTest.name=Entity Test
 item.blockDestroyer.name=Block Destroyer
 item.woodenAxe.name=Wooden Cutting Axe
+item.unicodeTooltips.name=Unicode Tooltips
+
+# Tooltips
+item.unicodeTooltips.desc.1=§a§oLine 1 (Section Characters in Lang File)§r
+item.unicodeTooltips.desc.2=Line 2 (Section Characters in Code)
+item.unicodeTooltips.desc.3=Line 3 (EnumChatFormatting)
 
 # Chat messages
 message.entityInteractCount=Interact count: %s
