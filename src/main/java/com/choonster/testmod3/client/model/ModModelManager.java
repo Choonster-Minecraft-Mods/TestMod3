@@ -1,4 +1,4 @@
-package com.choonster.testmod3.client.util;
+package com.choonster.testmod3.client.model;
 
 import com.choonster.testmod3.init.ModBlocks;
 import com.choonster.testmod3.init.ModFluids;
