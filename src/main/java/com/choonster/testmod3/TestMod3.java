@@ -60,6 +60,8 @@ public class TestMod3 {
 
 		ModRecipes.removeCraftingRecipes();
 
+		ModMapGen.registerWorldGenerators();
+
 		proxy.init();
 	}
 
