@@ -36,11 +36,15 @@ item.entityTest.name=Entity Test
 item.blockDestroyer.name=Block Destroyer
 item.woodenAxe.name=Wooden Cutting Axe
 item.unicodeTooltips.name=Unicode Tooltips
+item.swapTestA.name=Swap Test A
+item.swapTestB.name=Swap Test B
 
 # Tooltips
 item.unicodeTooltips.desc.1=§a§oLine 1 (Section Characters in Lang File)§r
 item.unicodeTooltips.desc.2=Line 2 (Section Characters in Code)
 item.unicodeTooltips.desc.3=Line 3 (EnumChatFormatting)
+item.swapTestWithItem.desc=Shift-right click to convert to %s
+item.swapTestWithoutItem.desc=No conversion defined for this item
 
 # Chat messages
 message.entityInteractCount=Interact count: %s

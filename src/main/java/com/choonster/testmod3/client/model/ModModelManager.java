@@ -103,6 +103,8 @@ public class ModModelManager {
 		registerItemModel(ModItems.snowballLauncher, "minecraft:fishing_rod");
 		registerItemModel(ModItems.slingshot);
 		registerItemModel(ModItems.unicodeTooltips, "minecraft:rabbit");
+		registerItemModel(ModItems.swapTestA, "minecraft:brick");
+		registerItemModel(ModItems.swapTestB, "minecraft:netherbrick");
 	}
 
 	private void registerItemModel(Item item) {

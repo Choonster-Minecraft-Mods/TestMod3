@@ -22,6 +22,8 @@ public class ModItems {
 	public static ItemSnowballLauncher snowballLauncher;
 	public static ItemSlingshot slingshot;
 	public static ItemUnicodeTooltips unicodeTooltips;
+	public static ItemSwapTest swapTestA;
+	public static ItemSwapTest swapTestB;
 
 	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE;
 
@@ -54,6 +56,11 @@ public class ModItems {
 		slingshot = registerItem(new ItemSlingshot());
 
 		unicodeTooltips = registerItem(new ItemUnicodeTooltips());
+
+		swapTestA = registerItem(new ItemSwapTest("A"));
+		swapTestB = registerItem(new ItemSwapTest("B"));
+		swapTestA.setOtherItem(new ItemStack(swapTestB));
+		swapTestB.setOtherItem(new ItemStack(swapTestA));
 
 		TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10).setRepairItem(new ItemStack(Items.glowstone_dust));
 	}
