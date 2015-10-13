@@ -19,6 +19,8 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @Mod(modid = TestMod3.MODID, version = TestMod3.VERSION, guiFactory = "com.choonster.testmod3.config.GuiConfigFactoryTestMod3")
@@ -34,6 +36,8 @@ public class TestMod3 {
 	@Mod.Instance(MODID)
 	public static TestMod3 instance;
 
+	public static SimpleNetworkWrapper network;
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		creativeTab = new CreativeTabExample();
@@ -42,6 +46,9 @@ public class TestMod3 {
 		MinecraftForge.EVENT_BUS.register(new BucketFillHandler());
 		MinecraftForge.EVENT_BUS.register(new BlockEventHandler());
 
+		network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
+
+		ModMessages.registerMessages();
 		ModFluids.registerFluids();
 		ModBlocks.registerBlocks();
 		ModItems.registerItems();
