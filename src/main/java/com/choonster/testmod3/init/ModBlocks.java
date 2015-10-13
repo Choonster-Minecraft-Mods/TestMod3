@@ -1,10 +1,12 @@
 package com.choonster.testmod3.init;
 
+import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.block.*;
 import com.choonster.testmod3.block.pipe.BlockPipeBasic;
 import com.choonster.testmod3.item.block.ItemColoredMod;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModBlocks {
@@ -39,5 +41,13 @@ public class ModBlocks {
 	private static <T extends Block> T registerBlock(T block, Class<? extends ItemBlock> itemClass, Object... constructorArgs) {
 		GameRegistry.registerBlock(block, itemClass, block.getUnlocalizedName().replace("tile.", ""), constructorArgs);
 		return block;
+	}
+
+
+	public static void registerTileEntities() {
+	}
+
+	private static void registerTileEntity(Class<? extends TileEntity> tileEntityClass, String id) {
+		GameRegistry.registerTileEntity(tileEntityClass, TestMod3.MODID + ":" + id);
 	}
 }

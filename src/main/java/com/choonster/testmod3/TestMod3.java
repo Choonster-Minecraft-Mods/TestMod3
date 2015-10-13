@@ -51,6 +51,7 @@ public class TestMod3 {
 		ModMessages.registerMessages();
 		ModFluids.registerFluids();
 		ModBlocks.registerBlocks();
+		ModBlocks.registerTileEntities();
 		ModItems.registerItems();
 		ModFluids.registerBuckets();
 		ModBiomes.registerBiomes();
