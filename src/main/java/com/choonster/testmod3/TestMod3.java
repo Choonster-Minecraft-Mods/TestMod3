@@ -1,5 +1,6 @@
 package com.choonster.testmod3;
 
+import com.choonster.testmod3.client.gui.GuiHandler;
 import com.choonster.testmod3.compat.nei.NEICompat;
 import com.choonster.testmod3.config.Config;
 import com.choonster.testmod3.event.BlockEventHandler;
@@ -29,6 +30,9 @@ public class TestMod3 {
 
 	@SidedProxy(clientSide = "com.choonster.testmod3.proxy.CombinedClientProxy", serverSide = "com.choonster.testmod3.proxy.DedicatedServerProxy")
 	public static CommonProxy proxy;
+
+	@Mod.Instance(MODID)
+	public static TestMod3 instance;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -61,6 +65,8 @@ public class TestMod3 {
 		ModRecipes.removeCraftingRecipes();
 
 		ModMapGen.registerWorldGenerators();
+
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
 		proxy.init();
 	}
