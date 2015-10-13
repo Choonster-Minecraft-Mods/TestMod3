@@ -24,6 +24,7 @@ public class ModItems {
 	public static ItemUnicodeTooltips unicodeTooltips;
 	public static ItemSwapTest swapTestA;
 	public static ItemSwapTest swapTestB;
+	public static ItemBlockDebugger blockDebugger;
 
 	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE;
 
@@ -61,6 +62,8 @@ public class ModItems {
 		swapTestB = registerItem(new ItemSwapTest("B"));
 		swapTestA.setOtherItem(new ItemStack(swapTestB));
 		swapTestB.setOtherItem(new ItemStack(swapTestA));
+
+		blockDebugger = registerItem(new ItemBlockDebugger());
 
 		TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10).setRepairItem(new ItemStack(Items.glowstone_dust));
 	}

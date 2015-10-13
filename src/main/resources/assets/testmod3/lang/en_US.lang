@@ -38,6 +38,7 @@ item.woodenAxe.name=Wooden Cutting Axe
 item.unicodeTooltips.name=Unicode Tooltips
 item.swapTestA.name=Swap Test A
 item.swapTestB.name=Swap Test B
+item.blockDebugger.name=Block Debugger
 
 # Tooltips
 item.unicodeTooltips.desc.1=§a§oLine 1 (Section Characters in Lang File)§r

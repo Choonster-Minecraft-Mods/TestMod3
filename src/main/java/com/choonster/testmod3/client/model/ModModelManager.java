@@ -105,6 +105,7 @@ public class ModModelManager {
 		registerItemModel(ModItems.unicodeTooltips, "minecraft:rabbit");
 		registerItemModel(ModItems.swapTestA, "minecraft:brick");
 		registerItemModel(ModItems.swapTestB, "minecraft:netherbrick");
+		registerItemModel(ModItems.blockDebugger, "minecraft:nether_star");
 	}
 
 	private void registerItemModel(Item item) {
