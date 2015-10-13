@@ -1,5 +1,7 @@
 package com.choonster.testmod3.client.gui;
 
+import com.choonster.testmod3.command.SurvivalCommandBlockLogic;
+import com.choonster.testmod3.tileentity.TileEntitySurvivalCommandBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -15,6 +17,10 @@ public class GuiHandler implements IGuiHandler {
 		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 
 		switch (ID) {
+			case SURVIVAL_COMMAND_BLOCK:
+			case SURVIVAL_COMMAND_BLOCK_MINECART:
+				return null;
+
 			default:
 				return null;
 		}
@@ -25,9 +31,16 @@ public class GuiHandler implements IGuiHandler {
 		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 
 		switch (ID) {
+			case SURVIVAL_COMMAND_BLOCK:
+				SurvivalCommandBlockLogic survivalCommandBlockLogic = ((TileEntitySurvivalCommandBlock) tileEntity).getCommandBlockLogic();
+				return new GuiSurvivalCommandBlock(survivalCommandBlockLogic);
+
+			case SURVIVAL_COMMAND_BLOCK_MINECART:
+				// Get SurvivalCommandBlockLogic from Minecart using x as entityID (NYI)
+				return null;
+
 			default:
 				return null;
 		}
 	}
 }
-

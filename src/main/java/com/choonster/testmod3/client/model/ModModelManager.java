@@ -5,6 +5,7 @@ import com.choonster.testmod3.init.ModFluids;
 import com.choonster.testmod3.init.ModItems;
 import com.choonster.testmod3.util.Constants;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCommandBlock;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
@@ -77,6 +78,9 @@ public class ModModelManager {
 		registerBlockItemModel(ModBlocks.clientPlayerRightClick, "minecraft:heavy_weighted_pressure_plate");
 		registerBlockItemModel(ModBlocks.rotatableLamp);
 		registerBlockItemModel(ModBlocks.itemCollisionTest);
+		registerBlockItemModel(ModBlocks.survivalCommandBlock);
+
+		ModelLoader.setCustomStateMapper(ModBlocks.survivalCommandBlock, new StateMap.Builder().addPropertiesToIgnore(BlockCommandBlock.TRIGGERED).build());
 	}
 
 	private void registerBlockItemModel(Block block) {

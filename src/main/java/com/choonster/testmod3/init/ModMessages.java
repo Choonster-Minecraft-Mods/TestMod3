@@ -10,10 +10,10 @@ public class ModMessages {
 	private static int messageID = 0;
 
 	public static void registerMessages() {
+		registerMessage(MessageSurvivalCommandBlockSaveChanges.Handler.class, MessageSurvivalCommandBlockSaveChanges.class, Side.SERVER);
 	}
 
 	private static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(Class<? extends IMessageHandler<REQ, REPLY>> messageHandler, Class<REQ> requestMessageType, Side receivingSide) {
 		TestMod3.network.registerMessage(messageHandler, requestMessageType, messageID++, receivingSide);
 	}
 }
-
