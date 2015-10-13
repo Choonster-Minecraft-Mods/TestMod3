@@ -29,7 +29,7 @@ public class GuiSurvivalCommandBlock extends GuiCommandBlock {
 	protected void actionPerformed(GuiButton button) throws IOException {
 		if (button.enabled && button.id == 0) {
 			try {
-				GuiTextField commandTextField = ((GuiTextField) COMMAND_TEXT_FIELD.get(this));
+				GuiTextField commandTextField = (GuiTextField) COMMAND_TEXT_FIELD.get(this);
 				TestMod3.network.sendToServer(new MessageSurvivalCommandBlockSaveChanges(survivalCommandBlockLogic, commandTextField.getText()));
 			} catch (IllegalAccessException e) {
 				Logger.error(e, "Couldn't set survival command block");
