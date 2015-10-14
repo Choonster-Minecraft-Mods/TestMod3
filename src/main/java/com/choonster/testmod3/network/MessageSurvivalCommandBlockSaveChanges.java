@@ -42,9 +42,9 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 	private BlockPos blockPos;
 
 	/**
-	 * The Survival Command Block Minecart's entityID. {@code null} if {@link #type} is not {@link SurvivalCommandBlockLogic.Type#MINECART}. Server-only.
+	 * The Survival Command Block Minecart's entityID. -1 if {@link #type} is not {@link SurvivalCommandBlockLogic.Type#MINECART}. Server-only.
 	 */
-	private int minecartEntityID;
+	private int minecartEntityID = -1;
 
 	public MessageSurvivalCommandBlockSaveChanges() {
 	}
