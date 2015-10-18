@@ -10,6 +10,7 @@ tile.clientPlayerRightClick.name=Client Player Right Click Block
 tile.rotatableLamp.name=Rotatable Lamp
 tile.itemCollisionTest.name=Item Collision Test
 tile.survivalCommandBlock.name=Survival Command Block
+tile.itemDebugger.name=Item Debugger
 
 tile.basicPipe.name=Basic Pipe
 

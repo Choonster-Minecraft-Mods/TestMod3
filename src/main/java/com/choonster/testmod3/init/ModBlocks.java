@@ -24,6 +24,7 @@ public class ModBlocks {
 	public static BlockRotatableLamp rotatableLamp;
 	public static BlockItemCollisionTest itemCollisionTest;
 	public static BlockSurvivalCommandBlock survivalCommandBlock;
+	public static BlockItemDebugger itemDebugger;
 
 	public static BlockPipeBasic pipeBasic;
 
@@ -35,6 +36,7 @@ public class ModBlocks {
 		rotatableLamp = registerBlock(new BlockRotatableLamp());
 		itemCollisionTest = registerBlock(new BlockItemCollisionTest());
 		survivalCommandBlock = registerBlock(new BlockSurvivalCommandBlock());
+		itemDebugger = registerBlock(new BlockItemDebugger());
 
 		pipeBasic = registerBlock(new BlockPipeBasic());
 	}
