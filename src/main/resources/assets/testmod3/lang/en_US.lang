@@ -14,6 +14,7 @@ tile.fluidTank.name=Fluid Tank
 tile.itemDebugger.name=Item Debugger
 
 tile.basicPipe.name=Basic Pipe
+tile.fluidPipe.name=Fluid Pipe
 
 tile.fluid.static.name=Static Fluid
 tile.fluid.normal.name=Normal Fluid

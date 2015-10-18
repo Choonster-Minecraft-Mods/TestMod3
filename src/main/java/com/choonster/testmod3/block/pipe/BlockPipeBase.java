@@ -58,16 +58,16 @@ public abstract class BlockPipeBase extends Block {
 	}
 
 	/**
-	 * Is the neighbouring pipe a valid connection for this pipe?
+	 * Is the neighbouring block a valid connection for this pipe?
 	 *
 	 * @param ownState           This pipe's state
-	 * @param neighbourState     The neighbouring pipe's state
+	 * @param neighbourState     The neighbouring block's state
 	 * @param world              The world
 	 * @param ownPos             This pipe's position
-	 * @param neighbourDirection The direction of the neighbouring pipe
-	 * @return Is the neighbouring pipe a valid connection?
+	 * @param neighbourDirection The direction of the neighbouring block
+	 * @return Is the neighbouring block a valid connection?
 	 */
-	protected boolean isValidPipe(IBlockState ownState, IBlockState neighbourState, IBlockAccess world, BlockPos ownPos, EnumFacing neighbourDirection) {
+	protected boolean isValidConnection(IBlockState ownState, IBlockState neighbourState, IBlockAccess world, BlockPos ownPos, EnumFacing neighbourDirection) {
 		return neighbourState.getBlock() instanceof BlockPipeBase;
 	}
 
@@ -85,8 +85,8 @@ public abstract class BlockPipeBase extends Block {
 		IBlockState neighbourState = worldIn.getBlockState(neighbourPos);
 		Block neighbourBlock = neighbourState.getBlock();
 
-		boolean neighbourIsValidForThis = isValidPipe(ownState, neighbourState, worldIn, ownPos, neighbourDirection);
-		boolean thisIsValidForNeighbour = neighbourBlock instanceof BlockPipeBase && ((BlockPipeBase) neighbourBlock).isValidPipe(neighbourState, ownState, worldIn, neighbourPos, neighbourDirection.getOpposite());
+		boolean neighbourIsValidForThis = isValidConnection(ownState, neighbourState, worldIn, ownPos, neighbourDirection);
+		boolean thisIsValidForNeighbour = !(neighbourBlock instanceof BlockPipeBase) || ((BlockPipeBase) neighbourBlock).isValidConnection(neighbourState, ownState, worldIn, neighbourPos, neighbourDirection.getOpposite());
 
 		return neighbourIsValidForThis && thisIsValidForNeighbour;
 	}

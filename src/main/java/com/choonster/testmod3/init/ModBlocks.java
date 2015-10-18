@@ -3,6 +3,7 @@ package com.choonster.testmod3.init;
 import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.block.*;
 import com.choonster.testmod3.block.pipe.BlockPipeBasic;
+import com.choonster.testmod3.block.pipe.BlockPipeFluid;
 import com.choonster.testmod3.item.block.ItemColoredMod;
 import com.choonster.testmod3.item.block.ItemFluidTank;
 import com.choonster.testmod3.tileentity.TileEntityFluidTank;
@@ -30,6 +31,7 @@ public class ModBlocks {
 	public static BlockItemDebugger itemDebugger;
 
 	public static BlockPipeBasic pipeBasic;
+	public static BlockPipeFluid pipeFluid;
 
 	public static void registerBlocks() {
 		waterGrass = registerBlock(new BlockWaterGrass(), ItemColoredMod.class, true);
@@ -43,6 +45,7 @@ public class ModBlocks {
 		itemDebugger = registerBlock(new BlockItemDebugger());
 
 		pipeBasic = registerBlock(new BlockPipeBasic());
+		pipeFluid = registerBlock(new BlockPipeFluid());
 	}
 
 	/**
