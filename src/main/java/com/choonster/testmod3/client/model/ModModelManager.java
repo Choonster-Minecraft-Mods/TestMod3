@@ -17,6 +17,9 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 public class ModModelManager {
 	public static final ModModelManager INSTANCE = new ModModelManager();
@@ -37,9 +40,7 @@ public class ModModelManager {
 	}
 
 	private void registerFluidModels() {
-		for (IFluidBlock fluidBlock : ModFluids.fluidBlocks) {
-			registerFluidModel(fluidBlock);
-		}
+		ModFluids.fluidBlocks.forEach(this::registerFluidModel);
 	}
 
 	private void registerFluidModel(IFluidBlock fluidBlock) {
@@ -60,27 +61,29 @@ public class ModModelManager {
 	}
 
 	private void registerBucketModels() {
+		itemsRegistered.add(ModItems.bucket);
+
 		for (FluidStack fluidStack : ModItems.bucket.fluids) {
 			ModelBakery.addVariantName(ModItems.bucket, "testmod3:bucket/" + fluidStack.getFluid().getName());
 		}
 
-		ModelLoader.setCustomMeshDefinition(ModItems.bucket, MeshDefinitionFix.create(stack ->
-						new ModelResourceLocation("testmod3:bucket/" + ModItems.bucket.getFluid(stack).getFluid().getName(), "inventory")
+		ModelLoader.setCustomMeshDefinition(ModItems.bucket, MeshDefinitionFix.create(stack -> {
+					FluidStack fluidStack = ModItems.bucket.getFluid(stack);
+					return fluidStack != null ? new ModelResourceLocation("testmod3:bucket/" + fluidStack.getFluid().getName(), "inventory") : null;
+				}
 		));
 	}
 
 	private void registerBlockModels() {
 		ModelLoader.setCustomStateMapper(ModBlocks.waterGrass, new StateMap.Builder().addPropertiesToIgnore(BlockLiquid.LEVEL).build());
-		registerBlockItemModel(ModBlocks.waterGrass, "minecraft:tall_grass");
+		ModelLoader.setCustomStateMapper(ModBlocks.survivalCommandBlock, new StateMap.Builder().addPropertiesToIgnore(BlockCommandBlock.TRIGGERED).build());
 
+		registerBlockItemModel(ModBlocks.waterGrass, "minecraft:tall_grass");
 		registerBlockItemModel(ModBlocks.largeCollisionTest, "minecraft:white_wool");
 		registerBlockItemModel(ModBlocks.rightClickTest, "minecraft:black_stained_glass");
 		registerBlockItemModel(ModBlocks.clientPlayerRightClick, "minecraft:heavy_weighted_pressure_plate");
-		registerBlockItemModel(ModBlocks.rotatableLamp);
-		registerBlockItemModel(ModBlocks.itemCollisionTest);
-		registerBlockItemModel(ModBlocks.survivalCommandBlock);
 
-		ModelLoader.setCustomStateMapper(ModBlocks.survivalCommandBlock, new StateMap.Builder().addPropertiesToIgnore(BlockCommandBlock.TRIGGERED).build());
+		ModBlocks.blocks.forEach(this::registerBlockItemModel);
 	}
 
 	private void registerBlockItemModel(Block block) {
@@ -99,17 +102,18 @@ public class ModModelManager {
 		ModelBakery.addVariantName(ModItems.slingshot, "testmod3:slingshot_pulled");
 	}
 
+	private Set<Item> itemsRegistered = new HashSet<>();
+
 	private void registerItemModels() {
-		registerItemModel(ModItems.entityInteractionTest);
-		registerItemModel(ModItems.solarisRecord);
-		registerItemModel(ModItems.woodenAxe);
-		registerItemModel(ModItems.modelTest); // Only use the default model, the stages are handled by ItemModelTest#getModel
+		// Register items with custom model names first
 		registerItemModel(ModItems.snowballLauncher, "minecraft:fishing_rod");
-		registerItemModel(ModItems.slingshot);
 		registerItemModel(ModItems.unicodeTooltips, "minecraft:rabbit");
 		registerItemModel(ModItems.swapTestA, "minecraft:brick");
 		registerItemModel(ModItems.swapTestB, "minecraft:netherbrick");
 		registerItemModel(ModItems.blockDebugger, "minecraft:nether_star");
+
+		// Then register items with default model names
+		ModItems.items.forEach(this::registerItemModel);
 	}
 
 	private void registerItemModel(Item item) {
@@ -117,8 +121,12 @@ public class ModModelManager {
 	}
 
 	private void registerItemModel(Item item, String modelLocation) {
-		final ModelResourceLocation fullModelLocation = new ModelResourceLocation(modelLocation, "inventory");
-		ModelBakery.addVariantName(item, modelLocation); // Ensure the custom model is loaded and prevent the default model from being loaded
-		ModelLoader.setCustomMeshDefinition(item, MeshDefinitionFix.create(stack -> fullModelLocation));
+		if (!itemsRegistered.contains(item)) { // Don't replace an existing registration
+			itemsRegistered.add(item);
+
+			final ModelResourceLocation fullModelLocation = new ModelResourceLocation(modelLocation, "inventory");
+			ModelBakery.addVariantName(item, modelLocation); // Ensure the custom model is loaded and prevent the default model from being loaded
+			ModelLoader.setCustomMeshDefinition(item, MeshDefinitionFix.create(stack -> fullModelLocation));
+		}
 	}
 }

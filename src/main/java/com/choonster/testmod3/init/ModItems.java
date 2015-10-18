@@ -8,7 +8,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ModItems {
+	public static final Set<Item> items = new HashSet<>();
+
 	public static Item woodenAxe;
 	public static Item entityTest;
 	public static Item solarisRecord;
@@ -29,47 +34,50 @@ public class ModItems {
 	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE;
 
 	public static void registerItems() {
-		woodenAxe = new ToolWoodAxe(Item.ToolMaterial.WOOD).setCreativeTab(TestMod3.creativeTab).setUnlocalizedName("woodenAxe");
-		GameRegistry.registerItem(woodenAxe, "wooden_axe_test");
-
-		entityTest = new ItemEntityTest();
-		GameRegistry.registerItem(entityTest, "entity_test");
-
-		solarisRecord = new ItemRecordSolaris();
-		GameRegistry.registerItem(solarisRecord, "solaris_record");
-
-		heavy = new ItemHeavy();
-		GameRegistry.registerItem(heavy, "heavy");
-
-		bucket = registerItem(new ItemBucketTestMod3());
-
+		woodenAxe = registerItem(new ToolWoodAxe(Item.ToolMaterial.WOOD).setCreativeTab(TestMod3.creativeTab).setUnlocalizedName("woodenAxe"));
+		entityTest = registerItem(new ItemEntityTest());
+		solarisRecord = registerItem(new ItemRecordSolaris(), "solaris_record");
+		heavy = registerItem(new ItemHeavy());
+		bucket = registerItem(new ItemBucketTestMod3(), "bucket");
 		entityInteractionTest = registerItem(new ItemEntityInteractionTest());
-
 		blockDestroyer = registerItem(new ItemBlockDestroyer());
-
 		subscripts = registerItem(new ItemWithSubscripts());
 		superscripts = registerItem(new ItemWithSuperscripts());
-
 		modelTest = registerItem(new ItemModelTest());
-
 		snowballLauncher = registerItem(new ItemSnowballLauncher());
-
 		slingshot = registerItem(new ItemSlingshot());
-
 		unicodeTooltips = registerItem(new ItemUnicodeTooltips());
+		blockDebugger = registerItem(new ItemBlockDebugger());
 
 		swapTestA = registerItem(new ItemSwapTest("A"));
 		swapTestB = registerItem(new ItemSwapTest("B"));
 		swapTestA.setOtherItem(new ItemStack(swapTestB));
 		swapTestB.setOtherItem(new ItemStack(swapTestA));
 
-		blockDebugger = registerItem(new ItemBlockDebugger());
-
 		TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10).setRepairItem(new ItemStack(Items.glowstone_dust));
 	}
 
+	/**
+	 * Register an Item with the default name.
+	 *
+	 * @param item The Item instance
+	 * @param <T>  The Item type
+	 * @return The Item instance
+	 */
 	private static <T extends Item> T registerItem(T item) {
-		GameRegistry.registerItem(item, item.getUnlocalizedName().replace("item.", ""));
+		return registerItem(item, item.getUnlocalizedName().replaceFirst("item.", ""));
+	}
+
+	/**
+	 * Register an Item with a custom name.
+	 *
+	 * @param item The Item instance
+	 * @param <T>  The Item type
+	 * @return The Item instance
+	 */
+	private static <T extends Item> T registerItem(T item, String name) {
+		GameRegistry.registerItem(item, name);
+		items.add(item);
 		return item;
 	}
 }

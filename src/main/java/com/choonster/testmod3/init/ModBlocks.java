@@ -10,7 +10,12 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ModBlocks {
+
+	public static final Set<Block> blocks = new HashSet<>();
 
 	public static BlockWaterGrass waterGrass;
 	public static BlockLargeCollisionTest largeCollisionTest;
@@ -34,18 +39,33 @@ public class ModBlocks {
 		pipeBasic = registerBlock(new BlockPipeBasic());
 	}
 
-	// Register a Block with the default ItemBlock class
+	/**
+	 * Register a Block with the default ItemBlock class.
+	 *
+	 * @param block The Block instance
+	 * @param <T>   The Block type
+	 * @return The Block instance
+	 */
 	private static <T extends Block> T registerBlock(T block) {
-		GameRegistry.registerBlock(block, block.getUnlocalizedName().replace("tile.", ""));
+		GameRegistry.registerBlock(block, block.getUnlocalizedName().replaceFirst("tile.", ""));
+		blocks.add(block);
 		return block;
 	}
 
-	// Register a Block with a custom ItemBlock class
+	/**
+	 * Register a Block with a custom ItemBlock class.
+	 *
+	 * @param block           The Block instance
+	 * @param itemClass       The ItemBlock class
+	 * @param constructorArgs Arguments to pass to the ItemBlock constructor
+	 * @param <T>             The Block type
+	 * @return The Block instance
+	 */
 	private static <T extends Block> T registerBlock(T block, Class<? extends ItemBlock> itemClass, Object... constructorArgs) {
-		GameRegistry.registerBlock(block, itemClass, block.getUnlocalizedName().replace("tile.", ""), constructorArgs);
+		GameRegistry.registerBlock(block, itemClass, block.getUnlocalizedName().replaceFirst("tile.", ""), constructorArgs);
+		blocks.add(block);
 		return block;
 	}
-
 
 	public static void registerTileEntities() {
 		registerTileEntity(TileEntitySurvivalCommandBlock.class, "survivalCommandBlock");
