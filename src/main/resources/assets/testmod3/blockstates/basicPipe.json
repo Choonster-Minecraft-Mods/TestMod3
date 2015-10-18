@@ -79,6 +79,21 @@
 				}
 			},
 			"false": { }
-		}
+		},
+		"inventory": [
+			{
+				"submodel": {
+					"pipe_north": {
+						"model": "testmod3:pipe/pipe_part",
+						"uvlock": true
+					},
+					"pipe_south": {
+						"model": "testmod3:pipe/pipe_part",
+						"y": 180,
+						"uvlock": true
+					}
+				}
+			}
+		]
 	}
 }
