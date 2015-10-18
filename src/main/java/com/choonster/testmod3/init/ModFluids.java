@@ -4,6 +4,8 @@ import com.choonster.testmod3.block.fluid.BlockFluidNoFlow;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.MaterialLiquid;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.*;
@@ -41,11 +43,10 @@ public class ModFluids {
 		blockNormalGas = registerFluidBlock(new BlockFluidClassic(fluidNormalGas, new MaterialLiquid(MapColor.adobeColor)));
 	}
 
-	public static void registerBuckets() {
-		registerBucket(fluidStatic);
-		registerBucket(fluidStaticGas);
-		registerBucket(fluidNormal);
-		registerBucket(fluidNormalGas);
+	public static void registerFluidContainers() {
+		for (IFluidBlock fluidBlock : fluidBlocks) {
+			registerBucket(fluidBlock.getFluid());
+		}
 	}
 
 	private static Fluid createFluid(String name, String textureName, boolean hasFlowIcon) {
@@ -73,6 +74,7 @@ public class ModFluids {
 	private static void registerBucket(Fluid fluid) {
 		ItemStack filledBucket = ModItems.bucket.addFluid(fluid);
 
-		FluidContainerRegistry.registerFluidContainer(fluid, filledBucket);
+		FluidContainerRegistry.registerFluidContainer(fluid, filledBucket, FluidContainerRegistry.EMPTY_BUCKET);
+	}
 	}
 }

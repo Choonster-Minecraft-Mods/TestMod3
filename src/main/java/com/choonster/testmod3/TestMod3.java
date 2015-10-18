@@ -53,7 +53,7 @@ public class TestMod3 {
 		ModBlocks.registerBlocks();
 		ModBlocks.registerTileEntities();
 		ModItems.registerItems();
-		ModFluids.registerBuckets();
+		ModFluids.registerFluidContainers();
 		ModBiomes.registerBiomes();
 		ModMapGen.registerMapGen();
 

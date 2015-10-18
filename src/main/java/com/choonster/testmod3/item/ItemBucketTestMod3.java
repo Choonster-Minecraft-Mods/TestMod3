@@ -92,7 +92,7 @@ public class ItemBucketTestMod3 extends ItemFluidContainer {
 
 					if (this.tryPlaceContainedLiquid(stack, world, blockpos1) && !player.capabilities.isCreativeMode) {
 						player.triggerAchievement(StatList.objectUseStats[Item.getIdFromItem(this)]);
-						return new ItemStack(Items.bucket);
+						return FluidContainerRegistry.EMPTY_BUCKET.copy();
 					}
 				}
 			}
