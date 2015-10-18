@@ -4,6 +4,8 @@ import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.block.*;
 import com.choonster.testmod3.block.pipe.BlockPipeBasic;
 import com.choonster.testmod3.item.block.ItemColoredMod;
+import com.choonster.testmod3.item.block.ItemFluidTank;
+import com.choonster.testmod3.tileentity.TileEntityFluidTank;
 import com.choonster.testmod3.tileentity.TileEntitySurvivalCommandBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
@@ -24,6 +26,7 @@ public class ModBlocks {
 	public static BlockRotatableLamp rotatableLamp;
 	public static BlockItemCollisionTest itemCollisionTest;
 	public static BlockSurvivalCommandBlock survivalCommandBlock;
+	public static BlockFluidTank fluidTank;
 	public static BlockItemDebugger itemDebugger;
 
 	public static BlockPipeBasic pipeBasic;
@@ -36,6 +39,7 @@ public class ModBlocks {
 		rotatableLamp = registerBlock(new BlockRotatableLamp());
 		itemCollisionTest = registerBlock(new BlockItemCollisionTest());
 		survivalCommandBlock = registerBlock(new BlockSurvivalCommandBlock());
+		fluidTank = registerBlock(new BlockFluidTank(), ItemFluidTank.class);
 		itemDebugger = registerBlock(new BlockItemDebugger());
 
 		pipeBasic = registerBlock(new BlockPipeBasic());
@@ -71,6 +75,7 @@ public class ModBlocks {
 
 	public static void registerTileEntities() {
 		registerTileEntity(TileEntitySurvivalCommandBlock.class, "survivalCommandBlock");
+		registerTileEntity(TileEntityFluidTank.class, "fluidTank");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> tileEntityClass, String id) {

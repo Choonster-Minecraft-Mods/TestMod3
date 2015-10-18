@@ -10,6 +10,7 @@ tile.clientPlayerRightClick.name=Client Player Right Click Block
 tile.rotatableLamp.name=Rotatable Lamp
 tile.itemCollisionTest.name=Item Collision Test
 tile.survivalCommandBlock.name=Survival Command Block
+tile.fluidTank.name=Fluid Tank
 tile.itemDebugger.name=Item Debugger
 
 tile.basicPipe.name=Basic Pipe
@@ -48,6 +49,9 @@ item.unicodeTooltips.desc.2=Line 2 (Section Characters in Code)
 item.unicodeTooltips.desc.3=Line 3 (EnumChatFormatting)
 item.swapTestWithItem.desc=Shift-right click to convert to %s
 item.swapTestWithoutItem.desc=No conversion defined for this item
+tile.fluidTank.desc.fluid=%s (%s/%s mB)
+tile.fluidTank.desc.empty=Empty
+tile.fluidTank.desc.shift=Hold Shift to display contents
 
 # Chat messages
 message.entityInteractCount=Interact count: %s
