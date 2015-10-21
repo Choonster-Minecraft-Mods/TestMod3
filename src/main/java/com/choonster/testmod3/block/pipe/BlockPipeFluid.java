@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * A fluid pipe.
- *
+ * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,34448.0.html
  */
