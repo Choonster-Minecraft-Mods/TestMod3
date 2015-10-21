@@ -116,6 +116,7 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 							}
 
 							survivalCommandBlockLogic.func_145756_e();
+							survivalCommandBlockLogic.trigger(world);
 							player.addChatMessage(new ChatComponentTranslation("advMode.setCommand.success", message.command));
 						}
 					} catch (Exception e) {
