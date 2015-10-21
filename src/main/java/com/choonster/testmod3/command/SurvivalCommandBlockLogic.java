@@ -9,6 +9,7 @@ public abstract class SurvivalCommandBlockLogic extends CommandBlockLogic {
 
 	public SurvivalCommandBlockLogic(Type type) {
 		this.type = type;
+		setName("Server");
 	}
 
 	public Type getType() {
