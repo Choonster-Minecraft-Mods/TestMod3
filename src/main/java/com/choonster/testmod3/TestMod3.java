@@ -5,6 +5,7 @@ import com.choonster.testmod3.compat.nei.NEICompat;
 import com.choonster.testmod3.config.Config;
 import com.choonster.testmod3.event.BlockEventHandler;
 import com.choonster.testmod3.event.BucketFillHandler;
+import com.choonster.testmod3.event.NetworkEventHandler;
 import com.choonster.testmod3.init.*;
 import com.choonster.testmod3.proxy.CommonProxy;
 import com.choonster.testmod3.tests.Tests;
@@ -12,6 +13,7 @@ import com.choonster.testmod3.util.BiomeBlockReplacer;
 import com.choonster.testmod3.util.BlockDumper;
 import com.choonster.testmod3.world.gen.WorldGenOres;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -45,6 +47,7 @@ public class TestMod3 {
 
 		MinecraftForge.EVENT_BUS.register(new BucketFillHandler());
 		MinecraftForge.EVENT_BUS.register(new BlockEventHandler());
+		FMLCommonHandler.instance().bus().register(new NetworkEventHandler());
 
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 
