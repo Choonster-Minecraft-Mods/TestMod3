@@ -30,6 +30,8 @@ public class ModItems {
 	public static ItemSwapTest swapTestA;
 	public static ItemSwapTest swapTestB;
 	public static ItemBlockDebugger blockDebugger;
+	public static ItemHarvestSword woodenHarvestSword;
+	public static ItemHarvestSword diamondHarvestSword;
 
 	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE;
 
@@ -48,6 +50,8 @@ public class ModItems {
 		slingshot = registerItem(new ItemSlingshot());
 		unicodeTooltips = registerItem(new ItemUnicodeTooltips());
 		blockDebugger = registerItem(new ItemBlockDebugger());
+		woodenHarvestSword = (ItemHarvestSword) registerItem(new ItemHarvestSword(Item.ToolMaterial.WOOD).setUnlocalizedName("harvestSwordWood"));
+		diamondHarvestSword = (ItemHarvestSword) registerItem(new ItemHarvestSword(Item.ToolMaterial.EMERALD).setUnlocalizedName("harvestSwordDiamond"));
 
 		swapTestA = registerItem(new ItemSwapTest("A"));
 		swapTestB = registerItem(new ItemSwapTest("B"));

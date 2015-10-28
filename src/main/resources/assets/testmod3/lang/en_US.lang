@@ -43,6 +43,8 @@ item.unicodeTooltips.name=Unicode Tooltips
 item.swapTestA.name=Swap Test A
 item.swapTestB.name=Swap Test B
 item.blockDebugger.name=Block Debugger
+item.harvestSwordWood.name=Wooden Harvest Sword
+item.harvestSwordDiamond.name=Diamond Harvest Sword
 
 # Tooltips
 item.unicodeTooltips.desc.1=§a§oLine 1 (Section Characters in Lang File)§r

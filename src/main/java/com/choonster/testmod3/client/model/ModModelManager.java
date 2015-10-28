@@ -111,6 +111,8 @@ public class ModModelManager {
 		registerItemModel(ModItems.swapTestA, "minecraft:brick");
 		registerItemModel(ModItems.swapTestB, "minecraft:netherbrick");
 		registerItemModel(ModItems.blockDebugger, "minecraft:nether_star");
+		registerItemModel(ModItems.woodenHarvestSword, "minecraft:wooden_sword");
+		registerItemModel(ModItems.diamondHarvestSword, "minecraft:diamond_sword");
 
 		// Then register items with default model names
 		ModItems.items.forEach(this::registerItemModel);
