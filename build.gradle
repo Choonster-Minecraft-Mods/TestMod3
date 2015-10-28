@@ -14,10 +14,9 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
 
-srcCompat = JavaVersion.VERSION_1_8
-targetCompat = JavaVersion.VERSION_1_8
+apply plugin: 'scala'
+apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = "${mc_version}-${mod_version}"
 group = "${package_group}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -69,19 +68,28 @@ processResources
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
+
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
+
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
 }
 
-tasks.withType(JavaCompile) {
+
+tasks.withType(ScalaCompile){
     options.encoding = 'UTF-8'
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+}
+
+tasks.withType(JavaCompile){
+    options.encoding = 'UTF-8'
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 // Fix resources not being loaded in IDEA
