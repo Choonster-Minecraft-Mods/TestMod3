@@ -31,6 +31,7 @@ public class ItemSwapTest extends Item {
 		this.otherItem = otherItem;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
 		super.addInformation(stack, playerIn, tooltip, advanced);
