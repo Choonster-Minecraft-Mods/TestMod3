@@ -41,14 +41,9 @@ public class ModRecipes {
 		GameRegistry.addRecipe(new ShapedArmourUpgradeRecipe(Items.golden_helmet, "AAA", "ABA", "AAA", 'A', Blocks.gold_block, 'B', new ItemStack(Items.iron_helmet, 1, OreDictionary.WILDCARD_VALUE)));
 
 		// Recipe for Guardian Spawner - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2424619-help-needed-creating-non-pig-mob-spawners
-		NBTTagCompound tileEntityData = new NBTTagCompound();
-		tileEntityData.setString("EntityId", "Guardian");
-
-		NBTTagCompound stackTagCompound = new NBTTagCompound();
-		stackTagCompound.setTag("BlockEntityTag", tileEntityData);
-
 		ItemStack guardianSpawner = new ItemStack(Blocks.mob_spawner);
-		guardianSpawner.setTagCompound(stackTagCompound);
+		NBTTagCompound tileEntityData = guardianSpawner.getSubCompound("BlockEntityTag", true);
+		tileEntityData.setString("EntityId", "Guardian");
 
 		GameRegistry.addRecipe(guardianSpawner, "SSS", "SFS", "SSS", 'S', Items.stick, 'F', Items.fish);
 	}
