@@ -46,6 +46,9 @@ public class ItemHarvestSword extends ItemTool {
 		setHarvestLevel("axe", toolMaterial.getHarvestLevel());
 		setHarvestLevel("shovel", toolMaterial.getHarvestLevel());
 
+		// Waila Harvestability sets the harvest tool of Cobwebs to "sword"
+		setHarvestLevel("sword", toolMaterial.getHarvestLevel());
+
 		setCreativeTab(TestMod3.creativeTab);
 	}
 
