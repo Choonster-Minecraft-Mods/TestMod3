@@ -9,6 +9,7 @@ import com.choonster.testmod3.item.block.ItemFluidTank;
 import com.choonster.testmod3.tileentity.TileEntityFluidTank;
 import com.choonster.testmod3.tileentity.TileEntitySurvivalCommandBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -29,6 +30,7 @@ public class ModBlocks {
 	public static BlockSurvivalCommandBlock survivalCommandBlock;
 	public static BlockFluidTank fluidTank;
 	public static BlockItemDebugger itemDebugger;
+	public static Block endPortalFrameFull;
 
 	public static BlockPipeBasic pipeBasic;
 	public static BlockPipeFluid pipeFluid;
@@ -43,6 +45,7 @@ public class ModBlocks {
 		survivalCommandBlock = registerBlock(new BlockSurvivalCommandBlock());
 		fluidTank = registerBlock(new BlockFluidTank(), ItemFluidTank.class);
 		itemDebugger = registerBlock(new BlockItemDebugger());
+		endPortalFrameFull = registerBlock(new Block(Material.rock).setUnlocalizedName("endPortalFrameFull").setCreativeTab(TestMod3.creativeTab));
 
 		pipeBasic = registerBlock(new BlockPipeBasic());
 		pipeFluid = registerBlock(new BlockPipeFluid());
