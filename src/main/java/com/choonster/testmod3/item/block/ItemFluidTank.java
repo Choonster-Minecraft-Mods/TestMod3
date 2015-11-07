@@ -36,8 +36,9 @@ public class ItemFluidTank extends ItemBlock implements IFluidContainerItem {
 	}
 
 	private void saveTank(ItemStack stack, FluidTank tank) {
-		NBTTagCompound teData = stack.getSubCompound("TankData", true);
+		NBTTagCompound teData = new NBTTagCompound();
 		TileEntityFluidTank.saveTank(teData, tank);
+		stack.setTagInfo("TankData", teData);
 	}
 
 	public ItemStack addFluid(FluidStack fluidStack) {
