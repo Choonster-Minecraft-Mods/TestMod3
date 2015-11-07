@@ -46,13 +46,13 @@ public class BucketFillHandler {
 					if (fluidBlock.canDrain(world, blockpos) && fluidBlock.drain(world, blockpos, false).amount == FluidContainerRegistry.BUCKET_VOLUME) {
 						FluidStack fluidStack = fluidBlock.drain(world, blockpos, true);
 
-						ItemStack result = new ItemStack(ModItems.bucket);
-						ModItems.bucket.fill(result, fluidStack, true);
+						ItemStack result = ModItems.bucket.fill(fluidStack);
+						if (result != null) {
+							player.triggerAchievement(StatList.objectUseStats[Item.getIdFromItem(Items.bucket)]);
 
-						player.triggerAchievement(StatList.objectUseStats[Item.getIdFromItem(Items.bucket)]);
-
-						event.result = result;
-						event.setResult(Event.Result.ALLOW);
+							event.result = result;
+							event.setResult(Event.Result.ALLOW);
+						}
 					}
 				}
 			}

@@ -1,5 +1,7 @@
 package com.choonster.testmod3.init;
 
+import com.choonster.testmod3.Logger;
+import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.block.fluid.BlockFluidNoFlow;
 import com.choonster.testmod3.item.block.ItemFluidTank;
 import net.minecraft.block.Block;
@@ -13,54 +15,75 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 
 public class ModFluids {
 	public static Fluid fluidStatic;
-	public static BlockFluidFinite blockStatic;
-
 	public static Fluid fluidStaticGas;
-	public static BlockFluidNoFlow blockStaticGas;
-
 	public static Fluid fluidNormal;
-	public static BlockFluidClassic blockNormal;
-
 	public static Fluid fluidNormalGas;
-	public static BlockFluidClassic blockNormalGas;
 
-	public static Set<IFluidBlock> fluidBlocks = new HashSet<>();
+	/**
+	 * The fluids registered by this mod. Includes fluids that were already registered by another mod.
+	 */
+	public static Set<Fluid> fluids = new HashSet<>();
+
+	/**
+	 * The fluid blocks from this mod only. Doesn't include blocks for fluids that were already registered by another mod.
+	 */
+	public static Set<IFluidBlock> modFluidBlocks = new HashSet<>();
 
 	public static void registerFluids() {
-		fluidStatic = createFluid("static", "testmod3:blocks/fluid_static", false).setLuminosity(10).setDensity(800).setViscosity(1500);
-		blockStatic = registerFluidBlock(new BlockFluidNoFlow(fluidStatic, new MaterialLiquid(MapColor.brownColor)));
+		fluidStatic = createFluid("static", "testmod3:blocks/fluid_static", false, 10, 800, 1500, false,
+				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.brownColor)));
 
-		fluidStaticGas = createFluid("staticgas", "testmod3:blocks/fluid_staticGas", false).setLuminosity(10).setDensity(-800).setViscosity(1500).setGaseous(true);
-		blockStaticGas = registerFluidBlock(new BlockFluidNoFlow(fluidStaticGas, new MaterialLiquid(MapColor.brownColor)));
+		fluidStaticGas = createFluid("staticgas", "testmod3:blocks/fluid_staticGas", false, 10, -800, 1500, true,
+				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.brownColor)));
 
-		fluidNormal = createFluid("normal", "testmod3:blocks/fluid_normal", true).setLuminosity(10).setDensity(1600).setViscosity(100);
-		blockNormal = registerFluidBlock(new BlockFluidClassic(fluidNormal, new MaterialLiquid(MapColor.adobeColor)));
+		fluidNormal = createFluid("normal", "testmod3:blocks/fluid_normal", true, 10, 1600, 100, false,
+				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.adobeColor)));
 
-		fluidNormalGas = createFluid("normalgas", "testmod3:blocks/fluid_normalGas", true).setLuminosity(10).setDensity(-1600).setViscosity(100).setGaseous(true);
-		blockNormalGas = registerFluidBlock(new BlockFluidClassic(fluidNormalGas, new MaterialLiquid(MapColor.adobeColor)));
+		fluidNormalGas = createFluid("normalgas", "testmod3:blocks/fluid_normalGas", true, 10, -1600, 100, true,
+				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.adobeColor)));
 	}
 
 	public static void registerFluidContainers() {
 		registerTank(FluidRegistry.WATER);
 		registerTank(FluidRegistry.LAVA);
 
-		for (IFluidBlock fluidBlock : fluidBlocks) {
-			registerBucket(fluidBlock.getFluid());
-			registerTank(fluidBlock.getFluid());
+		for (Fluid fluid : fluids) {
+			registerBucket(fluid);
+			registerTank(fluid);
 		}
 	}
 
-	private static Fluid createFluid(String name, String textureName, boolean hasFlowIcon) {
+	/**
+	 * Create a {@link Fluid} and its {@link IFluidBlock}, or use the existing ones if a fluid has already been registered with the same name.
+	 *
+	 * @param name         The name of the fluid
+	 * @param textureName  The base name of the fluid's texture
+	 * @param hasFlowIcon  Does the fluid have a flow icon?
+	 * @param luminosity   The fluid's luminosity
+	 * @param density      The fluid's density
+	 * @param viscosity    The fluid's viscosity
+	 * @param gaseous      Is the fluid gaseous?
+	 * @param blockFactory A function to call to create the {@link IFluidBlock}
+	 * @return The fluid and block
+	 */
+	private static <T extends Block & IFluidBlock> Fluid createFluid(String name, String textureName, boolean hasFlowIcon, int luminosity, int density, int viscosity, boolean gaseous, Function<Fluid, T> blockFactory) {
 		ResourceLocation still = new ResourceLocation(textureName + "_still");
 		ResourceLocation flowing = hasFlowIcon ? new ResourceLocation(textureName + "_flow") : still;
 
-		Fluid fluid = new Fluid(name, still, flowing);
-		if (!FluidRegistry.registerFluid(fluid)) {
-			throw new IllegalStateException(String.format("Unable to register fluid %s", fluid.getID()));
+		Fluid fluid = new Fluid(name, still, flowing).setLuminosity(luminosity).setDensity(density).setViscosity(viscosity).setGaseous(gaseous);
+		boolean useOwnFluid = FluidRegistry.registerFluid(fluid);
+
+		if (useOwnFluid) {
+			registerFluidBlock(blockFactory.apply(fluid));
+		} else {
+			fluid = FluidRegistry.getFluid(name);
 		}
+
+		fluids.add(fluid);
 
 		return fluid;
 	}
@@ -68,23 +91,24 @@ public class ModFluids {
 	private static <T extends Block & IFluidBlock> T registerFluidBlock(T block) {
 		String fluidName = block.getFluid().getUnlocalizedName();
 		block.setUnlocalizedName(fluidName);
+		block.setCreativeTab(TestMod3.creativeTab);
 		GameRegistry.registerBlock(block, fluidName);
 
-		fluidBlocks.add(block);
+		modFluidBlocks.add(block);
 
 		return block;
 	}
 
 	private static void registerBucket(Fluid fluid) {
-		ItemStack filledBucket = ModItems.bucket.addFluid(fluid);
+		ItemStack filledBucket = ModItems.bucket.registerBucketForFluid(fluid);
 
-		FluidContainerRegistry.registerFluidContainer(fluid, filledBucket, FluidContainerRegistry.EMPTY_BUCKET);
+		if (!FluidContainerRegistry.registerFluidContainer(fluid, filledBucket, FluidContainerRegistry.EMPTY_BUCKET)) {
+			Logger.error("Unable to register bucket of %s as fluid container", fluid.getName());
+		}
 	}
 
 	private static void registerTank(Fluid fluid) {
 		FluidStack fluidStack = new FluidStack(fluid, 10 * FluidContainerRegistry.BUCKET_VOLUME);
-		ItemStack filledTank = ((ItemFluidTank) Item.getItemFromBlock(ModBlocks.fluidTank)).addFluid(fluidStack);
-
-		FluidContainerRegistry.registerFluidContainer(fluidStack, filledTank, new ItemStack(ModBlocks.fluidTank));
+		((ItemFluidTank) Item.getItemFromBlock(ModBlocks.fluidTank)).addFluid(fluidStack);
 	}
 }

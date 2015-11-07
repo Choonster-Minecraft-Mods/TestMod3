@@ -17,15 +17,14 @@ import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
-public class ItemBucketTestMod3 extends ItemFluidContainer {
-	public final Set<FluidStack> fluids = new HashSet<>();
+public class ItemBucketTestMod3 extends Item {
+	private final List<FluidStack> fluids = new ArrayList<>();
 
 	public ItemBucketTestMod3() {
-		super(-1, FluidContainerRegistry.BUCKET_VOLUME);
 		setContainerItem(Items.bucket);
 		setCreativeTab(TestMod3.creativeTab);
 		setHasSubtypes(true);
@@ -33,14 +32,52 @@ public class ItemBucketTestMod3 extends ItemFluidContainer {
 		setMaxStackSize(1);
 	}
 
-	public ItemStack addFluid(Fluid fluid) {
+	/**
+	 * Gets a read-only list of the fluids that have had buckets registered
+	 *
+	 * @return The registered fluid list
+	 */
+	public List<FluidStack> getRegisteredFluids() {
+		return Collections.unmodifiableList(fluids);
+	}
+
+	/**
+	 * Register a bucket for the specified {@link Fluid}.
+	 *
+	 * @param fluid The fluid to register a bucket for
+	 * @return The filled bucket
+	 */
+	public ItemStack registerBucketForFluid(Fluid fluid) {
+		if (fluids.stream().anyMatch(fluidStack -> fluidStack.getFluid() == fluid)) {
+			throw new IllegalArgumentException("Fluid has already had a bucket registered");
+		}
+
 		FluidStack fluidStack = new FluidStack(fluid, FluidContainerRegistry.BUCKET_VOLUME);
 		fluids.add(fluidStack);
 
-		ItemStack filledBucket = new ItemStack(this);
-		fill(filledBucket, fluidStack, true);
+		return new ItemStack(this, 1, fluids.size() - 1);
+	}
 
-		return filledBucket;
+	public FluidStack getFluid(ItemStack stack) {
+		return fluids.get(stack.getItemDamage());
+	}
+
+	/**
+	 * Get an {@link ItemStack} of the bucket filled with the specified {@link FluidStack}.
+	 * Returns {@code null} if the specified fluid hasn't been registered with {@link #registerBucketForFluid(Fluid)}.
+	 *
+	 * @param fluidStackToFill The {@link FluidStack} to fill the bucket with
+	 * @return The filled bucket
+	 */
+	public ItemStack fill(FluidStack fluidStackToFill) {
+		for (int meta = 0; meta < fluids.size(); meta++) {
+			FluidStack fluidStack = fluids.get(meta);
+			if (fluidStack.isFluidEqual(fluidStackToFill)) {
+				return new ItemStack(this, 1, meta);
+			}
+		}
+
+		return null;
 	}
 
 	@Override
@@ -58,10 +95,8 @@ public class ItemBucketTestMod3 extends ItemFluidContainer {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubItems(Item itemIn, CreativeTabs tab, List subItems) {
-		for (FluidStack fluidStack : fluids) {
-			ItemStack stack = new ItemStack(this);
-			fill(stack, fluidStack.copy(), true);
-			subItems.add(stack);
+		for (int meta = 0; meta < fluids.size(); meta++) {
+			subItems.add(new ItemStack(this, 1, meta));
 		}
 	}
 

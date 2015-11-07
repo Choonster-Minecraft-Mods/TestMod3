@@ -40,7 +40,7 @@ public class ModModelManager {
 	}
 
 	private void registerFluidModels() {
-		ModFluids.fluidBlocks.forEach(this::registerFluidModel);
+		ModFluids.modFluidBlocks.forEach(this::registerFluidModel);
 	}
 
 	private void registerFluidModel(IFluidBlock fluidBlock) {
@@ -63,7 +63,7 @@ public class ModModelManager {
 	private void registerBucketModels() {
 		itemsRegistered.add(ModItems.bucket);
 
-		for (FluidStack fluidStack : ModItems.bucket.fluids) {
+		for (FluidStack fluidStack : ModItems.bucket.getRegisteredFluids()) {
 			ModelBakery.addVariantName(ModItems.bucket, "testmod3:bucket/" + fluidStack.getFluid().getName());
 		}
 
