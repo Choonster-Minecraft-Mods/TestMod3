@@ -14,9 +14,12 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.RecipeFireworks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.util.Iterator;
 import java.util.List;
@@ -47,6 +50,9 @@ public class ModRecipes {
 		NBTTagCompound tileEntityData = guardianSpawner.getSubCompound("BlockEntityTag", true);
 		tileEntityData.setString("EntityId", "Guardian");
 		GameRegistry.addRecipe(guardianSpawner, "SSS", "SFS", "SSS", 'S', Items.stick, 'F', Items.fish);
+
+		ItemStack bucketOfStaticGas = FluidContainerRegistry.fillFluidContainer(new FluidStack(ModFluids.fluidStaticGas, FluidContainerRegistry.BUCKET_VOLUME), FluidContainerRegistry.EMPTY_BUCKET);
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.cobblestone), bucketOfStaticGas, bucketOfStaticGas, bucketOfStaticGas));
 	}
 
 	public static void removeCraftingRecipes() {
