@@ -3,6 +3,7 @@ package com.choonster.testmod3.init;
 import com.choonster.testmod3.Logger;
 import com.choonster.testmod3.recipe.ShapedArmourUpgradeRecipe;
 import com.choonster.testmod3.recipe.ShapelessCuttingRecipe;
+import com.choonster.testmod3.recipe.ShapelessNBTRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.init.Blocks;
@@ -32,6 +33,7 @@ public class ModRecipes {
 	private static void registerRecipeClasses() {
 		RecipeSorter.register("testmod3:shapelesscutting", ShapelessCuttingRecipe.class, SHAPELESS, "after:minecraft:shapeless");
 		RecipeSorter.register("testmod3:shapedarmourupgrade", ShapedArmourUpgradeRecipe.class, SHAPED, "after:forge:shapedore before:minecraft:shapeless");
+		RecipeSorter.register("testmod3:shapelessnbt", ShapelessNBTRecipe.class, SHAPELESS, "after:forge:shapelessore");
 	}
 
 	private static void addCraftingRecipes() {
@@ -44,7 +46,6 @@ public class ModRecipes {
 		ItemStack guardianSpawner = new ItemStack(Blocks.mob_spawner);
 		NBTTagCompound tileEntityData = guardianSpawner.getSubCompound("BlockEntityTag", true);
 		tileEntityData.setString("EntityId", "Guardian");
-
 		GameRegistry.addRecipe(guardianSpawner, "SSS", "SFS", "SSS", 'S', Items.stick, 'F', Items.fish);
 	}
 
