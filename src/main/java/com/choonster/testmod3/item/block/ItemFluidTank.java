@@ -2,7 +2,6 @@ package com.choonster.testmod3.item.block;
 
 import com.choonster.testmod3.block.BlockFluidTank;
 import com.choonster.testmod3.tileentity.TileEntityFluidTank;
-import com.choonster.testmod3.util.TranslatableMessage;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -32,7 +32,7 @@ public class ItemFluidTank extends ItemBlock implements IFluidContainerItem {
 
 	private FluidTank loadTank(ItemStack stack) {
 		NBTTagCompound teData = stack.getSubCompound("TankData", true);
-		return TileEntityFluidTank.loadTank(teData);
+		return TileEntityFluidTank.loadTank(teData, null);
 	}
 
 	private void saveTank(ItemStack stack, FluidTank tank) {
@@ -55,7 +55,7 @@ public class ItemFluidTank extends ItemBlock implements IFluidContainerItem {
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
 		FluidTankInfo[] fluidTankInfos = new FluidTankInfo[]{loadTank(stack).getInfo()};
 		List<String> lines = BlockFluidTank.getFluidDataForDisplay(fluidTankInfos).stream()
-				.map(TranslatableMessage::toTranslatedString).collect(Collectors.toList());
+				.map(IChatComponent::getFormattedText).collect(Collectors.toList());
 		tooltip.addAll(lines);
 	}
 
@@ -63,6 +63,7 @@ public class ItemFluidTank extends ItemBlock implements IFluidContainerItem {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubItems(Item itemIn, CreativeTabs tab, List subItems) {
+		super.getSubItems(itemIn, tab, subItems);
 		subItems.addAll(tankItems);
 	}
 

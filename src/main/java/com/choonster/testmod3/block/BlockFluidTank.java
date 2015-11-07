@@ -2,7 +2,6 @@ package com.choonster.testmod3.block;
 
 import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.tileentity.TileEntityFluidTank;
-import com.choonster.testmod3.util.TranslatableMessage;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -11,9 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -82,8 +79,8 @@ public class BlockFluidTank extends Block {
 		return (TileEntityFluidTank) world.getTileEntity(pos);
 	}
 
-	public static List<TranslatableMessage> getFluidDataForDisplay(FluidTankInfo[] infos) {
-		List<TranslatableMessage> data = new ArrayList<>();
+	public static List<IChatComponent> getFluidDataForDisplay(FluidTankInfo[] infos) {
+		List<IChatComponent> data = new ArrayList<>();
 
 		boolean hasFluid = false;
 
@@ -92,12 +89,12 @@ public class BlockFluidTank extends Block {
 
 			if (fluidStack != null && fluidStack.amount > 0) {
 				hasFluid = true;
-				data.add(new TranslatableMessage("tile.fluidTank.desc.fluid", fluidStack.getLocalizedName(), fluidStack.amount, fluidTankInfo.capacity));
+				data.add(new ChatComponentTranslation("tile.fluidTank.desc.fluid", fluidStack.getLocalizedName(), fluidStack.amount, fluidTankInfo.capacity));
 			}
 		}
 
 		if (!hasFluid) {
-			data.add(new TranslatableMessage("tile.fluidTank.desc.empty"));
+			data.add(new ChatComponentTranslation("tile.fluidTank.desc.empty"));
 		}
 
 		return data;
@@ -107,20 +104,27 @@ public class BlockFluidTank extends Block {
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileEntityFluidTank tileEntityFluidTank = getTileEntity(worldIn, pos);
 		ItemStack heldItem = playerIn.getHeldItem();
+		if (heldItem != null) {
+			ItemStack container = tileEntityFluidTank.tryUseFluidContainer(heldItem, side);
+			if (container != null) {
+				if (!playerIn.capabilities.isCreativeMode) {
+					heldItem.stackSize--;
+					if (heldItem.stackSize <= 0) {
+						playerIn.destroyCurrentEquippedItem(); // Destroy the current held item
+						playerIn.setCurrentItemOrArmor(0, container); // Replace it with the container
+					} else if (!playerIn.inventory.addItemStackToInventory(container)) {
+						playerIn.dropPlayerItemWithRandomChoice(container, false);
+					}
+				}
 
-		ItemStack container = tileEntityFluidTank.tryUseFluidContainer(heldItem, side);
-		if (container != null) {
-			if (!playerIn.capabilities.isCreativeMode) {
-				heldItem.stackSize--;
-			}
+				playerIn.inventoryContainer.detectAndSendChanges();
 
-			if (!playerIn.inventory.addItemStackToInventory(container)) {
-				playerIn.dropPlayerItemWithRandomChoice(container, false);
+				return true;
 			}
-		} else if (!worldIn.isRemote) {
-			for (TranslatableMessage message : getFluidDataForDisplay(tileEntityFluidTank.getTankInfo(EnumFacing.NORTH))) {
-				playerIn.addChatComponentMessage(message.toChatComponent());
-			}
+		}
+
+		if (!worldIn.isRemote) {
+			getFluidDataForDisplay(tileEntityFluidTank.getTankInfo(EnumFacing.NORTH)).forEach(playerIn::addChatComponentMessage);
 		}
 
 		return true;
