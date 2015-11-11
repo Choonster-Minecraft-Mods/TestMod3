@@ -1,7 +1,6 @@
 package com.choonster.testmod3;
 
 import com.choonster.testmod3.client.gui.GuiHandler;
-import com.choonster.testmod3.compat.nei.NEICompat;
 import com.choonster.testmod3.config.Config;
 import com.choonster.testmod3.event.BlockEventHandler;
 import com.choonster.testmod3.event.BucketFillHandler;
@@ -14,7 +13,6 @@ import com.choonster.testmod3.util.BlockDumper;
 import com.choonster.testmod3.world.gen.WorldGenOres;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -59,10 +57,6 @@ public class TestMod3 {
 		ModFluids.registerFluidContainers();
 		ModBiomes.registerBiomes();
 		ModMapGen.registerMapGen();
-
-		if (Loader.isModLoaded("NotEnoughItems")) {
-			NEICompat.init();
-		}
 
 		proxy.preInit();
 	}
