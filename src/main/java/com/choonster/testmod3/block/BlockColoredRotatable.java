@@ -29,7 +29,7 @@ public class BlockColoredRotatable extends BlockColored {
 
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, BlockColored.COLOR, FACING);
+		return new BlockState(this, COLOR, FACING);
 	}
 
 	@Override
