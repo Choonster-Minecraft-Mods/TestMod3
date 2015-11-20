@@ -83,6 +83,8 @@ message.subscripts.rightClick=Subscripts: %s
 message.superscripts.rightClick=Superscripts: %s
 message.clearer.clearing=Clearing the chunk at %s, %s
 message.clearer.cleared=Chunk cleared
+message.clearer.mode.0=Switched to Whitelist Mode
+message.clearer.mode.1=Switched to All Mode
 
 # Config GUI strings
 testmod3.config.title=TestMod3 Config
