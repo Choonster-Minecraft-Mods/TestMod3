@@ -84,7 +84,7 @@ public class ModModelManager {
 		registerBlockItemModel(ModBlocks.clientPlayerRightClick, "minecraft:heavy_weighted_pressure_plate");
 
 		ModelBakery.addVariantName(Item.getItemFromBlock(ModBlocks.coloredRotatable)); // Don't load the default item model
-		for (EnumDyeColor color : EnumDyeColor.values()){
+		for (EnumDyeColor color : EnumDyeColor.values()) {
 
 			registerBlockItemModel(ModBlocks.coloredRotatable, color.getMetadata(), new ModelResourceLocation("testmod3:coloredRotatable", "color=" + color.getName() + ",facing=north"));
 		}
@@ -100,7 +100,7 @@ public class ModModelManager {
 		registerItemModel(Item.getItemFromBlock(block), modelLocation);
 	}
 
-	private void registerBlockItemModel(Block block, int metadata, ModelResourceLocation modelResourceLocation){
+	private void registerBlockItemModel(Block block, int metadata, ModelResourceLocation modelResourceLocation) {
 		registerItemModel(Item.getItemFromBlock(block), metadata, modelResourceLocation);
 	}
 
@@ -139,15 +139,15 @@ public class ModModelManager {
 		registerItemModel(item, MeshDefinitionFix.create(stack -> fullModelLocation));
 	}
 
-	private void registerItemModel(Item item, ItemMeshDefinition meshDefinition){
+	private void registerItemModel(Item item, ItemMeshDefinition meshDefinition) {
 		if (!itemsRegistered.contains(item)) { // Don't replace an existing registration
 			itemsRegistered.add(item);
 			ModelLoader.setCustomMeshDefinition(item, meshDefinition);
 		}
 	}
 
-	private void registerItemModel(Item item, int metadata, ModelResourceLocation modelResourceLocation){
-		if (!itemsRegistered.contains(item)){
+	private void registerItemModel(Item item, int metadata, ModelResourceLocation modelResourceLocation) {
+		if (!itemsRegistered.contains(item)) {
 			itemsRegistered.add(item);
 		}
 
