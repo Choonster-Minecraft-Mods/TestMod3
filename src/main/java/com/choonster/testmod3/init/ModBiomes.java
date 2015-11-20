@@ -12,10 +12,10 @@ public class ModBiomes {
 	public static BiomeGenDesertTest desertTest;
 
 	public static void registerBiomes() {
-		desertTest = reigsterBiome(new BiomeGenDesertTest(Config.desertBiomeID), BiomeManager.BiomeType.DESERT, 1000, HOT, DRY, SANDY, JUNGLE, SWAMP);
+		desertTest = registerBiome(new BiomeGenDesertTest(Config.desertBiomeID), BiomeManager.BiomeType.DESERT, 1000, HOT, DRY, SANDY, JUNGLE, SWAMP);
 	}
 
-	private static <T extends BiomeGenBase> T reigsterBiome(T biome, BiomeManager.BiomeType biomeType, int weight, BiomeDictionary.Type... types) {
+	private static <T extends BiomeGenBase> T registerBiome(T biome, BiomeManager.BiomeType biomeType, int weight, BiomeDictionary.Type... types) {
 		BiomeDictionary.registerBiomeType(biome, types);
 		BiomeManager.addBiome(biomeType, new BiomeManager.BiomeEntry(biome, weight));
 
