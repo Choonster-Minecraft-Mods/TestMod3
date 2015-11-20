@@ -8,10 +8,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockCommandBlock;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidStack;
@@ -61,13 +63,11 @@ public class ModModelManager {
 	}
 
 	private void registerBucketModels() {
-		itemsRegistered.add(ModItems.bucket);
-
 		for (FluidStack fluidStack : ModItems.bucket.getRegisteredFluids()) {
 			ModelBakery.addVariantName(ModItems.bucket, "testmod3:bucket/" + fluidStack.getFluid().getName());
 		}
 
-		ModelLoader.setCustomMeshDefinition(ModItems.bucket, MeshDefinitionFix.create(stack -> {
+		registerItemModel(ModItems.bucket, MeshDefinitionFix.create(stack -> {
 					FluidStack fluidStack = ModItems.bucket.getFluid(stack);
 					return fluidStack != null ? new ModelResourceLocation("testmod3:bucket/" + fluidStack.getFluid().getName(), "inventory") : null;
 				}
@@ -92,6 +92,10 @@ public class ModModelManager {
 
 	private void registerBlockItemModel(Block block, String modelLocation) {
 		registerItemModel(Item.getItemFromBlock(block), modelLocation);
+	}
+
+	private void registerBlockItemModel(Block block, int metadata, ModelResourceLocation modelResourceLocation){
+		registerItemModel(Item.getItemFromBlock(block), metadata, modelResourceLocation);
 	}
 
 	private void registerItemVariants() {
@@ -124,12 +128,23 @@ public class ModModelManager {
 	}
 
 	private void registerItemModel(Item item, String modelLocation) {
+		final ModelResourceLocation fullModelLocation = new ModelResourceLocation(modelLocation, "inventory");
+		ModelBakery.addVariantName(item, modelLocation); // Ensure the custom model is loaded and prevent the default model from being loaded
+		registerItemModel(item, MeshDefinitionFix.create(stack -> fullModelLocation));
+	}
+
+	private void registerItemModel(Item item, ItemMeshDefinition meshDefinition){
 		if (!itemsRegistered.contains(item)) { // Don't replace an existing registration
 			itemsRegistered.add(item);
-
-			final ModelResourceLocation fullModelLocation = new ModelResourceLocation(modelLocation, "inventory");
-			ModelBakery.addVariantName(item, modelLocation); // Ensure the custom model is loaded and prevent the default model from being loaded
-			ModelLoader.setCustomMeshDefinition(item, MeshDefinitionFix.create(stack -> fullModelLocation));
+			ModelLoader.setCustomMeshDefinition(item, meshDefinition);
 		}
+	}
+
+	private void registerItemModel(Item item, int metadata, ModelResourceLocation modelResourceLocation){
+		if (!itemsRegistered.contains(item)){
+			itemsRegistered.add(item);
+		}
+
+		ModelLoader.setCustomModelResourceLocation(item, metadata, modelResourceLocation);
 	}
 }
