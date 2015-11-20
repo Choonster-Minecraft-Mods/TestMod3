@@ -106,11 +106,10 @@
 		},
 		"facing": {
 			"down": {
-				"model": "testmod3:orientable_single_vertical",
-				"x": 180
+				"x": 90
 			},
 			"up": {
-				"model": "testmod3:orientable_single_vertical"
+				"x": 270
 			},
 			"north": { },
 			"south": {
