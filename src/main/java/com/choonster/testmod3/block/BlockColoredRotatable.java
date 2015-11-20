@@ -76,11 +76,9 @@ public class BlockColoredRotatable extends BlockColored {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (playerIn.isSneaking()) {
-			rotateBlock(worldIn, pos, side);
+			return rotateBlock(worldIn, pos, side);
 		} else {
-			worldIn.setBlockState(pos, state.cycleProperty(COLOR));
+			return worldIn.setBlockState(pos, state.cycleProperty(COLOR));
 		}
-
-		return true;
 	}
 }
