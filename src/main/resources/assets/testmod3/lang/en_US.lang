@@ -12,7 +12,7 @@ tile.itemCollisionTest.name=Item Collision Test
 tile.survivalCommandBlock.name=Survival Command Block
 tile.fluidTank.name=Fluid Tank
 tile.itemDebugger.name=Item Debugger
-tile.endPortalFrameFull=End Portal Frame Full
+tile.endPortalFrameFull.name=End Portal Frame Full
 
 tile.basicPipe.name=Basic Pipe
 tile.fluidPipe.name=Fluid Pipe
