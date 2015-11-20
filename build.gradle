@@ -91,3 +91,18 @@ tasks.withType(JavaCompile){
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+task deobfSourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'deobfSources'
+}
+
+artifacts {
+    archives deobfJar
+    archives deobfSourceJar
+}
