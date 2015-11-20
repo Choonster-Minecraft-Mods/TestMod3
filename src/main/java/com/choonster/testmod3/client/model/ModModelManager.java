@@ -83,6 +83,12 @@ public class ModModelManager {
 		registerBlockItemModel(ModBlocks.rightClickTest, "minecraft:black_stained_glass");
 		registerBlockItemModel(ModBlocks.clientPlayerRightClick, "minecraft:heavy_weighted_pressure_plate");
 
+		ModelBakery.addVariantName(Item.getItemFromBlock(ModBlocks.coloredRotatable)); // Don't load the default item model
+		for (EnumDyeColor color : EnumDyeColor.values()){
+
+			registerBlockItemModel(ModBlocks.coloredRotatable, color.getMetadata(), new ModelResourceLocation("testmod3:coloredRotatable", "color=" + color.getName() + ",facing=north"));
+		}
+
 		ModBlocks.blocks.forEach(this::registerBlockItemModel);
 	}
 

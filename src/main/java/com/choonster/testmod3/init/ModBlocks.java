@@ -6,11 +6,13 @@ import com.choonster.testmod3.block.pipe.BlockPipeBasic;
 import com.choonster.testmod3.block.pipe.BlockPipeFluid;
 import com.choonster.testmod3.item.block.ItemColoredMod;
 import com.choonster.testmod3.item.block.ItemFluidTank;
+import com.choonster.testmod3.tileentity.TileEntityColoredRotatable;
 import com.choonster.testmod3.tileentity.TileEntityFluidTank;
 import com.choonster.testmod3.tileentity.TileEntitySurvivalCommandBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemCloth;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -31,6 +33,7 @@ public class ModBlocks {
 	public static BlockFluidTank fluidTank;
 	public static BlockItemDebugger itemDebugger;
 	public static Block endPortalFrameFull;
+	public static BlockColoredRotatable coloredRotatable;
 
 	public static BlockPipeBasic pipeBasic;
 	public static BlockPipeFluid pipeFluid;
@@ -46,6 +49,7 @@ public class ModBlocks {
 		fluidTank = registerBlock(new BlockFluidTank(), ItemFluidTank.class);
 		itemDebugger = registerBlock(new BlockItemDebugger());
 		endPortalFrameFull = registerBlock(new Block(Material.rock).setUnlocalizedName("endPortalFrameFull").setCreativeTab(TestMod3.creativeTab));
+		coloredRotatable = (BlockColoredRotatable) registerBlock(new BlockColoredRotatable(Material.cloth).setUnlocalizedName("coloredRotatable").setCreativeTab(TestMod3.creativeTab), ItemCloth.class);
 
 		pipeBasic = registerBlock(new BlockPipeBasic());
 		pipeFluid = registerBlock(new BlockPipeFluid());
@@ -82,6 +86,7 @@ public class ModBlocks {
 	public static void registerTileEntities() {
 		registerTileEntity(TileEntitySurvivalCommandBlock.class, "survivalCommandBlock");
 		registerTileEntity(TileEntityFluidTank.class, "fluidTank");
+		registerTileEntity(TileEntityColoredRotatable.class, "coloredRotatable");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> tileEntityClass, String id) {

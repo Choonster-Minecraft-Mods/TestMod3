@@ -22,6 +22,24 @@ tile.fluid.normal.name=Normal Fluid
 tile.fluid.staticgas.name=Static Gas
 tile.fluid.normalgas.name=Normal Gas
 
+tile.coloredRotatable.name=Rotatable Block
+tile.coloredRotatable.white.name=White Rotatable Block
+tile.coloredRotatable.orange.name=Orange Rotatable Block
+tile.coloredRotatable.magenta.name=Magenta Rotatable Block
+tile.coloredRotatable.lightBlue.name=Light Blue Rotatable Block
+tile.coloredRotatable.yellow.name=Yellow Rotatable Block
+tile.coloredRotatable.lime.name=Lime Rotatable Block
+tile.coloredRotatable.pink.name=Pink Rotatable Block
+tile.coloredRotatable.gray.name=Gray Rotatable Block
+tile.coloredRotatable.silver.name=Light Grey Rotatable Block
+tile.coloredRotatable.cyan.name=Cyan Rotatable Block
+tile.coloredRotatable.purple.name=Purple Rotatable Block
+tile.coloredRotatable.blue.name=Blue Rotatable Block
+tile.coloredRotatable.brown.name=Brown Rotatable Block
+tile.coloredRotatable.green.name=Green Rotatable Block
+tile.coloredRotatable.red.name=Red Rotatable Block
+tile.coloredRotatable.black.name=Black Rotatable Block
+
 # Items
 item.bucket.testmod3.empty.name=Bucket
 item.bucket.testmod3.static.name=Bucket of Static Fluid
