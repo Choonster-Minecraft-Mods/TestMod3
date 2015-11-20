@@ -25,6 +25,7 @@ import java.util.Random;
 public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 	public final List<BiomeDictionary.Type> biomeTypes = ImmutableList.of(BiomeDictionary.Type.JUNGLE, BiomeDictionary.Type.SANDY, BiomeDictionary.Type.SWAMP);
 
+	@Override
 	protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ) {
 		// These fields are private in the super class and always constant for non-flat worlds so inline them here
 		// Flat worlds don't fire InitMapGenEvent, so this class will never be used in a flat world
@@ -105,10 +106,11 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 				possibleFeatures.add(new WeightedRandomScatteredFeature(swamphut, 100));
 			}
 
-			WeightedRandomScatteredFeature featureToGenerate = (WeightedRandomScatteredFeature) WeightedRandom.getRandomItem(random, possibleFeatures);
-			this.components.add(featureToGenerate.feature);
-
-			Logger.info("Scattered feature %s at %d, %d", featureToGenerate.feature.toString(), chunkX * 16, chunkZ * 16);
+			if (!possibleFeatures.isEmpty()) {
+				WeightedRandomScatteredFeature featureToGenerate = (WeightedRandomScatteredFeature) WeightedRandom.getRandomItem(random, possibleFeatures);
+				this.components.add(featureToGenerate.feature);
+				Logger.info("Scattered feature %s at %d, %d", featureToGenerate.feature.toString(), chunkX * 16, chunkZ * 16);
+			}
 
 			this.updateBoundingBox();
 		}
