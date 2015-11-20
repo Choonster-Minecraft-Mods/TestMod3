@@ -40,6 +40,24 @@ tile.coloredRotatable.green.name=Green Rotatable Block
 tile.coloredRotatable.red.name=Red Rotatable Block
 tile.coloredRotatable.black.name=Black Rotatable Block
 
+tile.coloredMultiRotatable.name=Multi Rotatable Block
+tile.coloredMultiRotatable.white.name=White Multi Rotatable Block
+tile.coloredMultiRotatable.orange.name=Orange Multi Rotatable Block
+tile.coloredMultiRotatable.magenta.name=Magenta Multi Rotatable Block
+tile.coloredMultiRotatable.lightBlue.name=Light Blue Multi Rotatable Block
+tile.coloredMultiRotatable.yellow.name=Yellow Multi Rotatable Block
+tile.coloredMultiRotatable.lime.name=Lime Multi Rotatable Block
+tile.coloredMultiRotatable.pink.name=Pink Multi Rotatable Block
+tile.coloredMultiRotatable.gray.name=Gray Multi Rotatable Block
+tile.coloredMultiRotatable.silver.name=Light Grey Multi Rotatable Block
+tile.coloredMultiRotatable.cyan.name=Cyan Multi Rotatable Block
+tile.coloredMultiRotatable.purple.name=Purple Multi Rotatable Block
+tile.coloredMultiRotatable.blue.name=Blue Multi Rotatable Block
+tile.coloredMultiRotatable.brown.name=Brown Multi Rotatable Block
+tile.coloredMultiRotatable.green.name=Green Multi Rotatable Block
+tile.coloredMultiRotatable.red.name=Red Multi Rotatable Block
+tile.coloredMultiRotatable.black.name=Black Multi Rotatable Block
+
 # Items
 item.bucket.testmod3.empty.name=Bucket
 item.bucket.testmod3.static.name=Bucket of Static Fluid
