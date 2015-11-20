@@ -24,9 +24,10 @@ public class ItemBlockDebugger extends Item {
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 		IBlockState state = worldIn.getBlockState(pos);
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
-
+		state.getBlock().getActualState(state, worldIn, pos);
 		Logger.info("Block at %d,%d,%d: %s", pos.getX(), pos.getY(), pos.getZ(), state);
+
+		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		if (tileEntity != null) {
 			NBTTagCompound tagCompound = new NBTTagCompound();
 			tileEntity.writeToNBT(tagCompound);
