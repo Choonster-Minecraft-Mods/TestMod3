@@ -24,7 +24,7 @@ import net.minecraft.world.World;
  * http://www.minecraftforge.net/forum/index.php/topic,35055.0.html
  */
 public class BlockColoredMultiRotatable extends BlockColoredRotatable {
-	public static final IProperty FACE_ROTATION = PropertyEnum.create("face_rotation", EnumFaceRotation.class);
+	public static final IProperty<EnumFaceRotation> FACE_ROTATION = PropertyEnum.create("face_rotation", EnumFaceRotation.class);
 
 	public BlockColoredMultiRotatable(Material materialIn) {
 		super(materialIn);

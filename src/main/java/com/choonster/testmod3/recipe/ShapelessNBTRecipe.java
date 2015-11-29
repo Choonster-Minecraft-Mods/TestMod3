@@ -31,10 +31,9 @@ public class ShapelessNBTRecipe extends ShapelessOreRecipe {
 		super(result, recipe);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean matches(InventoryCrafting var1, World world) {
-		ArrayList<Object> required = new ArrayList<Object>(input);
+		ArrayList<Object> required = new ArrayList<>(input);
 
 		for (int x = 0; x < var1.getSizeInventory(); x++) {
 			ItemStack slot = var1.getStackInSlot(x);
@@ -51,6 +50,7 @@ public class ShapelessNBTRecipe extends ShapelessOreRecipe {
 					if (next instanceof ItemStack) {
 						match = itemMatches((ItemStack) next, slot);
 					} else if (next instanceof List) {
+						@SuppressWarnings("unchecked")
 						Iterator<ItemStack> itr = ((List<ItemStack>) next).iterator();
 						while (itr.hasNext() && !match) {
 							match = itemMatches(itr.next(), slot);

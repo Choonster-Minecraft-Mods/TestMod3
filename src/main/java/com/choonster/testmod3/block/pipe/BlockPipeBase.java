@@ -22,7 +22,7 @@ public abstract class BlockPipeBase extends Block {
 	public static final float PIPE_MIN_POS = 0.25f;
 	public static final float PIPE_MAX_POS = 0.75f;
 
-	public static final ImmutableList<IProperty> CONNECTED_PROPERTIES = ImmutableList.copyOf(
+	public static final ImmutableList<IProperty<Boolean>> CONNECTED_PROPERTIES = ImmutableList.copyOf(
 			Stream.of(EnumFacing.VALUES)
 					.map(facing -> PropertyBool.create(facing.getName()))
 					.collect(Collectors.toList())
@@ -101,7 +101,7 @@ public abstract class BlockPipeBase extends Block {
 	}
 
 	public final boolean isConnected(IBlockState state, EnumFacing facing) {
-		return (boolean) state.getValue(CONNECTED_PROPERTIES.get(facing.getIndex()));
+		return state.getValue(CONNECTED_PROPERTIES.get(facing.getIndex()));
 	}
 
 	public void setBlockBounds(AxisAlignedBB bb) {
@@ -109,7 +109,7 @@ public abstract class BlockPipeBase extends Block {
 	}
 
 	@Override
-	public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List list, Entity collidingEntity) {
+	public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
 		setBlockBounds(PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MAX_POS, PIPE_MAX_POS, PIPE_MAX_POS);
 		super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
 

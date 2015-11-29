@@ -115,7 +115,7 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 								survivalCommandBlockLogic.setLastOutput(null);
 							}
 
-							survivalCommandBlockLogic.func_145756_e();
+							survivalCommandBlockLogic.updateCommand();
 							survivalCommandBlockLogic.trigger(world);
 							player.addChatMessage(new ChatComponentTranslation("advMode.setCommand.success", message.command));
 						}

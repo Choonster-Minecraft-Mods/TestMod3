@@ -18,7 +18,7 @@ public class BlockFluidNoFlow extends BlockFluidFinite {
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		boolean changed = false;
-		int quantaRemaining = ((Integer) state.getValue(LEVEL)) + 1;
+		int quantaRemaining = state.getValue(LEVEL) + 1;
 
 		// Flow vertically if possible
 		int prevRemaining = quantaRemaining;

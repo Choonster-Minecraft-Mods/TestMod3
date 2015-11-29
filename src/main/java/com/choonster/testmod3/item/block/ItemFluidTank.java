@@ -50,20 +50,18 @@ public class ItemFluidTank extends ItemBlock implements IFluidContainerItem {
 		return filledTank;
 	}
 
-	@SuppressWarnings("unchecked")
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
+	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 		FluidTankInfo[] fluidTankInfos = new FluidTankInfo[]{loadTank(stack).getInfo()};
 		List<String> lines = BlockFluidTank.getFluidDataForDisplay(fluidTankInfos).stream()
 				.map(IChatComponent::getFormattedText).collect(Collectors.toList());
 		tooltip.addAll(lines);
 	}
 
-	@SuppressWarnings("unchecked")
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(Item itemIn, CreativeTabs tab, List subItems) {
+	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
 		super.getSubItems(itemIn, tab, subItems);
 		subItems.addAll(tankItems);
 	}

@@ -2,6 +2,7 @@ package com.choonster.testmod3.util;
 
 import com.choonster.testmod3.Logger;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameData;
 
@@ -17,7 +18,7 @@ public class BlockDumper {
 		try (PrintWriter writer = new PrintWriter("TestMod3_BlockDump_" + (FMLCommonHandler.instance().getEffectiveSide().isClient() ? "Client" : "Server") + ".txt", "UTF-8")) {
 			writer.println("Name - toString");
 
-			for (Object key : GameData.getBlockRegistry().getKeys()) {
+			for (ResourceLocation key : GameData.getBlockRegistry().getKeys()) {
 				if (key.toString().startsWith(Constants.RESOURCE_PREFIX)) {
 					Item item = GameData.getItemRegistry().getObject(key);
 					if (item != null) {

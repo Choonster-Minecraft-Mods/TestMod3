@@ -1,4 +1,5 @@
 package com.choonster.testmod3.compat.nei;
+/*
 
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
@@ -24,3 +25,4 @@ public class NEITestMod3Config implements IConfigureNEI {
 		return TestMod3.VERSION;
 	}
 }
+*/

@@ -1,6 +1,7 @@
 package com.choonster.testmod3.config;
 
 import com.choonster.testmod3.TestMod3;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -19,7 +20,7 @@ public class Config {
 		config = new Configuration(event.getSuggestedConfigurationFile());
 		reloadConfig();
 
-		FMLCommonHandler.instance().bus().register(new Config());
+		MinecraftForge.EVENT_BUS.register(new Config());
 	}
 
 	public static void reloadConfig() {

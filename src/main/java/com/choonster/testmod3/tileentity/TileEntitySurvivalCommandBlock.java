@@ -62,7 +62,7 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 		}
 
 		@Override
-		public void func_145756_e() {
+		public void updateCommand() {
 			TileEntitySurvivalCommandBlock.this.getWorld().markBlockForUpdate(TileEntitySurvivalCommandBlock.this.pos);
 		}
 
@@ -81,7 +81,7 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 		 * @return Did the player open the edit GUI?
 		 */
 		@Override
-		public boolean func_175574_a(EntityPlayer player) {
+		public boolean tryOpenEditCommandBlock(EntityPlayer player) {
 			if (player.getEntityWorld().isRemote) {
 				BlockPos pos = getPosition();
 				player.openGui(TestMod3.instance, GuiIDs.SURVIVAL_COMMAND_BLOCK, player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());

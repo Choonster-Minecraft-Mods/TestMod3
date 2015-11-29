@@ -23,7 +23,7 @@ import net.minecraft.world.World;
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2512904-make-the-player-perform-a-right-click-on-non
  */
 public class BlockClientPlayerRightClick extends Block {
-	public static final IProperty POWERED = PropertyBool.create("powered");
+	public static final IProperty<Boolean> POWERED = PropertyBool.create("powered");
 
 	public BlockClientPlayerRightClick() {
 		super(Material.rock);

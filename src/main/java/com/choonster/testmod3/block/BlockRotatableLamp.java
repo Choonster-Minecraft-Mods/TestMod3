@@ -23,8 +23,8 @@ import net.minecraft.world.World;
  * http://www.minecraftforge.net/forum/index.php/topic,33716.0.html
  */
 public class BlockRotatableLamp extends Block {
-	public static final IProperty FACING = PropertyDirection.create("facing");
-	public static final IProperty LIT = PropertyBool.create("lit");
+	public static final IProperty<EnumFacing> FACING = PropertyDirection.create("facing");
+	public static final IProperty<Boolean> LIT = PropertyBool.create("lit");
 
 	public BlockRotatableLamp() {
 		super(Material.redstoneLight);
@@ -40,8 +40,8 @@ public class BlockRotatableLamp extends Block {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		int facingIndex = ((EnumFacing) state.getValue(FACING)).getIndex(); // Convert the EnumFacing to its index
-		int lit = (boolean) state.getValue(LIT) ? 1 : 0; // Convert the lit state boolean to 1 or 0
+		int facingIndex = state.getValue(FACING).getIndex(); // Convert the EnumFacing to its index
+		int lit = state.getValue(LIT) ? 1 : 0; // Convert the lit state boolean to 1 or 0
 
 		// Shift lit left three bits so it occupies the highest bit then OR it with the facing index (which occupies the lowest three bits)
 		return lit << 3 | facingIndex;
@@ -83,6 +83,6 @@ public class BlockRotatableLamp extends Block {
 	public int getLightValue(IBlockAccess world, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
 
-		return (boolean) state.getValue(LIT) ? 15 : 0;
+		return state.getValue(LIT) ? 15 : 0;
 	}
 }

@@ -25,7 +25,7 @@ import java.util.Random;
  * http://www.minecraftforge.net/forum/index.php/topic,32685.0.html
  */
 public class BlockRightClickTest extends BlockGlass {
-	public static IProperty HAS_ENDER_EYE = PropertyBool.create("has_ender_eye");
+	public static IProperty<Boolean> HAS_ENDER_EYE = PropertyBool.create("has_ender_eye");
 
 	public BlockRightClickTest() {
 		super(Material.glass, false);
@@ -46,14 +46,14 @@ public class BlockRightClickTest extends BlockGlass {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return (boolean) state.getValue(HAS_ENDER_EYE) ? 1 : 0;
+		return state.getValue(HAS_ENDER_EYE) ? 1 : 0;
 	}
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = playerIn.getHeldItem();
 
-		if (heldItem != null && heldItem.getItem() == Items.ender_eye && !(boolean) state.getValue(HAS_ENDER_EYE)) {
+		if (heldItem != null && heldItem.getItem() == Items.ender_eye && !state.getValue(HAS_ENDER_EYE)) {
 			if (!playerIn.capabilities.isCreativeMode) {
 				heldItem.stackSize--;
 			}
@@ -79,7 +79,7 @@ public class BlockRightClickTest extends BlockGlass {
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		List<ItemStack> drops = super.getDrops(world, pos, state, fortune);
 
-		if ((boolean) state.getValue(HAS_ENDER_EYE)) {
+		if (state.getValue(HAS_ENDER_EYE)) {
 			drops.add(new ItemStack(Items.ender_eye));
 		}
 

@@ -41,7 +41,7 @@ public class ItemHarvestSword extends ItemTool {
 	public static final float DIG_SPEED_DEFAULT = 1.0f;
 
 	public ItemHarvestSword(ToolMaterial toolMaterial) {
-		super(4.0f, toolMaterial, Collections.EMPTY_SET);
+		super(4.0f, toolMaterial, Collections.emptySet());
 		setHarvestLevel("pickaxe", toolMaterial.getHarvestLevel());
 		setHarvestLevel("axe", toolMaterial.getHarvestLevel());
 		setHarvestLevel("shovel", toolMaterial.getHarvestLevel());

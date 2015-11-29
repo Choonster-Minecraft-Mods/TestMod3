@@ -11,7 +11,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
     }
 }
 
@@ -26,6 +26,8 @@ minecraft {
     version = "${mc_version}-${forge_version}"
     runDir = "run"
 
+    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+
     if (project.hasProperty('mappings_version'))
         mappings = project.mappings_version
 }
@@ -37,30 +39,17 @@ repositories {
 
 dependencies {
     //runtime "mcp.mobius.waila:Waila:${waila_version}"
-    compile "codechicken:CodeChickenLib:${mc_version}-${ccl_version}:dev"
-    compile "codechicken:CodeChickenLib:${mc_version}-${ccl_version}:src"
-
-    compile "codechicken:CodeChickenCore:${mc_version}-${ccc_version}:dev"
-    compile "codechicken:CodeChickenCore:${mc_version}-${ccc_version}:src"
-
-    compile "codechicken:NotEnoughItems:${mc_version}-${nei_version}:dev"
-    compile "codechicken:NotEnoughItems:${mc_version}-${nei_version}:src"
+//    compile "codechicken:CodeChickenLib:${mc_version}-${ccl_version}:dev"
+//    compile "codechicken:CodeChickenLib:${mc_version}-${ccl_version}:src"
+//
+//    compile "codechicken:CodeChickenCore:${mc_version}-${ccc_version}:dev"
+//    compile "codechicken:CodeChickenCore:${mc_version}-${ccc_version}:src"
+//
+//    compile "codechicken:NotEnoughItems:${mc_version}-${nei_version}:dev"
+//    compile "codechicken:NotEnoughItems:${mc_version}-${nei_version}:src"
 }
 
-// Adapted from AE2: https://github.com/AppliedEnergistics/Applied-Energistics-2
-//task copyChicken(type: Copy, dependsOn: "extractUserdev") {
-//    from { configurations.compile }
-//    include "***//*Chicken*.jar", "***/NotEnoughItems*.jar"
-//    exclude "*CodeChickenLib*" // because CCC downloads it anyway
-//    into file(minecraft.runDir + "/mods")
-//    mustRunAfter "recompileMc"
-//}
-
-//setupDecompWorkspace.finalizedBy copyChicken
-//setupDevWorkspace.finalizedBy copyChicken
-
-processResources
-{
+processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
@@ -70,7 +59,7 @@ processResources
         include 'mcmod.info'
 
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version': project.version, 'mcversion': project.minecraft.version
     }
 
     // copy everything else, thats not the mcmod.info
@@ -88,6 +77,7 @@ tasks.withType(ScalaCompile) {
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+    options.compilerArgs.add('-Xlint:unchecked')
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }

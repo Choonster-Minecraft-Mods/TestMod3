@@ -81,7 +81,6 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 		public Start() {
 		}
 
-		@SuppressWarnings("unchecked")
 		public Start(World worldIn, Random random, int chunkX, int chunkZ) {
 			super(worldIn, random, chunkX, chunkZ);
 
@@ -107,7 +106,7 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 			}
 
 			if (!possibleFeatures.isEmpty()) {
-				WeightedRandomScatteredFeature featureToGenerate = (WeightedRandomScatteredFeature) WeightedRandom.getRandomItem(random, possibleFeatures);
+				WeightedRandomScatteredFeature featureToGenerate = WeightedRandom.getRandomItem(random, possibleFeatures);
 				this.components.add(featureToGenerate.feature);
 				Logger.info("Scattered feature %s at %d, %d", featureToGenerate.feature.toString(), chunkX * 16, chunkZ * 16);
 			}

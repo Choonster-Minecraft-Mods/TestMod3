@@ -25,8 +25,7 @@ public class ItemUnicodeTooltips extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	@SuppressWarnings("unchecked")
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
+	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 
 		tooltip.add(StatCollector.translateToLocal("item.unicodeTooltips.desc.1"));

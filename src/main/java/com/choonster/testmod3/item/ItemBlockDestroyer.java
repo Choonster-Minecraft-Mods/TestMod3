@@ -22,7 +22,7 @@ public class ItemBlockDestroyer extends Item {
 	public boolean onBlockDestroyed(ItemStack stack, World worldIn, Block blockIn, BlockPos pos, EntityLivingBase playerIn) {
 		if (!worldIn.isRemote) {
 			IBlockState state = worldIn.getBlockState(pos);
-			if (state.getBlock() == Blocks.wheat && (int) state.getValue(BlockCrops.AGE) >= 6) {
+			if (state.getBlock() == Blocks.wheat && state.getValue(BlockCrops.AGE) >= 6) {
 				playerIn.addChatMessage(new ChatComponentTranslation("message.blockDestroyer.destroy"));
 			}
 		}

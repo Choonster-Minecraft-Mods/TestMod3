@@ -73,7 +73,6 @@ public class ModRecipes {
 	 *
 	 * @param output The output Item
 	 */
-	@SuppressWarnings("unchecked")
 	private static void removeRecipe(Item output) {
 		int recipesRemoved = 0;
 
@@ -103,7 +102,6 @@ public class ModRecipes {
 	 *
 	 * @param recipeClass The recipe class
 	 */
-	@SuppressWarnings("unchecked")
 	private static void removeRecipeClass(Class<? extends IRecipe> recipeClass) {
 		int recipesRemoved = 0;
 

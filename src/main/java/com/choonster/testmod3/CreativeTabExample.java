@@ -25,10 +25,9 @@ public class CreativeTabExample extends CreativeTabs {
 		return Items.stone_sword;
 	}
 
-	@SuppressWarnings("unchecked")
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void displayAllReleventItems(List items) {
+	public void displayAllReleventItems(List<ItemStack> items) {
 		items.add(sword.copy());
 		super.displayAllReleventItems(items);
 	}

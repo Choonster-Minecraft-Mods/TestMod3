@@ -91,10 +91,9 @@ public class ItemBucketTestMod3 extends Item {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(Item itemIn, CreativeTabs tab, List subItems) {
+	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
 		for (int meta = 0; meta < fluids.size(); meta++) {
 			subItems.add(new ItemStack(this, 1, meta));
 		}

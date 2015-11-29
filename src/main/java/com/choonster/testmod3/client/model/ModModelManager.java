@@ -75,8 +75,8 @@ public class ModModelManager {
 	}
 
 	private void registerBlockModels() {
-		ModelLoader.setCustomStateMapper(ModBlocks.waterGrass, new StateMap.Builder().addPropertiesToIgnore(BlockLiquid.LEVEL).build());
-		ModelLoader.setCustomStateMapper(ModBlocks.survivalCommandBlock, new StateMap.Builder().addPropertiesToIgnore(BlockCommandBlock.TRIGGERED).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.waterGrass, new StateMap.Builder().ignore(BlockLiquid.LEVEL).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.survivalCommandBlock, new StateMap.Builder().ignore(BlockCommandBlock.TRIGGERED).build());
 
 		registerBlockItemModel(ModBlocks.waterGrass, "minecraft:tall_grass");
 		registerBlockItemModel(ModBlocks.largeCollisionTest, "minecraft:white_wool");

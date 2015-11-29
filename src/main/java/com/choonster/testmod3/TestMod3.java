@@ -45,7 +45,7 @@ public class TestMod3 {
 
 		MinecraftForge.EVENT_BUS.register(new BucketFillHandler());
 		MinecraftForge.EVENT_BUS.register(new BlockEventHandler());
-		FMLCommonHandler.instance().bus().register(new NetworkEventHandler());
+		MinecraftForge.EVENT_BUS.register(new NetworkEventHandler());
 
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 
