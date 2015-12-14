@@ -2,6 +2,7 @@ package com.choonster.testmod3.proxy;
 
 
 import com.choonster.testmod3.client.cape.CapeEventHandler;
+import com.choonster.testmod3.client.event.ClientEventHandler;
 import com.choonster.testmod3.client.model.ModModelManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -21,6 +22,7 @@ public class CombinedClientProxy extends CommonProxy {
 
 		ModModelManager.INSTANCE.registerAllModels();
 		MinecraftForge.EVENT_BUS.register(new CapeEventHandler());
+		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
 	}
 
 	@Override

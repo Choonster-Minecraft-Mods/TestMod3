@@ -110,6 +110,7 @@ public class ModModelManager {
 	private void registerItemVariants() {
 		for (int stage = 0; stage < 3; stage++) { // Add a variant for each stage's model
 			ModelBakery.addVariantName(ModItems.modelTest, Constants.RESOURCE_PREFIX + "modeltest_" + stage);
+			ModelBakery.addVariantName(ModItems.modBow, Constants.RESOURCE_PREFIX + "bow_pulling_" + stage);
 		}
 
 		ModelBakery.addVariantName(ModItems.slingshot, Constants.RESOURCE_PREFIX + "slingshot_pulled");
