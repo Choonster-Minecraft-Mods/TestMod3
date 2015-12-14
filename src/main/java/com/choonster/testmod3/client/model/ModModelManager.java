@@ -66,12 +66,12 @@ public class ModModelManager {
 
 	private void registerBucketModels() {
 		for (FluidStack fluidStack : ModItems.bucket.getRegisteredFluids()) {
-			ModelBakery.addVariantName(ModItems.bucket, "testmod3:bucket/" + fluidStack.getFluid().getName());
+			ModelBakery.addVariantName(ModItems.bucket, Constants.RESOURCE_PREFIX + "bucket/" + fluidStack.getFluid().getName());
 		}
 
 		registerItemModel(ModItems.bucket, MeshDefinitionFix.create(stack -> {
 					FluidStack fluidStack = ModItems.bucket.getFluid(stack);
-					return fluidStack != null ? new ModelResourceLocation("testmod3:bucket/" + fluidStack.getFluid().getName(), "inventory") : null;
+			return fluidStack != null ? new ModelResourceLocation(Constants.RESOURCE_PREFIX + "bucket/" + fluidStack.getFluid().getName(), "inventory") : null;
 				}
 		));
 	}
@@ -88,8 +88,8 @@ public class ModModelManager {
 		ModelBakery.addVariantName(Item.getItemFromBlock(ModBlocks.coloredRotatable)); // Don't load the default item model
 		ModelBakery.addVariantName(Item.getItemFromBlock(ModBlocks.coloredMultiRotatable));
 		for (EnumDyeColor color : EnumDyeColor.values()) {
-			registerBlockItemModel(ModBlocks.coloredRotatable, color.getMetadata(), new ModelResourceLocation("testmod3:coloredRotatable", String.format("color=%s,facing=north", color.getName())));
-			registerBlockItemModel(ModBlocks.coloredMultiRotatable, color.getMetadata(), new ModelResourceLocation("testmod3:coloredMultiRotatable", String.format("color=%s,face_rotation=up,facing=north", color.getName())));
+			registerBlockItemModel(ModBlocks.coloredRotatable, color.getMetadata(), new ModelResourceLocation(Constants.RESOURCE_PREFIX + "coloredRotatable", String.format("color=%s,facing=north", color.getName())));
+			registerBlockItemModel(ModBlocks.coloredMultiRotatable, color.getMetadata(), new ModelResourceLocation(Constants.RESOURCE_PREFIX + "coloredMultiRotatable", String.format("color=%s,face_rotation=up,facing=north", color.getName())));
 		}
 
 		ModBlocks.blocks.forEach(this::registerBlockItemModel);
@@ -109,10 +109,10 @@ public class ModModelManager {
 
 	private void registerItemVariants() {
 		for (int stage = 0; stage < 3; stage++) { // Add a variant for each stage's model
-			ModelBakery.addVariantName(ModItems.modelTest, "testmod3:modeltest_" + stage);
+			ModelBakery.addVariantName(ModItems.modelTest, Constants.RESOURCE_PREFIX + "modeltest_" + stage);
 		}
 
-		ModelBakery.addVariantName(ModItems.slingshot, "testmod3:slingshot_pulled");
+		ModelBakery.addVariantName(ModItems.slingshot, Constants.RESOURCE_PREFIX + "slingshot_pulled");
 	}
 
 	private Set<Item> itemsRegistered = new HashSet<>();
