@@ -7,6 +7,8 @@ import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
@@ -15,6 +17,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+@SideOnly(Side.CLIENT)
 public class CapeUtils {
 	public static final ResourceLocation CAPE_LOCATION = new ResourceLocation(TestMod3.MODID, "textures/capes/testmod3.png");
 	public static final UUID UUID_CHOONSTER = UUID.fromString("12bbe833-bf2b-4daa-adb0-9a7f6e2f4f38");
