@@ -25,7 +25,7 @@ import java.util.Random;
  * http://www.minecraftforge.net/forum/index.php/topic,32685.0.html
  */
 public class BlockRightClickTest extends BlockGlass {
-	public static IProperty HAS_ENDER_EYE = PropertyBool.create("has_ender_eye");
+	public static final IProperty HAS_ENDER_EYE = PropertyBool.create("has_ender_eye");
 
 	public BlockRightClickTest() {
 		super(Material.glass, false);
