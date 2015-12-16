@@ -4,8 +4,6 @@ import com.choonster.testmod3.TestMod3;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
@@ -23,30 +21,33 @@ import net.minecraft.world.World;
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2512904-make-the-player-perform-a-right-click-on-non
  */
 public class BlockClientPlayerRightClick extends Block {
-	public static final IProperty POWERED = PropertyBool.create("powered");
-
 	public BlockClientPlayerRightClick() {
 		super(Material.rock);
 		setCreativeTab(TestMod3.creativeTab);
 		setUnlocalizedName("clientPlayerRightClick");
 	}
 
+	@Override
 	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
 		return null;
 	}
 
+	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
 
+	@Override
 	public boolean isFullCube() {
 		return false;
 	}
 
+	@Override
 	public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
 		return true;
 	}
 
+	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		return World.doesBlockHaveSolidTopSurface(worldIn, pos) || worldIn.getBlockState(pos).getBlock() instanceof BlockFence;
 	}
@@ -56,10 +57,12 @@ public class BlockClientPlayerRightClick extends Block {
 		setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.0625F, 0.9375F);
 	}
 
+	@Override
 	public void setBlockBoundsForItemRender() {
 		this.setBlockBounds(0.0F, 0.375F, 0.0F, 1.0F, 0.625F, 1.0F);
 	}
 
+	@Override
 	public int getMobilityFlag() {
 		return 1;
 	}
