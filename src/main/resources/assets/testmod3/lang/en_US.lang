@@ -83,6 +83,7 @@ item.blockDebugger.name=Block Debugger
 item.harvestSwordWood.name=Wooden Harvest Sword
 item.harvestSwordDiamond.name=Diamond Harvest Sword
 item.clearer.name=Clearer
+item.modBow.name=Mod Bow
 
 # Tooltips
 item.unicodeTooltips.desc.1=§a§oLine 1 (Section Characters in Lang File)§r
