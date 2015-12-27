@@ -1,5 +1,6 @@
 package com.choonster.testmod3.client.model;
 
+import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.init.ModBlocks;
 import com.choonster.testmod3.init.ModFluids;
 import com.choonster.testmod3.init.ModItems;
@@ -15,6 +16,7 @@ import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
@@ -50,7 +52,7 @@ public class ModModelManager {
 	private void registerFluidModel(IFluidBlock fluidBlock) {
 		Item item = Item.getItemFromBlock((Block) fluidBlock);
 
-		ModelBakery.addVariantName(item);
+		ModelBakery.registerItemVariants(item);
 
 		ModelResourceLocation modelResourceLocation = new ModelResourceLocation(FLUID_MODEL_PATH, fluidBlock.getFluid().getName());
 
@@ -85,8 +87,8 @@ public class ModModelManager {
 		registerBlockItemModel(ModBlocks.rightClickTest, "minecraft:black_stained_glass");
 		registerBlockItemModel(ModBlocks.clientPlayerRightClick, "minecraft:heavy_weighted_pressure_plate");
 
-		ModelBakery.addVariantName(Item.getItemFromBlock(ModBlocks.coloredRotatable)); // Don't load the default item model
-		ModelBakery.addVariantName(Item.getItemFromBlock(ModBlocks.coloredMultiRotatable));
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.coloredRotatable)); // Don't load the default item model
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.coloredMultiRotatable));
 		for (EnumDyeColor color : EnumDyeColor.values()) {
 			registerBlockItemModel(ModBlocks.coloredRotatable, color.getMetadata(), new ModelResourceLocation(Constants.RESOURCE_PREFIX + "coloredRotatable", String.format("color=%s,facing=north", color.getName())));
 			registerBlockItemModel(ModBlocks.coloredMultiRotatable, color.getMetadata(), new ModelResourceLocation(Constants.RESOURCE_PREFIX + "coloredMultiRotatable", String.format("color=%s,face_rotation=up,facing=north", color.getName())));
@@ -109,11 +111,11 @@ public class ModModelManager {
 
 	private void registerItemVariants() {
 		for (int stage = 0; stage < 3; stage++) { // Add a variant for each stage's model
-			ModelBakery.addVariantName(ModItems.modelTest, Constants.RESOURCE_PREFIX + "modeltest_" + stage);
-			ModelBakery.addVariantName(ModItems.modBow, Constants.RESOURCE_PREFIX + "bow_pulling_" + stage);
+			ModelBakery.registerItemVariants(ModItems.modelTest, new ResourceLocation(TestMod3.MODID, "modeltest_" + stage));
+			ModelBakery.registerItemVariants(ModItems.modBow, new ResourceLocation(TestMod3.MODID, "bow_pulling_" + stage));
 		}
 
-		ModelBakery.addVariantName(ModItems.slingshot, Constants.RESOURCE_PREFIX + "slingshot_pulled");
+		ModelBakery.registerItemVariants(ModItems.slingshot, new ResourceLocation(TestMod3.MODID, "slingshot_pulled"));
 	}
 
 	private Set<Item> itemsRegistered = new HashSet<>();
@@ -139,7 +141,7 @@ public class ModModelManager {
 
 	private void registerItemModel(Item item, String modelLocation) {
 		final ModelResourceLocation fullModelLocation = new ModelResourceLocation(modelLocation, "inventory");
-		ModelBakery.addVariantName(item, modelLocation); // Ensure the custom model is loaded and prevent the default model from being loaded
+		ModelBakery.registerItemVariants(item, fullModelLocation); // Ensure the custom model is loaded and prevent the default model from being loaded
 		registerItemModel(item, MeshDefinitionFix.create(stack -> fullModelLocation));
 	}
 
