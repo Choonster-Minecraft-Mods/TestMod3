@@ -18,7 +18,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.client.model.ModelDynBucket;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,7 +37,6 @@ public class ModModelManager {
 
 	public void registerAllModels() {
 		registerFluidModels();
-		registerBucketModels();
 
 		registerBlockModels();
 
@@ -64,18 +63,6 @@ public class ModModelManager {
 				return modelResourceLocation;
 			}
 		});
-	}
-
-	private void registerBucketModels() {
-		for (FluidStack fluidStack : ModItems.bucket.getRegisteredFluids()) {
-			ModelBakery.addVariantName(ModItems.bucket, Constants.RESOURCE_PREFIX + "bucket/" + fluidStack.getFluid().getName());
-		}
-
-		registerItemModel(ModItems.bucket, MeshDefinitionFix.create(stack -> {
-					FluidStack fluidStack = ModItems.bucket.getFluid(stack);
-			return fluidStack != null ? new ModelResourceLocation(Constants.RESOURCE_PREFIX + "bucket/" + fluidStack.getFluid().getName(), "inventory") : null;
-				}
-		));
 	}
 
 	private void registerBlockModels() {
@@ -116,6 +103,7 @@ public class ModModelManager {
 		}
 
 		ModelBakery.registerItemVariants(ModItems.slingshot, new ResourceLocation(TestMod3.MODID, "slingshot_pulled"));
+		ModelBakery.registerItemVariants(ModItems.bucket, ModelDynBucket.LOCATION);
 	}
 
 	private Set<Item> itemsRegistered = new HashSet<>();
@@ -130,6 +118,7 @@ public class ModModelManager {
 		registerItemModel(ModItems.woodenHarvestSword, "minecraft:wooden_sword");
 		registerItemModel(ModItems.diamondHarvestSword, "minecraft:diamond_sword");
 		registerItemModel(ModItems.clearer, "minecraft:nether_star");
+		registerItemModel(ModItems.bucket, MeshDefinitionFix.create(stack -> ModelDynBucket.LOCATION));
 
 		// Then register items with default model names
 		ModItems.items.forEach(this::registerItemModel);

@@ -1,6 +1,0 @@
-{
-	"parent": "testmod3:item/bucket/base",
-	"textures": {
-		"layer0": "testmod3:items/bucket/staticgas"
-	}
-}
