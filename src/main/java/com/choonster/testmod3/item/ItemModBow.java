@@ -1,11 +1,14 @@
 package com.choonster.testmod3.item;
 
 import com.choonster.testmod3.TestMod3;
-import com.choonster.testmod3.util.Constants;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * A bow that uses custom models identical to the vanilla ones.
@@ -19,17 +22,27 @@ public class ItemModBow extends ItemBow {
 		setCreativeTab(TestMod3.creativeTab);
 	}
 
+	/**
+	 * Get the location of the blockstates file used for this item's models
+	 *
+	 * @return The location
+	 */
+	public ResourceLocation getModelLocation() {
+		return Item.itemRegistry.getNameForObject(this);
+	}
+
+	@SideOnly(Side.CLIENT)
 	@Override
 	public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
 		if (player.isUsingItem()) {
 			int useTime = stack.getMaxItemUseDuration() - useRemaining;
 
 			if (useTime >= 18) {
-				return new ModelResourceLocation(Constants.RESOURCE_PREFIX + "bow_pulling_2", "inventory");
+				return new ModelResourceLocation(getModelLocation(), "pulling_2");
 			} else if (useTime > 13) {
-				return new ModelResourceLocation(Constants.RESOURCE_PREFIX + "bow_pulling_1", "inventory");
+				return new ModelResourceLocation(getModelLocation(), "pulling_1");
 			} else if (useTime > 0) {
-				return new ModelResourceLocation(Constants.RESOURCE_PREFIX + "bow_pulling_0", "inventory");
+				return new ModelResourceLocation(getModelLocation(), "pulling_0");
 			}
 		}
 

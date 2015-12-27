@@ -96,9 +96,10 @@ public class ModModelManager {
 	private final Set<Item> itemsRegistered = new HashSet<>();
 
 	private void registerItemModels() {
+		ResourceLocation locationBow = ModItems.modBow.getModelLocation();
 		for (int stage = 0; stage < 3; stage++) { // Add a variant for each stage's model
 			ModelBakery.registerItemVariants(ModItems.modelTest, new ResourceLocation(TestMod3.MODID, "modeltest_" + stage));
-			ModelBakery.registerItemVariants(ModItems.modBow, new ResourceLocation(TestMod3.MODID, "bow_pulling_" + stage));
+			ModelBakery.registerItemVariants(ModItems.modBow, new ModelResourceLocation(locationBow, "pulling_" + stage));
 		}
 
 		ModelBakery.registerItemVariants(ModItems.slingshot, new ResourceLocation(TestMod3.MODID, "slingshot_pulled"));
@@ -114,6 +115,7 @@ public class ModModelManager {
 		registerItemModel(ModItems.diamondHarvestSword, "minecraft:diamond_sword");
 		registerItemModel(ModItems.clearer, "minecraft:nether_star");
 		registerItemModel(ModItems.bucket, ModelDynBucket.LOCATION);
+		registerItemModel(ModItems.modBow, new ModelResourceLocation(locationBow, "standby"));
 
 		// Then register items with default model names
 		ModItems.items.forEach(this::registerItemModel);

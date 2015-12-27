@@ -1,0 +1,36 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "builtin/generated",
+	},
+	"variants": {
+		"standby": [
+			{
+				"textures": {
+					"layer0": "items/bow_standby"
+				}
+			}
+		],
+		"pulling_0": [
+			{
+				"textures": {
+					"layer0": "items/bow_pulling_0"
+				}
+			}
+		],
+		"pulling_1": [
+			{
+				"textures": {
+					"layer0": "items/bow_pulling_1"
+				}
+			}
+		],
+		"pulling_2": [
+			{
+				"textures": {
+					"layer0": "items/bow_pulling_2"
+				}
+			}
+		]
+	}
+}
