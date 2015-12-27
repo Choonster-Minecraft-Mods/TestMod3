@@ -37,10 +37,7 @@ public class ModModelManager {
 
 	public void registerAllModels() {
 		registerFluidModels();
-
 		registerBlockModels();
-
-		registerItemVariants();
 		registerItemModels();
 	}
 
@@ -96,7 +93,9 @@ public class ModModelManager {
 		registerItemModel(Item.getItemFromBlock(block), metadata, modelResourceLocation);
 	}
 
-	private void registerItemVariants() {
+	private final Set<Item> itemsRegistered = new HashSet<>();
+
+	private void registerItemModels() {
 		for (int stage = 0; stage < 3; stage++) { // Add a variant for each stage's model
 			ModelBakery.registerItemVariants(ModItems.modelTest, new ResourceLocation(TestMod3.MODID, "modeltest_" + stage));
 			ModelBakery.registerItemVariants(ModItems.modBow, new ResourceLocation(TestMod3.MODID, "bow_pulling_" + stage));
@@ -104,11 +103,7 @@ public class ModModelManager {
 
 		ModelBakery.registerItemVariants(ModItems.slingshot, new ResourceLocation(TestMod3.MODID, "slingshot_pulled"));
 		ModelBakery.registerItemVariants(ModItems.bucket, ModelDynBucket.LOCATION);
-	}
 
-	private final Set<Item> itemsRegistered = new HashSet<>();
-
-	private void registerItemModels() {
 		// Register items with custom model names first
 		registerItemModel(ModItems.snowballLauncher, "minecraft:fishing_rod");
 		registerItemModel(ModItems.unicodeTooltips, "minecraft:rabbit");
@@ -118,7 +113,7 @@ public class ModModelManager {
 		registerItemModel(ModItems.woodenHarvestSword, "minecraft:wooden_sword");
 		registerItemModel(ModItems.diamondHarvestSword, "minecraft:diamond_sword");
 		registerItemModel(ModItems.clearer, "minecraft:nether_star");
-		registerItemModel(ModItems.bucket, MeshDefinitionFix.create(stack -> ModelDynBucket.LOCATION));
+		registerItemModel(ModItems.bucket, ModelDynBucket.LOCATION);
 
 		// Then register items with default model names
 		ModItems.items.forEach(this::registerItemModel);
@@ -130,6 +125,10 @@ public class ModModelManager {
 
 	private void registerItemModel(Item item, String modelLocation) {
 		final ModelResourceLocation fullModelLocation = new ModelResourceLocation(modelLocation, "inventory");
+		registerItemModel(item, fullModelLocation);
+	}
+
+	private void registerItemModel(Item item, ModelResourceLocation fullModelLocation) {
 		ModelBakery.registerItemVariants(item, fullModelLocation); // Ensure the custom model is loaded and prevent the default model from being loaded
 		registerItemModel(item, MeshDefinitionFix.create(stack -> fullModelLocation));
 	}
