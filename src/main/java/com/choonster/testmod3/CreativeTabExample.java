@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 public class CreativeTabExample extends CreativeTabs {
-	public ItemStack sword;
+	public final ItemStack sword;
 
 	public CreativeTabExample() {
 		super("example");

@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class ShapelessCuttingRecipe extends ShapelessRecipes {
 
-	private Random random = new Random();
+	private final Random random = new Random();
 
 	public ShapelessCuttingRecipe(ItemStack output, ItemStack... input) {
 		super(output, Arrays.asList(input));

@@ -19,8 +19,8 @@ import java.util.Map;
 // Used for example in this thread: http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2418536-get-stair-state-and-apply-it-to-new-stair-block
 public class BiomeBlockReplacer {
 
-	private Map<Block, List<Pair<String, Block>>> replacements;
-	private Map<Block, List<Pair<String, Integer>>> metadata;
+	private final Map<Block, List<Pair<String, Block>>> replacements;
+	private final Map<Block, List<Pair<String, Integer>>> metadata;
 
 	public BiomeBlockReplacer() {
 		replacements = Collections.emptyMap(); /* ConfigVillage.getReplacements(); */

@@ -26,12 +26,12 @@ public class ModFluids {
 	/**
 	 * The fluids registered by this mod. Includes fluids that were already registered by another mod.
 	 */
-	public static Set<Fluid> fluids = new HashSet<>();
+	public static final Set<Fluid> fluids = new HashSet<>();
 
 	/**
 	 * The fluid blocks from this mod only. Doesn't include blocks for fluids that were already registered by another mod.
 	 */
-	public static Set<IFluidBlock> modFluidBlocks = new HashSet<>();
+	public static final Set<IFluidBlock> modFluidBlocks = new HashSet<>();
 
 	public static void registerFluids() {
 		fluidStatic = createFluid("static", "testmod3:blocks/fluid_static", false, 10, 800, 1500, false,

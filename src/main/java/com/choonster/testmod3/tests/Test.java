@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 
 public abstract class Test {
-	protected Logger logger = LogManager.getLogger();
+	protected final Logger logger = LogManager.getLogger();
 
 	private boolean allAssertionsPassed = true;
 

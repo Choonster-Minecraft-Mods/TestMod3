@@ -17,8 +17,8 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelDynBucket;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -106,7 +106,7 @@ public class ModModelManager {
 		ModelBakery.registerItemVariants(ModItems.bucket, ModelDynBucket.LOCATION);
 	}
 
-	private Set<Item> itemsRegistered = new HashSet<>();
+	private final Set<Item> itemsRegistered = new HashSet<>();
 
 	private void registerItemModels() {
 		// Register items with custom model names first
