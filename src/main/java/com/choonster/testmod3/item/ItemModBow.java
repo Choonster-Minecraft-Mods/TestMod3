@@ -58,22 +58,22 @@ public class ItemModBow extends ItemBow {
 
 		if (noAmmoRequired || playerIn.inventory.hasItem(ModItems.modArrow))
 		{
-			float f = (float)charge / 20.0f;
-			f = (f * f + f * 2.0f) / 3.0f;
+			float velocity = (float)charge / 20.0f;
+			velocity = (velocity * velocity + velocity * 2.0f) / 3.0f;
 
-			if (f < 0.1f)
+			if (velocity < 0.1f)
 			{
 				return;
 			}
 
-			if (f > 1.0f)
+			if (velocity > 1.0f)
 			{
-				f = 1.0f;
+				velocity = 1.0f;
 			}
 
-			EntityModArrow entityArrow = new EntityModArrow(worldIn, playerIn, f * 2.0f);
+			EntityModArrow entityArrow = new EntityModArrow(worldIn, playerIn, velocity * 2.0f);
 
-			if (f == 1.0f)
+			if (velocity == 1.0f)
 			{
 				entityArrow.setIsCritical(true);
 			}
@@ -96,7 +96,7 @@ public class ItemModBow extends ItemBow {
 			}
 
 			stack.damageItem(1, playerIn);
-			worldIn.playSoundAtEntity(playerIn, "random.bow", 1.0f, 1.0f / (itemRand.nextFloat() * 0.4f + 1.2f) + f * 0.5f);
+			worldIn.playSoundAtEntity(playerIn, "random.bow", 1.0f, 1.0f / (itemRand.nextFloat() * 0.4f + 1.2f) + velocity * 0.5f);
 
 			if (noAmmoRequired)
 			{
