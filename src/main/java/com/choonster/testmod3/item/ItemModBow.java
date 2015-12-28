@@ -56,7 +56,7 @@ public class ItemModBow extends ItemBow {
 
 		boolean noAmmoRequired = playerIn.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
 
-		if (noAmmoRequired || playerIn.inventory.hasItem(Items.arrow))
+		if (noAmmoRequired || playerIn.inventory.hasItem(ModItems.modArrow))
 		{
 			float f = (float)charge / 20.0f;
 			f = (f * f + f * 2.0f) / 3.0f;
