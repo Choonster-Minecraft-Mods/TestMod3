@@ -57,6 +57,7 @@ public class TestMod3 {
 		ModFluids.registerFluidContainers();
 		ModBiomes.registerBiomes();
 		ModMapGen.registerMapGen();
+		ModEntities.registerEntities();
 
 		proxy.preInit();
 	}

@@ -84,6 +84,7 @@ item.harvestSwordWood.name=Wooden Harvest Sword
 item.harvestSwordDiamond.name=Diamond Harvest Sword
 item.clearer.name=Clearer
 item.modBow.name=Mod Bow
+item.testmod3.modArrow.name=Mod Arrow
 
 # Tooltips
 item.unicodeTooltips.desc.1=§a§oLine 1 (Section Characters in Lang File)§r
@@ -109,3 +110,6 @@ message.clearer.mode.1=Switched to All Mode
 testmod3.config.title=TestMod3 Config
 testmod3.config.general=General
 testmod3.config.biomes=Biome IDs
+
+# Entities
+entity.testmod3.modArrow.name=Mod Arrow
