@@ -103,7 +103,6 @@ public class ModModelManager {
 		}
 
 		ModelBakery.registerItemVariants(ModItems.slingshot, new ResourceLocation(TestMod3.MODID, "slingshot_pulled"));
-		ModelBakery.registerItemVariants(ModItems.bucket, ModelDynBucket.LOCATION);
 
 		// Register items with custom model names first
 		registerItemModel(ModItems.snowballLauncher, "minecraft:fishing_rod");
@@ -114,7 +113,7 @@ public class ModModelManager {
 		registerItemModel(ModItems.woodenHarvestSword, "minecraft:wooden_sword");
 		registerItemModel(ModItems.diamondHarvestSword, "minecraft:diamond_sword");
 		registerItemModel(ModItems.clearer, "minecraft:nether_star");
-		registerItemModel(ModItems.bucket, ModelDynBucket.LOCATION);
+		ModelLoader.setBucketModelDefinition(ModItems.bucket);
 		registerItemModel(ModItems.modBow, new ModelResourceLocation(locationBow, "standby"));
 
 		// Then register items with default model names
