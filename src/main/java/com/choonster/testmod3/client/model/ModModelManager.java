@@ -17,7 +17,6 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.ModelDynBucket;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
@@ -113,11 +112,16 @@ public class ModModelManager {
 		registerItemModel(ModItems.woodenHarvestSword, "minecraft:wooden_sword");
 		registerItemModel(ModItems.diamondHarvestSword, "minecraft:diamond_sword");
 		registerItemModel(ModItems.clearer, "minecraft:nether_star");
-		ModelLoader.setBucketModelDefinition(ModItems.bucket);
+		registerBucketModel(ModItems.bucket);
 		registerItemModel(ModItems.modBow, new ModelResourceLocation(locationBow, "standby"));
 
 		// Then register items with default model names
 		ModItems.items.forEach(this::registerItemModel);
+	}
+
+	private void registerBucketModel(Item item) {
+		itemsRegistered.add(item);
+		ModelLoader.setBucketModelDefinition(item);
 	}
 
 	private void registerItemModel(Item item) {
