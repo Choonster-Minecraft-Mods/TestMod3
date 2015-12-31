@@ -13,6 +13,7 @@ tile.survivalCommandBlock.name=Survival Command Block
 tile.fluidTank.name=Fluid Tank
 tile.itemDebugger.name=Item Debugger
 tile.endPortalFrameFull.name=End Portal Frame Full
+tile.potionEffect.name=Potion Effect Block
 
 tile.basicPipe.name=Basic Pipe
 tile.fluidPipe.name=Fluid Pipe

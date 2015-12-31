@@ -6,10 +6,7 @@ import com.choonster.testmod3.block.pipe.BlockPipeBasic;
 import com.choonster.testmod3.block.pipe.BlockPipeFluid;
 import com.choonster.testmod3.item.block.ItemColoredMod;
 import com.choonster.testmod3.item.block.ItemFluidTank;
-import com.choonster.testmod3.tileentity.TileEntityColoredMultiRotatable;
-import com.choonster.testmod3.tileentity.TileEntityColoredRotatable;
-import com.choonster.testmod3.tileentity.TileEntityFluidTank;
-import com.choonster.testmod3.tileentity.TileEntitySurvivalCommandBlock;
+import com.choonster.testmod3.tileentity.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
@@ -36,6 +33,7 @@ public class ModBlocks {
 	public static Block endPortalFrameFull;
 	public static BlockColoredRotatable coloredRotatable;
 	public static BlockColoredMultiRotatable coloredMultiRotatable;
+	public static BlockPotionEffect potionEffect;
 
 	public static BlockPipeBasic pipeBasic;
 	public static BlockPipeFluid pipeFluid;
@@ -53,6 +51,7 @@ public class ModBlocks {
 		endPortalFrameFull = registerBlock(new Block(Material.rock).setUnlocalizedName("endPortalFrameFull").setCreativeTab(TestMod3.creativeTab));
 		coloredRotatable = (BlockColoredRotatable) registerBlock(new BlockColoredRotatable(Material.cloth).setUnlocalizedName("coloredRotatable").setCreativeTab(TestMod3.creativeTab), ItemCloth.class);
 		coloredMultiRotatable = (BlockColoredMultiRotatable) registerBlock(new BlockColoredMultiRotatable(Material.cloth).setUnlocalizedName("coloredMultiRotatable").setCreativeTab(TestMod3.creativeTab), ItemCloth.class);
+		potionEffect = registerBlock(new BlockPotionEffect());
 
 		pipeBasic = registerBlock(new BlockPipeBasic());
 		pipeFluid = registerBlock(new BlockPipeFluid());
@@ -91,6 +90,7 @@ public class ModBlocks {
 		registerTileEntity(TileEntityFluidTank.class, "fluidTank");
 		registerTileEntity(TileEntityColoredRotatable.class, "coloredRotatable");
 		registerTileEntity(TileEntityColoredMultiRotatable.class, "colouredMultiRotatable");
+		registerTileEntity(TileEntityPotionEffect.class, "potionEffect");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> tileEntityClass, String id) {
