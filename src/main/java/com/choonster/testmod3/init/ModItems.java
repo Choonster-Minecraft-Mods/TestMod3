@@ -34,6 +34,7 @@ public class ModItems {
 	public static ItemHarvestSword diamondHarvestSword;
 	public static ItemClearer clearer;
 	public static ItemModBow modBow;
+	public static Item modArrow;
 
 	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE;
 
@@ -56,6 +57,7 @@ public class ModItems {
 		diamondHarvestSword = (ItemHarvestSword) registerItem(new ItemHarvestSword(Item.ToolMaterial.EMERALD).setUnlocalizedName("harvestSwordDiamond"));
 		clearer = registerItem(new ItemClearer());
 		modBow = registerItem(new ItemModBow(), "bow");
+		modArrow = registerItem(new Item().setUnlocalizedName("testmod3.modArrow").setCreativeTab(TestMod3.creativeTab));
 
 		swapTestA = registerItem(new ItemSwapTest("A"));
 		swapTestB = registerItem(new ItemSwapTest("B"));
@@ -73,7 +75,7 @@ public class ModItems {
 	 * @return The Item instance
 	 */
 	private static <T extends Item> T registerItem(T item) {
-		return registerItem(item, item.getUnlocalizedName().replaceFirst("item.", ""));
+		return registerItem(item, item.getUnlocalizedName().replaceFirst("item\\.", "").replaceFirst("testmod3\\.", ""));
 	}
 
 	/**
