@@ -8,6 +8,7 @@ import com.choonster.testmod3.event.NetworkEventHandler;
 import com.choonster.testmod3.init.*;
 import com.choonster.testmod3.proxy.CommonProxy;
 import com.choonster.testmod3.tests.Tests;
+import com.choonster.testmod3.tweak.snowbuildup.SnowBuildup;
 import com.choonster.testmod3.util.BiomeBlockReplacer;
 import com.choonster.testmod3.util.BlockDumper;
 import com.choonster.testmod3.world.gen.WorldGenOres;
@@ -58,6 +59,8 @@ public class TestMod3 {
 		ModBiomes.registerBiomes();
 		ModMapGen.registerMapGen();
 		ModEntities.registerEntities();
+
+		SnowBuildup.init();
 
 		proxy.preInit();
 	}
