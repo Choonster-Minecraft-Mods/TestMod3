@@ -7,7 +7,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -27,7 +27,7 @@ public class SnowBuildup {
 	public static final SnowBuildup INSTANCE = new SnowBuildup();
 
 	public static void init() {
-		FMLCommonHandler.instance().bus().register(INSTANCE);
+		MinecraftForge.EVENT_BUS.register(INSTANCE);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class SnowBuildup {
 							// If the biome at that position allows snow, the block is a snow layer and a random integer in the range [0,24) is 0 (roughly 4% chance),
 							if (world.getBiomeGenForCoords(pos).getEnableSnow() && state.getBlock() == Blocks.snow_layer && random.nextInt(24) == 0) {
 								// Get the number of layers
-								final int numLayers = (int) state.getValue(BlockSnow.LAYERS);
+								final int numLayers = state.getValue(BlockSnow.LAYERS);
 
 								if (numLayers < MAX_LAYERS) { // If it's less than the maximum, increase it by 1
 									world.setBlockState(pos, state.withProperty(BlockSnow.LAYERS, numLayers + 1));
