@@ -86,6 +86,7 @@ item.harvestSwordDiamond.name=Diamond Harvest Sword
 item.clearer.name=Clearer
 item.modBow.name=Mod Bow
 item.testmod3.modArrow.name=Mod Arrow
+item.testmod3.heightTester.name=Height Tester
 
 # Tooltips
 item.unicodeTooltips.desc.1=§a§oLine 1 (Section Characters in Lang File)§r
@@ -106,6 +107,8 @@ message.clearer.clearing=Clearing the chunk at %s, %s
 message.clearer.cleared=Chunk cleared
 message.clearer.mode.0=Switched to Whitelist Mode
 message.clearer.mode.1=Switched to All Mode
+message.heightTester.height=Height at %s,%s is %s
+message.heightTester.generate=Generated skylight map for the chunk %d,%d at %d,%d,%d
 
 # Config GUI strings
 testmod3.config.title=TestMod3 Config

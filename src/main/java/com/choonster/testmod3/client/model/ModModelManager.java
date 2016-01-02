@@ -114,6 +114,7 @@ public class ModModelManager {
 		registerItemModel(ModItems.clearer, "minecraft:nether_star");
 		registerBucketModel(ModItems.bucket);
 		registerItemModel(ModItems.modBow, new ModelResourceLocation(locationBow, "standby"));
+		registerItemModel(ModItems.heightTester, "minecraft:compass");
 
 		// Then register items with default model names
 		ModItems.items.forEach(this::registerItemModel);
