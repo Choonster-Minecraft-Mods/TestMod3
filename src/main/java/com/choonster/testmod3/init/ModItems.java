@@ -35,6 +35,7 @@ public class ModItems {
 	public static ItemClearer clearer;
 	public static ItemModBow modBow;
 	public static Item modArrow;
+	public static ItemHeightTester heightTester;
 
 	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE;
 
@@ -58,6 +59,7 @@ public class ModItems {
 		clearer = registerItem(new ItemClearer());
 		modBow = registerItem(new ItemModBow(), "bow");
 		modArrow = registerItem(new Item().setUnlocalizedName("testmod3.modArrow").setCreativeTab(TestMod3.creativeTab));
+		heightTester = registerItem(new ItemHeightTester());
 
 		swapTestA = registerItem(new ItemSwapTest("A"));
 		swapTestB = registerItem(new ItemSwapTest("B"));

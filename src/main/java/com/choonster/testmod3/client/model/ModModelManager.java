@@ -128,6 +128,7 @@ public class ModModelManager {
 		registerItemModel(ModItems.woodenHarvestSword, "minecraft:wooden_sword");
 		registerItemModel(ModItems.diamondHarvestSword, "minecraft:diamond_sword");
 		registerItemModel(ModItems.clearer, "minecraft:nether_star");
+		registerItemModel(ModItems.heightTester, "minecraft:compass");
 
 		// Then register items with default model names
 		ModItems.items.forEach(this::registerItemModel);
