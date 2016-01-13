@@ -28,25 +28,18 @@ minecraft {
 
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
+    useDepAts = true
+
     if (project.hasProperty('mappings_version'))
         mappings = project.mappings_version
 }
 
 repositories {
-    maven { url = "http://mobiusstrip.eu/maven" }
-    maven { url = "http://chickenbones.net/maven/" }
+    maven { url = "http://dvs1.progwml6.com/files/maven" }
 }
 
 dependencies {
-    //runtime "mcp.mobius.waila:Waila:${waila_version}"
-//    compile "codechicken:CodeChickenLib:${mc_version}-${ccl_version}:dev"
-//    compile "codechicken:CodeChickenLib:${mc_version}-${ccl_version}:src"
-//
-//    compile "codechicken:CodeChickenCore:${mc_version}-${ccc_version}:dev"
-//    compile "codechicken:CodeChickenCore:${mc_version}-${ccc_version}:src"
-//
-//    compile "codechicken:NotEnoughItems:${mc_version}-${nei_version}:dev"
-//    compile "codechicken:NotEnoughItems:${mc_version}-${nei_version}:src"
+    compile  "mezz.jei:jei_${mc_version}:${jei_version}"
 }
 
 processResources {
