@@ -1,8 +1,6 @@
 package com.choonster.testmod3.block;
 
-import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.tileentity.TileEntityPotionEffect;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
@@ -14,11 +12,9 @@ import net.minecraft.world.World;
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,35818.0.html
  */
-public class BlockPotionEffect extends Block {
+public class BlockPotionEffect extends BlockTestMod3 {
 	public BlockPotionEffect() {
-		super(Material.rock);
-		setCreativeTab(TestMod3.creativeTab);
-		setUnlocalizedName("potionEffect");
+		super(Material.rock, "potionEffect");
 	}
 
 	@Override

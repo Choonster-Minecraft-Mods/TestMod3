@@ -26,7 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class ItemModBow extends ItemBow {
 	public ItemModBow() {
-		setUnlocalizedName("modBow");
+		ItemTestMod3.setItemName(this, "bow");
 		setCreativeTab(TestMod3.creativeTab);
 	}
 

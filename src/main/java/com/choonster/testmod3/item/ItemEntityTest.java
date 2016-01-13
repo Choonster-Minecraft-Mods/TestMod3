@@ -1,21 +1,18 @@
 package com.choonster.testmod3.item;
 
-import com.choonster.testmod3.TestMod3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 
 import java.util.List;
 
-public class ItemEntityTest extends Item {
+public class ItemEntityTest extends ItemTestMod3 {
 	public ItemEntityTest() {
-		setCreativeTab(TestMod3.creativeTab);
-		setUnlocalizedName("entityTest");
+		super("entityTest");
 	}
 
 	@Override

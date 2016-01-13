@@ -1,7 +1,5 @@
 package com.choonster.testmod3.block;
 
-import com.choonster.testmod3.TestMod3;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -22,14 +20,12 @@ import net.minecraft.world.World;
  * Example for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,33716.0.html
  */
-public class BlockRotatableLamp extends Block {
+public class BlockRotatableLamp extends BlockTestMod3 {
 	public static final IProperty<EnumFacing> FACING = PropertyDirection.create("facing");
 	public static final IProperty<Boolean> LIT = PropertyBool.create("lit");
 
 	public BlockRotatableLamp() {
-		super(Material.redstoneLight);
-		setUnlocalizedName("rotatableLamp");
-		setCreativeTab(TestMod3.creativeTab);
+		super(Material.redstoneLight, "rotatableLamp");
 		setDefaultState(getBlockState().getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(LIT, false));
 	}
 

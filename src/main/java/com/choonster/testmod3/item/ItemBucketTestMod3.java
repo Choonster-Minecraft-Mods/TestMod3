@@ -1,6 +1,5 @@
 package com.choonster.testmod3.item;
 
-import com.choonster.testmod3.TestMod3;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -21,14 +20,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ItemBucketTestMod3 extends Item {
+public class ItemBucketTestMod3 extends ItemTestMod3 {
 	private final List<FluidStack> fluids = new ArrayList<>();
 
 	public ItemBucketTestMod3() {
+		super("bucket");
 		setContainerItem(Items.bucket);
-		setCreativeTab(TestMod3.creativeTab);
 		setHasSubtypes(true);
-		setUnlocalizedName("bucket.testmod3.empty");
 		setMaxStackSize(1);
 	}
 
@@ -85,7 +83,7 @@ public class ItemBucketTestMod3 extends Item {
 		FluidStack fluidStack = getFluid(stack);
 
 		if (fluidStack != null) {
-			return "item.bucket.testmod3." + fluidStack.getUnlocalizedName().replace("fluid.", "");
+			return getUnlocalizedName() + "." + fluidStack.getUnlocalizedName().replaceFirst("fluid\\.", "");
 		} else {
 			return getUnlocalizedName();
 		}

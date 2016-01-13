@@ -1,10 +1,8 @@
 package com.choonster.testmod3.item;
 
-import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.util.Constants;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.world.World;
@@ -15,10 +13,9 @@ import net.minecraft.world.World;
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2470478-how-to-do-a-custom-bow-animation
  */
-public class ItemModelTest extends Item {
+public class ItemModelTest extends ItemTestMod3 {
 	public ItemModelTest() {
-		setCreativeTab(TestMod3.creativeTab);
-		setUnlocalizedName("modeltest");
+		super("modeltest");
 	}
 
 	private long getLastUseTime(ItemStack stack) {

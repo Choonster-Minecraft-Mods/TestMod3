@@ -6,7 +6,6 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.world.World;
@@ -17,7 +16,7 @@ import net.minecraft.world.World;
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,32389.0.html
  */
-public class ItemSnowballLauncher extends Item {
+public class ItemSnowballLauncher extends ItemTestMod3 {
 
 	/**
 	 * How often the launcher fires (in ticks)
@@ -25,8 +24,7 @@ public class ItemSnowballLauncher extends Item {
 	public static final int FIRE_RATE = 20;
 
 	public ItemSnowballLauncher() {
-		setUnlocalizedName("snowballLauncher");
-		setCreativeTab(TestMod3.creativeTab);
+		super("snowballLauncher");
 	}
 
 	/**

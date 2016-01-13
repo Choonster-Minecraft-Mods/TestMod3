@@ -4,7 +4,6 @@ import com.choonster.testmod3.util.StringUtils;
 
 public class ItemWithSuperscripts extends ItemWithScripts {
 	public ItemWithSuperscripts() {
-		super(StringUtils::superscript);
-		setUnlocalizedName("superscripts");
+		super(StringUtils::superscript, "superscripts");
 	}
 }

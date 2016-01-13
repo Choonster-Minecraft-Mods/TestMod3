@@ -17,7 +17,7 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 	public BlockSurvivalCommandBlock() {
 		super();
 		setCreativeTab(TestMod3.creativeTab);
-		setUnlocalizedName("survivalCommandBlock");
+		BlockTestMod3.setBlockName(this, "survivalCommandBlock");
 	}
 
 	@Override

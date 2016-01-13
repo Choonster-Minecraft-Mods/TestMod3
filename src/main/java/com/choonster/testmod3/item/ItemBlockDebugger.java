@@ -1,10 +1,8 @@
 package com.choonster.testmod3.item;
 
 import com.choonster.testmod3.Logger;
-import com.choonster.testmod3.TestMod3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -15,10 +13,9 @@ import net.minecraft.world.World;
 /**
  * An Item that prints the current state of a Block and its TileEntity on the client and server when right clicked.
  */
-public class ItemBlockDebugger extends Item {
+public class ItemBlockDebugger extends ItemTestMod3 {
 	public ItemBlockDebugger() {
-		setCreativeTab(TestMod3.creativeTab);
-		setUnlocalizedName("blockDebugger");
+		super("blockDebugger");
 	}
 
 	@Override

@@ -73,11 +73,11 @@ public class ModModelManager {
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.coloredRotatable)); // Don't load the default item model
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.coloredMultiRotatable));
 		for (EnumDyeColor color : EnumDyeColor.values()) {
-			registerBlockItemModel(ModBlocks.coloredRotatable, color.getMetadata(), new ModelResourceLocation(Constants.RESOURCE_PREFIX + "coloredRotatable", String.format("color=%s,facing=north", color.getName())));
-			registerBlockItemModel(ModBlocks.coloredMultiRotatable, color.getMetadata(), new ModelResourceLocation(Constants.RESOURCE_PREFIX + "coloredMultiRotatable", String.format("color=%s,face_rotation=up,facing=north", color.getName())));
+			registerBlockItemModelForMeta(ModBlocks.coloredRotatable, color.getMetadata(), String.format("color=%s,facing=north", color.getName()));
+			registerBlockItemModelForMeta(ModBlocks.coloredMultiRotatable, color.getMetadata(), String.format("color=%s,face_rotation=up,facing=north", color.getName()));
 		}
 
-		ModBlocks.blocks.forEach(this::registerBlockItemModel);
+		ModBlocks.blocks.stream().filter(block -> !itemsRegistered.contains(Item.getItemFromBlock(block))).forEach(this::registerBlockItemModel);
 	}
 
 	private void registerBlockItemModel(Block block) {
@@ -88,8 +88,8 @@ public class ModModelManager {
 		registerItemModel(Item.getItemFromBlock(block), modelLocation);
 	}
 
-	private void registerBlockItemModel(Block block, int metadata, ModelResourceLocation modelResourceLocation) {
-		registerItemModel(Item.getItemFromBlock(block), metadata, modelResourceLocation);
+	private void registerBlockItemModelForMeta(Block block, int metadata, String variant) {
+		registerItemModelForMeta(Item.getItemFromBlock(block), metadata, variant);
 	}
 
 	private final Set<Item> itemsRegistered = new HashSet<>();
@@ -115,9 +115,12 @@ public class ModModelManager {
 		registerBucketModel(ModItems.bucket);
 		registerItemModel(ModItems.modBow, new ModelResourceLocation(locationBow, "standby"));
 		registerItemModel(ModItems.heightTester, "minecraft:compass");
+		registerItemModel(ModItems.heavy, "minecraft:brick");
+		registerItemModel(ModItems.entityTest, "minecraft:porkchop");
+		registerItemModel(ModItems.blockDestroyer, "minecraft:tnt_minecart");
 
 		// Then register items with default model names
-		ModItems.items.forEach(this::registerItemModel);
+		ModItems.items.stream().filter(item -> !itemsRegistered.contains(item)).forEach(this::registerItemModel);
 	}
 
 	private void registerBucketModel(Item item) {
@@ -126,7 +129,7 @@ public class ModModelManager {
 	}
 
 	private void registerItemModel(Item item) {
-		registerItemModel(item, Item.itemRegistry.getNameForObject(item).toString());
+		registerItemModel(item, item.getRegistryName());
 	}
 
 	private void registerItemModel(Item item, String modelLocation) {
@@ -140,17 +143,16 @@ public class ModModelManager {
 	}
 
 	private void registerItemModel(Item item, ItemMeshDefinition meshDefinition) {
-		if (!itemsRegistered.contains(item)) { // Don't replace an existing registration
-			itemsRegistered.add(item);
-			ModelLoader.setCustomMeshDefinition(item, meshDefinition);
-		}
+		itemsRegistered.add(item);
+		ModelLoader.setCustomMeshDefinition(item, meshDefinition);
 	}
 
-	private void registerItemModel(Item item, int metadata, ModelResourceLocation modelResourceLocation) {
-		if (!itemsRegistered.contains(item)) {
-			itemsRegistered.add(item);
-		}
+	private void registerItemModelForMeta(Item item, int metadata, String variant) {
+		registerItemModelForMeta(item, metadata, new ModelResourceLocation(item.getRegistryName(), variant));
+	}
 
+	private void registerItemModelForMeta(Item item, int metadata, ModelResourceLocation modelResourceLocation) {
+		itemsRegistered.add(item);
 		ModelLoader.setCustomModelResourceLocation(item, metadata, modelResourceLocation);
 	}
 }

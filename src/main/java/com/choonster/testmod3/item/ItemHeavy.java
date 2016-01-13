@@ -1,19 +1,16 @@
 package com.choonster.testmod3.item;
 
-import com.choonster.testmod3.TestMod3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
 // http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2423521-detecting-item-in-inventory
-public class ItemHeavy extends Item {
+public class ItemHeavy extends ItemTestMod3 {
 	public ItemHeavy() {
-		setCreativeTab(TestMod3.creativeTab);
-		setUnlocalizedName("heavy");
+		super("heavy");
 	}
 
 	@Override

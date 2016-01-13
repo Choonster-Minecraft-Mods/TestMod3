@@ -5,7 +5,6 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.world.World;
@@ -15,10 +14,9 @@ import net.minecraft.world.World;
  * <p>
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2483633-custom-bow-animation-and-projectiles
  */
-public class ItemSlingshot extends Item {
+public class ItemSlingshot extends ItemTestMod3 {
 	public ItemSlingshot() {
-		setCreativeTab(TestMod3.creativeTab);
-		setUnlocalizedName("slingshot");
+		super("slingshot");
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package com.choonster.testmod3.init;
 
-import com.choonster.testmod3.TestMod3;
+import com.choonster.testmod3.util.Constants;
 import com.choonster.testmod3.block.*;
 import com.choonster.testmod3.block.pipe.BlockPipeBasic;
 import com.choonster.testmod3.block.pipe.BlockPipeFluid;
@@ -48,12 +48,12 @@ public class ModBlocks {
 		survivalCommandBlock = registerBlock(new BlockSurvivalCommandBlock());
 		fluidTank = registerBlock(new BlockFluidTank(), ItemFluidTank.class);
 		itemDebugger = registerBlock(new BlockItemDebugger());
-		endPortalFrameFull = registerBlock(new Block(Material.rock).setUnlocalizedName("endPortalFrameFull").setCreativeTab(TestMod3.creativeTab));
-		coloredRotatable = (BlockColoredRotatable) registerBlock(new BlockColoredRotatable(Material.cloth).setUnlocalizedName("coloredRotatable").setCreativeTab(TestMod3.creativeTab), ItemCloth.class);
-		coloredMultiRotatable = (BlockColoredMultiRotatable) registerBlock(new BlockColoredMultiRotatable(Material.cloth).setUnlocalizedName("coloredMultiRotatable").setCreativeTab(TestMod3.creativeTab), ItemCloth.class);
+		endPortalFrameFull = registerBlock(new BlockTestMod3(Material.rock, "endPortalFrameFull"));
+		coloredRotatable = registerBlock(new BlockColoredRotatable(Material.cloth, "coloredRotatable"), ItemCloth.class);
+		coloredMultiRotatable = registerBlock(new BlockColoredMultiRotatable(Material.cloth, "coloredMultiRotatable"), ItemCloth.class);
 		potionEffect = registerBlock(new BlockPotionEffect());
 
-		pipeBasic = registerBlock(new BlockPipeBasic());
+		pipeBasic = registerBlock(new BlockPipeBasic("basicPipe"));
 		pipeFluid = registerBlock(new BlockPipeFluid());
 	}
 
@@ -65,7 +65,7 @@ public class ModBlocks {
 	 * @return The Block instance
 	 */
 	private static <T extends Block> T registerBlock(T block) {
-		GameRegistry.registerBlock(block, block.getUnlocalizedName().replaceFirst("tile.", ""));
+		GameRegistry.registerBlock(block);
 		blocks.add(block);
 		return block;
 	}
@@ -80,20 +80,20 @@ public class ModBlocks {
 	 * @return The Block instance
 	 */
 	private static <T extends Block> T registerBlock(T block, Class<? extends ItemBlock> itemClass, Object... constructorArgs) {
-		GameRegistry.registerBlock(block, itemClass, block.getUnlocalizedName().replaceFirst("tile.", ""), constructorArgs);
+		GameRegistry.registerBlock(block, itemClass, constructorArgs);
 		blocks.add(block);
 		return block;
 	}
 
 	public static void registerTileEntities() {
-		registerTileEntity(TileEntitySurvivalCommandBlock.class, "survivalCommandBlock");
-		registerTileEntity(TileEntityFluidTank.class, "fluidTank");
-		registerTileEntity(TileEntityColoredRotatable.class, "coloredRotatable");
-		registerTileEntity(TileEntityColoredMultiRotatable.class, "colouredMultiRotatable");
-		registerTileEntity(TileEntityPotionEffect.class, "potionEffect");
+		registerTileEntity(TileEntitySurvivalCommandBlock.class);
+		registerTileEntity(TileEntityFluidTank.class);
+		registerTileEntity(TileEntityColoredRotatable.class);
+		registerTileEntity(TileEntityColoredMultiRotatable.class);
+		registerTileEntity(TileEntityPotionEffect.class);
 	}
 
-	private static void registerTileEntity(Class<? extends TileEntity> tileEntityClass, String id) {
-		GameRegistry.registerTileEntity(tileEntityClass, TestMod3.MODID + ":" + id);
+	private static void registerTileEntity(Class<? extends TileEntity> tileEntityClass) {
+		GameRegistry.registerTileEntity(tileEntityClass, Constants.RESOURCE_PREFIX + tileEntityClass.getSimpleName().replaceFirst("TileEntity", ""));
 	}
 }

@@ -1,6 +1,5 @@
 package com.choonster.testmod3.init;
 
-import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.item.*;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -14,10 +13,10 @@ import java.util.Set;
 public class ModItems {
 	public static final Set<Item> items = new HashSet<>();
 
-	public static Item woodenAxe;
-	public static Item entityTest;
-	public static Item solarisRecord;
-	public static Item heavy;
+	public static ItemCuttingAxe woodenAxe;
+	public static ItemEntityTest entityTest;
+	public static ItemRecordMod solarisRecord;
+	public static ItemHeavy heavy;
 	public static ItemBucketTestMod3 bucket;
 	public static ItemEntityInteractionTest entityInteractionTest;
 	public static ItemBlockDestroyer blockDestroyer;
@@ -40,11 +39,11 @@ public class ModItems {
 	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE;
 
 	public static void registerItems() {
-		woodenAxe = registerItem(new ToolWoodAxe(Item.ToolMaterial.WOOD).setCreativeTab(TestMod3.creativeTab).setUnlocalizedName("woodenAxe"));
+		woodenAxe = registerItem(new ItemCuttingAxe(Item.ToolMaterial.WOOD, "woodenAxe"));
 		entityTest = registerItem(new ItemEntityTest());
 		solarisRecord = registerItem(new ItemRecordMod("solaris"));
 		heavy = registerItem(new ItemHeavy());
-		bucket = registerItem(new ItemBucketTestMod3(), "bucket");
+		bucket = registerItem(new ItemBucketTestMod3());
 		entityInteractionTest = registerItem(new ItemEntityInteractionTest());
 		blockDestroyer = registerItem(new ItemBlockDestroyer());
 		subscripts = registerItem(new ItemWithSubscripts());
@@ -54,11 +53,11 @@ public class ModItems {
 		slingshot = registerItem(new ItemSlingshot());
 		unicodeTooltips = registerItem(new ItemUnicodeTooltips());
 		blockDebugger = registerItem(new ItemBlockDebugger());
-		woodenHarvestSword = (ItemHarvestSword) registerItem(new ItemHarvestSword(Item.ToolMaterial.WOOD).setUnlocalizedName("harvestSwordWood"));
-		diamondHarvestSword = (ItemHarvestSword) registerItem(new ItemHarvestSword(Item.ToolMaterial.EMERALD).setUnlocalizedName("harvestSwordDiamond"));
+		woodenHarvestSword = registerItem(new ItemHarvestSword(Item.ToolMaterial.WOOD, "harvestSwordWood"));
+		diamondHarvestSword = registerItem(new ItemHarvestSword(Item.ToolMaterial.EMERALD, "harvestSwordDiamond"));
 		clearer = registerItem(new ItemClearer());
-		modBow = registerItem(new ItemModBow(), "bow");
-		modArrow = registerItem(new Item().setUnlocalizedName("testmod3.modArrow").setCreativeTab(TestMod3.creativeTab));
+		modBow = registerItem(new ItemModBow());
+		modArrow = registerItem(new ItemTestMod3("arrow"));
 		heightTester = registerItem(new ItemHeightTester());
 
 		swapTestA = registerItem(new ItemSwapTest("A"));
@@ -70,26 +69,16 @@ public class ModItems {
 	}
 
 	/**
-	 * Register an Item with the default name.
+	 * Register an Item
 	 *
 	 * @param item The Item instance
 	 * @param <T>  The Item type
 	 * @return The Item instance
 	 */
 	private static <T extends Item> T registerItem(T item) {
-		return registerItem(item, item.getUnlocalizedName().replaceFirst("item\\.", "").replaceFirst("testmod3\\.", ""));
-	}
-
-	/**
-	 * Register an Item with a custom name.
-	 *
-	 * @param item The Item instance
-	 * @param <T>  The Item type
-	 * @return The Item instance
-	 */
-	private static <T extends Item> T registerItem(T item, String name) {
-		GameRegistry.registerItem(item, name);
+		GameRegistry.registerItem(item);
 		items.add(item);
+
 		return item;
 	}
 }

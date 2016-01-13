@@ -28,10 +28,12 @@ public class BlockWaterGrass extends BlockBush {
 	public BlockWaterGrass() {
 		super(Material.water);
 		setCreativeTab(TestMod3.creativeTab);
-		setUnlocalizedName("watergrass");
-		float f = 0.4F;
-		setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.8F, 0.5F + f);
+		BlockTestMod3.setBlockName(this, "watergrass");
+
 		setDefaultState(blockState.getBaseState().withProperty(BlockLiquid.LEVEL, 15));
+
+		final float size = 0.4F;
+		setBlockBounds(0.5F - size, 0.0F, 0.5F - size, 0.5F + size, 0.8F, 0.5F + size);
 	}
 
 	@Override

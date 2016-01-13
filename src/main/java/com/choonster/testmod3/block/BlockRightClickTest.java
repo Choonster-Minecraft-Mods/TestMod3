@@ -30,7 +30,7 @@ public class BlockRightClickTest extends BlockGlass {
 	public BlockRightClickTest() {
 		super(Material.glass, false);
 		setDefaultState(blockState.getBaseState().withProperty(HAS_ENDER_EYE, false));
-		setUnlocalizedName("rightClickTest");
+		BlockTestMod3.setBlockName(this, "rightClickTest");
 		setCreativeTab(TestMod3.creativeTab);
 	}
 

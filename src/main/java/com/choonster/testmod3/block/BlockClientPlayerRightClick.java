@@ -1,7 +1,6 @@
 package com.choonster.testmod3.block;
 
 import com.choonster.testmod3.TestMod3;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -20,11 +19,9 @@ import net.minecraft.world.World;
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2512904-make-the-player-perform-a-right-click-on-non
  */
-public class BlockClientPlayerRightClick extends Block {
+public class BlockClientPlayerRightClick extends BlockTestMod3 {
 	public BlockClientPlayerRightClick() {
-		super(Material.rock);
-		setCreativeTab(TestMod3.creativeTab);
-		setUnlocalizedName("clientPlayerRightClick");
+		super(Material.rock, "clientPlayerRightClick");
 	}
 
 	@Override

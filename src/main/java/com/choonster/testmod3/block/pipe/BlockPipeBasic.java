@@ -1,16 +1,13 @@
 package com.choonster.testmod3.block.pipe;
 
-import com.choonster.testmod3.TestMod3;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 
 public class BlockPipeBasic extends BlockPipeBase {
-	public BlockPipeBasic() {
-		super(Material.iron);
-		setCreativeTab(TestMod3.creativeTab);
-		setUnlocalizedName("basicPipe");
+	public BlockPipeBasic(String blockName) {
+		super(Material.iron, blockName);
 	}
 
 	@Override

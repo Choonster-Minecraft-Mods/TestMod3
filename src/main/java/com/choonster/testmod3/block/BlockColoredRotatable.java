@@ -1,5 +1,6 @@
 package com.choonster.testmod3.block;
 
+import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.tileentity.TileEntityColoredRotatable;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.BlockPistonBase;
@@ -23,8 +24,10 @@ import net.minecraft.world.World;
 public class BlockColoredRotatable extends BlockColored {
 	public static final IProperty<EnumFacing> FACING = PropertyDirection.create("facing");
 
-	public BlockColoredRotatable(Material materialIn) {
+	public BlockColoredRotatable(Material materialIn, String blockName) {
 		super(materialIn);
+		BlockTestMod3.setBlockName(this, blockName);
+		setCreativeTab(TestMod3.creativeTab);
 	}
 
 	@Override

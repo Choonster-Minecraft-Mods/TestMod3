@@ -9,12 +9,12 @@ import net.minecraft.world.World;
 
 import java.util.function.Function;
 
-public abstract class ItemWithScripts extends Item {
+public abstract class ItemWithScripts extends ItemTestMod3 {
 	private final Function<Integer, String> scriptFunction;
 
-	public ItemWithScripts(Function<Integer, String> scriptFunction) {
+	public ItemWithScripts(Function<Integer, String> scriptFunction, String itemName) {
+		super(itemName);
 		this.scriptFunction = scriptFunction;
-		setCreativeTab(TestMod3.creativeTab);
 		setHasSubtypes(true);
 	}
 
@@ -34,7 +34,7 @@ public abstract class ItemWithScripts extends Item {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
 		if (!worldIn.isRemote) {
-			playerIn.addChatComponentMessage(new ChatComponentTranslation("message.subscripts.rightClick", scriptFunction.apply(getNumber(itemStackIn))));
+			playerIn.addChatComponentMessage(new ChatComponentTranslation("message." + getRegistryName() + ".rightClick", scriptFunction.apply(getNumber(itemStackIn))));
 		}
 
 		return super.onItemRightClick(itemStackIn, worldIn, playerIn);

@@ -14,7 +14,7 @@ public class BlockLargeCollisionTest extends Block {
 	public BlockLargeCollisionTest() {
 		super(Material.cloth);
 		setCreativeTab(TestMod3.creativeTab);
-		setUnlocalizedName("largeCollisionTest");
+		BlockTestMod3.setBlockName(this, "largeCollisionTest");
 		setBlockBounds(-1, -1, -1, 2, 2, 2);
 	}
 }

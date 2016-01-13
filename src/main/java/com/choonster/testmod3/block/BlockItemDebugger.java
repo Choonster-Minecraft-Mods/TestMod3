@@ -1,8 +1,6 @@
 package com.choonster.testmod3.block;
 
 import com.choonster.testmod3.Logger;
-import com.choonster.testmod3.TestMod3;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,11 +12,9 @@ import net.minecraft.world.World;
 /**
  * A Block that prints the current state of the player's held ItemStack on the client and server when right clicked.
  */
-public class BlockItemDebugger extends Block {
+public class BlockItemDebugger extends BlockTestMod3 {
 	public BlockItemDebugger() {
-		super(Material.iron);
-		setCreativeTab(TestMod3.creativeTab);
-		setUnlocalizedName("itemDebugger");
+		super(Material.iron, "itemDebugger");
 	}
 
 	@Override

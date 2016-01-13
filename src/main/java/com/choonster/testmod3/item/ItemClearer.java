@@ -1,11 +1,9 @@
 package com.choonster.testmod3.item;
 
-import com.choonster.testmod3.TestMod3;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
@@ -14,15 +12,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemClearer extends Item {
+public class ItemClearer extends ItemTestMod3 {
 	private static final ImmutableList<Block> whitelist = ImmutableList.of(Blocks.stone, Blocks.dirt, Blocks.grass, Blocks.gravel, Blocks.sand, Blocks.water, Blocks.flowing_water, Blocks.lava, Blocks.flowing_lava, Blocks.ice);
 
 	private static final int MODE_WHITELIST = 0;
 	private static final int MODE_ALL = 1;
 
 	public ItemClearer() {
-		setCreativeTab(TestMod3.creativeTab);
-		setUnlocalizedName("clearer");
+		super("clearer");
 	}
 
 	@Override
@@ -33,12 +30,12 @@ public class ItemClearer extends Item {
 			if (player.isSneaking()) {
 				int newMode = currentMode == MODE_ALL ? MODE_WHITELIST : MODE_ALL;
 				stack.setItemDamage(newMode);
-				player.addChatComponentMessage(new ChatComponentTranslation("message.clearer.mode.%s", newMode));
+				player.addChatComponentMessage(new ChatComponentTranslation("message.testmod3:clearer.mode.%s", newMode));
 			} else {
 				int minX = MathHelper.floor_double(player.posX / 16) * 16;
 				int minZ = MathHelper.floor_double(player.posZ / 16) * 16;
 
-				player.addChatComponentMessage(new ChatComponentTranslation("message.clearer.clearing", minX, minZ));
+				player.addChatComponentMessage(new ChatComponentTranslation("message.testmod3:clearer.clearing", minX, minZ));
 
 				for (int x = minX; x < minX + 16; x++) {
 					for (int z = minZ; z < minZ + 16; z++) {
@@ -54,7 +51,7 @@ public class ItemClearer extends Item {
 
 				world.markBlockForUpdate(player.getPosition());
 
-				player.addChatComponentMessage(new ChatComponentTranslation("message.clearer.cleared"));
+				player.addChatComponentMessage(new ChatComponentTranslation("message.testmod3:clearer.cleared"));
 			}
 		}
 

@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class BlockPipeFluid extends BlockPipeBasic {
 	public BlockPipeFluid() {
-		setUnlocalizedName("fluidPipe");
+		super("fluidPipe");
 	}
 
 	@Override

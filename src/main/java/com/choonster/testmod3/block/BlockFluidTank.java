@@ -1,6 +1,5 @@
 package com.choonster.testmod3.block;
 
-import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.tileentity.TileEntityFluidTank;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -21,12 +20,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockFluidTank extends Block {
+public class BlockFluidTank extends BlockTestMod3 {
 	public BlockFluidTank() {
-		super(Material.glass);
+		super(Material.glass, "fluidTank");
 		setStepSound(Block.soundTypeGlass);
-		setUnlocalizedName("fluidTank");
-		setCreativeTab(TestMod3.creativeTab);
 	}
 
 	@Override
@@ -89,12 +86,12 @@ public class BlockFluidTank extends Block {
 
 			if (fluidStack != null && fluidStack.amount > 0) {
 				hasFluid = true;
-				data.add(new ChatComponentTranslation("tile.fluidTank.desc.fluid", fluidStack.getLocalizedName(), fluidStack.amount, fluidTankInfo.capacity));
+				data.add(new ChatComponentTranslation("tile.testmod3:fluidTank.fluid.desc", fluidStack.getLocalizedName(), fluidStack.amount, fluidTankInfo.capacity));
 			}
 		}
 
 		if (!hasFluid) {
-			data.add(new ChatComponentTranslation("tile.fluidTank.desc.empty"));
+			data.add(new ChatComponentTranslation("tile.testmod3:fluidTank.empty.desc"));
 		}
 
 		return data;

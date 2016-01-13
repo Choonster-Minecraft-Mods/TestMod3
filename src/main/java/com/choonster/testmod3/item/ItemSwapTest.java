@@ -15,12 +15,11 @@ import java.util.List;
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,34244.0.html
  */
-public class ItemSwapTest extends Item {
+public class ItemSwapTest extends ItemTestMod3 {
 	private ItemStack otherItem;
 
 	public ItemSwapTest(String name) {
-		setCreativeTab(TestMod3.creativeTab);
-		setUnlocalizedName("swapTest" + name);
+		super("swapTest" + name);
 	}
 
 	public boolean hasOtherItem() {
@@ -36,9 +35,9 @@ public class ItemSwapTest extends Item {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 
 		if (hasOtherItem()) {
-			tooltip.add(StatCollector.translateToLocalFormatted("item.swapTestWithItem.desc", otherItem.getDisplayName()));
+			tooltip.add(StatCollector.translateToLocalFormatted("item.testmod3:swapTest.withItem.desc", otherItem.getDisplayName()));
 		} else {
-			tooltip.add(StatCollector.translateToLocal("item.swapTestWithoutItem.desc"));
+			tooltip.add(StatCollector.translateToLocal("item.testmod3:swapTest.withoutItem.desc"));
 		}
 	}
 

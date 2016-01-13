@@ -17,10 +17,9 @@ import java.util.List;
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,34027.msg179047.html
  */
-public class ItemUnicodeTooltips extends Item {
+public class ItemUnicodeTooltips extends ItemTestMod3 {
 	public ItemUnicodeTooltips() {
-		setCreativeTab(TestMod3.creativeTab);
-		setUnlocalizedName("unicodeTooltips");
+		super("unicodeTooltips");
 	}
 
 	@Override
@@ -28,8 +27,8 @@ public class ItemUnicodeTooltips extends Item {
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 
-		tooltip.add(StatCollector.translateToLocal("item.unicodeTooltips.desc.1"));
-		tooltip.add("§a§o" + StatCollector.translateToLocal("item.unicodeTooltips.desc.2") + "§r");
-		tooltip.add("" + EnumChatFormatting.GREEN + EnumChatFormatting.ITALIC + StatCollector.translateToLocal("item.unicodeTooltips.desc.3") + EnumChatFormatting.RESET);
+		tooltip.add(StatCollector.translateToLocal("item.testmod3:unicodeTooltips.1.desc"));
+		tooltip.add("§a§o" + StatCollector.translateToLocal("item.testmod3:unicodeTooltips.2.desc") + "§r");
+		tooltip.add("" + EnumChatFormatting.GREEN + EnumChatFormatting.ITALIC + StatCollector.translateToLocal("item.testmod3:unicodeTooltips.3.desc") + EnumChatFormatting.RESET);
 	}
 }

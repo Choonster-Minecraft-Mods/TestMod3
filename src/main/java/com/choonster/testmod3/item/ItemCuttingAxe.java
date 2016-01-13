@@ -1,14 +1,22 @@
 package com.choonster.testmod3.item;
 
+import com.choonster.testmod3.TestMod3;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 
-public class ToolWoodAxe extends ItemAxe {
+/**
+ * An axe that loses durability when used in crafting recipes
+ *
+ * @author Choonster
+ */
+public class ItemCuttingAxe extends ItemAxe {
 
-	public ToolWoodAxe(ToolMaterial material) {
+	public ItemCuttingAxe(ToolMaterial material, String itemName) {
 		super(material);
-		this.setMaxDamage(59);
-		this.maxStackSize = 1;
+		ItemTestMod3.setItemName(this, itemName);
+		setCreativeTab(TestMod3.creativeTab);
+		setMaxDamage(59);
+		setMaxStackSize(1);
 	}
 
 	@Override
