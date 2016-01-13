@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModMapGen {
 	public static void registerMapGen() {
-		MapGenStructureIO.registerStructure(MapGenScatteredFeatureModBiomes.Start.class, "testmod3_MapGenScatteredFeatureModBiomes");
+		MapGenStructureIO.registerStructure(MapGenScatteredFeatureModBiomes.Start.class, "testmod3:MapGenScatteredFeatureModBiomes");
 
 		MinecraftForge.TERRAIN_GEN_BUS.register(new MapGenHandler());
 	}
