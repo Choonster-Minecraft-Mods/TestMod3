@@ -18,21 +18,15 @@ public class ItemEntityInteractionTest extends ItemTestMod3 {
 			stack.setTagCompound(new NBTTagCompound());
 		}
 
-		NBTTagCompound tagCompound = stack.getTagCompound();
-
-		if (!tagCompound.hasKey("Count", Constants.NBT.TAG_INT)) {
-			tagCompound.setInteger("Count", 0);
-		}
-
-		return tagCompound.getInteger("Count");
+		return stack.getTagCompound().getInteger("Count");
 	}
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target) {
-		int count = getInteractCount(stack) + 1;
-		stack.getTagCompound().setInteger("Count", count);
-
 		if (!playerIn.worldObj.isRemote) {
+			int count = getInteractCount(stack) + 1;
+			stack.getTagCompound().setInteger("Count", count);
+
 			playerIn.addChatComponentMessage(new ChatComponentTranslation("message.testmod3:entityInteractCount", count));
 		}
 
