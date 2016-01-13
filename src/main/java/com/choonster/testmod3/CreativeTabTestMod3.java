@@ -11,11 +11,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class CreativeTabExample extends CreativeTabs {
+public class CreativeTabTestMod3 extends CreativeTabs {
 	public final ItemStack sword;
 
-	public CreativeTabExample() {
-		super("example");
+	public CreativeTabTestMod3() {
+		super(TestMod3.MODID);
 		sword = SwordUpgrades.upgradeSword((ItemSword) Items.stone_sword);
 	}
 
