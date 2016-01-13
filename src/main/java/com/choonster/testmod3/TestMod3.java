@@ -6,7 +6,7 @@ import com.choonster.testmod3.event.BlockEventHandler;
 import com.choonster.testmod3.event.BucketFillHandler;
 import com.choonster.testmod3.event.NetworkEventHandler;
 import com.choonster.testmod3.init.*;
-import com.choonster.testmod3.proxy.CommonProxy;
+import com.choonster.testmod3.proxy.IProxy;
 import com.choonster.testmod3.tests.Tests;
 import com.choonster.testmod3.tweak.snowbuildup.SnowBuildup;
 import com.choonster.testmod3.util.BiomeBlockReplacer;
@@ -31,7 +31,7 @@ public class TestMod3 {
 	public static CreativeTabTestMod3 creativeTab;
 
 	@SidedProxy(clientSide = "com.choonster.testmod3.proxy.CombinedClientProxy", serverSide = "com.choonster.testmod3.proxy.DedicatedServerProxy")
-	public static CommonProxy proxy;
+	public static IProxy proxy;
 
 	@Mod.Instance(MODID)
 	public static TestMod3 instance;
