@@ -1,12 +1,13 @@
 package com.choonster.testmod3.init;
 
-import com.choonster.testmod3.util.Constants;
 import com.choonster.testmod3.block.*;
 import com.choonster.testmod3.block.pipe.BlockPipeBasic;
 import com.choonster.testmod3.block.pipe.BlockPipeFluid;
 import com.choonster.testmod3.item.block.ItemColoredMod;
 import com.choonster.testmod3.item.block.ItemFluidTank;
+import com.choonster.testmod3.item.block.ItemMultiTextureMod;
 import com.choonster.testmod3.tileentity.*;
+import com.choonster.testmod3.util.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
@@ -34,6 +35,7 @@ public class ModBlocks {
 	public static BlockColoredRotatable coloredRotatable;
 	public static BlockColoredMultiRotatable coloredMultiRotatable;
 	public static BlockPotionEffect potionEffect;
+	public static BlockVariants variants;
 
 	public static BlockPipeBasic pipeBasic;
 	public static BlockPipeFluid pipeFluid;
@@ -52,6 +54,7 @@ public class ModBlocks {
 		coloredRotatable = registerBlock(new BlockColoredRotatable(Material.cloth, "coloredRotatable"), ItemCloth.class);
 		coloredMultiRotatable = registerBlock(new BlockColoredMultiRotatable(Material.cloth, "coloredMultiRotatable"), ItemCloth.class);
 		potionEffect = registerBlock(new BlockPotionEffect());
+		variants = registerBlock(new BlockVariants(Material.iron), ItemMultiTextureMod.class, BlockVariants.EnumType.getNames(), true);
 
 		pipeBasic = registerBlock(new BlockPipeBasic("basicPipe"));
 		pipeFluid = registerBlock(new BlockPipeFluid());

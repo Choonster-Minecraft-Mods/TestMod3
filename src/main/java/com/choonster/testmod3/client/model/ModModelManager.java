@@ -1,6 +1,7 @@
 package com.choonster.testmod3.client.model;
 
 import com.choonster.testmod3.TestMod3;
+import com.choonster.testmod3.block.BlockVariants;
 import com.choonster.testmod3.init.ModBlocks;
 import com.choonster.testmod3.init.ModFluids;
 import com.choonster.testmod3.init.ModItems;
@@ -73,6 +74,10 @@ public class ModModelManager {
 		for (EnumDyeColor color : EnumDyeColor.values()) {
 			registerBlockItemModelForMeta(ModBlocks.coloredRotatable, color.getMetadata(), String.format("color=%s,facing=north", color.getName()));
 			registerBlockItemModelForMeta(ModBlocks.coloredMultiRotatable, color.getMetadata(), String.format("color=%s,face_rotation=up,facing=north", color.getName()));
+		}
+
+		for (BlockVariants.EnumType enumType : BlockVariants.EnumType.values()) {
+			registerBlockItemModelForMeta(ModBlocks.variants, enumType.getMeta(), "variant=" + enumType.getName());
 		}
 
 		ModBlocks.blocks.stream().filter(block -> !itemsRegistered.contains(Item.getItemFromBlock(block))).forEach(this::registerBlockItemModel);
