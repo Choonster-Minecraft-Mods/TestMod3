@@ -123,3 +123,6 @@ testmod3.config.biomes=Biome IDs
 
 # Entities
 entity.testmod3.modArrow.name=Mod Arrow
+
+# Creative Tabs
+itemGroup.testmod3=Test Mod 3
