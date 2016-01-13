@@ -1,6 +1,6 @@
 {
 	"parent": "testmod3:item/simple_model",
 	"textures": {
-		"layer0": "testmod3:items/modeltest_2"
+		"layer0": "testmod3:items/subscripts"
 	}
 }
