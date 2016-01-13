@@ -42,7 +42,7 @@ public class ModItems {
 	public static void registerItems() {
 		woodenAxe = registerItem(new ToolWoodAxe(Item.ToolMaterial.WOOD).setCreativeTab(TestMod3.creativeTab).setUnlocalizedName("woodenAxe"));
 		entityTest = registerItem(new ItemEntityTest());
-		solarisRecord = registerItem(new ItemRecordSolaris(), "solaris_record");
+		solarisRecord = registerItem(new ItemRecordMod("solaris"));
 		heavy = registerItem(new ItemHeavy());
 		bucket = registerItem(new ItemBucketTestMod3(), "bucket");
 		entityInteractionTest = registerItem(new ItemEntityInteractionTest());
