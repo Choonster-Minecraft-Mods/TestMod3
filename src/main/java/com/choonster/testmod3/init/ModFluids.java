@@ -15,6 +15,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ModFluids {
@@ -34,16 +35,20 @@ public class ModFluids {
 	public static final Set<IFluidBlock> modFluidBlocks = new HashSet<>();
 
 	public static void registerFluids() {
-		fluidStatic = createFluid("static", "testmod3:blocks/fluid_static", false, 10, 800, 1500, false,
+		fluidStatic = createFluid("static", "testmod3:blocks/fluid_static", false,
+				fluid -> fluid.setLuminosity(10).setDensity(800).setViscosity(1500),
 				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.brownColor)));
 
-		fluidStaticGas = createFluid("staticgas", "testmod3:blocks/fluid_staticGas", false, 10, -800, 1500, true,
+		fluidStaticGas = createFluid("staticgas", "testmod3:blocks/fluid_staticGas", false,
+				fluid -> fluid.setLuminosity(10).setDensity(-800).setViscosity(1500).setGaseous(true),
 				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.brownColor)));
 
-		fluidNormal = createFluid("normal", "testmod3:blocks/fluid_normal", true, 10, 1600, 100, false,
+		fluidNormal = createFluid("normal", "testmod3:blocks/fluid_normal", true,
+				fluid -> fluid.setLuminosity(10).setDensity(1600).setViscosity(100),
 				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.adobeColor)));
 
-		fluidNormalGas = createFluid("normalgas", "testmod3:blocks/fluid_normalGas", true, 10, -1600, 100, true,
+		fluidNormalGas = createFluid("normalgas", "testmod3:blocks/fluid_normalGas", true,
+				fluid -> fluid.setLuminosity(10).setDensity(-1600).setViscosity(100).setGaseous(true),
 				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.adobeColor)));
 	}
 
@@ -63,21 +68,19 @@ public class ModFluids {
 	 * @param name         The name of the fluid
 	 * @param textureName  The base name of the fluid's texture
 	 * @param hasFlowIcon  Does the fluid have a flow icon?
-	 * @param luminosity   The fluid's luminosity
-	 * @param density      The fluid's density
-	 * @param viscosity    The fluid's viscosity
-	 * @param gaseous      Is the fluid gaseous?
-	 * @param blockFactory A function to call to create the {@link IFluidBlock}
+	 * @param fluidPropertyApplier A function that sets the properties of the {@link Fluid}
+	 * @param blockFactory A function that creates the {@link IFluidBlock}
 	 * @return The fluid and block
 	 */
-	private static <T extends Block & IFluidBlock> Fluid createFluid(String name, String textureName, boolean hasFlowIcon, int luminosity, int density, int viscosity, boolean gaseous, Function<Fluid, T> blockFactory) {
+	private static <T extends Block & IFluidBlock> Fluid createFluid(String name, String textureName, boolean hasFlowIcon, Consumer<Fluid> fluidPropertyApplier, Function<Fluid, T> blockFactory) {
 		ResourceLocation still = new ResourceLocation(textureName + "_still");
 		ResourceLocation flowing = hasFlowIcon ? new ResourceLocation(textureName + "_flow") : still;
 
-		Fluid fluid = new Fluid(name, still, flowing).setLuminosity(luminosity).setDensity(density).setViscosity(viscosity).setGaseous(gaseous);
+		Fluid fluid = new Fluid(name, still, flowing);
 		boolean useOwnFluid = FluidRegistry.registerFluid(fluid);
 
 		if (useOwnFluid) {
+			fluidPropertyApplier.accept(fluid);
 			registerFluidBlock(blockFactory.apply(fluid));
 		} else {
 			fluid = FluidRegistry.getFluid(name);
