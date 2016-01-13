@@ -4,12 +4,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBoat;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 
 import java.util.List;
 
+/**
+ * An item that places a Pig where the player is looking when used. Based on {@link ItemBoat}.
+ *
+ * @author Choonster
+ */
 public class ItemEntityTest extends ItemTestMod3 {
 	public ItemEntityTest() {
 		super("entityTest");

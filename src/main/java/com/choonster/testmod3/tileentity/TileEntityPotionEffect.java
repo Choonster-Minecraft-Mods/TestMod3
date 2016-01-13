@@ -15,10 +15,11 @@ import java.util.List;
  * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,35818.0.html
+ *
+ * @author Choonster
  */
 public class TileEntityPotionEffect extends TileEntity implements ITickable {
 	private static final int RADIUS = 2;
-
 
 	@Override
 	public void update() {

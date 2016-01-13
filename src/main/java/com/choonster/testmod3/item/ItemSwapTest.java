@@ -1,8 +1,6 @@
 package com.choonster.testmod3.item;
 
-import com.choonster.testmod3.TestMod3;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -14,6 +12,8 @@ import java.util.List;
  * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,34244.0.html
+ *
+ * @author Choonster
  */
 public class ItemSwapTest extends ItemTestMod3 {
 	private ItemStack otherItem;

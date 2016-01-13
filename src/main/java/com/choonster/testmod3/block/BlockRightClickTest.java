@@ -23,6 +23,8 @@ import java.util.Random;
  * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,32685.0.html
+ *
+ * @author Choonster
  */
 public class BlockRightClickTest extends BlockGlass {
 	public static final IProperty<Boolean> HAS_ENDER_EYE = PropertyBool.create("has_ender_eye");

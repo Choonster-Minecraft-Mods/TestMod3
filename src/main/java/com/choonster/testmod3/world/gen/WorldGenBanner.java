@@ -20,6 +20,8 @@ import java.util.Random;
  * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2535868-banner-nbt-tags
+ *
+ * @author Choonster
  */
 public class WorldGenBanner implements IWorldGenerator {
 	private final ItemStack bannerStack = createBannerStack();

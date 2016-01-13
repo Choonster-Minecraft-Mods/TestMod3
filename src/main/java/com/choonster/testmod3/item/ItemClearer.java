@@ -12,6 +12,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * An item that clears all whitelisted blocks from the player's current chunk when used.
+ *
+ * @author Choonster
+ */
 public class ItemClearer extends ItemTestMod3 {
 	private static final ImmutableList<Block> whitelist = ImmutableList.of(Blocks.stone, Blocks.dirt, Blocks.grass, Blocks.gravel, Blocks.sand, Blocks.water, Blocks.flowing_water, Blocks.lava, Blocks.flowing_lava, Blocks.ice);
 

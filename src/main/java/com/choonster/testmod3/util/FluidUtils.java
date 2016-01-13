@@ -10,6 +10,8 @@ import net.minecraftforge.fluids.IFluidContainerItem;
  * <p>
  * The methods in this class do not modify the {@link FluidStack} or container {@link ItemStack} passed to them,
  * instead they return a {@link FluidStack} and an {@link ItemStack} as part of a {@link FluidUtils.FluidResult}.
+ *
+ * @author Choonster
  */
 public class FluidUtils {
 

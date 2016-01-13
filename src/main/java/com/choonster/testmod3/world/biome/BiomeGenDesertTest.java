@@ -9,6 +9,11 @@ import net.minecraft.world.chunk.ChunkPrimer;
 
 import java.util.Random;
 
+/**
+ * A Desert-like biome with Red Sand as the top block and Brick Block as the filler block.
+ *
+ * @author Choonster
+ */
 public class BiomeGenDesertTest extends BiomeGenDesert {
 	private boolean logged = false;
 

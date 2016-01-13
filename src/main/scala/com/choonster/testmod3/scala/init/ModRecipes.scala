@@ -6,6 +6,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry
 
 /**
  * A Scala object that adds crafting recipes.
+  *
+  * @author Choonster
  */
 object ModRecipes {
 

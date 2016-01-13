@@ -12,6 +12,8 @@ import net.minecraft.world.World;
  * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2470478-how-to-do-a-custom-bow-animation
+ *
+ * @author Choonster
  */
 public class ItemModelTest extends ItemTestMod3 {
 	public ItemModelTest() {

@@ -20,6 +20,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A Fluid Tank block.
+ *
+ * @author Choonster
+ */
 public class BlockFluidTank extends BlockTestMod3 {
 	public BlockFluidTank() {
 		super(Material.glass, "fluidTank");

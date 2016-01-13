@@ -11,6 +11,8 @@ import net.minecraft.world.World;
  * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,35818.0.html
+ *
+ * @author Choonster
  */
 public class BlockPotionEffect extends BlockTestMod3 {
 	public BlockPotionEffect() {

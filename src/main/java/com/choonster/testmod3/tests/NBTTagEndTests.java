@@ -12,6 +12,8 @@ import java.io.IOException;
  * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,34724.0.html
+ *
+ * @author Choonster
  */
 public class NBTTagEndTests extends Test {
 	public static final NBTTagEndTests INSTANCE = new NBTTagEndTests();

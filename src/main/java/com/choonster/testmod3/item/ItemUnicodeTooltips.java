@@ -1,8 +1,6 @@
 package com.choonster.testmod3.item;
 
-import com.choonster.testmod3.TestMod3;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
@@ -16,6 +14,8 @@ import java.util.List;
  * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,34027.msg179047.html
+ *
+ * @author Choonster
  */
 public class ItemUnicodeTooltips extends ItemTestMod3 {
 	public ItemUnicodeTooltips() {

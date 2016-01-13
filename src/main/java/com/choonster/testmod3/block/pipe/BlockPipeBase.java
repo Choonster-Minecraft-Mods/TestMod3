@@ -19,6 +19,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Base class for pipe blocks that connect to adjacent pipes and blocks.
+ *
+ * @author Choonster
+ */
 public abstract class BlockPipeBase extends BlockTestMod3 {
 	public static final float PIPE_MIN_POS = 0.25f;
 	public static final float PIPE_MAX_POS = 0.75f;

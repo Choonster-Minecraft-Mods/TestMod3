@@ -13,6 +13,8 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
  * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2513998-help-needed-creating-crafting-recipe-with-damaged
+ *
+ * @author Choonster
  */
 public class ShapedArmourUpgradeRecipe extends ShapedOreRecipe {
 	public ShapedArmourUpgradeRecipe(Block result, Object... recipe) {

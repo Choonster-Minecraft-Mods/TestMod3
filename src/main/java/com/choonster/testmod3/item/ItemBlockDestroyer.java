@@ -10,6 +10,11 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 
+/**
+ * An item that sends the player a chat message when it's used to destroy Wheat with an age >= 6.
+ *
+ * @author Choonster
+ */
 public class ItemBlockDestroyer extends ItemTestMod3 {
 	public ItemBlockDestroyer() {
 		super("blockDestroyer");

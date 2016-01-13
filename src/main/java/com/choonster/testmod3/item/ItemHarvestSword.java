@@ -22,6 +22,8 @@ import java.util.Set;
  * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2550421-how-to-make-a-tool-e-g-a-sword-have-the-abilities
+ *
+ * @author Choonster
  */
 public class ItemHarvestSword extends ItemTool {
 

@@ -4,7 +4,13 @@ package com.choonster.testmod3.tests;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
+/**
+ * A class that runs various tests from {@link #runTest()}.
+ * <p>
+ * This exists because Minecraft/Forge don't support regular unit testing libraries.
+ *
+ * @author Choonster
+ */
 public abstract class Test {
 	protected final Logger logger = LogManager.getLogger();
 

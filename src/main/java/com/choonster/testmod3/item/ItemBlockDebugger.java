@@ -12,6 +12,8 @@ import net.minecraft.world.World;
 
 /**
  * An Item that prints the current state of a Block and its TileEntity on the client and server when right clicked.
+ *
+ * @author Choonster
  */
 public class ItemBlockDebugger extends ItemTestMod3 {
 	public ItemBlockDebugger() {

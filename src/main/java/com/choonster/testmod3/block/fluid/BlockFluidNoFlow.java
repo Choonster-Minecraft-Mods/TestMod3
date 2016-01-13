@@ -9,6 +9,11 @@ import net.minecraftforge.fluids.Fluid;
 
 import java.util.Random;
 
+/**
+ * A fluid block that doesn't flow.
+ *
+ * @author Choonster
+ */
 public class BlockFluidNoFlow extends BlockFluidFinite {
 	public BlockFluidNoFlow(Fluid fluid, Material material) {
 		super(fluid, material);

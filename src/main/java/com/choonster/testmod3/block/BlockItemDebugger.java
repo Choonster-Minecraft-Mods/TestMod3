@@ -11,6 +11,8 @@ import net.minecraft.world.World;
 
 /**
  * A Block that prints the current state of the player's held ItemStack on the client and server when right clicked.
+ *
+ * @author Choonster
  */
 public class BlockItemDebugger extends BlockTestMod3 {
 	public BlockItemDebugger() {

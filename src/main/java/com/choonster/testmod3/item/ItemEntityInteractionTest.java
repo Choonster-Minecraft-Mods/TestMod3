@@ -7,7 +7,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 
-// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2451199-1-8-iteminteractionforentity-with-nbt-bug
+/**
+ * An item that records how many times it's used to right click an entity.
+ * <p>
+ * Test for this thread:
+ * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2451199-1-8-iteminteractionforentity-with-nbt-bug
+ *
+ * @author Choonster
+ */
 public class ItemEntityInteractionTest extends ItemTestMod3 {
 	public ItemEntityInteractionTest() {
 		super("entityInteractionTest");

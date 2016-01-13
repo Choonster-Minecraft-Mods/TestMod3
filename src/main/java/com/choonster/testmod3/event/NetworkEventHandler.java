@@ -15,6 +15,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * WARNING: These events are fired on a Netty thread rather than the main client/server thread, so the handler methods must not directly interact with normal Minecraft classes.
  * <p>
  * Use {@link IThreadListener#addScheduledTask} to run a task on the main thread where you can safely interact with normal Minecraft classes.
+ *
+ * @author Choonster
  */
 public class NetworkEventHandler {
 

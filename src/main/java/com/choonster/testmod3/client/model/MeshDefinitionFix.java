@@ -12,6 +12,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * <p>
  * Written by diesieben07 in this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,34034.0.html
+ *
+ * @author diesieben07
  */
 @SideOnly(Side.CLIENT)
 interface MeshDefinitionFix extends ItemMeshDefinition {

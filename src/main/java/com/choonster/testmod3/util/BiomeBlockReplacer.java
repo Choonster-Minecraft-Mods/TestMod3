@@ -15,8 +15,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-// Adapted from FloraSoma (https://github.com/LogicTechCorp/FloraSoma)
-// Used for example in this thread: http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2418536-get-stair-state-and-apply-it-to-new-stair-block
+/**
+ * Replaces village blocks according to biome.
+ * <p>
+ * Adapted from FloraSoma (https://github.com/LogicTechCorp/FloraSoma)
+ * <p>
+ * Used for example in this thread:
+ * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2418536-get-stair-state-and-apply-it-to-new-stair-block
+ *
+ * @author LogicTechCorp, Choonster
+ */
 public class BiomeBlockReplacer {
 
 	private final Map<Block, List<Pair<String, Block>>> replacements;

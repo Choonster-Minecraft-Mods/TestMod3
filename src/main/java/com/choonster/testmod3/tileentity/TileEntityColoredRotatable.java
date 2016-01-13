@@ -10,6 +10,11 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+/**
+ * A TileEntity that stores an {@link EnumFacing} value.
+ *
+ * @author Choonster
+ */
 public class TileEntityColoredRotatable extends TileEntity {
 	private EnumFacing facing = EnumFacing.NORTH;
 

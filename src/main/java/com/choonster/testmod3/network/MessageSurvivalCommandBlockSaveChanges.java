@@ -24,6 +24,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
  * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2540671-command-block-replica-issue
+ *
+ * @author Choonster
  */
 public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 

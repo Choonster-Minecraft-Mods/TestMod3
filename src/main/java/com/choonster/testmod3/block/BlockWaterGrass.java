@@ -21,6 +21,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,32280.0.html
+ *
+ * @author Choonster
  */
 public class BlockWaterGrass extends BlockBush {
 	private static final double RENDER_TEMPERATURE = 0.5, RENDER_HUMIDITY = 1.0;

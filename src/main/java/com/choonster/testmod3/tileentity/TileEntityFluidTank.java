@@ -15,6 +15,8 @@ import net.minecraftforge.fluids.*;
  * A tank that holds 10 buckets of fluid.
  * <p>
  * Parts of this code are adapted from EnderIO's {@code TileTank} (https://github.com/SleepyTrousers/EnderIO) and Forge's {@link TileFluidHandler}.
+ *
+ * @author Choonster, CrazyPants, tterag1098, King Lemming
  */
 public class TileEntityFluidTank extends TileEntity implements IFluidHandler {
 

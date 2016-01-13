@@ -14,6 +14,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,34448.0.html
+ *
+ * @author Choonster
  */
 public class BlockPipeFluid extends BlockPipeBasic {
 	public BlockPipeFluid() {

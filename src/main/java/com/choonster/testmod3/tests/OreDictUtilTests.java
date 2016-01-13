@@ -7,6 +7,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+/**
+ * Tests for {@link OreDictUtils}.
+ *
+ * @author Choonster
+ */
 public class OreDictUtilTests extends Test {
 	public static final OreDictUtilTests INSTANCE = new OreDictUtilTests();
 

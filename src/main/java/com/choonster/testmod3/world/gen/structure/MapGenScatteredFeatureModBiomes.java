@@ -21,6 +21,8 @@ import java.util.Random;
  * i.e. any biome registered as JUNGLE, SANDY or SWAMP
  * <p>
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2471489-jungle-and-desert-temple-spawn-biome
+ *
+ * @author Choonster
  */
 public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 	public final List<BiomeDictionary.Type> biomeTypes = ImmutableList.of(BiomeDictionary.Type.JUNGLE, BiomeDictionary.Type.SANDY, BiomeDictionary.Type.SWAMP);

@@ -11,6 +11,8 @@ import net.minecraft.world.World;
  * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2540671-command-block-replica-issue
+ *
+ * @author Choonster
  */
 public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 

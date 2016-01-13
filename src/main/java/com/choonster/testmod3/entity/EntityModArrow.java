@@ -18,6 +18,8 @@ import java.lang.reflect.Field;
  * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2577561-custom-arrow
+ *
+ * @author Choonster
  */
 public class EntityModArrow extends EntityArrow implements IThrowableEntity {
 	private static final Field IN_GROUND_FIELD = ReflectionHelper.findField(EntityArrow.class, "inGround", "field_70254_i");

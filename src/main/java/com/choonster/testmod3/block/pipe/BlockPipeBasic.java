@@ -5,6 +5,11 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 
+/**
+ * A basic pipe that only connects to other pipes.
+ *
+ * @author Choonster
+ */
 public class BlockPipeBasic extends BlockPipeBase {
 	public BlockPipeBasic(String blockName) {
 		super(Material.iron, blockName);

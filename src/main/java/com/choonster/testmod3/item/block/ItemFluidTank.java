@@ -21,6 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * A Fluid Tank item.
+ *
+ * @author Choonster
+ */
 public class ItemFluidTank extends ItemBlock implements IFluidContainerItem {
 	private final List<ItemStack> tankItems = new ArrayList<>();
 

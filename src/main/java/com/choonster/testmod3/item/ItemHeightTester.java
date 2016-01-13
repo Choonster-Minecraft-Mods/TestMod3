@@ -10,6 +10,8 @@ import net.minecraft.world.chunk.Chunk;
 /**
  * When right clicked, prints the value of {@link World#getHeight(BlockPos)} at the player's current position.
  * When sneak-right clicked, regenerates the skylight map for the player's current chunk (updating the height map used by {@link World#getHeight(BlockPos)}.
+ *
+ * @author Choonster
  */
 public class ItemHeightTester extends ItemTestMod3 {
 	public ItemHeightTester() {

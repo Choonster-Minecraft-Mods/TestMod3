@@ -20,6 +20,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * A bucket.
+ *
+ * @author Choonster
+ */
 public class ItemBucketTestMod3 extends ItemTestMod3 {
 	private final List<FluidStack> fluids = new ArrayList<>();
 

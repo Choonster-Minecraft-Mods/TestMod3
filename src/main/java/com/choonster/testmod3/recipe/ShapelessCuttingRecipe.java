@@ -10,8 +10,12 @@ import net.minecraftforge.event.ForgeEventFactory;
 import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * A shapeless recipe that damages any {@link ItemAxe} ingredients.
+ *
+ * @author Choonster
+ */
 public class ShapelessCuttingRecipe extends ShapelessRecipes {
-
 	private final Random random = new Random();
 
 	public ShapelessCuttingRecipe(ItemStack output, ItemStack... input) {

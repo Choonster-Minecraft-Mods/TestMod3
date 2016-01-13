@@ -20,6 +20,8 @@ import net.minecraft.world.World;
 
 /**
  * A block with 16 colours (stored in the metadata) and 6 facings (stored in the TileEntity).
+ *
+ * @author Choonster
  */
 public class BlockColoredRotatable extends BlockColored {
 	public static final IProperty<EnumFacing> FACING = PropertyDirection.create("facing");

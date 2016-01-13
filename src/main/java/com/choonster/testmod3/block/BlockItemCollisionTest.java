@@ -16,6 +16,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,34022.0.html
+ *
+ * @author Choonster
  */
 public class BlockItemCollisionTest extends BlockTestMod3 {
 	// A small value to offset each side of the block's bounding box by to allow entities to collide with the block

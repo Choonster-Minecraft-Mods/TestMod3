@@ -1,14 +1,17 @@
 package com.choonster.testmod3.item;
 
-import com.choonster.testmod3.TestMod3;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 
 import java.util.function.Function;
 
+/**
+ * An item that displays a number stored in NBT in its display name.
+ *
+ * @author Choonster
+ */
 public abstract class ItemWithScripts extends ItemTestMod3 {
 	private final Function<Integer, String> scriptFunction;
 

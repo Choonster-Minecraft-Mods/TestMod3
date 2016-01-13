@@ -9,6 +9,8 @@ import net.minecraft.block.material.Material;
  * <p>
  * Currently only the selection bounding box works.
  * Entity collision still treats the bounding box as 1x1x1 and glitches out if you try to enter this bounding box.
+ *
+ * @author Choonster
  */
 public class BlockLargeCollisionTest extends Block {
 	public BlockLargeCollisionTest() {

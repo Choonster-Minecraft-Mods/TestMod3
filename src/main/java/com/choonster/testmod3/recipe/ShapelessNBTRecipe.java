@@ -17,6 +17,8 @@ import java.util.List;
  * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,34577.0.html
+ *
+ * @author Choonster
  */
 public class ShapelessNBTRecipe extends ShapelessOreRecipe {
 	public ShapelessNBTRecipe(Block result, Object... recipe) {

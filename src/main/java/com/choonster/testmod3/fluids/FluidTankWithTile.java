@@ -9,6 +9,8 @@ import net.minecraftforge.fluids.FluidTank;
 
 /**
  * An extension of {@link FluidTank} that sets the {@link FluidTank#tile} field, so {@link FluidDrainingEvent} and {@link FluidFillingEvent} are fired.
+ *
+ * @author Choonster
  */
 public class FluidTankWithTile extends FluidTank {
 	public FluidTankWithTile(TileEntity tileEntity, int capacity) {

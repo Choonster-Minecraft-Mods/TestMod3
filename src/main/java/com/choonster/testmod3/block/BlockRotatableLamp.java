@@ -19,6 +19,8 @@ import net.minecraft.world.World;
  * <p>
  * Example for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,33716.0.html
+ *
+ * @author Choonster
  */
 public class BlockRotatableLamp extends BlockTestMod3 {
 	public static final IProperty<EnumFacing> FACING = PropertyDirection.create("facing");

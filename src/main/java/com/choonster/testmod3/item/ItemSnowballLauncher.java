@@ -1,6 +1,5 @@
 package com.choonster.testmod3.item;
 
-import com.choonster.testmod3.TestMod3;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +14,8 @@ import net.minecraft.world.World;
  * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,32389.0.html
+ *
+ * @author Choonster
  */
 public class ItemSnowballLauncher extends ItemTestMod3 {
 

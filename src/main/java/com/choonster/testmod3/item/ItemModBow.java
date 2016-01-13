@@ -19,10 +19,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * A bow that uses custom models identical to the vanilla ones.
+ * A bow that uses custom models identical to the vanilla ones and shoots custom arrows.
  * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2576588-custom-bow-wont-load-model
+ *
+ * @author Choonster
  */
 public class ItemModBow extends ItemBow {
 	public ItemModBow() {

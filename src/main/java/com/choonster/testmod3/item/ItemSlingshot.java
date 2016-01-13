@@ -10,9 +10,12 @@ import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.world.World;
 
 /**
- * Based on Vastatio's ARKSlingshot code.
- * <p>
+ * A slingshot that fired Snowballs when used.
+ *
+ * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2483633-custom-bow-animation-and-projectiles
+ *
+ * @author Vastatio, Choonster
  */
 public class ItemSlingshot extends ItemTestMod3 {
 	public ItemSlingshot() {
