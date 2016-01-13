@@ -20,27 +20,28 @@ public class ItemSlingshot extends ItemTestMod3 {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World w, EntityPlayer p) {
-		if (p.capabilities.isCreativeMode
-				|| p.inventory
-				.consumeInventoryItem(Items.snowball)) {
-			setLastUseTime(stack, w.getTotalWorldTime());
-			w.playSoundAtEntity(p, "random.bow", 0.5F,
-					0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-			if (!w.isRemote)
-				w.spawnEntityInWorld(new EntitySnowball(w, p));
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+		if (player.capabilities.isCreativeMode || player.inventory.consumeInventoryItem(Items.snowball)) {
+			setLastUseTime(stack, world.getTotalWorldTime());
+			world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+
+			if (!world.isRemote) {
+				world.spawnEntityInWorld(new EntitySnowball(world, player));
+			}
 		}
-		return super.onItemRightClick(stack, w, p);
+
+		return super.onItemRightClick(stack, world, player);
 	}
 
 	@Override
-	public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player,
-										  int useRemaining) {
+	public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
 		long ticksSinceLastUse = player.worldObj.getTotalWorldTime() - getLastUseTime(stack);
-		if (ticksSinceLastUse < 20)
-			return new ModelResourceLocation(TestMod3.MODID + ":slingshot_pulled",
-					"inventory");
-		else return null;
+
+		if (ticksSinceLastUse < 20) {
+			return new ModelResourceLocation(TestMod3.MODID + ":slingshot_pulled", "inventory");
+		}
+
+		return null;
 	}
 
 	private void setLastUseTime(ItemStack stack, long time) {
@@ -48,7 +49,6 @@ public class ItemSlingshot extends ItemTestMod3 {
 	}
 
 	private long getLastUseTime(ItemStack stack) {
-		return stack.hasTagCompound() ? stack.getTagCompound().getLong(
-				"LastUse") : 0;
+		return stack.hasTagCompound() ? stack.getTagCompound().getLong("LastUse") : 0;
 	}
 }
