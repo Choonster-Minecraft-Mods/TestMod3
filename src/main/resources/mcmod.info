@@ -12,5 +12,19 @@
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
+},
+{
+"modid": "testmod3scala",
+  "name": "Test Mod 3 Scala",
+  "description": "Example placeholder mod.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Choonster"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
 }
 ]
