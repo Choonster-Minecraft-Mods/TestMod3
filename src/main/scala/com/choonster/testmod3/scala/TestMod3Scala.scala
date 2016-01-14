@@ -15,7 +15,7 @@ object TestMod3Scala {
   var proxy: IProxy = null
 
   @EventHandler
-  def preinit(event: FMLPreInitializationEvent): Unit = {
+  def preInit(event: FMLPreInitializationEvent): Unit = {
     proxy.preInit()
   }
 
