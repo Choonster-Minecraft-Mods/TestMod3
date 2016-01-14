@@ -36,6 +36,7 @@ public class ModBlocks {
 	public static BlockColoredMultiRotatable coloredMultiRotatable;
 	public static BlockPotionEffect potionEffect;
 	public static BlockVariants variants;
+	public static BlockClientPlayerRotation clientPlayerRotation;
 
 	public static BlockPipeBasic pipeBasic;
 	public static BlockPipeFluid pipeFluid;
@@ -55,6 +56,7 @@ public class ModBlocks {
 		coloredMultiRotatable = registerBlock(new BlockColoredMultiRotatable(Material.cloth, "coloredMultiRotatable"), ItemCloth.class);
 		potionEffect = registerBlock(new BlockPotionEffect());
 		variants = registerBlock(new BlockVariants(Material.iron), ItemMultiTextureMod.class, BlockVariants.EnumType.getNames(), true);
+		clientPlayerRotation = registerBlock(new BlockClientPlayerRotation());
 
 		pipeBasic = registerBlock(new BlockPipeBasic("basicPipe"));
 		pipeFluid = registerBlock(new BlockPipeFluid());
