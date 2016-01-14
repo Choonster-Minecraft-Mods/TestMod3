@@ -12,6 +12,8 @@ import net.minecraft.world.World;
  * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2423521-detecting-item-in-inventory
+ *
+ * @author Choonster
  */
 public class ItemHeavy extends ItemTestMod3 {
 	public ItemHeavy() {
