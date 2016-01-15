@@ -1,6 +1,7 @@
 package com.choonster.testmod3.client.model;
 
 import com.choonster.testmod3.TestMod3;
+import com.choonster.testmod3.block.BlockColouredSlab;
 import com.choonster.testmod3.block.BlockVariants;
 import com.choonster.testmod3.init.ModBlocks;
 import com.choonster.testmod3.init.ModFluids;
@@ -74,6 +75,11 @@ public class ModModelManager {
 		for (EnumDyeColor color : EnumDyeColor.values()) {
 			registerBlockItemModelForMeta(ModBlocks.coloredRotatable, color.getMetadata(), String.format("color=%s,facing=north", color.getName()));
 			registerBlockItemModelForMeta(ModBlocks.coloredMultiRotatable, color.getMetadata(), String.format("color=%s,face_rotation=up,facing=north", color.getName()));
+
+			BlockColouredSlab.EnumColourGroup colourGroup = BlockColouredSlab.EnumColourGroup.getGroupForColour(color);
+			if (colourGroup != null) {
+				registerBlockItemModelForMeta(ModBlocks.stainedClaySlabs.getSlabGroupByColourGroup(colourGroup).singleSlab, colourGroup.getOffsetMetadata(color), String.format("colour=%s,half=bottom", color.getName()));
+			}
 		}
 
 		for (BlockVariants.EnumType enumType : BlockVariants.EnumType.values()) {
@@ -84,7 +90,10 @@ public class ModModelManager {
 	}
 
 	private void registerBlockItemModel(Block block) {
-		registerItemModel(Item.getItemFromBlock(block));
+		Item item = Item.getItemFromBlock(block);
+		if (item != null) {
+			registerItemModel(item);
+		}
 	}
 
 	private void registerBlockItemModel(Block block, String modelLocation) {
