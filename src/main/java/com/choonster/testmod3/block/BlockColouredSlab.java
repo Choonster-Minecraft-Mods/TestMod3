@@ -32,11 +32,10 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 	 * Create a coloured slab block.
 	 *
 	 * @param material    The Material of this slab
-	 * @param isDouble    Is this a double slab?
 	 * @param colourGroup This slab's colour group
 	 * @param slabGroup   The group this slab belongs to
 	 */
-	public BlockColouredSlab(Material material, boolean isDouble, EnumColourGroup colourGroup, SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> slabGroup) {
+	public BlockColouredSlab(Material material, EnumColourGroup colourGroup, SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> slabGroup) {
 		super(material, slabGroup, colourGroup);
 	}
 
@@ -213,7 +212,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 			return new SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab>(groupName, material, colourGroup) {
 				@Override
 				public BlockColouredSlab createSlab(final Material material, final boolean isDouble, final EnumColourGroup colourGroup) {
-					return new BlockColouredSlab(material, isDouble, colourGroup, this) {
+					return new BlockColouredSlab(material, colourGroup, this) {
 						@Override
 						public boolean isDouble() {
 							return isDouble;
