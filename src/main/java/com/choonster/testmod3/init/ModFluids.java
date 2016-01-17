@@ -4,6 +4,7 @@ import com.choonster.testmod3.Logger;
 import com.choonster.testmod3.block.BlockTestMod3;
 import com.choonster.testmod3.block.fluid.BlockFluidNoFlow;
 import com.choonster.testmod3.item.block.ItemFluidTank;
+import com.choonster.testmod3.util.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.MaterialLiquid;
@@ -35,19 +36,20 @@ public class ModFluids {
 	public static final Set<IFluidBlock> modFluidBlocks = new HashSet<>();
 
 	public static void registerFluids() {
-		static_ = createFluid("static", "testmod3:blocks/fluid_static", false,
+
+		static_ = createFluid("static", false,
 				fluid -> fluid.setLuminosity(10).setDensity(800).setViscosity(1500),
 				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.brownColor)));
 
-		staticGas = createFluid("staticgas", "testmod3:blocks/fluid_staticGas", false,
+		staticGas = createFluid("staticGas", false,
 				fluid -> fluid.setLuminosity(10).setDensity(-800).setViscosity(1500).setGaseous(true),
 				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.brownColor)));
 
-		normal = createFluid("normal", "testmod3:blocks/fluid_normal", true,
+		normal = createFluid("normal", true,
 				fluid -> fluid.setLuminosity(10).setDensity(1600).setViscosity(100),
 				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.adobeColor)));
 
-		normalGas = createFluid("normalgas", "testmod3:blocks/fluid_normalGas", true,
+		normalGas = createFluid("normalGas", true,
 				fluid -> fluid.setLuminosity(10).setDensity(-1600).setViscosity(100).setGaseous(true),
 				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.adobeColor)));
 	}
@@ -66,15 +68,16 @@ public class ModFluids {
 	 * Create a {@link Fluid} and its {@link IFluidBlock}, or use the existing ones if a fluid has already been registered with the same name.
 	 *
 	 * @param name         The name of the fluid
-	 * @param textureName  The base name of the fluid's texture
 	 * @param hasFlowIcon  Does the fluid have a flow icon?
 	 * @param fluidPropertyApplier A function that sets the properties of the {@link Fluid}
 	 * @param blockFactory A function that creates the {@link IFluidBlock}
 	 * @return The fluid and block
 	 */
-	private static <T extends Block & IFluidBlock> Fluid createFluid(String name, String textureName, boolean hasFlowIcon, Consumer<Fluid> fluidPropertyApplier, Function<Fluid, T> blockFactory) {
-		ResourceLocation still = new ResourceLocation(textureName + "_still");
-		ResourceLocation flowing = hasFlowIcon ? new ResourceLocation(textureName + "_flow") : still;
+	private static <T extends Block & IFluidBlock> Fluid createFluid(String name, boolean hasFlowIcon, Consumer<Fluid> fluidPropertyApplier, Function<Fluid, T> blockFactory) {
+		final String texturePrefix = Constants.RESOURCE_PREFIX + "blocks/fluid_";
+
+		ResourceLocation still = new ResourceLocation(texturePrefix + name + "_still");
+		ResourceLocation flowing = hasFlowIcon ? new ResourceLocation(texturePrefix + name + "_flow") : still;
 
 		Fluid fluid = new Fluid(name, still, flowing);
 		boolean useOwnFluid = FluidRegistry.registerFluid(fluid);
