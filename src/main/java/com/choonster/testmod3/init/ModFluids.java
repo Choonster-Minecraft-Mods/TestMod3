@@ -23,6 +23,7 @@ public class ModFluids {
 	public static Fluid staticGas;
 	public static Fluid normal;
 	public static Fluid normalGas;
+	public static Fluid finite;
 
 	/**
 	 * The fluids registered by this mod. Includes fluids that were already registered by another mod.
@@ -51,6 +52,10 @@ public class ModFluids {
 		normalGas = createFluid("normalGas", true,
 				fluid -> fluid.setLuminosity(10).setDensity(-1600).setViscosity(100).setGaseous(true),
 				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.adobeColor)));
+
+		finite = createFluid("finite", false,
+				fluid -> fluid.setLuminosity(10).setDensity(800).setViscosity(1500),
+				fluid -> new BlockFluidFinite(fluid, new MaterialLiquid(MapColor.blackColor)));
 	}
 
 	public static void registerFluidContainers() {

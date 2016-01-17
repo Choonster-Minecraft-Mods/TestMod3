@@ -31,6 +31,13 @@
 					"fluid": "staticgas"
 				}
 			}
+		],
+		"finite": [
+			{
+				"custom": {
+					"fluid": "finite"
+				}
+			}
 		]
 	}
 }
