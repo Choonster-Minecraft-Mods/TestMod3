@@ -1,7 +1,6 @@
 package com.choonster.testmod3.init;
 
 import com.choonster.testmod3.Logger;
-import com.choonster.testmod3.block.BlockTestMod3;
 import com.choonster.testmod3.block.fluid.BlockFluidNoFlow;
 import com.choonster.testmod3.item.block.ItemFluidTank;
 import com.choonster.testmod3.util.Constants;
@@ -95,9 +94,8 @@ public class ModFluids {
 	}
 
 	private static <T extends Block & IFluidBlock> T registerFluidBlock(T block) {
-		String fluidName = "fluid." + block.getFluid().getName();
-
-		BlockTestMod3.setBlockName(block, fluidName);
+		block.setRegistryName("fluid." + block.getFluid().getName());
+		block.setUnlocalizedName(Constants.RESOURCE_PREFIX + block.getFluid().getUnlocalizedName());
 		GameRegistry.registerBlock(block);
 
 		modFluidBlocks.add(block);
