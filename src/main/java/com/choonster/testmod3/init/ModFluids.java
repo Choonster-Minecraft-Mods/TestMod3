@@ -19,10 +19,10 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ModFluids {
-	public static Fluid fluidStatic;
-	public static Fluid fluidStaticGas;
-	public static Fluid fluidNormal;
-	public static Fluid fluidNormalGas;
+	public static Fluid static_;
+	public static Fluid staticGas;
+	public static Fluid normal;
+	public static Fluid normalGas;
 
 	/**
 	 * The fluids registered by this mod. Includes fluids that were already registered by another mod.
@@ -35,19 +35,19 @@ public class ModFluids {
 	public static final Set<IFluidBlock> modFluidBlocks = new HashSet<>();
 
 	public static void registerFluids() {
-		fluidStatic = createFluid("static", "testmod3:blocks/fluid_static", false,
+		static_ = createFluid("static", "testmod3:blocks/fluid_static", false,
 				fluid -> fluid.setLuminosity(10).setDensity(800).setViscosity(1500),
 				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.brownColor)));
 
-		fluidStaticGas = createFluid("staticgas", "testmod3:blocks/fluid_staticGas", false,
+		staticGas = createFluid("staticgas", "testmod3:blocks/fluid_staticGas", false,
 				fluid -> fluid.setLuminosity(10).setDensity(-800).setViscosity(1500).setGaseous(true),
 				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.brownColor)));
 
-		fluidNormal = createFluid("normal", "testmod3:blocks/fluid_normal", true,
+		normal = createFluid("normal", "testmod3:blocks/fluid_normal", true,
 				fluid -> fluid.setLuminosity(10).setDensity(1600).setViscosity(100),
 				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.adobeColor)));
 
-		fluidNormalGas = createFluid("normalgas", "testmod3:blocks/fluid_normalGas", true,
+		normalGas = createFluid("normalgas", "testmod3:blocks/fluid_normalGas", true,
 				fluid -> fluid.setLuminosity(10).setDensity(-1600).setViscosity(100).setGaseous(true),
 				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.adobeColor)));
 	}
