@@ -41,7 +41,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 
 	@Override
 	public MapColor getMapColor(IBlockState state) {
-		return state.getValue(VARIANT).getMapColor();
+		return state.getValue(getVariantProperty()).getMapColor();
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 
 	@Override
 	public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor colour) {
-		return variants.isColourInGroup(colour) && world.setBlockState(pos, world.getBlockState(pos).withProperty(VARIANT, colour));
+		return variants.isColourInGroup(colour) && world.setBlockState(pos, world.getBlockState(pos).withProperty(getVariantProperty(), colour));
 	}
 
 	@Override

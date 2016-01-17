@@ -48,11 +48,6 @@ public abstract class BlockSlabTestMod3<
 	protected final VARIANTS variants;
 
 	/**
-	 * The variant property of this slab
-	 */
-	protected final IProperty<VARIANT> VARIANT;
-
-	/**
 	 * Create a slab block.
 	 *
 	 * @param material  The Material of this slab
@@ -63,7 +58,6 @@ public abstract class BlockSlabTestMod3<
 		super(material);
 		this.slabGroup = slabGroup;
 		this.variants = variants;
-		this.VARIANT = getVariantProperty();
 
 		// Vanilla sets this for anything that extends BlockSlab in Block.registerBlocks,
 		// but this is run before mods are loaded; so we need to set it manually.
@@ -158,7 +152,6 @@ public abstract class BlockSlabTestMod3<
 
 	@Override
 	protected BlockState createBlockState() {
-		// This is called from the Block constructor before the VARIANT field is set, so we need to call getVariantProperty directly.
 		return isDouble() ? new BlockState(this, getVariantProperty()) : new BlockState(this, HALF, getVariantProperty());
 	}
 
