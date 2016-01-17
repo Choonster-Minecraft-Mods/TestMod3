@@ -157,7 +157,7 @@ public abstract class BlockSlabTestMod3<
 
 	@Override
 	public int damageDropped(IBlockState state) {
-		return super.damageDropped(state);
+		return getMetadata(state.getValue(getVariantProperty()));
 	}
 
 	/**
