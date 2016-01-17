@@ -65,6 +65,12 @@ public abstract class BlockSlabTestMod3<
 		this.variants = variants;
 		this.VARIANT = getVariantProperty();
 
+		// Vanilla sets this for anything that extends BlockSlab in Block.registerBlocks,
+		// but this is run before mods are loaded; so we need to set it manually.
+		// Thanks to HappyKiller1O1 for pointing out this field to me:
+		// http://www.minecraftforge.net/forum/index.php/topic,36125.msg190252.html#msg190252
+		this.useNeighborBrightness = true;
+
 		String name = slabGroup.groupName + StringUtils.capitalize(variants.getName());
 		if (isDouble()) {
 			name += "Double";
