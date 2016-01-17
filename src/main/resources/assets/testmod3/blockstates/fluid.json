@@ -1,29 +1,36 @@
 {
 	"forge_marker": 1,
+	"defaults": {
+		"model": "forge:fluid"
+	},
 	"variants": {
-		"normal": {
-			"model": "forge:fluid",
-			"custom": {
-				"fluid": "normal"
+		"normal": [
+			{
+				"custom": {
+					"fluid": "normal"
+				}
 			}
-		},
-		"normalgas": {
-			"model": "forge:fluid",
-			"custom": {
-				"fluid": "normalgas"
+		],
+		"normalgas": [
+			{
+				"custom": {
+					"fluid": "normalgas"
+				}
 			}
-		},
-		"static": {
-			"model": "forge:fluid",
-			"custom": {
-				"fluid": "static"
+		],
+		"static": [
+			{
+				"custom": {
+					"fluid": "static"
+				}
 			}
-		},
-		"staticgas": {
-			"model": "forge:fluid",
-			"custom": {
-				"fluid": "staticgas"
+		],
+		"staticgas": [
+			{
+				"custom": {
+					"fluid": "staticgas"
+				}
 			}
-		}
+		]
 	}
 }
