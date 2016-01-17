@@ -88,8 +88,8 @@ tile.testmod3:stainedClaySlab.black.name=Black Stained Clay Slab
 item.testmod3:bucket.empty.name=Bucket
 item.testmod3:bucket.static.name=Bucket of Static Fluid
 item.testmod3:bucket.normal.name=Bucket of Normal Fluid
-item.testmod3:bucket.staticgas.name=Bucket of Static Gas
-item.testmod3:bucket.normalgas.name=Bucket of Normal Gas
+item.testmod3:bucket.staticGas.name=Bucket of Static Gas
+item.testmod3:bucket.normalGas.name=Bucket of Normal Gas
 
 item.testmod3:heavy.name=Heavy Item
 item.testmod3:entityInteractionTest.name=Entity Interaction Test
