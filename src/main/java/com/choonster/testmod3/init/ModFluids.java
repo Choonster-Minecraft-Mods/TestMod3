@@ -72,10 +72,10 @@ public class ModFluids {
 	/**
 	 * Create a {@link Fluid} and its {@link IFluidBlock}, or use the existing ones if a fluid has already been registered with the same name.
 	 *
-	 * @param name         The name of the fluid
-	 * @param hasFlowIcon  Does the fluid have a flow icon?
+	 * @param name                 The name of the fluid
+	 * @param hasFlowIcon          Does the fluid have a flow icon?
 	 * @param fluidPropertyApplier A function that sets the properties of the {@link Fluid}
-	 * @param blockFactory A function that creates the {@link IFluidBlock}
+	 * @param blockFactory         A function that creates the {@link IFluidBlock}
 	 * @return The fluid and block
 	 */
 	private static <T extends Block & IFluidBlock> Fluid createFluid(String name, boolean hasFlowIcon, Consumer<Fluid> fluidPropertyApplier, Function<Fluid, T> blockFactory) {

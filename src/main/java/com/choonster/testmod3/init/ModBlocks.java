@@ -14,7 +14,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemCloth;
-import net.minecraft.item.ItemSlab;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -92,7 +91,7 @@ public class ModBlocks {
 	 * @param block           The Block instance
 	 * @param itemClass       The ItemBlock class
 	 * @param constructorArgs Arguments to pass to the ItemBlock constructor
-	 * @param <BLOCK>             The Block type
+	 * @param <BLOCK>         The Block type
 	 * @return The Block instance
 	 */
 	private static <BLOCK extends Block> BLOCK registerBlock(BLOCK block, Class<? extends ItemBlock> itemClass, Object... constructorArgs) {

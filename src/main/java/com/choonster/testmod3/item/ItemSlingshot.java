@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 
 /**
  * A slingshot that fired Snowballs when used.
- *
+ * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2483633-custom-bow-animation-and-projectiles
  *

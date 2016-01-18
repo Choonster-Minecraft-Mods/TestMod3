@@ -39,7 +39,7 @@ repositories {
 }
 
 dependencies {
-    compile  "mezz.jei:jei_${mc_version}:${jei_version}"
+    compile "mezz.jei:jei_${mc_version}:${jei_version}"
 }
 
 processResources {
