@@ -130,6 +130,10 @@ public class ModModelManager {
 		registerItemModel(ModItems.heavy, "minecraft:brick");
 		registerItemModel(ModItems.entityTest, "minecraft:porkchop");
 		registerItemModel(ModItems.blockDestroyer, "minecraft:tnt_minecart");
+		registerItemModel(ModItems.replacementHelmet, "minecraft:chainmail_helmet");
+		registerItemModel(ModItems.replacementChestplate, "minecraft:chainmail_chestplate");
+		registerItemModel(ModItems.repacementLeggings, "minecraft:chainmail_leggings");
+		registerItemModel(ModItems.replacementBoots, "minecraft:chainmail_boots");
 
 		// Then register items with default model names
 		ModItems.items.stream().filter(item -> !itemsRegistered.contains(item)).forEach(this::registerItemModel);

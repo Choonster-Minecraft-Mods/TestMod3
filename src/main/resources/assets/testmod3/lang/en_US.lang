@@ -115,6 +115,11 @@ item.testmod3:bow.name=Mod Bow
 item.testmod3:arrow.name=Mod Arrow
 item.testmod3:heightTester.name=Height Tester
 
+item.testmod3:helmetReplacement.name=Armour Replacement Helmet
+item.testmod3:chestplateReplacement.name=Armour Replacement Chestplate
+item.testmod3:leggingsReplacement.name=Armour Replacement Leggings
+item.testmod3:bootsReplacement.name=Armour Replacement Boots
+
 # Tooltips
 item.record.testmod3:solaris.desc=Solaris (Path of Exile)
 item.testmod3:unicodeTooltips.1.desc=§a§oLine 1 (Section Characters in Lang File)§r
@@ -125,6 +130,9 @@ item.testmod3:swapTest.withoutItem.desc=No conversion defined for this item
 tile.testmod3:fluidTank.fluid.desc=%s (%s/%s mB)
 tile.testmod3:fluidTank.empty.desc=Empty
 tile.testmod3:fluidTank.shift.desc=Hold Shift to display contents
+item.testmod3:armourReplacement.equip.desc=Replaces your other armour when equipped
+item.testmod3:armourReplacement.unequip.desc=Restores your armour when unequipped
+item.testmod3:armourRestricted.desc=Disappears if unequipped
 
 # Chat messages
 message.testmod3:entityInteractCount=Interact count: %s
