@@ -3,6 +3,7 @@ fluid.static=Static Fluid
 fluid.normal=Normal Fluid
 fluid.staticgas=Static Gas
 fluid.normalgas=Normal Gas
+fluid.finite=Finite Fluid
 
 # Blocks
 tile.testmod3:watergrass.name=Water Grass
@@ -25,6 +26,7 @@ tile.testmod3:fluid.static.name=Static Fluid
 tile.testmod3:fluid.normal.name=Normal Fluid
 tile.testmod3:fluid.staticGas.name=Static Gas
 tile.testmod3:fluid.normalGas.name=Normal Gas
+tile.testmod3:fluid.finite.name=Finite Fluid
 
 tile.testmod3:coloredRotatable.name=Rotatable Block
 tile.testmod3:coloredRotatable.white.name=White Rotatable Block
@@ -90,6 +92,7 @@ item.testmod3:bucket.static.name=Bucket of Static Fluid
 item.testmod3:bucket.normal.name=Bucket of Normal Fluid
 item.testmod3:bucket.staticGas.name=Bucket of Static Gas
 item.testmod3:bucket.normalGas.name=Bucket of Normal Gas
+item.testmod3:bucket.finite.name=Bucket of Finite Fluid
 
 item.testmod3:heavy.name=Heavy Item
 item.testmod3:entityInteractionTest.name=Entity Interaction Test
