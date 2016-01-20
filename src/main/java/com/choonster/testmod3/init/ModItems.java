@@ -76,7 +76,9 @@ public class ModItems {
 		replacementChestplate = registerItem(new ItemArmourRestricted(ItemArmor.ArmorMaterial.CHAIN, Constants.ARMOUR_TYPE_CHEST, "Replacement"));
 		repacementLeggings = registerItem(new ItemArmourRestricted(ItemArmor.ArmorMaterial.CHAIN, Constants.ARMOUR_TYPE_LEGS, "Replacement"));
 		replacementBoots = registerItem(new ItemArmourRestricted(ItemArmor.ArmorMaterial.CHAIN, Constants.ARMOUR_TYPE_FEET, "Replacement"));
-		replacementHelmet.setReplacementItems(new ItemStack(replacementChestplate), new ItemStack(repacementLeggings), new ItemStack(replacementBoots));
+		ItemStack chest = new ItemStack(replacementChestplate);
+		chest.addEnchantment(Enchantment.sharpness, 1);
+		replacementHelmet.setReplacementItems(chest, new ItemStack(repacementLeggings), new ItemStack(replacementBoots));
 
 		TOOL_MATERIAL_GLOWSTONE.setRepairItem(new ItemStack(Items.glowstone_dust));
 	}
