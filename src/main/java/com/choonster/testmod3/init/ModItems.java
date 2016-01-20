@@ -43,7 +43,7 @@ public class ModItems {
 	public static ItemArmourRestricted repacementLeggings;
 	public static ItemArmourRestricted replacementBoots;
 
-	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE;
+	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10);
 
 	public static void registerItems() {
 		woodenAxe = registerItem(new ItemCuttingAxe(Item.ToolMaterial.WOOD, "woodenAxe"));
@@ -78,7 +78,7 @@ public class ModItems {
 		replacementBoots = registerItem(new ItemArmourRestricted(ItemArmor.ArmorMaterial.CHAIN, Constants.ARMOUR_TYPE_FEET, "Replacement"));
 		replacementHelmet.setReplacementItems(new ItemStack(replacementChestplate), new ItemStack(repacementLeggings), new ItemStack(replacementBoots));
 
-		TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10).setRepairItem(new ItemStack(Items.glowstone_dust));
+		TOOL_MATERIAL_GLOWSTONE.setRepairItem(new ItemStack(Items.glowstone_dust));
 	}
 
 	/**
