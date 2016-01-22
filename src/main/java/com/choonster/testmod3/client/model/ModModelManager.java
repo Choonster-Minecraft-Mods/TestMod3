@@ -129,6 +129,8 @@ public class ModModelManager {
 		registerItemModel(ModItems.diamondHarvestSword, "minecraft:diamond_sword");
 		registerItemModel(ModItems.clearer, "minecraft:nether_star");
 		registerItemModel(ModItems.heightTester, "minecraft:compass");
+		registerItemModel(ModItems.vanillaChainHelmet, "minecraft:chainmail_helmet");
+		registerItemModel(ModItems.customChainHelmet, "minecraft:chainmail_helmet");
 
 		// Then register items with default model names
 		ModItems.items.forEach(this::registerItemModel);

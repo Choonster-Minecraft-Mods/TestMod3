@@ -86,6 +86,8 @@ item.clearer.name=Clearer
 item.modBow.name=Mod Bow
 item.testmod3.modArrow.name=Mod Arrow
 item.testmod3.heightTester.name=Height Tester
+item.testmod3.helmetVanillaChain.name=Vanilla Chain Helmet
+item.testmod3.helmetCustomChain.name=Custom Chain Helmet
 
 # Tooltips
 item.unicodeTooltips.desc.1=§a§oLine 1 (Section Characters in Lang File)§r

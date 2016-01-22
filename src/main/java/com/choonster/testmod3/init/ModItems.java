@@ -2,8 +2,10 @@ package com.choonster.testmod3.init;
 
 import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.item.*;
+import com.choonster.testmod3.util.Constants;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -36,6 +38,8 @@ public class ModItems {
 	public static ItemModBow modBow;
 	public static Item modArrow;
 	public static ItemHeightTester heightTester;
+	public static ItemArmourTextureTest vanillaChainHelmet;
+	public static ItemArmourTextureTest customChainHelmet;
 
 	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE;
 
@@ -65,6 +69,9 @@ public class ModItems {
 		swapTestB = registerItem(new ItemSwapTest("B"));
 		swapTestA.setOtherItem(new ItemStack(swapTestB));
 		swapTestB.setOtherItem(new ItemStack(swapTestA));
+
+		vanillaChainHelmet = registerItem(new ItemArmourTextureTest(ItemArmor.ArmorMaterial.DIAMOND, Constants.ARMOUR_TYPE_HEAD, "minecraft:textures/models/armor/chainmail_layer_%d%s.png", "VanillaChain"));
+		customChainHelmet = registerItem(new ItemArmourTextureTest(ItemArmor.ArmorMaterial.DIAMOND, Constants.ARMOUR_TYPE_HEAD, "testmod3:textures/models/armor/custom_chainmail_layer_%d%s.png", "CustomChain"));
 
 		TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10).setRepairItem(new ItemStack(Items.glowstone_dust));
 	}
