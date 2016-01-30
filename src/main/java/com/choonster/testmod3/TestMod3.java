@@ -5,6 +5,7 @@ import com.choonster.testmod3.config.Config;
 import com.choonster.testmod3.event.BlockEventHandler;
 import com.choonster.testmod3.event.BucketFillHandler;
 import com.choonster.testmod3.event.NetworkEventHandler;
+import com.choonster.testmod3.event.PlayerEventHandler;
 import com.choonster.testmod3.init.*;
 import com.choonster.testmod3.proxy.IProxy;
 import com.choonster.testmod3.tests.Tests;
@@ -46,6 +47,7 @@ public class TestMod3 {
 		MinecraftForge.EVENT_BUS.register(new BucketFillHandler());
 		MinecraftForge.EVENT_BUS.register(new BlockEventHandler());
 		MinecraftForge.EVENT_BUS.register(new NetworkEventHandler());
+		MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
 
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 
