@@ -7,6 +7,7 @@ import com.choonster.testmod3.event.BucketFillHandler;
 import com.choonster.testmod3.event.NetworkEventHandler;
 import com.choonster.testmod3.event.PlayerEventHandler;
 import com.choonster.testmod3.init.*;
+import com.choonster.testmod3.pigspawner.CapabilityPigSpawner;
 import com.choonster.testmod3.proxy.IProxy;
 import com.choonster.testmod3.tests.Tests;
 import com.choonster.testmod3.tweak.snowbuildup.SnowBuildup;
@@ -43,6 +44,8 @@ public class TestMod3 {
 	public void preInit(FMLPreInitializationEvent event) {
 		creativeTab = new CreativeTabTestMod3();
 		Config.load(event);
+
+		CapabilityPigSpawner.register();
 
 		MinecraftForge.EVENT_BUS.register(new BucketFillHandler());
 		MinecraftForge.EVENT_BUS.register(new BlockEventHandler());

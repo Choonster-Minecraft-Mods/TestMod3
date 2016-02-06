@@ -41,6 +41,7 @@ public class ModBlocks {
 	public static BlockPotionEffect potionEffect;
 	public static BlockVariants variants;
 	public static BlockClientPlayerRotation clientPlayerRotation;
+	public static BlockPigSpawnerRefiller pigSpawnerRefiller;
 
 	public static BlockPipeBasic pipeBasic;
 	public static BlockPipeFluid pipeFluid;
@@ -63,6 +64,7 @@ public class ModBlocks {
 		potionEffect = registerBlock(new BlockPotionEffect());
 		variants = registerBlock(new BlockVariants(Material.iron), ItemMultiTextureMod.class, BlockVariants.EnumType.getNames(), true);
 		clientPlayerRotation = registerBlock(new BlockClientPlayerRotation());
+		pigSpawnerRefiller = registerBlock(new BlockPigSpawnerRefiller());
 
 		pipeBasic = registerBlock(new BlockPipeBasic("basicPipe"));
 		pipeFluid = registerBlock(new BlockPipeFluid());

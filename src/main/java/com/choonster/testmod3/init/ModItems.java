@@ -1,6 +1,8 @@
 package com.choonster.testmod3.init;
 
 import com.choonster.testmod3.item.*;
+import com.choonster.testmod3.pigspawner.PigSpawnerFinite;
+import com.choonster.testmod3.pigspawner.PigSpawnerInfinite;
 import com.choonster.testmod3.util.Constants;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
@@ -38,6 +40,8 @@ public class ModItems {
 	public static ItemModBow modBow;
 	public static Item modArrow;
 	public static ItemHeightTester heightTester;
+	public static ItemPigSpawner pigSpawnerFinite;
+	public static ItemPigSpawner pigSpawnerInfinite;
 
 	public static ItemArmourReplacement replacementHelmet;
 	public static ItemArmourRestricted replacementChestplate;
@@ -82,6 +86,9 @@ public class ModItems {
 		ItemStack chest = new ItemStack(replacementChestplate);
 		chest.addEnchantment(Enchantment.sharpness, 1);
 		replacementHelmet.setReplacementItems(chest, new ItemStack(repacementLeggings), new ItemStack(replacementBoots));
+
+		pigSpawnerFinite = registerItem(new ItemPigSpawner("finite", () -> new PigSpawnerFinite(20)));
+		pigSpawnerInfinite = registerItem(new ItemPigSpawner("infinite", PigSpawnerInfinite::new));
 
 		TOOL_MATERIAL_GLOWSTONE.setRepairItem(new ItemStack(Items.glowstone_dust));
 		ARMOUR_MATERIAL_REPLACEMENT.customCraftingMaterial = modArrow;

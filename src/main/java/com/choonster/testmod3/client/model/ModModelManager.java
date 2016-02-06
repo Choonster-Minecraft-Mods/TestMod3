@@ -134,6 +134,8 @@ public class ModModelManager {
 		registerItemModel(ModItems.replacementChestplate, "minecraft:chainmail_chestplate");
 		registerItemModel(ModItems.repacementLeggings, "minecraft:chainmail_leggings");
 		registerItemModel(ModItems.replacementBoots, "minecraft:chainmail_boots");
+		registerItemModel(ModItems.pigSpawnerFinite, "minecraft:porkchop");
+		registerItemModel(ModItems.pigSpawnerInfinite, "minecraft:porkchop");
 
 		// Then register items with default model names
 		ModItems.items.stream().filter(item -> !itemsRegistered.contains(item)).forEach(this::registerItemModel);

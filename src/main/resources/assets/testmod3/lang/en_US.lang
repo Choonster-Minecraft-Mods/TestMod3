@@ -18,6 +18,7 @@ tile.testmod3:itemDebugger.name=Item Debugger
 tile.testmod3:endPortalFrameFull.name=End Portal Frame Full
 tile.testmod3:potionEffect.name=Potion Effect Block
 tile.testmod3:clientPlayerRotation.name=Client Player Rotation Block
+tile.testmod3:pigSpawnerRefiller.name=Pig Spawner Refiller
 
 tile.testmod3:basicPipe.name=Basic Pipe
 tile.testmod3:fluidPipe.name=Fluid Pipe
@@ -114,6 +115,8 @@ item.testmod3:clearer.name=Clearer
 item.testmod3:bow.name=Mod Bow
 item.testmod3:arrow.name=Mod Arrow
 item.testmod3:heightTester.name=Height Tester
+item.testmod3:pigSpawner.finite.name=Finite Pig Spawner
+item.testmod3:pigSpawner.infinite.name=Infinite Pig Spawner
 
 item.testmod3:helmetReplacement.name=Armour Replacement Helmet
 item.testmod3:chestplateReplacement.name=Armour Replacement Chestplate
@@ -133,6 +136,8 @@ tile.testmod3:fluidTank.shift.desc=Hold Shift to display contents
 item.testmod3:armourReplacement.equip.desc=Replaces your other armour when equipped
 item.testmod3:armourReplacement.unequip.desc=Restores your armour when unequipped
 item.testmod3:armourRestricted.desc=Disappears if unequipped
+testmod3:pigSpawner.finite.desc=Spawnable Pigs: %s/%s
+testmod3:pigSpawner.infinite.desc=Spawnable Pigs: ∞
 
 # Chat messages
 message.testmod3:entityInteractCount=Interact count: %s
@@ -147,6 +152,7 @@ message.testmod3:heightTester.height=Height at %s,%s is %s
 message.testmod3:heightTester.generate=Generated skylight map for the chunk %d,%d at %d,%d,%d
 message.testmod3:login.freeApple=Congratulations! You have received a free apple for logging into the game.
 message.testmod3:login.alreadyReceived=You've already received your free apple, you won't be getting any more.
+message.pigSpawnerRefiller.refilled=Refilled held pig spawner.
 
 # Config GUI strings
 testmod3.config.title=TestMod3 Config
