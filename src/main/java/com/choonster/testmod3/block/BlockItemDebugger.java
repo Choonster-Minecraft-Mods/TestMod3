@@ -17,18 +17,25 @@ import net.minecraft.world.World;
 public class BlockItemDebugger extends BlockTestMod3 {
 	public BlockItemDebugger() {
 		super(Material.iron, "itemDebugger");
+		setBlockUnbreakable();
+	}
+
+	private void logItem(EntityPlayer playerIn) {
+		final ItemStack stack = playerIn.getHeldItem();
+		if (stack != null) {
+			Logger.info("ItemStack: %s", stack.serializeNBT());
+		}
 	}
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
-		ItemStack stack = playerIn.getHeldItem();
-		if (stack != null) {
-			Logger.info("Item: %s", stack);
-			if (stack.hasTagCompound()) {
-				Logger.info("NBT data: %s", stack.getTagCompound());
-			}
-		}
+		logItem(playerIn);
 
 		return true;
+	}
+
+	@Override
+	public void onBlockClicked(World worldIn, BlockPos pos, EntityPlayer playerIn) {
+		logItem(playerIn);
 	}
 }
