@@ -11,7 +11,7 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 
 /**
- * An item that sends the player a chat message when it's used to destroy Wheat with an age >= 6.
+ * An item that sends the player a chat message when it's used to destroy Wheat with an age &gt;= 6.
  *
  * @author Choonster
  */

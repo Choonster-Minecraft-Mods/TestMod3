@@ -86,7 +86,7 @@ public class ItemHarvestSword extends ItemTool {
 	 *
 	 * @param block     The Block
 	 * @param itemStack The tool
-	 * @return Is this tool effective on the {@link Block's} {@link Material}?
+	 * @return Is this tool effective on the {@link Block}'s {@link Material}?
 	 */
 	@Override
 	public boolean canHarvestBlock(Block block, ItemStack itemStack) {

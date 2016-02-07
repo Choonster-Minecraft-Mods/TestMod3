@@ -37,6 +37,8 @@ public interface IPigSpawner extends INBTSerializable<NBTTagCompound> {
 
 	/**
 	 * Get the tooltip lines for this spawner. Can be called on the client or server.
+	 *
+	 * @return The tooltip lines
 	 */
 	List<IChatComponent> getTooltipLines();
 }
