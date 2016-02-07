@@ -1,7 +1,3 @@
-/*plugins {
-    id "net.minecraftforge.gradle.forge" version "2.0.1"
-}*/
-
 buildscript {
     repositories {
         jcenter()
@@ -26,7 +22,7 @@ minecraft {
     version = "${mc_version}-${forge_version}"
     runDir = "run"
 
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    makeObfSourceJar = false
 
     useDepAts = true
 
@@ -75,17 +71,21 @@ tasks.withType(JavaCompile) {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = 'deobf'
+tasks.withType(Javadoc){
+    options.encoding = 'UTF-8'
 }
 
-task deobfSourceJar(type: Jar) {
-    from sourceSets.main.allSource
-    classifier = 'deobfSources'
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier = 'sources'
 }
 
 artifacts {
-    archives deobfJar
-    archives deobfSourceJar
+    archives javadocJar
+    archives sourcesJar
 }
