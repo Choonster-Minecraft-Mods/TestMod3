@@ -1,9 +1,9 @@
 package com.choonster.testmod3.scala.proxy
 
 trait IProxy {
-  def preInit()
+	def preInit()
 
-  def init()
+	def init()
 
-  def postInit()
+	def postInit()
 }
