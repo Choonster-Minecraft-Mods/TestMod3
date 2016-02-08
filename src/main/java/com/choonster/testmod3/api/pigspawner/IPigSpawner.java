@@ -29,7 +29,7 @@ public interface IPigSpawner {
 	 * @param x     The x coordinate
 	 * @param y     The y coordinate
 	 * @param z     The z coordinate
-	 * @return Was the pig spawned?
+	 * @return Was the pig successfully spawned?
 	 */
 	boolean spawnPig(World world, double x, double y, double z);
 

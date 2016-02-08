@@ -80,8 +80,6 @@ public class PigSpawnerFinite extends PigSpawnerBase implements IPigSpawnerFinit
 
 	/**
 	 * Spawn a pig at the specified position.
-	 * <p>
-	 * This method is responsible for decreasing the pig count.
 	 *
 	 * @param world The world
 	 * @param x     The x coordinate

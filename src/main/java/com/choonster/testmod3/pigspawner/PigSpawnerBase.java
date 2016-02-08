@@ -14,13 +14,13 @@ import net.minecraft.world.World;
  */
 public abstract class PigSpawnerBase implements IPigSpawner {
 	/**
-	 * Can a pig be spawned at the specified position?
+	 * Spawn a pig at the specified position.
 	 *
 	 * @param world The world
 	 * @param x     The x coordinate
 	 * @param y     The y coordinate
 	 * @param z     The z coordinate
-	 * @return Can a pig be spawned?
+	 * @return Was the pig successfully spawned?
 	 */
 	@Override
 	public boolean spawnPig(World world, double x, double y, double z) {
