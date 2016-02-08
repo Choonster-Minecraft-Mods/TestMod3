@@ -1,13 +1,16 @@
 package com.choonster.testmod3.pigspawner;
 
+import com.choonster.testmod3.Logger;
 import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.api.pigspawner.IPigSpawner;
 import com.choonster.testmod3.api.pigspawner.IPigSpawnerFinite;
 import com.choonster.testmod3.api.pigspawner.IPigSpawnerInteractable;
+import com.choonster.testmod3.network.MessageUpdateHeldPigSpawnerFinite;
 import com.choonster.testmod3.util.DebugUtil;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -112,11 +115,11 @@ public final class CapabilityPigSpawner {
 		}
 
 		/**
-		 * Spawn a pig at the specified position of the item has the {@link IPigSpawner} capability.
+		 * Spawn a pig at the specified position.
 		 * <p>
 		 * If there's an {@link IPigSpawnerInteractable}, call {@link IPigSpawnerInteractable#interact} on it.
 		 *
-		 * @param itemStack       The player's held item
+		 * @param pigSpawner      The pig spawner
 		 * @param world           The World
 		 * @param x               The x position to spawn the pig at
 		 * @param y               The y position to spawn the pig at
@@ -124,20 +127,38 @@ public final class CapabilityPigSpawner {
 		 * @param interactable    The IPigSpawnerInteractable, if any
 		 * @param interactablePos The position of the IPigSpawnerInteractable
 		 * @param iCommandSender  The ICommandSender, if any
+		 * @return Was any action taken?
 		 */
-		private void trySpawnPig(ItemStack itemStack, World world, double x, double y, double z, Optional<IPigSpawnerInteractable> interactable, BlockPos interactablePos, Optional<ICommandSender> iCommandSender) {
-			if (world.isRemote) return;
+		private boolean trySpawnPig(IPigSpawner pigSpawner, World world, double x, double y, double z, Optional<IPigSpawnerInteractable> interactable, BlockPos interactablePos, Optional<ICommandSender> iCommandSender) {
+			if (world.isRemote || pigSpawner == null) return false;
 
-			final IPigSpawner pigSpawner = getPigSpawner(itemStack);
-			if (pigSpawner == null) return;
+			boolean actionTaken = false;
+			boolean shouldSpawnPig = true;
 
-			boolean spawnPig = true;
 			if (interactable.isPresent()) {
-				spawnPig = !interactable.get().interact(pigSpawner, world, interactablePos, iCommandSender);
+				shouldSpawnPig = !interactable.get().interact(pigSpawner, world, interactablePos, iCommandSender);
+				actionTaken = true;
 			}
 
-			if (spawnPig && pigSpawner.canSpawnPig(world, x, y, z)) {
+			if (shouldSpawnPig && pigSpawner.canSpawnPig(world, x, y, z)) {
 				pigSpawner.spawnPig(world, x, y, z);
+				actionTaken = true;
+			}
+
+			return actionTaken;
+		}
+
+		/**
+		 * Sync the pig spawner for the player's held item.
+		 *
+		 * @param pigSpawner The pig spawner
+		 * @param player     The player
+		 */
+		private void sendToPlayer(IPigSpawner pigSpawner, EntityPlayerMP player) {
+			if (pigSpawner instanceof IPigSpawnerFinite) {
+				final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) pigSpawner;
+				Logger.info(LOG_MARKER, DebugUtil.getStackTrace(10), "Sending finite pig spawner to client. Player: %s - NumPigs: %d", player.getDisplayNameString(), pigSpawnerFinite.getNumPigs());
+				TestMod3.network.sendTo(new MessageUpdateHeldPigSpawnerFinite(pigSpawnerFinite), player);
 			}
 		}
 
@@ -159,7 +180,10 @@ public final class CapabilityPigSpawner {
 			final Block block = world.getBlockState(event.pos).getBlock();
 			final Optional<IPigSpawnerInteractable> interactable = block instanceof IPigSpawnerInteractable ? Optional.of((IPigSpawnerInteractable) block) : Optional.empty();
 
-			trySpawnPig(event.entityPlayer.getHeldItem(), world, x, y, z, interactable, event.pos, Optional.of(event.entityPlayer));
+			final IPigSpawner pigSpawner = getPigSpawner(event.entityPlayer.getHeldItem());
+			if (trySpawnPig(pigSpawner, world, x, y, z, interactable, event.pos, Optional.of(event.entityPlayer))) {
+				sendToPlayer(pigSpawner, (EntityPlayerMP) event.entityPlayer);
+			}
 		}
 
 		/**
@@ -177,7 +201,10 @@ public final class CapabilityPigSpawner {
 			final double x = target.posX, y = target.posY, z = target.posZ;
 			final Optional<IPigSpawnerInteractable> interactable = target instanceof IPigSpawnerInteractable ? Optional.of((IPigSpawnerInteractable) target) : Optional.empty();
 
-			trySpawnPig(event.entityPlayer.getHeldItem(), world, x, y, z, interactable, target.getPosition(), Optional.of(event.entityPlayer));
+			final IPigSpawner pigSpawner = getPigSpawner(event.entityPlayer.getHeldItem());
+			if (trySpawnPig(pigSpawner, world, x, y, z, interactable, target.getPosition(), Optional.of(event.entityPlayer))) {
+				sendToPlayer(pigSpawner, (EntityPlayerMP) event.entityPlayer);
+			}
 		}
 
 		/**
