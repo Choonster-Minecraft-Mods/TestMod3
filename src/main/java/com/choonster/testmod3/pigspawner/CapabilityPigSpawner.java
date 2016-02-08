@@ -4,6 +4,7 @@ import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.api.pigspawner.IPigSpawner;
 import com.choonster.testmod3.api.pigspawner.IPigSpawnerFinite;
 import com.choonster.testmod3.api.pigspawner.IPigSpawnerInteractable;
+import com.choonster.testmod3.util.DebugUtil;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
@@ -23,6 +24,8 @@ import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.MarkerManager;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,6 +48,8 @@ public final class CapabilityPigSpawner {
 	 */
 	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "PigPower");
 
+	public static final Marker LOG_MARKER = MarkerManager.getMarker("PIG_SPAWNER", Logger.MOD_MARKER);
+
 	/**
 	 * Register the capability.
 	 */
@@ -64,6 +69,9 @@ public final class CapabilityPigSpawner {
 				if (instance instanceof IPigSpawnerFinite) {
 					final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) instance;
 					NBTTagCompound tagCompound = (NBTTagCompound) nbt;
+
+					Logger.info(LOG_MARKER, DebugUtil.getStackTrace(10), "Reading finite pig spawner from NBT: %s (Current: %d, New: %d)", instance, pigSpawnerFinite.getNumPigs(), tagCompound.getInteger("NumPigs"));
+
 					pigSpawnerFinite.setNumPigs(tagCompound.getInteger("NumPigs"));
 				}
 			}

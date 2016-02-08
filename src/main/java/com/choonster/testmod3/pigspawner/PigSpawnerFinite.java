@@ -1,6 +1,8 @@
 package com.choonster.testmod3.pigspawner;
 
+import com.choonster.testmod3.Logger;
 import com.choonster.testmod3.api.pigspawner.IPigSpawnerFinite;
+import com.choonster.testmod3.util.DebugUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.util.ChatComponentTranslation;
@@ -27,6 +29,7 @@ public class PigSpawnerFinite extends PigSpawnerBase implements IPigSpawnerFinit
 
 	public PigSpawnerFinite(int maxNumPigs) {
 		this.maxNumPigs = maxNumPigs;
+		Logger.info(CapabilityPigSpawner.LOG_MARKER, DebugUtil.getStackTrace(10), "Creating finite pig spawner: %s", this);
 	}
 
 	/**
