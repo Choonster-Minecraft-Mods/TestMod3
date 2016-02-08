@@ -42,6 +42,8 @@ public class TestMod3 {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		Logger.setLogger(event.getModLog());
+
 		creativeTab = new CreativeTabTestMod3();
 		Config.load(event);
 
