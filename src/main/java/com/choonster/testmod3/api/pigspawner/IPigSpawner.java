@@ -23,13 +23,13 @@ public interface IPigSpawner {
 	boolean canSpawnPig(World world, double x, double y, double z);
 
 	/**
-	 * Can a pig be spawned at the specified position?
+	 * Spawn a pig at the specified position.
 	 *
 	 * @param world The world
 	 * @param x     The x coordinate
 	 * @param y     The y coordinate
 	 * @param z     The z coordinate
-	 * @return Can a pig be spawned?
+	 * @return Was the pig spawned?
 	 */
 	boolean spawnPig(World world, double x, double y, double z);
 

@@ -182,8 +182,7 @@ public final class CapabilityPigSpawner {
 			IPigSpawner pigSpawner = getPigSpawner(event.itemStack);
 			if (pigSpawner == null) return;
 
-			final ChatStyle chatStyle = new ChatStyle();
-			chatStyle.setColor(EnumChatFormatting.LIGHT_PURPLE);
+			final ChatStyle chatStyle = new ChatStyle().setColor(EnumChatFormatting.LIGHT_PURPLE);
 
 			final List<IChatComponent> chatComponents = pigSpawner.getTooltipLines();
 			final List<String> tooltipLines = chatComponents.stream()
