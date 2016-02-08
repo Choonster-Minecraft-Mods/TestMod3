@@ -24,7 +24,7 @@ import static net.minecraftforge.common.util.Constants.NBT;
 
 /**
  * An armour item that replaces your other armour when equipped and restores it when unequipped.
- *
+ * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2595100-persistent-variables-for-armor
  *

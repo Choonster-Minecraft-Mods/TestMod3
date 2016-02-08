@@ -45,17 +45,14 @@ public abstract class BlockStaticPressurePlate extends BlockTestMod3 {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
-	{
-		if (!this.canBePlacedOn(worldIn, pos.down()))
-		{
+	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
+		if (!this.canBePlacedOn(worldIn, pos.down())) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
 			worldIn.setBlockToAir(pos);
 		}
 	}
 
-	private boolean canBePlacedOn(World worldIn, BlockPos pos)
-	{
+	private boolean canBePlacedOn(World worldIn, BlockPos pos) {
 		return World.doesBlockHaveSolidTopSurface(worldIn, pos) || worldIn.getBlockState(pos).getBlock() instanceof BlockFence;
 	}
 

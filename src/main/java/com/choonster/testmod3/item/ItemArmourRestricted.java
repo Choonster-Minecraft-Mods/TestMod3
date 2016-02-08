@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * An armour item that will be deleted as soon as it's unequipped (i.e. in a player's inventory or on the ground).
- *
+ * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2595100-persistent-variables-for-armor
  *

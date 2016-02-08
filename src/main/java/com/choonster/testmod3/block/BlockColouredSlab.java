@@ -164,7 +164,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		 * @param colour The colour
 		 * @return True if the colour is in this group
 		 */
-		public boolean isColourInGroup(EnumDyeColor colour){
+		public boolean isColourInGroup(EnumDyeColor colour) {
 			return values.contains(colour);
 		}
 
@@ -192,8 +192,8 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		/**
 		 * Create a coloured slab group.
 		 *
-		 * @param groupName   The group's name
-		 * @param material    The Material of the slabs
+		 * @param groupName The group's name
+		 * @param material  The Material of the slabs
 		 */
 		public ColouredSlabGroup(String groupName, Material material) {
 			low = createGroup(groupName, material, EnumColourGroup.LOW);
@@ -203,8 +203,8 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		/**
 		 * Create a slab group.
 		 *
-		 * @param groupName The group's name
-		 * @param material The Material of the slabs
+		 * @param groupName   The group's name
+		 * @param material    The Material of the slabs
 		 * @param colourGroup The colour group
 		 * @return The slab group
 		 */

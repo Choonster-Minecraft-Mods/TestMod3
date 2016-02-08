@@ -4,7 +4,6 @@ import com.choonster.testmod3.Logger;
 import com.choonster.testmod3.TestMod3;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;

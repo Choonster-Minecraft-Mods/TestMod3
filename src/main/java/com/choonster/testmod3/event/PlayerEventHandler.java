@@ -20,7 +20,7 @@ public class PlayerEventHandler {
 
 	/**
 	 * Give the player an Apple when they first log in.
-	 *
+	 * <p>
 	 * Test for this thread:
 	 * http://www.minecraftforge.net/forum/index.php/topic,36355.0.html
 	 *

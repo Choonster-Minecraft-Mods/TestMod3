@@ -33,7 +33,7 @@ public class ClientEventHandler {
 
 	/**
 	 * Rotate the player every tick while they're standing on a Block of Iron.
-	 *
+	 * <p>
 	 * Test for this thread:
 	 * http://www.minecraftforge.net/forum/index.php/topic,36093.0.html
 	 *
