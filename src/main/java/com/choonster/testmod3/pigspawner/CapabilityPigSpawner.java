@@ -213,9 +213,7 @@ public final class CapabilityPigSpawner {
 		 * Create a provider using the default {@link IPigSpawner} instance.
 		 */
 		public Provider() {
-			// IDEA thinks this will produce a NullPointerException, but Forge will inject the capability instance into
-			// this field when the capability is registered.
-			this(PIG_SPAWNER_CAPABILITY.getDefaultInstance());
+			this(new PigSpawnerFinite(20));
 		}
 
 		/**
