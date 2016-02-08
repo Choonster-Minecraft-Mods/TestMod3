@@ -3,7 +3,6 @@ package com.choonster.testmod3.pigspawner;
 import com.choonster.testmod3.api.pigspawner.IPigSpawnerFinite;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
@@ -99,17 +98,5 @@ public class PigSpawnerFinite extends PigSpawnerBase implements IPigSpawnerFinit
 	@Override
 	public List<IChatComponent> getTooltipLines() {
 		return ImmutableList.of(new ChatComponentTranslation("testmod3:pigSpawner.finite.desc", getNumPigs(), getMaxNumPigs()));
-	}
-
-	@Override
-	public NBTTagCompound serializeNBT() {
-		final NBTTagCompound tagCompound = new NBTTagCompound();
-		tagCompound.setInteger("NumPigs", getNumPigs());
-		return tagCompound;
-	}
-
-	@Override
-	public void deserializeNBT(NBTTagCompound nbt) {
-		setNumPigs(nbt.getInteger("NumPigs"));
 	}
 }

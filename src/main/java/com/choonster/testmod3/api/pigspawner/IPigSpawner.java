@@ -1,9 +1,7 @@
 package com.choonster.testmod3.api.pigspawner;
 
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.List;
 
@@ -12,7 +10,7 @@ import java.util.List;
  *
  * @author Choonster
  */
-public interface IPigSpawner extends INBTSerializable<NBTTagCompound> {
+public interface IPigSpawner {
 	/**
 	 * Can a pig be spawned at the specified position?
 	 *

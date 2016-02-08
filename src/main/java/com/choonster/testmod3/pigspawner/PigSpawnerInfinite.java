@@ -1,7 +1,6 @@
 package com.choonster.testmod3.pigspawner;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
@@ -34,15 +33,5 @@ public class PigSpawnerInfinite extends PigSpawnerBase {
 	@Override
 	public List<IChatComponent> getTooltipLines() {
 		return ImmutableList.of(new ChatComponentTranslation("testmod3:pigSpawner.infinite.desc"));
-	}
-
-	@Override
-	public NBTTagCompound serializeNBT() {
-		return new NBTTagCompound();
-	}
-
-	@Override
-	public void deserializeNBT(NBTTagCompound nbt) {
-
 	}
 }

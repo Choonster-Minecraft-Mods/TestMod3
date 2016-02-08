@@ -2,6 +2,7 @@ package com.choonster.testmod3.pigspawner;
 
 import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.api.pigspawner.IPigSpawner;
+import com.choonster.testmod3.api.pigspawner.IPigSpawnerFinite;
 import com.choonster.testmod3.api.pigspawner.IPigSpawnerInteractable;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandSender;
@@ -51,12 +52,20 @@ public final class CapabilityPigSpawner {
 		CapabilityManager.INSTANCE.register(IPigSpawner.class, new Capability.IStorage<IPigSpawner>() {
 			@Override
 			public NBTBase writeNBT(Capability<IPigSpawner> capability, IPigSpawner instance, EnumFacing side) {
-				return instance.serializeNBT();
+				NBTTagCompound tagCompound = new NBTTagCompound();
+				if (instance instanceof IPigSpawnerFinite) {
+					tagCompound.setInteger("NumPigs", ((IPigSpawnerFinite) instance).getNumPigs());
+				}
+				return tagCompound;
 			}
 
 			@Override
 			public void readNBT(Capability<IPigSpawner> capability, IPigSpawner instance, EnumFacing side, NBTBase nbt) {
-				instance.deserializeNBT((NBTTagCompound) nbt);
+				if (instance instanceof IPigSpawnerFinite) {
+					final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) instance;
+					NBTTagCompound tagCompound = (NBTTagCompound) nbt;
+					pigSpawnerFinite.setNumPigs(tagCompound.getInteger("NumPigs"));
+				}
 			}
 		}, () -> new PigSpawnerFinite(20));
 
@@ -213,12 +222,12 @@ public final class CapabilityPigSpawner {
 
 		@Override
 		public NBTTagCompound serializeNBT() {
-			return pigSpawner.serializeNBT();
+			return (NBTTagCompound) PIG_SPAWNER_CAPABILITY.getStorage().writeNBT(PIG_SPAWNER_CAPABILITY, pigSpawner, EnumFacing.NORTH);
 		}
 
 		@Override
 		public void deserializeNBT(NBTTagCompound nbt) {
-			pigSpawner.deserializeNBT(nbt);
+			PIG_SPAWNER_CAPABILITY.getStorage().readNBT(PIG_SPAWNER_CAPABILITY, pigSpawner, EnumFacing.NORTH, nbt);
 		}
 
 		/**
