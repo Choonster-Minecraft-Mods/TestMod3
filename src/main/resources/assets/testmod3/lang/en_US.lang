@@ -164,3 +164,8 @@ entity.testmod3.modArrow.name=Mod Arrow
 
 # Creative Tabs
 itemGroup.testmod3=Test Mod 3
+
+# Commands
+commands.testmod3.rotateVector.usage=/rotatevector x y z axis degrees
+commands.testmod3.rotateVector.invalidAxis=axis must be x, y or z
+commands.testmod3.rotateVector.result=Rotated vector: [%s, %s, %s]
