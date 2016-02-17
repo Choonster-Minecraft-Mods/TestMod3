@@ -86,6 +86,8 @@ public class ModModelManager {
 			registerBlockItemModelForMeta(ModBlocks.variants, enumType.getMeta(), "variant=" + enumType.getName());
 		}
 
+		registerBlockItemModel(ModBlocks.mirrorPlane, new ModelResourceLocation(ModBlocks.mirrorPlane.getRegistryName(), "horizontal_rotation=north,vertical_rotation=up"));
+
 		ModBlocks.blocks.stream().filter(block -> !itemsRegistered.contains(Item.getItemFromBlock(block))).forEach(this::registerBlockItemModel);
 	}
 
@@ -98,6 +100,10 @@ public class ModModelManager {
 
 	private void registerBlockItemModel(Block block, String modelLocation) {
 		registerItemModel(Item.getItemFromBlock(block), modelLocation);
+	}
+
+	private void registerBlockItemModel(Block block, ModelResourceLocation fullModelLocation){
+		registerItemModel(Item.getItemFromBlock(block), fullModelLocation);
 	}
 
 	private void registerBlockItemModelForMeta(Block block, int metadata, String variant) {

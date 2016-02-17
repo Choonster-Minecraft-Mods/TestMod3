@@ -19,6 +19,7 @@ tile.testmod3:endPortalFrameFull.name=End Portal Frame Full
 tile.testmod3:potionEffect.name=Potion Effect Block
 tile.testmod3:clientPlayerRotation.name=Client Player Rotation Block
 tile.testmod3:pigSpawnerRefiller.name=Pig Spawner Refiller
+tile.testmod3:mirrorPlane.name=Mirror Plane
 
 tile.testmod3:basicPipe.name=Basic Pipe
 tile.testmod3:fluidPipe.name=Fluid Pipe

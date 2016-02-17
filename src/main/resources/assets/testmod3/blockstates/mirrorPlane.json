@@ -1,0 +1,29 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "testmod3:plane",
+		"textures": {
+			"side": "testmod3:blocks/mirror_plane_side",
+			"base": "testmod3:blocks/mirror_plane_base",
+			"plane": "testmod3:blocks/mirror_plane_plane"
+		},
+		"transform": "forge:default-block"
+	},
+	"variants": {
+		"horizontal_rotation=north,vertical_rotation=up": { "x": 0, "y": 0 },
+		"horizontal_rotation=north,vertical_rotation=down": { "x": 180, "y": 180 },
+		"horizontal_rotation=north,vertical_rotation=side": { "x": 270, "y": 0 },
+
+		"horizontal_rotation=south,vertical_rotation=up": { "x": 0, "y": 180 },
+		"horizontal_rotation=south,vertical_rotation=down": { "x": 180, "y": 0 },
+		"horizontal_rotation=south,vertical_rotation=side": { "x": 270, "y": 180 },
+
+		"horizontal_rotation=east,vertical_rotation=up": { "x": 0, "y": 90 },
+		"horizontal_rotation=east,vertical_rotation=down": { "x": 180, "y": 270 },
+		"horizontal_rotation=east,vertical_rotation=side": { "x": 270, "y": 90 },
+
+		"horizontal_rotation=west,vertical_rotation=up": { "x": 0, "y": 270 },
+		"horizontal_rotation=west,vertical_rotation=down": { "x": 180, "y": 90 },
+		"horizontal_rotation=west,vertical_rotation=side": { "x": 270, "y": 270 }
+	}
+}
