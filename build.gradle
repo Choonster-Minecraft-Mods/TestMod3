@@ -11,10 +11,18 @@ buildscript {
     }
 }
 
+plugins {
+    id 'org.ajoberstar.grgit' version '1.4.2'
+}
+
 apply plugin: 'scala'
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "${mc_version}-${mod_version}"
+import org.ajoberstar.grgit.*
+
+ext.repo = Grgit.open()
+
+version = "${mc_version}-${mod_version}-${repo.head().abbreviatedId}"
 group = "${package_group}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${mod_name}"
 
