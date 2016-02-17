@@ -1,6 +1,7 @@
 package com.choonster.testmod3.tileentity;
 
 import com.choonster.testmod3.block.BlockColoredMultiRotatable.EnumFaceRotation;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 /**
@@ -18,5 +19,17 @@ public class TileEntityColoredMultiRotatable extends TileEntityColoredRotatable 
 	public void setFaceRotation(EnumFaceRotation faceRotation) {
 		this.faceRotation = faceRotation;
 		markDirty();
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		super.readFromNBT(compound);
+		faceRotation = EnumFaceRotation.values()[compound.getInteger("faceRotation")];
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound compound) {
+		super.writeToNBT(compound);
+		compound.setInteger("faceRotation", faceRotation.ordinal());
 	}
 }
