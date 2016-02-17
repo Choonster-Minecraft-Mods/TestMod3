@@ -1,8 +1,8 @@
 # Fluids
 fluid.static=Static Fluid
 fluid.normal=Normal Fluid
-fluid.staticgas=Static Gas
-fluid.normalgas=Normal Gas
+fluid.staticGas=Static Gas
+fluid.normalGas=Normal Gas
 fluid.finite=Finite Fluid
 
 # Blocks
@@ -89,13 +89,6 @@ tile.testmod3:stainedClaySlab.red.name=Red Stained Clay Slab
 tile.testmod3:stainedClaySlab.black.name=Black Stained Clay Slab
 
 # Items
-item.testmod3:bucket.empty.name=Bucket
-item.testmod3:bucket.static.name=Bucket of Static Fluid
-item.testmod3:bucket.normal.name=Bucket of Normal Fluid
-item.testmod3:bucket.staticGas.name=Bucket of Static Gas
-item.testmod3:bucket.normalGas.name=Bucket of Normal Gas
-item.testmod3:bucket.finite.name=Bucket of Finite Fluid
-
 item.testmod3:heavy.name=Heavy Item
 item.testmod3:entityInteractionTest.name=Entity Interaction Test
 item.testmod3:subscripts.name=Subscripts

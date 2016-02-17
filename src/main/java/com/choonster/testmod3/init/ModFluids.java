@@ -111,11 +111,7 @@ public class ModFluids {
 	}
 
 	private static void registerBucket(Fluid fluid) {
-		ItemStack filledBucket = ModItems.bucket.registerBucketForFluid(fluid);
-
-		if (!FluidContainerRegistry.registerFluidContainer(fluid, filledBucket, FluidContainerRegistry.EMPTY_BUCKET)) {
-			Logger.error("Unable to register bucket of %s as fluid container", fluid.getName());
-		}
+		FluidRegistry.addBucketForFluid(fluid);
 	}
 
 	private static void registerTank(Fluid fluid) {

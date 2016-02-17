@@ -22,7 +22,6 @@ public class ModItems {
 	public static ItemEntityTest entityTest;
 	public static ItemRecordMod solarisRecord;
 	public static ItemHeavy heavy;
-	public static ItemBucketTestMod3 bucket;
 	public static ItemEntityInteractionTest entityInteractionTest;
 	public static ItemBlockDestroyer blockDestroyer;
 	public static ItemWithSubscripts subscripts;
@@ -56,7 +55,6 @@ public class ModItems {
 		entityTest = registerItem(new ItemEntityTest());
 		solarisRecord = registerItem(new ItemRecordMod("solaris"));
 		heavy = registerItem(new ItemHeavy());
-		bucket = registerItem(new ItemBucketTestMod3());
 		entityInteractionTest = registerItem(new ItemEntityInteractionTest());
 		blockDestroyer = registerItem(new ItemBlockDestroyer());
 		subscripts = registerItem(new ItemWithSubscripts());

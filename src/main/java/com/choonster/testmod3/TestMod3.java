@@ -3,7 +3,6 @@ package com.choonster.testmod3;
 import com.choonster.testmod3.client.gui.GuiHandler;
 import com.choonster.testmod3.config.Config;
 import com.choonster.testmod3.event.BlockEventHandler;
-import com.choonster.testmod3.event.BucketFillHandler;
 import com.choonster.testmod3.event.NetworkEventHandler;
 import com.choonster.testmod3.event.PlayerEventHandler;
 import com.choonster.testmod3.init.*;
@@ -15,6 +14,7 @@ import com.choonster.testmod3.util.BiomeBlockReplacer;
 import com.choonster.testmod3.util.BlockDumper;
 import com.choonster.testmod3.world.gen.WorldGenOres;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -41,6 +41,10 @@ public class TestMod3 {
 
 	public static SimpleNetworkWrapper network;
 
+	static {
+		FluidRegistry.enableUniversalBucket(); // Must be called before preInit
+	}
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		Logger.setLogger(event.getModLog());
@@ -50,7 +54,6 @@ public class TestMod3 {
 
 		CapabilityPigSpawner.register();
 
-		MinecraftForge.EVENT_BUS.register(new BucketFillHandler());
 		MinecraftForge.EVENT_BUS.register(new BlockEventHandler());
 		MinecraftForge.EVENT_BUS.register(new NetworkEventHandler());
 		MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());

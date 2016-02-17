@@ -130,7 +130,6 @@ public class ModModelManager {
 		registerItemModel(ModItems.woodenHarvestSword, "minecraft:wooden_sword");
 		registerItemModel(ModItems.diamondHarvestSword, "minecraft:diamond_sword");
 		registerItemModel(ModItems.clearer, "minecraft:nether_star");
-		registerBucketModel(ModItems.bucket);
 		registerItemModel(ModItems.modBow, new ModelResourceLocation(locationBow, "standby"));
 		registerItemModel(ModItems.heightTester, "minecraft:compass");
 		registerItemModel(ModItems.heavy, "minecraft:brick");
@@ -145,11 +144,6 @@ public class ModModelManager {
 
 		// Then register items with default model names
 		ModItems.items.stream().filter(item -> !itemsRegistered.contains(item)).forEach(this::registerItemModel);
-	}
-
-	private void registerBucketModel(Item item) {
-		itemsRegistered.add(item);
-		ModelLoader.setBucketModelDefinition(item);
 	}
 
 	private void registerItemModel(Item item) {
