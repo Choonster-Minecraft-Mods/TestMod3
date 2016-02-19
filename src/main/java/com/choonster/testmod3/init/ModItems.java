@@ -41,6 +41,7 @@ public class ModItems {
 	public static ItemHeightTester heightTester;
 	public static ItemPigSpawner pigSpawnerFinite;
 	public static ItemPigSpawner pigSpawnerInfinite;
+	public static ItemContinuousBow continuousBow;
 
 	public static ItemArmourReplacement replacementHelmet;
 	public static ItemArmourRestricted replacementChestplate;
@@ -67,9 +68,10 @@ public class ModItems {
 		woodenHarvestSword = registerItem(new ItemHarvestSword(Item.ToolMaterial.WOOD, "harvestSwordWood"));
 		diamondHarvestSword = registerItem(new ItemHarvestSword(Item.ToolMaterial.EMERALD, "harvestSwordDiamond"));
 		clearer = registerItem(new ItemClearer());
-		modBow = registerItem(new ItemModBow());
+		modBow = registerItem(new ItemModBow("bow"));
 		modArrow = registerItem(new ItemTestMod3("arrow"));
 		heightTester = registerItem(new ItemHeightTester());
+		continuousBow = registerItem(new ItemContinuousBow("continuousBow"));
 
 		swapTestA = registerItem(new ItemSwapTest("A"));
 		swapTestB = registerItem(new ItemSwapTest("B"));

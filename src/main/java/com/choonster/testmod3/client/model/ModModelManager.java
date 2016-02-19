@@ -113,10 +113,12 @@ public class ModModelManager {
 	private final Set<Item> itemsRegistered = new HashSet<>();
 
 	private void registerItemModels() {
-		ResourceLocation locationBow = ModItems.modBow.getModelLocation();
+		String locationBow = ModItems.modBow.getModelLocation();
+		String locationContinuousBow = ModItems.continuousBow.getModelLocation();
 		for (int stage = 0; stage < 3; stage++) { // Add a variant for each stage's model
 			ModelBakery.registerItemVariants(ModItems.modelTest, new ResourceLocation(TestMod3.MODID, "modeltest_" + stage));
 			ModelBakery.registerItemVariants(ModItems.modBow, new ModelResourceLocation(locationBow, "pulling_" + stage));
+			ModelBakery.registerItemVariants(ModItems.continuousBow, new ModelResourceLocation(locationContinuousBow, "pulling_" + stage));
 		}
 
 		ModelBakery.registerItemVariants(ModItems.slingshot, new ResourceLocation(TestMod3.MODID, "slingshot_pulled"));
@@ -141,6 +143,7 @@ public class ModModelManager {
 		registerItemModel(ModItems.replacementBoots, "minecraft:chainmail_boots");
 		registerItemModel(ModItems.pigSpawnerFinite, "minecraft:porkchop");
 		registerItemModel(ModItems.pigSpawnerInfinite, "minecraft:porkchop");
+		registerItemModel(ModItems.continuousBow, new ModelResourceLocation(locationContinuousBow, "standby"));
 
 		// Then register items with default model names
 		ModItems.items.stream().filter(item -> !itemsRegistered.contains(item)).forEach(this::registerItemModel);

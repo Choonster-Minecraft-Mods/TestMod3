@@ -11,12 +11,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Optional;
 
 /**
  * A bow that uses custom models identical to the vanilla ones and shoots custom arrows.
@@ -27,8 +29,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author Choonster
  */
 public class ItemModBow extends ItemBow {
-	public ItemModBow() {
-		ItemTestMod3.setItemName(this, "bow");
+	public ItemModBow(String itemName) {
+		ItemTestMod3.setItemName(this, itemName);
 		setCreativeTab(TestMod3.creativeTab);
 	}
 
@@ -37,8 +39,8 @@ public class ItemModBow extends ItemBow {
 	 *
 	 * @return The location
 	 */
-	public ResourceLocation getModelLocation() {
-		return Item.itemRegistry.getNameForObject(this);
+	public String getModelLocation() {
+		return getRegistryName();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -59,16 +61,72 @@ public class ItemModBow extends ItemBow {
 		return null;
 	}
 
-	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityPlayer playerIn, int timeLeft) {
-		int charge = this.getMaxItemUseDuration(stack) - timeLeft;
-		ArrowLooseEvent event = new ArrowLooseEvent(playerIn, stack, charge);
-		if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) return;
+	/**
+	 * Get the ammunition fired by this bow
+	 *
+	 * @param stack The bow ItemStack
+	 * @return The ammunition Item
+	 */
+	protected Item getAmmoItem(ItemStack stack) {
+		return ModItems.modArrow;
+	}
+
+	/**
+	 * Does the player need ammunition to fire the bow?
+	 *
+	 * @param stack  The bow ItemStack
+	 * @param player The player to check
+	 * @return True if the player is not in creative mode and the bow doesn't have the Infinity enchantment
+	 */
+	protected boolean playerNeedsAmmo(ItemStack stack, EntityPlayer player) {
+		return !player.capabilities.isCreativeMode && EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) == 0;
+	}
+
+	/**
+	 * Does the player have the ammunition to fire the bow?
+	 *
+	 * @param stack  The bow ItemStack
+	 * @param player The player to check
+	 * @return True if the player has the ammunition Item
+	 */
+	protected boolean playerHasAmmo(ItemStack stack, EntityPlayer player) {
+		return player.inventory.hasItem(getAmmoItem(stack));
+	}
+
+	/**
+	 * Nock an arrow.
+	 *
+	 * @param itemStackIn The bow ItemStack
+	 * @param playerIn    The player
+	 * @return The result of ArrowNockEvent if it was canceled.
+	 */
+	protected Optional<ItemStack> nockArrow(ItemStack itemStackIn, EntityPlayer playerIn) {
+		ArrowNockEvent event = new ArrowNockEvent(playerIn, itemStackIn);
+		if (MinecraftForge.EVENT_BUS.post(event)) return Optional.of(event.result);
+
+		if (playerIn.capabilities.isCreativeMode || playerIn.inventory.hasItem(ModItems.modArrow)) {
+			playerIn.setItemInUse(itemStackIn, this.getMaxItemUseDuration(itemStackIn));
+		}
+
+		return Optional.empty();
+	}
+
+	/**
+	 * Fire an arrow with the specified charge.
+	 *
+	 * @param stack  The bow ItemStack
+	 * @param world  The firing player's World
+	 * @param player The player firing the bow
+	 * @param charge The charge of the arrow
+	 */
+	protected void fireArrow(ItemStack stack, World world, EntityPlayer player, int charge) {
+		ArrowLooseEvent event = new ArrowLooseEvent(player, stack, charge);
+		if (MinecraftForge.EVENT_BUS.post(event)) return;
 		charge = event.charge;
 
-		boolean noAmmoRequired = playerIn.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
+		boolean playerNeedsAmmo = playerNeedsAmmo(stack, player);
 
-		if (noAmmoRequired || playerIn.inventory.hasItem(ModItems.modArrow)) {
+		if (!playerNeedsAmmo || playerHasAmmo(stack, player)) {
 			float velocity = (float) charge / 20.0f;
 			velocity = (velocity * velocity + velocity * 2.0f) / 3.0f;
 
@@ -80,7 +138,7 @@ public class ItemModBow extends ItemBow {
 				velocity = 1.0f;
 			}
 
-			EntityModArrow entityArrow = new EntityModArrow(worldIn, playerIn, velocity * 2.0f);
+			EntityModArrow entityArrow = new EntityModArrow(world, player, velocity * 2.0f);
 
 			if (velocity == 1.0f) {
 				entityArrow.setIsCritical(true);
@@ -100,31 +158,33 @@ public class ItemModBow extends ItemBow {
 				entityArrow.setFire(100);
 			}
 
-			stack.damageItem(1, playerIn);
-			worldIn.playSoundAtEntity(playerIn, "random.bow", 1.0f, 1.0f / (itemRand.nextFloat() * 0.4f + 1.2f) + velocity * 0.5f);
+			stack.damageItem(1, player);
+			world.playSoundAtEntity(player, "random.bow", 1.0f, 1.0f / (itemRand.nextFloat() * 0.4f + 1.2f) + velocity * 0.5f);
 
-			if (noAmmoRequired) {
-				entityArrow.canBePickedUp = 2;
+			if (playerNeedsAmmo) {
+				player.inventory.consumeInventoryItem(getAmmoItem(stack));
 			} else {
-				playerIn.inventory.consumeInventoryItem(ModItems.modArrow);
+				entityArrow.canBePickedUp = 2;
 			}
 
-			playerIn.triggerAchievement(StatList.objectUseStats[Item.getIdFromItem(this)]);
+			player.triggerAchievement(StatList.objectUseStats[Item.getIdFromItem(this)]);
 
-			if (!worldIn.isRemote) {
-				worldIn.spawnEntityInWorld(entityArrow);
+			if (!world.isRemote) {
+				world.spawnEntityInWorld(entityArrow);
 			}
 		}
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
-		ArrowNockEvent event = new ArrowNockEvent(playerIn, itemStackIn);
-		if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) return event.result;
+	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityPlayer playerIn, int timeLeft) {
+		int charge = this.getMaxItemUseDuration(stack) - timeLeft;
+		fireArrow(stack, worldIn, playerIn, charge);
+	}
 
-		if (playerIn.capabilities.isCreativeMode || playerIn.inventory.hasItem(ModItems.modArrow)) {
-			playerIn.setItemInUse(itemStackIn, this.getMaxItemUseDuration(itemStackIn));
-		}
+	@Override
+	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
+		Optional<ItemStack> eventResult = nockArrow(itemStackIn, playerIn);
+		if (eventResult.isPresent()) return eventResult.get();
 
 		return itemStackIn;
 	}
