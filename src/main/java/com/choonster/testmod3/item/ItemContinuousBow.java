@@ -3,10 +3,7 @@ package com.choonster.testmod3.item;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.world.World;
-
-import java.util.Optional;
 
 /**
  * A bow that fires continuously while right click is held.
@@ -19,38 +16,12 @@ import java.util.Optional;
 public class ItemContinuousBow extends ItemModBow {
 
 	/**
-	 * How often the launcher fires (in ticks)
+	 * The amount to multiply the use time by to determine the charge when firing arrows.
 	 */
-	private final long FIRE_RATE = 10;
-
-	/**
-	 * The charge of the arrows fired by this bow.
-	 */
-	private final int CHARGE = 72000;
+	private final int CHARGE_MULTIPLIER = 5;
 
 	public ItemContinuousBow(String itemName) {
 		super(itemName);
-	}
-
-	/**
-	 * Has it been at least FIRE_RATE ticks since the bow was last used?
-	 *
-	 * @param stack The now ItemStack
-	 * @param world The World to check the time against
-	 * @return True if the ItemStack was last used at least FIRE_RATE ticks ago or if it has never been used
-	 */
-	protected boolean isOffCooldown(ItemStack stack, World world) {
-		return !stack.hasTagCompound() || (world.getTotalWorldTime() - stack.getTagCompound().getLong("LastUseTime")) >= FIRE_RATE;
-	}
-
-	/**
-	 * Set the bow's last use time to the specified time.
-	 *
-	 * @param stack The bow ItemStack
-	 * @param time  The time
-	 */
-	protected void setLastUseTime(ItemStack stack, long time) {
-		stack.setTagInfo("LastUseTime", new NBTTagLong(time));
 	}
 
 	@Override
@@ -77,18 +48,15 @@ public class ItemContinuousBow extends ItemModBow {
 
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityPlayer playerIn, int timeLeft) {
-		// No-op
+		int charge = (getMaxItemUseDuration(stack) - timeLeft) * CHARGE_MULTIPLIER;
+		fireArrow(stack, worldIn, playerIn, charge);
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
-		Optional<ItemStack> eventResult = nockArrow(itemStackIn, playerIn);
-		if (eventResult.isPresent()) return eventResult.get();
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityPlayer playerIn) {
+		int charge = getMaxItemUseDuration(stack) * CHARGE_MULTIPLIER;
+		fireArrow(stack, worldIn, playerIn, charge);
 
-		if (isOffCooldown(itemStackIn, worldIn) && (!playerNeedsAmmo(itemStackIn, playerIn) || playerHasAmmo(itemStackIn, playerIn))) {
-			fireArrow(itemStackIn, worldIn, playerIn, CHARGE);
-		}
-
-		return itemStackIn;
+		return stack;
 	}
 }

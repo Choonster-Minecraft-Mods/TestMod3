@@ -111,6 +111,7 @@ item.testmod3:arrow.name=Mod Arrow
 item.testmod3:heightTester.name=Height Tester
 item.testmod3:pigSpawner.finite.name=Finite Pig Spawner
 item.testmod3:pigSpawner.infinite.name=Infinite Pig Spawner
+item.testmod3:continuousBow.name=Continuous Bow
 
 item.testmod3:helmetReplacement.name=Armour Replacement Helmet
 item.testmod3:chestplateReplacement.name=Armour Replacement Chestplate
