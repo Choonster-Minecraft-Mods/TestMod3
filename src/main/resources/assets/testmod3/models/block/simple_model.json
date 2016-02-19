@@ -1,4 +1,5 @@
 {
+	"__comment": "Actually an item model, but has to be in models/block to be loaded by blockstates files. Uses the same display transforms as the vanilla bow.",
 	"parent": "builtin/generated",
 	"display": {
 		"thirdperson": {
