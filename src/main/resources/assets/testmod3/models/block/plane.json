@@ -10,7 +10,7 @@
 			"to": [ 16.0, 16.0, 16.0 ],
 			"faces": {
 				"east": { "texture": "#side", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
-				"south": { "texture": "#base", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+				"north": { "texture": "#base", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
 				"west": { "texture": "#side", "uv": [ 16.0, 0.0, 0.0, 16.0 ] },
 				"down": { "texture": "#base", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
 			}
@@ -19,9 +19,9 @@
 			"name": "Plane",
 			"from": [ 0.0, 0.0, 0.0 ],
 			"to": [ 16.0, 16.0, 0.0 ],
-			"rotation": { "origin": [ 0.0, 0.0, 0.0 ], "axis": "x", "angle": 45.0, "rescale": "true" },
+			"rotation": { "origin": [ 0.0, 16.0, 0.0 ], "axis": "x", "angle": -45.0, "rescale": true },
 			"faces": {
-				"north": { "texture": "#plane", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+				"south": { "texture": "#plane", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
 			}
 		}
 	]
