@@ -144,6 +144,7 @@ public class ModModelManager {
 		registerItemModel(ModItems.pigSpawnerFinite, "minecraft:porkchop");
 		registerItemModel(ModItems.pigSpawnerInfinite, "minecraft:porkchop");
 		registerItemModel(ModItems.continuousBow, new ModelResourceLocation(locationContinuousBow, "standby"));
+		registerItemModel(ModItems.respawner, "minecraft:clock");
 
 		// Then register items with default model names
 		ModItems.items.stream().filter(item -> !itemsRegistered.contains(item)).forEach(this::registerItemModel);

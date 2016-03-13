@@ -112,6 +112,7 @@ item.testmod3:heightTester.name=Height Tester
 item.testmod3:pigSpawner.finite.name=Finite Pig Spawner
 item.testmod3:pigSpawner.infinite.name=Infinite Pig Spawner
 item.testmod3:continuousBow.name=Continuous Bow
+item.testmod3:respawner.name=Respawner
 
 item.testmod3:helmetReplacement.name=Armour Replacement Helmet
 item.testmod3:chestplateReplacement.name=Armour Replacement Chestplate
@@ -148,6 +149,8 @@ message.testmod3:heightTester.generate=Generated skylight map for the chunk %d,%
 message.testmod3:login.freeApple=Congratulations! You have received a free apple for logging into the game.
 message.testmod3:login.alreadyReceived=You've already received your free apple, you won't be getting any more.
 message.testmod3:pigSpawnerRefiller.refilled=Refilled held pig spawner.
+message.testmod3:respawner.noSpawnLocation=No spawn location set
+message.testmod3:respawner.teleporting=Teleporting to %d,%d,%d in dimension %d
 
 # Config GUI strings
 testmod3.config.title=TestMod3 Config

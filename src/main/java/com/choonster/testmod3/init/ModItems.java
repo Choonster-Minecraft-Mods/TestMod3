@@ -42,6 +42,7 @@ public class ModItems {
 	public static ItemPigSpawner pigSpawnerFinite;
 	public static ItemPigSpawner pigSpawnerInfinite;
 	public static ItemContinuousBow continuousBow;
+	public static ItemRespawner respawner;
 
 	public static ItemArmourReplacement replacementHelmet;
 	public static ItemArmourRestricted replacementChestplate;
@@ -72,6 +73,7 @@ public class ModItems {
 		modArrow = registerItem(new ItemTestMod3("arrow"));
 		heightTester = registerItem(new ItemHeightTester());
 		continuousBow = registerItem(new ItemContinuousBow("continuousBow"));
+		respawner = registerItem(new ItemRespawner());
 
 		swapTestA = registerItem(new ItemSwapTest("A"));
 		swapTestB = registerItem(new ItemSwapTest("B"));
