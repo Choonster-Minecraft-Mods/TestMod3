@@ -13,6 +13,7 @@ buildscript {
 
 plugins {
     id 'org.ajoberstar.grgit' version '1.4.2'
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -46,6 +47,27 @@ repositories {
 
 dependencies {
     compile "mezz.jei:jei_${mc_version}:${jei_version}"
+    compile "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
+}
+
+shadowJar {
+    // Only shadow fluent-hc
+    dependencies {
+        exclude(dependency('mezz.jei:jei_.*'))
+        exclude(dependency('commons-codec:commons-codec:'))
+        exclude(dependency('commons-logging:commons-logging:'))
+        exclude(dependency('org.apache.httpcomponents:httpcore:'))
+        exclude(dependency('org.apache.httpcomponents:httpclient:'))
+    }
+
+    // Relocate fluent-hc to prevent conflicts with other mods that include it
+    relocate 'org.apache.http.client.fluent', 'com.choonster.testmod3.repack.org.apache.http.client.fluent'
+
+    classifier '' // Replace the default JAR
+}
+
+reobf {
+    shadowJar {} // Reobfuscate the shadowed JAR
 }
 
 processResources {
@@ -89,4 +111,5 @@ task sourcesJar(type: Jar) {
 artifacts {
     archives javadocJar
     archives sourcesJar
+    archives shadowJar
 }
