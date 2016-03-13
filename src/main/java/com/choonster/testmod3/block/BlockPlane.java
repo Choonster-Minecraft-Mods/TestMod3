@@ -1,5 +1,7 @@
 package com.choonster.testmod3.block;
 
+import com.choonster.testmod3.util.VectorUtils;
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -7,6 +9,7 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.*;
@@ -14,6 +17,11 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.tuple.Pair;
+
+import javax.vecmath.Matrix3d;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A diagonal half-cube block, like the Carpenter's Slope from Carpenter's Blocks.
@@ -45,6 +53,54 @@ public class BlockPlane extends BlockTestMod3 {
 	{
 		setDefaultState(getBlockState().getBaseState().withProperty(HORIZONTAL_ROTATION, EnumFacing.NORTH).withProperty(VERTICAL_ROTATION, EnumVerticalRotation.UP));
 	}
+
+	/**
+	 * The bounding boxes for each rotation.
+	 * <ul>
+	 * <li>Key: Left = Horizontal Rotation, Right = Vertical Rotation</li>
+	 * <li>Value: Left = Base Bounding Box, Right = Top Bounding Box</li>
+	 * </ul>
+	 */
+	private static final Map<Pair<EnumFacing, EnumVerticalRotation>, Pair<AxisAlignedBB, AxisAlignedBB>> ROTATED_BOUNDING_BOXES;
+
+	static {
+		final ImmutableMap.Builder<Pair<EnumFacing, EnumVerticalRotation>, Pair<AxisAlignedBB, AxisAlignedBB>> builder = ImmutableMap.builder();
+
+		// The base and top AABBs for the default rotation pair
+		final AxisAlignedBB baseBoundingBox = new AxisAlignedBB(0, 0, 0, 1, 0.5, 1);
+		final AxisAlignedBB topBoundingBox = new AxisAlignedBB(0, 0.5, 0, 1, 1, 0.5);
+
+		// For each horizontal and vertical rotation pair,
+		for (EnumFacing horizontalRotation : HORIZONTAL_ROTATION.getAllowedValues()) {
+			for (EnumVerticalRotation verticalRotation : VERTICAL_ROTATION.getAllowedValues()) {
+				// Get the horizontal (around the y axis) rotation angle and matrix
+				final double horizontalRotationAngle = VectorUtils.getHorizontalRotation(horizontalRotation);
+				final Matrix3d horizontalRotationMatrix = VectorUtils.getRotationMatrix(EnumFacing.Axis.Y, verticalRotation == EnumVerticalRotation.DOWN ? horizontalRotationAngle + Math.PI : horizontalRotationAngle);
+
+				// Get the vertical (around the x axis) rotation angle and matrix
+				final double verticalRotationAngle = verticalRotation.getAngle();
+				final Matrix3d verticalRotationMatrix = VectorUtils.getRotationMatrix(EnumFacing.Axis.X, verticalRotationAngle);
+
+				// Multiply the rotation matrices to combine them
+				final Matrix3d combinedRotationMatrix = new Matrix3d();
+				combinedRotationMatrix.mul(verticalRotationMatrix, horizontalRotationMatrix);
+
+				// Rotate the AABBs
+				final AxisAlignedBB rotatedBaseBoundingBox = VectorUtils.rotateAABB(baseBoundingBox, combinedRotationMatrix, true);
+				final AxisAlignedBB rotatedTopBoundingBox = VectorUtils.rotateAABB(topBoundingBox, combinedRotationMatrix, true);
+
+				// Add them to the map
+				builder.put(Pair.of(horizontalRotation, verticalRotation), Pair.of(rotatedBaseBoundingBox, rotatedTopBoundingBox));
+			}
+		}
+
+		ROTATED_BOUNDING_BOXES = builder.build();
+	}
+
+	/**
+	 * The default bounding box.
+	 */
+	private static final AxisAlignedBB DEFAULT_BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 
 	@Override
 	protected BlockState createBlockState() {
@@ -114,6 +170,11 @@ public class BlockPlane extends BlockTestMod3 {
 		return false;
 	}
 
+	@Override
+	public boolean isFullCube() {
+		return false;
+	}
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
@@ -121,15 +182,40 @@ public class BlockPlane extends BlockTestMod3 {
 	}
 
 	/**
+	 * Set this block's bounds to those specified by an {@link AxisAlignedBB}.
+	 *
+	 * @param axisAlignedBB The AABB
+	 */
+	public void setBlockBounds(AxisAlignedBB axisAlignedBB) {
+		setBlockBounds((float) axisAlignedBB.minX, (float) axisAlignedBB.minY, (float) axisAlignedBB.minZ, (float) axisAlignedBB.maxX, (float) axisAlignedBB.maxY, (float) axisAlignedBB.maxZ);
+	}
+
+	@Override
+	public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
+		final Pair<EnumFacing, EnumVerticalRotation> key = Pair.of(state.getValue(HORIZONTAL_ROTATION), state.getValue(VERTICAL_ROTATION));
+		final Pair<AxisAlignedBB, AxisAlignedBB> boundingBoxes = ROTATED_BOUNDING_BOXES.get(key);
+
+		final AxisAlignedBB baseBoundingBox = boundingBoxes.getLeft();
+		setBlockBounds(baseBoundingBox);
+		super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
+
+		final AxisAlignedBB topBoundingBox = boundingBoxes.getRight();
+		setBlockBounds(topBoundingBox);
+		super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
+
+		setBlockBounds(DEFAULT_BOUNDING_BOX);
+	}
+
+	/**
 	 * A rotation around the x-axis.
 	 */
 	public enum EnumVerticalRotation implements IStringSerializable {
-		DOWN(0, "down", EnumFacing.DOWN),
-		UP(1, "up", EnumFacing.UP),
-		SIDE(2, "side", EnumFacing.NORTH);
+		DOWN(0, "down", EnumFacing.DOWN, 2),
+		UP(1, "up", EnumFacing.UP, 0),
+		SIDE(2, "side", EnumFacing.NORTH, 1);
 
 		/**
-		 * The values ordered by their index
+		 * The values ordered by their index.
 		 */
 		private static final EnumVerticalRotation[] VALUES = new EnumVerticalRotation[values().length];
 
@@ -181,10 +267,24 @@ public class BlockPlane extends BlockTestMod3 {
 		 */
 		private final EnumFacing facing;
 
-		EnumVerticalRotation(int index, String name, EnumFacing facing) {
+		/**
+		 * The angle of this rotation in radians
+		 */
+		private final double angle;
+
+		/**
+		 * Construct a new vertical rotation.
+		 *
+		 * @param index        The index
+		 * @param name         The name
+		 * @param facing       The corresponding facing
+		 * @param numRotations The number of 90-degree rotations relative to {@link #SIDE}
+		 */
+		EnumVerticalRotation(int index, String name, EnumFacing facing, int numRotations) {
 			this.index = index;
 			this.name = name;
 			this.facing = facing;
+			this.angle = numRotations * Math.toRadians(90);
 		}
 
 		/**
@@ -197,6 +297,16 @@ public class BlockPlane extends BlockTestMod3 {
 		}
 
 		/**
+		 * Get the name.
+		 *
+		 * @return The name
+		 */
+		@Override
+		public String getName() {
+			return name;
+		}
+
+		/**
 		 * Get the corresponding {@link EnumFacing}.
 		 *
 		 * @return The corresponding {@link EnumFacing}
@@ -206,13 +316,12 @@ public class BlockPlane extends BlockTestMod3 {
 		}
 
 		/**
-		 * Get the name.
+		 * Get the angle of this vertical rotation relative to {@link #SIDE}.
 		 *
-		 * @return The name
+		 * @return The angle
 		 */
-		@Override
-		public String getName() {
-			return name;
+		public double getAngle() {
+			return angle;
 		}
 
 		@Override
