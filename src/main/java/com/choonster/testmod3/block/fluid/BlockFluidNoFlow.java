@@ -17,6 +17,7 @@ import java.util.Random;
 public class BlockFluidNoFlow extends BlockFluidFinite {
 	public BlockFluidNoFlow(Fluid fluid, Material material) {
 		super(fluid, material);
+		setDefaultState(blockState.getBaseState().withProperty(LEVEL, 7));
 	}
 
 	// Adapted from BlockFluidFinite#updateTick. Only flows vertically, not horizontally.
