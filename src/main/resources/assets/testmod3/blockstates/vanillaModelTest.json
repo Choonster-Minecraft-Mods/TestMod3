@@ -1,0 +1,7 @@
+{
+	"variants": {
+		"normal": {
+			"model": "testmod3:vanillaModelTest"
+		}
+	}
+}

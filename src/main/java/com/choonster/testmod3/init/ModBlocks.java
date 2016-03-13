@@ -43,6 +43,7 @@ public class ModBlocks {
 	public static BlockClientPlayerRotation clientPlayerRotation;
 	public static BlockPigSpawnerRefiller pigSpawnerRefiller;
 	public static BlockPlane mirrorPlane;
+	public static BlockTestMod3 vanillaModelTest;
 
 	public static BlockPipeBasic pipeBasic;
 	public static BlockPipeFluid pipeFluid;
@@ -67,6 +68,7 @@ public class ModBlocks {
 		clientPlayerRotation = registerBlock(new BlockClientPlayerRotation());
 		pigSpawnerRefiller = registerBlock(new BlockPigSpawnerRefiller());
 		mirrorPlane = registerBlock(new BlockPlane(Material.iron, "mirrorPlane"));
+		vanillaModelTest = registerBlock(new BlockTestMod3(Material.iron, "vanillaModelTest"));
 
 		pipeBasic = registerBlock(new BlockPipeBasic("basicPipe"));
 		pipeFluid = registerBlock(new BlockPipeFluid());
