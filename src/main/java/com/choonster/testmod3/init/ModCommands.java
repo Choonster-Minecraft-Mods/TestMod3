@@ -1,6 +1,7 @@
 package com.choonster.testmod3.init;
 
 import com.choonster.testmod3.command.CommandRotateVector;
+import com.choonster.testmod3.command.CommandRunTests;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 /**
@@ -17,5 +18,6 @@ public class ModCommands {
 	 */
 	public static void registerCommands(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandRotateVector());
+		event.registerServerCommand(new CommandRunTests());
 	}
 }

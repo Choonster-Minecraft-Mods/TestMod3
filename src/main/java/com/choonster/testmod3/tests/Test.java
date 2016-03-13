@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
  * @author Choonster
  */
 public abstract class Test {
-	protected final Logger logger = LogManager.getLogger();
+	protected final Logger logger = LogManager.getLogger(this);
 
 	private boolean allAssertionsPassed = true;
 
@@ -42,12 +42,14 @@ public abstract class Test {
 		}
 	}
 
-	public final void test() {
+	public final boolean test() {
 		runTest();
 
 		if (allAssertionsPassed) {
 			logger.info("All assertions passed");
 		}
+
+		return allAssertionsPassed;
 	}
 
 	protected abstract void runTest();

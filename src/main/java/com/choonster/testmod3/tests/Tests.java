@@ -6,8 +6,12 @@ package com.choonster.testmod3.tests;
  * @author Choonster
  */
 public class Tests {
-	public static void runTests() {
-		OreDictUtilTests.INSTANCE.test();
-//		NBTTagEndTests.INSTANCE.test();
+	public static boolean runTests() {
+		boolean allTestsPassed;
+
+		allTestsPassed = OreDictUtilTests.INSTANCE.test();
+		//		NBTTagEndTests.INSTANCE.test();
+
+		return allTestsPassed;
 	}
 }
