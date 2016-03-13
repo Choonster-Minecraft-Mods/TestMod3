@@ -104,7 +104,7 @@ public class ItemModBow extends ItemBow {
 		ArrowNockEvent event = new ArrowNockEvent(playerIn, itemStackIn);
 		if (MinecraftForge.EVENT_BUS.post(event)) return Optional.of(event.result);
 
-		if (playerIn.capabilities.isCreativeMode || playerIn.inventory.hasItem(ModItems.modArrow)) {
+		if (playerIn.capabilities.isCreativeMode || playerIn.inventory.hasItem(getAmmoItem(itemStackIn))) {
 			playerIn.setItemInUse(itemStackIn, this.getMaxItemUseDuration(itemStackIn));
 		}
 
