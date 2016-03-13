@@ -11,7 +11,7 @@ public class Logger {
 	private static org.apache.logging.log4j.Logger logger;
 
 	public static void log(Level level, String format, Object... data) {
-		logger.log(level, String.format(format, data));
+		logger.printf(level, format, data);
 	}
 
 	public static void log(Level level, Throwable throwable, String format, Object... data) {
@@ -19,7 +19,7 @@ public class Logger {
 	}
 
 	public static void log(Level level, Marker marker, String format, Object... data) {
-		logger.log(level, marker, String.format(format, data));
+		logger.printf(level, marker, format, data);
 	}
 
 	public static void log(Level level, Marker marker, Throwable throwable, String format, Object... data) {
