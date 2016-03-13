@@ -32,7 +32,7 @@ public class CommandRotateVector extends CommandBase {
 	 */
 	@Override
 	public String getCommandName() {
-		return "rotate-vector";
+		return "rotatevector";
 	}
 
 	/**
