@@ -1,6 +1,5 @@
 package com.choonster.testmod3.init;
 
-import com.choonster.testmod3.Logger;
 import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.block.fluid.BlockFluidNoFlow;
 import com.choonster.testmod3.item.block.ItemFluidTank;
@@ -9,7 +8,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.common.registry.GameRegistry;

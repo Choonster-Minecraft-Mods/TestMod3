@@ -17,7 +17,7 @@ plugins {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-import org.ajoberstar.grgit.*
+import org.ajoberstar.grgit.Grgit
 
 ext.repo = Grgit.open()
 

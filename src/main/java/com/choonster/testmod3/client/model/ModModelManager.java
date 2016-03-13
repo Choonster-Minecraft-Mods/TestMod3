@@ -102,7 +102,7 @@ public class ModModelManager {
 		registerItemModel(Item.getItemFromBlock(block), modelLocation);
 	}
 
-	private void registerBlockItemModel(Block block, ModelResourceLocation fullModelLocation){
+	private void registerBlockItemModel(Block block, ModelResourceLocation fullModelLocation) {
 		registerItemModel(Item.getItemFromBlock(block), fullModelLocation);
 	}
 

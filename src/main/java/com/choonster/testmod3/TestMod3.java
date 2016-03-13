@@ -17,6 +17,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -36,7 +37,7 @@ public class TestMod3 {
 	@SidedProxy(clientSide = "com.choonster.testmod3.proxy.CombinedClientProxy", serverSide = "com.choonster.testmod3.proxy.DedicatedServerProxy")
 	public static IProxy proxy;
 
-	@Mod.Instance(MODID)
+	@Instance(MODID)
 	public static TestMod3 instance;
 
 	public static SimpleNetworkWrapper network;
@@ -102,7 +103,7 @@ public class TestMod3 {
 	}
 
 	@EventHandler
-	public void serverStarting(FMLServerStartingEvent event){
+	public void serverStarting(FMLServerStartingEvent event) {
 		ModCommands.registerCommands(event);
 	}
 }
