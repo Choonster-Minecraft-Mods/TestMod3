@@ -27,10 +27,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-@Mod(modid = TestMod3.MODID, version = TestMod3.VERSION, guiFactory = "com.choonster.testmod3.config.GuiConfigFactoryTestMod3")
+@Mod(modid = TestMod3.MODID, guiFactory = "com.choonster.testmod3.config.GuiConfigFactoryTestMod3")
 public class TestMod3 {
 	public static final String MODID = "testmod3";
-	public static final String VERSION = "1.0";
 
 	public static CreativeTabTestMod3 creativeTab;
 
