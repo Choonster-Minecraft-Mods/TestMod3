@@ -3,6 +3,7 @@ package com.choonster.testmod3.block;
 import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.tileentity.TileEntitySurvivalCommandBlock;
 import net.minecraft.block.BlockCommandBlock;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -17,7 +18,7 @@ import net.minecraft.world.World;
 public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 
 	public BlockSurvivalCommandBlock() {
-		super();
+		super(MapColor.brownColor);
 		setCreativeTab(TestMod3.creativeTab);
 		BlockTestMod3.setBlockName(this, "survivalCommandBlock");
 	}

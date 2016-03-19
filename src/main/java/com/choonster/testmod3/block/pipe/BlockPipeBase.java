@@ -8,10 +8,10 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Vec3i;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -59,7 +59,12 @@ public abstract class BlockPipeBase extends BlockTestMod3 {
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
 
@@ -110,25 +115,18 @@ public abstract class BlockPipeBase extends BlockTestMod3 {
 		return state.getValue(CONNECTED_PROPERTIES.get(facing.getIndex()));
 	}
 
-	public void setBlockBounds(AxisAlignedBB bb) {
-		setBlockBounds((float) bb.minX, (float) bb.minY, (float) bb.minZ, (float) bb.maxX, (float) bb.maxY, (float) bb.maxZ);
-	}
-
 	@Override
-	public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
-		setBlockBounds(PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MAX_POS, PIPE_MAX_POS, PIPE_MAX_POS);
-		super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
+		AxisAlignedBB bb = new AxisAlignedBB(PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MAX_POS, PIPE_MAX_POS, PIPE_MAX_POS);
+		addCollisionBoxToList(pos, mask, list, bb);
 
 		state = getActualState(state, worldIn, pos);
 
 		for (EnumFacing facing : EnumFacing.VALUES) {
 			if (isConnected(state, facing)) {
 				AxisAlignedBB axisAlignedBB = CONNECTED_BOUNDING_BOXES.get(facing.getIndex());
-				setBlockBounds(axisAlignedBB);
-				super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
+				addCollisionBoxToList(pos, mask, list, axisAlignedBB);
 			}
 		}
-
-		setBlockBounds(0, 0, 0, 1, 1, 1);
 	}
 }

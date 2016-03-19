@@ -12,10 +12,10 @@ import net.minecraft.block.BlockCommandBlock;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -65,7 +65,7 @@ public class ModModelManager {
 
 	private void registerBlockModels() {
 		ModelLoader.setCustomStateMapper(ModBlocks.waterGrass, new StateMap.Builder().ignore(BlockLiquid.LEVEL).build());
-		ModelLoader.setCustomStateMapper(ModBlocks.survivalCommandBlock, new StateMap.Builder().ignore(BlockCommandBlock.TRIGGERED).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.survivalCommandBlock, new StateMap.Builder().ignore(BlockCommandBlock.CONDITIONAL).build());
 
 		registerBlockItemModel(ModBlocks.waterGrass, "minecraft:tall_grass");
 		registerBlockItemModel(ModBlocks.largeCollisionTest, "minecraft:white_wool");

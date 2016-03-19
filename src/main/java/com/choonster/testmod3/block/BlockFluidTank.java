@@ -1,7 +1,7 @@
 package com.choonster.testmod3.block;
 
 import com.choonster.testmod3.tileentity.TileEntityFluidTank;
-import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,7 +9,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -28,7 +33,7 @@ import java.util.List;
 public class BlockFluidTank extends BlockTestMod3 {
 	public BlockFluidTank() {
 		super(Material.glass, "fluidTank");
-		setStepSound(Block.soundTypeGlass);
+		setStepSound(SoundType.GLASS);
 	}
 
 	@Override
@@ -56,14 +61,14 @@ public class BlockFluidTank extends BlockTestMod3 {
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 		// If it will harvest, delay deletion of the block until after getDrops
-		return willHarvest || super.removedByPlayer(world, pos, player, false);
+		return willHarvest || super.removedByPlayer(state, world, pos, player, false);
 	}
 
 	@Override
-	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
-		super.harvestBlock(world, player, pos, state, te);
+	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
+		super.harvestBlock(world, player, pos, state, te, stack);
 		world.setBlockToAir(pos);
 	}
 
@@ -81,8 +86,8 @@ public class BlockFluidTank extends BlockTestMod3 {
 		return (TileEntityFluidTank) world.getTileEntity(pos);
 	}
 
-	public static List<IChatComponent> getFluidDataForDisplay(FluidTankInfo[] infos) {
-		List<IChatComponent> data = new ArrayList<>();
+	public static List<ITextComponent> getFluidDataForDisplay(FluidTankInfo[] infos) {
+		List<ITextComponent> data = new ArrayList<>();
 
 		boolean hasFluid = false;
 
@@ -91,29 +96,27 @@ public class BlockFluidTank extends BlockTestMod3 {
 
 			if (fluidStack != null && fluidStack.amount > 0) {
 				hasFluid = true;
-				data.add(new ChatComponentTranslation("tile.testmod3:fluidTank.fluid.desc", fluidStack.getLocalizedName(), fluidStack.amount, fluidTankInfo.capacity));
+				data.add(new TextComponentTranslation("tile.testmod3:fluidTank.fluid.desc", fluidStack.getLocalizedName(), fluidStack.amount, fluidTankInfo.capacity));
 			}
 		}
 
 		if (!hasFluid) {
-			data.add(new ChatComponentTranslation("tile.testmod3:fluidTank.empty.desc"));
+			data.add(new TextComponentTranslation("tile.testmod3:fluidTank.empty.desc"));
 		}
 
 		return data;
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileEntityFluidTank tileEntityFluidTank = getTileEntity(worldIn, pos);
-		ItemStack heldItem = playerIn.getHeldItem();
 		if (heldItem != null) {
 			ItemStack container = tileEntityFluidTank.tryUseFluidContainer(heldItem, side);
 			if (container != null) {
 				if (!playerIn.capabilities.isCreativeMode) {
 					heldItem.stackSize--;
 					if (heldItem.stackSize <= 0) {
-						playerIn.destroyCurrentEquippedItem(); // Destroy the current held item
-						playerIn.setCurrentItemOrArmor(0, container); // Replace it with the container
+						playerIn.setHeldItem(hand, container); // Replace the player's held item with the container
 					} else if (!playerIn.inventory.addItemStackToInventory(container)) {
 						playerIn.dropPlayerItemWithRandomChoice(container, false);
 					}
@@ -133,19 +136,19 @@ public class BlockFluidTank extends BlockTestMod3 {
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isFullyOpaque(IBlockState state) {
 		return false;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return true;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public EnumWorldBlockLayer getBlockLayer() {
-		return EnumWorldBlockLayer.CUTOUT;
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT;
 	}
 }

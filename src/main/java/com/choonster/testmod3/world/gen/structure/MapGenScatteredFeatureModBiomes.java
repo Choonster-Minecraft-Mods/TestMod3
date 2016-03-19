@@ -2,8 +2,8 @@ package com.choonster.testmod3.world.gen.structure;
 
 import com.choonster.testmod3.Logger;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.WeightedRandom;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.structure.ComponentScatteredFeaturePieces;
@@ -25,7 +25,7 @@ import java.util.Random;
  * @author Choonster
  */
 public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
-	public final List<BiomeDictionary.Type> biomeTypes = ImmutableList.of(BiomeDictionary.Type.JUNGLE, BiomeDictionary.Type.SANDY, BiomeDictionary.Type.SWAMP);
+	private final List<BiomeDictionary.Type> biomeTypes = ImmutableList.of(BiomeDictionary.Type.JUNGLE, BiomeDictionary.Type.SANDY, BiomeDictionary.Type.SWAMP);
 
 	@Override
 	protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ) {
@@ -51,7 +51,7 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 		j1 += random.nextInt(maxDistanceBetweenScatteredFeatures - minDistanceBetweenScatteredFeatures);
 
 		if (chunkX == i1 && chunkZ == j1) {
-			BiomeGenBase biomegenbase = this.worldObj.getWorldChunkManager().getBiomeGenerator(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
+			BiomeGenBase biomegenbase = this.worldObj.getBiomeProvider().getBiomeGenerator(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
 
 			if (biomegenbase != null) {
 				for (BiomeDictionary.Type type : biomeTypes) {

@@ -9,7 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -60,7 +60,7 @@ public class ItemFluidTank extends ItemBlock implements IFluidContainerItem {
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 		FluidTankInfo[] fluidTankInfos = new FluidTankInfo[]{loadTank(stack).getInfo()};
 		List<String> lines = BlockFluidTank.getFluidDataForDisplay(fluidTankInfos).stream()
-				.map(IChatComponent::getFormattedText).collect(Collectors.toList());
+				.map(ITextComponent::getFormattedText).collect(Collectors.toList());
 		tooltip.addAll(lines);
 	}
 

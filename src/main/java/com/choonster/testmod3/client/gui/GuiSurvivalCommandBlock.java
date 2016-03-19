@@ -2,8 +2,9 @@ package com.choonster.testmod3.client.gui;
 
 import com.choonster.testmod3.Logger;
 import com.choonster.testmod3.TestMod3;
-import com.choonster.testmod3.command.SurvivalCommandBlockLogic;
 import com.choonster.testmod3.network.MessageSurvivalCommandBlockSaveChanges;
+import com.choonster.testmod3.tileentity.SurvivalCommandBlockLogic;
+import com.choonster.testmod3.tileentity.TileEntitySurvivalCommandBlock;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiCommandBlock;
 import net.minecraft.client.gui.GuiTextField;
@@ -20,16 +21,16 @@ public class GuiSurvivalCommandBlock extends GuiCommandBlock {
 
 	private final SurvivalCommandBlockLogic survivalCommandBlockLogic;
 
-	public GuiSurvivalCommandBlock(SurvivalCommandBlockLogic survivalCommandBlockLogic) {
-		super(survivalCommandBlockLogic);
-		this.survivalCommandBlockLogic = survivalCommandBlockLogic;
+	public GuiSurvivalCommandBlock(TileEntitySurvivalCommandBlock tileEntitySurvivalCommandBlock) {
+		super(tileEntitySurvivalCommandBlock);
+		this.survivalCommandBlockLogic = tileEntitySurvivalCommandBlock.getCommandBlockLogic();
 	}
 
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
 		if (button.enabled && button.id == 0) {
 			try {
-				GuiTextField commandTextField = (GuiTextField) COMMAND_TEXT_FIELD.get(this);
+				final GuiTextField commandTextField = (GuiTextField) COMMAND_TEXT_FIELD.get(this);
 				TestMod3.network.sendToServer(new MessageSurvivalCommandBlockSaveChanges(survivalCommandBlockLogic, commandTextField.getText()));
 			} catch (IllegalAccessException e) {
 				Logger.error(e, "Couldn't set survival command block");

@@ -4,7 +4,8 @@ import com.choonster.testmod3.tests.Tests;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentTranslation;
 
 /**
  * A command that runs this mod's tests.
@@ -39,17 +40,18 @@ public class CommandRunTests extends CommandBase {
 	}
 
 	/**
-	 * Callback when the command is invoked
+	 * Callback for when the command is executed
 	 *
-	 * @param sender The command sender that executed the command
+	 * @param server The Minecraft server instance
+	 * @param sender The source of the command invocation
 	 * @param args   The arguments that were passed
 	 */
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (Tests.runTests()) {
-			sender.addChatMessage(new ChatComponentTranslation("commands.testmod3.runTests.testsPassed"));
+			sender.addChatMessage(new TextComponentTranslation("commands.testmod3.runTests.testsPassed"));
 		} else {
-			sender.addChatMessage(new ChatComponentTranslation("commands.testmod3.runTests.testsFailed"));
+			sender.addChatMessage(new TextComponentTranslation("commands.testmod3.runTests.testsFailed"));
 		}
 	}
 }

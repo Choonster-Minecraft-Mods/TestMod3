@@ -8,6 +8,7 @@ import com.choonster.testmod3.pigspawner.CapabilityPigSpawner;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -23,11 +24,17 @@ public class MessageUpdateHeldPigSpawnerFinite implements IMessage {
 	 */
 	private int numPigs;
 
+	/**
+	 * The hand holding the pig spawner.
+	 */
+	private EnumHand hand;
+
 	public MessageUpdateHeldPigSpawnerFinite() {
 	}
 
-	public MessageUpdateHeldPigSpawnerFinite(IPigSpawnerFinite pigSpawner) {
-		numPigs = pigSpawner.getNumPigs();
+	public MessageUpdateHeldPigSpawnerFinite(IPigSpawnerFinite pigSpawner, EnumHand hand) {
+		this.numPigs = pigSpawner.getNumPigs();
+		this.hand = hand;
 	}
 
 	/**
@@ -38,6 +45,7 @@ public class MessageUpdateHeldPigSpawnerFinite implements IMessage {
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		numPigs = buf.readInt();
+		hand = EnumHand.values()[buf.readByte()];
 	}
 
 	/**
@@ -48,6 +56,7 @@ public class MessageUpdateHeldPigSpawnerFinite implements IMessage {
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(numPigs);
+		buf.writeByte(hand.ordinal());
 	}
 
 	/**
@@ -70,7 +79,7 @@ public class MessageUpdateHeldPigSpawnerFinite implements IMessage {
 			// Minecraft/FMLClientHandler.
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				final EntityPlayer player = TestMod3.proxy.getClientPlayer();
-				final IPigSpawner pigSpawner = CapabilityPigSpawner.getPigSpawner(player.getHeldItem());
+				final IPigSpawner pigSpawner = CapabilityPigSpawner.getPigSpawner(player.getHeldItem(message.hand));
 
 				if (pigSpawner instanceof IPigSpawnerFinite) {
 					final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) pigSpawner;

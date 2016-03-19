@@ -1,6 +1,7 @@
 package com.choonster.testmod3.item;
 
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -47,15 +48,15 @@ public class ItemContinuousBow extends ItemModBow {
 	}
 
 	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityPlayer playerIn, int timeLeft) {
+	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
 		int charge = (getMaxItemUseDuration(stack) - timeLeft) * CHARGE_MULTIPLIER;
-		fireArrow(stack, worldIn, playerIn, charge);
+		fireArrow(stack, worldIn, entityLiving, charge);
 	}
 
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityPlayer playerIn) {
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		int charge = getMaxItemUseDuration(stack) * CHARGE_MULTIPLIER;
-		fireArrow(stack, worldIn, playerIn, charge);
+		fireArrow(stack, worldIn, entityLiving, charge);
 
 		return stack;
 	}

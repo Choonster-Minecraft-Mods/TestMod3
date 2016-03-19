@@ -4,7 +4,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentTranslation;
+
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 /**
@@ -29,25 +33,25 @@ public class ItemEntityInteractionTest extends ItemTestMod3 {
 	}
 
 	@Override
-	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target) {
+	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
 		if (!playerIn.worldObj.isRemote) {
 			int count = getInteractCount(stack) + 1;
 			stack.getTagCompound().setInteger("Count", count);
 
-			playerIn.addChatComponentMessage(new ChatComponentTranslation("message.testmod3:entityInteractCount", count));
+			playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:entityInteractCount", count));
 		}
 
 		return true;
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		if (!playerIn.worldObj.isRemote) {
 			int count = getInteractCount(itemStackIn);
 
-			playerIn.addChatComponentMessage(new ChatComponentTranslation("message.testmod3:entityInteractCount", count));
+			playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:entityInteractCount", count));
 		}
 
-		return super.onItemRightClick(itemStackIn, worldIn, playerIn);
+		return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
 	}
 }

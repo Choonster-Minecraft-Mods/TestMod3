@@ -4,9 +4,9 @@ import com.google.common.collect.Maps;
 import gnu.trove.TCollections;
 import gnu.trove.map.TObjectDoubleMap;
 import gnu.trove.map.hash.TObjectDoubleHashMap;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Vec3i;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3i;
 
 import javax.vecmath.AxisAngle4d;
 import javax.vecmath.Matrix3d;
@@ -32,7 +32,7 @@ public class VectorUtils {
 
 		for (EnumFacing.Axis axis : EnumFacing.Axis.values()) { // For each axis,
 			// Get the direction vector of the positive facing of the axis
-			final Vec3i directionVec = EnumFacing.func_181076_a(EnumFacing.AxisDirection.POSITIVE, axis).getDirectionVec();
+			final Vec3i directionVec = EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.POSITIVE, axis).getDirectionVec();
 			axisVectors.put(axis, directionVec); // Add it to the map
 		}
 

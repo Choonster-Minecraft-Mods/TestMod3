@@ -2,16 +2,16 @@ package com.choonster.testmod3.tileentity;
 
 import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.client.gui.GuiIDs;
-import com.choonster.testmod3.command.SurvivalCommandBlockLogic;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandResultStats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityCommandBlock;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -41,8 +41,8 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 		 * 0.0D, 0.0D, 0.0D
 		 */
 		@Override
-		public Vec3 getPositionVector() {
-			return new Vec3(TileEntitySurvivalCommandBlock.this.pos.getX() + 0.5D, TileEntitySurvivalCommandBlock.this.pos.getY() + 0.5D, TileEntitySurvivalCommandBlock.this.pos.getZ() + 0.5D);
+		public Vec3d getPositionVector() {
+			return new Vec3d(TileEntitySurvivalCommandBlock.this.pos.getX() + 0.5D, TileEntitySurvivalCommandBlock.this.pos.getY() + 0.5D, TileEntitySurvivalCommandBlock.this.pos.getZ() + 0.5D);
 		}
 
 		/**
@@ -65,7 +65,9 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 
 		@Override
 		public void updateCommand() {
-			TileEntitySurvivalCommandBlock.this.getWorld().markBlockForUpdate(TileEntitySurvivalCommandBlock.this.pos);
+			final BlockPos pos = TileEntitySurvivalCommandBlock.this.getPos();
+			final IBlockState state = TileEntitySurvivalCommandBlock.this.getWorld().getBlockState(pos);
+			TileEntitySurvivalCommandBlock.this.getWorld().notifyBlockUpdate(pos, state, state, 3);
 		}
 
 		@Override
@@ -98,6 +100,14 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 		@Override
 		public Entity getCommandSenderEntity() {
 			return null;
+		}
+
+		/**
+		 * Get the Minecraft server instance
+		 */
+		@Override
+		public MinecraftServer getServer() {
+			return TileEntitySurvivalCommandBlock.this.getWorld().getMinecraftServer();
 		}
 	};
 

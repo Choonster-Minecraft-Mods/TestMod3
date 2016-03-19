@@ -1,7 +1,6 @@
 package com.choonster.testmod3.util;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.EntityEquipmentSlot;
 
 /**
  * Utility methods for inventories.
@@ -11,14 +10,18 @@ import net.minecraft.item.ItemStack;
 public class InventoryUtils {
 
 	/**
-	 * Add the {@link ItemStack} to the player's inventory or drop it on the ground if there's no room.
+	 * Get the {@link EntityEquipmentSlot} with the specified index (as returned by {@link EntityEquipmentSlot#func_188452_c()}.
 	 *
-	 * @param player The player
-	 * @param stack  The ItemStack
+	 * @param index The index
+	 * @return The equipment slot
 	 */
-	public static void addOrDropItem(EntityPlayer player, ItemStack stack) {
-		if (!player.inventory.addItemStackToInventory(stack)) {
-			player.dropPlayerItemWithRandomChoice(stack, false);
+	public static EntityEquipmentSlot getEquipmentSlotFromIndex(int index) {
+		for (EntityEquipmentSlot equipmentSlot : EntityEquipmentSlot.values()) {
+			if (equipmentSlot.func_188452_c() == index) {
+				return equipmentSlot;
+			}
 		}
+
+		throw new IllegalArgumentException(String.format("Invalid equipment slot index %d", index));
 	}
 }

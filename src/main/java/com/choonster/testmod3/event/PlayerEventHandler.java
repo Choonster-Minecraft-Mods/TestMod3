@@ -1,15 +1,16 @@
 package com.choonster.testmod3.event;
 
 import com.choonster.testmod3.util.Constants;
-import com.choonster.testmod3.util.InventoryUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 /**
  * Handler for player-related events.
@@ -40,13 +41,13 @@ public class PlayerEventHandler {
 		if (!persistedData.getBoolean(key)) {
 			persistedData.setBoolean(key, true);
 
-			InventoryUtils.addOrDropItem(player, new ItemStack(Items.apple));
+			ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(Items.apple));
 
 			message = "message.testmod3:login.freeApple";
 		}
 
-		ChatComponentTranslation chatComponent = new ChatComponentTranslation(message);
-		chatComponent.getChatStyle().setColor(EnumChatFormatting.LIGHT_PURPLE);
+		ITextComponent chatComponent = new TextComponentTranslation(message);
+		chatComponent.getChatStyle().setColor(TextFormatting.LIGHT_PURPLE);
 		player.addChatComponentMessage(chatComponent);
 	}
 }

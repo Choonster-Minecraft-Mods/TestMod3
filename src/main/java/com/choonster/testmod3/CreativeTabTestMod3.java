@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 public class CreativeTabTestMod3 extends CreativeTabs {
-	public final ItemStack sword;
+	private final ItemStack sword;
 
 	public CreativeTabTestMod3() {
 		super(TestMod3.MODID);
@@ -27,8 +27,8 @@ public class CreativeTabTestMod3 extends CreativeTabs {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void displayAllReleventItems(List<ItemStack> items) {
+	public void displayAllRelevantItems(List<ItemStack> items) {
 		items.add(sword.copy());
-		super.displayAllReleventItems(items);
+		super.displayAllRelevantItems(items);
 	}
 }

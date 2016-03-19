@@ -20,7 +20,7 @@ public class SwordUpgrades {
 		// so we need to manually add the sword's damage to the total
 		float swordDamage = 4 + item.getDamageVsEntity();
 		AttributeModifier attackModifier = new AttributeModifier(MODIFIER_UUID, "Weapon Upgrade", 30 + swordDamage, 0);
-		NBTTagCompound modifierNBT = writeAttributeModifierToNBT(SharedMonsterAttributes.attackDamage, attackModifier);
+		NBTTagCompound modifierNBT = writeAttributeModifierToNBT(SharedMonsterAttributes.ATTACK_DAMAGE, attackModifier);
 
 		// Create the NBT structure needed by ItemStack#getAttributeModifiers
 		NBTTagCompound stackTagCompound = new NBTTagCompound();

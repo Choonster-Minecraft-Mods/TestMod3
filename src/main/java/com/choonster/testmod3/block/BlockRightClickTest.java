@@ -5,13 +5,14 @@ import net.minecraft.block.BlockGlass;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -37,8 +38,8 @@ public class BlockRightClickTest extends BlockGlass {
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, HAS_ENDER_EYE);
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, HAS_ENDER_EYE);
 	}
 
 	@Override
@@ -52,9 +53,7 @@ public class BlockRightClickTest extends BlockGlass {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
-		ItemStack heldItem = playerIn.getHeldItem();
-
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (heldItem != null && heldItem.getItem() == Items.ender_eye && !state.getValue(HAS_ENDER_EYE)) {
 			if (!playerIn.capabilities.isCreativeMode) {
 				heldItem.stackSize--;
@@ -64,7 +63,7 @@ public class BlockRightClickTest extends BlockGlass {
 			return true;
 		}
 
-		return super.onBlockActivated(worldIn, pos, state, playerIn, side, hitX, hitY, hitZ);
+		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
 	}
 
 	@Override

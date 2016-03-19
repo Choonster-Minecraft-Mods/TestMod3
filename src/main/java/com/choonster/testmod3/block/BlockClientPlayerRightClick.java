@@ -4,8 +4,8 @@ import com.choonster.testmod3.TestMod3;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 /**
@@ -26,7 +26,7 @@ public class BlockClientPlayerRightClick extends BlockStaticPressurePlate {
 		// If on the client side, the colliding Entity is the client player and the total world time is a multiple of 10
 		if (worldIn.isRemote && entityIn == TestMod3.proxy.getClientPlayer() && worldIn.getTotalWorldTime() % 10 == 0) {
 			// Make the player right click
-			entityIn.addChatMessage(new ChatComponentText("Right click!!"));
+			entityIn.addChatMessage(new TextComponentTranslation("message.testmod3:clientPlayerRightClick.rightClick"));
 			TestMod3.proxy.doClientRightClick();
 		}
 	}

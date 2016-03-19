@@ -4,17 +4,15 @@ import com.choonster.testmod3.TestMod3;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.ColorizerGrass;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Tall grass that renders with water around it while in water.
@@ -25,7 +23,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author Choonster
  */
 public class BlockWaterGrass extends BlockBush {
-	private static final double RENDER_TEMPERATURE = 0.5, RENDER_HUMIDITY = 1.0;
+	private static final AxisAlignedBB BOUNDING_BOX;
+
+	static {
+		final float size = 0.4F;
+		BOUNDING_BOX = new AxisAlignedBB(0.5F - size, 0.0F, 0.5F - size, 0.5F + size, 0.8F, 0.5F + size);
+	}
 
 	public BlockWaterGrass() {
 		super(Material.water);
@@ -33,14 +36,16 @@ public class BlockWaterGrass extends BlockBush {
 		BlockTestMod3.setBlockName(this, "watergrass");
 
 		setDefaultState(blockState.getBaseState().withProperty(BlockLiquid.LEVEL, 15));
-
-		final float size = 0.4F;
-		setBlockBounds(0.5F - size, 0.0F, 0.5F - size, 0.5F + size, 0.8F, 0.5F + size);
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, BlockLiquid.LEVEL);
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return BOUNDING_BOX;
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, BlockLiquid.LEVEL);
 	}
 
 	@Override
@@ -69,25 +74,5 @@ public class BlockWaterGrass extends BlockBush {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
 			worldIn.setBlockState(pos, Blocks.water.getDefaultState());
 		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public int getBlockColor() {
-		return ColorizerGrass.getGrassColor(RENDER_TEMPERATURE, RENDER_HUMIDITY);
-	}
-
-	@Override
-	public int getRenderColor(IBlockState state) {
-		if (state.getBlock() != this) {
-			return super.getRenderColor(state);
-		} else {
-			return ColorizerGrass.getGrassColor(RENDER_TEMPERATURE, RENDER_HUMIDITY);
-		}
-	}
-
-	@Override
-	public int colorMultiplier(IBlockAccess worldIn, BlockPos pos, int renderPass) {
-		return worldIn.getBiomeGenForCoords(pos).getGrassColorAtPos(pos);
 	}
 }

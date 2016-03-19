@@ -1,15 +1,14 @@
 package com.choonster.testmod3.network;
 
 import com.choonster.testmod3.Logger;
-import com.choonster.testmod3.command.SurvivalCommandBlockLogic;
+import com.choonster.testmod3.tileentity.SurvivalCommandBlockLogic;
 import com.choonster.testmod3.tileentity.TileEntitySurvivalCommandBlock;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IThreadListener;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -87,13 +86,13 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 
 		@Override
 		public IMessage onMessage(MessageSurvivalCommandBlockSaveChanges message, MessageContext ctx) {
-			EntityPlayer player = ctx.getServerHandler().playerEntity;
-			World world = player.worldObj;
+			final EntityPlayer player = ctx.getServerHandler().playerEntity;
+			final World world = player.worldObj;
 
-			IThreadListener mainThread = (WorldServer) world;
+			final IThreadListener mainThread = (WorldServer) world;
 			mainThread.addScheduledTask(() -> {
-				if (!MinecraftServer.getServer().isCommandBlockEnabled()) {
-					player.addChatMessage(new ChatComponentTranslation("advMode.notEnabled"));
+				if (!world.getMinecraftServer().isCommandBlockEnabled()) {
+					player.addChatMessage(new TextComponentTranslation("advMode.notEnabled"));
 				} else if (player.canCommandSenderUseCommand(2, "")) {
 					try {
 						SurvivalCommandBlockLogic survivalCommandBlockLogic = null;
@@ -119,13 +118,13 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 
 							survivalCommandBlockLogic.updateCommand();
 							survivalCommandBlockLogic.trigger(world);
-							player.addChatMessage(new ChatComponentTranslation("advMode.setCommand.success", message.command));
+							player.addChatMessage(new TextComponentTranslation("advMode.setCommand.success", message.command));
 						}
 					} catch (Exception e) {
 						Logger.error(e, "Couldn't set survival command block");
 					}
 				} else {
-					player.addChatMessage(new ChatComponentTranslation("advMode.notAllowed"));
+					player.addChatMessage(new TextComponentTranslation("advMode.notAllowed"));
 				}
 			});
 

@@ -2,7 +2,10 @@ package com.choonster.testmod3.item;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 import java.util.function.Function;
@@ -35,11 +38,11 @@ public abstract class ItemWithScripts extends ItemTestMod3 {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		if (!worldIn.isRemote) {
-			playerIn.addChatComponentMessage(new ChatComponentTranslation("message." + getRegistryName() + ".rightClick", scriptFunction.apply(getNumber(itemStackIn))));
+			playerIn.addChatComponentMessage(new TextComponentTranslation("message." + getRegistryName() + ".rightClick", scriptFunction.apply(getNumber(itemStackIn))));
 		}
 
-		return super.onItemRightClick(itemStackIn, worldIn, playerIn);
+		return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
 	}
 }

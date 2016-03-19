@@ -7,12 +7,19 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -51,6 +58,7 @@ public class BlockPlane extends BlockTestMod3 {
 	}
 
 	{
+		fullBlock = false;
 		setDefaultState(getBlockState().getBaseState().withProperty(HORIZONTAL_ROTATION, EnumFacing.NORTH).withProperty(VERTICAL_ROTATION, EnumVerticalRotation.UP));
 	}
 
@@ -103,8 +111,8 @@ public class BlockPlane extends BlockTestMod3 {
 	private static final AxisAlignedBB DEFAULT_BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, HORIZONTAL_ROTATION, VERTICAL_ROTATION);
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, HORIZONTAL_ROTATION, VERTICAL_ROTATION);
 	}
 
 	@Override
@@ -145,7 +153,7 @@ public class BlockPlane extends BlockTestMod3 {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		return rotateBlock(worldIn, pos, side);
 	}
 
@@ -161,49 +169,26 @@ public class BlockPlane extends BlockTestMod3 {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public EnumWorldBlockLayer getBlockLayer() {
-		return EnumWorldBlockLayer.CUTOUT;
-	}
-
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean isFullCube() {
-		return false;
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return true;
 	}
 
-	/**
-	 * Set this block's bounds to those specified by an {@link AxisAlignedBB}.
-	 *
-	 * @param axisAlignedBB The AABB
-	 */
-	public void setBlockBounds(AxisAlignedBB axisAlignedBB) {
-		setBlockBounds((float) axisAlignedBB.minX, (float) axisAlignedBB.minY, (float) axisAlignedBB.minZ, (float) axisAlignedBB.maxX, (float) axisAlignedBB.maxY, (float) axisAlignedBB.maxZ);
-	}
-
 	@Override
-	public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity p_185477_6_) {
 		final Pair<EnumFacing, EnumVerticalRotation> key = Pair.of(state.getValue(HORIZONTAL_ROTATION), state.getValue(VERTICAL_ROTATION));
 		final Pair<AxisAlignedBB, AxisAlignedBB> boundingBoxes = ROTATED_BOUNDING_BOXES.get(key);
 
 		final AxisAlignedBB baseBoundingBox = boundingBoxes.getLeft();
-		setBlockBounds(baseBoundingBox);
-		super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
+		addCollisionBoxToList(pos, mask, list, baseBoundingBox);
 
 		final AxisAlignedBB topBoundingBox = boundingBoxes.getRight();
-		setBlockBounds(topBoundingBox);
-		super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
-
-		setBlockBounds(DEFAULT_BOUNDING_BOX);
+		addCollisionBoxToList(pos, mask, list, topBoundingBox);
 	}
 
 	/**

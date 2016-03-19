@@ -1,6 +1,5 @@
 package com.choonster.testmod3.block;
 
-import com.google.common.base.Predicate;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -10,13 +9,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 /**
  * A slab that uses vanilla's dye colours.
@@ -77,9 +78,13 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
-		final ItemStack heldItem = playerIn.getHeldItem();
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		return heldItem != null && heldItem.getItem() == Items.dye && recolorBlock(worldIn, pos, side, EnumDyeColor.byDyeDamage(heldItem.getMetadata()));
+	}
+
+	@Override
+	public Comparable<?> getTypeForItem(ItemStack stack) {
+		return variants.byOffsetMetadata(stack.getMetadata() & variants.values.size());
 	}
 
 	/**
@@ -118,7 +123,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		 */
 		EnumColourGroup(String name, Predicate<EnumDyeColor> colourFilter, int metaOffset) {
 			this.name = name;
-			this.property = PropertyEnum.create("colour", EnumDyeColor.class, colourFilter);
+			this.property = PropertyEnum.create("colour", EnumDyeColor.class, colourFilter::test);
 			this.metaOffset = metaOffset;
 			this.values = this.property.getAllowedValues();
 		}

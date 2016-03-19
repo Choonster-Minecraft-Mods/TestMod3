@@ -1,6 +1,6 @@
 package com.choonster.testmod3.api.pigspawner;
 
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -38,5 +38,5 @@ public interface IPigSpawner {
 	 *
 	 * @return The tooltip lines
 	 */
-	List<IChatComponent> getTooltipLines();
+	List<ITextComponent> getTooltipLines();
 }

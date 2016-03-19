@@ -5,13 +5,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -32,8 +33,8 @@ public class BlockRotatableLamp extends BlockTestMod3 {
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, FACING, LIT);
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, FACING, LIT);
 	}
 
 	@Override
@@ -57,13 +58,13 @@ public class BlockRotatableLamp extends BlockTestMod3 {
 
 	@Override
 	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		EnumFacing newFacing = BlockPistonBase.getFacingFromEntity(worldIn, pos, placer);
+		EnumFacing newFacing = BlockPistonBase.getFacingFromEntity(pos, placer);
 
 		return super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, newFacing);
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		IBlockState newState;
 
 		if (playerIn.isSneaking()) {
@@ -78,9 +79,7 @@ public class BlockRotatableLamp extends BlockTestMod3 {
 	}
 
 	@Override
-	public int getLightValue(IBlockAccess world, BlockPos pos) {
-		IBlockState state = world.getBlockState(pos);
-
+	public int getLightValue(IBlockState state) {
 		return state.getValue(LIT) ? 15 : 0;
 	}
 }

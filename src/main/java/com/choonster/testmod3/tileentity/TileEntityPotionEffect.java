@@ -1,12 +1,13 @@
 package com.choonster.testmod3.tileentity;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
@@ -30,8 +31,8 @@ public class TileEntityPotionEffect extends TileEntity implements ITickable {
 			List<EntityLivingBase> entities = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, areaToSearch);
 
 			for (EntityLivingBase entity : entities) {
-				if (!entity.isPotionActive(Potion.poison)) {
-					entity.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 1));
+				if (!entity.isPotionActive(MobEffects.poison)) {
+					entity.addPotionEffect(new PotionEffect(MobEffects.poison, 200, 1));
 				}
 			}
 		}

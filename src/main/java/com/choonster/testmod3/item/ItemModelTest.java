@@ -1,10 +1,14 @@
 package com.choonster.testmod3.item;
 
 import com.choonster.testmod3.util.Constants;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 /**
@@ -44,9 +48,9 @@ public class ItemModelTest extends ItemTestMod3 {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		setLastUseTime(itemStackIn, worldIn.getTotalWorldTime());
 
-		return super.onItemRightClick(itemStackIn, worldIn, playerIn);
+		return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
 	}
 }

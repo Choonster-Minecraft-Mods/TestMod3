@@ -24,7 +24,7 @@ public class ShapelessCuttingRecipe extends ShapelessRecipes {
 
 	private ItemStack damageAxe(ItemStack stack) {
 		if (stack.attemptDamageItem(1, random)) {
-			ForgeEventFactory.onPlayerDestroyItem(ForgeHooks.getCraftingPlayer(), stack);
+			ForgeEventFactory.onPlayerDestroyItem(ForgeHooks.getCraftingPlayer(), stack, null);
 			return null;
 		}
 

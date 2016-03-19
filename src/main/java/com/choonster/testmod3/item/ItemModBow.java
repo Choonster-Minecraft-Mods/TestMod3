@@ -1,24 +1,26 @@
 package com.choonster.testmod3.item;
 
 import com.choonster.testmod3.TestMod3;
-import com.choonster.testmod3.entity.EntityModArrow;
-import com.choonster.testmod3.init.ModItems;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.enchantment.Enchantment;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Enchantments;
+import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.ArrowLooseEvent;
-import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Optional;
 
 /**
  * A bow that uses custom models identical to the vanilla ones and shoots custom arrows.
@@ -62,130 +64,137 @@ public class ItemModBow extends ItemBow {
 	}
 
 	/**
-	 * Get the ammunition fired by this bow
+	 * Get the first {@link ItemStack} of arrows in the player's inventory.
+	 * <p>
+	 * Copied from {@link ItemBow#func_185060_a(EntityPlayer)} because it's private.
 	 *
-	 * @param stack The bow ItemStack
-	 * @return The ammunition Item
+	 * @param player The player
+	 * @return The arrow ItemStack, or null if there aren't any
 	 */
-	protected Item getAmmoItem(ItemStack stack) {
-		return ModItems.modArrow;
-	}
+	protected ItemStack getArrowItemStack(EntityPlayer player) {
+		// TODO: Update MCP mappings. func_185058_h_ = isArrow
+		if (this.func_185058_h_(player.getHeldItem(EnumHand.OFF_HAND))) {
+			return player.getHeldItem(EnumHand.OFF_HAND);
+		} else if (this.func_185058_h_(player.getHeldItem(EnumHand.MAIN_HAND))) {
+			return player.getHeldItem(EnumHand.MAIN_HAND);
+		} else {
+			for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
+				ItemStack itemStack = player.inventory.getStackInSlot(i);
 
-	/**
-	 * Does the player need ammunition to fire the bow?
-	 *
-	 * @param stack  The bow ItemStack
-	 * @param player The player to check
-	 * @return True if the player is not in creative mode and the bow doesn't have the Infinity enchantment
-	 */
-	protected boolean playerNeedsAmmo(ItemStack stack, EntityPlayer player) {
-		return !player.capabilities.isCreativeMode && EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) == 0;
-	}
+				if (this.func_185058_h_(itemStack)) {
+					return itemStack;
+				}
+			}
 
-	/**
-	 * Does the player have the ammunition to fire the bow?
-	 *
-	 * @param stack  The bow ItemStack
-	 * @param player The player to check
-	 * @return True if the player has the ammunition Item
-	 */
-	protected boolean playerHasAmmo(ItemStack stack, EntityPlayer player) {
-		return player.inventory.hasItem(getAmmoItem(stack));
+			return null;
+		}
 	}
 
 	/**
 	 * Nock an arrow.
 	 *
-	 * @param itemStackIn The bow ItemStack
-	 * @param playerIn    The player
+	 * @param bow     The bow ItemStack
+	 * @param shooter The player shooting the bow
 	 * @return The result of ArrowNockEvent if it was canceled.
 	 */
-	protected Optional<ItemStack> nockArrow(ItemStack itemStackIn, EntityPlayer playerIn) {
-		ArrowNockEvent event = new ArrowNockEvent(playerIn, itemStackIn);
-		if (MinecraftForge.EVENT_BUS.post(event)) return Optional.of(event.result);
+	protected ActionResult<ItemStack> nockArrow(ItemStack bow, World world, EntityPlayer shooter, EnumHand hand) {
+		boolean flag = this.getArrowItemStack(shooter) != null;
 
-		if (playerIn.capabilities.isCreativeMode || playerIn.inventory.hasItem(getAmmoItem(itemStackIn))) {
-			playerIn.setItemInUse(itemStackIn, this.getMaxItemUseDuration(itemStackIn));
+		ActionResult<ItemStack> ret = ForgeEventFactory.onArrowNock(bow, world, shooter, hand, flag);
+		if (ret != null) return ret;
+
+		if (!shooter.capabilities.isCreativeMode && !flag) {
+			return new ActionResult<>(EnumActionResult.FAIL, bow);
+		} else {
+			shooter.setActiveHand(hand);
+			return new ActionResult<>(EnumActionResult.SUCCESS, bow);
 		}
-
-		return Optional.empty();
 	}
 
 	/**
 	 * Fire an arrow with the specified charge.
 	 *
-	 * @param stack  The bow ItemStack
-	 * @param world  The firing player's World
-	 * @param player The player firing the bow
-	 * @param charge The charge of the arrow
+	 * @param bow     The bow ItemStack
+	 * @param world   The firing player's World
+	 * @param shooter The player firing the bow
+	 * @param charge  The charge of the arrow
 	 */
-	protected void fireArrow(ItemStack stack, World world, EntityPlayer player, int charge) {
-		ArrowLooseEvent event = new ArrowLooseEvent(player, stack, charge);
-		if (MinecraftForge.EVENT_BUS.post(event)) return;
-		charge = event.charge;
+	protected void fireArrow(ItemStack bow, World world, EntityLivingBase shooter, int charge) {
+		if (!(shooter instanceof EntityPlayer)) return;
 
-		boolean playerNeedsAmmo = playerNeedsAmmo(stack, player);
+		final EntityPlayer player = (EntityPlayer) shooter;
+		final boolean noArrowsRequired = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.infinity, bow) > 0;
+		ItemStack arrows = this.getArrowItemStack(player);
 
-		if (!playerNeedsAmmo || playerHasAmmo(stack, player)) {
-			float velocity = (float) charge / 20.0f;
-			velocity = (velocity * velocity + velocity * 2.0f) / 3.0f;
+		charge = ForgeEventFactory.onArrowLoose(bow, world, player, charge, arrows != null || noArrowsRequired);
+		if (charge < 0) return;
 
-			if (velocity < 0.1f) {
-				return;
+		if (arrows != null || noArrowsRequired) {
+			if (arrows == null) {
+				arrows = new ItemStack(Items.arrow);
 			}
 
-			if (velocity > 1.0f) {
-				velocity = 1.0f;
-			}
+			// TODO: Update MCP mappings. func_185059_b = getArrowVelocity
+			final float arrowVelocity = func_185059_b(charge);
 
-			EntityModArrow entityArrow = new EntityModArrow(world, player, velocity * 2.0f);
+			if (arrowVelocity >= 0.1) {
+				final boolean noAmmoConsumed = noArrowsRequired && arrows.getItem() instanceof ItemArrow;
 
-			if (velocity == 1.0f) {
-				entityArrow.setIsCritical(true);
-			}
+				if (!world.isRemote) {
+					ItemArrow itemArrow = (ItemArrow) (arrows.getItem() instanceof ItemArrow ? arrows.getItem() : Items.arrow);
+					EntityArrow entityArrow = itemArrow.makeTippedArrow(world, arrows, player);
+					entityArrow.func_184547_a(player, player.rotationPitch, player.rotationYaw, 0.0F, arrowVelocity * 3.0F, 1.0F);
 
-			int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
-			if (powerLevel > 0) {
-				entityArrow.setDamage(entityArrow.getDamage() + powerLevel * 0.5D + 0.5D);
-			}
+					if (arrowVelocity == 1.0f) {
+						entityArrow.setIsCritical(true);
+					}
 
-			int punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
-			if (punchLevel > 0) {
-				entityArrow.setKnockbackStrength(punchLevel);
-			}
+					int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.power, bow);
+					if (powerLevel > 0) {
+						entityArrow.setDamage(entityArrow.getDamage() + (double) powerLevel * 0.5D + 0.5D);
+					}
 
-			if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0) {
-				entityArrow.setFire(100);
-			}
+					int punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.punch, bow);
+					if (punchLevel > 0) {
+						entityArrow.setKnockbackStrength(punchLevel);
+					}
 
-			stack.damageItem(1, player);
-			world.playSoundAtEntity(player, "random.bow", 1.0f, 1.0f / (itemRand.nextFloat() * 0.4f + 1.2f) + velocity * 0.5f);
+					if (EnchantmentHelper.getEnchantmentLevel(Enchantments.flame, bow) > 0) {
+						entityArrow.setFire(100);
+					}
 
-			if (playerNeedsAmmo) {
-				player.inventory.consumeInventoryItem(getAmmoItem(stack));
-			} else {
-				entityArrow.canBePickedUp = 2;
-			}
+					bow.damageItem(1, player);
 
-			player.triggerAchievement(StatList.objectUseStats[Item.getIdFromItem(this)]);
+					if (noAmmoConsumed) {
+						entityArrow.canBePickedUp = EntityArrow.PickupStatus.CREATIVE_ONLY;
+					}
 
-			if (!world.isRemote) {
-				world.spawnEntityInWorld(entityArrow);
+					world.spawnEntityInWorld(entityArrow);
+				}
+
+				world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.entity_arrow_shoot, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + arrowVelocity * 0.5F);
+
+				if (!noAmmoConsumed) {
+					--arrows.stackSize;
+
+					if (arrows.stackSize == 0) {
+						player.inventory.deleteStack(arrows);
+					}
+				}
+
+				player.addStat(StatList.func_188057_b(this));
 			}
 		}
 	}
 
 	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityPlayer playerIn, int timeLeft) {
+	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
 		int charge = this.getMaxItemUseDuration(stack) - timeLeft;
-		fireArrow(stack, worldIn, playerIn, charge);
+		fireArrow(stack, worldIn, entityLiving, charge);
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
-		Optional<ItemStack> eventResult = nockArrow(itemStackIn, playerIn);
-		if (eventResult.isPresent()) return eventResult.get();
-
-		return itemStackIn;
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		return nockArrow(itemStackIn, worldIn, playerIn, hand);
 	}
 }

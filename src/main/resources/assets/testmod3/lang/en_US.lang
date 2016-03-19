@@ -152,6 +152,7 @@ message.testmod3:login.alreadyReceived=You've already received your free apple, 
 message.testmod3:pigSpawnerRefiller.refilled=Refilled held pig spawner.
 message.testmod3:respawner.noSpawnLocation=No spawn location set
 message.testmod3:respawner.teleporting=Teleporting to %d,%d,%d in dimension %d
+message.testmod3:clientPlayerRightClick.rightClick=Right click!!
 
 # Config GUI strings
 testmod3.config.title=TestMod3 Config

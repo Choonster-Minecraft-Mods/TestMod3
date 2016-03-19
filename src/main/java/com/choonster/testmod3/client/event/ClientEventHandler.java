@@ -4,7 +4,7 @@ import com.choonster.testmod3.item.ItemModBow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -18,8 +18,8 @@ public class ClientEventHandler {
 
 	@SubscribeEvent
 	public void onFOVUpdate(FOVUpdateEvent event) {
-		if (event.entity.isUsingItem() && event.entity.getItemInUse().getItem() instanceof ItemModBow) {
-			float fovModifier = event.entity.getItemInUseDuration() / 20.0f;
+		if (event.entity.isHandActive() && event.entity.getActiveItemStack().getItem() instanceof ItemModBow) {
+			float fovModifier = event.entity.getItemInUseMaxCount() / 20.0f;
 
 			if (fovModifier > 1.0f) {
 				fovModifier = 1.0f;

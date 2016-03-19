@@ -5,8 +5,8 @@ import com.choonster.testmod3.api.pigspawner.IPigSpawnerFinite;
 import com.choonster.testmod3.util.DebugUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -97,7 +97,7 @@ public class PigSpawnerFinite extends PigSpawnerBase implements IPigSpawnerFinit
 	 * Add tooltip lines for this spawner. Can be called on the client or server.
 	 */
 	@Override
-	public List<IChatComponent> getTooltipLines() {
-		return ImmutableList.of(new ChatComponentTranslation("testmod3:pigSpawner.finite.desc", getNumPigs(), getMaxNumPigs()));
+	public List<ITextComponent> getTooltipLines() {
+		return ImmutableList.of(new TextComponentTranslation("testmod3:pigSpawner.finite.desc", getNumPigs(), getMaxNumPigs()));
 	}
 }

@@ -2,12 +2,16 @@ package com.choonster.testmod3.item;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -28,25 +32,25 @@ public class ItemClearer extends ItemTestMod3 {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 		if (!world.isRemote) {
 			int currentMode = stack.getMetadata();
 
 			if (player.isSneaking()) {
-				int newMode = currentMode == MODE_ALL ? MODE_WHITELIST : MODE_ALL;
+				final int newMode = currentMode == MODE_ALL ? MODE_WHITELIST : MODE_ALL;
 				stack.setItemDamage(newMode);
-				player.addChatComponentMessage(new ChatComponentTranslation("message.testmod3:clearer.mode.%s", newMode));
+				player.addChatComponentMessage(new TextComponentTranslation("message.testmod3:clearer.mode.%s", newMode));
 			} else {
-				int minX = MathHelper.floor_double(player.posX / 16) * 16;
-				int minZ = MathHelper.floor_double(player.posZ / 16) * 16;
+				final int minX = MathHelper.floor_double(player.posX / 16) * 16;
+				final int minZ = MathHelper.floor_double(player.posZ / 16) * 16;
 
-				player.addChatComponentMessage(new ChatComponentTranslation("message.testmod3:clearer.clearing", minX, minZ));
+				player.addChatComponentMessage(new TextComponentTranslation("message.testmod3:clearer.clearing", minX, minZ));
 
 				for (int x = minX; x < minX + 16; x++) {
 					for (int z = minZ; z < minZ + 16; z++) {
 						for (int y = 0; y < 256; y++) {
-							BlockPos pos = new BlockPos(x, y, z);
-							Block block = world.getBlockState(pos).getBlock();
+							final BlockPos pos = new BlockPos(x, y, z);
+							final Block block = world.getBlockState(pos).getBlock();
 							if ((currentMode == MODE_ALL && block != Blocks.bedrock) || whitelist.contains(block)) {
 								world.setBlockState(pos, Blocks.air.getDefaultState(), 2);
 							}
@@ -54,13 +58,15 @@ public class ItemClearer extends ItemTestMod3 {
 					}
 				}
 
-				world.markBlockForUpdate(player.getPosition());
+				final BlockPos pos = player.getPosition();
+				final IBlockState state = world.getBlockState(pos);
+				world.notifyBlockUpdate(pos, state, state, 3);
 
-				player.addChatComponentMessage(new ChatComponentTranslation("message.testmod3:clearer.cleared"));
+				player.addChatComponentMessage(new TextComponentTranslation("message.testmod3:clearer.cleared"));
 			}
 		}
 
-		return super.onItemRightClick(stack, world, player);
+		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
 
 	@SideOnly(Side.CLIENT)

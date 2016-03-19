@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
@@ -19,7 +19,6 @@ import net.minecraftforge.fluids.*;
  * @author Choonster, CrazyPants, tterag1098, King Lemming
  */
 public class TileEntityFluidTank extends TileEntity implements IFluidHandler {
-
 	private static final int CAPACITY = 10 * FluidContainerRegistry.BUCKET_VOLUME;
 
 	protected FluidTank tank = new FluidTankWithTile(this, CAPACITY);
@@ -99,11 +98,11 @@ public class TileEntityFluidTank extends TileEntity implements IFluidHandler {
 	public Packet getDescriptionPacket() {
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		writeToNBT(tagCompound);
-		return new S35PacketUpdateTileEntity(getPos(), getBlockMetadata(), tagCompound);
+		return new SPacketUpdateTileEntity(getPos(), getBlockMetadata(), tagCompound);
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		readFromNBT(pkt.getNbtCompound());
 	}
 

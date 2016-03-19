@@ -4,16 +4,17 @@ import com.choonster.testmod3.tileentity.TileEntityColoredMultiRotatable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -33,8 +34,8 @@ public class BlockColoredMultiRotatable extends BlockColoredRotatable {
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, COLOR, FACING, FACE_ROTATION);
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, COLOR, FACING, FACE_ROTATION);
 	}
 
 	@Override
@@ -61,16 +62,17 @@ public class BlockColoredMultiRotatable extends BlockColoredRotatable {
 	}
 
 	public boolean rotateFace(World world, BlockPos pos) {
+		IBlockState oldState = world.getBlockState(pos);
+
 		EnumFaceRotation faceRotation = getFaceRotation(world, pos);
 		setFaceRotation(world, pos, faceRotation.rotateClockwise());
-		world.markBlockForUpdate(pos);
+		world.notifyBlockUpdate(pos, oldState, world.getBlockState(pos), 3);
 
 		return true;
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
-		ItemStack heldItem = playerIn.getHeldItem();
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (heldItem != null && heldItem.getItem() == Items.dye) { // If the player is holding dye, change the colour
 			EnumDyeColor color = EnumDyeColor.byDyeDamage(heldItem.getMetadata());
 			return worldIn.setBlockState(pos, state.withProperty(COLOR, color));

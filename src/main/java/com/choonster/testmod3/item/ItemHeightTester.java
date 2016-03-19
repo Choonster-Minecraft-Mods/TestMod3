@@ -2,8 +2,11 @@ package com.choonster.testmod3.item;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -19,19 +22,19 @@ public class ItemHeightTester extends ItemTestMod3 {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		if (!worldIn.isRemote) {
 			BlockPos pos = playerIn.getPosition();
 
 			if (playerIn.isSneaking()) {
 				Chunk chunk = worldIn.getChunkFromBlockCoords(pos);
 				chunk.generateSkylightMap();
-				playerIn.addChatComponentMessage(new ChatComponentTranslation("message.testmod3:heightTester.generate", chunk.xPosition, chunk.zPosition, pos.getX(), pos.getY(), pos.getZ()));
+				playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:heightTester.generate", chunk.xPosition, chunk.zPosition, pos.getX(), pos.getY(), pos.getZ()));
 			} else {
-				playerIn.addChatComponentMessage(new ChatComponentTranslation("message.testmod3:heightTester.height", pos.getX(), pos.getZ(), worldIn.getHeight(pos).getY()));
+				playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:heightTester.height", pos.getX(), pos.getZ(), worldIn.getHeight(pos).getY()));
 			}
 		}
 
-		return itemStackIn;
+		return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
 	}
 }

@@ -5,7 +5,10 @@ import com.choonster.testmod3.pigspawner.PigSpawnerFinite;
 import com.choonster.testmod3.pigspawner.PigSpawnerInfinite;
 import com.choonster.testmod3.util.Constants;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -50,7 +53,7 @@ public class ModItems {
 	public static ItemArmourRestricted replacementBoots;
 
 	public static Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10);
-	public static ItemArmor.ArmorMaterial ARMOUR_MATERIAL_REPLACEMENT = EnumHelper.addArmorMaterial(Constants.RESOURCE_PREFIX + "replacement", Constants.RESOURCE_PREFIX + "replacement", 15, new int[]{2, 5, 4, 1}, 12);
+	public static ItemArmor.ArmorMaterial ARMOUR_MATERIAL_REPLACEMENT = EnumHelper.addArmorMaterial(Constants.RESOURCE_PREFIX + "replacement", Constants.RESOURCE_PREFIX + "replacement", 15, new int[]{2, 5, 4, 1}, 12, SoundEvents.item_armor_equip_chain);
 
 	public static void registerItems() {
 		woodenAxe = registerItem(new ItemCuttingAxe(Item.ToolMaterial.WOOD, "woodenAxe"));
@@ -67,7 +70,7 @@ public class ModItems {
 		unicodeTooltips = registerItem(new ItemUnicodeTooltips());
 		blockDebugger = registerItem(new ItemBlockDebugger());
 		woodenHarvestSword = registerItem(new ItemHarvestSword(Item.ToolMaterial.WOOD, "harvestSwordWood"));
-		diamondHarvestSword = registerItem(new ItemHarvestSword(Item.ToolMaterial.EMERALD, "harvestSwordDiamond"));
+		diamondHarvestSword = registerItem(new ItemHarvestSword(Item.ToolMaterial.DIAMOND, "harvestSwordDiamond"));
 		clearer = registerItem(new ItemClearer());
 		modBow = registerItem(new ItemModBow("bow"));
 		modArrow = registerItem(new ItemTestMod3("arrow"));
@@ -80,13 +83,13 @@ public class ModItems {
 		swapTestA.setOtherItem(new ItemStack(swapTestB));
 		swapTestB.setOtherItem(new ItemStack(swapTestA));
 
-		replacementHelmet = registerItem(new ItemArmourReplacement(ARMOUR_MATERIAL_REPLACEMENT, Constants.ARMOUR_TYPE_HEAD, "Replacement"));
-		replacementChestplate = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, Constants.ARMOUR_TYPE_CHEST, "Replacement"));
-		repacementLeggings = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, Constants.ARMOUR_TYPE_LEGS, "Replacement"));
-		replacementBoots = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, Constants.ARMOUR_TYPE_FEET, "Replacement"));
+		replacementHelmet = registerItem(new ItemArmourReplacement(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD, "Replacement"));
+		replacementChestplate = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.CHEST, "Replacement"));
+		repacementLeggings = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.LEGS, "Replacement"));
+		replacementBoots = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.FEET, "Replacement"));
 
 		ItemStack chest = new ItemStack(replacementChestplate);
-		chest.addEnchantment(Enchantment.sharpness, 1);
+		chest.addEnchantment(Enchantments.sharpness, 1);
 		replacementHelmet.setReplacementItems(chest, new ItemStack(repacementLeggings), new ItemStack(replacementBoots));
 
 		pigSpawnerFinite = registerItem(new ItemPigSpawner("finite", () -> new PigSpawnerFinite(20)));

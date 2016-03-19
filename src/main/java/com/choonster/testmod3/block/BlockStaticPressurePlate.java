@@ -2,10 +2,12 @@ package com.choonster.testmod3.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -15,23 +17,16 @@ import net.minecraft.world.World;
  * @author Choonster
  */
 public abstract class BlockStaticPressurePlate extends BlockTestMod3 {
+	protected final AxisAlignedBB BB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.03125D, 0.9375D);
+
 	public BlockStaticPressurePlate(Material materialIn, String blockName) {
 		super(materialIn, blockName);
+		fullBlock = false;
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
-		return null;
-	}
-
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean isFullCube() {
-		return false;
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return BB;
 	}
 
 	@Override
@@ -53,21 +48,16 @@ public abstract class BlockStaticPressurePlate extends BlockTestMod3 {
 	}
 
 	private boolean canBePlacedOn(World worldIn, BlockPos pos) {
-		return World.doesBlockHaveSolidTopSurface(worldIn, pos) || worldIn.getBlockState(pos).getBlock() instanceof BlockFence;
+		return worldIn.getBlockState(pos).isSideSolid(worldIn, pos, EnumFacing.UP)|| worldIn.getBlockState(pos).getBlock() instanceof BlockFence;
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
-		setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.0625F, 0.9375F);
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+		return NULL_AABB;
 	}
 
 	@Override
-	public void setBlockBoundsForItemRender() {
-		this.setBlockBounds(0.0F, 0.375F, 0.0F, 1.0F, 0.625F, 1.0F);
-	}
-
-	@Override
-	public int getMobilityFlag() {
-		return 1;
+	public EnumPushReaction getMobilityFlag(IBlockState state) {
+		return EnumPushReaction.DESTROY;
 	}
 }

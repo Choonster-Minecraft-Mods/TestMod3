@@ -6,14 +6,14 @@ import com.choonster.testmod3.util.Constants;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSlab;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -105,19 +105,8 @@ public abstract class BlockSlabTestMod3<
 		return slabGroup.getItem();
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public Item getItem(World worldIn, BlockPos pos) {
-		return slabGroup.getItem();
-	}
-
 	@Override
 	public abstract IProperty<VARIANT> getVariantProperty();
-
-	@Override
-	public VARIANT getVariant(ItemStack stack) {
-		return getVariant(stack.getMetadata() & 7);
-	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
@@ -151,8 +140,8 @@ public abstract class BlockSlabTestMod3<
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return isDouble() ? new BlockState(this, getVariantProperty()) : new BlockState(this, HALF, getVariantProperty());
+	protected BlockStateContainer createBlockState() {
+		return isDouble() ? new BlockStateContainer(this, getVariantProperty()) : new BlockStateContainer(this, HALF, getVariantProperty());
 	}
 
 	@Override

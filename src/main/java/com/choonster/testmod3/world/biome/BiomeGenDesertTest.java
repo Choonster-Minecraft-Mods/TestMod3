@@ -17,14 +17,10 @@ import java.util.Random;
 public class BiomeGenDesertTest extends BiomeGenDesert {
 	private boolean logged = false;
 
-	public BiomeGenDesertTest(int id) {
-		super(id);
+	public BiomeGenDesertTest(BiomeProperties properties) {
+		super(properties);
 		topBlock = Blocks.sand.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
 		fillerBlock = Blocks.brick_block.getDefaultState();
-		setBiomeName("testmod3:Desert Test");
-		setColor(16421912);
-		setTemperatureRainfall(2.0F, 0.0F);
-		setHeight(height_LowPlains);
 	}
 
 	@Override

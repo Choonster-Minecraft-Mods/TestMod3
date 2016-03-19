@@ -2,8 +2,8 @@ package com.choonster.testmod3.item;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
@@ -25,7 +25,7 @@ public class ItemHeavy extends ItemTestMod3 {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 
 		if (entityIn instanceof EntityLivingBase) { // If the Entity is an instance of EntityLivingBase,
-			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 10, 1)); // Apply Slowness II (amplifier = 1) for 10 ticks (0.5 seconds)
+			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.moveSlowdown, 10, 1)); // Apply Slowness II (amplifier = 1) for 10 ticks (0.5 seconds)
 		}
 	}
 }

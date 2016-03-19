@@ -2,7 +2,10 @@ package com.choonster.testmod3.item;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -35,18 +38,18 @@ public class ItemSwapTest extends ItemTestMod3 {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 
 		if (hasOtherItem()) {
-			tooltip.add(StatCollector.translateToLocalFormatted("item.testmod3:swapTest.withItem.desc", otherItem.getDisplayName()));
+			tooltip.add(I18n.translateToLocalFormatted("item.testmod3:swapTest.withItem.desc", otherItem.getDisplayName()));
 		} else {
-			tooltip.add(StatCollector.translateToLocal("item.testmod3:swapTest.withoutItem.desc"));
+			tooltip.add(I18n.translateToLocal("item.testmod3:swapTest.withoutItem.desc"));
 		}
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		if (hasOtherItem() && playerIn.isSneaking()) {
-			return otherItem.copy();
+			return new ActionResult<>(EnumActionResult.SUCCESS, otherItem.copy());
 		}
 
-		return super.onItemRightClick(itemStackIn, worldIn, playerIn);
+		return new ActionResult<>(EnumActionResult.PASS, itemStackIn);
 	}
 }

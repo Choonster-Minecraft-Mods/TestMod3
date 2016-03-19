@@ -4,7 +4,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -40,7 +40,7 @@ public class BlockEventHandler {
 	private boolean isPlayerHarvestingLogWithoutCorrectTool(IBlockState state, IBlockAccess blockAccess, BlockPos pos, EntityPlayer player) {
 		return player != null && !player.capabilities.isCreativeMode
 				&& state.getBlock().isWood(blockAccess, pos)
-				&& !canToolHarvestBlock(state, player.getHeldItem());
+				&& !canToolHarvestBlock(state, player.getHeldItemMainhand());
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class BlockEventHandler {
 	 */
 	@SubscribeEvent
 	public void harvestDrops(BlockEvent.HarvestDropsEvent event) {
-		if (event.state.getBlock().isLeaves(event.world, event.pos)) {
+		if (event.state.getBlock().isLeaves(event.state, event.world, event.pos)) {
 			event.drops.add(new ItemStack(Items.stick, 2));
 		}
 	}

@@ -1,16 +1,20 @@
 package com.choonster.testmod3.item;
 
 import com.choonster.testmod3.TestMod3;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 /**
- * A slingshot that fired Snowballs when used.
+ * A slingshot that fires Snowballs when used.
  * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2483633-custom-bow-animation-and-projectiles
@@ -22,8 +26,39 @@ public class ItemSlingshot extends ItemTestMod3 {
 		super("slingshot");
 	}
 
+	private ItemStack getAmmoItemStack(EntityPlayer player)
+	{
+		if (this.isAmmoItem(player.getHeldItem(EnumHand.OFF_HAND)))
+		{
+			return player.getHeldItem(EnumHand.OFF_HAND);
+		}
+		else if (this.isAmmoItem(player.getHeldItem(EnumHand.MAIN_HAND)))
+		{
+			return player.getHeldItem(EnumHand.MAIN_HAND);
+		}
+		else
+		{
+			for (int i = 0; i < player.inventory.getSizeInventory(); ++i)
+			{
+				ItemStack itemstack = player.inventory.getStackInSlot(i);
+
+				if (this.isAmmoItem(itemstack))
+				{
+					return itemstack;
+				}
+			}
+
+			return null;
+		}
+	}
+
+	protected boolean isAmmoItem(ItemStack stack)
+	{
+		return stack != null && stack.getItem() instanceof ItemArrow;
+	}
+
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 		if (player.capabilities.isCreativeMode || player.inventory.consumeInventoryItem(Items.snowball)) {
 			setLastUseTime(stack, world.getTotalWorldTime());
 			world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
@@ -31,9 +66,11 @@ public class ItemSlingshot extends ItemTestMod3 {
 			if (!world.isRemote) {
 				world.spawnEntityInWorld(new EntitySnowball(world, player));
 			}
+
+			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		}
 
-		return super.onItemRightClick(stack, world, player);
+		return new ActionResult<>(EnumActionResult.FAIL, stack);
 	}
 
 	@Override

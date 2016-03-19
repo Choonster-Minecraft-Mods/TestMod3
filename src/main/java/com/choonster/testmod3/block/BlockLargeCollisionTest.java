@@ -3,6 +3,10 @@ package com.choonster.testmod3.block;
 import com.choonster.testmod3.TestMod3;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 /**
  * A Block with a 3x3x3 bounding box.
@@ -13,10 +17,16 @@ import net.minecraft.block.material.Material;
  * @author Choonster
  */
 public class BlockLargeCollisionTest extends Block {
+	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(-1, -1, -1, 2, 2, 2);
+
 	public BlockLargeCollisionTest() {
 		super(Material.cloth);
 		setCreativeTab(TestMod3.creativeTab);
 		BlockTestMod3.setBlockName(this, "largeCollisionTest");
-		setBlockBounds(-1, -1, -1, 2, 2, 2);
+	}
+
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return BOUNDING_BOX;
 	}
 }

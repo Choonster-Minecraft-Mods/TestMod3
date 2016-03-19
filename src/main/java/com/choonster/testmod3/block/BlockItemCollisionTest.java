@@ -5,11 +5,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * A block that writes a message to the log when an item collides with it.
@@ -20,19 +19,20 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author Choonster
  */
 public class BlockItemCollisionTest extends BlockTestMod3 {
-	// A small value to offset each side of the block's bounding box by to allow entities to collide with the block
-	// and thus call onEntityCollidedWithBlock
-	private static final float ENTITY_COLLISION_MIN = 0.01f;
+	private static final AxisAlignedBB BOUNDING_BOX;
+
+	static {
+		// A small value to offset each side of the block's bounding box by to allow entities to collide with the block
+		// and thus call onEntityCollidedWithBlock
+		final float minBound = 0.01f;
+		final float maxBound = 1 - minBound;
+
+		BOUNDING_BOX = new AxisAlignedBB(minBound, minBound, minBound, maxBound, maxBound, maxBound);
+	}
 
 	public BlockItemCollisionTest() {
 		super(Material.cloth, "itemCollisionTest");
-		setBlockBounds();
-	}
-
-	private void setBlockBounds() {
-		float min = ENTITY_COLLISION_MIN;
-		float max = 1 - min;
-		setBlockBounds(min, min, min, max, max, max);
+		fullBlock = false;
 	}
 
 	@Override
@@ -45,8 +45,7 @@ public class BlockItemCollisionTest extends BlockTestMod3 {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos) {
-		return new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1.0, pos.getY() + 1.0, pos.getZ() + 1.0);
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return BOUNDING_BOX;
 	}
 }

@@ -4,8 +4,9 @@ import com.choonster.testmod3.Logger;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -21,8 +22,8 @@ import java.util.List;
  * @author Choonster
  */
 public class ItemArmourRestricted extends ItemArmourTestMod3 {
-	public ItemArmourRestricted(final ArmorMaterial material, final int armorType, final String armourName) {
-		super(material, armorType, armourName);
+	public ItemArmourRestricted(final ArmorMaterial material, final EntityEquipmentSlot equipmentSlot, final String armourName) {
+		super(material, equipmentSlot, armourName);
 	}
 
 	/**
@@ -64,6 +65,6 @@ public class ItemArmourRestricted extends ItemArmourTestMod3 {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(final ItemStack stack, final EntityPlayer playerIn, final List<String> tooltip, final boolean advanced) {
-		tooltip.add(StatCollector.translateToLocal("item.testmod3:armourRestricted.desc"));
+		tooltip.add(I18n.translateToLocal("item.testmod3:armourRestricted.desc"));
 	}
 }

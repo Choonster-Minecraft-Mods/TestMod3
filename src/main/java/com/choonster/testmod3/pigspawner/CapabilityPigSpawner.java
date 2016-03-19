@@ -15,7 +15,13 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
@@ -30,8 +36,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 
+import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -129,14 +135,14 @@ public final class CapabilityPigSpawner {
 		 * @param iCommandSender  The ICommandSender, if any
 		 * @return Was any action taken?
 		 */
-		private boolean trySpawnPig(IPigSpawner pigSpawner, World world, double x, double y, double z, Optional<IPigSpawnerInteractable> interactable, BlockPos interactablePos, Optional<ICommandSender> iCommandSender) {
+		private boolean trySpawnPig(IPigSpawner pigSpawner, World world, double x, double y, double z, @Nullable IPigSpawnerInteractable interactable, BlockPos interactablePos, @Nullable ICommandSender iCommandSender) {
 			if (world.isRemote || pigSpawner == null) return false;
 
 			boolean actionTaken = false;
 			boolean shouldSpawnPig = true;
 
-			if (interactable.isPresent()) {
-				shouldSpawnPig = !interactable.get().interact(pigSpawner, world, interactablePos, iCommandSender);
+			if (interactable != null) {
+				shouldSpawnPig = !interactable.interact(pigSpawner, world, interactablePos, iCommandSender);
 				actionTaken = true;
 			}
 
@@ -153,12 +159,13 @@ public final class CapabilityPigSpawner {
 		 *
 		 * @param pigSpawner The pig spawner
 		 * @param player     The player
+		 * @param hand       The hand holding the pig spawner
 		 */
-		private void sendToPlayer(IPigSpawner pigSpawner, EntityPlayerMP player) {
+		private void sendToPlayer(IPigSpawner pigSpawner, EntityPlayerMP player, EnumHand hand) {
 			if (pigSpawner instanceof IPigSpawnerFinite) {
 				final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) pigSpawner;
 				Logger.info(LOG_MARKER, DebugUtil.getStackTrace(10), "Sending finite pig spawner to client. Player: %s - NumPigs: %d", player.getDisplayNameString(), pigSpawnerFinite.getNumPigs());
-				TestMod3.network.sendTo(new MessageUpdateHeldPigSpawnerFinite(pigSpawnerFinite), player);
+				TestMod3.network.sendTo(new MessageUpdateHeldPigSpawnerFinite(pigSpawnerFinite, hand), player);
 			}
 		}
 
@@ -178,11 +185,14 @@ public final class CapabilityPigSpawner {
 
 			final World world = event.world;
 			final Block block = world.getBlockState(event.pos).getBlock();
-			final Optional<IPigSpawnerInteractable> interactable = block instanceof IPigSpawnerInteractable ? Optional.of((IPigSpawnerInteractable) block) : Optional.empty();
+			final IPigSpawnerInteractable interactable = block instanceof IPigSpawnerInteractable ? (IPigSpawnerInteractable) block : null;
 
-			final IPigSpawner pigSpawner = getPigSpawner(event.entityPlayer.getHeldItem());
-			if (trySpawnPig(pigSpawner, world, x, y, z, interactable, event.pos, Optional.of(event.entityPlayer))) {
-				sendToPlayer(pigSpawner, (EntityPlayerMP) event.entityPlayer);
+			// TODO: Get the hand from PlayerInteractEvent when it's added
+			final EnumHand hand = EnumHand.MAIN_HAND;
+
+			final IPigSpawner pigSpawner = getPigSpawner(event.entityPlayer.getHeldItem(hand));
+			if (trySpawnPig(pigSpawner, world, x, y, z, interactable, event.pos, event.entityPlayer)) {
+				sendToPlayer(pigSpawner, (EntityPlayerMP) event.entityPlayer, hand);
 			}
 		}
 
@@ -197,13 +207,15 @@ public final class CapabilityPigSpawner {
 		public void entityInteract(EntityInteractEvent event) {
 			final World world = event.entityPlayer.getEntityWorld();
 
-			final Entity target = event.target;
+			final Entity target = event.getTarget();
 			final double x = target.posX, y = target.posY, z = target.posZ;
-			final Optional<IPigSpawnerInteractable> interactable = target instanceof IPigSpawnerInteractable ? Optional.of((IPigSpawnerInteractable) target) : Optional.empty();
+			final IPigSpawnerInteractable interactable = target instanceof IPigSpawnerInteractable ? (IPigSpawnerInteractable) target : null;
 
-			final IPigSpawner pigSpawner = getPigSpawner(event.entityPlayer.getHeldItem());
-			if (trySpawnPig(pigSpawner, world, x, y, z, interactable, target.getPosition(), Optional.of(event.entityPlayer))) {
-				sendToPlayer(pigSpawner, (EntityPlayerMP) event.entityPlayer);
+			final EnumHand hand = event.getHand();
+
+			final IPigSpawner pigSpawner = getPigSpawner(event.entityPlayer.getHeldItem(hand));
+			if (trySpawnPig(pigSpawner, world, x, y, z, interactable, target.getPosition(), event.entityPlayer)) {
+				sendToPlayer(pigSpawner, (EntityPlayerMP) event.entityPlayer, hand);
 			}
 		}
 
@@ -217,12 +229,12 @@ public final class CapabilityPigSpawner {
 			IPigSpawner pigSpawner = getPigSpawner(event.itemStack);
 			if (pigSpawner == null) return;
 
-			final ChatStyle chatStyle = new ChatStyle().setColor(EnumChatFormatting.LIGHT_PURPLE);
+			final Style chatStyle = new Style().setColor(TextFormatting.LIGHT_PURPLE);
 
-			final List<IChatComponent> chatComponents = pigSpawner.getTooltipLines();
+			final List<ITextComponent> chatComponents = pigSpawner.getTooltipLines();
 			final List<String> tooltipLines = chatComponents.stream()
-					.map(iChatComponent -> iChatComponent.setChatStyle(chatStyle))
-					.map(IChatComponent::getFormattedText)
+					.map(iTextComponent -> iTextComponent.setChatStyle(chatStyle))
+					.map(ITextComponent::getFormattedText)
 					.collect(Collectors.toList());
 
 			event.toolTip.add("");

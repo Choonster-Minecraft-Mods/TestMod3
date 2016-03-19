@@ -6,13 +6,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 
 /**
- * A Block that prints the current state of the player's held ItemStack on the client and server when right clicked.
+ * A Block that prints the current state of the player's held {@link ItemStack}s on the client and server when left or right clicked.
  *
  * @author Choonster
  */
@@ -22,8 +23,7 @@ public class BlockItemDebugger extends BlockTestMod3 {
 		setBlockUnbreakable();
 	}
 
-	private void logItem(EntityPlayer playerIn) {
-		final ItemStack stack = playerIn.getHeldItem();
+	private void logItem(ItemStack stack) {
 		if (stack != null) {
 			Logger.info("ItemStack: %s", stack.serializeNBT());
 			logCapability(stack, CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY, EnumFacing.NORTH);
@@ -38,14 +38,16 @@ public class BlockItemDebugger extends BlockTestMod3 {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
-		logItem(playerIn);
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		logItem(heldItem);
 
 		return true;
 	}
 
 	@Override
 	public void onBlockClicked(World worldIn, BlockPos pos, EntityPlayer playerIn) {
-		logItem(playerIn);
+		for (EnumHand hand : EnumHand.values()) {
+			logItem(playerIn.getHeldItem(hand));
+		}
 	}
 }

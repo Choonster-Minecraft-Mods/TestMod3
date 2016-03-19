@@ -1,10 +1,10 @@
-package com.choonster.testmod3.command;
+package com.choonster.testmod3.tileentity;
 
-import net.minecraft.command.server.CommandBlockLogic;
+import net.minecraft.tileentity.CommandBlockBaseLogic;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class SurvivalCommandBlockLogic extends CommandBlockLogic {
+public abstract class SurvivalCommandBlockLogic extends CommandBlockBaseLogic {
 	private final Type type;
 
 	public SurvivalCommandBlockLogic(Type type) {

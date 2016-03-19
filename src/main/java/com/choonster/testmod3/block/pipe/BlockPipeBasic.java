@@ -2,7 +2,7 @@ package com.choonster.testmod3.block.pipe;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 
 /**
@@ -16,8 +16,8 @@ public class BlockPipeBasic extends BlockPipeBase {
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, CONNECTED_PROPERTIES.toArray(new IProperty[CONNECTED_PROPERTIES.size()]));
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, CONNECTED_PROPERTIES.toArray(new IProperty[CONNECTED_PROPERTIES.size()]));
 	}
 
 	@Override

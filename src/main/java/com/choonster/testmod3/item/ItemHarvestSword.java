@@ -10,7 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
-import net.minecraft.util.BlockPos;
+
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -43,7 +43,7 @@ public class ItemHarvestSword extends ItemTool {
 	public static final float DIG_SPEED_DEFAULT = 1.0f;
 
 	public ItemHarvestSword(ToolMaterial toolMaterial, String itemName) {
-		super(4.0f, toolMaterial, Collections.emptySet());
+		super(3.0f, toolMaterial, Collections.emptySet());
 
 		ItemTestMod3.setItemName(this, itemName);
 

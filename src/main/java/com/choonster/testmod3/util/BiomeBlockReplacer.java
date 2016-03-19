@@ -1,5 +1,6 @@
 package com.choonster.testmod3.util;
 
+import com.choonster.testmod3.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStairs;
@@ -70,19 +71,18 @@ public class BiomeBlockReplacer {
 		try {
 			if (condition.startsWith("b:")) {
 				String identifier = condition.substring("b:".length());
-				return identifier.equalsIgnoreCase(biome.biomeName) || identifier.equals(String.valueOf(biome.biomeID));
+				return identifier.equalsIgnoreCase(biome.getBiomeName());
 			}
 			if (condition.startsWith("t:")) {
 				String identifier = condition.substring("t:".length());
 				Type type = Type.valueOf(identifier);
-				return type != null && BiomeDictionary.isBiomeOfType(biome, type);
+				return BiomeDictionary.isBiomeOfType(biome, type);
 			}
 			return false;
 		} catch (NullPointerException e) {
-			/*FloraSoma.instance.log.warn("NullPointerException when replacing blocks:");
-			e.printStackTrace();
-			FloraSoma.instance.log.warn("Something was NULL when replacing blocks.");
-			FloraSoma.instance.log.warn("Biome class: " + biome.getClass() + "; Condition: " + condition);*/
+			Logger.error(e, "NullPointerException when replacing blocks:");
+			Logger.error("Something was null when replacing blocks.");
+			Logger.error("Biome class: %s Condition: %s", biome.getClass(), condition);
 			return false;
 		}
 	}
