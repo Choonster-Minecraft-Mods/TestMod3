@@ -33,8 +33,6 @@ minecraft {
     version = "${mc_version}-${forge_version}"
     runDir = "run"
 
-    makeObfSourceJar = false
-
     useDepAts = true
 
     if (project.hasProperty('mappings_version'))
@@ -103,13 +101,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
 }
 
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allJava
-    classifier = 'sources'
-}
-
 artifacts {
     archives javadocJar
-    archives sourcesJar
     archives shadowJar
 }

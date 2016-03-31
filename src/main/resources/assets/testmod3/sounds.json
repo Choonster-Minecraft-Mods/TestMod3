@@ -3,7 +3,7 @@
 		"category": "record",
 		"sounds": [
 			{
-				"name": "records/solaris",
+				"name": "testmod3:records/solaris",
 				"stream": true
 			}
 		]
