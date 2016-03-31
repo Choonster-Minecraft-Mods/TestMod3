@@ -1,8 +1,8 @@
 package com.choonster.testmod3.block;
 
-import com.choonster.testmod3.api.pigspawner.IPigSpawner;
-import com.choonster.testmod3.api.pigspawner.IPigSpawnerFinite;
-import com.choonster.testmod3.api.pigspawner.IPigSpawnerInteractable;
+import com.choonster.testmod3.api.capability.pigspawner.IPigSpawner;
+import com.choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
+import com.choonster.testmod3.api.capability.pigspawner.IPigSpawnerInteractable;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.math.BlockPos;

@@ -1,4 +1,4 @@
-package com.choonster.testmod3.pigspawner;
+package com.choonster.testmod3.capability.pigspawner;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.util.text.ITextComponent;

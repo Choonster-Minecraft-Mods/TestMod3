@@ -1,11 +1,12 @@
-package com.choonster.testmod3.pigspawner;
+package com.choonster.testmod3.capability.pigspawner;
 
 import com.choonster.testmod3.Logger;
 import com.choonster.testmod3.TestMod3;
-import com.choonster.testmod3.api.pigspawner.IPigSpawner;
-import com.choonster.testmod3.api.pigspawner.IPigSpawnerFinite;
-import com.choonster.testmod3.api.pigspawner.IPigSpawnerInteractable;
+import com.choonster.testmod3.api.capability.pigspawner.IPigSpawner;
+import com.choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
+import com.choonster.testmod3.api.capability.pigspawner.IPigSpawnerInteractable;
 import com.choonster.testmod3.network.MessageUpdateHeldPigSpawnerFinite;
+import com.choonster.testmod3.util.CapabilityUtils;
 import com.choonster.testmod3.util.DebugUtil;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandSender;
@@ -47,10 +48,15 @@ import java.util.stream.Collectors;
  */
 public final class CapabilityPigSpawner {
 	/**
-	 * The capability instance.
+	 * The {@link Capability} instance.
 	 */
 	@CapabilityInject(IPigSpawner.class)
 	public static final Capability<IPigSpawner> PIG_SPAWNER_CAPABILITY = null;
+
+	/**
+	 * The default {@link EnumFacing} to use for this capability.
+	 */
+	public static final EnumFacing DEFAULT_FACING = null;
 
 	/**
 	 * The ID of the capability.
@@ -96,11 +102,7 @@ public final class CapabilityPigSpawner {
 	 * @return The IPigSpawner, or null if there isn't one
 	 */
 	public static IPigSpawner getPigSpawner(ItemStack itemStack) {
-		if (itemStack != null && itemStack.hasCapability(PIG_SPAWNER_CAPABILITY, EnumFacing.NORTH)) {
-			return itemStack.getCapability(PIG_SPAWNER_CAPABILITY, EnumFacing.NORTH);
-		}
-
-		return null;
+		return CapabilityUtils.getCapability(itemStack, PIG_SPAWNER_CAPABILITY, DEFAULT_FACING);
 	}
 
 	/**
@@ -178,21 +180,21 @@ public final class CapabilityPigSpawner {
 		 */
 		@SubscribeEvent
 		public void playerInteract(PlayerInteractEvent event) {
-			if (event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) return;
+			if (event.getAction() != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) return;
 
-			final BlockPos spawnPos = event.pos.offset(event.face);
+			final BlockPos spawnPos = event.getPos().offset(event.getFace());
 			final double x = spawnPos.getX() + 0.5, y = spawnPos.getY() + 0.5, z = spawnPos.getZ() + 0.5;
 
-			final World world = event.world;
-			final Block block = world.getBlockState(event.pos).getBlock();
+			final World world = event.getWorld();
+			final Block block = world.getBlockState(event.getPos()).getBlock();
 			final IPigSpawnerInteractable interactable = block instanceof IPigSpawnerInteractable ? (IPigSpawnerInteractable) block : null;
 
 			// TODO: Get the hand from PlayerInteractEvent when it's added
 			final EnumHand hand = EnumHand.MAIN_HAND;
 
-			final IPigSpawner pigSpawner = getPigSpawner(event.entityPlayer.getHeldItem(hand));
-			if (trySpawnPig(pigSpawner, world, x, y, z, interactable, event.pos, event.entityPlayer)) {
-				sendToPlayer(pigSpawner, (EntityPlayerMP) event.entityPlayer, hand);
+			final IPigSpawner pigSpawner = getPigSpawner(event.getEntityPlayer().getHeldItem(hand));
+			if (trySpawnPig(pigSpawner, world, x, y, z, interactable, event.getPos(), event.getEntityPlayer())) {
+				sendToPlayer(pigSpawner, (EntityPlayerMP) event.getEntityPlayer(), hand);
 			}
 		}
 
@@ -205,7 +207,7 @@ public final class CapabilityPigSpawner {
 		 */
 		@SubscribeEvent
 		public void entityInteract(EntityInteractEvent event) {
-			final World world = event.entityPlayer.getEntityWorld();
+			final World world = event.getEntityPlayer().getEntityWorld();
 
 			final Entity target = event.getTarget();
 			final double x = target.posX, y = target.posY, z = target.posZ;
@@ -213,9 +215,9 @@ public final class CapabilityPigSpawner {
 
 			final EnumHand hand = event.getHand();
 
-			final IPigSpawner pigSpawner = getPigSpawner(event.entityPlayer.getHeldItem(hand));
-			if (trySpawnPig(pigSpawner, world, x, y, z, interactable, target.getPosition(), event.entityPlayer)) {
-				sendToPlayer(pigSpawner, (EntityPlayerMP) event.entityPlayer, hand);
+			final IPigSpawner pigSpawner = getPigSpawner(event.getEntityPlayer().getHeldItem(hand));
+			if (trySpawnPig(pigSpawner, world, x, y, z, interactable, target.getPosition(), event.getEntityPlayer())) {
+				sendToPlayer(pigSpawner, (EntityPlayerMP) event.getEntityPlayer(), hand);
 			}
 		}
 
@@ -226,19 +228,19 @@ public final class CapabilityPigSpawner {
 		 */
 		@SubscribeEvent
 		public void itemTooltip(ItemTooltipEvent event) {
-			IPigSpawner pigSpawner = getPigSpawner(event.itemStack);
+			IPigSpawner pigSpawner = getPigSpawner(event.getItemStack());
 			if (pigSpawner == null) return;
 
-			final Style chatStyle = new Style().setColor(TextFormatting.LIGHT_PURPLE);
+			final Style style = new Style().setColor(TextFormatting.LIGHT_PURPLE);
 
 			final List<ITextComponent> chatComponents = pigSpawner.getTooltipLines();
 			final List<String> tooltipLines = chatComponents.stream()
-					.map(iTextComponent -> iTextComponent.setChatStyle(chatStyle))
+					.map(iTextComponent -> iTextComponent.setStyle(style))
 					.map(ITextComponent::getFormattedText)
 					.collect(Collectors.toList());
 
-			event.toolTip.add("");
-			event.toolTip.addAll(tooltipLines);
+			event.getToolTip().add("");
+			event.getToolTip().addAll(tooltipLines);
 		}
 	}
 
@@ -304,11 +306,10 @@ public final class CapabilityPigSpawner {
 		 *                   CAN BE NULL. Null is defined to represent 'internal' or 'self'
 		 * @return True if this object supports the capability.
 		 */
-		@SuppressWarnings("unchecked")
 		@Override
 		public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 			if (capability == PIG_SPAWNER_CAPABILITY) {
-				return (T) pigSpawner;
+				return PIG_SPAWNER_CAPABILITY.cast(pigSpawner);
 			}
 
 			return null;

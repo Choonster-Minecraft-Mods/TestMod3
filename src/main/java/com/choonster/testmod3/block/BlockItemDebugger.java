@@ -1,7 +1,7 @@
 package com.choonster.testmod3.block;
 
 import com.choonster.testmod3.Logger;
-import com.choonster.testmod3.pigspawner.CapabilityPigSpawner;
+import com.choonster.testmod3.capability.pigspawner.CapabilityPigSpawner;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;

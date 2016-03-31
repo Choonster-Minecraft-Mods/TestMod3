@@ -1,4 +1,4 @@
-package com.choonster.testmod3.api.pigspawner;
+package com.choonster.testmod3.api.capability.pigspawner;
 
 /**
  * A spawner that can only spawn a finite number of pigs.

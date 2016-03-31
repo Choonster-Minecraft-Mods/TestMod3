@@ -6,7 +6,6 @@ import com.choonster.testmod3.event.BlockEventHandler;
 import com.choonster.testmod3.event.NetworkEventHandler;
 import com.choonster.testmod3.event.PlayerEventHandler;
 import com.choonster.testmod3.init.*;
-import com.choonster.testmod3.pigspawner.CapabilityPigSpawner;
 import com.choonster.testmod3.proxy.IProxy;
 import com.choonster.testmod3.tests.Tests;
 import com.choonster.testmod3.tweak.snowbuildup.SnowBuildup;
@@ -52,7 +51,7 @@ public class TestMod3 {
 		creativeTab = new CreativeTabTestMod3();
 		Config.load(event);
 
-		CapabilityPigSpawner.register();
+		ModCapabilities.registerCapabilities();
 
 		MinecraftForge.EVENT_BUS.register(new BlockEventHandler());
 		MinecraftForge.EVENT_BUS.register(new NetworkEventHandler());

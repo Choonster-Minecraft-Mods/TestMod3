@@ -1,11 +1,10 @@
-package com.choonster.testmod3.api.pigspawner;
+package com.choonster.testmod3.api.capability.pigspawner;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
 
 /**
  * Something that can interacted with by an {@link IPigSpawner}.

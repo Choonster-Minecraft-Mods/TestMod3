@@ -1,8 +1,8 @@
 package com.choonster.testmod3.item;
 
-import com.choonster.testmod3.api.pigspawner.IPigSpawner;
-import com.choonster.testmod3.api.pigspawner.IPigSpawnerFinite;
-import com.choonster.testmod3.pigspawner.CapabilityPigSpawner;
+import com.choonster.testmod3.api.capability.pigspawner.IPigSpawner;
+import com.choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
+import com.choonster.testmod3.capability.pigspawner.CapabilityPigSpawner;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;

@@ -1,4 +1,4 @@
-package com.choonster.testmod3.api.pigspawner;
+package com.choonster.testmod3.api.capability.pigspawner;
 
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;

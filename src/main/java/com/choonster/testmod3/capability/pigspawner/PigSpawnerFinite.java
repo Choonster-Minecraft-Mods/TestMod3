@@ -1,7 +1,7 @@
-package com.choonster.testmod3.pigspawner;
+package com.choonster.testmod3.capability.pigspawner;
 
 import com.choonster.testmod3.Logger;
-import com.choonster.testmod3.api.pigspawner.IPigSpawnerFinite;
+import com.choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
 import com.choonster.testmod3.util.DebugUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;

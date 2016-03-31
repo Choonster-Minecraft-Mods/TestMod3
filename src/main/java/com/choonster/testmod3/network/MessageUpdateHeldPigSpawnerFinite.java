@@ -2,9 +2,9 @@ package com.choonster.testmod3.network;
 
 import com.choonster.testmod3.Logger;
 import com.choonster.testmod3.TestMod3;
-import com.choonster.testmod3.api.pigspawner.IPigSpawner;
-import com.choonster.testmod3.api.pigspawner.IPigSpawnerFinite;
-import com.choonster.testmod3.pigspawner.CapabilityPigSpawner;
+import com.choonster.testmod3.api.capability.pigspawner.IPigSpawner;
+import com.choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
+import com.choonster.testmod3.capability.pigspawner.CapabilityPigSpawner;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;

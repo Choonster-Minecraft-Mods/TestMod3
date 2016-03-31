@@ -1,6 +1,6 @@
-package com.choonster.testmod3.pigspawner;
+package com.choonster.testmod3.capability.pigspawner;
 
-import com.choonster.testmod3.api.pigspawner.IPigSpawner;
+import com.choonster.testmod3.api.capability.pigspawner.IPigSpawner;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.world.World;
 
