@@ -1,13 +1,18 @@
 package com.choonster.testmod3.item;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySnowball;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraftforge.items.IItemHandler;
 
 /**
  * An Item that fires Snowballs at a fixed rate while right click is held
@@ -20,23 +25,22 @@ import net.minecraft.world.World;
 public class ItemSnowballLauncher extends ItemTestMod3 {
 
 	/**
-	 * How often the launcher fires (in ticks)
+	 * The cooldown of the launcher (in ticks)
 	 */
-	public static final int FIRE_RATE = 20;
+	private static final int COOLDOWN = 20;
 
-	public ItemSnowballLauncher() {
-		super("snowballLauncher");
+	public ItemSnowballLauncher(String itemName) {
+		super(itemName);
 	}
 
 	/**
-	 * Has it been at least FIRE_RATE ticks since the launcher was last used?
+	 * Get the cooldown of the launcher (in ticks).
 	 *
-	 * @param stack The launcher ItemStack
-	 * @param world The World to check the time against
-	 * @return True if the ItemStack was last used at least FIRE_RATE ticks ago or if it has never been used
+	 * @param launcher The launcher
+	 * @return The cooldown of the launcher (in ticks), or 0 if there is none
 	 */
-	private boolean isOffCooldown(ItemStack stack, World world) {
-		return !stack.hasTagCompound() || (world.getTotalWorldTime() - stack.getTagCompound().getLong("LastUseTime")) >= FIRE_RATE;
+	protected int getCooldown(ItemStack launcher) {
+		return COOLDOWN;
 	}
 
 	/**
@@ -46,39 +50,48 @@ public class ItemSnowballLauncher extends ItemTestMod3 {
 	 * @param player The player to check
 	 * @return True if the player is not in creative mode and the launcher doesn't have the Infinity enchantment
 	 */
-	private boolean playerNeedsAmmo(ItemStack stack, EntityPlayer player) {
-		return !player.capabilities.isCreativeMode && EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) == 0;
+	private boolean isAmmoRequired(ItemStack stack, EntityPlayer player) {
+		return !player.capabilities.isCreativeMode && EnchantmentHelper.getEnchantmentLevel(Enchantments.infinity, stack) == 0;
 	}
 
 	/**
-	 * Set the launcher's last use time to the specified time.
+	 * Is the {@link ItemStack} valid ammunition?
 	 *
-	 * @param stack The launcher ItemStack
-	 * @param time  The time
+	 * @param stack The ItemStack
+	 * @return Is the ItemStack valid ammunition?
 	 */
-	private void setLastUseTime(ItemStack stack, long time) {
-		stack.setTagInfo("LastUseTime", new NBTTagLong(time));
+	protected boolean isAmmo(ItemStack stack) {
+		return stack != null && stack.getItem() == Items.snowball;
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
-		boolean offCooldown = isOffCooldown(itemStackIn, worldIn);
-		boolean needsAmmo = playerNeedsAmmo(itemStackIn, playerIn);
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		final boolean ammoRequired = isAmmoRequired(itemStackIn, playerIn);
+		final IItemHandler ammoSlot = ammoRequired ? ItemModBow.findAmmoSlot(playerIn, this::isAmmo) : null;
+		final boolean hasAmmo = ammoSlot != null;
 
-		if (offCooldown && (!needsAmmo || playerIn.inventory.consumeInventoryItem(Items.snowball))) {
-			setLastUseTime(itemStackIn, worldIn.getTotalWorldTime());
+		if (!ammoRequired || hasAmmo) {
+			final int cooldown = getCooldown(itemStackIn);
+			if (cooldown > 0) {
+				playerIn.getCooldownTracker().setCooldown(this, cooldown);
+			}
 
-			worldIn.playSoundAtEntity(playerIn, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+			worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.entity_snowball_throw, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
 			if (!worldIn.isRemote) {
-				worldIn.spawnEntityInWorld(new EntitySnowball(worldIn, playerIn));
+				final EntitySnowball entitySnowball = new EntitySnowball(worldIn, playerIn);
+				entitySnowball.func_184538_a(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
+				worldIn.spawnEntityInWorld(entitySnowball);
 			}
 
-			if (needsAmmo) {
+			if (hasAmmo && ammoSlot.extractItem(0, 1, true) != null) {
+				ammoSlot.extractItem(0, 1, false);
 				playerIn.inventoryContainer.detectAndSendChanges();
 			}
+
+			return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
 		}
 
-		return itemStackIn;
+		return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
 	}
 }
