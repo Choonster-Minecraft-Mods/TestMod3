@@ -1,5 +1,5 @@
 {
-	"parent": "testmod3:block/simple_model",
+	"parent": "testmod3:item/simple_model",
 	"textures": {
 		"layer0": "testmod3:items/slingshot"
 	}
