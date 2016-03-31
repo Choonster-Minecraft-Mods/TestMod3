@@ -28,7 +28,7 @@ public class ModItems {
 	public static ItemBlockDestroyer blockDestroyer;
 	public static ItemWithSubscripts subscripts;
 	public static ItemWithSuperscripts superscripts;
-	public static ItemModelTest modelTest;
+	public static ItemLastUseTimeModel modelTest;
 	public static ItemSnowballLauncher snowballLauncher;
 	public static ItemSlingshot slingshot;
 	public static ItemUnicodeTooltips unicodeTooltips;
@@ -63,8 +63,8 @@ public class ModItems {
 		blockDestroyer = registerItem(new ItemBlockDestroyer());
 		subscripts = registerItem(new ItemWithSubscripts());
 		superscripts = registerItem(new ItemWithSuperscripts());
-		modelTest = registerItem(new ItemModelTest());
-		snowballLauncher = registerItem(new ItemSnowballLauncher());
+		modelTest = registerItem(new ItemLastUseTimeModel("modeltest"));
+		snowballLauncher = registerItem(new ItemSnowballLauncher("snowballLauncher"));
 		slingshot = registerItem(new ItemSlingshot());
 		unicodeTooltips = registerItem(new ItemUnicodeTooltips());
 		blockDebugger = registerItem(new ItemBlockDebugger());
