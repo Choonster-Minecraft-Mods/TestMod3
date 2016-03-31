@@ -1,10 +1,9 @@
 package com.choonster.testmod3.init;
 
 import com.choonster.testmod3.item.*;
-import com.choonster.testmod3.pigspawner.PigSpawnerFinite;
-import com.choonster.testmod3.pigspawner.PigSpawnerInfinite;
+import com.choonster.testmod3.capability.pigspawner.PigSpawnerFinite;
+import com.choonster.testmod3.capability.pigspawner.PigSpawnerInfinite;
 import com.choonster.testmod3.util.Constants;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
