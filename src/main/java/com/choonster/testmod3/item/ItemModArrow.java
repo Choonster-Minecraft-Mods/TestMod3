@@ -18,9 +18,9 @@ public class ItemModArrow extends ItemArrow {
 	}
 
 	@Override
-	public EntityArrow makeTippedArrow(World worldIn, ItemStack p_185052_2_, EntityLivingBase shooter) {
+	public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
 		EntityModArrow entityModArrow = new EntityModArrow(worldIn, shooter);
-		entityModArrow.setPotionEffect(p_185052_2_);
+		entityModArrow.setPotionEffect(stack);
 		return entityModArrow;
 	}
 }

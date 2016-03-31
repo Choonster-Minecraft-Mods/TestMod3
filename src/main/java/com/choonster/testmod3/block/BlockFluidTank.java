@@ -33,7 +33,7 @@ import java.util.List;
 public class BlockFluidTank extends BlockTestMod3 {
 	public BlockFluidTank() {
 		super(Material.glass, "fluidTank");
-		setStepSound(SoundType.GLASS);
+		setSoundType(SoundType.GLASS);
 	}
 
 	@Override

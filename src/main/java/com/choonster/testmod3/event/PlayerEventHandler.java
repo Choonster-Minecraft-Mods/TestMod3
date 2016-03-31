@@ -47,7 +47,7 @@ public class PlayerEventHandler {
 		}
 
 		ITextComponent chatComponent = new TextComponentTranslation(message);
-		chatComponent.getChatStyle().setColor(TextFormatting.LIGHT_PURPLE);
+		chatComponent.getStyle().setColor(TextFormatting.LIGHT_PURPLE);
 		player.addChatComponentMessage(chatComponent);
 	}
 }

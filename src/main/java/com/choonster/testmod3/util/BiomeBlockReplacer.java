@@ -38,21 +38,21 @@ public class BiomeBlockReplacer {
 
 	@SubscribeEvent
 	public void onGetVillageBlockID(BiomeEvent.GetVillageBlockID event) {
-		if (replacements.containsKey(event.original.getBlock())) {
-			for (Pair<String, Block> pair : replacements.get(event.original.getBlock())) {
-				if (metadata.containsKey(event.original.getBlock())) {
-					for (Pair<String, Integer> pair1 : metadata.get(event.original.getBlock())) {
-						if (checkCondition(event.biome, pair.left)) {
-							if (event.original.getBlock() instanceof BlockStairs) {
-								event.replacement = copyStairsState(event.original, pair.right);
-							} else if (event.original.getBlock() instanceof BlockSlab) {
-								event.replacement = copySlabState(event.original, pair.right);
+		if (replacements.containsKey(event.getOriginal().getBlock())) {
+			for (Pair<String, Block> pair : replacements.get(event.getOriginal().getBlock())) {
+				if (metadata.containsKey(event.getOriginal().getBlock())) {
+					for (Pair<String, Integer> pair1 : metadata.get(event.getOriginal().getBlock())) {
+						if (checkCondition(event.getBiome(), pair.left)) {
+							if (event.getOriginal().getBlock() instanceof BlockStairs) {
+								event.setReplacement(copyStairsState(event.getOriginal(), pair.right));
+							} else if (event.getOriginal().getBlock() instanceof BlockSlab) {
+								event.setReplacement(copySlabState(event.getOriginal(), pair.right));
 							} else {
-								if (checkCondition(event.biome, pair1.left)) {
+								if (checkCondition(event.getBiome(), pair1.left)) {
 									if (pair1.right == 0) {
-										event.replacement = pair.right.getDefaultState();
+										event.setReplacement(pair.right.getDefaultState());
 									} else {
-										event.replacement = pair.right.getStateFromMeta(pair1.right);
+										event.setReplacement(pair.right.getStateFromMeta(pair1.right));
 									}
 								}
 							}

@@ -18,7 +18,7 @@ public abstract class SurvivalCommandBlockLogic extends CommandBlockBaseLogic {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public int func_145751_f() {
+	public int getCommandBlockType() {
 		return type.ordinal();
 	}
 

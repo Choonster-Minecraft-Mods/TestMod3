@@ -50,8 +50,8 @@ public class BlockEventHandler {
 	 */
 	@SubscribeEvent
 	public void harvestDrops(BlockEvent.HarvestDropsEvent event) {
-		if (event.state.getBlock().isLeaves(event.state, event.world, event.pos)) {
-			event.drops.add(new ItemStack(Items.stick, 2));
+		if (event.getState().getBlock().isLeaves(event.getState(), event.getWorld(), event.getPos())) {
+			event.getDrops().add(new ItemStack(Items.stick, 2));
 		}
 	}
 
@@ -62,7 +62,7 @@ public class BlockEventHandler {
 	 */
 	@SubscribeEvent
 	public void breakSpeed(PlayerEvent.BreakSpeed event) {
-		if (isPlayerHarvestingLogWithoutCorrectTool(event.state, event.entityPlayer.getEntityWorld(), event.pos, event.entityPlayer)) {
+		if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getEntityPlayer().getEntityWorld(), event.getPos(), event.getEntityPlayer())) {
 			event.setCanceled(true);
 		}
 	}
@@ -74,7 +74,7 @@ public class BlockEventHandler {
 	 */
 	@SubscribeEvent
 	public void breakBlock(BlockEvent.BreakEvent event) {
-		if (isPlayerHarvestingLogWithoutCorrectTool(event.state, event.world, event.pos, event.getPlayer())) {
+		if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getWorld(), event.getPos(), event.getPlayer())) {
 			event.setCanceled(true);
 		}
 	}

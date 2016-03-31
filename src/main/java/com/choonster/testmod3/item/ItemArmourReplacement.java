@@ -117,7 +117,7 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 
 					if (original != null) { // If the player is wearing something in this slot,
 						final NBTTagCompound tagCompound = new NBTTagCompound();
-						tagCompound.setByte(KEY_SLOT, (byte) armorType.func_188452_c());
+						tagCompound.setByte(KEY_SLOT, (byte) armorType.getSlotIndex());
 
 						original.writeToNBT(tagCompound); // Write it to NBT
 

@@ -76,7 +76,7 @@ public class ItemEntityTest extends ItemTestMod3 {
 			entity.rotationYaw = (float) (((MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) - 1) * 90);
 			entity.setPosition(blockPos.getX(), blockPos.getY() + 2, blockPos.getZ());
 
-			if (!world.getCubes(entity, entity.getEntityBoundingBox().expand(-0.1D, -0.1D, -0.1D)).isEmpty()) {
+			if (!world.getCollisionBoxes(entity, entity.getEntityBoundingBox().expand(-0.1D, -0.1D, -0.1D)).isEmpty()) {
 				return new ActionResult<>(EnumActionResult.FAIL, itemStack);
 			}
 
@@ -88,7 +88,7 @@ public class ItemEntityTest extends ItemTestMod3 {
 				--itemStack.stackSize;
 			}
 
-			player.addStat(StatList.func_188057_b(this));
+			player.addStat(StatList.getObjectUseStats(this));
 		}
 
 		return new ActionResult<>(EnumActionResult.PASS, itemStack);

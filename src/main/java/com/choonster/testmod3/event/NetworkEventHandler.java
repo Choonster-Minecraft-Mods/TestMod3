@@ -34,7 +34,7 @@ public class NetworkEventHandler {
 		IThreadListener mainThread = Minecraft.getMinecraft();
 		mainThread.addScheduledTask(() -> {
 			ServerData serverData = Minecraft.getMinecraft().getCurrentServerData();
-			Logger.info("Server Connected! Local? %s - Address: %s", event.isLocal, serverData != null ? serverData.serverIP : "<No ServerData>");
+			Logger.info("Server Connected! Local? %s - Address: %s", event.isLocal(), serverData != null ? serverData.serverIP : "<No ServerData>");
 		});
 	}
 }

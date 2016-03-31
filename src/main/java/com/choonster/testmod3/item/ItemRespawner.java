@@ -47,7 +47,7 @@ public class ItemRespawner extends ItemTestMod3 {
 				playerMP.playerNetServerHandler.setPlayerLocation(playerMP.posX, playerMP.posY, playerMP.posZ, playerMP.rotationYaw, playerMP.rotationPitch);
 				worldServer.getChunkProvider().loadChunk((int) playerMP.posX >> 4, (int) playerMP.posZ >> 4);
 
-				while (!worldServer.getCubes(playerMP, playerMP.getEntityBoundingBox()).isEmpty() && playerMP.posY < 256.0D) {
+				while (!worldServer.getCollisionBoxes(playerMP, playerMP.getEntityBoundingBox()).isEmpty() && playerMP.posY < 256.0D) {
 					playerMP.setPosition(playerMP.posX, playerMP.posY + 1.0D, playerMP.posZ);
 				}
 

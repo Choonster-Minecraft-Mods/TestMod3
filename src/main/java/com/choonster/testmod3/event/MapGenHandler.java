@@ -8,8 +8,8 @@ public class MapGenHandler {
 
 	@SubscribeEvent
 	public void initMapGen(InitMapGenEvent event) {
-		if (event.type == InitMapGenEvent.EventType.SCATTERED_FEATURE) {
-			event.newGen = new MapGenScatteredFeatureModBiomes();
+		if (event.getType() == InitMapGenEvent.EventType.SCATTERED_FEATURE) {
+			event.setNewGen(new MapGenScatteredFeatureModBiomes());
 		}
 	}
 }

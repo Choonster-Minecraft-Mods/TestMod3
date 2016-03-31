@@ -10,14 +10,14 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 public class InventoryUtils {
 
 	/**
-	 * Get the {@link EntityEquipmentSlot} with the specified index (as returned by {@link EntityEquipmentSlot#func_188452_c()}.
+	 * Get the {@link EntityEquipmentSlot} with the specified index (as returned by {@link EntityEquipmentSlot#getSlotIndex()}.
 	 *
 	 * @param index The index
 	 * @return The equipment slot
 	 */
 	public static EntityEquipmentSlot getEquipmentSlotFromIndex(int index) {
 		for (EntityEquipmentSlot equipmentSlot : EntityEquipmentSlot.values()) {
-			if (equipmentSlot.func_188452_c() == index) {
+			if (equipmentSlot.getSlotIndex() == index) {
 				return equipmentSlot;
 			}
 		}

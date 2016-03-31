@@ -18,8 +18,8 @@ public class ClientEventHandler {
 
 	@SubscribeEvent
 	public void onFOVUpdate(FOVUpdateEvent event) {
-		if (event.entity.isHandActive() && event.entity.getActiveItemStack().getItem() instanceof ItemModBow) {
-			float fovModifier = event.entity.getItemInUseMaxCount() / 20.0f;
+		if (event.getEntity().isHandActive() && event.getEntity().getActiveItemStack().getItem() instanceof ItemModBow) {
+			float fovModifier = event.getEntity().getItemInUseMaxCount() / 20.0f;
 
 			if (fovModifier > 1.0f) {
 				fovModifier = 1.0f;
@@ -27,7 +27,7 @@ public class ClientEventHandler {
 				fovModifier *= fovModifier;
 			}
 
-			event.newfov = event.fov * (1.0f - fovModifier * 0.15f);
+			event.setNewfov(event.getFov() * (1.0f - fovModifier * 0.15f));
 		}
 	}
 

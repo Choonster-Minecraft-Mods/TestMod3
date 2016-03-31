@@ -72,7 +72,7 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 
 		@Override
 		@SideOnly(Side.CLIENT)
-		public void func_145757_a(ByteBuf byteBuf) {
+		public void fillInInfo(ByteBuf byteBuf) {
 			byteBuf.writeInt(TileEntitySurvivalCommandBlock.this.pos.getX());
 			byteBuf.writeInt(TileEntitySurvivalCommandBlock.this.pos.getY());
 			byteBuf.writeInt(TileEntitySurvivalCommandBlock.this.pos.getZ());

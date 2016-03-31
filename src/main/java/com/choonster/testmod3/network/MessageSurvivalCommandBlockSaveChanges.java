@@ -79,7 +79,7 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 		ByteBufUtils.writeUTF8String(buf, command);
 		buf.writeBoolean(shouldTrackOutput);
 
-		survivalCommandBlockLogic.func_145757_a(buf);
+		survivalCommandBlockLogic.fillInInfo(buf);
 	}
 
 	public static class Handler implements IMessageHandler<MessageSurvivalCommandBlockSaveChanges, IMessage> {

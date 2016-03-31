@@ -38,7 +38,7 @@ public class Config {
 
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-		if (event.modID.equals(TestMod3.MODID)) {
+		if (event.getModID().equals(TestMod3.MODID)) {
 			reloadConfig();
 		}
 	}
