@@ -73,7 +73,7 @@ public class ModItems {
 		diamondHarvestSword = registerItem(new ItemHarvestSword(Item.ToolMaterial.DIAMOND, "harvestSwordDiamond"));
 		clearer = registerItem(new ItemClearer());
 		modBow = registerItem(new ItemModBow("bow"));
-		modArrow = registerItem(new ItemTestMod3("arrow"));
+		modArrow = registerItem(new ItemModArrow("arrow"));
 		heightTester = registerItem(new ItemHeightTester());
 		continuousBow = registerItem(new ItemContinuousBow("continuousBow"));
 		respawner = registerItem(new ItemRespawner());
