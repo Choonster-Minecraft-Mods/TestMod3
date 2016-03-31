@@ -1,7 +1,6 @@
 package com.choonster.testmod3.item;
 
 import com.choonster.testmod3.TestMod3;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,14 +12,17 @@ import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.PlayerOffhandInvWrapper;
+import net.minecraftforge.items.wrapper.RangedWrapper;
+
+import java.util.function.Predicate;
 
 /**
  * A bow that uses custom models identical to the vanilla ones and shoots custom arrows.
@@ -34,6 +36,18 @@ public class ItemModBow extends ItemBow {
 	public ItemModBow(String itemName) {
 		ItemTestMod3.setItemName(this, itemName);
 		setCreativeTab(TestMod3.creativeTab);
+		addPropertyOverride(new ResourceLocation(TestMod3.MODID, "pull"),
+				(stack, worldIn, entityIn) -> {
+					if (entityIn == null) return 0.0f;
+
+					ItemStack activeItemStack = entityIn.getActiveItemStack();
+					if (activeItemStack != null && activeItemStack.getItem() instanceof ItemModBow) {
+						return (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0f;
+					}
+
+					return 0.0f;
+				}
+		);
 	}
 
 	/**
@@ -45,18 +59,38 @@ public class ItemModBow extends ItemBow {
 		return getRegistryName();
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
-		if (player.isUsingItem()) {
-			int useTime = stack.getMaxItemUseDuration() - useRemaining;
+	/**
+	 * Get an {@link IItemHandler} wrapper of the first slot in the player's inventory containing an {@link ItemStack} of ammunition.
+	 * <p>
+	 * This {@link IItemHandler} will always have a single slot containing the ammunition {@link ItemStack}.
+	 * <p>
+	 * Adapted from {@link ItemBow#findAmmo(EntityPlayer)}.
+	 *
+	 * @param player The player
+	 * @param isAmmo A function that detects whether a given ItemStack is valid ammunition
+	 * @return The ammunition slot's IItemHandler, or null if there isn't any ammunition
+	 */
+	public static IItemHandler findAmmoSlot(EntityPlayer player, Predicate<ItemStack> isAmmo) {
+		if (isAmmo.test(player.getHeldItemOffhand())) {
+			return new PlayerOffhandInvWrapper(player.inventory);
+		}
 
-			if (useTime >= 18) {
-				return new ModelResourceLocation(getModelLocation(), "pulling_2");
-			} else if (useTime > 13) {
-				return new ModelResourceLocation(getModelLocation(), "pulling_1");
-			} else if (useTime > 0) {
-				return new ModelResourceLocation(getModelLocation(), "pulling_0");
+		// Vertical facing = main inventory
+		final EnumFacing mainInventoryFacing = EnumFacing.UP;
+		if (player.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, mainInventoryFacing)) {
+			final IItemHandler mainInventory = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, mainInventoryFacing);
+
+			if (isAmmo.test(player.getHeldItemMainhand())) {
+				final int currentItem = player.inventory.currentItem;
+				return new RangedWrapper((IItemHandlerModifiable) mainInventory, currentItem, currentItem + 1);
+			}
+
+			for (int slot = 0; slot < mainInventory.getSlots(); ++slot) {
+				ItemStack itemStack = mainInventory.getStackInSlot(slot);
+
+				if (isAmmo.test(itemStack)) {
+					return new RangedWrapper((IItemHandlerModifiable) mainInventory, slot, slot + 1);
+				}
 			}
 		}
 
@@ -64,30 +98,14 @@ public class ItemModBow extends ItemBow {
 	}
 
 	/**
-	 * Get the first {@link ItemStack} of arrows in the player's inventory.
-	 * <p>
-	 * Copied from {@link ItemBow#func_185060_a(EntityPlayer)} because it's private.
+	 * Is ammunition required to fire this bow?
 	 *
-	 * @param player The player
-	 * @return The arrow ItemStack, or null if there aren't any
+	 * @param bow     The bow
+	 * @param shooter The shooter
+	 * @return Is ammunition required?
 	 */
-	protected ItemStack getArrowItemStack(EntityPlayer player) {
-		// TODO: Update MCP mappings. func_185058_h_ = isArrow
-		if (this.func_185058_h_(player.getHeldItem(EnumHand.OFF_HAND))) {
-			return player.getHeldItem(EnumHand.OFF_HAND);
-		} else if (this.func_185058_h_(player.getHeldItem(EnumHand.MAIN_HAND))) {
-			return player.getHeldItem(EnumHand.MAIN_HAND);
-		} else {
-			for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
-				ItemStack itemStack = player.inventory.getStackInSlot(i);
-
-				if (this.func_185058_h_(itemStack)) {
-					return itemStack;
-				}
-			}
-
-			return null;
-		}
+	protected boolean isAmmoRequired(ItemStack bow, EntityPlayer shooter) {
+		return !shooter.capabilities.isCreativeMode && EnchantmentHelper.getEnchantmentLevel(Enchantments.infinity, bow) == 0;
 	}
 
 	/**
@@ -95,15 +113,17 @@ public class ItemModBow extends ItemBow {
 	 *
 	 * @param bow     The bow ItemStack
 	 * @param shooter The player shooting the bow
-	 * @return The result of ArrowNockEvent if it was canceled.
+	 * @param world   The World
+	 * @param hand    The hand holding the bow
+	 * @return The result
 	 */
 	protected ActionResult<ItemStack> nockArrow(ItemStack bow, World world, EntityPlayer shooter, EnumHand hand) {
-		boolean flag = this.getArrowItemStack(shooter) != null;
+		boolean hasAmmo = findAmmoSlot(shooter, this::isArrow) != null;
 
-		ActionResult<ItemStack> ret = ForgeEventFactory.onArrowNock(bow, world, shooter, hand, flag);
+		ActionResult<ItemStack> ret = ForgeEventFactory.onArrowNock(bow, world, shooter, hand, hasAmmo);
 		if (ret != null) return ret;
 
-		if (!shooter.capabilities.isCreativeMode && !flag) {
+		if (isAmmoRequired(bow, shooter) && !hasAmmo) {
 			return new ActionResult<>(EnumActionResult.FAIL, bow);
 		} else {
 			shooter.setActiveHand(hand);
@@ -123,26 +143,27 @@ public class ItemModBow extends ItemBow {
 		if (!(shooter instanceof EntityPlayer)) return;
 
 		final EntityPlayer player = (EntityPlayer) shooter;
-		final boolean noArrowsRequired = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.infinity, bow) > 0;
-		ItemStack arrows = this.getArrowItemStack(player);
+		final boolean ammoRequired = isAmmoRequired(bow, player);
+		IItemHandler ammoSlot = findAmmoSlot(player, this::isArrow);
 
-		charge = ForgeEventFactory.onArrowLoose(bow, world, player, charge, arrows != null || noArrowsRequired);
+		charge = ForgeEventFactory.onArrowLoose(bow, world, player, charge, ammoSlot != null || !ammoRequired);
 		if (charge < 0) return;
 
-		if (arrows != null || noArrowsRequired) {
-			if (arrows == null) {
-				arrows = new ItemStack(Items.arrow);
+		if (ammoSlot != null || !ammoRequired) {
+			if (ammoSlot == null) {
+				ammoSlot = new ItemStackHandler(new ItemStack[]{new ItemStack(Items.arrow)});
 			}
 
-			// TODO: Update MCP mappings. func_185059_b = getArrowVelocity
-			final float arrowVelocity = func_185059_b(charge);
+			final ItemStack ammo = ammoSlot.getStackInSlot(0);
+
+			final float arrowVelocity = getArrowVelocity(charge);
 
 			if (arrowVelocity >= 0.1) {
-				final boolean noAmmoConsumed = noArrowsRequired && arrows.getItem() instanceof ItemArrow;
+				final boolean consumeAmmo = ammoRequired && ammo.getItem() instanceof ItemArrow;
 
 				if (!world.isRemote) {
-					ItemArrow itemArrow = (ItemArrow) (arrows.getItem() instanceof ItemArrow ? arrows.getItem() : Items.arrow);
-					EntityArrow entityArrow = itemArrow.makeTippedArrow(world, arrows, player);
+					ItemArrow itemArrow = (ItemArrow) (ammo.getItem() instanceof ItemArrow ? ammo.getItem() : Items.arrow);
+					EntityArrow entityArrow = itemArrow.createArrow(world, ammo, player);
 					entityArrow.func_184547_a(player, player.rotationPitch, player.rotationYaw, 0.0F, arrowVelocity * 3.0F, 1.0F);
 
 					if (arrowVelocity == 1.0f) {
@@ -165,7 +186,7 @@ public class ItemModBow extends ItemBow {
 
 					bow.damageItem(1, player);
 
-					if (noAmmoConsumed) {
+					if (!consumeAmmo) {
 						entityArrow.canBePickedUp = EntityArrow.PickupStatus.CREATIVE_ONLY;
 					}
 
@@ -174,15 +195,11 @@ public class ItemModBow extends ItemBow {
 
 				world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.entity_arrow_shoot, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + arrowVelocity * 0.5F);
 
-				if (!noAmmoConsumed) {
-					--arrows.stackSize;
-
-					if (arrows.stackSize == 0) {
-						player.inventory.deleteStack(arrows);
-					}
+				if (consumeAmmo && ammoSlot.extractItem(0, 1, true) != null) {
+					ammoSlot.extractItem(0, 1, false);
 				}
 
-				player.addStat(StatList.func_188057_b(this));
+				player.addStat(StatList.getObjectUseStats(this));
 			}
 		}
 	}
