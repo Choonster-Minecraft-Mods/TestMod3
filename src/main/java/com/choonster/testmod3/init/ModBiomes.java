@@ -1,11 +1,12 @@
 package com.choonster.testmod3.init;
 
-import com.choonster.testmod3.config.Config;
-import com.choonster.testmod3.util.Constants;
+import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.world.biome.BiomeGenDesertTest;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
@@ -20,11 +21,11 @@ public class ModBiomes {
 				.setTemperature(2.0F)
 				.setRainfall(0.0F)
 				.setRainDisabled()
-		), Config.desertBiomeID, Constants.RESOURCE_PREFIX + "desert_test", BiomeManager.BiomeType.DESERT, 1000, HOT, DRY, SANDY, JUNGLE, SWAMP);
+		), new ResourceLocation(TestMod3.MODID, "desert_test"), BiomeManager.BiomeType.DESERT, 1000, HOT, DRY, SANDY, JUNGLE, SWAMP);
 	}
 
-	private static <T extends BiomeGenBase> T registerBiome(T biome, int biomeID, String biomeName, BiomeManager.BiomeType biomeType, int weight, BiomeDictionary.Type... types) {
-		BiomeGenBase.registerBiome(biomeID, biomeName, biome);
+	private static <T extends BiomeGenBase> T registerBiome(T biome, ResourceLocation biomeName, BiomeManager.BiomeType biomeType, int weight, BiomeDictionary.Type... types) {
+		GameRegistry.register(biome, biomeName);
 		BiomeDictionary.registerBiomeType(biome, types);
 		BiomeManager.addBiome(biomeType, new BiomeManager.BiomeEntry(biome, weight));
 

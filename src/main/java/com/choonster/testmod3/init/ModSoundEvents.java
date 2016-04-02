@@ -29,6 +29,6 @@ public class ModSoundEvents {
 	 */
 	private static SoundEvent registerSound(String soundName) {
 		final ResourceLocation soundID = new ResourceLocation(TestMod3.MODID, soundName);
-		return GameRegistry.register(new SoundEvent(soundID).setRegistryName(soundID), soundID);
+		return GameRegistry.register(new SoundEvent(soundID), soundID);
 	}
 }

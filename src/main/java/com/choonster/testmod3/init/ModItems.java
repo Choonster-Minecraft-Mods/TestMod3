@@ -107,7 +107,7 @@ public class ModItems {
 	 * @return The Item instance
 	 */
 	private static <T extends Item> T registerItem(T item) {
-		GameRegistry.register(item, item.getRegistryName());
+		GameRegistry.register(item);
 		items.add(item);
 
 		return item;

@@ -97,13 +97,12 @@ public class ModBlocks {
 	 * @return The Block instance
 	 */
 	protected static <BLOCK extends Block> BLOCK registerBlock(BLOCK block, @Nullable Function<BLOCK, ItemBlock> itemFactory) {
-		GameRegistry.register(block, block.getRegistryName());
+		GameRegistry.register(block);
 
 		if (itemFactory != null) {
-			ItemBlock itemBlock = itemFactory.apply(block);
-			itemBlock.setRegistryName(block.getRegistryName());
+			final ItemBlock itemBlock = itemFactory.apply(block);
 
-			GameRegistry.register(itemBlock, itemBlock.getRegistryName());
+			GameRegistry.register(itemBlock, block.getRegistryName());
 		}
 
 		blocks.add(block);
