@@ -1,7 +1,6 @@
 package com.choonster.testmod3.block;
 
 import com.choonster.testmod3.TestMod3;
-import com.choonster.testmod3.item.block.ItemSlabTestMod3;
 import com.choonster.testmod3.util.Constants;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
@@ -163,7 +162,7 @@ public abstract class BlockSlabTestMod3<
 		public final SLAB singleSlab;
 		public final SLAB doubleSlab;
 		public final String groupName;
-		private ItemSlabTestMod3<SLAB> item;
+		private ItemSlab item;
 
 		/**
 		 * Create a slab group.
@@ -192,7 +191,7 @@ public abstract class BlockSlabTestMod3<
 			return item;
 		}
 
-		public void setItem(ItemSlabTestMod3<SLAB> item) {
+		public void setItem(ItemSlab item) {
 			this.item = item;
 		}
 	}

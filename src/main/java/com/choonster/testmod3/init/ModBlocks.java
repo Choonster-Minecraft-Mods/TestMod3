@@ -4,7 +4,6 @@ import com.choonster.testmod3.block.*;
 import com.choonster.testmod3.block.pipe.BlockPipeBasic;
 import com.choonster.testmod3.block.pipe.BlockPipeFluid;
 import com.choonster.testmod3.item.block.ItemFluidTank;
-import com.choonster.testmod3.item.block.ItemSlabTestMod3;
 import com.choonster.testmod3.tileentity.*;
 import com.choonster.testmod3.util.Constants;
 import net.minecraft.block.Block;
@@ -13,7 +12,6 @@ import net.minecraft.item.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
@@ -120,9 +118,9 @@ public class ModBlocks {
 			VARIANTS extends Iterable<VARIANT> & IStringSerializable,
 			SLAB extends BlockSlabTestMod3<VARIANT, VARIANTS, SLAB>
 			> void registerSlabGroup(BlockSlabTestMod3.SlabGroup<VARIANT, VARIANTS, SLAB> slabGroup) {
-		registerBlock(slabGroup.singleSlab, slab -> new ItemSlabTestMod3<>(slab, ImmutablePair.of(slabGroup.singleSlab, slabGroup.doubleSlab)));
+		registerBlock(slabGroup.singleSlab, slab -> new ItemSlab(slab, slabGroup.singleSlab, slabGroup.doubleSlab));
 		registerBlock(slabGroup.doubleSlab, null); // No item form for the double slab
-		slabGroup.setItem((ItemSlabTestMod3<SLAB>) Item.getItemFromBlock(slabGroup.singleSlab));
+		slabGroup.setItem((ItemSlab) Item.getItemFromBlock(slabGroup.singleSlab));
 	}
 
 	public static void registerTileEntities() {
