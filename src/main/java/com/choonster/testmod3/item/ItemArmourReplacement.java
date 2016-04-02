@@ -102,33 +102,32 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 		// Create a mutable copy of the replacements
 		final Set<ItemStack> replacements = new HashSet<>(replacementItems);
 
-		// For each armour type,
-		for (EntityEquipmentSlot equipmentSlot : Constants.ARMOUR_SLOTS) {
-			if (equipmentSlot != armorType) { // If it's not this item's armour type,
-				Optional<ItemStack> optionalReplacement = replacements.stream()
-						.filter(replacementStack -> replacementStack.getItem().isValidArmor(replacementStack, armorType, player))
-						.findFirst();
+		Constants.ARMOUR_SLOTS.stream() // For each armour type,
+				.filter(equipmentSlot -> equipmentSlot != armorType)
+				.forEach(equipmentSlot -> { // If it's not this item's armour type,
+					Optional<ItemStack> optionalReplacement = replacements.stream()
+							.filter(replacementStack -> replacementStack.getItem().isValidArmor(replacementStack, armorType, player))
+							.findFirst();
 
-				if (optionalReplacement.isPresent()) { // If there's a replacement for this armour type,
-					final ItemStack replacement = optionalReplacement.get(); // Get it
-					replacements.remove(replacement); // Don't use it for any other armour type
+					if (optionalReplacement.isPresent()) { // If there's a replacement for this armour type,
+						final ItemStack replacement = optionalReplacement.get(); // Get it
+						replacements.remove(replacement); // Don't use it for any other armour type
 
-					final ItemStack original = player.getItemStackFromSlot(equipmentSlot);
+						final ItemStack original = player.getItemStackFromSlot(equipmentSlot);
 
-					if (original != null) { // If the player is wearing something in this slot,
-						final NBTTagCompound tagCompound = new NBTTagCompound();
-						tagCompound.setByte(KEY_SLOT, (byte) armorType.getSlotIndex());
+						if (original != null) { // If the player is wearing something in this slot,
+							final NBTTagCompound tagCompound = new NBTTagCompound();
+							tagCompound.setByte(KEY_SLOT, (byte) armorType.getSlotIndex());
 
-						original.writeToNBT(tagCompound); // Write it to NBT
+							original.writeToNBT(tagCompound); // Write it to NBT
 
-						replacedArmour.appendTag(tagCompound); // Add it to the list of replaced armour
+							replacedArmour.appendTag(tagCompound); // Add it to the list of replaced armour
+						}
+
+						player.setItemStackToSlot(equipmentSlot, replacement.copy()); // Equip a copy of the replacement
+						Logger.info("Equipped replacement %s to slot %d, replacing %s", replacement, equipmentSlot, original);
 					}
-
-					player.setItemStackToSlot(equipmentSlot, replacement.copy()); // Equip a copy of the replacement
-					Logger.info("Equipped replacement %s to slot %d, replacing %s", replacement, equipmentSlot, original);
-				}
-			}
-		}
+				});
 
 		stackTagCompound.setTag(KEY_REPLACED_ARMOUR, replacedArmour); // Save the replaced armour to the ItemStack
 	}

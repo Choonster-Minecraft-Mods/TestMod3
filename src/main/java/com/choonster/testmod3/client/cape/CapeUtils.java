@@ -18,9 +18,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 @SideOnly(Side.CLIENT)
-public class CapeUtils {
-	public static final ResourceLocation CAPE_LOCATION = new ResourceLocation(TestMod3.MODID, "textures/capes/testmod3.png");
-	public static final UUID UUID_CHOONSTER = UUID.fromString("12bbe833-bf2b-4daa-adb0-9a7f6e2f4f38");
+class CapeUtils {
+	private static final ResourceLocation CAPE_LOCATION = new ResourceLocation(TestMod3.MODID, "textures/capes/testmod3.png");
+	private static final UUID UUID_CHOONSTER = UUID.fromString("12bbe833-bf2b-4daa-adb0-9a7f6e2f4f38");
 
 	// Copied from SkinManager
 	private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(0, 2, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
@@ -32,7 +32,7 @@ public class CapeUtils {
 	 *
 	 * @param player The player
 	 */
-	public static void queuePlayerCapeReplacement(AbstractClientPlayer player) {
+	static void queuePlayerCapeReplacement(AbstractClientPlayer player) {
 		String displayName = player.getDisplayNameString();
 
 		Logger.info("Queueing cape replacement for %s", displayName);
@@ -54,7 +54,7 @@ public class CapeUtils {
 	 *
 	 * @param player The player
 	 */
-	public static void replacePlayerCape(AbstractClientPlayer player) {
+	private static void replacePlayerCape(AbstractClientPlayer player) {
 		String displayName = player.getDisplayNameString();
 
 		NetworkPlayerInfo playerInfo;
@@ -83,7 +83,7 @@ public class CapeUtils {
 	 * @param player The player
 	 * @return True if the player has a TestMod3 cape
 	 */
-	public static boolean doesPlayerHaveCape(AbstractClientPlayer player) {
+	static boolean doesPlayerHaveCape(AbstractClientPlayer player) {
 		return player.getUniqueID().equals(UUID_CHOONSTER);
 	}
 }

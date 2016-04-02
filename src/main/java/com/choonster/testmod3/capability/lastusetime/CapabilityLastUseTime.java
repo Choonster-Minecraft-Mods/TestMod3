@@ -116,7 +116,7 @@ public class CapabilityLastUseTime {
 	 * Provider for the {@link ILastUseTime} capability.
 	 */
 	public static class Provider implements ICapabilitySerializable<NBTTagLong> {
-		private ILastUseTime lastUseTime = new LastUseTime();
+		private final ILastUseTime lastUseTime = new LastUseTime();
 
 		/**
 		 * Determines if this object has support for the capability in question on the specific side.
