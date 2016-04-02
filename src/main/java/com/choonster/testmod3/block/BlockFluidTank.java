@@ -19,6 +19,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -110,29 +111,13 @@ public class BlockFluidTank extends BlockTestMod3 {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileEntityFluidTank tileEntityFluidTank = getTileEntity(worldIn, pos);
-		if (heldItem != null) {
-			ItemStack container = tileEntityFluidTank.tryUseFluidContainer(heldItem, side);
-			if (container != null) {
-				if (!playerIn.capabilities.isCreativeMode) {
-					heldItem.stackSize--;
-					if (heldItem.stackSize <= 0) {
-						playerIn.setHeldItem(hand, container); // Replace the player's held item with the container
-					} else if (!playerIn.inventory.addItemStackToInventory(container)) {
-						playerIn.dropPlayerItemWithRandomChoice(container, false);
-					}
-				}
-
-				playerIn.inventoryContainer.detectAndSendChanges();
-
-				return true;
-			}
-		}
+		final boolean result = FluidUtil.interactWithTank(heldItem, playerIn, tileEntityFluidTank, side);
 
 		if (!worldIn.isRemote) {
-			getFluidDataForDisplay(tileEntityFluidTank.getTankInfo(EnumFacing.NORTH)).forEach(playerIn::addChatComponentMessage);
+			getFluidDataForDisplay(tileEntityFluidTank.getTankInfo(side)).forEach(playerIn::addChatComponentMessage);
 		}
 
-		return true;
+		return result;
 	}
 
 	@Override
