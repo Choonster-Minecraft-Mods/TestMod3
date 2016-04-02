@@ -80,7 +80,7 @@ public class ItemSnowballLauncher extends ItemTestMod3 {
 
 			if (!worldIn.isRemote) {
 				final EntitySnowball entitySnowball = new EntitySnowball(worldIn, playerIn);
-				entitySnowball.func_184538_a(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
+				entitySnowball.setHeadingFromThrower(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
 				worldIn.spawnEntityInWorld(entitySnowball);
 			}
 

@@ -3,25 +3,24 @@ package com.choonster.testmod3.init;
 import com.choonster.testmod3.block.*;
 import com.choonster.testmod3.block.pipe.BlockPipeBasic;
 import com.choonster.testmod3.block.pipe.BlockPipeFluid;
-import com.choonster.testmod3.item.block.ItemColoredMod;
 import com.choonster.testmod3.item.block.ItemFluidTank;
-import com.choonster.testmod3.item.block.ItemMultiTextureMod;
 import com.choonster.testmod3.item.block.ItemSlabTestMod3;
 import com.choonster.testmod3.tileentity.*;
 import com.choonster.testmod3.util.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemCloth;
+import net.minecraft.item.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 
+@SuppressWarnings("WeakerAccess")
 public class ModBlocks {
 
 	public static final Set<Block> blocks = new HashSet<>();
@@ -51,20 +50,20 @@ public class ModBlocks {
 	public static BlockColouredSlab.ColouredSlabGroup stainedClaySlabs;
 
 	public static void registerBlocks() {
-		waterGrass = registerBlock(new BlockWaterGrass(), ItemColoredMod.class, true);
+		waterGrass = registerBlock(new BlockWaterGrass(), block -> new ItemColored(block, true));
 		largeCollisionTest = registerBlock(new BlockLargeCollisionTest());
 		rightClickTest = registerBlock(new BlockRightClickTest());
 		clientPlayerRightClick = registerBlock(new BlockClientPlayerRightClick());
 		rotatableLamp = registerBlock(new BlockRotatableLamp());
 		itemCollisionTest = registerBlock(new BlockItemCollisionTest());
 		survivalCommandBlock = registerBlock(new BlockSurvivalCommandBlock());
-		fluidTank = registerBlock(new BlockFluidTank(), ItemFluidTank.class);
+		fluidTank = registerBlock(new BlockFluidTank(), ItemFluidTank::new);
 		itemDebugger = registerBlock(new BlockItemDebugger());
 		endPortalFrameFull = registerBlock(new BlockTestMod3(Material.rock, "endPortalFrameFull"));
-		coloredRotatable = registerBlock(new BlockColoredRotatable(Material.cloth, "coloredRotatable"), ItemCloth.class);
-		coloredMultiRotatable = registerBlock(new BlockColoredMultiRotatable(Material.cloth, "coloredMultiRotatable"), ItemCloth.class);
+		coloredRotatable = registerBlock(new BlockColoredRotatable(Material.cloth, "coloredRotatable"), ItemCloth::new);
+		coloredMultiRotatable = registerBlock(new BlockColoredMultiRotatable(Material.cloth, "coloredMultiRotatable"), ItemCloth::new);
 		potionEffect = registerBlock(new BlockPotionEffect());
-		variants = registerBlock(new BlockVariants(Material.iron), ItemMultiTextureMod.class, BlockVariants.EnumType.getNames(), true);
+		variants = registerBlock(new BlockVariants(Material.iron), block -> new ItemMultiTexture(block, block, BlockVariants.EnumType.getNames()));
 		clientPlayerRotation = registerBlock(new BlockClientPlayerRotation());
 		pigSpawnerRefiller = registerBlock(new BlockPigSpawnerRefiller());
 		mirrorPlane = registerBlock(new BlockPlane(Material.iron, "mirrorPlane"));
@@ -85,23 +84,28 @@ public class ModBlocks {
 	 * @param <T>   The Block type
 	 * @return The Block instance
 	 */
-	private static <T extends Block> T registerBlock(T block) {
-		GameRegistry.registerBlock(block);
-		blocks.add(block);
-		return block;
+	protected static <T extends Block> T registerBlock(T block) {
+		return registerBlock(block, ItemBlock::new);
 	}
 
 	/**
 	 * Register a Block with a custom ItemBlock class.
 	 *
-	 * @param block           The Block instance
-	 * @param itemClass       The ItemBlock class
-	 * @param constructorArgs Arguments to pass to the ItemBlock constructor
-	 * @param <BLOCK>         The Block type
+	 * @param <BLOCK>     The Block type
+	 * @param block       The Block instance
+	 * @param itemFactory A function that creates the ItemBlock instance, or null if no ItemBlock should be created
 	 * @return The Block instance
 	 */
-	private static <BLOCK extends Block> BLOCK registerBlock(BLOCK block, Class<? extends ItemBlock> itemClass, Object... constructorArgs) {
-		GameRegistry.registerBlock(block, itemClass, constructorArgs);
+	protected static <BLOCK extends Block> BLOCK registerBlock(BLOCK block, @Nullable Function<BLOCK, ItemBlock> itemFactory) {
+		GameRegistry.register(block, block.getRegistryName());
+
+		if (itemFactory != null) {
+			ItemBlock itemBlock = itemFactory.apply(block);
+			itemBlock.setRegistryName(block.getRegistryName());
+
+			GameRegistry.register(itemBlock, itemBlock.getRegistryName());
+		}
+
 		blocks.add(block);
 		return block;
 	}
@@ -117,7 +121,7 @@ public class ModBlocks {
 			VARIANTS extends Iterable<VARIANT> & IStringSerializable,
 			SLAB extends BlockSlabTestMod3<VARIANT, VARIANTS, SLAB>
 			> void registerSlabGroup(BlockSlabTestMod3.SlabGroup<VARIANT, VARIANTS, SLAB> slabGroup) {
-		registerBlock(slabGroup.singleSlab, ItemSlabTestMod3.class, ImmutablePair.of(slabGroup.singleSlab, slabGroup.doubleSlab));
+		registerBlock(slabGroup.singleSlab, slab -> new ItemSlabTestMod3<>(slab, ImmutablePair.of(slabGroup.singleSlab, slabGroup.doubleSlab)));
 		registerBlock(slabGroup.doubleSlab, null); // No item form for the double slab
 		slabGroup.setItem((ItemSlabTestMod3<SLAB>) Item.getItemFromBlock(slabGroup.singleSlab));
 	}

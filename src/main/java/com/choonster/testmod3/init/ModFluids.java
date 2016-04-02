@@ -10,13 +10,13 @@ import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.*;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+@SuppressWarnings("WeakerAccess")
 public class ModFluids {
 	public static Fluid static_;
 	public static Fluid staticGas;
@@ -101,7 +101,8 @@ public class ModFluids {
 		block.setRegistryName("fluid." + block.getFluid().getName());
 		block.setUnlocalizedName(Constants.RESOURCE_PREFIX + block.getFluid().getUnlocalizedName());
 		block.setCreativeTab(TestMod3.creativeTab);
-		GameRegistry.registerBlock(block);
+
+		ModBlocks.registerBlock(block);
 
 		modFluidBlocks.add(block);
 

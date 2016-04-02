@@ -1,10 +1,11 @@
 package com.choonster.testmod3.util;
 
 import com.choonster.testmod3.Logger;
+import com.choonster.testmod3.TestMod3;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.registry.GameData;
 
 import java.io.PrintWriter;
 
@@ -20,9 +21,9 @@ public class BlockDumper {
 		try (PrintWriter writer = new PrintWriter("TestMod3_BlockDump_" + (FMLCommonHandler.instance().getEffectiveSide().isClient() ? "Client" : "Server") + ".txt", "UTF-8")) {
 			writer.println("Name - toString");
 
-			for (ResourceLocation key : GameData.getBlockRegistry().getKeys()) {
-				if (key.toString().startsWith(Constants.RESOURCE_PREFIX)) {
-					Item item = GameData.getItemRegistry().getObject(key);
+			for (ResourceLocation key : Block.blockRegistry.getKeys()) {
+				if (key.getResourceDomain().equals(TestMod3.MODID)) {
+					Item item = Item.itemRegistry.getObject(key);
 					if (item != null) {
 						writer.printf("%s - %s\n", item.getUnlocalizedName(), item.toString());
 					}

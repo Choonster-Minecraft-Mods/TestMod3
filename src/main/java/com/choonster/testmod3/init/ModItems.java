@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import java.util.HashSet;
 import java.util.Set;
 
+@SuppressWarnings("WeakerAccess")
 public class ModItems {
 	public static final Set<Item> items = new HashSet<>();
 
@@ -106,7 +107,7 @@ public class ModItems {
 	 * @return The Item instance
 	 */
 	private static <T extends Item> T registerItem(T item) {
-		GameRegistry.registerItem(item);
+		GameRegistry.register(item, item.getRegistryName());
 		items.add(item);
 
 		return item;

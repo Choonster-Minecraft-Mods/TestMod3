@@ -51,15 +51,6 @@ public class ItemModBow extends ItemBow {
 	}
 
 	/**
-	 * Get the location of the blockstates file used for this item's models
-	 *
-	 * @return The location
-	 */
-	public String getModelLocation() {
-		return getRegistryName();
-	}
-
-	/**
 	 * Get an {@link IItemHandler} wrapper of the first slot in the player's inventory containing an {@link ItemStack} of ammunition.
 	 * <p>
 	 * This {@link IItemHandler} will always have a single slot containing the ammunition {@link ItemStack}.

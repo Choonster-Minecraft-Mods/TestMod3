@@ -8,7 +8,6 @@ import com.choonster.testmod3.init.ModFluids;
 import com.choonster.testmod3.init.ModItems;
 import com.choonster.testmod3.util.Constants;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockCommandBlock;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
@@ -112,8 +111,8 @@ public class ModModelManager {
 	private final Set<Item> itemsRegistered = new HashSet<>();
 
 	private void registerItemModels() {
-		String locationBow = ModItems.modBow.getModelLocation();
-		String locationContinuousBow = ModItems.continuousBow.getModelLocation();
+		String locationBow = ModItems.modBow.getRegistryName().toString();
+		String locationContinuousBow = ModItems.continuousBow.getRegistryName().toString();
 		for (int stage = 0; stage < 3; stage++) { // Add a variant for each stage's model
 			ModelBakery.registerItemVariants(ModItems.modelTest, new ResourceLocation(TestMod3.MODID, "modeltest_" + stage));
 			ModelBakery.registerItemVariants(ModItems.modBow, new ModelResourceLocation(locationBow, "pulling_" + stage));
@@ -150,7 +149,7 @@ public class ModModelManager {
 	}
 
 	private void registerItemModel(Item item) {
-		registerItemModel(item, item.getRegistryName());
+		registerItemModel(item, item.getRegistryName().toString());
 	}
 
 	private void registerItemModel(Item item, String modelLocation) {
