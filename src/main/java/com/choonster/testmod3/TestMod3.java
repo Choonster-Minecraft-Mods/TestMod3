@@ -59,6 +59,7 @@ public class TestMod3 {
 
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 
+		ModSoundEvents.registerSounds();
 		ModMessages.registerMessages();
 		ModFluids.registerFluids();
 		ModBlocks.registerBlocks();

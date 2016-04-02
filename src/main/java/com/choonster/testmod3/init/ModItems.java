@@ -1,8 +1,8 @@
 package com.choonster.testmod3.init;
 
-import com.choonster.testmod3.item.*;
 import com.choonster.testmod3.capability.pigspawner.PigSpawnerFinite;
 import com.choonster.testmod3.capability.pigspawner.PigSpawnerInfinite;
+import com.choonster.testmod3.item.*;
 import com.choonster.testmod3.util.Constants;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
@@ -58,7 +58,7 @@ public class ModItems {
 	public static void registerItems() {
 		woodenAxe = registerItem(new ItemCuttingAxe(Item.ToolMaterial.WOOD, "woodenAxe"));
 		entityTest = registerItem(new ItemEntityTest());
-		solarisRecord = registerItem(new ItemRecordMod("solaris"));
+		solarisRecord = registerItem(new ItemRecordMod("solaris", ModSoundEvents.record_solaris));
 		heavy = registerItem(new ItemHeavy());
 		entityInteractionTest = registerItem(new ItemEntityInteractionTest());
 		blockDestroyer = registerItem(new ItemBlockDestroyer());

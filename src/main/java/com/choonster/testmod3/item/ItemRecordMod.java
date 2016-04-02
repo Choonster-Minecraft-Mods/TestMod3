@@ -2,9 +2,8 @@ package com.choonster.testmod3.item;
 
 import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.util.Constants;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemRecord;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 
 /**
  * A record.
@@ -15,16 +14,10 @@ import net.minecraft.util.ResourceLocation;
  * @author Choonster
  */
 public class ItemRecordMod extends ItemRecord {
-	public ItemRecordMod(String recordName) {
-		// TODO: Use proper SoundEvent when Forge gets sounds working
-		super(Constants.RESOURCE_PREFIX + recordName, SoundEvents.record_13);
+	public ItemRecordMod(String recordName, SoundEvent soundEvent) {
+		super(Constants.RESOURCE_PREFIX + recordName, soundEvent);
 		setRegistryName("record_" + recordName);
 		setUnlocalizedName("record");
 		setCreativeTab(TestMod3.creativeTab);
-	}
-
-	@Override
-	public ResourceLocation getRecordResource(String name) {
-		return new ResourceLocation(TestMod3.MODID, name);
 	}
 }
