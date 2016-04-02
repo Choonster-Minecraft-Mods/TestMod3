@@ -1,7 +1,6 @@
 package com.choonster.testmod3.capability.lastusetime;
 
 import com.choonster.testmod3.api.capability.lastusetime.ILastUseTime;
-import net.minecraft.item.ItemStack;
 
 /**
  * @author Choonster

@@ -2,10 +2,7 @@ package com.choonster.testmod3.util;
 
 import com.choonster.testmod3.TestMod3;
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
 
 import java.util.Set;
 import java.util.stream.Collectors;

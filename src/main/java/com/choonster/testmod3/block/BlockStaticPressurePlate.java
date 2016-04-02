@@ -48,7 +48,7 @@ public abstract class BlockStaticPressurePlate extends BlockTestMod3 {
 	}
 
 	private boolean canBePlacedOn(World worldIn, BlockPos pos) {
-		return worldIn.getBlockState(pos).isSideSolid(worldIn, pos, EnumFacing.UP)|| worldIn.getBlockState(pos).getBlock() instanceof BlockFence;
+		return worldIn.getBlockState(pos).isSideSolid(worldIn, pos, EnumFacing.UP) || worldIn.getBlockState(pos).getBlock() instanceof BlockFence;
 	}
 
 	@Override

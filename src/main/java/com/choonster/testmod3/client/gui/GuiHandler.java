@@ -1,6 +1,5 @@
 package com.choonster.testmod3.client.gui;
 
-import com.choonster.testmod3.tileentity.SurvivalCommandBlockLogic;
 import com.choonster.testmod3.tileentity.TileEntitySurvivalCommandBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

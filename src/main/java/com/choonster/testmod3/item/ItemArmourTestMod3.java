@@ -20,7 +20,7 @@ public class ItemArmourTestMod3 extends ItemArmor {
 
 	public ItemArmourTestMod3(final ArmorMaterial material, final EntityEquipmentSlot equipmentSlot, final String armourName) {
 		super(material, -1, equipmentSlot);
-		ItemTestMod3.setItemName(this,  equipmentSlot.getName() + armourName);
+		ItemTestMod3.setItemName(this, equipmentSlot.getName() + armourName);
 		setCreativeTab(TestMod3.creativeTab);
 	}
 }
