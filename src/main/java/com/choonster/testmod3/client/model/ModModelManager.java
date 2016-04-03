@@ -46,7 +46,7 @@ public class ModModelManager {
 	}
 
 	private void registerFluidModel(IFluidBlock fluidBlock) {
-		Item item = Item.getItemFromBlock((Block) fluidBlock);
+		final Item item = Item.getItemFromBlock((Block) fluidBlock);
 
 		ModelBakery.registerItemVariants(item);
 
@@ -60,6 +60,8 @@ public class ModModelManager {
 				return modelResourceLocation;
 			}
 		});
+
+		itemsRegistered.add(item);
 	}
 
 	private void registerBlockModels() {
