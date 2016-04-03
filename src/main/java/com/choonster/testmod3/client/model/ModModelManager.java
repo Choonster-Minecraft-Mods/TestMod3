@@ -65,9 +65,7 @@ public class ModModelManager {
 	private void registerBlockModels() {
 		ModelLoader.setCustomStateMapper(ModBlocks.waterGrass, new StateMap.Builder().ignore(BlockLiquid.LEVEL).build());
 
-		registerBlockItemModel(ModBlocks.largeCollisionTest, "minecraft:white_wool");
-		registerBlockItemModel(ModBlocks.rightClickTest, "minecraft:black_stained_glass");
-		registerBlockItemModel(ModBlocks.clientPlayerRightClick, "minecraft:heavy_weighted_pressure_plate");
+		registerBlockItemModel(ModBlocks.rightClickTest, new ModelResourceLocation(ModBlocks.rightClickTest.getRegistryName(), "has_ender_eye=false"));
 
 		for (EnumDyeColor color : EnumDyeColor.values()) {
 			registerBlockItemModelForMeta(ModBlocks.coloredRotatable, color.getMetadata(), String.format("color=%s,facing=north", color.getName()));

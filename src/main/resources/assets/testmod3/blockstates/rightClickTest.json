@@ -1,10 +1,16 @@
 {
+	"forge_marker": 1,
+	"defaults": {
+		"transform": "forge:default-block"
+	},
 	"variants": {
-		"has_ender_eye=true": {
-			"model": "glass_white"
-		},
-		"has_ender_eye=false": {
-			"model": "glass_black"
+		"has_ender_eye": {
+			"true": {
+				"model": "glass_white"
+			},
+			"false": {
+				"model": "glass_black"
+			}
 		}
 	}
 }

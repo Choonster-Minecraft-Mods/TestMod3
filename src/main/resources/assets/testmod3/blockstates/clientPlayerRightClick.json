@@ -1,7 +1,11 @@
 {
+	"forge_marker": 1,
+	"defaults": {
+		"model": "minecraft:heavy_pressure_plate_down",
+		"transform": "forge:default-block"
+	},
 	"variants": {
-		"normal": {
-			"model": "heavy_pressure_plate_down"
-		}
+		"normal": [ { } ],
+		"inventory": [ { } ]
 	}
 }
