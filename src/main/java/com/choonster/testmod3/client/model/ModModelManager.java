@@ -67,7 +67,6 @@ public class ModModelManager {
 	private void registerBlockModels() {
 		ModelLoader.setCustomStateMapper(ModBlocks.waterGrass, new StateMap.Builder().ignore(BlockLiquid.LEVEL).build());
 
-		registerBlockItemModel(ModBlocks.waterGrass, "minecraft:tall_grass");
 		registerBlockItemModel(ModBlocks.largeCollisionTest, "minecraft:white_wool");
 		registerBlockItemModel(ModBlocks.rightClickTest, "minecraft:black_stained_glass");
 		registerBlockItemModel(ModBlocks.clientPlayerRightClick, "minecraft:heavy_weighted_pressure_plate");

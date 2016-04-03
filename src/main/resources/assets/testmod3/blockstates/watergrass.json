@@ -1,7 +1,5 @@
 {
 	"variants": {
-		"normal": {
-			"model": "tall_grass"
-		}
+		"normal": { "model": "minecraft:tall_grass" }
 	}
 }
