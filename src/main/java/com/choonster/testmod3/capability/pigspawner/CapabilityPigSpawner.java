@@ -85,7 +85,7 @@ public final class CapabilityPigSpawner {
 					final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) instance;
 					NBTTagCompound tagCompound = (NBTTagCompound) nbt;
 
-					Logger.info(LOG_MARKER, DebugUtil.getStackTrace(10), "Reading finite pig spawner from NBT: %s (Current: %d, New: %d)", instance, pigSpawnerFinite.getNumPigs(), tagCompound.getInteger("NumPigs"));
+					Logger.debug(LOG_MARKER, DebugUtil.getStackTrace(10), "Reading finite pig spawner from NBT: %s (Current: %d, New: %d)", instance, pigSpawnerFinite.getNumPigs(), tagCompound.getInteger("NumPigs"));
 
 					pigSpawnerFinite.setNumPigs(tagCompound.getInteger("NumPigs"));
 				}
@@ -166,7 +166,7 @@ public final class CapabilityPigSpawner {
 		private void sendToPlayer(IPigSpawner pigSpawner, EntityPlayerMP player, EnumHand hand) {
 			if (pigSpawner instanceof IPigSpawnerFinite) {
 				final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) pigSpawner;
-				Logger.info(LOG_MARKER, DebugUtil.getStackTrace(10), "Sending finite pig spawner to client. Player: %s - NumPigs: %d", player.getDisplayNameString(), pigSpawnerFinite.getNumPigs());
+				Logger.debug(LOG_MARKER, DebugUtil.getStackTrace(10), "Sending finite pig spawner to client. Player: %s - NumPigs: %d", player.getDisplayNameString(), pigSpawnerFinite.getNumPigs());
 				TestMod3.network.sendTo(new MessageUpdateHeldPigSpawnerFinite(pigSpawnerFinite, hand), player);
 			}
 		}

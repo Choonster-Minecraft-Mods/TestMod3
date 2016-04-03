@@ -84,11 +84,11 @@ public class MessageUpdateHeldPigSpawnerFinite implements IMessage {
 				if (pigSpawner instanceof IPigSpawnerFinite) {
 					final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) pigSpawner;
 
-					Logger.info(CapabilityPigSpawner.LOG_MARKER, "Received finite pig spawner from server. %s - New: %d - Old: %d", pigSpawner, message.numPigs, pigSpawnerFinite.getNumPigs());
+					Logger.debug(CapabilityPigSpawner.LOG_MARKER, "Received finite pig spawner from server. %s - New: %d - Old: %d", pigSpawner, message.numPigs, pigSpawnerFinite.getNumPigs());
 
 					pigSpawnerFinite.setNumPigs(message.numPigs);
 				} else {
-					Logger.info(CapabilityPigSpawner.LOG_MARKER, "Received non-finite pig spawner from server: %s", pigSpawner);
+					Logger.debug(CapabilityPigSpawner.LOG_MARKER, "Received non-finite pig spawner from server: %s", pigSpawner);
 				}
 			});
 

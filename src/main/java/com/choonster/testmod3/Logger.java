@@ -96,6 +96,11 @@ public class Logger {
 		log(Level.DEBUG, marker, format, data);
 	}
 
+	public static void debug(Marker marker, Throwable throwable, String format,
+							 Object... data) {
+		log(Level.DEBUG, marker, throwable, format, data);
+	}
+
 	public static void setLogger(org.apache.logging.log4j.Logger logger) {
 		if (Logger.logger != null) {
 			throw new IllegalStateException("Attempt to replace logger");
