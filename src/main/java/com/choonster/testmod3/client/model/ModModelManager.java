@@ -1,6 +1,5 @@
 package com.choonster.testmod3.client.model;
 
-import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.block.BlockColouredSlab;
 import com.choonster.testmod3.block.BlockVariants;
 import com.choonster.testmod3.init.ModBlocks;
@@ -17,7 +16,6 @@ import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
@@ -112,16 +110,6 @@ public class ModModelManager {
 	private final Set<Item> itemsRegistered = new HashSet<>();
 
 	private void registerItemModels() {
-		String locationBow = ModItems.modBow.getRegistryName().toString();
-		String locationContinuousBow = ModItems.continuousBow.getRegistryName().toString();
-		for (int stage = 0; stage < 3; stage++) { // Add a variant for each stage's model
-			ModelBakery.registerItemVariants(ModItems.modelTest, new ResourceLocation(TestMod3.MODID, "modeltest_" + stage));
-			ModelBakery.registerItemVariants(ModItems.modBow, new ModelResourceLocation(locationBow, "pulling_" + stage));
-			ModelBakery.registerItemVariants(ModItems.continuousBow, new ModelResourceLocation(locationContinuousBow, "pulling_" + stage));
-		}
-
-		ModelBakery.registerItemVariants(ModItems.slingshot, new ResourceLocation(TestMod3.MODID, "slingshot_pulled"));
-
 		// Register items with custom model names first
 		registerItemModel(ModItems.snowballLauncher, "minecraft:fishing_rod");
 		registerItemModel(ModItems.unicodeTooltips, "minecraft:rabbit");
@@ -131,7 +119,6 @@ public class ModModelManager {
 		registerItemModel(ModItems.woodenHarvestSword, "minecraft:wooden_sword");
 		registerItemModel(ModItems.diamondHarvestSword, "minecraft:diamond_sword");
 		registerItemModel(ModItems.clearer, "minecraft:nether_star");
-		registerItemModel(ModItems.modBow, new ModelResourceLocation(locationBow, "standby"));
 		registerItemModel(ModItems.heightTester, "minecraft:compass");
 		registerItemModel(ModItems.heavy, "minecraft:brick");
 		registerItemModel(ModItems.entityTest, "minecraft:porkchop");
@@ -142,7 +129,6 @@ public class ModModelManager {
 		registerItemModel(ModItems.replacementBoots, "minecraft:chainmail_boots");
 		registerItemModel(ModItems.pigSpawnerFinite, "minecraft:porkchop");
 		registerItemModel(ModItems.pigSpawnerInfinite, "minecraft:porkchop");
-		registerItemModel(ModItems.continuousBow, new ModelResourceLocation(locationContinuousBow, "standby"));
 		registerItemModel(ModItems.respawner, "minecraft:clock");
 
 		// Then register items with default model names
