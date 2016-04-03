@@ -100,7 +100,7 @@ public class ModBlocks {
 		if (itemFactory != null) {
 			final ItemBlock itemBlock = itemFactory.apply(block);
 
-			GameRegistry.register(itemBlock, block.getRegistryName());
+			GameRegistry.register(itemBlock.setRegistryName(block.getRegistryName()));
 		}
 
 		blocks.add(block);

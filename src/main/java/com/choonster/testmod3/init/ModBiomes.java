@@ -25,7 +25,7 @@ public class ModBiomes {
 	}
 
 	private static <T extends BiomeGenBase> T registerBiome(T biome, ResourceLocation biomeName, BiomeManager.BiomeType biomeType, int weight, BiomeDictionary.Type... types) {
-		GameRegistry.register(biome, biomeName);
+		GameRegistry.register(biome.setRegistryName(biomeName));
 		BiomeDictionary.registerBiomeType(biome, types);
 		BiomeManager.addBiome(biomeType, new BiomeManager.BiomeEntry(biome, weight));
 
