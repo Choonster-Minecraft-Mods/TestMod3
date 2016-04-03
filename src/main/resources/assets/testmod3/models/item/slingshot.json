@@ -14,7 +14,7 @@
 			"predicate": {
 				"testmod3:ticksSinceLastUse": 20
 			},
-			"model": null
+			"model": "testmod3:item/slingshot"
 		}
 	]
 }
