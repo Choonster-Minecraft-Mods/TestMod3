@@ -153,6 +153,7 @@ message.testmod3:pigSpawnerRefiller.refilled=Refilled held pig spawner.
 message.testmod3:respawner.noSpawnLocation=No spawn location set
 message.testmod3:respawner.teleporting=Teleporting to %d,%d,%d in dimension %d
 message.testmod3:clientPlayerRightClick.rightClick=Right click!!
+message.testmod3:death.coordinates=You died at %d %d %d!
 
 # Config GUI strings
 testmod3.config.title=TestMod3 Config

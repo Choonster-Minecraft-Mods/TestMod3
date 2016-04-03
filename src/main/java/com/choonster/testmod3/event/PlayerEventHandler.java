@@ -5,9 +5,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -49,5 +51,19 @@ public class PlayerEventHandler {
 		ITextComponent chatComponent = new TextComponentTranslation(message);
 		chatComponent.getStyle().setColor(TextFormatting.LIGHT_PURPLE);
 		player.addChatComponentMessage(chatComponent);
+	}
+
+	/**
+	 * When a player dies, tell them their coordinates.
+	 *
+	 * @param event The event
+	 */
+	@SubscribeEvent
+	public void livingDeath(LivingDeathEvent event) {
+		if (event.getEntity() instanceof EntityPlayer) {
+			final EntityPlayer player = (EntityPlayer) event.getEntity();
+			final BlockPos pos = player.getPosition();
+			player.addChatComponentMessage(new TextComponentTranslation("message.testmod3:death.coordinates", pos.getX(), pos.getY(), pos.getZ()));
+		}
 	}
 }
