@@ -183,7 +183,9 @@ public class CapabilityLastUseTime {
 		private static final IItemPropertyGetter GETTER = (stack, worldIn, entityIn) -> {
 			final ILastUseTime lastUseTime = getLastUseTime(stack);
 
-			return lastUseTime != null && worldIn != null ? worldIn.getTotalWorldTime() - lastUseTime.get() : 0;
+			final World world = worldIn != null ? worldIn : entityIn != null ? entityIn.getEntityWorld() : null;
+
+			return lastUseTime != null && world != null ? world.getTotalWorldTime() - lastUseTime.get() : 0;
 		};
 
 		/**
