@@ -2,15 +2,17 @@ package com.choonster.testmod3.client.cape;
 
 import com.choonster.testmod3.Logger;
 import com.choonster.testmod3.TestMod3;
+import com.choonster.testmod3.util.ReflectionUtil;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.invoke.MethodHandle;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -24,6 +26,9 @@ class CapeUtils {
 
 	// Copied from SkinManager
 	private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(0, 2, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
+
+	private static final MethodHandle GET_PLAYER_INFO = ReflectionUtil.findMethod(AbstractClientPlayer.class, new String[]{"getPlayerInfo", "func_175155_b"});
+	private static final MethodHandle GET_PLAYER_TEXTURES = ReflectionUtil.findFieldGetter(NetworkPlayerInfo.class, "playerTextures", "field_187107_a");
 
 	/**
 	 * Queue the replacement of a player's cape with the TestMod3 cape.
@@ -54,15 +59,16 @@ class CapeUtils {
 	 *
 	 * @param player The player
 	 */
+	@SuppressWarnings("unchecked")
 	private static void replacePlayerCape(AbstractClientPlayer player) {
 		String displayName = player.getDisplayNameString();
 
 		NetworkPlayerInfo playerInfo;
 
 		try {
-			playerInfo = (NetworkPlayerInfo) ReflectionHelper.findMethod(AbstractClientPlayer.class, player, new String[]{"getPlayerInfo", "func_175155_b"}).invoke(player);
-		} catch (IllegalAccessException | InvocationTargetException e) {
-			Logger.fatal(e, "Failed to get NetworkPlayerInfo of %s", displayName);
+			playerInfo = (NetworkPlayerInfo) GET_PLAYER_INFO.invoke(player);
+		} catch (Throwable throwable) {
+			Logger.fatal(throwable, "Failed to get NetworkPlayerInfo of %s", displayName);
 			return;
 		}
 
@@ -71,7 +77,17 @@ class CapeUtils {
 			return;
 		}
 
-		ReflectionHelper.setPrivateValue(NetworkPlayerInfo.class, playerInfo, CAPE_LOCATION, "locationCape", "field_178862_f");
+
+		final Map<MinecraftProfileTexture.Type, ResourceLocation> playerTextures;
+		try {
+			playerTextures = (Map<MinecraftProfileTexture.Type, ResourceLocation>) GET_PLAYER_TEXTURES.invoke(playerInfo);
+		} catch (Throwable throwable) {
+			Logger.fatal(throwable, "Failed to get player textures of %s", displayName);
+			return;
+		}
+
+		playerTextures.put(MinecraftProfileTexture.Type.CAPE, CAPE_LOCATION);
+
 		Logger.info("Replaced cape of %s!", displayName);
 	}
 
