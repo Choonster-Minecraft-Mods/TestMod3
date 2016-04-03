@@ -80,6 +80,10 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 	}
 
 	public static class Start extends MapGenScatteredFeature.Start {
+		@SuppressWarnings("unused")
+		public Start() {
+		}
+
 		public Start(World worldIn, Random random, int chunkX, int chunkZ) {
 			super(worldIn, random, chunkX, chunkZ);
 
