@@ -268,12 +268,12 @@ public final class CapabilityPigSpawner {
 
 		@Override
 		public NBTTagCompound serializeNBT() {
-			return (NBTTagCompound) PIG_SPAWNER_CAPABILITY.getStorage().writeNBT(PIG_SPAWNER_CAPABILITY, pigSpawner, EnumFacing.NORTH);
+			return (NBTTagCompound) PIG_SPAWNER_CAPABILITY.writeNBT(pigSpawner, EnumFacing.NORTH);
 		}
 
 		@Override
 		public void deserializeNBT(NBTTagCompound nbt) {
-			PIG_SPAWNER_CAPABILITY.getStorage().readNBT(PIG_SPAWNER_CAPABILITY, pigSpawner, EnumFacing.NORTH, nbt);
+			PIG_SPAWNER_CAPABILITY.readNBT(pigSpawner, EnumFacing.NORTH, nbt);
 		}
 
 		/**

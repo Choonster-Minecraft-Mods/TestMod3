@@ -159,12 +159,12 @@ public class CapabilityLastUseTime {
 
 		@Override
 		public NBTTagLong serializeNBT() {
-			return (NBTTagLong) LAST_USE_TIME_CAPABILITY.getStorage().writeNBT(LAST_USE_TIME_CAPABILITY, lastUseTime, DEFAULT_FACING);
+			return (NBTTagLong) LAST_USE_TIME_CAPABILITY.writeNBT(lastUseTime, DEFAULT_FACING);
 		}
 
 		@Override
 		public void deserializeNBT(NBTTagLong nbt) {
-			LAST_USE_TIME_CAPABILITY.getStorage().readNBT(LAST_USE_TIME_CAPABILITY, lastUseTime, DEFAULT_FACING, nbt);
+			LAST_USE_TIME_CAPABILITY.readNBT(lastUseTime, DEFAULT_FACING, nbt);
 		}
 	}
 
