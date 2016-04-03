@@ -36,6 +36,8 @@ public class ItemModBow extends ItemBow {
 	public ItemModBow(String itemName) {
 		ItemTestMod3.setItemName(this, itemName);
 		setCreativeTab(TestMod3.creativeTab);
+
+		// ItemBow's "pull" getter only works for Items.bow, so register a custom getter that works for any instance of this class.
 		addPropertyOverride(new ResourceLocation(TestMod3.MODID, "pull"),
 				(stack, worldIn, entityIn) -> {
 					if (entityIn == null) return 0.0f;
