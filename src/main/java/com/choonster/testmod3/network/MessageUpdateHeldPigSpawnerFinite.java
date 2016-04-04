@@ -29,6 +29,7 @@ public class MessageUpdateHeldPigSpawnerFinite implements IMessage {
 	 */
 	private EnumHand hand;
 
+	@SuppressWarnings("unused")
 	public MessageUpdateHeldPigSpawnerFinite() {
 	}
 

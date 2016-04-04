@@ -28,6 +28,7 @@ public class MessageUpdateHeldLastUseTime implements IMessage {
 	 */
 	private EnumHand hand;
 
+	@SuppressWarnings("unused")
 	public MessageUpdateHeldLastUseTime() {
 	}
 

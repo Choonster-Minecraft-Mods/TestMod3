@@ -47,6 +47,7 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 	 */
 	private int minecartEntityID = -1;
 
+	@SuppressWarnings("unused")
 	public MessageSurvivalCommandBlockSaveChanges() {
 	}
 
