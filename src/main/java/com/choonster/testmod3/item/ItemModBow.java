@@ -39,7 +39,7 @@ public class ItemModBow extends ItemBow {
 
 		// ItemBow's "pull" getter only works for Items.bow, so register a custom getter that works for any instance of this class.
 		addPropertyOverride(new ResourceLocation(TestMod3.MODID, "pull"),
-				(stack, worldIn, entityIn) -> {
+				IItemPropertyGetterFix.create((stack, worldIn, entityIn) -> {
 					if (entityIn == null) return 0.0f;
 
 					ItemStack activeItemStack = entityIn.getActiveItemStack();
@@ -48,7 +48,7 @@ public class ItemModBow extends ItemBow {
 					}
 
 					return 0.0f;
-				}
+				})
 		);
 	}
 
