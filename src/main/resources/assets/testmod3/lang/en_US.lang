@@ -114,6 +114,7 @@ item.testmod3:pigSpawner.finite.name=Finite Pig Spawner
 item.testmod3:pigSpawner.infinite.name=Infinite Pig Spawner
 item.testmod3:continuousBow.name=Continuous Bow
 item.testmod3:respawner.name=Respawner
+item.testmod3:lootTableTest.name=Loot Table Test
 
 item.testmod3:helmetReplacement.name=Armour Replacement Helmet
 item.testmod3:chestplateReplacement.name=Armour Replacement Chestplate
@@ -154,6 +155,9 @@ message.testmod3:respawner.noSpawnLocation=No spawn location set
 message.testmod3:respawner.teleporting=Teleporting to %d,%d,%d in dimension %d
 message.testmod3:clientPlayerRightClick.rightClick=Right click!!
 message.testmod3:death.coordinates=You died at %d %d %d!
+message.testmod3:playerReceivedLoot.base=Received Loot: %s
+message.testmod3:playerReceivedLoot.item=%d x %s
+message.testmod3:playerReceivedLoot.noLoot=No loot received.
 
 # Config GUI strings
 testmod3.config.title=TestMod3 Config

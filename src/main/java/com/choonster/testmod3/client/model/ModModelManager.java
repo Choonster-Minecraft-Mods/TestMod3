@@ -128,6 +128,7 @@ public class ModModelManager {
 		registerItemModel(ModItems.pigSpawnerFinite, "minecraft:porkchop");
 		registerItemModel(ModItems.pigSpawnerInfinite, "minecraft:porkchop");
 		registerItemModel(ModItems.respawner, "minecraft:clock");
+		registerItemModel(ModItems.lootTableTest, "minecraft:gold_ingot");
 
 		// Then register items with default model names
 		ModItems.items.stream().filter(item -> !itemsRegistered.contains(item)).forEach(this::registerItemModel);

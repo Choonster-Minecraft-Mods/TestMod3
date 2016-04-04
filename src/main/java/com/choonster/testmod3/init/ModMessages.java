@@ -1,6 +1,7 @@
 package com.choonster.testmod3.init;
 
 import com.choonster.testmod3.TestMod3;
+import com.choonster.testmod3.network.MessagePlayerReceivedLoot;
 import com.choonster.testmod3.network.MessageSurvivalCommandBlockSaveChanges;
 import com.choonster.testmod3.network.MessageUpdateHeldLastUseTime;
 import com.choonster.testmod3.network.MessageUpdateHeldPigSpawnerFinite;
@@ -15,6 +16,7 @@ public class ModMessages {
 		registerMessage(MessageSurvivalCommandBlockSaveChanges.Handler.class, MessageSurvivalCommandBlockSaveChanges.class, Side.SERVER);
 		registerMessage(MessageUpdateHeldPigSpawnerFinite.Handler.class, MessageUpdateHeldPigSpawnerFinite.class, Side.CLIENT);
 		registerMessage(MessageUpdateHeldLastUseTime.Handler.class, MessageUpdateHeldLastUseTime.class, Side.CLIENT);
+		registerMessage(MessagePlayerReceivedLoot.Handler.class, MessagePlayerReceivedLoot.class, Side.CLIENT);
 	}
 
 	private static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(Class<? extends IMessageHandler<REQ, REPLY>> messageHandler, Class<REQ> requestMessageType, Side receivingSide) {
