@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author Choonster
  */
 public class ItemClearer extends ItemTestMod3 {
-	private static final ImmutableList<Block> whitelist = ImmutableList.of(Blocks.stone, Blocks.dirt, Blocks.grass, Blocks.gravel, Blocks.sand, Blocks.water, Blocks.flowing_water, Blocks.lava, Blocks.flowing_lava, Blocks.ice);
+	private static final ImmutableList<Block> whitelist = ImmutableList.of(Blocks.STONE, Blocks.DIRT, Blocks.GRASS, Blocks.GRAVEL, Blocks.SAND, Blocks.WATER, Blocks.FLOWING_WATER, Blocks.LAVA, Blocks.FLOWING_LAVA, Blocks.ICE);
 
 	private static final int MODE_WHITELIST = 0;
 	private static final int MODE_ALL = 1;
@@ -51,8 +51,8 @@ public class ItemClearer extends ItemTestMod3 {
 						for (int y = 0; y < 256; y++) {
 							final BlockPos pos = new BlockPos(x, y, z);
 							final Block block = world.getBlockState(pos).getBlock();
-							if ((currentMode == MODE_ALL && block != Blocks.bedrock) || whitelist.contains(block)) {
-								world.setBlockState(pos, Blocks.air.getDefaultState(), 2);
+							if ((currentMode == MODE_ALL && block != Blocks.BEDROCK) || whitelist.contains(block)) {
+								world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 							}
 						}
 					}

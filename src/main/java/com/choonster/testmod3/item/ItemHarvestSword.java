@@ -72,20 +72,20 @@ public class ItemHarvestSword extends ItemTool {
 	 */
 	private static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(
 			// Pickaxe
-			Material.rock, Material.iron, Material.ice, Material.glass, Material.piston, Material.anvil, Material.circuits,
+			Material.ROCK, Material.IRON, Material.IRON, Material.GLASS, Material.PISTON, Material.ANVIL, Material.CIRCUITS,
 
 			// Axe
-			Material.wood, Material.gourd, Material.plants, Material.vine,
+			Material.WOOD, Material.GOURD, Material.PLANTS, Material.VINE,
 
 			// Shovel
-			Material.grass, Material.ground, Material.sand, Material.snow, Material.craftedSnow, Material.clay
+			Material.GRASS, Material.GROUND, Material.SAND, Material.SNOW, Material.CRAFTED_SNOW, Material.CLAY
 	);
 
 	/**
 	 * The {@link Material}s that Swords are effective on.
 	 */
 	private static final Set<Material> SWORD_MATERIALS = ImmutableSet.of(
-			Material.plants, Material.vine, Material.coral, Material.leaves, Material.gourd
+			Material.PLANTS, Material.VINE, Material.CORAL, Material.LEAVES, Material.GOURD
 	);
 
 	/**
@@ -100,12 +100,12 @@ public class ItemHarvestSword extends ItemTool {
 	 */
 	@Override
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
-		return EFFECTIVE_MATERIALS.contains(state.getMaterial()) || state.getBlock() == Blocks.web;
+		return EFFECTIVE_MATERIALS.contains(state.getMaterial()) || state.getBlock() == Blocks.WEB;
 	}
 
 	@Override
 	public float getStrVsBlock(ItemStack stack, IBlockState state) {
-		if (state.getBlock() == Blocks.web) {
+		if (state.getBlock() == Blocks.WEB) {
 			return DIG_SPEED_WEB;
 		}
 

@@ -117,7 +117,7 @@ public final class CapabilityPigSpawner {
 		 */
 		@SubscribeEvent
 		public void attachCapabilities(AttachCapabilitiesEvent.Item event) {
-			if (event.getItem() == Items.clay_ball) {
+			if (event.getItem() == Items.CLAY_BALL) {
 				event.addCapability(ID, new Provider());
 			}
 		}

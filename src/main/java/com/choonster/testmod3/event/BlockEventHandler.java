@@ -51,7 +51,7 @@ public class BlockEventHandler {
 	@SubscribeEvent
 	public void harvestDrops(BlockEvent.HarvestDropsEvent event) {
 		if (event.getState().getBlock().isLeaves(event.getState(), event.getWorld(), event.getPos())) {
-			event.getDrops().add(new ItemStack(Items.stick, 2));
+			event.getDrops().add(new ItemStack(Items.STICK, 2));
 		}
 	}
 

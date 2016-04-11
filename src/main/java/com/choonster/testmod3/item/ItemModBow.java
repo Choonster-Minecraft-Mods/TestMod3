@@ -98,7 +98,7 @@ public class ItemModBow extends ItemBow {
 	 * @return Is ammunition required?
 	 */
 	protected boolean isAmmoRequired(ItemStack bow, EntityPlayer shooter) {
-		return !shooter.capabilities.isCreativeMode && EnchantmentHelper.getEnchantmentLevel(Enchantments.infinity, bow) == 0;
+		return !shooter.capabilities.isCreativeMode && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bow) == 0;
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class ItemModBow extends ItemBow {
 
 		if (ammoSlot != null || !ammoRequired) {
 			if (ammoSlot == null) {
-				ammoSlot = new ItemStackHandler(new ItemStack[]{new ItemStack(Items.arrow)});
+				ammoSlot = new ItemStackHandler(new ItemStack[]{new ItemStack(Items.ARROW)});
 			}
 
 			final ItemStack ammo = ammoSlot.getStackInSlot(0);
@@ -155,7 +155,7 @@ public class ItemModBow extends ItemBow {
 				final boolean consumeAmmo = ammoRequired && ammo.getItem() instanceof ItemArrow;
 
 				if (!world.isRemote) {
-					final ItemArrow itemArrow = (ItemArrow) (ammo.getItem() instanceof ItemArrow ? ammo.getItem() : Items.arrow);
+					final ItemArrow itemArrow = (ItemArrow) (ammo.getItem() instanceof ItemArrow ? ammo.getItem() : Items.ARROW);
 					final EntityArrow entityArrow = itemArrow.createArrow(world, ammo, player);
 					entityArrow.func_184547_a(player, player.rotationPitch, player.rotationYaw, 0.0F, arrowVelocity * 3.0F, 1.0F);
 
@@ -163,17 +163,17 @@ public class ItemModBow extends ItemBow {
 						entityArrow.setIsCritical(true);
 					}
 
-					final int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.power, bow);
+					final int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, bow);
 					if (powerLevel > 0) {
 						entityArrow.setDamage(entityArrow.getDamage() + (double) powerLevel * 0.5D + 0.5D);
 					}
 
-					final int punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.punch, bow);
+					final int punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, bow);
 					if (punchLevel > 0) {
 						entityArrow.setKnockbackStrength(punchLevel);
 					}
 
-					if (EnchantmentHelper.getEnchantmentLevel(Enchantments.flame, bow) > 0) {
+					if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, bow) > 0) {
 						entityArrow.setFire(100);
 					}
 
@@ -186,7 +186,7 @@ public class ItemModBow extends ItemBow {
 					world.spawnEntityInWorld(entityArrow);
 				}
 
-				world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.entity_arrow_shoot, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + arrowVelocity * 0.5F);
+				world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + arrowVelocity * 0.5F);
 
 				if (consumeAmmo && ammoSlot.extractItem(0, 1, true) != null) {
 					ammoSlot.extractItem(0, 1, false);

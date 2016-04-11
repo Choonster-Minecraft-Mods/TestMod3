@@ -54,7 +54,7 @@ public class ModItems {
 	public static ItemArmourRestricted replacementBoots;
 
 	public static final Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10);
-	public static final ItemArmor.ArmorMaterial ARMOUR_MATERIAL_REPLACEMENT = EnumHelper.addArmorMaterial(Constants.RESOURCE_PREFIX + "replacement", Constants.RESOURCE_PREFIX + "replacement", 15, new int[]{2, 5, 4, 1}, 12, SoundEvents.item_armor_equip_chain);
+	public static final ItemArmor.ArmorMaterial ARMOUR_MATERIAL_REPLACEMENT = EnumHelper.addArmorMaterial(Constants.RESOURCE_PREFIX + "replacement", Constants.RESOURCE_PREFIX + "replacement", 15, new int[]{2, 5, 4, 1}, 12, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN);
 
 	public static void registerItems() {
 		woodenAxe = registerItem(new ItemCuttingAxe(Item.ToolMaterial.WOOD, "woodenAxe"));
@@ -90,7 +90,7 @@ public class ModItems {
 		replacementBoots = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.FEET, "Replacement"));
 
 		ItemStack chest = new ItemStack(replacementChestplate);
-		chest.addEnchantment(Enchantments.sharpness, 1);
+		chest.addEnchantment(Enchantments.SHARPNESS, 1);
 		replacementHelmet.setReplacementItems(chest, new ItemStack(repacementLeggings), new ItemStack(replacementBoots));
 
 		pigSpawnerFinite = registerItem(new ItemPigSpawner("finite", () -> new PigSpawnerFinite(20)));
@@ -98,7 +98,7 @@ public class ModItems {
 
 		lootTableTest = registerItem(new ItemLootTableTest());
 
-		TOOL_MATERIAL_GLOWSTONE.setRepairItem(new ItemStack(Items.glowstone_dust));
+		TOOL_MATERIAL_GLOWSTONE.setRepairItem(new ItemStack(Items.GLOWSTONE_DUST));
 		ARMOUR_MATERIAL_REPLACEMENT.customCraftingMaterial = modArrow;
 	}
 

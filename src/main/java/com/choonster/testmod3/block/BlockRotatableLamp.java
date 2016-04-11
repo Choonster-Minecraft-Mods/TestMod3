@@ -28,7 +28,7 @@ public class BlockRotatableLamp extends BlockTestMod3 {
 	public static final IProperty<Boolean> LIT = PropertyBool.create("lit");
 
 	public BlockRotatableLamp() {
-		super(Material.redstoneLight, "rotatableLamp");
+		super(Material.REDSTONE_LIGHT, "rotatableLamp");
 		setDefaultState(getBlockState().getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(LIT, false));
 	}
 

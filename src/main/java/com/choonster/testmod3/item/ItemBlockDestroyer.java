@@ -23,7 +23,7 @@ public class ItemBlockDestroyer extends ItemTestMod3 {
 	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState blockIn, BlockPos pos, EntityLivingBase entityLiving) {
 		if (!worldIn.isRemote) {
 			IBlockState state = worldIn.getBlockState(pos);
-			if (state.getBlock() == Blocks.wheat && state.getValue(BlockCrops.AGE) >= 6) {
+			if (state.getBlock() == Blocks.WHEAT && state.getValue(BlockCrops.AGE) >= 6) {
 				entityLiving.addChatMessage(new TextComponentTranslation("message.testmod3:blockDestroyer.destroy"));
 			}
 		}

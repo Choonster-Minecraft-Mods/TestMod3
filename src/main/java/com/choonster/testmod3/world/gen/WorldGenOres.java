@@ -16,8 +16,8 @@ public class WorldGenOres implements IWorldGenerator {
 	private final WorldGenMinable oreGenEnd;
 
 	public WorldGenOres() {
-		oreGenNether = new WorldGenMinable(Blocks.iron_ore.getDefaultState(), 20, BlockMatcher.forBlock(Blocks.netherrack));
-		oreGenEnd = new WorldGenMinable(Blocks.iron_ore.getDefaultState(), 20, BlockMatcher.forBlock(Blocks.end_stone));
+		oreGenNether = new WorldGenMinable(Blocks.IRON_ORE.getDefaultState(), 20, BlockMatcher.forBlock(Blocks.NETHERRACK));
+		oreGenEnd = new WorldGenMinable(Blocks.IRON_ORE.getDefaultState(), 20, BlockMatcher.forBlock(Blocks.END_STONE));
 	}
 
 	@Override

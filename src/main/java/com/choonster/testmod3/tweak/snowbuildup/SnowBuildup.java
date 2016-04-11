@@ -71,7 +71,7 @@ public class SnowBuildup {
 					final IBlockState state = world.getBlockState(pos);
 
 					// If the biome at that position allows snow, the block is a snow layer and a random integer in the range [0,24) is 0 (roughly 4% chance),
-					if (world.getBiomeGenForCoords(pos).getEnableSnow() && state.getBlock() == Blocks.snow_layer && random.nextInt(24) == 0) {
+					if (world.getBiomeGenForCoords(pos).getEnableSnow() && state.getBlock() == Blocks.SNOW_LAYER && random.nextInt(24) == 0) {
 						// Get the number of layers
 						final int numLayers = state.getValue(BlockSnow.LAYERS);
 

@@ -20,7 +20,7 @@ public class BlockLargeCollisionTest extends Block {
 	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(-1, -1, -1, 2, 2, 2);
 
 	public BlockLargeCollisionTest() {
-		super(Material.cloth);
+		super(Material.CLOTH);
 		setCreativeTab(TestMod3.creativeTab);
 		BlockTestMod3.setBlockName(this, "largeCollisionTest");
 	}

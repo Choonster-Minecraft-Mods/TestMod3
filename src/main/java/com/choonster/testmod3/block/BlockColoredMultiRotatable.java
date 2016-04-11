@@ -73,7 +73,7 @@ public class BlockColoredMultiRotatable extends BlockColoredRotatable {
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (heldItem != null && heldItem.getItem() == Items.dye) { // If the player is holding dye, change the colour
+		if (heldItem != null && heldItem.getItem() == Items.DYE) { // If the player is holding dye, change the colour
 			EnumDyeColor color = EnumDyeColor.byDyeDamage(heldItem.getMetadata());
 			return worldIn.setBlockState(pos, state.withProperty(COLOR, color));
 		} else if (playerIn.isSneaking()) { // If the player is sneaking, rotate the face

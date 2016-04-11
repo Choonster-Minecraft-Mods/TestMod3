@@ -67,7 +67,7 @@ public class ItemEntityTest extends ItemTestMod3 {
 		if (rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
 			BlockPos blockPos = rayTraceResult.getBlockPos(); // Use blockPos instead of coordinate variables
 
-			if (world.getBlockState(blockPos).getBlock() == Blocks.snow) // Use world.getBlockState().getBlock() instead of world.getBlock()
+			if (world.getBlockState(blockPos).getBlock() == Blocks.SNOW) // Use world.getBlockState().getBlock() instead of world.getBlock()
 			{
 				blockPos = blockPos.down(); // Use blockPos.down() instead of subtracting 1 from y coordinate
 			}

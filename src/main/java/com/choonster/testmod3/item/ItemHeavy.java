@@ -25,7 +25,7 @@ public class ItemHeavy extends ItemTestMod3 {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 
 		if (entityIn instanceof EntityLivingBase) { // If the Entity is an instance of EntityLivingBase,
-			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.moveSlowdown, 10, 1)); // Apply Slowness II (amplifier = 1) for 10 ticks (0.5 seconds)
+			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 10, 1)); // Apply Slowness II (amplifier = 1) for 10 ticks (0.5 seconds)
 		}
 	}
 }

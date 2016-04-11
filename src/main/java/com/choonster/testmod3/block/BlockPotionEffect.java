@@ -16,7 +16,7 @@ import net.minecraft.world.World;
  */
 public class BlockPotionEffect extends BlockTestMod3 {
 	public BlockPotionEffect() {
-		super(Material.rock, "potionEffect");
+		super(Material.ROCK, "potionEffect");
 	}
 
 	@Override

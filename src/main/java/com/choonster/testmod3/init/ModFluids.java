@@ -38,23 +38,23 @@ public class ModFluids {
 
 		static_ = createFluid("static", false,
 				fluid -> fluid.setLuminosity(10).setDensity(800).setViscosity(1500),
-				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.brownColor)));
+				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.BROWN)));
 
 		staticGas = createFluid("staticGas", false,
 				fluid -> fluid.setLuminosity(10).setDensity(-800).setViscosity(1500).setGaseous(true),
-				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.brownColor)));
+				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.BROWN)));
 
 		normal = createFluid("normal", true,
 				fluid -> fluid.setLuminosity(10).setDensity(1600).setViscosity(100),
-				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.adobeColor)));
+				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.ADOBE)));
 
 		normalGas = createFluid("normalGas", true,
 				fluid -> fluid.setLuminosity(10).setDensity(-1600).setViscosity(100).setGaseous(true),
-				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.adobeColor)));
+				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.ADOBE)));
 
 		finite = createFluid("finite", false,
 				fluid -> fluid.setLuminosity(10).setDensity(800).setViscosity(1500),
-				fluid -> new BlockFluidFinite(fluid, new MaterialLiquid(MapColor.blackColor)));
+				fluid -> new BlockFluidFinite(fluid, new MaterialLiquid(MapColor.BLACK)));
 	}
 
 	public static void registerFluidContainers() {

@@ -19,7 +19,7 @@ import net.minecraftforge.common.capabilities.Capability;
  */
 public class BlockItemDebugger extends BlockTestMod3 {
 	public BlockItemDebugger() {
-		super(Material.iron, "itemDebugger");
+		super(Material.IRON, "itemDebugger");
 		setBlockUnbreakable();
 	}
 

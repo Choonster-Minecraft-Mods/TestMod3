@@ -33,7 +33,7 @@ public class WorldGenBanner implements IWorldGenerator {
 	 * @return A Banner ItemStack with the appropriate NBT data
 	 */
 	protected ItemStack createBannerStack() {
-		ItemStack bannerStack = new ItemStack(Items.banner);
+		ItemStack bannerStack = new ItemStack(Items.BANNER);
 
 		NBTTagCompound stackTagCompound = new NBTTagCompound();
 		bannerStack.setTagCompound(stackTagCompound);
@@ -74,7 +74,7 @@ public class WorldGenBanner implements IWorldGenerator {
 	private void generateBanner(World world, BlockPos pos) {
 		pos = world.getTopSolidOrLiquidBlock(pos);
 
-		world.setBlockState(pos, Blocks.standing_banner.getDefaultState());
+		world.setBlockState(pos, Blocks.STANDING_BANNER.getDefaultState());
 
 		TileEntityBanner tileEntityBanner = (TileEntityBanner) world.getTileEntity(pos);
 		tileEntityBanner.setItemValues(bannerStack);

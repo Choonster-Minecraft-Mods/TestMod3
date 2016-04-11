@@ -27,23 +27,23 @@ public class OreDictUtilTests extends Test {
 
 	@Override
 	protected void runTest() {
-		ItemStack oakLog = new ItemStack(Blocks.log, 1, BlockPlanks.EnumType.OAK.getMetadata());
+		ItemStack oakLog = new ItemStack(Blocks.LOG, 1, BlockPlanks.EnumType.OAK.getMetadata());
 		assertRegistered(oakLog, "logWood");
 		assertNotRegistered(oakLog, "blahblahblah");
 
-		ItemStack jungleLog = new ItemStack(Blocks.log, 1, BlockPlanks.EnumType.JUNGLE.getMetadata());
+		ItemStack jungleLog = new ItemStack(Blocks.LOG, 1, BlockPlanks.EnumType.JUNGLE.getMetadata());
 		assertRegistered(jungleLog, "logWood");
 
-		ItemStack ironIngot = new ItemStack(Items.iron_ingot);
+		ItemStack ironIngot = new ItemStack(Items.IRON_INGOT);
 		assertRegistered(ironIngot, "ingotIron");
 
-		ItemStack stone = new ItemStack(Blocks.stone, 1, BlockStone.EnumType.STONE.getMetadata());
+		ItemStack stone = new ItemStack(Blocks.STONE, 1, BlockStone.EnumType.STONE.getMetadata());
 		assertRegistered(stone, "stone");
 
-		ItemStack andesite = new ItemStack(Blocks.stone, 1, BlockStone.EnumType.ANDESITE.getMetadata());
+		ItemStack andesite = new ItemStack(Blocks.STONE, 1, BlockStone.EnumType.ANDESITE.getMetadata());
 		assertNotRegistered(andesite, "stone");
 
-		ItemStack record13 = new ItemStack(Items.record_13);
+		ItemStack record13 = new ItemStack(Items.RECORD_13);
 		assertRegistered(record13, "record");
 	}
 }

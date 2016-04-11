@@ -51,7 +51,7 @@ public class ItemSnowballLauncher extends ItemTestMod3 {
 	 * @return True if the player is not in creative mode and the launcher doesn't have the Infinity enchantment
 	 */
 	private boolean isAmmoRequired(ItemStack stack, EntityPlayer player) {
-		return !player.capabilities.isCreativeMode && EnchantmentHelper.getEnchantmentLevel(Enchantments.infinity, stack) == 0;
+		return !player.capabilities.isCreativeMode && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) == 0;
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class ItemSnowballLauncher extends ItemTestMod3 {
 	 * @return Is the ItemStack valid ammunition?
 	 */
 	protected boolean isAmmo(ItemStack stack) {
-		return stack != null && stack.getItem() == Items.snowball;
+		return stack != null && stack.getItem() == Items.SNOWBALL;
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class ItemSnowballLauncher extends ItemTestMod3 {
 				playerIn.getCooldownTracker().setCooldown(this, cooldown);
 			}
 
-			worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.entity_snowball_throw, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+			worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
 			if (!worldIn.isRemote) {
 				final EntitySnowball entitySnowball = new EntitySnowball(worldIn, playerIn);

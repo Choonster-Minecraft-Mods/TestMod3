@@ -5,6 +5,7 @@ import com.choonster.testmod3.TestMod3;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.io.PrintWriter;
 import java.util.stream.StreamSupport;
@@ -21,7 +22,7 @@ public class BlockDumper {
 		try (PrintWriter writer = new PrintWriter("TestMod3_BlockDump_" + (FMLCommonHandler.instance().getEffectiveSide().isClient() ? "Client" : "Server") + ".txt", "UTF-8")) {
 			writer.println("Name - toString");
 
-			StreamSupport.stream(Block.blockRegistry.spliterator(), false)
+			StreamSupport.stream(ForgeRegistries.BLOCKS.spliterator(), false)
 					.filter(block -> block.getRegistryName().getResourceDomain().equals(TestMod3.MODID))
 					.forEach(block -> {
 						Item item = Item.getItemFromBlock(block);

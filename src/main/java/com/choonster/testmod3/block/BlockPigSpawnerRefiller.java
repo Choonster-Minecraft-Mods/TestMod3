@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
  */
 public class BlockPigSpawnerRefiller extends BlockTestMod3 implements IPigSpawnerInteractable {
 	public BlockPigSpawnerRefiller() {
-		super(Material.iron, "pigSpawnerRefiller");
+		super(Material.IRON, "pigSpawnerRefiller");
 	}
 
 	/**

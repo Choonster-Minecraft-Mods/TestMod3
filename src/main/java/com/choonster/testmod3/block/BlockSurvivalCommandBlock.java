@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 
 	public BlockSurvivalCommandBlock() {
-		super(MapColor.brownColor);
+		super(MapColor.BROWN);
 		setCreativeTab(TestMod3.creativeTab);
 		BlockTestMod3.setBlockName(this, "survivalCommandBlock");
 	}

@@ -16,13 +16,13 @@ public class CreativeTabTestMod3 extends CreativeTabs {
 
 	public CreativeTabTestMod3() {
 		super(TestMod3.MODID);
-		sword = SwordUpgrades.upgradeSword((ItemSword) Items.stone_sword);
+		sword = SwordUpgrades.upgradeSword((ItemSword) Items.STONE_SWORD);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public Item getTabIconItem() {
-		return Items.stone_sword;
+		return Items.STONE_SWORD;
 	}
 
 	@SideOnly(Side.CLIENT)

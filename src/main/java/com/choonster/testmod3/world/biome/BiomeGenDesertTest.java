@@ -19,8 +19,8 @@ public class BiomeGenDesertTest extends BiomeGenDesert {
 
 	public BiomeGenDesertTest(BiomeProperties properties) {
 		super(properties);
-		topBlock = Blocks.sand.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
-		fillerBlock = Blocks.brick_block.getDefaultState();
+		topBlock = Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
+		fillerBlock = Blocks.BRICK_BLOCK.getDefaultState();
 	}
 
 	@Override

@@ -31,7 +31,7 @@ public class BlockItemCollisionTest extends BlockTestMod3 {
 	}
 
 	public BlockItemCollisionTest() {
-		super(Material.cloth, "itemCollisionTest");
+		super(Material.CLOTH, "itemCollisionTest");
 		fullBlock = false;
 	}
 

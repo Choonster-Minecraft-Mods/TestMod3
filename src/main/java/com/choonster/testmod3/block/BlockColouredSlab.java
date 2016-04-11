@@ -79,7 +79,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		return heldItem != null && heldItem.getItem() == Items.dye && recolorBlock(worldIn, pos, side, EnumDyeColor.byDyeDamage(heldItem.getMetadata()));
+		return heldItem != null && heldItem.getItem() == Items.DYE && recolorBlock(worldIn, pos, side, EnumDyeColor.byDyeDamage(heldItem.getMetadata()));
 	}
 
 	@Override

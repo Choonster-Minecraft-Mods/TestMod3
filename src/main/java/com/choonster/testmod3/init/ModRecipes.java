@@ -16,6 +16,7 @@ import net.minecraft.item.crafting.RecipeFireworks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.UniversalBucket;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
@@ -40,25 +41,25 @@ public class ModRecipes {
 	}
 
 	private static void addCraftingRecipes() {
-		GameRegistry.addRecipe(new ShapelessCuttingRecipe(new ItemStack(Blocks.planks, 2, BlockPlanks.EnumType.OAK.getMetadata()), new ItemStack(Items.wooden_axe, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.log, 1, BlockPlanks.EnumType.OAK.getMetadata())));
+		GameRegistry.addRecipe(new ShapelessCuttingRecipe(new ItemStack(Blocks.PLANKS, 2, BlockPlanks.EnumType.OAK.getMetadata()), new ItemStack(Items.WOODEN_AXE, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.LOG, 1, BlockPlanks.EnumType.OAK.getMetadata())));
 
 		// Upgrade an Iron Helment to a Golden Helmet while preserving its damage - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2513998-help-needed-creating-crafting-recipe-with-damaged
-		GameRegistry.addRecipe(new ShapedArmourUpgradeRecipe(Items.golden_helmet, "AAA", "ABA", "AAA", 'A', Blocks.gold_block, 'B', new ItemStack(Items.iron_helmet, 1, OreDictionary.WILDCARD_VALUE)));
+		GameRegistry.addRecipe(new ShapedArmourUpgradeRecipe(Items.GOLDEN_HELMET, "AAA", "ABA", "AAA", 'A', Blocks.GOLD_BLOCK, 'B', new ItemStack(Items.IRON_HELMET, 1, OreDictionary.WILDCARD_VALUE)));
 
 		// Recipe for Guardian Spawner - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2424619-help-needed-creating-non-pig-mob-spawners
-		ItemStack guardianSpawner = new ItemStack(Blocks.mob_spawner);
+		ItemStack guardianSpawner = new ItemStack(Blocks.MOB_SPAWNER);
 		NBTTagCompound tileEntityData = guardianSpawner.getSubCompound("BlockEntityTag", true);
 		tileEntityData.setString("EntityId", "Guardian");
-		GameRegistry.addRecipe(guardianSpawner, "SSS", "SFS", "SSS", 'S', Items.stick, 'F', Items.fish);
+		GameRegistry.addRecipe(guardianSpawner, "SSS", "SFS", "SSS", 'S', Items.STICK, 'F', Items.FISH);
 
 		ItemStack bucketOfStaticGas = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ModFluids.staticGas);
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.cobblestone), bucketOfStaticGas, bucketOfStaticGas, bucketOfStaticGas));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.COBBLESTONE), bucketOfStaticGas, bucketOfStaticGas, bucketOfStaticGas));
 	}
 
 	public static void removeCraftingRecipes() {
 		removeRecipeClass(RecipeFireworks.class);
-		removeRecipe(Items.dye);
-		removeRecipe(Blocks.stained_hardened_clay);
+		removeRecipe(Items.DYE);
+		removeRecipe(Blocks.STAINED_HARDENED_CLAY);
 	}
 
 	private static void removeRecipe(Block output) {
@@ -91,7 +92,7 @@ public class ModRecipes {
 			}
 		}
 
-		Logger.info("Removed %d recipes for %s", recipesRemoved, Item.itemRegistry.getNameForObject(output));
+		Logger.info("Removed %d recipes for %s", recipesRemoved, output.getRegistryName());
 	}
 
 	/**

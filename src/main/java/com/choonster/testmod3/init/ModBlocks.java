@@ -57,20 +57,20 @@ public class ModBlocks {
 		survivalCommandBlock = registerBlock(new BlockSurvivalCommandBlock());
 		fluidTank = registerBlock(new BlockFluidTank(), ItemFluidTank::new);
 		itemDebugger = registerBlock(new BlockItemDebugger());
-		endPortalFrameFull = registerBlock(new BlockTestMod3(Material.rock, "endPortalFrameFull"));
-		coloredRotatable = registerBlock(new BlockColoredRotatable(Material.cloth, "coloredRotatable"), ItemCloth::new);
-		coloredMultiRotatable = registerBlock(new BlockColoredMultiRotatable(Material.cloth, "coloredMultiRotatable"), ItemCloth::new);
+		endPortalFrameFull = registerBlock(new BlockTestMod3(Material.ROCK, "endPortalFrameFull"));
+		coloredRotatable = registerBlock(new BlockColoredRotatable(Material.CLOTH, "coloredRotatable"), ItemCloth::new);
+		coloredMultiRotatable = registerBlock(new BlockColoredMultiRotatable(Material.CLOTH, "coloredMultiRotatable"), ItemCloth::new);
 		potionEffect = registerBlock(new BlockPotionEffect());
-		variants = registerBlock(new BlockVariants(Material.iron), block -> new ItemMultiTexture(block, block, BlockVariants.EnumType.getNames()));
+		variants = registerBlock(new BlockVariants(Material.IRON), block -> new ItemMultiTexture(block, block, BlockVariants.EnumType.getNames()));
 		clientPlayerRotation = registerBlock(new BlockClientPlayerRotation());
 		pigSpawnerRefiller = registerBlock(new BlockPigSpawnerRefiller());
-		mirrorPlane = registerBlock(new BlockPlane(Material.iron, "mirrorPlane"));
-		vanillaModelTest = registerBlock(new BlockTestMod3(Material.iron, "vanillaModelTest"));
+		mirrorPlane = registerBlock(new BlockPlane(Material.IRON, "mirrorPlane"));
+		vanillaModelTest = registerBlock(new BlockTestMod3(Material.IRON, "vanillaModelTest"));
 
 		pipeBasic = registerBlock(new BlockPipeBasic("basicPipe"));
 		pipeFluid = registerBlock(new BlockPipeFluid());
 
-		stainedClaySlabs = new BlockColouredSlab.ColouredSlabGroup("stainedClaySlab", Material.rock);
+		stainedClaySlabs = new BlockColouredSlab.ColouredSlabGroup("stainedClaySlab", Material.ROCK);
 		registerSlabGroup(stainedClaySlabs.low);
 		registerSlabGroup(stainedClaySlabs.high);
 	}

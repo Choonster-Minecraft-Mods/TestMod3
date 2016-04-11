@@ -31,7 +31,7 @@ public class BlockWaterGrass extends BlockBush {
 	}
 
 	public BlockWaterGrass() {
-		super(Material.water);
+		super(Material.WATER);
 		setCreativeTab(TestMod3.creativeTab);
 		BlockTestMod3.setBlockName(this, "watergrass");
 
@@ -55,7 +55,7 @@ public class BlockWaterGrass extends BlockBush {
 
 	@Override
 	public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
-		return worldIn.getBlockState(pos.up()).getBlock() == Blocks.water && super.canBlockStay(worldIn, pos, state);
+		return worldIn.getBlockState(pos.up()).getBlock() == Blocks.WATER && super.canBlockStay(worldIn, pos, state);
 	}
 
 	@Override
@@ -65,14 +65,14 @@ public class BlockWaterGrass extends BlockBush {
 
 	@Override
 	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
-		worldIn.setBlockState(pos, Blocks.water.getDefaultState());
+		worldIn.setBlockState(pos, Blocks.WATER.getDefaultState());
 	}
 
 	@Override
 	protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
 		if (!this.canBlockStay(worldIn, pos, state)) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
-			worldIn.setBlockState(pos, Blocks.water.getDefaultState());
+			worldIn.setBlockState(pos, Blocks.WATER.getDefaultState());
 		}
 	}
 }

@@ -43,7 +43,7 @@ public class PlayerEventHandler {
 		if (!persistedData.getBoolean(key)) {
 			persistedData.setBoolean(key, true);
 
-			ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(Items.apple));
+			ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(Items.APPLE));
 
 			message = "message.testmod3:login.freeApple";
 		}

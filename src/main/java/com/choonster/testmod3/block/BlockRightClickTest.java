@@ -31,7 +31,7 @@ public class BlockRightClickTest extends BlockGlass {
 	public static final IProperty<Boolean> HAS_ENDER_EYE = PropertyBool.create("has_ender_eye");
 
 	public BlockRightClickTest() {
-		super(Material.glass, false);
+		super(Material.GLASS, false);
 		setDefaultState(blockState.getBaseState().withProperty(HAS_ENDER_EYE, false));
 		BlockTestMod3.setBlockName(this, "rightClickTest");
 		setCreativeTab(TestMod3.creativeTab);
@@ -54,7 +54,7 @@ public class BlockRightClickTest extends BlockGlass {
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (heldItem != null && heldItem.getItem() == Items.ender_eye && !state.getValue(HAS_ENDER_EYE)) {
+		if (heldItem != null && heldItem.getItem() == Items.ENDER_EYE && !state.getValue(HAS_ENDER_EYE)) {
 			if (!playerIn.capabilities.isCreativeMode) {
 				heldItem.stackSize--;
 			}
@@ -81,7 +81,7 @@ public class BlockRightClickTest extends BlockGlass {
 		List<ItemStack> drops = super.getDrops(world, pos, state, fortune);
 
 		if (state.getValue(HAS_ENDER_EYE)) {
-			drops.add(new ItemStack(Items.ender_eye));
+			drops.add(new ItemStack(Items.ENDER_EYE));
 		}
 
 		return drops;

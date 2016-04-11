@@ -32,7 +32,7 @@ public class EntityModArrow extends EntityTippedArrow implements IThrowableEntit
 
 	@Override
 	public void setPotionEffect(ItemStack stack) {
-		super.setPotionEffect(new ItemStack(Items.arrow)); // Mod arrows can't have potion effects
+		super.setPotionEffect(new ItemStack(Items.ARROW)); // Mod arrows can't have potion effects
 	}
 
 	@Override

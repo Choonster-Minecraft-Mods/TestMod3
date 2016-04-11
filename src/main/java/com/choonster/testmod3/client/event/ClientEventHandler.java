@@ -43,7 +43,7 @@ public class ClientEventHandler {
 	public void onClientTick(TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.END && MINECRAFT.thePlayer != null) {
 			EntityPlayer player = MINECRAFT.thePlayer;
-			if (MINECRAFT.theWorld.getBlockState(new BlockPos(player).down()).getBlock() == Blocks.iron_block) {
+			if (MINECRAFT.theWorld.getBlockState(new BlockPos(player).down()).getBlock() == Blocks.IRON_BLOCK) {
 				player.setAngles(5, 0);
 			}
 		}
