@@ -51,6 +51,10 @@
             <AppenderRef ref="File"/>
             <AppenderRef ref="ServerGuiConsole" level="INFO"/>
         </Logger>
+        <Logger level="all" name="net.minecraft" additivity="false">
+            <AppenderRef ref="FmlSysOut" level="INFO"/>
+            <AppenderRef ref="FmlFile"/>
+        </Logger>
         <Root level="all">
             <AppenderRef ref="FmlSysOut" level="INFO"/>
             <AppenderRef ref="ServerGuiConsole" level="INFO"/>
