@@ -79,7 +79,7 @@ public class ItemModBow extends ItemBow {
 			}
 
 			for (int slot = 0; slot < mainInventory.getSlots(); ++slot) {
-				ItemStack itemStack = mainInventory.getStackInSlot(slot);
+				final ItemStack itemStack = mainInventory.getStackInSlot(slot);
 
 				if (isAmmo.test(itemStack)) {
 					return new RangedWrapper((IItemHandlerModifiable) mainInventory, slot, slot + 1);
@@ -155,20 +155,20 @@ public class ItemModBow extends ItemBow {
 				final boolean consumeAmmo = ammoRequired && ammo.getItem() instanceof ItemArrow;
 
 				if (!world.isRemote) {
-					ItemArrow itemArrow = (ItemArrow) (ammo.getItem() instanceof ItemArrow ? ammo.getItem() : Items.arrow);
-					EntityArrow entityArrow = itemArrow.createArrow(world, ammo, player);
+					final ItemArrow itemArrow = (ItemArrow) (ammo.getItem() instanceof ItemArrow ? ammo.getItem() : Items.arrow);
+					final EntityArrow entityArrow = itemArrow.createArrow(world, ammo, player);
 					entityArrow.func_184547_a(player, player.rotationPitch, player.rotationYaw, 0.0F, arrowVelocity * 3.0F, 1.0F);
 
 					if (arrowVelocity == 1.0f) {
 						entityArrow.setIsCritical(true);
 					}
 
-					int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.power, bow);
+					final int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.power, bow);
 					if (powerLevel > 0) {
 						entityArrow.setDamage(entityArrow.getDamage() + (double) powerLevel * 0.5D + 0.5D);
 					}
 
-					int punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.punch, bow);
+					final int punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.punch, bow);
 					if (punchLevel > 0) {
 						entityArrow.setKnockbackStrength(punchLevel);
 					}
