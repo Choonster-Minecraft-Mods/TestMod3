@@ -5,7 +5,6 @@ import com.choonster.testmod3.init.ModLootTables;
 import com.choonster.testmod3.network.MessagePlayerReceivedLoot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -21,7 +20,7 @@ import java.util.List;
 
 /**
  * Gives the player random loot from a {@link LootTable} when they right click.
- *
+ * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,37969.0.html
  *
@@ -40,15 +39,15 @@ public class ItemLootTableTest extends ItemTestMod3 {
 			LootContext lootContext = new LootContext.Builder((WorldServer) worldIn).withPlayer(playerIn).build();
 
 			final List<ItemStack> itemStacks = lootTable.generateLootForPools(itemRand, lootContext);
-			for (ItemStack itemStack : itemStacks){
-				ItemHandlerHelper.giveItemToPlayer(playerIn, itemStack, 0);
+			for (ItemStack itemStack : itemStacks) {
+				ItemHandlerHelper.giveItemToPlayer(playerIn, itemStack);
 			}
 
 			playerIn.inventoryContainer.detectAndSendChanges();
 
 			if (itemStacks.size() > 0) {
 				TestMod3.network.sendTo(new MessagePlayerReceivedLoot(itemStacks), (EntityPlayerMP) playerIn);
-			}else {
+			} else {
 				playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:playerReceivedLoot.noLoot"));
 			}
 		}

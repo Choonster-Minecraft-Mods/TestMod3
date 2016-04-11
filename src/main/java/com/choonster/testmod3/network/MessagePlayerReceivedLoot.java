@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -72,10 +71,11 @@ public class MessagePlayerReceivedLoot implements IMessage {
 
 		/**
 		 * Get an {@link ITextComponent} with the quantity and display name of the {@link ItemStack}.
+		 *
 		 * @param itemStack The ItemStack
 		 * @return The ITextComponent
 		 */
-		private ITextComponent getItemStackTextComponent(ItemStack itemStack){
+		private ITextComponent getItemStackTextComponent(ItemStack itemStack) {
 			return new TextComponentTranslation("message.testmod3:playerReceivedLoot.item", itemStack.stackSize, itemStack.getTextComponent());
 		}
 
