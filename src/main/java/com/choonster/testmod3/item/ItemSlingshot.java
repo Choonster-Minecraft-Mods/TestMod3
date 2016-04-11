@@ -1,6 +1,7 @@
 package com.choonster.testmod3.item;
 
 import com.choonster.testmod3.capability.lastusetime.CapabilityLastUseTime;
+import com.choonster.testmod3.capability.lastusetime.LastUseTime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,7 +38,7 @@ public class ItemSlingshot extends ItemSnowballLauncher {
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		return new CapabilityLastUseTime.Provider();
+		return new CapabilityLastUseTime.Provider(new LastUseTime(false));
 	}
 
 	@Override
@@ -45,8 +46,7 @@ public class ItemSlingshot extends ItemSnowballLauncher {
 		final ActionResult<ItemStack> result = super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
 
 		if (result.getType() == EnumActionResult.SUCCESS) {
-			// TODO: Move to EventHandler#playerInteract when PlayerInteractEvent is properly updated
-			CapabilityLastUseTime.updateLastUseTime(playerIn, hand);
+			CapabilityLastUseTime.updateLastUseTime(playerIn, itemStackIn, hand);
 		}
 
 		return result;

@@ -30,9 +30,6 @@ public class ItemLastUseTimeModel extends ItemTestMod3 {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-		// TODO: Move to EventHandler#playerInteract when PlayerInteractEvent is properly updated
-		CapabilityLastUseTime.updateLastUseTime(playerIn, hand);
-
 		return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
 	}
 

@@ -11,6 +11,7 @@ import com.choonster.testmod3.util.DebugUtil;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -30,7 +31,6 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -179,9 +179,7 @@ public final class CapabilityPigSpawner {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public void playerInteract(PlayerInteractEvent event) {
-			if (event.getAction() != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) return;
-
+		public void playerInteract(PlayerInteractEvent.RightClickBlock event) {
 			final BlockPos spawnPos = event.getPos().offset(event.getFace());
 			final double x = spawnPos.getX() + 0.5, y = spawnPos.getY() + 0.5, z = spawnPos.getZ() + 0.5;
 
@@ -189,12 +187,11 @@ public final class CapabilityPigSpawner {
 			final Block block = world.getBlockState(event.getPos()).getBlock();
 			final IPigSpawnerInteractable interactable = block instanceof IPigSpawnerInteractable ? (IPigSpawnerInteractable) block : null;
 
-			// TODO: Get the hand from PlayerInteractEvent when it's added
-			final EnumHand hand = EnumHand.MAIN_HAND;
+			final EntityPlayer player = event.getEntityPlayer();
+			final IPigSpawner pigSpawner = getPigSpawner(event.getItemStack());
 
-			final IPigSpawner pigSpawner = getPigSpawner(event.getEntityPlayer().getHeldItem(hand));
-			if (trySpawnPig(pigSpawner, world, x, y, z, interactable, event.getPos(), event.getEntityPlayer())) {
-				sendToPlayer(pigSpawner, (EntityPlayerMP) event.getEntityPlayer(), hand);
+			if (trySpawnPig(pigSpawner, world, x, y, z, interactable, event.getPos(), player)) {
+				sendToPlayer(pigSpawner, (EntityPlayerMP) player, event.getHand());
 			}
 		}
 
@@ -206,7 +203,7 @@ public final class CapabilityPigSpawner {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public void entityInteract(EntityInteractEvent event) {
+		public void entityInteract(PlayerInteractEvent.EntityInteract event) {
 			final World world = event.getEntityPlayer().getEntityWorld();
 
 			final Entity target = event.getTarget();

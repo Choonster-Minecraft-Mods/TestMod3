@@ -19,4 +19,13 @@ public interface ILastUseTime {
 	 * @param lastUseTime The last use time
 	 */
 	void set(long lastUseTime);
+
+	/**
+	 * Should this object's last use time be updated automatically?
+	 *
+	 * @return Whether to receive automatic updates
+	 */
+	default boolean automaticUpdates() {
+		return true;
+	}
 }

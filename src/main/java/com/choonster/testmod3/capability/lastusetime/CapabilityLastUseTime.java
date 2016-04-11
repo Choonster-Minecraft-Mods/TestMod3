@@ -57,7 +57,9 @@ public class CapabilityLastUseTime {
 			public void readNBT(Capability<ILastUseTime> capability, ILastUseTime instance, EnumFacing side, NBTBase nbt) {
 				instance.set(((NBTTagLong) nbt).getLong());
 			}
-		}, LastUseTime::new);
+		}, () -> {
+			return new LastUseTime(true);
+		});
 
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
 	}
@@ -72,11 +74,16 @@ public class CapabilityLastUseTime {
 		return CapabilityUtils.getCapability(itemStack, LAST_USE_TIME_CAPABILITY, DEFAULT_FACING);
 	}
 
-	// Temporary method to update the player's held ILastUseTime item
-	// TODO: Move to EventHandler#playerInteract when PlayerInteractEvent is properly updated
-	public static void updateLastUseTime(EntityPlayer player, EnumHand hand) {
+	/**
+	 * Update the last use time of the player's held item.
+	 *
+	 * @param player    The player
+	 * @param itemStack The held ItemStack
+	 * @param hand      The hand holding the item
+	 */
+	public static void updateLastUseTime(EntityPlayer player, ItemStack itemStack, EnumHand hand) {
 		final World world = player.getEntityWorld();
-		final ILastUseTime lastUseTime = getLastUseTime(player.getHeldItem(hand));
+		final ILastUseTime lastUseTime = getLastUseTime(itemStack);
 
 		lastUseTime.set(world.getTotalWorldTime());
 
@@ -101,15 +108,12 @@ public class CapabilityLastUseTime {
 	 */
 	public static class EventHandler {
 		@SubscribeEvent
-		public void playerInteract(PlayerInteractEvent event) {
-			if (event.getAction() != PlayerInteractEvent.Action.RIGHT_CLICK_AIR) return;
-
-			final EntityPlayer player = event.getEntityPlayer();
-
-			// TODO: Get the hand from PlayerInteractEvent when it's added
-			final EnumHand hand = EnumHand.MAIN_HAND;
-
-			updateLastUseTime(player, hand);
+		public void playerInteract(PlayerInteractEvent.RightClickItem event) {
+			final ItemStack itemStack = event.getItemStack();
+			final ILastUseTime lastUseTime = getLastUseTime(itemStack);
+			if (lastUseTime != null && lastUseTime.automaticUpdates()) {
+				updateLastUseTime(event.getEntityPlayer(), itemStack, event.getHand());
+			}
 		}
 	}
 
@@ -117,7 +121,15 @@ public class CapabilityLastUseTime {
 	 * Provider for the {@link ILastUseTime} capability.
 	 */
 	public static class Provider implements ICapabilitySerializable<NBTTagLong> {
-		private final ILastUseTime lastUseTime = new LastUseTime();
+		private final ILastUseTime lastUseTime;
+
+		public Provider() {
+			this(LAST_USE_TIME_CAPABILITY.getDefaultInstance());
+		}
+
+		public Provider(ILastUseTime lastUseTime) {
+			this.lastUseTime = lastUseTime;
+		}
 
 		/**
 		 * Determines if this object has support for the capability in question on the specific side.
@@ -170,7 +182,7 @@ public class CapabilityLastUseTime {
 	}
 
 	/**
-	 * {@link IItemPropertyGetter} to get the ticks since the last use of the item.
+	 * {@link IItemPropertyGetter} to get the ticks since the last use of the item. Returns {@link Float#MAX_VALUE} if the required information isn't available.
 	 */
 	public static class TicksSinceLastUseGetter {
 		/**
@@ -186,7 +198,7 @@ public class CapabilityLastUseTime {
 
 			final World world = worldIn != null ? worldIn : entityIn != null ? entityIn.getEntityWorld() : null;
 
-			return lastUseTime != null && world != null ? world.getTotalWorldTime() - lastUseTime.get() : 0;
+			return lastUseTime != null && world != null ? world.getTotalWorldTime() - lastUseTime.get() : Float.MAX_VALUE;
 		});
 
 		/**
