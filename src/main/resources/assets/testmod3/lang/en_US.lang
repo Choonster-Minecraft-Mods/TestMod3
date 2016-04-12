@@ -21,6 +21,8 @@ tile.testmod3:clientPlayerRotation.name=Client Player Rotation Block
 tile.testmod3:pigSpawnerRefiller.name=Pig Spawner Refiller
 tile.testmod3:mirrorPlane.name=Mirror Plane
 tile.testmod3:vanillaModelTest.name=Vanilla Model Test
+tile.testmod3:fullbright.name=Fullbright Block
+tile.testmod3:normalBrightness.name=Normal Brightness Block
 
 tile.testmod3:basicPipe.name=Basic Pipe
 tile.testmod3:fluidPipe.name=Fluid Pipe

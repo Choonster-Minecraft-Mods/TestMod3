@@ -1,0 +1,13 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "testmod3:fullbright",
+		"textures": {
+			"all": "testmod3:blocks/fullbright"
+		}
+	},
+	"variants": {
+		"normal": [ { } ],
+		"inventory": [ { } ]
+	}
+}

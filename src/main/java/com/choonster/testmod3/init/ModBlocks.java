@@ -41,6 +41,8 @@ public class ModBlocks {
 	public static BlockPigSpawnerRefiller pigSpawnerRefiller;
 	public static BlockPlane mirrorPlane;
 	public static BlockTestMod3 vanillaModelTest;
+	public static BlockTestMod3 fullbright;
+	public static BlockTestMod3 normalBrightness;
 
 	public static BlockPipeBasic pipeBasic;
 	public static BlockPipeFluid pipeFluid;
@@ -66,6 +68,8 @@ public class ModBlocks {
 		pigSpawnerRefiller = registerBlock(new BlockPigSpawnerRefiller());
 		mirrorPlane = registerBlock(new BlockPlane(Material.IRON, "mirrorPlane"));
 		vanillaModelTest = registerBlock(new BlockTestMod3(Material.IRON, "vanillaModelTest"));
+		fullbright = registerBlock(new BlockTestMod3(Material.ROCK, "fullbright"));
+		normalBrightness = registerBlock(new BlockTestMod3(Material.ROCK, "normalBrightness"));
 
 		pipeBasic = registerBlock(new BlockPipeBasic("basicPipe"));
 		pipeFluid = registerBlock(new BlockPipeFluid());
