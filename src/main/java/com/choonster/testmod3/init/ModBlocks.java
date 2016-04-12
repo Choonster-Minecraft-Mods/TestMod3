@@ -83,10 +83,10 @@ public class ModBlocks {
 	 * Register a Block with the default ItemBlock class.
 	 *
 	 * @param block The Block instance
-	 * @param <T>   The Block type
+	 * @param <BLOCK>   The Block type
 	 * @return The Block instance
 	 */
-	protected static <T extends Block> T registerBlock(T block) {
+	protected static <BLOCK extends Block> BLOCK registerBlock(BLOCK block) {
 		return registerBlock(block, ItemBlock::new);
 	}
 
