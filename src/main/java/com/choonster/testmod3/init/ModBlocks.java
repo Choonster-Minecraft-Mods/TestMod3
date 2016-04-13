@@ -86,8 +86,8 @@ public class ModBlocks {
 	/**
 	 * Register a Block with the default ItemBlock class.
 	 *
-	 * @param block The Block instance
-	 * @param <BLOCK>   The Block type
+	 * @param block   The Block instance
+	 * @param <BLOCK> The Block type
 	 * @return The Block instance
 	 */
 	protected static <BLOCK extends Block> BLOCK registerBlock(BLOCK block) {

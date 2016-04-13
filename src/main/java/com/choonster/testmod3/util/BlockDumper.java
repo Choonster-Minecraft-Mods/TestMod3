@@ -2,7 +2,6 @@ package com.choonster.testmod3.util;
 
 import com.choonster.testmod3.Logger;
 import com.choonster.testmod3.TestMod3;
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
