@@ -28,7 +28,7 @@ public class ItemPigSpawner extends ItemTestMod3 {
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		return new CapabilityPigSpawner.Provider(spawnerFactory.get());
+		return CapabilityPigSpawner.createProvider(spawnerFactory.get());
 	}
 
 	@Override

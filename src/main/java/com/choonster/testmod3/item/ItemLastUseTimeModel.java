@@ -35,6 +35,6 @@ public class ItemLastUseTimeModel extends ItemTestMod3 {
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		return new CapabilityLastUseTime.Provider();
+		return CapabilityLastUseTime.createProvider();
 	}
 }

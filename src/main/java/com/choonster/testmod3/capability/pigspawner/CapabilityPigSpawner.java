@@ -5,6 +5,7 @@ import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.api.capability.pigspawner.IPigSpawner;
 import com.choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
 import com.choonster.testmod3.api.capability.pigspawner.IPigSpawnerInteractable;
+import com.choonster.testmod3.capability.SimpleCapabilityProvider;
 import com.choonster.testmod3.network.MessageUpdateHeldPigSpawnerFinite;
 import com.choonster.testmod3.util.CapabilityUtils;
 import com.choonster.testmod3.util.DebugUtil;
@@ -29,7 +30,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -106,9 +107,29 @@ public final class CapabilityPigSpawner {
 	}
 
 	/**
+	 * Create a provider for the default {@link IPigSpawner} instance.
+	 *
+	 * @return The provider
+	 */
+	public static ICapabilityProvider createProvider() {
+		return new SimpleCapabilityProvider<>(PIG_SPAWNER_CAPABILITY, DEFAULT_FACING);
+	}
+
+	/**
+	 * Create a provider for the specified {@link IPigSpawner} instance.
+	 *
+	 * @param pigSpawner The IPigSpawner
+	 * @return The provider
+	 */
+	public static ICapabilityProvider createProvider(IPigSpawner pigSpawner) {
+		return new SimpleCapabilityProvider<>(PIG_SPAWNER_CAPABILITY, DEFAULT_FACING, pigSpawner);
+	}
+
+	/**
 	 * Event handler for the {@link IPigSpawner} capability.
 	 */
 	public static class EventHandler {
+
 
 		/**
 		 * Attach the {@link IPigSpawner} capability to vanilla items.
@@ -118,7 +139,7 @@ public final class CapabilityPigSpawner {
 		@SubscribeEvent
 		public void attachCapabilities(AttachCapabilitiesEvent.Item event) {
 			if (event.getItem() == Items.CLAY_BALL) {
-				event.addCapability(ID, new Provider());
+				event.addCapability(ID, createProvider());
 			}
 		}
 
@@ -239,77 +260,6 @@ public final class CapabilityPigSpawner {
 			event.getToolTip().add("");
 			event.getToolTip().addAll(tooltipLines);
 		}
-	}
 
-	/**
-	 * Provider for the {@link IPigSpawner} capability.
-	 */
-	public static class Provider implements ICapabilitySerializable<NBTTagCompound> {
-		private final IPigSpawner pigSpawner;
-
-		/**
-		 * Create a provider using the default {@link IPigSpawner} instance.
-		 */
-		public Provider() {
-			this(new PigSpawnerFinite(20));
-		}
-
-		/**
-		 * Create a provider using the specified {@link IPigSpawner} instance.
-		 *
-		 * @param pigSpawner The {@link IPigSpawner} instance
-		 */
-		public Provider(IPigSpawner pigSpawner) {
-			this.pigSpawner = pigSpawner;
-		}
-
-		@Override
-		public NBTTagCompound serializeNBT() {
-			return (NBTTagCompound) PIG_SPAWNER_CAPABILITY.writeNBT(pigSpawner, EnumFacing.NORTH);
-		}
-
-		@Override
-		public void deserializeNBT(NBTTagCompound nbt) {
-			PIG_SPAWNER_CAPABILITY.readNBT(pigSpawner, EnumFacing.NORTH, nbt);
-		}
-
-		/**
-		 * Determines if this object has support for the capability in question on the specific side.
-		 * The return value of this MIGHT change during runtime if this object gains or looses support
-		 * for a capability.
-		 * <p>
-		 * Example:
-		 * A Pipe getting a cover placed on one side causing it loose the Inventory attachment function for that side.
-		 * <p>
-		 * This is a light weight version of getCapability, intended for metadata uses.
-		 *
-		 * @param capability The capability to check
-		 * @param facing     The Side to check from:
-		 *                   CAN BE NULL. Null is defined to represent 'internal' or 'self'
-		 * @return True if this object supports the capability.
-		 */
-		@Override
-		public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-			return capability == PIG_SPAWNER_CAPABILITY;
-		}
-
-		/**
-		 * Retrieves the handler for the capability requested on the specific side.
-		 * The return value CAN be null if the object does not support the capability.
-		 * The return value CAN be the same for multiple faces.
-		 *
-		 * @param capability The capability to check
-		 * @param facing     The Side to check from:
-		 *                   CAN BE NULL. Null is defined to represent 'internal' or 'self'
-		 * @return True if this object supports the capability.
-		 */
-		@Override
-		public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-			if (capability == PIG_SPAWNER_CAPABILITY) {
-				return PIG_SPAWNER_CAPABILITY.cast(pigSpawner);
-			}
-
-			return null;
-		}
 	}
 }

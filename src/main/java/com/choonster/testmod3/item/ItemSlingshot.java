@@ -38,7 +38,7 @@ public class ItemSlingshot extends ItemSnowballLauncher {
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		return new CapabilityLastUseTime.Provider(new LastUseTime(false));
+		return CapabilityLastUseTime.createProvider(new LastUseTime(false));
 	}
 
 	@Override

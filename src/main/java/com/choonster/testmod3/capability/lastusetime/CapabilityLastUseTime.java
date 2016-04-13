@@ -2,6 +2,7 @@ package com.choonster.testmod3.capability.lastusetime;
 
 import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.api.capability.lastusetime.ILastUseTime;
+import com.choonster.testmod3.capability.SimpleCapabilityProvider;
 import com.choonster.testmod3.item.IItemPropertyGetterFix;
 import com.choonster.testmod3.network.MessageUpdateHeldLastUseTime;
 import com.choonster.testmod3.util.CapabilityUtils;
@@ -20,7 +21,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -57,9 +58,7 @@ public class CapabilityLastUseTime {
 			public void readNBT(Capability<ILastUseTime> capability, ILastUseTime instance, EnumFacing side, NBTBase nbt) {
 				instance.set(((NBTTagLong) nbt).getLong());
 			}
-		}, () -> {
-			return new LastUseTime(true);
-		});
+		}, () -> new LastUseTime(true));
 
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
 	}
@@ -104,9 +103,33 @@ public class CapabilityLastUseTime {
 	}
 
 	/**
+	 * Create a provider for the default {@link ILastUseTime} instance.
+	 *
+	 * @return The provider
+	 */
+	public static ICapabilityProvider createProvider() {
+		return new SimpleCapabilityProvider<>(LAST_USE_TIME_CAPABILITY, DEFAULT_FACING);
+	}
+
+	/**
+	 * Create a provider for the specified {@link ILastUseTime} instance.
+	 *
+	 * @param lastUseTime The ILastUseTime
+	 * @return The provider
+	 */
+	public static ICapabilityProvider createProvider(ILastUseTime lastUseTime) {
+		return new SimpleCapabilityProvider<>(LAST_USE_TIME_CAPABILITY, DEFAULT_FACING, lastUseTime);
+	}
+
+	/**
 	 * Event handler for the {@link ILastUseTime} capability.
 	 */
 	public static class EventHandler {
+		/**
+		 * Update the {@link ILastUseTime} of the player's held item when they right click.
+		 *
+		 * @param event The event
+		 */
 		@SubscribeEvent
 		public void playerInteract(PlayerInteractEvent.RightClickItem event) {
 			final ItemStack itemStack = event.getItemStack();
@@ -114,70 +137,6 @@ public class CapabilityLastUseTime {
 			if (lastUseTime != null && lastUseTime.automaticUpdates()) {
 				updateLastUseTime(event.getEntityPlayer(), itemStack, event.getHand());
 			}
-		}
-	}
-
-	/**
-	 * Provider for the {@link ILastUseTime} capability.
-	 */
-	public static class Provider implements ICapabilitySerializable<NBTTagLong> {
-		private final ILastUseTime lastUseTime;
-
-		public Provider() {
-			this(LAST_USE_TIME_CAPABILITY.getDefaultInstance());
-		}
-
-		public Provider(ILastUseTime lastUseTime) {
-			this.lastUseTime = lastUseTime;
-		}
-
-		/**
-		 * Determines if this object has support for the capability in question on the specific side.
-		 * The return value of this MIGHT change during runtime if this object gains or looses support
-		 * for a capability.
-		 * <p>
-		 * Example:
-		 * A Pipe getting a cover placed on one side causing it loose the Inventory attachment function for that side.
-		 * <p>
-		 * This is a light weight version of getCapability, intended for metadata uses.
-		 *
-		 * @param capability The capability to check
-		 * @param facing     The Side to check from:
-		 *                   CAN BE NULL. Null is defined to represent 'internal' or 'self'
-		 * @return True if this object supports the capability.
-		 */
-		@Override
-		public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-			return capability == LAST_USE_TIME_CAPABILITY;
-		}
-
-		/**
-		 * Retrieves the handler for the capability requested on the specific side.
-		 * The return value CAN be null if the object does not support the capability.
-		 * The return value CAN be the same for multiple faces.
-		 *
-		 * @param capability The capability to check
-		 * @param facing     The Side to check from:
-		 *                   CAN BE NULL. Null is defined to represent 'internal' or 'self'
-		 * @return True if this object supports the capability.
-		 */
-		@Override
-		public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-			if (capability == LAST_USE_TIME_CAPABILITY) {
-				return LAST_USE_TIME_CAPABILITY.cast(lastUseTime);
-			}
-
-			return null;
-		}
-
-		@Override
-		public NBTTagLong serializeNBT() {
-			return (NBTTagLong) LAST_USE_TIME_CAPABILITY.writeNBT(lastUseTime, DEFAULT_FACING);
-		}
-
-		@Override
-		public void deserializeNBT(NBTTagLong nbt) {
-			LAST_USE_TIME_CAPABILITY.readNBT(lastUseTime, DEFAULT_FACING, nbt);
 		}
 	}
 
