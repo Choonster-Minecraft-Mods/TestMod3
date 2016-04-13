@@ -2,50 +2,55 @@ package com.choonster.testmod3.util;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
 import java.util.UUID;
 
 public class SwordUpgrades {
-	// The ID to use for the attack damage modifier. This can be used to look up the modifier in an ItemStack's NBT.
-	public final static UUID MODIFIER_UUID = UUID.fromString("294093da-54f0-4c1b-9dbb-13b77534a84c");
+	/**
+	 * The ID of the attack damage modifier. This can be used to look up the modifier in an {@link ItemStack}'s NBT.
+	 */
+	private static final UUID MODIFIER_UUID = UUID.fromString("294093da-54f0-4c1b-9dbb-13b77534a84c");
 
-	// Returns an ItemStack of the ItemSword with +30 attack damage
-	public static ItemStack upgradeSword(ItemSword item) {
-		// Using the ItemStack AttributeModifiers NBT completely replaces the ItemSword modifiers,
-		// so we need to manually add the sword's damage to the total
-		float swordDamage = 4 + item.getDamageVsEntity();
-		AttributeModifier attackModifier = new AttributeModifier(MODIFIER_UUID, "Weapon Upgrade", 30 + swordDamage, 0);
-		NBTTagCompound modifierNBT = writeAttributeModifierToNBT(SharedMonsterAttributes.ATTACK_DAMAGE, attackModifier);
+	/**
+	 * The name of the attack damage modifier.
+	 */
+	private static final String MODIFIER_NAME = "Weapon Upgrade";
 
-		// Create the NBT structure needed by ItemStack#getAttributeModifiers
-		NBTTagCompound stackTagCompound = new NBTTagCompound();
-		NBTTagList list = new NBTTagList();
-		list.appendTag(modifierNBT);
-		stackTagCompound.setTag("AttributeModifiers", list);
+	/**
+	 * The amount of attack damage provided by the modifier.
+	 */
+	private static final float MODIFIER_AMOUNT = 30.0f;
 
+	/**
+	 * Returns an {@link ItemStack} of the {@link Item} with +30 attack damage.
+	 *
+	 * @param item The item
+	 * @return An ItemStack of the Item with the attack damage modifier added to it
+	 */
+	public static ItemStack upgradeSword(Item item) {
 		// Create an ItemStack of the Item
-		ItemStack stack = new ItemStack(item);
+		final ItemStack originalStack = new ItemStack(item);
+		final ItemStack outputStack = originalStack.copy();
 
-		// Set the stack's NBT to the modifier structure
-		stack.setTagCompound(stackTagCompound);
+		// Modifiers provided by the Item are completely ignored as soon as any modifiers are added to the ItemStack,
+		// so add the Item's modifiers to the output ItemStack manually
+		for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+			originalStack.getAttributeModifiers(slot)
+					.entries()
+					.forEach(entry -> {
+						outputStack.addAttributeModifier(entry.getKey(), entry.getValue(), slot);
+					});
+		}
 
-		return stack;
-	}
+		// Create the attack damage modifier
+		final AttributeModifier attackDamageModifier = new AttributeModifier(MODIFIER_UUID, MODIFIER_NAME, MODIFIER_AMOUNT, Constants.ATTRIBUTE_MODIFIER_OPERATION_ADD);
 
-	// Adapted from SharedMonsterAttributes. Also adds AttributeName tag required by ItemStack#getAttributeModifiers
-	private static NBTTagCompound writeAttributeModifierToNBT(IAttribute attribute, AttributeModifier modifier) {
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		nbttagcompound.setString("AttributeName", attribute.getAttributeUnlocalizedName());
-		nbttagcompound.setString("Name", modifier.getName());
-		nbttagcompound.setDouble("Amount", modifier.getAmount());
-		nbttagcompound.setInteger("Operation", modifier.getOperation());
-		nbttagcompound.setLong("UUIDMost", modifier.getID().getMostSignificantBits());
-		nbttagcompound.setLong("UUIDLeast", modifier.getID().getLeastSignificantBits());
-		return nbttagcompound;
+		// Add it to the output ItemStack
+		outputStack.addAttributeModifier(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), attackDamageModifier, EntityEquipmentSlot.MAINHAND);
+
+		return outputStack;
 	}
 }
