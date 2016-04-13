@@ -1,6 +1,6 @@
 package com.choonster.testmod3.init;
 
-import com.choonster.testmod3.capability.pigspawner.PigSpawnerFinite;
+import com.choonster.testmod3.capability.pigspawner.CapabilityPigSpawner;
 import com.choonster.testmod3.capability.pigspawner.PigSpawnerInfinite;
 import com.choonster.testmod3.item.*;
 import com.choonster.testmod3.util.Constants;
@@ -93,7 +93,7 @@ public class ModItems {
 		chest.addEnchantment(Enchantments.SHARPNESS, 1);
 		replacementHelmet.setReplacementItems(chest, new ItemStack(repacementLeggings), new ItemStack(replacementBoots));
 
-		pigSpawnerFinite = registerItem(new ItemPigSpawner("finite", () -> new PigSpawnerFinite(20)));
+		pigSpawnerFinite = registerItem(new ItemPigSpawner("finite", CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY::getDefaultInstance));
 		pigSpawnerInfinite = registerItem(new ItemPigSpawner("infinite", PigSpawnerInfinite::new));
 
 		lootTableTest = registerItem(new ItemLootTableTest());
