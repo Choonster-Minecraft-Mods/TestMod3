@@ -47,6 +47,8 @@ public class ModItems {
 	public static ItemContinuousBow continuousBow;
 	public static ItemRespawner respawner;
 	public static ItemLootTableTest lootTableTest;
+	public static ItemMaxHealthSetter maxHealthSetter;
+	public static ItemMaxHealthGetter maxHealthGetter;
 
 	public static ItemArmourReplacement replacementHelmet;
 	public static ItemArmourRestricted replacementChestplate;
@@ -97,6 +99,8 @@ public class ModItems {
 		pigSpawnerInfinite = registerItem(new ItemPigSpawner("infinite", PigSpawnerInfinite::new));
 
 		lootTableTest = registerItem(new ItemLootTableTest());
+		maxHealthSetter = registerItem(new ItemMaxHealthSetter());
+		maxHealthGetter = registerItem(new ItemMaxHealthGetter());
 
 		TOOL_MATERIAL_GLOWSTONE.setRepairItem(new ItemStack(Items.GLOWSTONE_DUST));
 		ARMOUR_MATERIAL_REPLACEMENT.customCraftingMaterial = modArrow;

@@ -43,6 +43,8 @@ public class ModBlocks {
 	public static BlockTestMod3 vanillaModelTest;
 	public static BlockTestMod3 fullbright;
 	public static BlockTestMod3 normalBrightness;
+	public static BlockMaxHealthSetter maxHealthSetter;
+	public static BlockMaxHealthGetter maxHealthGetter;
 
 	public static BlockPipeBasic pipeBasic;
 	public static BlockPipeFluid pipeFluid;
@@ -70,6 +72,8 @@ public class ModBlocks {
 		vanillaModelTest = registerBlock(new BlockTestMod3(Material.IRON, "vanillaModelTest"));
 		fullbright = registerBlock(new BlockTestMod3(Material.ROCK, "fullbright"));
 		normalBrightness = registerBlock(new BlockTestMod3(Material.ROCK, "normalBrightness"));
+		maxHealthSetter = registerBlock(new BlockMaxHealthSetter());
+		maxHealthGetter = registerBlock(new BlockMaxHealthGetter());
 
 		pipeBasic = registerBlock(new BlockPipeBasic("basicPipe"));
 		pipeFluid = registerBlock(new BlockPipeFluid());

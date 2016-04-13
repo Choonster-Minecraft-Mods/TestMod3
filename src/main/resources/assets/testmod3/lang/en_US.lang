@@ -23,6 +23,8 @@ tile.testmod3:mirrorPlane.name=Mirror Plane
 tile.testmod3:vanillaModelTest.name=Vanilla Model Test
 tile.testmod3:fullbright.name=Fullbright Block
 tile.testmod3:normalBrightness.name=Normal Brightness Block
+tile.testmod3:maxHealthSetter.name=Max Health Setter
+tile.testmod3:maxHealthGetter.name=Max Health Getter
 
 tile.testmod3:basicPipe.name=Basic Pipe
 tile.testmod3:fluidPipe.name=Fluid Pipe
@@ -117,6 +119,8 @@ item.testmod3:pigSpawner.infinite.name=Infinite Pig Spawner
 item.testmod3:continuousBow.name=Continuous Bow
 item.testmod3:respawner.name=Respawner
 item.testmod3:lootTableTest.name=Loot Table Test
+item.testmod3:maxHealthSetterItem.name=Max Health Setter
+item.testmod3:maxHealthGetterItem.name=Max Health Getter
 
 item.testmod3:helmetReplacement.name=Armour Replacement Helmet
 item.testmod3:chestplateReplacement.name=Armour Replacement Chestplate
@@ -160,6 +164,9 @@ message.testmod3:death.coordinates=You died at %d %d %d!
 message.testmod3:playerReceivedLoot.base=Received Loot: %s
 message.testmod3:playerReceivedLoot.item=%d x %s
 message.testmod3:playerReceivedLoot.noLoot=No loot received.
+message.testmod3:maxHealth.add=Added %2$0.1f bonus max health to %1$s
+message.testmod3:maxHealth.set=Set bonus max health of %s to %0.1f
+message.testmod3:maxHealth.get=Max health of %s is %0.1f (%0.1f bonus)
 
 # Config GUI strings
 testmod3.config.title=TestMod3 Config
@@ -179,3 +186,6 @@ commands.testmod3.rotateVector.result=Rotated vector: [%s, %s, %s]
 commands.testmod3.runTests.usage=/runtests
 commands.testmod3.runTests.testsPassed=All tests passed.
 commands.testmod3.runTests.testsFailed=Tests failed. See log for more details.
+commands.testmod3.addMaxHealth.usage=/addMaxHealth <entity> <amount>
+commands.testmod3.setMaxHealth.usage=/setMaxHealth <entity> <amount>
+commands.testmod3.getMaxHealth.usage=/getMaxHealth <entity>
