@@ -51,11 +51,7 @@ dependencies {
 shadowJar {
     // Only shadow fluent-hc
     dependencies {
-        exclude(dependency('mezz.jei:jei_.*'))
-        exclude(dependency('commons-codec:commons-codec:'))
-        exclude(dependency('commons-logging:commons-logging:'))
-        exclude(dependency('org.apache.httpcomponents:httpcore:'))
-        exclude(dependency('org.apache.httpcomponents:httpclient:'))
+        include(dependency('org.apache.httpcomponents:fluent-hc:.*'))
     }
 
     // Relocate fluent-hc to prevent conflicts with other mods that include it
