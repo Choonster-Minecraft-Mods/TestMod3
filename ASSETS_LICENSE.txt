@@ -1,2 +1,4 @@
 The file src/main/resources/assets/testmod3/sounds/records/solaris.ogg is taken from Path of Exile, (c) 2010 - 2015 Grinding Gear Games.
 
+The file src/main/resources/assets/testmod3/sounds/items/gun/9mm_fire.ogg was recorded by Mike Koenig.
+It is available from SoundBible.com (http://soundbible.com/2120-9mm-Gunshot.html) under the Creative Commons Attribution 3.0 license: https://creativecommons.org/licenses/by/3.0/

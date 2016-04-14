@@ -49,6 +49,7 @@ public class ModItems {
 	public static ItemLootTableTest lootTableTest;
 	public static ItemMaxHealthSetter maxHealthSetter;
 	public static ItemMaxHealthGetter maxHealthGetter;
+	public static ItemSoundEffect gun;
 
 	public static ItemArmourReplacement replacementHelmet;
 	public static ItemArmourRestricted replacementChestplate;
@@ -101,6 +102,7 @@ public class ModItems {
 		lootTableTest = registerItem(new ItemLootTableTest());
 		maxHealthSetter = registerItem(new ItemMaxHealthSetter());
 		maxHealthGetter = registerItem(new ItemMaxHealthGetter());
+		gun = registerItem(new ItemSoundEffect("gun", ModSoundEvents.NINE_MM_FIRE));
 
 		TOOL_MATERIAL_GLOWSTONE.setRepairItem(new ItemStack(Items.GLOWSTONE_DUST));
 		ARMOUR_MATERIAL_REPLACEMENT.customCraftingMaterial = modArrow;

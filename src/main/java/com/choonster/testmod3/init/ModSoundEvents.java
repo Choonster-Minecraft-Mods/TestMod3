@@ -13,12 +13,14 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 @SuppressWarnings("WeakerAccess")
 public class ModSoundEvents {
 	public static SoundEvent record_solaris;
+	public static SoundEvent NINE_MM_FIRE;
 
 	/**
 	 * Register the {@link SoundEvent}s.
 	 */
 	public static void registerSounds() {
 		record_solaris = registerSound("record.solaris");
+		NINE_MM_FIRE = registerSound("9mm.fire");
 	}
 
 	/**

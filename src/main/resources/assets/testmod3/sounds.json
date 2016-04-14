@@ -7,5 +7,12 @@
 				"stream": true
 			}
 		]
+	},
+	"9mm.fire": {
+		"category": "player",
+		"sounds": [
+			"testmod3:items/gun/9mm_fire"
+		],
+		"subtitle": "subtitles.item.testmod3:gun.fire"
 	}
 }

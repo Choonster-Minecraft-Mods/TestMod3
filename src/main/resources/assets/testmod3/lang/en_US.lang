@@ -121,6 +121,7 @@ item.testmod3:respawner.name=Respawner
 item.testmod3:lootTableTest.name=Loot Table Test
 item.testmod3:maxHealthSetterItem.name=Max Health Setter
 item.testmod3:maxHealthGetterItem.name=Max Health Getter
+item.testmod3:gun.name=Gun
 
 item.testmod3:helmetReplacement.name=Armour Replacement Helmet
 item.testmod3:chestplateReplacement.name=Armour Replacement Chestplate
@@ -189,3 +190,6 @@ commands.testmod3.runTests.testsFailed=Tests failed. See log for more details.
 commands.testmod3.addMaxHealth.usage=/addMaxHealth <entity> <amount>
 commands.testmod3.setMaxHealth.usage=/setMaxHealth <entity> <amount>
 commands.testmod3.getMaxHealth.usage=/getMaxHealth <entity>
+
+# Subtitles
+subtitles.item.testmod3:gun.fire=Gun fires
