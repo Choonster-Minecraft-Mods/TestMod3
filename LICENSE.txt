@@ -1,10 +1,8 @@
-The file src/main/resources/assets/testmod3/sounds/records/solaris.ogg is taken from Path of Exile, (c) 2010 - 2015 Grinding Gear Games.
-
-All other files are licensed under the terms below:
+Licenses for assets can be found in ASSETS_LICENSE.txt. All other files are licensed under the terms below:
 
 The MIT License (MIT)
 
-Copyright (c) 2015 Choonster
+Test Mod 3 - Copyright (c) 2015 Choonster
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

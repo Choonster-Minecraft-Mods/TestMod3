@@ -1,0 +1,2 @@
+The file src/main/resources/assets/testmod3/sounds/records/solaris.ogg is taken from Path of Exile, (c) 2010 - 2015 Grinding Gear Games.
+
