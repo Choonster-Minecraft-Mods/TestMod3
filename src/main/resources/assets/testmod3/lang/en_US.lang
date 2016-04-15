@@ -181,15 +181,17 @@ entity.testmod3.modArrow.name=Mod Arrow
 itemGroup.testmod3=Test Mod 3
 
 # Commands
-commands.testmod3.rotateVector.usage=/rotatevector x y z axis degrees
+commands.testmod3.rotateVector.usage=/testmod3 rotatevector <x> <y> <z> <axis> <degrees>
 commands.testmod3.rotateVector.invalidAxis=axis must be x, y or z
 commands.testmod3.rotateVector.result=Rotated vector: [%s, %s, %s]
-commands.testmod3.runTests.usage=/runtests
+commands.testmod3.runTests.usage=/testmod3 runtests
 commands.testmod3.runTests.testsPassed=All tests passed.
 commands.testmod3.runTests.testsFailed=Tests failed. See log for more details.
-commands.testmod3.addMaxHealth.usage=/addMaxHealth <entity> <amount>
-commands.testmod3.setMaxHealth.usage=/setMaxHealth <entity> <amount>
-commands.testmod3.getMaxHealth.usage=/getMaxHealth <entity>
+commands.testmod3.addMaxHealth.usage=/testmod3 addMaxHealth <entity> <amount>
+commands.testmod3.setMaxHealth.usage=/testmod3 setMaxHealth <entity> <amount>
+commands.testmod3.getMaxHealth.usage=/testmod3 getMaxHealth <entity>
+commands.testmod3.usage=/testmod3 <command>
+commands.testmod3:help.usage=/testmod3 help [page|command name]
 
 # Subtitles
 subtitles.item.testmod3:gun.fire=Gun fires
