@@ -55,7 +55,7 @@ public abstract class CommandMaxHealthBase extends CommandBase {
 
 		processEntity(entity, CapabilityMaxHealth.getMaxHealth(entity), amount);
 
-		notifyCommandListener(sender, this, getSuccessMessage(), entity.getDisplayName(), amount);
+		notifyCommandListener(sender, this, getSuccessMessage(), entity.getDisplayName(), CapabilityMaxHealth.formatMaxHealth(amount));
 	}
 
 	@Override

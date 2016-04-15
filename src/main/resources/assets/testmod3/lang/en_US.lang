@@ -165,9 +165,9 @@ message.testmod3:death.coordinates=You died at %d %d %d!
 message.testmod3:playerReceivedLoot.base=Received Loot: %s
 message.testmod3:playerReceivedLoot.item=%d x %s
 message.testmod3:playerReceivedLoot.noLoot=No loot received.
-message.testmod3:maxHealth.add=Added %2$0.1f bonus max health to %1$s
-message.testmod3:maxHealth.set=Set bonus max health of %s to %0.1f
-message.testmod3:maxHealth.get=Max health of %s is %0.1f (%0.1f bonus)
+message.testmod3:maxHealth.add=Added %2$s bonus max health to %1$s
+message.testmod3:maxHealth.set=Set bonus max health of %s to %s
+message.testmod3:maxHealth.get=Max health of %s is %s (%s bonus)
 
 # Config GUI strings
 testmod3.config.title=TestMod3 Config

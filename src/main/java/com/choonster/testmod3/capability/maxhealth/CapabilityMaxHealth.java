@@ -6,6 +6,7 @@ import com.choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import com.choonster.testmod3.capability.SimpleCapabilityProvider;
 import com.choonster.testmod3.util.CapabilityUtils;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.util.EnumFacing;
@@ -80,6 +81,16 @@ public class CapabilityMaxHealth {
 	 */
 	public static ICapabilityProvider createProvider(IMaxHealth maxHealth) {
 		return new SimpleCapabilityProvider<>(MAX_HEALTH_CAPABILITY, DEFAULT_FACING, maxHealth);
+	}
+
+	/**
+	 * Format a max health value.
+	 *
+	 * @param maxHealth The max health value
+	 * @return The formatted text.
+	 */
+	public static String formatMaxHealth(float maxHealth) {
+		return ItemStack.DECIMALFORMAT.format(maxHealth);
 	}
 
 	/**

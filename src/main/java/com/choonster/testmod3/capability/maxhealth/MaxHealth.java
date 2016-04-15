@@ -111,7 +111,9 @@ public class MaxHealth implements IMaxHealth {
 		AttributeModifier modifier = createModifier();
 		dummyMaxHealthAttribute.applyModifier(modifier);
 
-		// Increment bonus max health by 0.5 until the max health is at least 1.0
+		// Increment bonus max health by 0.5 until the max health is at least 2.0 (1 heart).
+		// We do this to avoid setting the entity's max health to 0, which would kill it (and prevent it from respawning if it's a player).
+		// The attribute itself will prevent its value from exceeding the maximum, so adding more than the maximum max health is harmless.
 		while (dummyMaxHealthAttribute.getAttributeValue() < MIN_AMOUNT) {
 			dummyMaxHealthAttribute.removeModifier(modifier);
 			bonusMaxHealth += 0.5f;
@@ -128,11 +130,11 @@ public class MaxHealth implements IMaxHealth {
 
 			oldAmount = (float) oldModifier.getAmount();
 
-			Logger.info(CapabilityMaxHealth.LOG_MARKER, "Max Health Changed! Entity: %s - Old: %f - New: %f", entity, oldAmount, newAmount);
+			Logger.debug(CapabilityMaxHealth.LOG_MARKER, "Max Health Changed! Entity: %s - Old: %s - New: %s", entity, CapabilityMaxHealth.formatMaxHealth(oldAmount), CapabilityMaxHealth.formatMaxHealth(newAmount));
 		} else {
 			oldAmount = 0.0f;
 
-			Logger.info(CapabilityMaxHealth.LOG_MARKER, "Max Health Added! Entity: %s - New: %f", entity, newAmount);
+			Logger.debug(CapabilityMaxHealth.LOG_MARKER, "Max Health Added! Entity: %s - New: %f", entity, CapabilityMaxHealth.formatMaxHealth(newAmount));
 		}
 
 		entityMaxHealthAttribute.applyModifier(modifier);
