@@ -52,7 +52,7 @@ public class ModBlocks {
 	public static BlockColouredSlab.ColouredSlabGroup stainedClaySlabs;
 
 	public static void registerBlocks() {
-		waterGrass = registerBlock(new BlockWaterGrass(), block -> new ItemColored(block, true));
+		waterGrass = registerBlock(new BlockWaterGrass());
 		largeCollisionTest = registerBlock(new BlockLargeCollisionTest());
 		rightClickTest = registerBlock(new BlockRightClickTest());
 		clientPlayerRightClick = registerBlock(new BlockClientPlayerRightClick());
