@@ -134,7 +134,7 @@ public class MaxHealth implements IMaxHealth {
 		} else {
 			oldAmount = 0.0f;
 
-			Logger.debug(CapabilityMaxHealth.LOG_MARKER, "Max Health Added! Entity: %s - New: %f", entity, CapabilityMaxHealth.formatMaxHealth(newAmount));
+			Logger.debug(CapabilityMaxHealth.LOG_MARKER, "Max Health Added! Entity: %s - New: %s", entity, CapabilityMaxHealth.formatMaxHealth(newAmount));
 		}
 
 		entityMaxHealthAttribute.applyModifier(modifier);
