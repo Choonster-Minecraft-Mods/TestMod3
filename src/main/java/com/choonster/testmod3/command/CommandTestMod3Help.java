@@ -5,7 +5,6 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -36,8 +35,6 @@ public class CommandTestMod3Help extends CommandHelp {
 
 	@Override
 	protected List<ICommand> getSortedPossibleCommands(ICommandSender sender, MinecraftServer server) {
-		List<ICommand> commands = subCommandManager.getPossibleCommands(sender);
-		Collections.sort(commands);
-		return commands;
+		return subCommandManager.getPossibleCommands(sender);
 	}
 }

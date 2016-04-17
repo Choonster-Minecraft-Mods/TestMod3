@@ -6,7 +6,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A command with sub-commands.
@@ -98,6 +99,19 @@ public class CommandTestMod3 extends CommandBase {
 	 * Handler for the sub-commands of this command.
 	 */
 	private static class SubCommandHandler extends CommandHandler implements ISubCommandManager {
+		/**
+		 * A map of command names/aliases to commands in the order they were registered.
+		 */
+		private final Map<String, ICommand> orderedCommandMap = new LinkedHashMap<>();
+
+		/**
+		 * A set of the registered commands in the order they were registered.
+		 */
+		private final Set<ICommand> orderedCommandSet = new LinkedHashSet<>();
+
+		/**
+		 * The server.
+		 */
 		private final MinecraftServer server;
 
 		private SubCommandHandler(MinecraftServer server) {
@@ -119,6 +133,61 @@ public class CommandTestMod3 extends CommandBase {
 		@Nullable
 		public ICommand getCommand(String commandName) {
 			return getCommands().get(commandName);
+		}
+
+		@Override
+		public ICommand registerCommand(ICommand command) {
+			orderedCommandMap.put(command.getCommandName(), command);
+			orderedCommandSet.add(command);
+
+			for (String alias : command.getCommandAliases()) {
+				ICommand iCommand = orderedCommandMap.get(alias);
+
+				if (iCommand == null || !iCommand.getCommandName().equals(alias)) {
+					orderedCommandMap.put(alias, command);
+				}
+			}
+
+			return super.registerCommand(command);
+		}
+
+		@Override
+		public List<String> getTabCompletionOptions(ICommandSender sender, String input, BlockPos pos) {
+			String[] args = input.split(" ", -1);
+			String commandName = args[0];
+
+			if (args.length == 1) {
+				List<String> list = new ArrayList<>();
+
+				list.addAll(this.orderedCommandMap.entrySet().stream()
+						.filter(entry -> CommandBase.doesStringStartWith(commandName, entry.getKey()))
+						.filter(entry -> entry.getValue().checkPermission(this.getServer(), sender))
+						.map(Map.Entry::getKey)
+						.collect(Collectors.toList()));
+
+				return list;
+			} else {
+				if (args.length > 1) {
+					ICommand iCommand = this.orderedCommandMap.get(commandName);
+
+					if (iCommand != null && iCommand.checkPermission(this.getServer(), sender)) {
+						return iCommand.getTabCompletionOptions(this.getServer(), sender, dropFirstString(args), pos);
+					}
+				}
+
+				return Collections.emptyList();
+			}
+		}
+
+		@Override
+		public List<ICommand> getPossibleCommands(ICommandSender sender) {
+			List<ICommand> list = new ArrayList<>();
+
+			list.addAll(orderedCommandSet.stream()
+					.filter(iCommand -> iCommand.checkPermission(this.getServer(), sender))
+					.collect(Collectors.toList()));
+
+			return list;
 		}
 	}
 }
