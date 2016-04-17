@@ -12,15 +12,19 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  */
 @SuppressWarnings("WeakerAccess")
 public class ModSoundEvents {
-	public static SoundEvent record_solaris;
-	public static SoundEvent NINE_MM_FIRE;
+	public static final SoundEvent RECORD_SOLARIS;
+	public static final SoundEvent NINE_MM_FIRE;
+
+	static {
+		RECORD_SOLARIS = registerSound("record.solaris");
+		NINE_MM_FIRE = registerSound("9mm.fire");
+	}
 
 	/**
 	 * Register the {@link SoundEvent}s.
 	 */
 	public static void registerSounds() {
-		record_solaris = registerSound("record.solaris");
-		NINE_MM_FIRE = registerSound("9mm.fire");
+		// Dummy method to make sure the static initialiser runs
 	}
 
 	/**

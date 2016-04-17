@@ -21,66 +21,70 @@ import java.util.function.Function;
 @SuppressWarnings("WeakerAccess")
 public class ModBlocks {
 
-	public static final Set<Block> blocks = new HashSet<>();
+	public static final Set<Block> BLOCKS = new HashSet<>();
 
-	public static BlockWaterGrass waterGrass;
-	public static BlockLargeCollisionTest largeCollisionTest;
-	public static BlockRightClickTest rightClickTest;
-	public static BlockClientPlayerRightClick clientPlayerRightClick;
-	public static BlockRotatableLamp rotatableLamp;
-	public static BlockItemCollisionTest itemCollisionTest;
-	public static BlockSurvivalCommandBlock survivalCommandBlock;
-	public static BlockFluidTank fluidTank;
-	public static BlockItemDebugger itemDebugger;
-	public static Block endPortalFrameFull;
-	public static BlockColoredRotatable coloredRotatable;
-	public static BlockColoredMultiRotatable coloredMultiRotatable;
-	public static BlockPotionEffect potionEffect;
-	public static BlockVariants variants;
-	public static BlockClientPlayerRotation clientPlayerRotation;
-	public static BlockPigSpawnerRefiller pigSpawnerRefiller;
-	public static BlockPlane mirrorPlane;
-	public static BlockTestMod3 vanillaModelTest;
-	public static BlockTestMod3 fullbright;
-	public static BlockTestMod3 normalBrightness;
-	public static BlockMaxHealthSetter maxHealthSetter;
-	public static BlockMaxHealthGetter maxHealthGetter;
+	public static final BlockWaterGrass WATER_GRASS;
+	public static final BlockLargeCollisionTest LARGE_COLLISION_TEST;
+	public static final BlockRightClickTest RIGHT_CLICK_TEST;
+	public static final BlockClientPlayerRightClick CLIENT_PLAYER_RIGHT_CLICK;
+	public static final BlockRotatableLamp ROTATABLE_LAMP;
+	public static final BlockItemCollisionTest ITEM_COLLISION_TEST;
+	public static final BlockSurvivalCommandBlock SURVIVAL_COMMAND_BLOCK;
+	public static final BlockFluidTank FLUID_TANK;
+	public static final BlockItemDebugger ITEM_DEBUGGER;
+	public static final Block END_PORTAL_FRAME_FULL;
+	public static final BlockColoredRotatable COLORED_ROTATABLE;
+	public static final BlockColoredMultiRotatable COLORED_MULTI_ROTATABLE;
+	public static final BlockPotionEffect POTION_EFFECT;
+	public static final BlockVariants VARIANTS;
+	public static final BlockClientPlayerRotation CLIENT_PLAYER_ROTATION;
+	public static final BlockPigSpawnerRefiller PIG_SPAWNER_REFILLER;
+	public static final BlockPlane MIRROR_PLANE;
+	public static final BlockTestMod3 VANILLA_MODEL_TEST;
+	public static final BlockTestMod3 FULLBRIGHT;
+	public static final BlockTestMod3 NORMAL_BRIGHTNESS;
+	public static final BlockMaxHealthSetter MAX_HEALTH_SETTER;
+	public static final BlockMaxHealthGetter MAX_HEALTH_GETTER;
 
-	public static BlockPipeBasic pipeBasic;
-	public static BlockPipeFluid pipeFluid;
+	public static final BlockPipeBasic PIPE_BASIC;
+	public static final BlockPipeFluid PIPE_FLUID;
 
-	public static BlockColouredSlab.ColouredSlabGroup stainedClaySlabs;
+	public static final BlockColouredSlab.ColouredSlabGroup STAINED_CLAY_SLABS;
+
+	static {
+		WATER_GRASS = registerBlock(new BlockWaterGrass());
+		LARGE_COLLISION_TEST = registerBlock(new BlockLargeCollisionTest());
+		RIGHT_CLICK_TEST = registerBlock(new BlockRightClickTest());
+		CLIENT_PLAYER_RIGHT_CLICK = registerBlock(new BlockClientPlayerRightClick());
+		ROTATABLE_LAMP = registerBlock(new BlockRotatableLamp());
+		ITEM_COLLISION_TEST = registerBlock(new BlockItemCollisionTest());
+		SURVIVAL_COMMAND_BLOCK = registerBlock(new BlockSurvivalCommandBlock());
+		FLUID_TANK = registerBlock(new BlockFluidTank(), ItemFluidTank::new);
+		ITEM_DEBUGGER = registerBlock(new BlockItemDebugger());
+		END_PORTAL_FRAME_FULL = registerBlock(new BlockTestMod3(Material.ROCK, "endPortalFrameFull"));
+		COLORED_ROTATABLE = registerBlock(new BlockColoredRotatable(Material.CLOTH, "coloredRotatable"), ItemCloth::new);
+		COLORED_MULTI_ROTATABLE = registerBlock(new BlockColoredMultiRotatable(Material.CLOTH, "coloredMultiRotatable"), ItemCloth::new);
+		POTION_EFFECT = registerBlock(new BlockPotionEffect());
+		VARIANTS = registerBlock(new BlockVariants(Material.IRON), block -> new ItemMultiTexture(block, block, BlockVariants.EnumType.getNames()));
+		CLIENT_PLAYER_ROTATION = registerBlock(new BlockClientPlayerRotation());
+		PIG_SPAWNER_REFILLER = registerBlock(new BlockPigSpawnerRefiller());
+		MIRROR_PLANE = registerBlock(new BlockPlane(Material.IRON, "mirrorPlane"));
+		VANILLA_MODEL_TEST = registerBlock(new BlockTestMod3(Material.IRON, "vanillaModelTest"));
+		FULLBRIGHT = registerBlock(new BlockTestMod3(Material.ROCK, "fullbright"));
+		NORMAL_BRIGHTNESS = registerBlock(new BlockTestMod3(Material.ROCK, "normalBrightness"));
+		MAX_HEALTH_SETTER = registerBlock(new BlockMaxHealthSetter());
+		MAX_HEALTH_GETTER = registerBlock(new BlockMaxHealthGetter());
+
+		PIPE_BASIC = registerBlock(new BlockPipeBasic("basicPipe"));
+		PIPE_FLUID = registerBlock(new BlockPipeFluid());
+
+		STAINED_CLAY_SLABS = new BlockColouredSlab.ColouredSlabGroup("stainedClaySlab", Material.ROCK);
+		registerSlabGroup(STAINED_CLAY_SLABS.low);
+		registerSlabGroup(STAINED_CLAY_SLABS.high);
+	}
 
 	public static void registerBlocks() {
-		waterGrass = registerBlock(new BlockWaterGrass());
-		largeCollisionTest = registerBlock(new BlockLargeCollisionTest());
-		rightClickTest = registerBlock(new BlockRightClickTest());
-		clientPlayerRightClick = registerBlock(new BlockClientPlayerRightClick());
-		rotatableLamp = registerBlock(new BlockRotatableLamp());
-		itemCollisionTest = registerBlock(new BlockItemCollisionTest());
-		survivalCommandBlock = registerBlock(new BlockSurvivalCommandBlock());
-		fluidTank = registerBlock(new BlockFluidTank(), ItemFluidTank::new);
-		itemDebugger = registerBlock(new BlockItemDebugger());
-		endPortalFrameFull = registerBlock(new BlockTestMod3(Material.ROCK, "endPortalFrameFull"));
-		coloredRotatable = registerBlock(new BlockColoredRotatable(Material.CLOTH, "coloredRotatable"), ItemCloth::new);
-		coloredMultiRotatable = registerBlock(new BlockColoredMultiRotatable(Material.CLOTH, "coloredMultiRotatable"), ItemCloth::new);
-		potionEffect = registerBlock(new BlockPotionEffect());
-		variants = registerBlock(new BlockVariants(Material.IRON), block -> new ItemMultiTexture(block, block, BlockVariants.EnumType.getNames()));
-		clientPlayerRotation = registerBlock(new BlockClientPlayerRotation());
-		pigSpawnerRefiller = registerBlock(new BlockPigSpawnerRefiller());
-		mirrorPlane = registerBlock(new BlockPlane(Material.IRON, "mirrorPlane"));
-		vanillaModelTest = registerBlock(new BlockTestMod3(Material.IRON, "vanillaModelTest"));
-		fullbright = registerBlock(new BlockTestMod3(Material.ROCK, "fullbright"));
-		normalBrightness = registerBlock(new BlockTestMod3(Material.ROCK, "normalBrightness"));
-		maxHealthSetter = registerBlock(new BlockMaxHealthSetter());
-		maxHealthGetter = registerBlock(new BlockMaxHealthGetter());
-
-		pipeBasic = registerBlock(new BlockPipeBasic("basicPipe"));
-		pipeFluid = registerBlock(new BlockPipeFluid());
-
-		stainedClaySlabs = new BlockColouredSlab.ColouredSlabGroup("stainedClaySlab", Material.ROCK);
-		registerSlabGroup(stainedClaySlabs.low);
-		registerSlabGroup(stainedClaySlabs.high);
+		// Dummy method to make sure the static initialiser runs
 	}
 
 	/**
@@ -111,7 +115,7 @@ public class ModBlocks {
 			GameRegistry.register(itemBlock.setRegistryName(block.getRegistryName()));
 		}
 
-		blocks.add(block);
+		BLOCKS.add(block);
 		return block;
 	}
 

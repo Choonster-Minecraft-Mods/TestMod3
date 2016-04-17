@@ -48,7 +48,7 @@ public class ModColourManager {
 			return ColorizerGrass.getGrassColor(0.5D, 1.0D);
 		};
 
-		blockColors.registerBlockColorHandler(grassColourHandler, ModBlocks.waterGrass);
+		blockColors.registerBlockColorHandler(grassColourHandler, ModBlocks.WATER_GRASS);
 	}
 
 	/**
@@ -64,6 +64,6 @@ public class ModColourManager {
 			return blockColors.colorMultiplier(iblockstate, null, null, tintIndex);
 		};
 
-		itemColors.registerItemColorHandler(itemBlockColourHandler, ModBlocks.waterGrass);
+		itemColors.registerItemColorHandler(itemBlockColourHandler, ModBlocks.WATER_GRASS);
 	}
 }

@@ -51,7 +51,7 @@ public class ModRecipes {
 		tileEntityData.setString("EntityId", "Guardian");
 		GameRegistry.addRecipe(guardianSpawner, "SSS", "SFS", "SSS", 'S', Items.STICK, 'F', Items.FISH);
 
-		ItemStack bucketOfStaticGas = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ModFluids.staticGas);
+		ItemStack bucketOfStaticGas = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ModFluids.STATIC_GAS);
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.COBBLESTONE), bucketOfStaticGas, bucketOfStaticGas, bucketOfStaticGas));
 	}
 

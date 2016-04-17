@@ -18,50 +18,53 @@ import java.util.function.Function;
 
 @SuppressWarnings("WeakerAccess")
 public class ModFluids {
-	public static Fluid static_;
-	public static Fluid staticGas;
-	public static Fluid normal;
-	public static Fluid normalGas;
-	public static Fluid finite;
+	public static final Fluid STATIC;
+	public static final Fluid STATIC_GAS;
+	public static final Fluid NORMAL;
+	public static final Fluid NORMAL_GAS;
+	public static final Fluid FINITE;
 
 	/**
 	 * The fluids registered by this mod. Includes fluids that were already registered by another mod.
 	 */
-	public static final Set<Fluid> fluids = new HashSet<>();
+	public static final Set<Fluid> FLUIDS = new HashSet<>();
 
 	/**
 	 * The fluid blocks from this mod only. Doesn't include blocks for fluids that were already registered by another mod.
 	 */
-	public static final Set<IFluidBlock> modFluidBlocks = new HashSet<>();
+	public static final Set<IFluidBlock> MOD_FLUID_BLOCKS = new HashSet<>();
 
-	public static void registerFluids() {
-
-		static_ = createFluid("static", false,
+	static {
+		STATIC = createFluid("static", false,
 				fluid -> fluid.setLuminosity(10).setDensity(800).setViscosity(1500),
 				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.BROWN)));
 
-		staticGas = createFluid("staticGas", false,
+		STATIC_GAS = createFluid("staticGas", false,
 				fluid -> fluid.setLuminosity(10).setDensity(-800).setViscosity(1500).setGaseous(true),
 				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.BROWN)));
 
-		normal = createFluid("normal", true,
+		NORMAL = createFluid("normal", true,
 				fluid -> fluid.setLuminosity(10).setDensity(1600).setViscosity(100),
 				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.ADOBE)));
 
-		normalGas = createFluid("normalGas", true,
+		NORMAL_GAS = createFluid("normalGas", true,
 				fluid -> fluid.setLuminosity(10).setDensity(-1600).setViscosity(100).setGaseous(true),
 				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.ADOBE)));
 
-		finite = createFluid("finite", false,
+		FINITE = createFluid("finite", false,
 				fluid -> fluid.setLuminosity(10).setDensity(800).setViscosity(1500),
 				fluid -> new BlockFluidFinite(fluid, new MaterialLiquid(MapColor.BLACK)));
+	}
+
+	public static void registerFluids() {
+		// Dummy method to make sure the static initialiser runs
 	}
 
 	public static void registerFluidContainers() {
 		registerTank(FluidRegistry.WATER);
 		registerTank(FluidRegistry.LAVA);
 
-		for (Fluid fluid : fluids) {
+		for (Fluid fluid : FLUIDS) {
 			registerBucket(fluid);
 			registerTank(fluid);
 		}
@@ -92,7 +95,7 @@ public class ModFluids {
 			fluid = FluidRegistry.getFluid(name);
 		}
 
-		fluids.add(fluid);
+		FLUIDS.add(fluid);
 
 		return fluid;
 	}
@@ -104,7 +107,7 @@ public class ModFluids {
 
 		ModBlocks.registerBlock(block);
 
-		modFluidBlocks.add(block);
+		MOD_FLUID_BLOCKS.add(block);
 
 		return block;
 	}
@@ -115,6 +118,6 @@ public class ModFluids {
 
 	private static void registerTank(Fluid fluid) {
 		FluidStack fluidStack = new FluidStack(fluid, 10 * FluidContainerRegistry.BUCKET_VOLUME);
-		((ItemFluidTank) Item.getItemFromBlock(ModBlocks.fluidTank)).addFluid(fluidStack);
+		((ItemFluidTank) Item.getItemFromBlock(ModBlocks.FLUID_TANK)).addFluid(fluidStack);
 	}
 }

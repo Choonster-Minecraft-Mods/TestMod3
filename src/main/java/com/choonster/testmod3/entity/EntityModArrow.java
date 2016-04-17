@@ -37,7 +37,7 @@ public class EntityModArrow extends EntityTippedArrow implements IThrowableEntit
 
 	@Override
 	protected ItemStack getArrowStack() {
-		return new ItemStack(ModItems.modArrow);
+		return new ItemStack(ModItems.ARROW);
 	}
 
 	/**

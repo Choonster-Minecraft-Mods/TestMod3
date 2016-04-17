@@ -40,7 +40,7 @@ public class ModModelManager {
 	}
 
 	private void registerFluidModels() {
-		ModFluids.modFluidBlocks.forEach(this::registerFluidModel);
+		ModFluids.MOD_FLUID_BLOCKS.forEach(this::registerFluidModel);
 	}
 
 	private void registerFluidModel(IFluidBlock fluidBlock) {
@@ -63,27 +63,27 @@ public class ModModelManager {
 	}
 
 	private void registerBlockModels() {
-		ModelLoader.setCustomStateMapper(ModBlocks.waterGrass, new StateMap.Builder().ignore(BlockLiquid.LEVEL).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.WATER_GRASS, new StateMap.Builder().ignore(BlockLiquid.LEVEL).build());
 
-		registerBlockItemModel(ModBlocks.rightClickTest, new ModelResourceLocation(ModBlocks.rightClickTest.getRegistryName(), "has_ender_eye=false"));
+		registerBlockItemModel(ModBlocks.RIGHT_CLICK_TEST, new ModelResourceLocation(ModBlocks.RIGHT_CLICK_TEST.getRegistryName(), "has_ender_eye=false"));
 
 		for (EnumDyeColor color : EnumDyeColor.values()) {
-			registerBlockItemModelForMeta(ModBlocks.coloredRotatable, color.getMetadata(), String.format("color=%s,facing=north", color.getName()));
-			registerBlockItemModelForMeta(ModBlocks.coloredMultiRotatable, color.getMetadata(), String.format("color=%s,face_rotation=up,facing=north", color.getName()));
+			registerBlockItemModelForMeta(ModBlocks.COLORED_ROTATABLE, color.getMetadata(), String.format("color=%s,facing=north", color.getName()));
+			registerBlockItemModelForMeta(ModBlocks.COLORED_MULTI_ROTATABLE, color.getMetadata(), String.format("color=%s,face_rotation=up,facing=north", color.getName()));
 
 			BlockColouredSlab.EnumColourGroup colourGroup = BlockColouredSlab.EnumColourGroup.getGroupForColour(color);
 			if (colourGroup != null) {
-				registerBlockItemModelForMeta(ModBlocks.stainedClaySlabs.getSlabGroupByColourGroup(colourGroup).singleSlab, colourGroup.getOffsetMetadata(color), String.format("colour=%s,half=bottom", color.getName()));
+				registerBlockItemModelForMeta(ModBlocks.STAINED_CLAY_SLABS.getSlabGroupByColourGroup(colourGroup).singleSlab, colourGroup.getOffsetMetadata(color), String.format("colour=%s,half=bottom", color.getName()));
 			}
 		}
 
 		for (BlockVariants.EnumType enumType : BlockVariants.EnumType.values()) {
-			registerBlockItemModelForMeta(ModBlocks.variants, enumType.getMeta(), "variant=" + enumType.getName());
+			registerBlockItemModelForMeta(ModBlocks.VARIANTS, enumType.getMeta(), "variant=" + enumType.getName());
 		}
 
-		registerBlockItemModel(ModBlocks.mirrorPlane, new ModelResourceLocation(ModBlocks.mirrorPlane.getRegistryName(), "horizontal_rotation=north,vertical_rotation=up"));
+		registerBlockItemModel(ModBlocks.MIRROR_PLANE, new ModelResourceLocation(ModBlocks.MIRROR_PLANE.getRegistryName(), "horizontal_rotation=north,vertical_rotation=up"));
 
-		ModBlocks.blocks.stream().filter(block -> !itemsRegistered.contains(Item.getItemFromBlock(block))).forEach(this::registerBlockItemModel);
+		ModBlocks.BLOCKS.stream().filter(block -> !itemsRegistered.contains(Item.getItemFromBlock(block))).forEach(this::registerBlockItemModel);
 	}
 
 	private void registerBlockItemModel(Block block) {
@@ -109,29 +109,29 @@ public class ModModelManager {
 
 	private void registerItemModels() {
 		// Register items with custom model names first
-		registerItemModel(ModItems.snowballLauncher, "minecraft:fishing_rod");
-		registerItemModel(ModItems.unicodeTooltips, "minecraft:rabbit");
-		registerItemModel(ModItems.swapTestA, "minecraft:brick");
-		registerItemModel(ModItems.swapTestB, "minecraft:netherbrick");
-		registerItemModel(ModItems.blockDebugger, "minecraft:nether_star");
-		registerItemModel(ModItems.woodenHarvestSword, "minecraft:wooden_sword");
-		registerItemModel(ModItems.diamondHarvestSword, "minecraft:diamond_sword");
-		registerItemModel(ModItems.clearer, "minecraft:nether_star");
-		registerItemModel(ModItems.heightTester, "minecraft:compass");
-		registerItemModel(ModItems.heavy, "minecraft:brick");
-		registerItemModel(ModItems.entityTest, "minecraft:porkchop");
-		registerItemModel(ModItems.blockDestroyer, "minecraft:tnt_minecart");
-		registerItemModel(ModItems.replacementHelmet, "minecraft:chainmail_helmet");
-		registerItemModel(ModItems.replacementChestplate, "minecraft:chainmail_chestplate");
-		registerItemModel(ModItems.repacementLeggings, "minecraft:chainmail_leggings");
-		registerItemModel(ModItems.replacementBoots, "minecraft:chainmail_boots");
-		registerItemModel(ModItems.pigSpawnerFinite, "minecraft:porkchop");
-		registerItemModel(ModItems.pigSpawnerInfinite, "minecraft:porkchop");
-		registerItemModel(ModItems.respawner, "minecraft:clock");
-		registerItemModel(ModItems.lootTableTest, "minecraft:gold_ingot");
+		registerItemModel(ModItems.SNOWBALL_LAUNCHER, "minecraft:fishing_rod");
+		registerItemModel(ModItems.UNICODE_TOOLTIPS, "minecraft:rabbit");
+		registerItemModel(ModItems.SWAP_TEST_A, "minecraft:brick");
+		registerItemModel(ModItems.SWAP_TEST_B, "minecraft:netherbrick");
+		registerItemModel(ModItems.BLOCK_DEBUGGER, "minecraft:nether_star");
+		registerItemModel(ModItems.HARVEST_SWORD_WOOD, "minecraft:wooden_sword");
+		registerItemModel(ModItems.HARVEST_SWORD_DIAMOND, "minecraft:diamond_sword");
+		registerItemModel(ModItems.CLEARER, "minecraft:nether_star");
+		registerItemModel(ModItems.HEIGHT_TESTER, "minecraft:compass");
+		registerItemModel(ModItems.HEAVY, "minecraft:brick");
+		registerItemModel(ModItems.ENTITY_TEST, "minecraft:porkchop");
+		registerItemModel(ModItems.BLOCK_DESTROYER, "minecraft:tnt_minecart");
+		registerItemModel(ModItems.REPLACEMENT_HELMET, "minecraft:chainmail_helmet");
+		registerItemModel(ModItems.REPLACEMENT_CHESTPLATE, "minecraft:chainmail_chestplate");
+		registerItemModel(ModItems.REPACEMENT_LEGGINGS, "minecraft:chainmail_leggings");
+		registerItemModel(ModItems.REPLACEMENT_BOOTS, "minecraft:chainmail_boots");
+		registerItemModel(ModItems.PIG_SPAWNER_FINITE, "minecraft:porkchop");
+		registerItemModel(ModItems.PIG_SPAWNER_INFINITE, "minecraft:porkchop");
+		registerItemModel(ModItems.RESPAWNER, "minecraft:clock");
+		registerItemModel(ModItems.LOOT_TABLE_TEST, "minecraft:gold_ingot");
 
 		// Then register items with default model names
-		ModItems.items.stream().filter(item -> !itemsRegistered.contains(item)).forEach(this::registerItemModel);
+		ModItems.ITEMS.stream().filter(item -> !itemsRegistered.contains(item)).forEach(this::registerItemModel);
 	}
 
 	private void registerItemModel(Item item) {

@@ -17,95 +17,99 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import java.util.HashSet;
 import java.util.Set;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings("WeakerAccess,unused")
 public class ModItems {
-	public static final Set<Item> items = new HashSet<>();
+	public static final Set<Item> ITEMS = new HashSet<>();
 
-	public static ItemCuttingAxe woodenAxe;
-	public static ItemEntityTest entityTest;
-	public static ItemRecordMod solarisRecord;
-	public static ItemHeavy heavy;
-	public static ItemEntityInteractionTest entityInteractionTest;
-	public static ItemBlockDestroyer blockDestroyer;
-	public static ItemWithSubscripts subscripts;
-	public static ItemWithSuperscripts superscripts;
-	public static ItemLastUseTimeModel modelTest;
-	public static ItemSnowballLauncher snowballLauncher;
-	public static ItemSlingshot slingshot;
-	public static ItemUnicodeTooltips unicodeTooltips;
-	public static ItemSwapTest swapTestA;
-	public static ItemSwapTest swapTestB;
-	public static ItemBlockDebugger blockDebugger;
-	public static ItemHarvestSword woodenHarvestSword;
-	public static ItemHarvestSword diamondHarvestSword;
-	public static ItemClearer clearer;
-	public static ItemModBow modBow;
-	public static Item modArrow;
-	public static ItemHeightTester heightTester;
-	public static ItemPigSpawner pigSpawnerFinite;
-	public static ItemPigSpawner pigSpawnerInfinite;
-	public static ItemContinuousBow continuousBow;
-	public static ItemRespawner respawner;
-	public static ItemLootTableTest lootTableTest;
-	public static ItemMaxHealthSetter maxHealthSetter;
-	public static ItemMaxHealthGetter maxHealthGetter;
-	public static ItemSoundEffect gun;
+	public static final ItemCuttingAxe WOODEN_AXE;
+	public static final ItemEntityTest ENTITY_TEST;
+	public static final ItemRecordMod RECORD_SOLARIS;
+	public static final ItemHeavy HEAVY;
+	public static final ItemEntityInteractionTest ENTITY_INTERACTION_TEST;
+	public static final ItemBlockDestroyer BLOCK_DESTROYER;
+	public static final ItemWithSubscripts SUBSCRIPTS;
+	public static final ItemWithSuperscripts SUPERSCRIPTS;
+	public static final ItemLastUseTimeModel MODEL_TEST;
+	public static final ItemSnowballLauncher SNOWBALL_LAUNCHER;
+	public static final ItemSlingshot SLINGSHOT;
+	public static final ItemUnicodeTooltips UNICODE_TOOLTIPS;
+	public static final ItemSwapTest SWAP_TEST_A;
+	public static final ItemSwapTest SWAP_TEST_B;
+	public static final ItemBlockDebugger BLOCK_DEBUGGER;
+	public static final ItemHarvestSword HARVEST_SWORD_WOOD;
+	public static final ItemHarvestSword HARVEST_SWORD_DIAMOND;
+	public static final ItemClearer CLEARER;
+	public static final ItemModBow BOW;
+	public static final Item ARROW;
+	public static final ItemHeightTester HEIGHT_TESTER;
+	public static final ItemPigSpawner PIG_SPAWNER_FINITE;
+	public static final ItemPigSpawner PIG_SPAWNER_INFINITE;
+	public static final ItemContinuousBow CONTINUOUS_BOW;
+	public static final ItemRespawner RESPAWNER;
+	public static final ItemLootTableTest LOOT_TABLE_TEST;
+	public static final ItemMaxHealthSetter MAX_HEALTH_SETTER;
+	public static final ItemMaxHealthGetter MAX_HEALTH_GETTER;
+	public static final ItemSoundEffect GUN;
 
-	public static ItemArmourReplacement replacementHelmet;
-	public static ItemArmourRestricted replacementChestplate;
-	public static ItemArmourRestricted repacementLeggings;
-	public static ItemArmourRestricted replacementBoots;
+	public static final ItemArmourReplacement REPLACEMENT_HELMET;
+	public static final ItemArmourRestricted REPLACEMENT_CHESTPLATE;
+	public static final ItemArmourRestricted REPACEMENT_LEGGINGS;
+	public static final ItemArmourRestricted REPLACEMENT_BOOTS;
 
 	public static final Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10);
 	public static final ItemArmor.ArmorMaterial ARMOUR_MATERIAL_REPLACEMENT = EnumHelper.addArmorMaterial(Constants.RESOURCE_PREFIX + "replacement", Constants.RESOURCE_PREFIX + "replacement", 15, new int[]{2, 5, 4, 1}, 12, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN);
 
-	public static void registerItems() {
-		woodenAxe = registerItem(new ItemCuttingAxe(Item.ToolMaterial.WOOD, "woodenAxe"));
-		entityTest = registerItem(new ItemEntityTest());
-		solarisRecord = registerItem(new ItemRecordMod("solaris", ModSoundEvents.record_solaris));
-		heavy = registerItem(new ItemHeavy());
-		entityInteractionTest = registerItem(new ItemEntityInteractionTest());
-		blockDestroyer = registerItem(new ItemBlockDestroyer());
-		subscripts = registerItem(new ItemWithSubscripts());
-		superscripts = registerItem(new ItemWithSuperscripts());
-		modelTest = registerItem(new ItemLastUseTimeModel("modeltest"));
-		snowballLauncher = registerItem(new ItemSnowballLauncher("snowballLauncher"));
-		slingshot = registerItem(new ItemSlingshot());
-		unicodeTooltips = registerItem(new ItemUnicodeTooltips());
-		blockDebugger = registerItem(new ItemBlockDebugger());
-		woodenHarvestSword = registerItem(new ItemHarvestSword(Item.ToolMaterial.WOOD, "harvestSwordWood"));
-		diamondHarvestSword = registerItem(new ItemHarvestSword(Item.ToolMaterial.DIAMOND, "harvestSwordDiamond"));
-		clearer = registerItem(new ItemClearer());
-		modBow = registerItem(new ItemModBow("bow"));
-		modArrow = registerItem(new ItemModArrow("arrow"));
-		heightTester = registerItem(new ItemHeightTester());
-		continuousBow = registerItem(new ItemContinuousBow("continuousBow"));
-		respawner = registerItem(new ItemRespawner());
+	static {
+		WOODEN_AXE = registerItem(new ItemCuttingAxe(Item.ToolMaterial.WOOD, "woodenAxe"));
+		ENTITY_TEST = registerItem(new ItemEntityTest());
+		RECORD_SOLARIS = registerItem(new ItemRecordMod("solaris", ModSoundEvents.RECORD_SOLARIS));
+		HEAVY = registerItem(new ItemHeavy());
+		ENTITY_INTERACTION_TEST = registerItem(new ItemEntityInteractionTest());
+		BLOCK_DESTROYER = registerItem(new ItemBlockDestroyer());
+		SUBSCRIPTS = registerItem(new ItemWithSubscripts());
+		SUPERSCRIPTS = registerItem(new ItemWithSuperscripts());
+		MODEL_TEST = registerItem(new ItemLastUseTimeModel("modeltest"));
+		SNOWBALL_LAUNCHER = registerItem(new ItemSnowballLauncher("snowballLauncher"));
+		SLINGSHOT = registerItem(new ItemSlingshot());
+		UNICODE_TOOLTIPS = registerItem(new ItemUnicodeTooltips());
+		BLOCK_DEBUGGER = registerItem(new ItemBlockDebugger());
+		HARVEST_SWORD_WOOD = registerItem(new ItemHarvestSword(Item.ToolMaterial.WOOD, "harvestSwordWood"));
+		HARVEST_SWORD_DIAMOND = registerItem(new ItemHarvestSword(Item.ToolMaterial.DIAMOND, "harvestSwordDiamond"));
+		CLEARER = registerItem(new ItemClearer());
+		BOW = registerItem(new ItemModBow("bow"));
+		ARROW = registerItem(new ItemModArrow("arrow"));
+		HEIGHT_TESTER = registerItem(new ItemHeightTester());
+		CONTINUOUS_BOW = registerItem(new ItemContinuousBow("continuousBow"));
+		RESPAWNER = registerItem(new ItemRespawner());
 
-		swapTestA = registerItem(new ItemSwapTest("A"));
-		swapTestB = registerItem(new ItemSwapTest("B"));
-		swapTestA.setOtherItem(new ItemStack(swapTestB));
-		swapTestB.setOtherItem(new ItemStack(swapTestA));
+		SWAP_TEST_A = registerItem(new ItemSwapTest("A"));
+		SWAP_TEST_B = registerItem(new ItemSwapTest("B"));
+		SWAP_TEST_A.setOtherItem(new ItemStack(SWAP_TEST_B));
+		SWAP_TEST_B.setOtherItem(new ItemStack(SWAP_TEST_A));
 
-		replacementHelmet = registerItem(new ItemArmourReplacement(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD, "Replacement"));
-		replacementChestplate = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.CHEST, "Replacement"));
-		repacementLeggings = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.LEGS, "Replacement"));
-		replacementBoots = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.FEET, "Replacement"));
+		REPLACEMENT_HELMET = registerItem(new ItemArmourReplacement(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD, "Replacement"));
+		REPLACEMENT_CHESTPLATE = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.CHEST, "Replacement"));
+		REPACEMENT_LEGGINGS = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.LEGS, "Replacement"));
+		REPLACEMENT_BOOTS = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.FEET, "Replacement"));
 
-		ItemStack chest = new ItemStack(replacementChestplate);
+		final ItemStack chest = new ItemStack(REPLACEMENT_CHESTPLATE);
 		chest.addEnchantment(Enchantments.SHARPNESS, 1);
-		replacementHelmet.setReplacementItems(chest, new ItemStack(repacementLeggings), new ItemStack(replacementBoots));
+		REPLACEMENT_HELMET.setReplacementItems(chest, new ItemStack(REPACEMENT_LEGGINGS), new ItemStack(REPLACEMENT_BOOTS));
 
-		pigSpawnerFinite = registerItem(new ItemPigSpawner("finite", CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY::getDefaultInstance));
-		pigSpawnerInfinite = registerItem(new ItemPigSpawner("infinite", PigSpawnerInfinite::new));
+		PIG_SPAWNER_FINITE = registerItem(new ItemPigSpawner("finite", CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY::getDefaultInstance));
+		PIG_SPAWNER_INFINITE = registerItem(new ItemPigSpawner("infinite", PigSpawnerInfinite::new));
 
-		lootTableTest = registerItem(new ItemLootTableTest());
-		maxHealthSetter = registerItem(new ItemMaxHealthSetter());
-		maxHealthGetter = registerItem(new ItemMaxHealthGetter());
-		gun = registerItem(new ItemSoundEffect("gun", ModSoundEvents.NINE_MM_FIRE));
+		LOOT_TABLE_TEST = registerItem(new ItemLootTableTest());
+		MAX_HEALTH_SETTER = registerItem(new ItemMaxHealthSetter());
+		MAX_HEALTH_GETTER = registerItem(new ItemMaxHealthGetter());
+		GUN = registerItem(new ItemSoundEffect("gun", ModSoundEvents.NINE_MM_FIRE));
 
 		TOOL_MATERIAL_GLOWSTONE.setRepairItem(new ItemStack(Items.GLOWSTONE_DUST));
-		ARMOUR_MATERIAL_REPLACEMENT.customCraftingMaterial = modArrow;
+		ARMOUR_MATERIAL_REPLACEMENT.customCraftingMaterial = ARROW;
+	}
+
+	public static void registerItems() {
+		// Dummy method to make sure the static initialiser runs
 	}
 
 	/**
@@ -117,7 +121,7 @@ public class ModItems {
 	 */
 	private static <T extends Item> T registerItem(T item) {
 		GameRegistry.register(item);
-		items.add(item);
+		ITEMS.add(item);
 
 		return item;
 	}
