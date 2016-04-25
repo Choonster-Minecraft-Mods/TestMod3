@@ -33,10 +33,10 @@ public class ShapelessCuttingRecipe extends ShapelessRecipes {
 
 	@Override
 	public ItemStack[] getRemainingItems(InventoryCrafting inventoryCrafting) {
-		ItemStack[] remainingItems = new ItemStack[inventoryCrafting.getSizeInventory()];
+		final ItemStack[] remainingItems = new ItemStack[inventoryCrafting.getSizeInventory()];
 
 		for (int i = 0; i < remainingItems.length; ++i) {
-			ItemStack itemstack = inventoryCrafting.getStackInSlot(i);
+			final ItemStack itemstack = inventoryCrafting.getStackInSlot(i);
 
 			if (itemstack != null && itemstack.getItem() instanceof ItemAxe) {
 				remainingItems[i] = damageAxe(itemstack.copy());

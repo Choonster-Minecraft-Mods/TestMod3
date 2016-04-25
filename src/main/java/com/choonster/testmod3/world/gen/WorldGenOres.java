@@ -22,7 +22,7 @@ public class WorldGenOres implements IWorldGenerator {
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-		BlockPos chunkPos = new BlockPos(chunkX * 16, 0, chunkZ * 16);
+		final BlockPos chunkPos = new BlockPos(chunkX * 16, 0, chunkZ * 16);
 
 		switch (world.provider.getDimensionType()) {
 			case NETHER:

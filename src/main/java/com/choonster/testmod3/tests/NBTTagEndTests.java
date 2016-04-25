@@ -20,12 +20,12 @@ public class NBTTagEndTests extends Test {
 
 	@Override
 	protected void runTest() {
-		NBTTagCompound originalCompound = new NBTTagCompound();
+		final NBTTagCompound originalCompound = new NBTTagCompound();
 		originalCompound.setString("Tag1", "Test2");
 		originalCompound.setTag("EndTag", new NBTTagEnd());
 		originalCompound.setFloat("Tag2", 3.55f);
 
-		File file = new File("./endTagTest.dat");
+		final File file = new File("./endTagTest.dat");
 
 		try {
 			CompressedStreamTools.write(originalCompound, file);
@@ -34,7 +34,7 @@ public class NBTTagEndTests extends Test {
 			return;
 		}
 
-		NBTTagCompound readCompound;
+		final NBTTagCompound readCompound;
 		try {
 			readCompound = CompressedStreamTools.read(file);
 		} catch (IOException e) {

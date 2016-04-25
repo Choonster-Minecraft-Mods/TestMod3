@@ -42,7 +42,7 @@ public class TileEntityFluidTank extends TileEntity implements IFluidHandler {
 	}
 
 	public static FluidTank loadTank(NBTTagCompound tagCompound, TileEntity tileEntity) {
-		FluidTank tank = new FluidTankWithTile(tileEntity, CAPACITY);
+		final FluidTank tank = new FluidTankWithTile(tileEntity, CAPACITY);
 		tank.readFromNBT(tagCompound);
 		return tank;
 	}
@@ -53,7 +53,7 @@ public class TileEntityFluidTank extends TileEntity implements IFluidHandler {
 
 	@Override
 	public Packet getDescriptionPacket() {
-		NBTTagCompound tagCompound = new NBTTagCompound();
+		final NBTTagCompound tagCompound = new NBTTagCompound();
 		writeToNBT(tagCompound);
 		return new SPacketUpdateTileEntity(getPos(), getBlockMetadata(), tagCompound);
 	}

@@ -25,9 +25,9 @@ public class TileEntityPotionEffect extends TileEntity implements ITickable {
 	public void update() {
 		if (!getWorld().isRemote) {
 
-			BlockPos pos = getPos();
-			AxisAlignedBB areaToSearch = new AxisAlignedBB(pos.add(-RADIUS, -RADIUS, -RADIUS), pos.add(RADIUS, RADIUS, RADIUS));
-			List<EntityLivingBase> entities = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, areaToSearch);
+			final BlockPos pos = getPos();
+			final AxisAlignedBB areaToSearch = new AxisAlignedBB(pos.add(-RADIUS, -RADIUS, -RADIUS), pos.add(RADIUS, RADIUS, RADIUS));
+			final List<EntityLivingBase> entities = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, areaToSearch);
 
 			entities.stream().filter(entity -> !entity.isPotionActive(MobEffects.POISON)).forEach(entity -> entity.addPotionEffect(new PotionEffect(MobEffects.POISON, 200, 1)));
 		}

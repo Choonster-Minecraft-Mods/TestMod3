@@ -44,17 +44,17 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 
 		int i1 = chunkX / maxDistanceBetweenScatteredFeatures;
 		int j1 = chunkZ / maxDistanceBetweenScatteredFeatures;
-		Random random = this.worldObj.setRandomSeed(i1, j1, 14357617);
+		final Random random = this.worldObj.setRandomSeed(i1, j1, 14357617);
 		i1 *= maxDistanceBetweenScatteredFeatures;
 		j1 *= maxDistanceBetweenScatteredFeatures;
 		i1 += random.nextInt(maxDistanceBetweenScatteredFeatures - minDistanceBetweenScatteredFeatures);
 		j1 += random.nextInt(maxDistanceBetweenScatteredFeatures - minDistanceBetweenScatteredFeatures);
 
 		if (chunkX == i1 && chunkZ == j1) {
-			BiomeGenBase biomegenbase = this.worldObj.getBiomeProvider().getBiomeGenerator(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
+			final BiomeGenBase biomegenbase = this.worldObj.getBiomeProvider().getBiomeGenerator(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
 
 			if (biomegenbase != null) {
-				for (BiomeDictionary.Type type : biomeTypes) {
+				for (final BiomeDictionary.Type type : biomeTypes) {
 					if (BiomeDictionary.isBiomeOfType(biomegenbase, type)) {
 						return true;
 					}

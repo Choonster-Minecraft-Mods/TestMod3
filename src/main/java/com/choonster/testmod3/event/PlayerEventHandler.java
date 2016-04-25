@@ -48,7 +48,7 @@ public class PlayerEventHandler {
 			message = "message.testmod3:login.freeApple";
 		}
 
-		ITextComponent chatComponent = new TextComponentTranslation(message);
+		final ITextComponent chatComponent = new TextComponentTranslation(message);
 		chatComponent.getStyle().setColor(TextFormatting.LIGHT_PURPLE);
 		player.addChatComponentMessage(chatComponent);
 	}

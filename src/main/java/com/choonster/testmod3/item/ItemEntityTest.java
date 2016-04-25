@@ -27,36 +27,36 @@ public class ItemEntityTest extends ItemTestMod3 {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
-		float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch);
-		float yaw = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw);
+		final float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch);
+		final float yaw = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw);
 
-		double posX = player.prevPosX + (player.posX - player.prevPosX);
-		double posY = player.prevPosY + (player.posY - player.prevPosY); // Entity.yOffset doesn't exist any more
-		double posZ = player.prevPosZ + (player.posZ - player.prevPosZ);
-		Vec3d startVector = new Vec3d(posX, posY, posZ); // Use Vec3 constructor instead of Vec3.createVectorHelper
+		final double posX = player.prevPosX + (player.posX - player.prevPosX);
+		final double posY = player.prevPosY + (player.posY - player.prevPosY); // Entity.yOffset doesn't exist any more
+		final double posZ = player.prevPosZ + (player.posZ - player.prevPosZ);
+		final Vec3d startVector = new Vec3d(posX, posY, posZ); // Use Vec3 constructor instead of Vec3.createVectorHelper
 
 		final float degreesToRadians = (float) (Math.PI / 180);
 
 		// I don't fully understand these values, so I haven't named them
-		float f3 = MathHelper.cos(-yaw * degreesToRadians - (float) Math.PI);
-		float f4 = MathHelper.sin(-yaw * degreesToRadians - (float) Math.PI);
-		float f5 = -MathHelper.cos(-pitch * degreesToRadians);
-		float f6 = MathHelper.sin(-pitch * degreesToRadians);
-		float f7 = f4 * f5;
-		float f8 = f3 * f5;
-		double multiplier = 5.0;
-		Vec3d endVector = startVector.addVector((double) f7 * multiplier, (double) f6 * multiplier, (double) f8 * multiplier);
-		RayTraceResult rayTraceResult = world.rayTraceBlocks(startVector, endVector, true);
+		final float f3 = MathHelper.cos(-yaw * degreesToRadians - (float) Math.PI);
+		final float f4 = MathHelper.sin(-yaw * degreesToRadians - (float) Math.PI);
+		final float f5 = -MathHelper.cos(-pitch * degreesToRadians);
+		final float f6 = MathHelper.sin(-pitch * degreesToRadians);
+		final float f7 = f4 * f5;
+		final float f8 = f3 * f5;
+		final double multiplier = 5.0;
+		final Vec3d endVector = startVector.addVector((double) f7 * multiplier, (double) f6 * multiplier, (double) f8 * multiplier);
+		final RayTraceResult rayTraceResult = world.rayTraceBlocks(startVector, endVector, true);
 
 		if (rayTraceResult == null) return new ActionResult<>(EnumActionResult.PASS, itemStack);
 
 		final Vec3d lookVector = player.getLook(1.0F);
 		final List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().addCoord(lookVector.xCoord * multiplier, lookVector.yCoord * multiplier, lookVector.zCoord * multiplier).expand(1.0, 1.0, 1.0)); // Use entity.getEntityBoundingBox() instead of entity.boundingBox
 
-		for (Entity entity : entities) {
+		for (final Entity entity : entities) {
 			if (entity.canBeCollidedWith()) {
-				double collisionBorderSize = entity.getCollisionBorderSize();
-				AxisAlignedBB axisAlignedBB = entity.getEntityBoundingBox().expand(collisionBorderSize, collisionBorderSize, collisionBorderSize);
+				final double collisionBorderSize = entity.getCollisionBorderSize();
+				final AxisAlignedBB axisAlignedBB = entity.getEntityBoundingBox().expand(collisionBorderSize, collisionBorderSize, collisionBorderSize);
 
 				if (axisAlignedBB.isVecInside(startVector)) {
 					return new ActionResult<>(EnumActionResult.PASS, itemStack);
@@ -72,7 +72,7 @@ public class ItemEntityTest extends ItemTestMod3 {
 				blockPos = blockPos.down(); // Use blockPos.down() instead of subtracting 1 from y coordinate
 			}
 
-			EntityPig entity = new EntityPig(world);
+			final EntityPig entity = new EntityPig(world);
 			entity.rotationYaw = (float) (((MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) - 1) * 90);
 			entity.setPosition(blockPos.getX(), blockPos.getY() + 2, blockPos.getZ());
 

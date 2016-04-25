@@ -180,7 +180,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		 * @return A group containing the colour, or null if there isn't one
 		 */
 		public static EnumColourGroup getGroupForColour(EnumDyeColor colour) {
-			for (EnumColourGroup colourGroup : values()) {
+			for (final EnumColourGroup colourGroup : values()) {
 				if (colourGroup.isColourInGroup(colour)) {
 					return colourGroup;
 				}

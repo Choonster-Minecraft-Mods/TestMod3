@@ -92,19 +92,19 @@ public abstract class BlockPipeBase extends BlockTestMod3 {
 	 * @return Can this pipe connect?
 	 */
 	private boolean canConnectTo(IBlockState ownState, IBlockAccess worldIn, BlockPos ownPos, EnumFacing neighbourDirection) {
-		BlockPos neighbourPos = ownPos.offset(neighbourDirection);
-		IBlockState neighbourState = worldIn.getBlockState(neighbourPos);
-		Block neighbourBlock = neighbourState.getBlock();
+		final BlockPos neighbourPos = ownPos.offset(neighbourDirection);
+		final IBlockState neighbourState = worldIn.getBlockState(neighbourPos);
+		final Block neighbourBlock = neighbourState.getBlock();
 
-		boolean neighbourIsValidForThis = isValidConnection(ownState, neighbourState, worldIn, ownPos, neighbourDirection);
-		boolean thisIsValidForNeighbour = !(neighbourBlock instanceof BlockPipeBase) || ((BlockPipeBase) neighbourBlock).isValidConnection(neighbourState, ownState, worldIn, neighbourPos, neighbourDirection.getOpposite());
+		final boolean neighbourIsValidForThis = isValidConnection(ownState, neighbourState, worldIn, ownPos, neighbourDirection);
+		final boolean thisIsValidForNeighbour = !(neighbourBlock instanceof BlockPipeBase) || ((BlockPipeBase) neighbourBlock).isValidConnection(neighbourState, ownState, worldIn, neighbourPos, neighbourDirection.getOpposite());
 
 		return neighbourIsValidForThis && thisIsValidForNeighbour;
 	}
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		for (EnumFacing facing : EnumFacing.VALUES) {
+		for (final EnumFacing facing : EnumFacing.VALUES) {
 			state = state.withProperty(CONNECTED_PROPERTIES.get(facing.getIndex()), canConnectTo(state, world, pos, facing));
 		}
 
@@ -117,14 +117,14 @@ public abstract class BlockPipeBase extends BlockTestMod3 {
 
 	@Override
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
-		AxisAlignedBB bb = new AxisAlignedBB(PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MAX_POS, PIPE_MAX_POS, PIPE_MAX_POS);
+		final AxisAlignedBB bb = new AxisAlignedBB(PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MAX_POS, PIPE_MAX_POS, PIPE_MAX_POS);
 		addCollisionBoxToList(pos, mask, list, bb);
 
 		state = getActualState(state, worldIn, pos);
 
-		for (EnumFacing facing : EnumFacing.VALUES) {
+		for (final EnumFacing facing : EnumFacing.VALUES) {
 			if (isConnected(state, facing)) {
-				AxisAlignedBB axisAlignedBB = CONNECTED_BOUNDING_BOXES.get(facing.getIndex());
+				final AxisAlignedBB axisAlignedBB = CONNECTED_BOUNDING_BOXES.get(facing.getIndex());
 				addCollisionBoxToList(pos, mask, list, axisAlignedBB);
 			}
 		}

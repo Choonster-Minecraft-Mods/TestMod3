@@ -55,7 +55,7 @@ public class ModRecipes {
 		tileEntityData.setTag("SpawnPotentials", new NBTTagList());
 		GameRegistry.addRecipe(guardianSpawner, "SSS", "SFS", "SSS", 'S', Items.STICK, 'F', Items.FISH);
 
-		ItemStack bucketOfStaticGas = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ModFluids.STATIC_GAS);
+		final ItemStack bucketOfStaticGas = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ModFluids.STATIC_GAS);
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.COBBLESTONE), bucketOfStaticGas, bucketOfStaticGas, bucketOfStaticGas));
 
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.DIMENSION_REPLACEMENT), ModItems.SUBSCRIPTS, ModItems.SUPERSCRIPTS);
@@ -83,12 +83,11 @@ public class ModRecipes {
 	private static void removeRecipe(Item output) {
 		int recipesRemoved = 0;
 
-		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
-		Iterator<IRecipe> remover = recipes.iterator();
+		final List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
+		final Iterator<IRecipe> remover = recipes.iterator();
 
 		while (remover.hasNext()) {
-
-			ItemStack itemstack = remover.next().getRecipeOutput();
+			final ItemStack itemstack = remover.next().getRecipeOutput();
 
 			// If the recipe's output Item is the specified Item,
 			if (itemstack != null && itemstack.getItem() == output) {
@@ -112,8 +111,8 @@ public class ModRecipes {
 	private static void removeRecipeClass(Class<? extends IRecipe> recipeClass) {
 		int recipesRemoved = 0;
 
-		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
-		Iterator<IRecipe> remover = recipes.iterator();
+		final List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
+		final Iterator<IRecipe> remover = recipes.iterator();
 
 		while (remover.hasNext()) {
 			// If the recipe is an instance of the specified class,

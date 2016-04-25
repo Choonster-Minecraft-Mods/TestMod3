@@ -4,7 +4,6 @@ import com.choonster.testmod3.Logger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -28,11 +27,9 @@ public class ItemBlockDebugger extends ItemTestMod3 {
 		state = state.getBlock().getActualState(state, worldIn, pos);
 		Logger.info("Block at %d,%d,%d: %s", pos.getX(), pos.getY(), pos.getZ(), state);
 
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		final TileEntity tileEntity = worldIn.getTileEntity(pos);
 		if (tileEntity != null) {
-			NBTTagCompound tagCompound = new NBTTagCompound();
-			tileEntity.writeToNBT(tagCompound);
-			Logger.info("TileEntity data: %s", tagCompound);
+			Logger.info("TileEntity data: %s", tileEntity.serializeNBT());
 		}
 
 		return EnumActionResult.SUCCESS;

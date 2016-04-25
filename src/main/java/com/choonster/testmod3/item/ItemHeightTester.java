@@ -24,10 +24,10 @@ public class ItemHeightTester extends ItemTestMod3 {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		if (!worldIn.isRemote) {
-			BlockPos pos = playerIn.getPosition();
+			final BlockPos pos = playerIn.getPosition();
 
 			if (playerIn.isSneaking()) {
-				Chunk chunk = worldIn.getChunkFromBlockCoords(pos);
+				final Chunk chunk = worldIn.getChunkFromBlockCoords(pos);
 				chunk.generateSkylightMap();
 				playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:heightTester.generate", chunk.xPosition, chunk.zPosition, pos.getX(), pos.getY(), pos.getZ()));
 			} else {

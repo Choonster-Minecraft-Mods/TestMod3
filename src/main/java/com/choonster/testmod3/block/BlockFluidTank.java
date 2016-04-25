@@ -39,13 +39,13 @@ public class BlockFluidTank extends BlockTestMod3 {
 
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		ItemStack stack = new ItemStack(this);
-		NBTTagCompound tankData = stack.getSubCompound("TankData", true);
+		final ItemStack stack = new ItemStack(this);
+		final NBTTagCompound tankData = stack.getSubCompound("TankData", true);
 
-		TileEntityFluidTank tileEntity = getTileEntity(world, pos);
+		final TileEntityFluidTank tileEntity = getTileEntity(world, pos);
 		tileEntity.writeTankData(tankData);
 
-		List<ItemStack> drops = new ArrayList<>();
+		final List<ItemStack> drops = new ArrayList<>();
 		drops.add(stack);
 
 		return drops;
@@ -53,10 +53,10 @@ public class BlockFluidTank extends BlockTestMod3 {
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		NBTTagCompound tankData = stack.getSubCompound("TankData", false);
+		final NBTTagCompound tankData = stack.getSubCompound("TankData", false);
 
 		if (tankData != null) {
-			TileEntityFluidTank tileEntity = getTileEntity(worldIn, pos);
+			final TileEntityFluidTank tileEntity = getTileEntity(worldIn, pos);
 			tileEntity.readTankData(tankData);
 		}
 	}
@@ -88,12 +88,12 @@ public class BlockFluidTank extends BlockTestMod3 {
 	}
 
 	public static List<ITextComponent> getFluidDataForDisplay(FluidTankInfo[] infos) {
-		List<ITextComponent> data = new ArrayList<>();
+		final List<ITextComponent> data = new ArrayList<>();
 
 		boolean hasFluid = false;
 
-		for (FluidTankInfo fluidTankInfo : infos) {
-			FluidStack fluidStack = fluidTankInfo.fluid;
+		for (final FluidTankInfo fluidTankInfo : infos) {
+			final FluidStack fluidStack = fluidTankInfo.fluid;
 
 			if (fluidStack != null && fluidStack.amount > 0) {
 				hasFluid = true;
@@ -110,7 +110,7 @@ public class BlockFluidTank extends BlockTestMod3 {
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		TileEntityFluidTank tileEntityFluidTank = getTileEntity(worldIn, pos);
+		final TileEntityFluidTank tileEntityFluidTank = getTileEntity(worldIn, pos);
 		final boolean result = FluidUtil.interactWithTank(heldItem, playerIn, tileEntityFluidTank, side);
 
 		if (!worldIn.isRemote) {

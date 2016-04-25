@@ -79,8 +79,8 @@ public class BlockPlane extends BlockTestMod3 {
 		final AxisAlignedBB topBoundingBox = new AxisAlignedBB(0, 0.5, 0, 1, 1, 0.5);
 
 		// For each horizontal and vertical rotation pair,
-		for (EnumFacing horizontalRotation : HORIZONTAL_ROTATION.getAllowedValues()) {
-			for (EnumVerticalRotation verticalRotation : VERTICAL_ROTATION.getAllowedValues()) {
+		for (final EnumFacing horizontalRotation : HORIZONTAL_ROTATION.getAllowedValues()) {
+			for (final EnumVerticalRotation verticalRotation : VERTICAL_ROTATION.getAllowedValues()) {
 				// Get the horizontal (around the y axis) rotation angle and matrix
 				final double horizontalRotationAngle = VectorUtils.getHorizontalRotation(horizontalRotation);
 				final Matrix3d horizontalRotationMatrix = VectorUtils.getRotationMatrix(EnumFacing.Axis.Y, verticalRotation == EnumVerticalRotation.DOWN ? horizontalRotationAngle + Math.PI : horizontalRotationAngle);
@@ -205,7 +205,7 @@ public class BlockPlane extends BlockTestMod3 {
 		private static final EnumVerticalRotation[] VALUES = new EnumVerticalRotation[values().length];
 
 		static {
-			for (EnumVerticalRotation verticalRotation : values()) {
+			for (final EnumVerticalRotation verticalRotation : values()) {
 				VALUES[verticalRotation.getIndex()] = verticalRotation;
 			}
 		}

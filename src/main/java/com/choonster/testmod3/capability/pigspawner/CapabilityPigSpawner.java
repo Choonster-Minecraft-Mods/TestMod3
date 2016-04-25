@@ -73,7 +73,7 @@ public final class CapabilityPigSpawner {
 		CapabilityManager.INSTANCE.register(IPigSpawner.class, new Capability.IStorage<IPigSpawner>() {
 			@Override
 			public NBTBase writeNBT(Capability<IPigSpawner> capability, IPigSpawner instance, EnumFacing side) {
-				NBTTagCompound tagCompound = new NBTTagCompound();
+				final NBTTagCompound tagCompound = new NBTTagCompound();
 				if (instance instanceof IPigSpawnerFinite) {
 					tagCompound.setInteger("NumPigs", ((IPigSpawnerFinite) instance).getNumPigs());
 				}
@@ -84,7 +84,7 @@ public final class CapabilityPigSpawner {
 			public void readNBT(Capability<IPigSpawner> capability, IPigSpawner instance, EnumFacing side, NBTBase nbt) {
 				if (instance instanceof IPigSpawnerFinite) {
 					final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) instance;
-					NBTTagCompound tagCompound = (NBTTagCompound) nbt;
+					final NBTTagCompound tagCompound = (NBTTagCompound) nbt;
 
 					Logger.debug(LOG_MARKER, DebugUtil.getStackTrace(10), "Reading finite pig spawner from NBT: %s (Current: %d, New: %d)", instance, pigSpawnerFinite.getNumPigs(), tagCompound.getInteger("NumPigs"));
 

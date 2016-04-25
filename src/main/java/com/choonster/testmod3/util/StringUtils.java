@@ -16,11 +16,11 @@ public class StringUtils {
 		// 0 requires a special case
 		if (number == 0) return new String(function.apply(0));
 
-		boolean isNegative = number < 0;
+		final boolean isNegative = number < 0;
 
 		number = Math.abs(number);
 
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 
 		// Get each digit of the number
 		// Based on this StackOverflow answer from Martin B: http://stackoverflow.com/a/3118505

@@ -46,7 +46,7 @@ public class CommandTestMod3 extends CommandBase {
 	 * @return The new array
 	 */
 	private static String[] dropFirstString(String[] input) {
-		String[] output = new String[input.length - 1];
+		final String[] output = new String[input.length - 1];
 		System.arraycopy(input, 1, output, 0, input.length - 1);
 		return output;
 	}
@@ -153,11 +153,11 @@ public class CommandTestMod3 extends CommandBase {
 
 		@Override
 		public List<String> getTabCompletionOptions(ICommandSender sender, String input, BlockPos pos) {
-			String[] args = input.split(" ", -1);
-			String commandName = args[0];
+			final String[] args = input.split(" ", -1);
+			final String commandName = args[0];
 
 			if (args.length == 1) {
-				List<String> list = new ArrayList<>();
+				final List<String> list = new ArrayList<>();
 
 				list.addAll(this.orderedCommandMap.entrySet().stream()
 						.filter(entry -> CommandBase.doesStringStartWith(commandName, entry.getKey()))
@@ -168,7 +168,7 @@ public class CommandTestMod3 extends CommandBase {
 				return list;
 			} else {
 				if (args.length > 1) {
-					ICommand iCommand = this.orderedCommandMap.get(commandName);
+					final ICommand iCommand = this.orderedCommandMap.get(commandName);
 
 					if (iCommand != null && iCommand.checkPermission(this.getServer(), sender)) {
 						return iCommand.getTabCompletionOptions(this.getServer(), sender, dropFirstString(args), pos);
@@ -181,7 +181,7 @@ public class CommandTestMod3 extends CommandBase {
 
 		@Override
 		public List<ICommand> getPossibleCommands(ICommandSender sender) {
-			List<ICommand> list = new ArrayList<>();
+			final List<ICommand> list = new ArrayList<>();
 
 			list.addAll(orderedCommandSet.stream()
 					.filter(iCommand -> iCommand.checkPermission(this.getServer(), sender))

@@ -32,7 +32,7 @@ public class BlockItemDebugger extends BlockTestMod3 {
 
 	private <T> void logCapability(ItemStack stack, Capability<T> capability, EnumFacing facing) {
 		if (stack.hasCapability(capability, facing)) {
-			T instance = stack.getCapability(capability, facing);
+			final T instance = stack.getCapability(capability, facing);
 			Logger.info("Capability: %s - %s", capability.getName(), instance);
 		}
 	}
@@ -46,7 +46,7 @@ public class BlockItemDebugger extends BlockTestMod3 {
 
 	@Override
 	public void onBlockClicked(World worldIn, BlockPos pos, EntityPlayer playerIn) {
-		for (EnumHand hand : EnumHand.values()) {
+		for (final EnumHand hand : EnumHand.values()) {
 			logItem(playerIn.getHeldItem(hand));
 		}
 	}

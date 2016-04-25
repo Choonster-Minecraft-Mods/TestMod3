@@ -100,7 +100,7 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 
 						switch (message.type) {
 							case BLOCK:
-								TileEntity tileEntity = world.getTileEntity(message.blockPos);
+								final TileEntity tileEntity = world.getTileEntity(message.blockPos);
 								if (tileEntity instanceof TileEntitySurvivalCommandBlock) {
 									survivalCommandBlockLogic = ((TileEntitySurvivalCommandBlock) tileEntity).getCommandBlockLogic();
 								}

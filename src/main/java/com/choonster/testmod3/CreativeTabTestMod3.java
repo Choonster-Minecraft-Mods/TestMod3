@@ -16,7 +16,7 @@ public class CreativeTabTestMod3 extends CreativeTabs {
 
 	public CreativeTabTestMod3() {
 		super(TestMod3.MODID);
-		sword = SwordUpgrades.upgradeSword((ItemSword) Items.STONE_SWORD);
+		sword = SwordUpgrades.upgradeSword(Items.STONE_SWORD);
 	}
 
 	@SideOnly(Side.CLIENT)

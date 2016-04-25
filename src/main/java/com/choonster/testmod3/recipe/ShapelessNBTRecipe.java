@@ -35,25 +35,25 @@ public class ShapelessNBTRecipe extends ShapelessOreRecipe {
 
 	@Override
 	public boolean matches(InventoryCrafting var1, World world) {
-		ArrayList<Object> required = new ArrayList<>(input);
+		final ArrayList<Object> required = new ArrayList<>(input);
 
 		for (int x = 0; x < var1.getSizeInventory(); x++) {
-			ItemStack slot = var1.getStackInSlot(x);
+			final ItemStack slot = var1.getStackInSlot(x);
 
 			if (slot != null) {
 				boolean inRecipe = false;
-				Iterator<Object> req = required.iterator();
+				final Iterator<Object> req = required.iterator();
 
 				while (req.hasNext()) {
 					boolean match = false;
 
-					Object next = req.next();
+					final Object next = req.next();
 
 					if (next instanceof ItemStack) {
 						match = itemMatches((ItemStack) next, slot);
 					} else if (next instanceof List) {
 						@SuppressWarnings("unchecked")
-						Iterator<ItemStack> itr = ((List<ItemStack>) next).iterator();
+						final Iterator<ItemStack> itr = ((List<ItemStack>) next).iterator();
 						while (itr.hasNext() && !match) {
 							match = itemMatches(itr.next(), slot);
 						}

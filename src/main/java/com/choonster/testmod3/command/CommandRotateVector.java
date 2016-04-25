@@ -58,7 +58,7 @@ public class CommandRotateVector extends CommandBase {
 		if (args.length < 5) throw new WrongUsageException("commands.testmod3.rotateVector.usage");
 
 		final double x = parseDouble(args[0]), y = parseDouble(args[1]), z = parseDouble(args[2]);
-		Vector3d inputVector = new Vector3d(x, y, z);
+		final Vector3d inputVector = new Vector3d(x, y, z);
 
 		final EnumFacing.Axis axis = EnumFacing.Axis.byName(args[3].toLowerCase(Locale.ENGLISH));
 		if (axis == null) throw new WrongUsageException("commands.testmod3.rotateVector.invalidAxis");

@@ -42,7 +42,7 @@ public class ItemModBow extends ItemBow {
 				IItemPropertyGetterFix.create((stack, worldIn, entityIn) -> {
 					if (entityIn == null) return 0.0f;
 
-					ItemStack activeItemStack = entityIn.getActiveItemStack();
+					final ItemStack activeItemStack = entityIn.getActiveItemStack();
 					if (activeItemStack != null && activeItemStack.getItem() instanceof ItemModBow) {
 						return (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0f;
 					}
@@ -113,7 +113,7 @@ public class ItemModBow extends ItemBow {
 	protected ActionResult<ItemStack> nockArrow(ItemStack bow, World world, EntityPlayer shooter, EnumHand hand) {
 		boolean hasAmmo = findAmmoSlot(shooter, this::isArrow) != null;
 
-		ActionResult<ItemStack> ret = ForgeEventFactory.onArrowNock(bow, world, shooter, hand, hasAmmo);
+		final ActionResult<ItemStack> ret = ForgeEventFactory.onArrowNock(bow, world, shooter, hand, hasAmmo);
 		if (ret != null) return ret;
 
 		if (isAmmoRequired(bow, shooter) && !hasAmmo) {
@@ -199,7 +199,7 @@ public class ItemModBow extends ItemBow {
 
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-		int charge = this.getMaxItemUseDuration(stack) - timeLeft;
+		final int charge = this.getMaxItemUseDuration(stack) - timeLeft;
 		fireArrow(stack, worldIn, entityLiving, charge);
 	}
 

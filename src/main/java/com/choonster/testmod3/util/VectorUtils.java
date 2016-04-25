@@ -28,9 +28,9 @@ public class VectorUtils {
 	private static final TObjectDoubleMap<EnumFacing> HORIZONTAL_ROTATIONS;
 
 	static {
-		Map<EnumFacing.Axis, Vec3i> axisVectors = new HashMap<>();
+		final Map<EnumFacing.Axis, Vec3i> axisVectors = new HashMap<>();
 
-		for (EnumFacing.Axis axis : EnumFacing.Axis.values()) { // For each axis,
+		for (final EnumFacing.Axis axis : EnumFacing.Axis.values()) { // For each axis,
 			// Get the direction vector of the positive facing of the axis
 			final Vec3i directionVec = EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.POSITIVE, axis).getDirectionVec();
 			axisVectors.put(axis, directionVec); // Add it to the map

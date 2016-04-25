@@ -13,7 +13,7 @@ import static com.choonster.testmod3.client.gui.GuiIDs.SURVIVAL_COMMAND_BLOCK_MI
 public class GuiHandler implements IGuiHandler {
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
+		final TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 
 		switch (ID) {
 			case SURVIVAL_COMMAND_BLOCK:
@@ -27,7 +27,7 @@ public class GuiHandler implements IGuiHandler {
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
+		final TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 
 		switch (ID) {
 			case SURVIVAL_COMMAND_BLOCK:

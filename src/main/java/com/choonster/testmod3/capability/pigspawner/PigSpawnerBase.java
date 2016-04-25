@@ -24,7 +24,7 @@ public abstract class PigSpawnerBase implements IPigSpawner {
 	 */
 	@Override
 	public boolean spawnPig(World world, double x, double y, double z) {
-		EntityPig pig = new EntityPig(world);
+		final EntityPig pig = new EntityPig(world);
 		pig.setPosition(x, y, z);
 		return world.spawnEntityInWorld(pig);
 	}

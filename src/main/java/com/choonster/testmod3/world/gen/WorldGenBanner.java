@@ -33,15 +33,11 @@ public class WorldGenBanner implements IWorldGenerator {
 	 * @return A Banner ItemStack with the appropriate NBT data
 	 */
 	protected ItemStack createBannerStack() {
-		ItemStack bannerStack = new ItemStack(Items.BANNER);
+		final ItemStack bannerStack = new ItemStack(Items.BANNER);
 
-		NBTTagCompound stackTagCompound = new NBTTagCompound();
-		bannerStack.setTagCompound(stackTagCompound);
+		final NBTTagCompound bannerData = bannerStack.getSubCompound("BlockEntityTag", true);
 
-		NBTTagCompound bannerData = new NBTTagCompound();
-		stackTagCompound.setTag("BlockEntityTag", bannerData);
-
-		NBTTagList patternsList = new NBTTagList();
+		final NBTTagList patternsList = new NBTTagList();
 		bannerData.setTag("Patterns", patternsList);
 		patternsList.appendTag(createPatternTag(TileEntityBanner.EnumBannerPattern.GRADIENT_UP, EnumDyeColor.MAGENTA));
 		patternsList.appendTag(createPatternTag(TileEntityBanner.EnumBannerPattern.FLOWER, EnumDyeColor.BLACK));
@@ -59,7 +55,7 @@ public class WorldGenBanner implements IWorldGenerator {
 	 * @return The compound tag
 	 */
 	protected NBTTagCompound createPatternTag(TileEntityBanner.EnumBannerPattern pattern, EnumDyeColor color) {
-		NBTTagCompound tag = new NBTTagCompound();
+		final NBTTagCompound tag = new NBTTagCompound();
 		tag.setString("Pattern", pattern.getPatternID());
 		tag.setInteger("Color", color.getDyeDamage());
 		return tag;
@@ -72,11 +68,11 @@ public class WorldGenBanner implements IWorldGenerator {
 	 * @param pos   The position
 	 */
 	private void generateBanner(World world, BlockPos pos) {
-		pos = world.getTopSolidOrLiquidBlock(pos);
+		final BlockPos newPos = world.getTopSolidOrLiquidBlock(pos);
 
 		world.setBlockState(pos, Blocks.STANDING_BANNER.getDefaultState());
 
-		TileEntityBanner tileEntityBanner = (TileEntityBanner) world.getTileEntity(pos);
+		final TileEntityBanner tileEntityBanner = (TileEntityBanner) world.getTileEntity(newPos);
 		tileEntityBanner.setItemValues(bannerStack);
 	}
 

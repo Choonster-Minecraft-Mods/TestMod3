@@ -17,9 +17,9 @@ public class OreDictUtils {
 	 * @return Is the ItemStack registered?
 	 */
 	public boolean isItemStackRegisteredForName(ItemStack stack, String oreName) {
-		int[] oreIDs = OreDictionary.getOreIDs(stack);
+		final int[] oreIDs = OreDictionary.getOreIDs(stack);
 
-		for (int oreID : oreIDs) {
+		for (final int oreID : oreIDs) {
 			if (oreName.equals(OreDictionary.getOreName(oreID))) {
 				return true;
 			}

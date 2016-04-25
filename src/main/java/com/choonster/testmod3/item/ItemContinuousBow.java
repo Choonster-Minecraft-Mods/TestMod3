@@ -30,13 +30,13 @@ public class ItemContinuousBow extends ItemModBow {
 
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-		int charge = (getMaxItemUseDuration(stack) - timeLeft) * CHARGE_MULTIPLIER;
+		final int charge = (getMaxItemUseDuration(stack) - timeLeft) * CHARGE_MULTIPLIER;
 		fireArrow(stack, worldIn, entityLiving, charge);
 	}
 
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
-		int charge = getMaxItemUseDuration(stack) * CHARGE_MULTIPLIER;
+		final int charge = getMaxItemUseDuration(stack) * CHARGE_MULTIPLIER;
 		fireArrow(stack, worldIn, entityLiving, charge);
 
 		return stack;

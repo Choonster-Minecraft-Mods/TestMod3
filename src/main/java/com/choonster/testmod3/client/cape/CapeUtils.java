@@ -38,7 +38,7 @@ class CapeUtils {
 	 * @param player The player
 	 */
 	static void queuePlayerCapeReplacement(AbstractClientPlayer player) {
-		String displayName = player.getDisplayNameString();
+		final String displayName = player.getDisplayNameString();
 
 		Logger.info("Queueing cape replacement for %s", displayName);
 
@@ -61,9 +61,9 @@ class CapeUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	private static void replacePlayerCape(AbstractClientPlayer player) {
-		String displayName = player.getDisplayNameString();
+		final String displayName = player.getDisplayNameString();
 
-		NetworkPlayerInfo playerInfo;
+		final NetworkPlayerInfo playerInfo;
 
 		try {
 			playerInfo = (NetworkPlayerInfo) GET_PLAYER_INFO.invoke(player);

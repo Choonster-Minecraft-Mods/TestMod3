@@ -37,7 +37,7 @@ public class SwordUpgrades {
 
 		// Modifiers provided by the Item are completely ignored as soon as any modifiers are added to the ItemStack,
 		// so add the Item's modifiers to the output ItemStack manually
-		for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+		for (final EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
 			originalStack.getAttributeModifiers(slot)
 					.entries()
 					.forEach(entry -> {

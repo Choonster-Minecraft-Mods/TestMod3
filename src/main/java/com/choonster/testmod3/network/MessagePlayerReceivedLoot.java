@@ -44,7 +44,7 @@ public class MessagePlayerReceivedLoot implements IMessage {
 	 */
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		int numStacks = buf.readInt();
+		final int numStacks = buf.readInt();
 
 		itemStacks = new ItemStack[numStacks];
 

@@ -78,7 +78,7 @@ public class BlockRightClickTest extends BlockGlass {
 
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		List<ItemStack> drops = super.getDrops(world, pos, state, fortune);
+		final List<ItemStack> drops = super.getDrops(world, pos, state, fortune);
 
 		if (state.getValue(HAS_ENDER_EYE)) {
 			drops.add(new ItemStack(Items.ENDER_EYE));

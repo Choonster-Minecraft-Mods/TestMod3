@@ -31,14 +31,14 @@ public class ShapedArmourUpgradeRecipe extends ShapedOreRecipe {
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
-		ItemStack output = super.getCraftingResult(inv); // Get the default output
+		final ItemStack output = super.getCraftingResult(inv); // Get the default output
 
 		for (int i = 0; i < inv.getSizeInventory(); i++) { // For each slot in the crafting inventory,
-			ItemStack ingredient = inv.getStackInSlot(i); // Get the ingredient in the slot
+			final ItemStack ingredient = inv.getStackInSlot(i); // Get the ingredient in the slot
 
 			if (ingredient != null && ingredient.getItem() instanceof ItemArmor) { // If it's an armour item,
 				// Clone its item damage, clamping it to the output's damage range
-				int newDamage = MathHelper.clamp_int(ingredient.getItemDamage(), 0, output.getMaxDamage());
+				final int newDamage = MathHelper.clamp_int(ingredient.getItemDamage(), 0, output.getMaxDamage());
 				output.setItemDamage(newDamage);
 				break; // Break now
 			}

@@ -18,13 +18,13 @@ import java.util.stream.StreamSupport;
  */
 public class BlockDumper {
 	public static void dump() {
-		try (PrintWriter writer = new PrintWriter("TestMod3_BlockDump_" + (FMLCommonHandler.instance().getEffectiveSide().isClient() ? "Client" : "Server") + ".txt", "UTF-8")) {
+		try (final PrintWriter writer = new PrintWriter("TestMod3_BlockDump_" + (FMLCommonHandler.instance().getEffectiveSide().isClient() ? "Client" : "Server") + ".txt", "UTF-8")) {
 			writer.println("Name - toString");
 
 			StreamSupport.stream(ForgeRegistries.BLOCKS.spliterator(), false)
 					.filter(block -> block.getRegistryName().getResourceDomain().equals(TestMod3.MODID))
 					.forEach(block -> {
-						Item item = Item.getItemFromBlock(block);
+						final Item item = Item.getItemFromBlock(block);
 						if (item != null) {
 							writer.printf("%s - %s\n", item.getUnlocalizedName(), item.toString());
 						}

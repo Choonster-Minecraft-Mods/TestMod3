@@ -115,7 +115,7 @@ public abstract class BlockSlabTestMod3<
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		VARIANT variant = getVariant(meta & 7);
+		final VARIANT variant = getVariant(meta & 7);
 		IBlockState state = this.getDefaultState().withProperty(getVariantProperty(), variant);
 
 		if (!this.isDouble()) {

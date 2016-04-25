@@ -64,7 +64,7 @@ public class ModFluids {
 		registerTank(FluidRegistry.WATER);
 		registerTank(FluidRegistry.LAVA);
 
-		for (Fluid fluid : FLUIDS) {
+		for (final Fluid fluid : FLUIDS) {
 			registerBucket(fluid);
 			registerTank(fluid);
 		}
@@ -82,11 +82,11 @@ public class ModFluids {
 	private static <T extends Block & IFluidBlock> Fluid createFluid(String name, boolean hasFlowIcon, Consumer<Fluid> fluidPropertyApplier, Function<Fluid, T> blockFactory) {
 		final String texturePrefix = Constants.RESOURCE_PREFIX + "blocks/fluid_";
 
-		ResourceLocation still = new ResourceLocation(texturePrefix + name + "_still");
-		ResourceLocation flowing = hasFlowIcon ? new ResourceLocation(texturePrefix + name + "_flow") : still;
+		final ResourceLocation still = new ResourceLocation(texturePrefix + name + "_still");
+		final ResourceLocation flowing = hasFlowIcon ? new ResourceLocation(texturePrefix + name + "_flow") : still;
 
 		Fluid fluid = new Fluid(name, still, flowing);
-		boolean useOwnFluid = FluidRegistry.registerFluid(fluid);
+		final boolean useOwnFluid = FluidRegistry.registerFluid(fluid);
 
 		if (useOwnFluid) {
 			fluidPropertyApplier.accept(fluid);
@@ -117,7 +117,7 @@ public class ModFluids {
 	}
 
 	private static void registerTank(Fluid fluid) {
-		FluidStack fluidStack = new FluidStack(fluid, 10 * FluidContainerRegistry.BUCKET_VOLUME);
+		final FluidStack fluidStack = new FluidStack(fluid, 10 * FluidContainerRegistry.BUCKET_VOLUME);
 		((ItemFluidTank) Item.getItemFromBlock(ModBlocks.FLUID_TANK)).addFluid(fluidStack);
 	}
 }

@@ -23,7 +23,7 @@ public class BlockEventHandler {
 	 * @return True if the tool can harvest the block
 	 */
 	private boolean canToolHarvestBlock(IBlockState state, ItemStack stack) {
-		String tool = state.getBlock().getHarvestTool(state);
+		final String tool = state.getBlock().getHarvestTool(state);
 		return stack != null && tool != null
 				&& stack.getItem().getHarvestLevel(stack, tool) >= state.getBlock().getHarvestLevel(state);
 	}

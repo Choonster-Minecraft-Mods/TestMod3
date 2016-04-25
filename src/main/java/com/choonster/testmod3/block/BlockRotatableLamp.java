@@ -39,8 +39,8 @@ public class BlockRotatableLamp extends BlockTestMod3 {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		int facingIndex = state.getValue(FACING).getIndex(); // Convert the EnumFacing to its index
-		int lit = state.getValue(LIT) ? 1 : 0; // Convert the lit state boolean to 1 or 0
+		final int facingIndex = state.getValue(FACING).getIndex(); // Convert the EnumFacing to its index
+		final int lit = state.getValue(LIT) ? 1 : 0; // Convert the lit state boolean to 1 or 0
 
 		// Shift lit left three bits so it occupies the highest bit then OR it with the facing index (which occupies the lowest three bits)
 		return lit << 3 | facingIndex;
@@ -48,24 +48,24 @@ public class BlockRotatableLamp extends BlockTestMod3 {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		int facingIndex = meta & 7; // Extract the facing index (lowest three bits)
-		EnumFacing facing = EnumFacing.getFront(facingIndex); // Convert it to the corresponding EnumFacing
+		final int facingIndex = meta & 7; // Extract the facing index (lowest three bits)
+		final EnumFacing facing = EnumFacing.getFront(facingIndex); // Convert it to the corresponding EnumFacing
 
-		boolean lit = (meta & 8) != 0; // Extract the lit state (highest bit)
+		final boolean lit = (meta & 8) != 0; // Extract the lit state (highest bit)
 
 		return getDefaultState().withProperty(FACING, facing).withProperty(LIT, lit);
 	}
 
 	@Override
 	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		EnumFacing newFacing = BlockPistonBase.getFacingFromEntity(pos, placer);
+		final EnumFacing newFacing = BlockPistonBase.getFacingFromEntity(pos, placer);
 
 		return super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, newFacing);
 	}
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		IBlockState newState;
+		final IBlockState newState;
 
 		if (playerIn.isSneaking()) {
 			newState = state.cycleProperty(FACING); // Cycle the facing (down -> up -> north -> south -> west -> east -> down)

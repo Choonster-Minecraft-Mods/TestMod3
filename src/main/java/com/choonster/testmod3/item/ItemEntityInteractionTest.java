@@ -1,5 +1,6 @@
 package com.choonster.testmod3.item;
 
+import com.choonster.testmod3.util.ItemStackUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -24,17 +25,13 @@ public class ItemEntityInteractionTest extends ItemTestMod3 {
 	}
 
 	private int getInteractCount(ItemStack stack) {
-		if (!stack.hasTagCompound()) {
-			stack.setTagCompound(new NBTTagCompound());
-		}
-
-		return stack.getTagCompound().getInteger("Count");
+		return ItemStackUtils.getOrCreateTagCompound(stack).getInteger("Count");
 	}
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
 		if (!playerIn.worldObj.isRemote) {
-			int count = getInteractCount(stack) + 1;
+			final int count = getInteractCount(stack) + 1;
 			stack.getTagCompound().setInteger("Count", count);
 
 			playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:entityInteractCount", count));
@@ -46,7 +43,7 @@ public class ItemEntityInteractionTest extends ItemTestMod3 {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		if (!playerIn.worldObj.isRemote) {
-			int count = getInteractCount(itemStackIn);
+			final int count = getInteractCount(itemStackIn);
 
 			playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:entityInteractCount", count));
 		}

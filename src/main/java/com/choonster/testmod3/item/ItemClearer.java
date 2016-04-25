@@ -34,7 +34,7 @@ public class ItemClearer extends ItemTestMod3 {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 		if (!world.isRemote) {
-			int currentMode = stack.getMetadata();
+			final int currentMode = stack.getMetadata();
 
 			if (player.isSneaking()) {
 				final int newMode = currentMode == MODE_ALL ? MODE_WHITELIST : MODE_ALL;

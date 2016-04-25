@@ -36,18 +36,18 @@ public class ItemFluidTank extends ItemBlock implements IFluidContainerItem {
 	}
 
 	private FluidTank loadTank(ItemStack stack) {
-		NBTTagCompound teData = stack.getSubCompound("TankData", true);
+		final NBTTagCompound teData = stack.getSubCompound("TankData", true);
 		return TileEntityFluidTank.loadTank(teData, null);
 	}
 
 	private void saveTank(ItemStack stack, FluidTank tank) {
-		NBTTagCompound teData = new NBTTagCompound();
+		final NBTTagCompound teData = new NBTTagCompound();
 		TileEntityFluidTank.saveTank(teData, tank);
 		stack.setTagInfo("TankData", teData);
 	}
 
 	public ItemStack addFluid(FluidStack fluidStack) {
-		ItemStack filledTank = new ItemStack(this);
+		final ItemStack filledTank = new ItemStack(this);
 		tankItems.add(filledTank);
 
 		fill(filledTank, fluidStack, true);
@@ -58,8 +58,8 @@ public class ItemFluidTank extends ItemBlock implements IFluidContainerItem {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-		FluidTankInfo[] fluidTankInfos = new FluidTankInfo[]{loadTank(stack).getInfo()};
-		List<String> lines = BlockFluidTank.getFluidDataForDisplay(fluidTankInfos).stream()
+		final FluidTankInfo[] fluidTankInfos = new FluidTankInfo[]{loadTank(stack).getInfo()};
+		final List<String> lines = BlockFluidTank.getFluidDataForDisplay(fluidTankInfos).stream()
 				.map(ITextComponent::getFormattedText).collect(Collectors.toList());
 		tooltip.addAll(lines);
 	}
@@ -83,8 +83,8 @@ public class ItemFluidTank extends ItemBlock implements IFluidContainerItem {
 
 	@Override
 	public int fill(ItemStack container, FluidStack resource, boolean doFill) {
-		FluidTank tank = loadTank(container);
-		int result = tank.fill(resource, doFill);
+		final FluidTank tank = loadTank(container);
+		final int result = tank.fill(resource, doFill);
 		saveTank(container, tank);
 
 		return result;
@@ -92,8 +92,8 @@ public class ItemFluidTank extends ItemBlock implements IFluidContainerItem {
 
 	@Override
 	public FluidStack drain(ItemStack container, int maxDrain, boolean doDrain) {
-		FluidTank tank = loadTank(container);
-		FluidStack result = tank.drain(maxDrain, doDrain);
+		final FluidTank tank = loadTank(container);
+		final FluidStack result = tank.drain(maxDrain, doDrain);
 		saveTank(container, tank);
 
 		return result;

@@ -61,7 +61,7 @@ public class BlockVariants extends BlockTestMod3 {
 
 	@Override
 	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-		for (EnumType enumType : EnumType.values()) {
+		for (final EnumType enumType : EnumType.values()) {
 			list.add(new ItemStack(this, 1, enumType.getMeta()));
 		}
 	}

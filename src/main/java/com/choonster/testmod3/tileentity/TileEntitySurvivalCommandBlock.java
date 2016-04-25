@@ -87,7 +87,7 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 		@Override
 		public boolean tryOpenEditCommandBlock(EntityPlayer player) {
 			if (player.getEntityWorld().isRemote) {
-				BlockPos pos = getPosition();
+				final BlockPos pos = getPosition();
 				player.openGui(TestMod3.instance, GuiIDs.SURVIVAL_COMMAND_BLOCK, player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());
 			}
 
@@ -132,7 +132,7 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 
-		NBTTagCompound survivalCommandBlockLogicTag = new NBTTagCompound();
+		final NBTTagCompound survivalCommandBlockLogicTag = new NBTTagCompound();
 		getCommandBlockLogic().writeDataToNBT(survivalCommandBlockLogicTag);
 		compound.setTag("SurvivalCommandBlockLogic", survivalCommandBlockLogicTag);
 	}

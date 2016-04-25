@@ -67,17 +67,17 @@ public class ModModelManager {
 
 		registerBlockItemModel(ModBlocks.RIGHT_CLICK_TEST, new ModelResourceLocation(ModBlocks.RIGHT_CLICK_TEST.getRegistryName(), "has_ender_eye=false"));
 
-		for (EnumDyeColor color : EnumDyeColor.values()) {
+		for (final EnumDyeColor color : EnumDyeColor.values()) {
 			registerBlockItemModelForMeta(ModBlocks.COLORED_ROTATABLE, color.getMetadata(), String.format("color=%s,facing=north", color.getName()));
 			registerBlockItemModelForMeta(ModBlocks.COLORED_MULTI_ROTATABLE, color.getMetadata(), String.format("color=%s,face_rotation=up,facing=north", color.getName()));
 
-			BlockColouredSlab.EnumColourGroup colourGroup = BlockColouredSlab.EnumColourGroup.getGroupForColour(color);
+			final BlockColouredSlab.EnumColourGroup colourGroup = BlockColouredSlab.EnumColourGroup.getGroupForColour(color);
 			if (colourGroup != null) {
 				registerBlockItemModelForMeta(ModBlocks.STAINED_CLAY_SLABS.getSlabGroupByColourGroup(colourGroup).singleSlab, colourGroup.getOffsetMetadata(color), String.format("colour=%s,half=bottom", color.getName()));
 			}
 		}
 
-		for (BlockVariants.EnumType enumType : BlockVariants.EnumType.values()) {
+		for (final BlockVariants.EnumType enumType : BlockVariants.EnumType.values()) {
 			registerBlockItemModelForMeta(ModBlocks.VARIANTS, enumType.getMeta(), "variant=" + enumType.getName());
 		}
 
@@ -87,7 +87,7 @@ public class ModModelManager {
 	}
 
 	private void registerBlockItemModel(Block block) {
-		Item item = Item.getItemFromBlock(block);
+		final Item item = Item.getItemFromBlock(block);
 		if (item != null) {
 			registerItemModel(item);
 		}

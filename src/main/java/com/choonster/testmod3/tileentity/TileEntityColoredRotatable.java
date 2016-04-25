@@ -49,7 +49,7 @@ public class TileEntityColoredRotatable extends TileEntity {
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		readFromNBT(pkt.getNbtCompound());
-		IBlockState state = getWorld().getBlockState(getPos());
+		final IBlockState state = getWorld().getBlockState(getPos());
 		getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 	}
 

@@ -31,9 +31,9 @@ public class NetworkEventHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void clientConnectedToServer(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-		IThreadListener mainThread = Minecraft.getMinecraft();
+		final IThreadListener mainThread = Minecraft.getMinecraft();
 		mainThread.addScheduledTask(() -> {
-			ServerData serverData = Minecraft.getMinecraft().getCurrentServerData();
+			final ServerData serverData = Minecraft.getMinecraft().getCurrentServerData();
 			Logger.info("Server Connected! Local? %s - Address: %s", event.isLocal(), serverData != null ? serverData.serverIP : "<No ServerData>");
 		});
 	}

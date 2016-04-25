@@ -16,7 +16,7 @@ public class InventoryUtils {
 	 * @return The equipment slot
 	 */
 	public static EntityEquipmentSlot getEquipmentSlotFromIndex(int index) {
-		for (EntityEquipmentSlot equipmentSlot : EntityEquipmentSlot.values()) {
+		for (final EntityEquipmentSlot equipmentSlot : EntityEquipmentSlot.values()) {
 			if (equipmentSlot.getSlotIndex() == index) {
 				return equipmentSlot;
 			}
