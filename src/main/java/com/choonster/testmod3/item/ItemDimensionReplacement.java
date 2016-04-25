@@ -71,7 +71,9 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 
 			final ItemStack replacement = getReplacement(worldIn); // Get the replacement for this dimension
 			if (replacement != null) { // If it exists,
+				final int stackSize = stack.stackSize; // Record the original stack size
 				stack.deserializeNBT(replacement.serializeNBT()); // Replace this item
+				stack.stackSize = stackSize; // Restore the original stack size
 			}
 		}
 	}
