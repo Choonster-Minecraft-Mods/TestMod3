@@ -14,6 +14,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.RecipeFireworks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -46,9 +47,12 @@ public class ModRecipes {
 		GameRegistry.addRecipe(new ShapedArmourUpgradeRecipe(Items.GOLDEN_HELMET, "AAA", "ABA", "AAA", 'A', Blocks.GOLD_BLOCK, 'B', new ItemStack(Items.IRON_HELMET, 1, OreDictionary.WILDCARD_VALUE)));
 
 		// Recipe for Guardian Spawner - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2424619-help-needed-creating-non-pig-mob-spawners
-		ItemStack guardianSpawner = new ItemStack(Blocks.MOB_SPAWNER);
-		NBTTagCompound tileEntityData = guardianSpawner.getSubCompound("BlockEntityTag", true);
-		tileEntityData.setString("EntityId", "Guardian");
+		final ItemStack guardianSpawner = new ItemStack(Blocks.MOB_SPAWNER);
+		final NBTTagCompound tileEntityData = guardianSpawner.getSubCompound("BlockEntityTag", true);
+		final NBTTagCompound spawnData = new NBTTagCompound();
+		spawnData.setString("id", "Guardian");
+		tileEntityData.setTag("SpawnData", spawnData);
+		tileEntityData.setTag("SpawnPotentials", new NBTTagList());
 		GameRegistry.addRecipe(guardianSpawner, "SSS", "SFS", "SSS", 'S', Items.STICK, 'F', Items.FISH);
 
 		ItemStack bucketOfStaticGas = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ModFluids.STATIC_GAS);
