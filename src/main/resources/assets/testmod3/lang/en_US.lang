@@ -122,6 +122,7 @@ item.testmod3:lootTableTest.name=Loot Table Test
 item.testmod3:maxHealthSetterItem.name=Max Health Setter
 item.testmod3:maxHealthGetterItem.name=Max Health Getter
 item.testmod3:gun.name=Gun
+item.testmod3:dimensionReplacement.name=Dimension Replacement
 
 item.testmod3:helmetReplacement.name=Armour Replacement Helmet
 item.testmod3:chestplateReplacement.name=Armour Replacement Chestplate
@@ -143,6 +144,8 @@ item.testmod3:armourReplacement.unequip.desc=Restores your armour when unequippe
 item.testmod3:armourRestricted.desc=Disappears if unequipped
 testmod3:pigSpawner.finite.desc=Spawnable Pigs: %s/%s
 testmod3:pigSpawner.infinite.desc=Spawnable Pigs: ∞
+item.testmod3:dimensionReplacement.replacement.desc=Will be replaced with %s when crafted in this dimension
+item.testmod3:dimensionReplacement.noReplacement.desc=Will not be replaced when crafted in this dimension
 
 # Chat messages
 message.testmod3:entityInteractCount=Interact count: %s

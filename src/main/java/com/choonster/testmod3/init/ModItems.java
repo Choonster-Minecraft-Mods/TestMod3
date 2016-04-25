@@ -11,6 +11,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -50,6 +51,7 @@ public class ModItems {
 	public static final ItemMaxHealthSetter MAX_HEALTH_SETTER;
 	public static final ItemMaxHealthGetter MAX_HEALTH_GETTER;
 	public static final ItemSoundEffect GUN;
+	public static final ItemDimensionReplacement DIMENSION_REPLACEMENT;
 
 	public static final ItemArmourReplacement REPLACEMENT_HELMET;
 	public static final ItemArmourRestricted REPLACEMENT_CHESTPLATE;
@@ -103,6 +105,10 @@ public class ModItems {
 		MAX_HEALTH_SETTER = registerItem(new ItemMaxHealthSetter());
 		MAX_HEALTH_GETTER = registerItem(new ItemMaxHealthGetter());
 		GUN = registerItem(new ItemSoundEffect("gun", ModSoundEvents.NINE_MM_FIRE));
+
+		DIMENSION_REPLACEMENT = registerItem(new ItemDimensionReplacement("dimensionReplacement"));
+		DIMENSION_REPLACEMENT.addReplacement(DimensionType.NETHER, new ItemStack(Items.NETHER_STAR));
+		DIMENSION_REPLACEMENT.addReplacement(DimensionType.THE_END, new ItemStack(Items.ENDER_PEARL));
 
 		TOOL_MATERIAL_GLOWSTONE.setRepairItem(new ItemStack(Items.GLOWSTONE_DUST));
 		ARMOUR_MATERIAL_REPLACEMENT.customCraftingMaterial = ARROW;

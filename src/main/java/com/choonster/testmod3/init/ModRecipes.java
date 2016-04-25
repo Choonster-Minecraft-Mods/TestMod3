@@ -53,6 +53,9 @@ public class ModRecipes {
 
 		ItemStack bucketOfStaticGas = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ModFluids.STATIC_GAS);
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.COBBLESTONE), bucketOfStaticGas, bucketOfStaticGas, bucketOfStaticGas));
+
+		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.DIMENSION_REPLACEMENT), ModItems.SUBSCRIPTS, ModItems.SUPERSCRIPTS);
+		GameRegistry.addSmelting(ModItems.SUBSCRIPTS, new ItemStack(ModItems.DIMENSION_REPLACEMENT), 0.35f);
 	}
 
 	public static void removeCraftingRecipes() {
