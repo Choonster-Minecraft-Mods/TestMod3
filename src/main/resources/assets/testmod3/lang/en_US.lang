@@ -124,10 +124,10 @@ item.testmod3:maxHealthGetterItem.name=Max Health Getter
 item.testmod3:gun.name=Gun
 item.testmod3:dimensionReplacement.name=Dimension Replacement
 
-item.testmod3:helmetReplacement.name=Armour Replacement Helmet
-item.testmod3:chestplateReplacement.name=Armour Replacement Chestplate
-item.testmod3:leggingsReplacement.name=Armour Replacement Leggings
-item.testmod3:bootsReplacement.name=Armour Replacement Boots
+item.testmod3:headReplacement.name=Armour Replacement Helmet
+item.testmod3:chestReplacement.name=Armour Replacement Chestplate
+item.testmod3:legsReplacement.name=Armour Replacement Leggings
+item.testmod3:feetReplacement.name=Armour Replacement Boots
 
 # Tooltips
 item.record.testmod3:solaris.desc=Solaris (Path of Exile)

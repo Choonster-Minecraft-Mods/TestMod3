@@ -12,10 +12,13 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.HashSet;
@@ -37,6 +40,7 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 	// NBT keys
 	private static final String KEY_REPLACED_ARMOUR = "ReplacedArmour";
 	private static final String KEY_SLOT = "Slot";
+	private static final String KEY_STACK = "Stack";
 
 	/**
 	 * The items to replace the other armour with.
@@ -80,22 +84,12 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 	}
 
 	/**
-	 * Convert the specified {@link #armorType} to a slot number as used by {@link Entity#setItemStackToSlot(EntityEquipmentSlot, ItemStack)} and {@link EntityLivingBase#getItemStackFromSlot(EntityEquipmentSlot)}.
-	 *
-	 * @param armorType The armour type
-	 * @return The slot number
-	 */
-	private static int armourTypeToSlot(final int armorType) {
-		return 4 - armorType;
-	}
-
-	/**
-	 * Save the player's armour and replace it with the replacements defined for this item.
+	 * Save the entity's armour and replace it with the replacements defined for this item.
 	 *
 	 * @param stack  The ItemStack of this item
-	 * @param player The player
+	 * @param entity The entity
 	 */
-	private void replaceArmour(final ItemStack stack, final EntityPlayer player) {
+	private void replaceArmour(final ItemStack stack, final EntityLivingBase entity) {
 		final NBTTagCompound stackTagCompound = ItemStackUtils.getOrCreateTagCompound(stack);
 		final NBTTagList replacedArmour = new NBTTagList();
 
@@ -105,27 +99,27 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 		Constants.ARMOUR_SLOTS.stream() // For each armour type,
 				.filter(equipmentSlot -> equipmentSlot != armorType)
 				.forEach(equipmentSlot -> { // If it's not this item's armour type,
-					Optional<ItemStack> optionalReplacement = replacements.stream()
-							.filter(replacementStack -> replacementStack.getItem().isValidArmor(replacementStack, armorType, player))
+					final Optional<ItemStack> optionalReplacement = replacements.stream()
+							.filter(replacementStack -> replacementStack.getItem().isValidArmor(replacementStack, equipmentSlot, entity))
 							.findFirst();
 
 					if (optionalReplacement.isPresent()) { // If there's a replacement for this armour type,
 						final ItemStack replacement = optionalReplacement.get(); // Get it
 						replacements.remove(replacement); // Don't use it for any other armour type
 
-						final ItemStack original = player.getItemStackFromSlot(equipmentSlot);
+						// Create a compound tag to store the original and add it to the list of replaced armour
+						final NBTTagCompound tagCompound = new NBTTagCompound();
+						replacedArmour.appendTag(tagCompound);
+						tagCompound.setByte(KEY_SLOT, (byte) equipmentSlot.getSlotIndex());
 
-						if (original != null) { // If the player is wearing something in this slot,
-							final NBTTagCompound tagCompound = new NBTTagCompound();
-							tagCompound.setByte(KEY_SLOT, (byte) armorType.getSlotIndex());
-
-							original.writeToNBT(tagCompound); // Write it to NBT
-
-							replacedArmour.appendTag(tagCompound); // Add it to the list of replaced armour
+						// If the original item exists, add it to the compound tag
+						final ItemStack original = entity.getItemStackFromSlot(equipmentSlot);
+						if (original != null) {
+							tagCompound.setTag(KEY_STACK, original.serializeNBT());
 						}
 
-						player.setItemStackToSlot(equipmentSlot, replacement.copy()); // Equip a copy of the replacement
-						Logger.info("Equipped replacement %s to slot %d, replacing %s", replacement, equipmentSlot, original);
+						entity.setItemStackToSlot(equipmentSlot, replacement.copy()); // Equip a copy of the replacement
+						Logger.info("Equipped replacement %s to %s, replacing %s", replacement, equipmentSlot, original);
 					}
 				});
 
@@ -133,44 +127,49 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 	}
 
 	/**
-	 * Restore the player's saved armour from this item's ItemStack NBT.
+	 * Restore the entity's saved armour from this item's ItemStack NBT.
 	 *
 	 * @param stack  The ItemStack of this item
-	 * @param player The player
+	 * @param entity The entity
 	 */
-	private void restoreArmour(final ItemStack stack, final EntityPlayer player) {
+	private void restoreArmour(final ItemStack stack, final EntityLivingBase entity) {
 		final NBTTagCompound stackTagCompound = ItemStackUtils.getOrCreateTagCompound(stack);
 		final NBTTagList replacedArmour = stackTagCompound.getTagList(KEY_REPLACED_ARMOUR, NBT.TAG_COMPOUND);
 
 		for (int i = 0; i < replacedArmour.tagCount(); i++) { // For each saved armour item,
 			final NBTTagCompound replacedTagCompound = replacedArmour.getCompoundTagAt(i);
-			final ItemStack original = ItemStack.loadItemStackFromNBT(replacedTagCompound); // Load the original ItemStack from the NBT
+			final ItemStack original = ItemStack.loadItemStackFromNBT(replacedTagCompound.getCompoundTag(KEY_STACK)); // Load the original ItemStack from the NBT
 
 			final EntityEquipmentSlot equipmentSlot = InventoryUtils.getEquipmentSlotFromIndex(replacedTagCompound.getByte(KEY_SLOT)); // Get the armour slot
-			final ItemStack current = player.getItemStackFromSlot(equipmentSlot);
+			final ItemStack current = entity.getItemStackFromSlot(equipmentSlot);
 
 			// Is the item currently in the slot one of the replacements defined for this item?
 			final boolean isReplacement = replacementItems.stream().anyMatch(replacement -> ItemStack.areItemStacksEqual(replacement, current));
 
 			if (original == null) { // If the original item is null,
 				if (isReplacement) { // If the current item is a replacement,
-					Logger.info("Original item for slot %d is null, clearing replacement", equipmentSlot);
-					player.setItemStackToSlot(equipmentSlot, null); // Delete it
+					Logger.info("Original item for %s is null, clearing replacement", equipmentSlot);
+					entity.setItemStackToSlot(equipmentSlot, null); // Delete it
 				} else { // Else do nothing
-					Logger.info("Original item for slot %d is null, leaving current item", equipmentSlot);
+					Logger.info("Original item for %s is null, leaving current item", equipmentSlot);
 				}
 			} else {
-				Logger.info("Restoring original %s to slot %d, replacing %s", original, equipmentSlot, current);
+				Logger.info("Restoring original %s to %s, replacing %s", original, equipmentSlot, current);
 
-				if (!isReplacement) { // If the current item isn't a replacement, try to add it to the player's inventory or drop it on the ground
-					ItemHandlerHelper.giveItemToPlayer(player, current);
+				// If the current item isn't a replacement and the entity is a player, try to add it to their inventory or drop it on the ground
+				if (!isReplacement && entity instanceof EntityPlayer) {
+					ItemHandlerHelper.giveItemToPlayer((EntityPlayer) entity, current);
 				}
 
-				player.setItemStackToSlot(equipmentSlot, original); // Equip the original item
+				entity.setItemStackToSlot(equipmentSlot, original); // Equip the original item
 			}
 		}
 
 		stackTagCompound.removeTag(KEY_REPLACED_ARMOUR);
+
+		if (stackTagCompound.hasNoTags()) {
+			stack.setTagCompound(null);
+		}
 	}
 
 	/**
@@ -189,7 +188,7 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 	}
 
 	/**
-	 * Called every tick while the item is in a player's inventory (not while worn).
+	 * Called every tick while the item is in a player's inventory (including while worn).
 	 *
 	 * @param stack      The ItemStack of this item
 	 * @param worldIn    The entity's world
@@ -199,11 +198,15 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 	 */
 	@Override
 	public void onUpdate(final ItemStack stack, final World worldIn, final Entity entity, final int itemSlot, final boolean isSelected) {
-		// If this is the server, the entity is a player and the player's armour has been replaced,
-		if (!worldIn.isRemote && entity instanceof EntityPlayer && hasReplacedArmour(stack)) {
-			EntityPlayer player = (EntityPlayer) entity;
-			restoreArmour(stack, player); // Restore the player's armour
-			player.inventoryContainer.detectAndSendChanges(); // Sync the player's inventory with the client
+		// If this is the server, the entity is living and the entity's armour has been replaced,
+		if (!worldIn.isRemote && entity instanceof EntityLivingBase && hasReplacedArmour(stack)) {
+			// Get the entity's main inventory
+			final IItemHandler mainInventory = entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
+
+			// If this item is in their main inventory,
+			if (mainInventory != null && mainInventory.getStackInSlot(itemSlot) == stack) {
+				restoreArmour(stack, (EntityLivingBase) entity); // Restore the entity's armour
+			}
 		}
 	}
 

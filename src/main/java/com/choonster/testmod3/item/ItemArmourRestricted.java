@@ -6,10 +6,13 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 import java.util.List;
 
@@ -27,7 +30,7 @@ public class ItemArmourRestricted extends ItemArmourTestMod3 {
 	}
 
 	/**
-	 * Called every tick while the item is in a player's inventory (not while worn).
+	 * Called every tick while the item is in a player's inventory (including while worn).
 	 *
 	 * @param stack      The ItemStack of this item
 	 * @param worldIn    The entity's world
@@ -37,14 +40,16 @@ public class ItemArmourRestricted extends ItemArmourTestMod3 {
 	 */
 	@Override
 	public void onUpdate(final ItemStack stack, final World worldIn, final Entity entity, final int itemSlot, final boolean isSelected) {
-		// For some reason this doesn't sync properly if it's only run on the server, so we run it on both sides.
-		// It always seems to delete it from the client side and sync that to the server.
+		if (!worldIn.isRemote) { // If this is the server,
+			// Get the entity's main inventory
+			final IItemHandler mainInventory = entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
 
-		if (entity instanceof EntityPlayer) { // If the entity is a player,
-			final EntityPlayer player = (EntityPlayer) entity;
-			player.inventory.setInventorySlotContents(itemSlot, null); // Remove this item from their inventory
-			Logger.info("Restricted armour deleted from slot %d of %s's inventory", itemSlot, player);
-			player.inventoryContainer.detectAndSendChanges(); // Sync the player's inventory
+			// If this item is in their main inventory and it can be extracted.
+			if (mainInventory != null && mainInventory.getStackInSlot(itemSlot) == stack && mainInventory.extractItem(itemSlot, stack.stackSize, true) != null) {
+				mainInventory.extractItem(itemSlot, stack.stackSize, false); // Remove this item from their inventory
+
+				Logger.info("Restricted armour deleted from slot %d of %s's inventory", itemSlot, entity.getName());
+			}
 		}
 	}
 
