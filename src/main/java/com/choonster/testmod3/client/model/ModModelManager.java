@@ -129,6 +129,7 @@ public class ModModelManager {
 		registerItemModel(ModItems.PIG_SPAWNER_INFINITE, "minecraft:porkchop");
 		registerItemModel(ModItems.RESPAWNER, "minecraft:clock");
 		registerItemModel(ModItems.LOOT_TABLE_TEST, "minecraft:gold_ingot");
+		registerItemModel(ModItems.SADDLE, "minecraft:saddle");
 
 		// Then register items with default model names
 		ModItems.ITEMS.stream().filter(item -> !itemsRegistered.contains(item)).forEach(this::registerItemModel);

@@ -14,10 +14,12 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ModSoundEvents {
 	public static final SoundEvent RECORD_SOLARIS;
 	public static final SoundEvent NINE_MM_FIRE;
+	public static final SoundEvent ACTION_SADDLE;
 
 	static {
 		RECORD_SOLARIS = registerSound("record.solaris");
 		NINE_MM_FIRE = registerSound("9mm.fire");
+		ACTION_SADDLE = registerSound("action.saddle");
 	}
 
 	/**

@@ -14,5 +14,14 @@
 			"testmod3:items/gun/9mm_fire"
 		],
 		"subtitle": "subtitles.item.testmod3:gun.fire"
+	},
+	"action.saddle": {
+		"sounds": [
+			{
+				"name": "minecraft:entity.horse.saddle",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.action.testmod3:saddle"
 	}
 }

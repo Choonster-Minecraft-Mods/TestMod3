@@ -52,6 +52,7 @@ public class ModItems {
 	public static final ItemMaxHealthGetter MAX_HEALTH_GETTER;
 	public static final ItemSoundEffect GUN;
 	public static final ItemDimensionReplacement DIMENSION_REPLACEMENT;
+	public static final ItemSoundEffect SADDLE;
 
 	public static final ItemArmourReplacement REPLACEMENT_HELMET;
 	public static final ItemArmourRestricted REPLACEMENT_CHESTPLATE;
@@ -109,6 +110,8 @@ public class ModItems {
 		DIMENSION_REPLACEMENT = registerItem(new ItemDimensionReplacement("dimensionReplacement"));
 		DIMENSION_REPLACEMENT.addReplacement(DimensionType.NETHER, new ItemStack(Items.NETHER_STAR));
 		DIMENSION_REPLACEMENT.addReplacement(DimensionType.THE_END, new ItemStack(Items.ENDER_PEARL));
+
+		SADDLE = registerItem(new ItemSoundEffect("saddle", ModSoundEvents.ACTION_SADDLE));
 
 		TOOL_MATERIAL_GLOWSTONE.setRepairItem(new ItemStack(Items.GLOWSTONE_DUST));
 		ARMOUR_MATERIAL_REPLACEMENT.customCraftingMaterial = ARROW;

@@ -123,6 +123,7 @@ item.testmod3:maxHealthSetterItem.name=Max Health Setter
 item.testmod3:maxHealthGetterItem.name=Max Health Getter
 item.testmod3:gun.name=Gun
 item.testmod3:dimensionReplacement.name=Dimension Replacement
+item.testmod3:saddle.name=Mod Saddle
 
 item.testmod3:headReplacement.name=Armour Replacement Helmet
 item.testmod3:chestReplacement.name=Armour Replacement Chestplate
@@ -198,3 +199,4 @@ commands.testmod3:help.usage=/testmod3 help [page|command name]
 
 # Subtitles
 subtitles.item.testmod3:gun.fire=Gun fires
+subtitles.action.testmod3:saddle=Mod saddle equips
