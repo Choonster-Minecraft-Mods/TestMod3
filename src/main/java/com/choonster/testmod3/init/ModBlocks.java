@@ -45,6 +45,7 @@ public class ModBlocks {
 	public static final BlockTestMod3 NORMAL_BRIGHTNESS;
 	public static final BlockMaxHealthSetter MAX_HEALTH_SETTER;
 	public static final BlockMaxHealthGetter MAX_HEALTH_GETTER;
+	public static final BlockSmallCollisionTest SMALL_COLLISION_TEST;
 
 	public static final BlockPipeBasic PIPE_BASIC;
 	public static final BlockPipeFluid PIPE_FLUID;
@@ -74,6 +75,7 @@ public class ModBlocks {
 		NORMAL_BRIGHTNESS = registerBlock(new BlockTestMod3(Material.ROCK, "normalBrightness"));
 		MAX_HEALTH_SETTER = registerBlock(new BlockMaxHealthSetter());
 		MAX_HEALTH_GETTER = registerBlock(new BlockMaxHealthGetter());
+		SMALL_COLLISION_TEST = registerBlock(new BlockSmallCollisionTest());
 
 		PIPE_BASIC = registerBlock(new BlockPipeBasic("basicPipe"));
 		PIPE_FLUID = registerBlock(new BlockPipeFluid());

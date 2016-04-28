@@ -25,6 +25,7 @@ tile.testmod3:fullbright.name=Fullbright Block
 tile.testmod3:normalBrightness.name=Normal Brightness Block
 tile.testmod3:maxHealthSetter.name=Max Health Setter
 tile.testmod3:maxHealthGetter.name=Max Health Getter
+tile.testmod3:smallCollisionTest.name=Small Collision Test
 
 tile.testmod3:basicPipe.name=Basic Pipe
 tile.testmod3:fluidPipe.name=Fluid Pipe
