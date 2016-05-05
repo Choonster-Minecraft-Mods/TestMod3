@@ -25,11 +25,11 @@ public class ModCommands {
 	 * @param subCommandManager The sub-command manager of the command
 	 */
 	public static void registerSubCommands(ISubCommandManager subCommandManager) {
-		subCommandManager.registerCommand(new CommandTestMod3Help(subCommandManager));
-		subCommandManager.registerCommand(new CommandRotateVector());
-		subCommandManager.registerCommand(new CommandRunTests());
-		subCommandManager.registerCommand(new CommandMaxHealthAdd());
-		subCommandManager.registerCommand(new CommandMaxHealthSet());
-		subCommandManager.registerCommand(new CommandMaxHealthGet());
+		subCommandManager.registerSubCommand(new CommandTestMod3Help(subCommandManager));
+		subCommandManager.registerSubCommand(new CommandRotateVector());
+		subCommandManager.registerSubCommand(new CommandRunTests());
+		subCommandManager.registerSubCommand(new CommandMaxHealthAdd());
+		subCommandManager.registerSubCommand(new CommandMaxHealthSet());
+		subCommandManager.registerSubCommand(new CommandMaxHealthGet());
 	}
 }

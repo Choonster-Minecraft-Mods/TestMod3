@@ -189,5 +189,16 @@ public class CommandTestMod3 extends CommandBase {
 
 			return list;
 		}
+
+		/**
+		 * Register and return a sub-command.
+		 *
+		 * @param subCommand The sub-command
+		 * @return The sub-command
+		 */
+		@Override
+		public ICommand registerSubCommand(ICommand subCommand) {
+			return registerCommand(subCommand);
+		}
 	}
 }

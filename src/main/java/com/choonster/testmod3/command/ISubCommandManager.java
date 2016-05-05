@@ -15,5 +15,5 @@ public interface ISubCommandManager extends ICommandManager {
 	 * @param subCommand The sub-command
 	 * @return The sub-command
 	 */
-	ICommand registerCommand(ICommand subCommand);
+	ICommand registerSubCommand(ICommand subCommand);
 }
