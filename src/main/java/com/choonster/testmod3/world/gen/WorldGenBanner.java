@@ -70,7 +70,7 @@ public class WorldGenBanner implements IWorldGenerator {
 	private void generateBanner(World world, BlockPos pos) {
 		final BlockPos newPos = world.getTopSolidOrLiquidBlock(pos);
 
-		world.setBlockState(pos, Blocks.STANDING_BANNER.getDefaultState());
+		world.setBlockState(newPos, Blocks.STANDING_BANNER.getDefaultState());
 
 		final TileEntityBanner tileEntityBanner = (TileEntityBanner) world.getTileEntity(newPos);
 		tileEntityBanner.setItemValues(bannerStack);
