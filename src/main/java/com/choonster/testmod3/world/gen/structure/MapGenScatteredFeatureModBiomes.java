@@ -89,27 +89,27 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 
 			this.components.clear();
 
-			BiomeGenBase biomegenbase = worldIn.getBiomeGenForCoords(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
+			final BiomeGenBase biomegenbase = worldIn.getBiomeGenForCoords(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
 
-			List<WeightedRandomScatteredFeature> possibleFeatures = new ArrayList<>();
+			final List<WeightedRandomScatteredFeature> possibleFeatures = new ArrayList<>();
 
 			if (BiomeDictionary.isBiomeOfType(biomegenbase, BiomeDictionary.Type.SANDY)) {
-				ComponentScatteredFeaturePieces.DesertPyramid desertpyramid = new ComponentScatteredFeaturePieces.DesertPyramid(random, chunkX * 16, chunkZ * 16);
-				possibleFeatures.add(new WeightedRandomScatteredFeature(desertpyramid, 100));
+				final ComponentScatteredFeaturePieces.DesertPyramid desertPyramid = new ComponentScatteredFeaturePieces.DesertPyramid(random, chunkX * 16, chunkZ * 16);
+				possibleFeatures.add(new WeightedRandomScatteredFeature(desertPyramid, 100));
 			}
 
 			if (BiomeDictionary.isBiomeOfType(biomegenbase, BiomeDictionary.Type.JUNGLE)) {
-				ComponentScatteredFeaturePieces.JunglePyramid junglepyramid = new ComponentScatteredFeaturePieces.JunglePyramid(random, chunkX * 16, chunkZ * 16);
-				possibleFeatures.add(new WeightedRandomScatteredFeature(junglepyramid, 100));
+				final ComponentScatteredFeaturePieces.JunglePyramid junglePyramid = new ComponentScatteredFeaturePieces.JunglePyramid(random, chunkX * 16, chunkZ * 16);
+				possibleFeatures.add(new WeightedRandomScatteredFeature(junglePyramid, 100));
 			}
 
 			if (BiomeDictionary.isBiomeOfType(biomegenbase, BiomeDictionary.Type.SWAMP)) {
-				ComponentScatteredFeaturePieces.SwampHut swamphut = new ComponentScatteredFeaturePieces.SwampHut(random, chunkX * 16, chunkZ * 16);
-				possibleFeatures.add(new WeightedRandomScatteredFeature(swamphut, 100));
+				final ComponentScatteredFeaturePieces.SwampHut swampHut = new ComponentScatteredFeaturePieces.SwampHut(random, chunkX * 16, chunkZ * 16);
+				possibleFeatures.add(new WeightedRandomScatteredFeature(swampHut, 100));
 			}
 
 			if (!possibleFeatures.isEmpty()) {
-				WeightedRandomScatteredFeature featureToGenerate = WeightedRandom.getRandomItem(random, possibleFeatures);
+				final WeightedRandomScatteredFeature featureToGenerate = WeightedRandom.getRandomItem(random, possibleFeatures);
 				this.components.add(featureToGenerate.feature);
 				Logger.info("Scattered feature %s at %d, %d", featureToGenerate.feature.toString(), chunkX * 16, chunkZ * 16);
 			}
