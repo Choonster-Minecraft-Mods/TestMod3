@@ -40,9 +40,7 @@ public class SwordUpgrades {
 		for (final EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
 			originalStack.getAttributeModifiers(slot)
 					.entries()
-					.forEach(entry -> {
-						outputStack.addAttributeModifier(entry.getKey(), entry.getValue(), slot);
-					});
+					.forEach(entry -> outputStack.addAttributeModifier(entry.getKey(), entry.getValue(), slot));
 		}
 
 		// Create the attack damage modifier
