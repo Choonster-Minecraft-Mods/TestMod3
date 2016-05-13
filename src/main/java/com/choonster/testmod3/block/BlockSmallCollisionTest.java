@@ -25,9 +25,9 @@ public class BlockSmallCollisionTest extends BlockTestMod3 {
 	private static final AxisAlignedBB BOUNDING_BOX;
 
 	static {
-		final float offset = 0.0011f;
-		final float min = 0 + offset;
-		final float max = 1 - offset;
+		final double offset = 0.0011;
+		final double min = 0 + offset;
+		final double max = 1 - offset;
 		BOUNDING_BOX = new AxisAlignedBB(min, min, min, max, max, max);
 	}
 
