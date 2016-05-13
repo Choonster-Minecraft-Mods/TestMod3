@@ -9,7 +9,7 @@ import com.choonster.testmod3.api.capability.lastusetime.ILastUseTime;
  */
 public class LastUseTime implements ILastUseTime {
 	private long lastUseTime;
-	private boolean automaticUpdates;
+	private final boolean automaticUpdates;
 
 	public LastUseTime(boolean automaticUpdates) {
 		this.automaticUpdates = automaticUpdates;
