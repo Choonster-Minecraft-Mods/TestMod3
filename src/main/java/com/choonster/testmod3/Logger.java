@@ -31,7 +31,7 @@ public class Logger {
 	}
 
 	public static void fatal(Marker marker, String format, Object... data) {
-		log(Level.FATAL, format, data);
+		log(Level.FATAL, marker, format, data);
 	}
 
 	public static void fatal(Throwable throwable, String format,
