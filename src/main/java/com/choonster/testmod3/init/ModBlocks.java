@@ -46,6 +46,7 @@ public class ModBlocks {
 	public static final BlockMaxHealthSetter MAX_HEALTH_SETTER;
 	public static final BlockMaxHealthGetter MAX_HEALTH_GETTER;
 	public static final BlockSmallCollisionTest SMALL_COLLISION_TEST;
+	public static final BlockModChest CHEST;
 
 	public static final BlockPipeBasic PIPE_BASIC;
 	public static final BlockPipeFluid PIPE_FLUID;
@@ -76,6 +77,7 @@ public class ModBlocks {
 		MAX_HEALTH_SETTER = registerBlock(new BlockMaxHealthSetter());
 		MAX_HEALTH_GETTER = registerBlock(new BlockMaxHealthGetter());
 		SMALL_COLLISION_TEST = registerBlock(new BlockSmallCollisionTest());
+		CHEST = registerBlock(new BlockModChest());
 
 		PIPE_BASIC = registerBlock(new BlockPipeBasic("basicPipe"));
 		PIPE_FLUID = registerBlock(new BlockPipeFluid());
@@ -143,6 +145,7 @@ public class ModBlocks {
 		registerTileEntity(TileEntityColoredRotatable.class);
 		registerTileEntity(TileEntityColoredMultiRotatable.class);
 		registerTileEntity(TileEntityPotionEffect.class);
+		registerTileEntity(TileEntityModChest.class);
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> tileEntityClass) {

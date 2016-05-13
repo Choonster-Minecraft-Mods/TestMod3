@@ -1,5 +1,7 @@
 package com.choonster.testmod3.client.gui;
 
+import com.choonster.testmod3.client.gui.inventory.GuiModChest;
+import com.choonster.testmod3.tileentity.TileEntityModChest;
 import com.choonster.testmod3.tileentity.TileEntitySurvivalCommandBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -7,8 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
-import static com.choonster.testmod3.client.gui.GuiIDs.SURVIVAL_COMMAND_BLOCK;
-import static com.choonster.testmod3.client.gui.GuiIDs.SURVIVAL_COMMAND_BLOCK_MINECART;
+import static com.choonster.testmod3.client.gui.GuiIDs.*;
 
 public class GuiHandler implements IGuiHandler {
 	@Override
@@ -19,6 +20,9 @@ public class GuiHandler implements IGuiHandler {
 			case SURVIVAL_COMMAND_BLOCK:
 			case SURVIVAL_COMMAND_BLOCK_MINECART:
 				return null;
+
+			case MOD_CHEST:
+				return ((TileEntityModChest) tileEntity).createContainer(player);
 
 			default:
 				return null;
@@ -36,6 +40,9 @@ public class GuiHandler implements IGuiHandler {
 			case SURVIVAL_COMMAND_BLOCK_MINECART:
 				// Get SurvivalCommandBlockLogic from Minecart using x as entityID (NYI)
 				return null;
+
+			case MOD_CHEST:
+				return new GuiModChest(((TileEntityModChest) tileEntity).createContainer(player));
 
 			default:
 				return null;

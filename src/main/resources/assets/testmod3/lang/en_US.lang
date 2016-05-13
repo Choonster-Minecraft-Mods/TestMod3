@@ -26,6 +26,7 @@ tile.testmod3:normalBrightness.name=Normal Brightness Block
 tile.testmod3:maxHealthSetter.name=Max Health Setter
 tile.testmod3:maxHealthGetter.name=Max Health Getter
 tile.testmod3:smallCollisionTest.name=Small Collision Test
+tile.testmod3:chest.name=Mod Chest
 
 tile.testmod3:basicPipe.name=Basic Pipe
 tile.testmod3:fluidPipe.name=Fluid Pipe
@@ -201,3 +202,6 @@ commands.testmod3:help.usage=/testmod3 help [page|command name]
 # Subtitles
 subtitles.item.testmod3:gun.fire=Gun fires
 subtitles.action.testmod3:saddle=Mod saddle equips
+
+# Containers
+container.testmod3:chest=Mod Chest

@@ -1,0 +1,24 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "testmod3:chest",
+		"textures": {
+			"chest": "testmod3:blocks/chest/wood",
+			"particle": "minecraft:blocks/planks_oak"
+		}
+	},
+	"variants": {
+		"facing": {
+			"north": { },
+			"south": {
+				"y": 180
+			},
+			"east": {
+				"y": 90
+			},
+			"west": {
+				"y": 270
+			}
+		}
+	}
+}
