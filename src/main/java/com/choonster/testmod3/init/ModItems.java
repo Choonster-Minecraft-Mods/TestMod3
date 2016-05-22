@@ -54,6 +54,8 @@ public class ModItems {
 	public static final ItemSoundEffect GUN;
 	public static final ItemDimensionReplacement DIMENSION_REPLACEMENT;
 	public static final ItemSoundEffect SADDLE;
+	public static final ItemSlowSword SLOW_SWORD_WOOD;
+	public static final ItemSlowSword SLOW_SWORD_DIAMOND;
 
 	public static final ItemArmourReplacement REPLACEMENT_HELMET;
 	public static final ItemArmourRestricted REPLACEMENT_CHESTPLATE;
@@ -113,6 +115,8 @@ public class ModItems {
 		DIMENSION_REPLACEMENT.addReplacement(DimensionType.THE_END, new ItemStack(Items.ENDER_PEARL));
 
 		SADDLE = registerItem(new ItemSoundEffect("saddle", ModSoundEvents.ACTION_SADDLE));
+		SLOW_SWORD_WOOD = registerItem(new ItemSlowSword(Item.ToolMaterial.WOOD, "slowSwordWood"));
+		SLOW_SWORD_DIAMOND = registerItem(new ItemSlowSword(Item.ToolMaterial.DIAMOND, "slowSwordDiamond"));
 
 		TOOL_MATERIAL_GLOWSTONE.setRepairItem(new ItemStack(Items.GLOWSTONE_DUST));
 		ARMOUR_MATERIAL_REPLACEMENT.customCraftingMaterial = ARROW;

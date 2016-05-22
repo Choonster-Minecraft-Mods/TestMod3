@@ -131,6 +131,8 @@ public class ModModelManager {
 		registerItemModel(ModItems.RESPAWNER, "minecraft:clock");
 		registerItemModel(ModItems.LOOT_TABLE_TEST, "minecraft:gold_ingot");
 		registerItemModel(ModItems.SADDLE, "minecraft:saddle");
+		registerItemModel(ModItems.SLOW_SWORD_WOOD, "minecraft:wooden_sword");
+		registerItemModel(ModItems.SLOW_SWORD_DIAMOND, "minecraft:diamond_sword");
 
 		// Then register items with default model names
 		ModItems.ITEMS.stream().filter(item -> !itemsRegistered.contains(item)).forEach(this::registerItemModel);
