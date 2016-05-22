@@ -3,11 +3,12 @@ package com.choonster.testmod3.tileentity;
 import com.choonster.testmod3.fluids.FluidTankWithTile;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
+
+import javax.annotation.Nullable;
 
 /**
  * A tank that holds 10 buckets of fluid.
@@ -17,6 +18,7 @@ import net.minecraftforge.fluids.*;
  * @author Choonster, CrazyPants, tterag1098, King Lemming
  */
 public class TileEntityFluidTank extends TileEntity implements IFluidHandler {
+	@SuppressWarnings("deprecation")
 	private static final int CAPACITY = 10 * FluidContainerRegistry.BUCKET_VOLUME;
 
 	protected FluidTank tank = new FluidTankWithTile(this, CAPACITY);
@@ -28,9 +30,10 @@ public class TileEntityFluidTank extends TileEntity implements IFluidHandler {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		writeTankData(compound);
+		return compound;
 	}
 
 	public void readTankData(NBTTagCompound compound) {
@@ -52,10 +55,14 @@ public class TileEntityFluidTank extends TileEntity implements IFluidHandler {
 	}
 
 	@Override
-	public Packet getDescriptionPacket() {
-		final NBTTagCompound tagCompound = new NBTTagCompound();
-		writeToNBT(tagCompound);
-		return new SPacketUpdateTileEntity(getPos(), getBlockMetadata(), tagCompound);
+	public NBTTagCompound getUpdateTag() {
+		return writeToNBT(new NBTTagCompound());
+	}
+
+	@Nullable
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(getPos(), getBlockMetadata(), writeToNBT(new NBTTagCompound()));
 	}
 
 	@Override

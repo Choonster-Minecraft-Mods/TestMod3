@@ -40,6 +40,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		super(material, slabGroup, colourGroup);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public MapColor getMapColor(IBlockState state) {
 		return state.getValue(getVariantProperty()).getMapColor();

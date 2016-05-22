@@ -23,6 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -49,6 +50,7 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 		return new BlockStateContainer(this, FACING);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return BOUNDING_BOX;
@@ -80,16 +82,19 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
@@ -143,6 +148,7 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 	 * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
 	 * blockstate.
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rotation) {
 		return state.withProperty(FACING, rotation.rotate(state.getValue(FACING)));
@@ -152,6 +158,7 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 	 * Returns the blockstate with the given mirror of the passed blockstate. If inapplicable, returns the passed
 	 * blockstate.
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirror) {
 		return state.withRotation(mirror.toRotation(state.getValue(FACING)));
@@ -164,7 +171,7 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 	}
 
 	@Override
-	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack tool) {
+	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack tool) {
 		super.harvestBlock(world, player, pos, state, te, tool);
 		world.setBlockToAir(pos);
 	}

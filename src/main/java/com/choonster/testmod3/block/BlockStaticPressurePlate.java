@@ -24,6 +24,7 @@ public abstract class BlockStaticPressurePlate extends BlockTestMod3 {
 		fullBlock = false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return BB;
@@ -39,23 +40,26 @@ public abstract class BlockStaticPressurePlate extends BlockTestMod3 {
 		return canBePlacedOn(worldIn, pos.down());
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
 		if (!this.canBePlacedOn(worldIn, pos.down())) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
 			worldIn.setBlockToAir(pos);
 		}
 	}
 
-	private boolean canBePlacedOn(World worldIn, BlockPos pos) {
-		return worldIn.getBlockState(pos).isSideSolid(worldIn, pos, EnumFacing.UP) || worldIn.getBlockState(pos).getBlock() instanceof BlockFence;
+	private boolean canBePlacedOn(World world, BlockPos pos) {
+		return world.getBlockState(pos).isSideSolid(world, pos, EnumFacing.UP) || world.getBlockState(pos).getBlock() instanceof BlockFence;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		return NULL_AABB;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public EnumPushReaction getMobilityFlag(IBlockState state) {
 		return EnumPushReaction.DESTROY;

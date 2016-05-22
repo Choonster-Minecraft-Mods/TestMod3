@@ -4,7 +4,7 @@ import com.choonster.testmod3.Logger;
 import net.minecraft.block.BlockSand;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenDesert;
+import net.minecraft.world.biome.BiomeDesert;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 import java.util.Random;
@@ -14,10 +14,10 @@ import java.util.Random;
  *
  * @author Choonster
  */
-public class BiomeGenDesertTest extends BiomeGenDesert {
+public class BiomeDesertTest extends BiomeDesert {
 	private boolean logged = false;
 
-	public BiomeGenDesertTest(BiomeProperties properties) {
+	public BiomeDesertTest(BiomeProperties properties) {
 		super(properties);
 		topBlock = Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
 		fillerBlock = Blocks.BRICK_BLOCK.getDefaultState();

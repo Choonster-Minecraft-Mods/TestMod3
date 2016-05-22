@@ -129,12 +129,12 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 
-		final NBTTagCompound survivalCommandBlockLogicTag = new NBTTagCompound();
-		getCommandBlockLogic().writeDataToNBT(survivalCommandBlockLogicTag);
-		compound.setTag("SurvivalCommandBlockLogic", survivalCommandBlockLogicTag);
+		compound.setTag("SurvivalCommandBlockLogic", getCommandBlockLogic().writeToNBT(new NBTTagCompound()));
+
+		return compound;
 	}
 
 	@Override

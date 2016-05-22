@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 /**
@@ -46,6 +47,7 @@ public class BlockRotatableLamp extends BlockTestMod3 {
 		return lit << 3 | facingIndex;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		final int facingIndex = meta & 7; // Extract the facing index (lowest three bits)
@@ -79,7 +81,7 @@ public class BlockRotatableLamp extends BlockTestMod3 {
 	}
 
 	@Override
-	public int getLightValue(IBlockState state) {
+	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return state.getValue(LIT) ? 15 : 0;
 	}
 }

@@ -35,6 +35,7 @@ public class BlockSmallCollisionTest extends BlockTestMod3 {
 		super(Material.IRON, "smallCollisionTest");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		return BOUNDING_BOX;

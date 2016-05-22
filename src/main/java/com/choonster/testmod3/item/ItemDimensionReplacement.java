@@ -1,11 +1,11 @@
 package com.choonster.testmod3.item;
 
 import com.choonster.testmod3.util.ItemStackUtils;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -84,9 +84,9 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 		final ItemStack replacement = getReplacement(playerIn.getEntityWorld());
 
 		if (replacement != null) {
-			tooltip.add(I18n.translateToLocalFormatted("item.testmod3:dimensionReplacement.replacement.desc", replacement.getDisplayName()));
+			tooltip.add(I18n.format("item.testmod3:dimensionReplacement.replacement.desc", replacement.getDisplayName()));
 		} else {
-			tooltip.add(I18n.translateToLocal("item.testmod3:dimensionReplacement.noReplacement.desc"));
+			tooltip.add(I18n.format("item.testmod3:dimensionReplacement.noReplacement.desc"));
 		}
 	}
 }

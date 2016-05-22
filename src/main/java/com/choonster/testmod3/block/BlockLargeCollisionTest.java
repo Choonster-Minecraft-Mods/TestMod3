@@ -25,6 +25,7 @@ public class BlockLargeCollisionTest extends Block {
 		BlockTestMod3.setBlockName(this, "largeCollisionTest");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return BOUNDING_BOX;

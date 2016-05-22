@@ -26,6 +26,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.annotation.Nullable;
 import javax.vecmath.Matrix3d;
 import java.util.List;
 import java.util.Map;
@@ -115,6 +116,7 @@ public class BlockPlane extends BlockTestMod3 {
 		return new BlockStateContainer(this, HORIZONTAL_ROTATION, VERTICAL_ROTATION);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		final EnumFacing horizontalRotation = EnumFacing.getHorizontal(meta & 3);
@@ -173,14 +175,16 @@ public class BlockPlane extends BlockTestMod3 {
 		return BlockRenderLayer.CUTOUT;
 	}
 
+	@SuppressWarnings("deprecation")
 	@SideOnly(Side.CLIENT)
 	@Override
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity p_185477_6_) {
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, @Nullable Entity entity) {
 		final Pair<EnumFacing, EnumVerticalRotation> key = Pair.of(state.getValue(HORIZONTAL_ROTATION), state.getValue(VERTICAL_ROTATION));
 		final Pair<AxisAlignedBB, AxisAlignedBB> boundingBoxes = ROTATED_BOUNDING_BOXES.get(key);
 

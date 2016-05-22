@@ -20,6 +20,7 @@ public class BlockPipeBasic extends BlockPipeBase {
 		return new BlockStateContainer(this, CONNECTED_PROPERTIES.toArray(new IProperty[CONNECTED_PROPERTIES.size()]));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState();

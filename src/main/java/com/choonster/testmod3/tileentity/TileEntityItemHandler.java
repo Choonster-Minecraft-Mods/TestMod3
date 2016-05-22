@@ -42,6 +42,8 @@ public abstract class TileEntityItemHandler<INVENTORY extends IItemHandler & INB
 
 	/**
 	 * Get the inventory contents to drop.
+	 *
+	 * @return The drops list
 	 */
 	public List<ItemStack> getDrops() {
 		return InventoryUtils.dropItemHandlerContents(inventory, getWorld().rand);
@@ -54,9 +56,10 @@ public abstract class TileEntityItemHandler<INVENTORY extends IItemHandler & INB
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setTag("ItemHandler", inventory.serializeNBT());
+		return compound;
 	}
 
 	@Override

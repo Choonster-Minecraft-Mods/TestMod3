@@ -1,11 +1,11 @@
 package com.choonster.testmod3.item;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -38,9 +38,9 @@ public class ItemSwapTest extends ItemTestMod3 {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 
 		if (hasOtherItem()) {
-			tooltip.add(I18n.translateToLocalFormatted("item.testmod3:swapTest.withItem.desc", otherItem.getDisplayName()));
+			tooltip.add(I18n.format("item.testmod3:swapTest.withItem.desc", otherItem.getDisplayName()));
 		} else {
-			tooltip.add(I18n.translateToLocal("item.testmod3:swapTest.withoutItem.desc"));
+			tooltip.add(I18n.format("item.testmod3:swapTest.withoutItem.desc"));
 		}
 	}
 

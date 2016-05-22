@@ -60,6 +60,7 @@ public class ModColourManager {
 	private static void registerItemColourHandlers(final BlockColors blockColors, final ItemColors itemColors) {
 		// Use the Block's colour handler for an ItemBlock
 		final IItemColor itemBlockColourHandler = (stack, tintIndex) -> {
+			@SuppressWarnings("deprecation")
 			final IBlockState state = ((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata());
 			return blockColors.colorMultiplier(state, null, null, tintIndex);
 		};

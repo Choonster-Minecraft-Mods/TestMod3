@@ -120,11 +120,13 @@ public class BlockFluidTank extends BlockTestMod3 {
 		return result;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean isFullyOpaque(IBlockState state) {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@SideOnly(Side.CLIENT)
 	@Override
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {

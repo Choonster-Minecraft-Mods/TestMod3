@@ -65,6 +65,7 @@ public class BlockColoredRotatable extends BlockColored {
 		setFacing(worldIn, pos, BlockPistonBase.getFacingFromEntity(pos, placer));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
 		return state.withProperty(FACING, getFacing(worldIn, pos));

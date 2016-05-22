@@ -15,6 +15,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -58,11 +59,13 @@ public abstract class BlockPipeBase extends BlockTestMod3 {
 		super(material, blockName);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean isFullCube(IBlockState state) {
 		return false;
@@ -102,6 +105,7 @@ public abstract class BlockPipeBase extends BlockTestMod3 {
 		return neighbourIsValidForThis && thisIsValidForNeighbour;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		for (final EnumFacing facing : EnumFacing.VALUES) {
@@ -115,8 +119,9 @@ public abstract class BlockPipeBase extends BlockTestMod3 {
 		return state.getValue(CONNECTED_PROPERTIES.get(facing.getIndex()));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, @Nullable Entity collidingEntity) {
 		final AxisAlignedBB bb = new AxisAlignedBB(PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MAX_POS, PIPE_MAX_POS, PIPE_MAX_POS);
 		addCollisionBoxToList(pos, mask, list, bb);
 

@@ -15,6 +15,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
@@ -39,6 +40,7 @@ public class BlockVariants extends BlockTestMod3 {
 		return new BlockStateContainer(this, VARIANT);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(VARIANT, EnumType.byMetadata(meta));
@@ -55,7 +57,7 @@ public class BlockVariants extends BlockTestMod3 {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		return worldIn.setBlockState(pos, state.cycleProperty(VARIANT));
 	}
 

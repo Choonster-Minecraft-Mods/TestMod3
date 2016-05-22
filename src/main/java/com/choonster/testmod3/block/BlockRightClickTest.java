@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
@@ -42,6 +43,7 @@ public class BlockRightClickTest extends BlockGlass {
 		return new BlockStateContainer(this, HAS_ENDER_EYE);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(HAS_ENDER_EYE, meta > 0);
@@ -53,7 +55,7 @@ public class BlockRightClickTest extends BlockGlass {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (heldItem != null && heldItem.getItem() == Items.ENDER_EYE && !state.getValue(HAS_ENDER_EYE)) {
 			if (!playerIn.capabilities.isCreativeMode) {
 				heldItem.stackSize--;

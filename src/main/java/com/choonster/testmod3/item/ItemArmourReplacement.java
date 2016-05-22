@@ -5,6 +5,7 @@ import com.choonster.testmod3.util.Constants;
 import com.choonster.testmod3.util.InventoryUtils;
 import com.choonster.testmod3.util.ItemStackUtils;
 import com.google.common.collect.ImmutableSet;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -213,7 +213,7 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(final ItemStack stack, final EntityPlayer playerIn, final List<String> tooltip, final boolean advanced) {
-		tooltip.add(I18n.translateToLocal("item.testmod3:armourReplacement.equip.desc"));
-		tooltip.add(I18n.translateToLocal("item.testmod3:armourReplacement.unequip.desc"));
+		tooltip.add(I18n.format("item.testmod3:armourReplacement.equip.desc"));
+		tooltip.add(I18n.format("item.testmod3:armourReplacement.unequip.desc"));
 	}
 }

@@ -11,6 +11,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -60,7 +61,7 @@ public class ModItems {
 	public static final ItemArmourRestricted REPLACEMENT_BOOTS;
 
 	public static final Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10);
-	public static final ItemArmor.ArmorMaterial ARMOUR_MATERIAL_REPLACEMENT = EnumHelper.addArmorMaterial(Constants.RESOURCE_PREFIX + "replacement", Constants.RESOURCE_PREFIX + "replacement", 15, new int[]{2, 5, 4, 1}, 12, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN);
+	public static final ItemArmor.ArmorMaterial ARMOUR_MATERIAL_REPLACEMENT = addArmorMaterial(Constants.RESOURCE_PREFIX + "replacement", Constants.RESOURCE_PREFIX + "replacement", 15, new int[]{1, 4, 5, 2}, 12, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0);
 
 	static {
 		WOODEN_AXE = registerItem(new ItemCuttingAxe(Item.ToolMaterial.WOOD, "woodenAxe"));
@@ -133,5 +134,23 @@ public class ModItems {
 		ITEMS.add(item);
 
 		return item;
+	}
+
+	/**
+	 * Add an {@link ItemArmor.ArmorMaterial}.
+	 * <p>
+	 * Temporary method until {@link EnumHelper#addArmorMaterial} is fixed.
+	 *
+	 * @param enumName         The name of the enum value
+	 * @param textureName      The name of the armor texture to use
+	 * @param durability       The durability
+	 * @param reductionAmounts The damage reduction of each armour piece
+	 * @param enchantability   The enchantability
+	 * @param soundOnEquip     The sound to play when equipped
+	 * @param toughness        The armour's toughness
+	 * @return The new ArmorMaterial
+	 */
+	private static ItemArmor.ArmorMaterial addArmorMaterial(String enumName, String textureName, int durability, int[] reductionAmounts, int enchantability, SoundEvent soundOnEquip, float toughness) {
+		return EnumHelper.addEnum(ItemArmor.ArmorMaterial.class, enumName, new Class<?>[]{String.class, int.class, int[].class, int.class, SoundEvent.class, float.class}, textureName, durability, reductionAmounts, enchantability, soundOnEquip, toughness);
 	}
 }

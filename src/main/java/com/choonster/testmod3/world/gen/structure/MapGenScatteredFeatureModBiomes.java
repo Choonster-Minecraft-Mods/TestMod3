@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.ComponentScatteredFeaturePieces;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.StructureComponent;
@@ -51,13 +51,11 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 		j1 += random.nextInt(maxDistanceBetweenScatteredFeatures - minDistanceBetweenScatteredFeatures);
 
 		if (chunkX == i1 && chunkZ == j1) {
-			final BiomeGenBase biomegenbase = this.worldObj.getBiomeProvider().getBiomeGenerator(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
+			final Biome biome = this.worldObj.getBiomeProvider().getBiomeGenerator(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
 
-			if (biomegenbase != null) {
-				for (final BiomeDictionary.Type type : biomeTypes) {
-					if (BiomeDictionary.isBiomeOfType(biomegenbase, type)) {
-						return true;
-					}
+			for (final BiomeDictionary.Type type : biomeTypes) {
+				if (BiomeDictionary.isBiomeOfType(biome, type)) {
+					return true;
 				}
 			}
 		}
@@ -89,21 +87,21 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 
 			this.components.clear();
 
-			final BiomeGenBase biomegenbase = worldIn.getBiomeGenForCoords(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
+			final Biome biome = worldIn.getBiomeGenForCoords(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
 
 			final List<WeightedRandomScatteredFeature> possibleFeatures = new ArrayList<>();
 
-			if (BiomeDictionary.isBiomeOfType(biomegenbase, BiomeDictionary.Type.SANDY)) {
+			if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.SANDY)) {
 				final ComponentScatteredFeaturePieces.DesertPyramid desertPyramid = new ComponentScatteredFeaturePieces.DesertPyramid(random, chunkX * 16, chunkZ * 16);
 				possibleFeatures.add(new WeightedRandomScatteredFeature(desertPyramid, 100));
 			}
 
-			if (BiomeDictionary.isBiomeOfType(biomegenbase, BiomeDictionary.Type.JUNGLE)) {
+			if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.JUNGLE)) {
 				final ComponentScatteredFeaturePieces.JunglePyramid junglePyramid = new ComponentScatteredFeaturePieces.JunglePyramid(random, chunkX * 16, chunkZ * 16);
 				possibleFeatures.add(new WeightedRandomScatteredFeature(junglePyramid, 100));
 			}
 
-			if (BiomeDictionary.isBiomeOfType(biomegenbase, BiomeDictionary.Type.SWAMP)) {
+			if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.SWAMP)) {
 				final ComponentScatteredFeaturePieces.SwampHut swampHut = new ComponentScatteredFeaturePieces.SwampHut(random, chunkX * 16, chunkZ * 16);
 				possibleFeatures.add(new WeightedRandomScatteredFeature(swampHut, 100));
 			}

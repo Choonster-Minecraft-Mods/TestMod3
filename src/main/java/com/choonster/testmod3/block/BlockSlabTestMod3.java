@@ -113,6 +113,7 @@ public abstract class BlockSlabTestMod3<
 				.collect(Collectors.toList()));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		final VARIANT variant = getVariant(meta & 7);

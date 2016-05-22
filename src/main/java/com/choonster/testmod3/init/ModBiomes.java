@@ -1,9 +1,9 @@
 package com.choonster.testmod3.init;
 
 import com.choonster.testmod3.TestMod3;
-import com.choonster.testmod3.world.biome.BiomeGenDesertTest;
+import com.choonster.testmod3.world.biome.BiomeDesertTest;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -12,10 +12,10 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @SuppressWarnings("WeakerAccess")
 public class ModBiomes {
-	public static final BiomeGenDesertTest DESERT_TEST;
+	public static final BiomeDesertTest DESERT_TEST;
 
 	static {
-		DESERT_TEST = registerBiome(new BiomeGenDesertTest(new BiomeGenBase.BiomeProperties("TestMod3 Desert Test")
+		DESERT_TEST = registerBiome(new BiomeDesertTest(new Biome.BiomeProperties("TestMod3 Desert Test")
 				.setBaseHeight(0.125F)
 				.setHeightVariation(0.05F)
 				.setTemperature(2.0F)
@@ -28,7 +28,7 @@ public class ModBiomes {
 		// Dummy method to make sure the static initialiser runs
 	}
 
-	private static <T extends BiomeGenBase> T registerBiome(T biome, ResourceLocation biomeName, BiomeManager.BiomeType biomeType, int weight, BiomeDictionary.Type... types) {
+	private static <T extends Biome> T registerBiome(T biome, ResourceLocation biomeName, BiomeManager.BiomeType biomeType, int weight, BiomeDictionary.Type... types) {
 		GameRegistry.register(biome.setRegistryName(biomeName));
 		BiomeDictionary.registerBiomeType(biome, types);
 		BiomeManager.addBiome(biomeType, new BiomeManager.BiomeEntry(biome, weight));

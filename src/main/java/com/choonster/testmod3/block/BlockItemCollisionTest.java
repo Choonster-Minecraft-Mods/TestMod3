@@ -44,6 +44,7 @@ public class BlockItemCollisionTest extends BlockTestMod3 {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return BOUNDING_BOX;

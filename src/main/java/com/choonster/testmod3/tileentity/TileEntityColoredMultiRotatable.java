@@ -28,8 +28,9 @@ public class TileEntityColoredMultiRotatable extends TileEntityColoredRotatable 
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setInteger("faceRotation", faceRotation.ordinal());
+		return compound;
 	}
 }

@@ -35,26 +35,35 @@ public class ItemRespawner extends ItemTestMod3 {
 			}
 
 			final BlockPos bedLocation = playerMP.getBedLocation(dimension);
-			final WorldServer worldServer = worldIn.getMinecraftServer().worldServerForDimension(dimension);
+			final WorldServer worldServer = worldIn.getMinecraftServer() != null ? worldIn.getMinecraftServer().worldServerForDimension(dimension) : null;
+
+			if (worldServer == null) {
+				return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
+			}
 
 			if (bedLocation == null) {
 				playerMP.addChatComponentMessage(new TextComponentTranslation("message.testmod3:respawner.noSpawnLocation"));
 				return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
-			} else {
-				final boolean spawnForced = playerMP.isSpawnForced(dimension);
-				final BlockPos spawnLocation = EntityPlayer.getBedSpawnLocation(worldServer, bedLocation, spawnForced);
-				playerMP.setLocationAndAngles(spawnLocation.getX() + 0.5, spawnLocation.getY() + 0.1, spawnLocation.getZ() + 0.5, 0, 0);
-				playerMP.playerNetServerHandler.setPlayerLocation(playerMP.posX, playerMP.posY, playerMP.posZ, playerMP.rotationYaw, playerMP.rotationPitch);
-				worldServer.getChunkProvider().loadChunk((int) playerMP.posX >> 4, (int) playerMP.posZ >> 4);
-
-				while (!worldServer.getCollisionBoxes(playerMP, playerMP.getEntityBoundingBox()).isEmpty() && playerMP.posY < 256.0D) {
-					playerMP.setPosition(playerMP.posX, playerMP.posY + 1.0D, playerMP.posZ);
-				}
-
-				playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:respawner.teleporting", spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ(), dimension));
-
-				return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
 			}
+
+			final boolean spawnForced = playerMP.isSpawnForced(dimension);
+			final BlockPos spawnLocation = EntityPlayer.getBedSpawnLocation(worldServer, bedLocation, spawnForced);
+
+			if (spawnLocation == null) {
+				return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
+			}
+
+			playerMP.setLocationAndAngles(spawnLocation.getX() + 0.5, spawnLocation.getY() + 0.1, spawnLocation.getZ() + 0.5, 0, 0);
+			playerMP.connection.setPlayerLocation(playerMP.posX, playerMP.posY, playerMP.posZ, playerMP.rotationYaw, playerMP.rotationPitch);
+			worldServer.getChunkProvider().loadChunk((int) playerMP.posX >> 4, (int) playerMP.posZ >> 4);
+
+			while (!worldServer.getCollisionBoxes(playerMP, playerMP.getEntityBoundingBox()).isEmpty() && playerMP.posY < 256.0D) {
+				playerMP.setPosition(playerMP.posX, playerMP.posY + 1.0D, playerMP.posZ);
+			}
+
+			playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:respawner.teleporting", spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ(), dimension));
+
+			return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
 		}
 
 		return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
