@@ -1,10 +1,12 @@
 package com.choonster.testmod3.item;
 
+import com.choonster.testmod3.TestMod3;
 import com.google.common.collect.Multimap;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 
 import java.util.Collection;
@@ -23,13 +25,14 @@ public class ItemSlowSword extends ItemSword {
 	public ItemSlowSword(ToolMaterial material, String itemName) {
 		super(material);
 		ItemTestMod3.setItemName(this, itemName);
+		setCreativeTab(TestMod3.creativeTab);
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot) {
-		final Multimap<String, AttributeModifier> modifiers = super.getItemAttributeModifiers(equipmentSlot);
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+		final Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
 
-		if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
+		if (slot == EntityEquipmentSlot.MAINHAND) {
 			replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_DAMAGE, ATTACK_DAMAGE_MODIFIER, 2);
 			replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, 1.5);
 		}
