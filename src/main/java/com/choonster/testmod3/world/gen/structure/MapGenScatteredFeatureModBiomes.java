@@ -51,7 +51,7 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 		j1 += random.nextInt(maxDistanceBetweenScatteredFeatures - minDistanceBetweenScatteredFeatures);
 
 		if (chunkX == i1 && chunkZ == j1) {
-			final Biome biome = this.worldObj.getBiomeProvider().getBiomeGenerator(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
+			final Biome biome = this.worldObj.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
 
 			for (final BiomeDictionary.Type type : biomeTypes) {
 				if (BiomeDictionary.isBiomeOfType(biome, type)) {
@@ -87,7 +87,7 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 
 			this.components.clear();
 
-			final Biome biome = worldIn.getBiomeGenForCoords(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
+			final Biome biome = worldIn.getBiome(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
 
 			final List<WeightedRandomScatteredFeature> possibleFeatures = new ArrayList<>();
 
