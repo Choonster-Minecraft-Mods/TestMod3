@@ -152,7 +152,7 @@ public class ItemModBow extends ItemBow {
 			final float arrowVelocity = getArrowVelocity(charge);
 
 			if (arrowVelocity >= 0.1) {
-				final boolean consumeAmmo = ammoRequired && ammo.getItem() instanceof ItemArrow;
+				final boolean isInfinite = player.capabilities.isCreativeMode || ammo.getItem() instanceof ItemArrow && ((ItemArrow) ammo.getItem()).isInfinite(ammo, bow, player);
 
 				if (!world.isRemote) {
 					final ItemArrow itemArrow = (ItemArrow) (ammo.getItem() instanceof ItemArrow ? ammo.getItem() : Items.ARROW);
@@ -179,7 +179,7 @@ public class ItemModBow extends ItemBow {
 
 					bow.damageItem(1, player);
 
-					if (!consumeAmmo) {
+					if (isInfinite) {
 						entityArrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
 					}
 
@@ -188,7 +188,7 @@ public class ItemModBow extends ItemBow {
 
 				world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + arrowVelocity * 0.5F);
 
-				if (consumeAmmo && ammoSlot.extractItem(0, 1, true) != null) {
+				if (!isInfinite && ammoSlot.extractItem(0, 1, true) != null) {
 					ammoSlot.extractItem(0, 1, false);
 				}
 
