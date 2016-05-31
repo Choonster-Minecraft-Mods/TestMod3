@@ -59,7 +59,6 @@ public class BlockPlane extends BlockTestMod3 {
 	}
 
 	{
-		fullBlock = false;
 		setDefaultState(getBlockState().getBaseState().withProperty(HORIZONTAL_ROTATION, EnumFacing.NORTH).withProperty(VERTICAL_ROTATION, EnumVerticalRotation.UP));
 	}
 
@@ -173,6 +172,12 @@ public class BlockPlane extends BlockTestMod3 {
 	@Override
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
 	}
 
 	@SuppressWarnings("deprecation")

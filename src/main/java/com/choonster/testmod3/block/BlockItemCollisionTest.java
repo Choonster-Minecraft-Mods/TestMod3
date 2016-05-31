@@ -32,7 +32,6 @@ public class BlockItemCollisionTest extends BlockTestMod3 {
 
 	public BlockItemCollisionTest() {
 		super(Material.CLOTH, "itemCollisionTest");
-		fullBlock = false;
 	}
 
 	@Override

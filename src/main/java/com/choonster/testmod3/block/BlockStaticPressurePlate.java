@@ -23,13 +23,24 @@ public abstract class BlockStaticPressurePlate extends BlockTestMod3 {
 
 	public BlockStaticPressurePlate(Material materialIn, String blockName) {
 		super(materialIn, blockName);
-		fullBlock = false;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return BB;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
 	}
 
 	@Override
