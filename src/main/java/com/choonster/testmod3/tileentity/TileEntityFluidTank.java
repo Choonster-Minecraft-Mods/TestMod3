@@ -62,7 +62,7 @@ public class TileEntityFluidTank extends TileEntity implements IFluidHandler {
 	@Nullable
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(getPos(), getBlockMetadata(), writeToNBT(new NBTTagCompound()));
+		return new SPacketUpdateTileEntity(getPos(), 0, writeToNBT(new NBTTagCompound()));
 	}
 
 	@Override
