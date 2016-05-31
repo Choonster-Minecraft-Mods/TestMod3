@@ -2,6 +2,7 @@ package com.choonster.testmod3.block;
 
 import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.tileentity.TileEntityColoredRotatable;
+import com.choonster.testmod3.util.OreDictUtils;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
@@ -11,6 +12,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -18,6 +20,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * A block with 16 colours (stored in the metadata) and 6 facings (stored in the TileEntity).
@@ -83,11 +88,20 @@ public class BlockColoredRotatable extends BlockColored {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (playerIn.isSneaking()) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (heldItem != null) { // If the player is holding dye, change the colour
+			final Optional<EnumDyeColor> dyeColour = OreDictUtils.INSTANCE.getDyeColour(heldItem);
+			if (dyeColour.isPresent()) {
+				final boolean success = recolorBlock(worldIn, pos, side, dyeColour.get());
+				if (success) {
+					heldItem.stackSize--;
+					return true;
+				}
+			}
+
+			return false;
+		} else { // Else rotate the block
 			return rotateBlock(worldIn, pos, side);
-		} else {
-			return worldIn.setBlockState(pos, state.cycleProperty(COLOR));
 		}
 	}
 }

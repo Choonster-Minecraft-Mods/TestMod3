@@ -7,8 +7,6 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -17,6 +15,8 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 /**
  * A block with 16 colours (stored in the metadata), 6 facings and 4 face rotations (stored in the TileEntity).
@@ -72,14 +72,11 @@ public class BlockColoredMultiRotatable extends BlockColoredRotatable {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (heldItem != null && heldItem.getItem() == Items.DYE) { // If the player is holding dye, change the colour
-			final EnumDyeColor color = EnumDyeColor.byDyeDamage(heldItem.getMetadata());
-			return worldIn.setBlockState(pos, state.withProperty(COLOR, color));
-		} else if (playerIn.isSneaking()) { // If the player is sneaking, rotate the face
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (playerIn.isSneaking()) { // If the player is sneaking, rotate the face
 			return rotateFace(worldIn, pos);
-		} else { // Else rotate the block
-			return rotateBlock(worldIn, pos, side);
+		} else { // Else rotate or recolour the block
+			return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
 		}
 	}
 
