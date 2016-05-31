@@ -18,10 +18,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -90,6 +87,8 @@ public class TestMod3 {
 		ModMapGen.registerWorldGenerators();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+
+		FMLInterModComms.sendMessage("Waila", "register", "com.choonster.testmod3.compat.waila.WailaCompat.register");
 
 		proxy.init();
 	}

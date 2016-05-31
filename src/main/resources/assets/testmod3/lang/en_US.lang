@@ -153,6 +153,10 @@ testmod3:pigSpawner.finite.desc=Spawnable Pigs: %s/%s
 testmod3:pigSpawner.infinite.desc=Spawnable Pigs: ∞
 item.testmod3:dimensionReplacement.replacement.desc=Will be replaced with %s when crafted in this dimension
 item.testmod3:dimensionReplacement.noReplacement.desc=Will not be replaced when crafted in this dimension
+testmod3:rotatable.facing.desc=Facing: %s
+testmod3:multiRotatable.faceRotation.desc=Face Rotation: %s
+tile.testmod3:plane.horizontalRotation.desc=Horizontal Rotation: %s
+tile.testmod3:plane.verticalRotation.desc=Vertical Rotation: %s
 
 # Chat messages
 message.testmod3:entityInteractCount=Interact count: %s
@@ -209,3 +213,20 @@ subtitles.action.testmod3:saddle=Mod saddle equips
 
 # Containers
 container.testmod3:chest=Mod Chest
+
+# Enum values
+testmod3:facing.down=Down
+testmod3:facing.up=Up
+testmod3:facing.north=North
+testmod3:facing.south=South
+testmod3:facing.west=West
+testmod3:facing.east=East
+
+testmod3:faceRotation.up=Up
+testmod3:faceRotation.right=Right
+testmod3:faceRotation.down=Down
+testmod3:faceRotation.left=Left
+
+testmod3:verticalRotation.down=Down
+testmod3:verticalRotation.up=Up
+testmod3:verticalRotation.side=Side
