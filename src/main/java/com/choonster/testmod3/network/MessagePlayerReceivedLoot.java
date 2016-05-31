@@ -93,7 +93,7 @@ public class MessagePlayerReceivedLoot implements IMessage {
 				final EntityPlayer player = TestMod3.proxy.getClientPlayer();
 
 				final ITextComponent lootMessage = getItemStackTextComponent(message.itemStacks[0]);
-				for (int i = 1; i < message.itemStacks.length - 1; i++) {
+				for (int i = 1; i < message.itemStacks.length; i++) {
 					lootMessage.appendText(", ");
 					lootMessage.appendSibling(getItemStackTextComponent(message.itemStacks[i]));
 				}
