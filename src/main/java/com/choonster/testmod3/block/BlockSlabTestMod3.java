@@ -17,6 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -76,7 +77,12 @@ public abstract class BlockSlabTestMod3<
 			iblockstate = iblockstate.withProperty(HALF, BlockSlab.EnumBlockHalf.BOTTOM);
 		}
 
-		setDefaultState(iblockstate.withProperty(getVariantProperty(), getVariantProperty().getAllowedValues().stream().findFirst().get()));
+		final Optional<VARIANT> defaultVariant = getVariantProperty().getAllowedValues().stream().findFirst();
+		if (defaultVariant.isPresent()) {
+			iblockstate = iblockstate.withProperty(getVariantProperty(), defaultVariant.get());
+		}
+
+		setDefaultState(iblockstate);
 
 		setCreativeTab(TestMod3.creativeTab);
 	}
