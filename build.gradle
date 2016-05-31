@@ -45,9 +45,9 @@ repositories {
 }
 
 dependencies {
-    deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}"
+    deobfProvided "mezz.jei:jei_${mc_version}:${jei_version}"
     compile "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
-    deobfCompile "mcp.mobius.waila:Waila:${waila_version}_${mc_version}"
+    deobfProvided "mcp.mobius.waila:Waila:${waila_version}_${mc_version}"
 }
 
 shadowJar {
