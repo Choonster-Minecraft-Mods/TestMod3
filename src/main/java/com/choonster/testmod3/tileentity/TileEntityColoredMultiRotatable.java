@@ -1,6 +1,6 @@
 package com.choonster.testmod3.tileentity;
 
-import com.choonster.testmod3.block.BlockColoredMultiRotatable.EnumFaceRotation;
+import com.choonster.testmod3.util.EnumFaceRotation;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 

@@ -1,6 +1,7 @@
 package com.choonster.testmod3.block;
 
 import com.choonster.testmod3.tileentity.TileEntityColoredMultiRotatable;
+import com.choonster.testmod3.util.EnumFaceRotation;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -11,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -80,36 +80,4 @@ public class BlockColoredMultiRotatable extends BlockColoredRotatable {
 		}
 	}
 
-	public enum EnumFaceRotation implements IStringSerializable {
-		UP("up"),
-		RIGHT("right"),
-		DOWN("down"),
-		LEFT("left");
-
-		private static final EnumFaceRotation[] VALUES = values();
-
-		private final String name;
-
-		EnumFaceRotation(String name) {
-			this.name = name;
-		}
-
-		@Override
-		public String getName() {
-			return name;
-		}
-
-		@Override
-		public String toString() {
-			return name;
-		}
-
-		public EnumFaceRotation rotateClockwise() {
-			return VALUES[(ordinal() + 1) % VALUES.length];
-		}
-
-		public EnumFaceRotation rotateCounterClockwise() {
-			return VALUES[(ordinal() - 1) % VALUES.length];
-		}
-	}
 }
