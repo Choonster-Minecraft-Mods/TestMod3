@@ -77,7 +77,10 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 
 	@Override
 	public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor colour) {
-		return variants.isColourInGroup(colour) && world.setBlockState(pos, world.getBlockState(pos).withProperty(getVariantProperty(), colour));
+		final IBlockState currentState = world.getBlockState(pos);
+		return variants.isColourInGroup(colour) &&
+				currentState.getValue(getVariantProperty()) != colour &&
+				world.setBlockState(pos, currentState.withProperty(getVariantProperty(), colour));
 	}
 
 	@Override
