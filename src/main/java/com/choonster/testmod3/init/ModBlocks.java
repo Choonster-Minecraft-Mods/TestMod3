@@ -10,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.*;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -29,7 +30,6 @@ public class ModBlocks {
 	public static final BlockClientPlayerRightClick CLIENT_PLAYER_RIGHT_CLICK;
 	public static final BlockRotatableLamp ROTATABLE_LAMP;
 	public static final BlockItemCollisionTest ITEM_COLLISION_TEST;
-	public static final BlockSurvivalCommandBlock SURVIVAL_COMMAND_BLOCK;
 	public static final BlockFluidTank FLUID_TANK;
 	public static final BlockItemDebugger ITEM_DEBUGGER;
 	public static final Block END_PORTAL_FRAME_FULL;
@@ -51,6 +51,10 @@ public class ModBlocks {
 	public static final BlockPipeBasic PIPE_BASIC;
 	public static final BlockPipeFluid PIPE_FLUID;
 
+	public static final BlockSurvivalCommandBlock SURVIVAL_COMMAND_BLOCK;
+	public static final BlockSurvivalCommandBlock REPEATING_SURVIVAL_COMMAND_BLOCK;
+	public static final BlockSurvivalCommandBlock CHAIN_SURVIVAL_COMMAND_BLOCK;
+
 	public static final BlockColouredSlab.ColouredSlabGroup STAINED_CLAY_SLABS;
 
 	static {
@@ -60,7 +64,6 @@ public class ModBlocks {
 		CLIENT_PLAYER_RIGHT_CLICK = registerBlock(new BlockClientPlayerRightClick());
 		ROTATABLE_LAMP = registerBlock(new BlockRotatableLamp());
 		ITEM_COLLISION_TEST = registerBlock(new BlockItemCollisionTest());
-		SURVIVAL_COMMAND_BLOCK = registerBlock(new BlockSurvivalCommandBlock());
 		FLUID_TANK = registerBlock(new BlockFluidTank(), ItemFluidTank::new);
 		ITEM_DEBUGGER = registerBlock(new BlockItemDebugger());
 		END_PORTAL_FRAME_FULL = registerBlock(new BlockTestMod3(Material.ROCK, "endPortalFrameFull"));
@@ -85,6 +88,10 @@ public class ModBlocks {
 		STAINED_CLAY_SLABS = new BlockColouredSlab.ColouredSlabGroup("stainedClaySlab", Material.ROCK);
 		registerSlabGroup(STAINED_CLAY_SLABS.low);
 		registerSlabGroup(STAINED_CLAY_SLABS.high);
+
+		SURVIVAL_COMMAND_BLOCK = registerBlock(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.REDSTONE, "survivalCommandBlock"));
+		REPEATING_SURVIVAL_COMMAND_BLOCK = registerBlock(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.AUTO, "repeatingSurvivalCommandBlock"));
+		CHAIN_SURVIVAL_COMMAND_BLOCK = registerBlock(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.SEQUENCE, "chainSurvivalCommandBlock"));
 	}
 
 	public static void registerBlocks() {

@@ -1,11 +1,11 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "minecraft:command_block"
+		"model": "minecraft:repeating_command_block"
 	},
 	"variants": {
 		"conditional": {
-			"true": { "model": "minecraft:command_block_conditional" },
+			"true": { "model": "minecraft:repeating_command_block_conditional" },
 			"false": { }
 		},
 		"facing": {

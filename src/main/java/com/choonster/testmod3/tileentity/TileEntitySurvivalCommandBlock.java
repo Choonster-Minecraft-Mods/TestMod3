@@ -1,13 +1,16 @@
 package com.choonster.testmod3.tileentity;
 
 import com.choonster.testmod3.TestMod3;
+import com.choonster.testmod3.block.BlockSurvivalCommandBlock;
 import com.choonster.testmod3.client.gui.GuiIDs;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandResultStats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.util.math.BlockPos;
@@ -33,7 +36,7 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 		 */
 		@Override
 		public BlockPos getPosition() {
-			return TileEntitySurvivalCommandBlock.this.pos;
+			return TileEntitySurvivalCommandBlock.this.getPos();
 		}
 
 		/**
@@ -65,7 +68,7 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 
 		@Override
 		public void updateCommand() {
-			final BlockPos pos = TileEntitySurvivalCommandBlock.this.getPos();
+			final BlockPos pos = getPosition();
 			final IBlockState state = TileEntitySurvivalCommandBlock.this.getWorld().getBlockState(pos);
 			TileEntitySurvivalCommandBlock.this.getWorld().notifyBlockUpdate(pos, state, state, 3);
 		}
@@ -73,9 +76,9 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public void fillInInfo(ByteBuf byteBuf) {
-			byteBuf.writeInt(TileEntitySurvivalCommandBlock.this.pos.getX());
-			byteBuf.writeInt(TileEntitySurvivalCommandBlock.this.pos.getY());
-			byteBuf.writeInt(TileEntitySurvivalCommandBlock.this.pos.getZ());
+			byteBuf.writeInt(TileEntitySurvivalCommandBlock.this.getPos().getX());
+			byteBuf.writeInt(TileEntitySurvivalCommandBlock.this.getPos().getY());
+			byteBuf.writeInt(TileEntitySurvivalCommandBlock.this.getPos().getZ());
 		}
 
 		/**
@@ -89,6 +92,8 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 			if (player.getEntityWorld().isRemote) {
 				final BlockPos pos = getPosition();
 				player.openGui(TestMod3.instance, GuiIDs.SURVIVAL_COMMAND_BLOCK, player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());
+			} else {
+				TileEntitySurvivalCommandBlock.this.sendToClient((EntityPlayerMP) player);
 			}
 
 			return true;
@@ -140,5 +145,24 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
 		return oldState.getBlock() != newSate.getBlock();
+	}
+
+	/**
+	 * Send an update packet for this command block to the specified player.
+	 *
+	 * @param player The player.
+	 */
+	private void sendToClient(EntityPlayerMP player) {
+		setSendToClient(true);
+
+		final SPacketUpdateTileEntity updatePacket = getUpdatePacket();
+		if (updatePacket != null) {
+			player.connection.sendPacket(updatePacket);
+		}
+	}
+
+	@Override
+	public Mode getMode() {
+		return ((BlockSurvivalCommandBlock) getBlockType()).getCommandBlockMode();
 	}
 }

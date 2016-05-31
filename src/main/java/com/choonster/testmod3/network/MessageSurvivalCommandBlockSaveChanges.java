@@ -1,12 +1,20 @@
 package com.choonster.testmod3.network;
 
 import com.choonster.testmod3.Logger;
+import com.choonster.testmod3.init.ModBlocks;
 import com.choonster.testmod3.tileentity.SurvivalCommandBlockLogic;
 import com.choonster.testmod3.tileentity.TileEntitySurvivalCommandBlock;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockCommandBlock;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityCommandBlock;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IThreadListener;
+import net.minecraft.util.StringUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
@@ -31,6 +39,9 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 	private SurvivalCommandBlockLogic.Type type;
 	private String command;
 	private boolean shouldTrackOutput;
+	private TileEntityCommandBlock.Mode commandBlockMode;
+	private boolean conditional;
+	private boolean automatic;
 
 	/**
 	 * The {@link SurvivalCommandBlockLogic} instance. Client-only.
@@ -51,11 +62,15 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 	public MessageSurvivalCommandBlockSaveChanges() {
 	}
 
-	public MessageSurvivalCommandBlockSaveChanges(SurvivalCommandBlockLogic survivalCommandBlockLogic, String command) {
+
+	public MessageSurvivalCommandBlockSaveChanges(SurvivalCommandBlockLogic survivalCommandBlockLogic, String command, TileEntityCommandBlock.Mode commandBlockMode, boolean conditional, boolean automatic) {
 		this.survivalCommandBlockLogic = survivalCommandBlockLogic;
 		this.type = survivalCommandBlockLogic.getType();
 		this.command = command;
 		this.shouldTrackOutput = survivalCommandBlockLogic.shouldTrackOutput();
+		this.commandBlockMode = commandBlockMode;
+		this.conditional = conditional;
+		this.automatic = automatic;
 	}
 
 	@Override
@@ -63,6 +78,10 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 		type = SurvivalCommandBlockLogic.Type.values()[buf.readByte()];
 		command = ByteBufUtils.readUTF8String(buf);
 		shouldTrackOutput = buf.readBoolean();
+		commandBlockMode = TileEntityCommandBlock.Mode.valueOf(ByteBufUtils.readUTF8String(buf));
+		conditional = buf.readBoolean();
+		automatic = buf.readBoolean();
+
 
 		switch (type) {
 			case BLOCK:
@@ -79,6 +98,9 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 		buf.writeByte(type.ordinal());
 		ByteBufUtils.writeUTF8String(buf, command);
 		buf.writeBoolean(shouldTrackOutput);
+		ByteBufUtils.writeUTF8String(buf, commandBlockMode.name());
+		buf.writeBoolean(conditional);
+		buf.writeBoolean(automatic);
 
 		survivalCommandBlockLogic.fillInInfo(buf);
 	}
@@ -92,21 +114,47 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 
 			final IThreadListener mainThread = (WorldServer) world;
 			mainThread.addScheduledTask(() -> {
-				if (!world.getMinecraftServer().isCommandBlockEnabled()) {
+				final MinecraftServer minecraftServer = world.getMinecraftServer();
+
+				if (minecraftServer != null && !minecraftServer.isCommandBlockEnabled()) {
 					player.addChatMessage(new TextComponentTranslation("advMode.notEnabled"));
-				} else if (player.canCommandSenderUseCommand(2, "")) {
+				} else if (!player.canCommandSenderUseCommand(2, "")) {
+					player.addChatMessage(new TextComponentTranslation("advMode.notAllowed"));
+				} else {
 					try {
 						SurvivalCommandBlockLogic survivalCommandBlockLogic = null;
 
-						switch (message.type) {
-							case BLOCK:
-								final TileEntity tileEntity = world.getTileEntity(message.blockPos);
-								if (tileEntity instanceof TileEntitySurvivalCommandBlock) {
-									survivalCommandBlockLogic = ((TileEntitySurvivalCommandBlock) tileEntity).getCommandBlockLogic();
-								}
-								break;
-							case MINECART:
-								// no-op
+						if (message.type == SurvivalCommandBlockLogic.Type.BLOCK) {
+							final Block newBlock;
+							switch (message.commandBlockMode) {
+								case SEQUENCE:
+									newBlock = ModBlocks.CHAIN_SURVIVAL_COMMAND_BLOCK;
+									break;
+								case AUTO:
+									newBlock = ModBlocks.REPEATING_SURVIVAL_COMMAND_BLOCK;
+									break;
+								case REDSTONE:
+								default:
+									newBlock = ModBlocks.SURVIVAL_COMMAND_BLOCK;
+									break;
+							}
+
+							final TileEntity existingTileEntity = world.getTileEntity(message.blockPos);
+
+							final EnumFacing facing = world.getBlockState(message.blockPos).getValue(BlockCommandBlock.FACING);
+							final IBlockState newState = newBlock.getDefaultState().withProperty(BlockCommandBlock.FACING, facing).withProperty(BlockCommandBlock.CONDITIONAL, message.conditional);
+							world.setBlockState(message.blockPos, newState);
+
+							final TileEntity newTileEntity = world.getTileEntity(message.blockPos);
+							if (existingTileEntity instanceof TileEntitySurvivalCommandBlock && newTileEntity instanceof TileEntitySurvivalCommandBlock) {
+								final TileEntitySurvivalCommandBlock newTileEntitySurvivalCommandBlock = (TileEntitySurvivalCommandBlock) newTileEntity;
+
+								newTileEntitySurvivalCommandBlock.deserializeNBT(existingTileEntity.serializeNBT());
+								survivalCommandBlockLogic = newTileEntitySurvivalCommandBlock.getCommandBlockLogic();
+								newTileEntitySurvivalCommandBlock.setAuto(message.automatic);
+							}
+						} else if (message.type == SurvivalCommandBlockLogic.Type.MINECART) {
+							// no-op
 						}
 
 						if (survivalCommandBlockLogic != null) {
@@ -118,15 +166,16 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 							}
 
 							survivalCommandBlockLogic.updateCommand();
-							survivalCommandBlockLogic.trigger(world);
-							player.addChatMessage(new TextComponentTranslation("advMode.setCommand.success", message.command));
+
+							if (!StringUtils.isNullOrEmpty(message.command)) {
+								player.addChatMessage(new TextComponentTranslation("advMode.setCommand.success", message.command));
+							}
 						}
 					} catch (Exception e) {
 						Logger.error(e, "Couldn't set survival command block");
 					}
-				} else {
-					player.addChatMessage(new TextComponentTranslation("advMode.notAllowed"));
 				}
+
 			});
 
 			return null;
