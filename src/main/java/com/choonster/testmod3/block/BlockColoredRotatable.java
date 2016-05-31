@@ -53,16 +53,21 @@ public class BlockColoredRotatable extends BlockColored {
 		return new TileEntityColoredRotatable();
 	}
 
+	@Nullable
 	public TileEntityColoredRotatable getTileEntity(IBlockAccess world, BlockPos pos) {
 		return (TileEntityColoredRotatable) world.getTileEntity(pos);
 	}
 
 	public EnumFacing getFacing(IBlockAccess world, BlockPos pos) {
-		return getTileEntity(world, pos).getFacing();
+		final TileEntityColoredRotatable tileEntity = getTileEntity(world, pos);
+		return tileEntity != null ? tileEntity.getFacing() : EnumFacing.NORTH;
 	}
 
 	public void setFacing(IBlockAccess world, BlockPos pos, EnumFacing facing) {
-		getTileEntity(world, pos).setFacing(facing);
+		final TileEntityColoredRotatable tileEntity = getTileEntity(world, pos);
+		if (tileEntity != null) {
+			tileEntity.setFacing(facing);
+		}
 	}
 
 	@Override

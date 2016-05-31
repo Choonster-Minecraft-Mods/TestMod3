@@ -64,7 +64,10 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		if (stack.hasDisplayName()) {
-			getTileEntity(worldIn, pos).setDisplayName(stack.getDisplayName());
+			final TileEntityModChest tileEntity = getTileEntity(worldIn, pos);
+			if (tileEntity != null) {
+				tileEntity.setDisplayName(stack.getDisplayName());
+			}
 		}
 	}
 
@@ -74,7 +77,7 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!worldIn.isRemote && !isBlocked(worldIn, pos)) {
 			playerIn.openGui(TestMod3.instance, GuiIDs.MOD_CHEST, worldIn, pos.getX(), pos.getY(), pos.getZ());
 		}
@@ -180,7 +183,10 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		final List<ItemStack> drops = super.getDrops(world, pos, state, fortune);
 
-		drops.addAll(getTileEntity(world, pos).getDrops());
+		final TileEntityModChest tileEntity = getTileEntity(world, pos);
+		if (tileEntity != null) {
+			drops.addAll(tileEntity.getDrops());
+		}
 
 		return drops;
 	}

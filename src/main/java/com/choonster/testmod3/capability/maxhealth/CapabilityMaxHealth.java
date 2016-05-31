@@ -22,6 +22,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 
+import javax.annotation.Nullable;
+
 /**
  * Capability for {@link IMaxHealth}.
  *
@@ -69,6 +71,7 @@ public class CapabilityMaxHealth {
 	 * @param entity The entity
 	 * @return The IMaxHealth
 	 */
+	@Nullable
 	public static IMaxHealth getMaxHealth(EntityLivingBase entity) {
 		return CapabilityUtils.getCapability(entity, MAX_HEALTH_CAPABILITY, DEFAULT_FACING);
 	}
@@ -120,7 +123,9 @@ public class CapabilityMaxHealth {
 			final IMaxHealth oldMaxHealth = getMaxHealth(event.getOriginal());
 			final IMaxHealth newMaxHealth = getMaxHealth(event.getEntityPlayer());
 
-			newMaxHealth.setBonusMaxHealth(oldMaxHealth.getBonusMaxHealth());
+			if (newMaxHealth != null && oldMaxHealth != null) {
+				newMaxHealth.setBonusMaxHealth(oldMaxHealth.getBonusMaxHealth());
+			}
 		}
 	}
 

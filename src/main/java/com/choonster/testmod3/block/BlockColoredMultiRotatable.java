@@ -49,11 +49,15 @@ public class BlockColoredMultiRotatable extends BlockColoredRotatable {
 	}
 
 	public EnumFaceRotation getFaceRotation(IBlockAccess world, BlockPos pos) {
-		return getTileEntity(world, pos).getFaceRotation();
+		final TileEntityColoredMultiRotatable tileEntity = getTileEntity(world, pos);
+		return tileEntity != null ? tileEntity.getFaceRotation() : EnumFaceRotation.UP;
 	}
 
 	public void setFaceRotation(IBlockAccess world, BlockPos pos, EnumFaceRotation faceRotation) {
-		getTileEntity(world, pos).setFaceRotation(faceRotation);
+		final TileEntityColoredMultiRotatable tileEntity = getTileEntity(world, pos);
+		if (tileEntity != null) {
+			tileEntity.setFaceRotation(faceRotation);
+		}
 	}
 
 	@Override

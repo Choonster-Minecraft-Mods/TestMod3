@@ -12,6 +12,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 
+import javax.annotation.Nullable;
+
 /**
  * A Block that prints the current state of the player's held {@link ItemStack}s on the client and server when left or right clicked.
  *
@@ -23,7 +25,7 @@ public class BlockItemDebugger extends BlockTestMod3 {
 		setBlockUnbreakable();
 	}
 
-	private void logItem(ItemStack stack) {
+	private void logItem(@Nullable ItemStack stack) {
 		if (stack != null) {
 			Logger.info("ItemStack: %s", stack.serializeNBT());
 			logCapability(stack, CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY, EnumFacing.NORTH);
@@ -38,7 +40,7 @@ public class BlockItemDebugger extends BlockTestMod3 {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		logItem(heldItem);
 
 		return true;

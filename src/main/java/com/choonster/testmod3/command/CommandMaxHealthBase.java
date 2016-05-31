@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,13 +54,16 @@ public abstract class CommandMaxHealthBase extends CommandBase {
 		final EntityLivingBase entity = getEntity(server, sender, args[0], EntityLivingBase.class);
 		final float amount = (float) parseDouble(args[1], -Float.MAX_VALUE, Float.MAX_VALUE);
 
-		processEntity(entity, CapabilityMaxHealth.getMaxHealth(entity), amount);
+		final IMaxHealth maxHealth = CapabilityMaxHealth.getMaxHealth(entity);
+		if (maxHealth != null) {
+			processEntity(entity, maxHealth, amount);
+		}
 
 		notifyCommandListener(sender, this, getSuccessMessage(), entity.getDisplayName(), CapabilityMaxHealth.formatMaxHealth(amount));
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 		return args.length == 1 ? getListOfStringsMatchingLastWord(args, server.getAllUsernames()) : Collections.emptyList();
 	}
 }

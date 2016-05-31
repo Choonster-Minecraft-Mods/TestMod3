@@ -12,6 +12,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+
 /**
  * A block that tells players who right click it their current max health and the bonus max health provided by their {@link IMaxHealth}.
  *
@@ -23,7 +25,7 @@ public class BlockMaxHealthGetter extends BlockTestMod3 {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!worldIn.isRemote) {
 			final IMaxHealth maxHealth = CapabilityMaxHealth.getMaxHealth(playerIn);
 

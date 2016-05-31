@@ -7,6 +7,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+
 /**
  * A wrapper for {@link net.minecraft.item.IItemPropertyGetter} that allows lambdas to be used as implementations.
  * <p>
@@ -16,7 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public interface IItemPropertyGetterFix extends IItemPropertyGetter {
 	@SideOnly(Side.CLIENT)
-	float applyPropertyGetter(ItemStack stack, World worldIn, EntityLivingBase entityIn);
+	float applyPropertyGetter(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn);
 
 	static IItemPropertyGetterFix create(IItemPropertyGetterFix lambda) {
 		return lambda;
@@ -24,7 +26,7 @@ public interface IItemPropertyGetterFix extends IItemPropertyGetter {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	default float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
+	default float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 		return applyPropertyGetter(stack, worldIn, entityIn);
 	}
 }

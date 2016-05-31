@@ -25,6 +25,8 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.annotation.Nullable;
+
 /**
  * Capability for {@link ILastUseTime}.
  *
@@ -69,7 +71,8 @@ public class CapabilityLastUseTime {
 	 * @param itemStack The ItemStack
 	 * @return The ILastUseTime, or null if there isn't one
 	 */
-	public static ILastUseTime getLastUseTime(ItemStack itemStack) {
+	@Nullable
+	public static ILastUseTime getLastUseTime(@Nullable ItemStack itemStack) {
 		return CapabilityUtils.getCapability(itemStack, LAST_USE_TIME_CAPABILITY, DEFAULT_FACING);
 	}
 
@@ -81,11 +84,12 @@ public class CapabilityLastUseTime {
 	 * @param hand      The hand holding the item
 	 */
 	public static void updateLastUseTime(EntityPlayer player, ItemStack itemStack, EnumHand hand) {
-		final World world = player.getEntityWorld();
 		final ILastUseTime lastUseTime = getLastUseTime(itemStack);
+		if (lastUseTime == null) return;
+
+		final World world = player.getEntityWorld();
 
 		lastUseTime.set(world.getTotalWorldTime());
-
 		if (!world.isRemote) {
 			sendToPlayer(lastUseTime, (EntityPlayerMP) player, hand);
 		}

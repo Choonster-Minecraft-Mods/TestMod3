@@ -45,6 +45,7 @@ public class ModModelManager {
 
 	private void registerFluidModel(IFluidBlock fluidBlock) {
 		final Item item = Item.getItemFromBlock((Block) fluidBlock);
+		assert item != null;
 
 		ModelBakery.registerItemVariants(item);
 
@@ -95,15 +96,24 @@ public class ModModelManager {
 	}
 
 	private void registerBlockItemModel(Block block, String modelLocation) {
-		registerItemModel(Item.getItemFromBlock(block), modelLocation);
+		final Item item = Item.getItemFromBlock(block);
+		if (item != null) {
+			registerItemModel(item, modelLocation);
+		}
 	}
 
 	private void registerBlockItemModel(Block block, ModelResourceLocation fullModelLocation) {
-		registerItemModel(Item.getItemFromBlock(block), fullModelLocation);
+		final Item item = Item.getItemFromBlock(block);
+		if (item != null) {
+			registerItemModel(item, fullModelLocation);
+		}
 	}
 
 	private void registerBlockItemModelForMeta(Block block, int metadata, String variant) {
-		registerItemModelForMeta(Item.getItemFromBlock(block), metadata, variant);
+		final Item item = Item.getItemFromBlock(block);
+		if (item != null) {
+			registerItemModelForMeta(item, metadata, variant);
+		}
 	}
 
 	private final Set<Item> itemsRegistered = new HashSet<>();

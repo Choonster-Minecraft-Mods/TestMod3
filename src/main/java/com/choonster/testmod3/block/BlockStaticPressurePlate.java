@@ -11,6 +11,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+
 /**
  * A block that uses pressure plate model, placement and piston movement behaviour; but doesn't depress when stood on.
  *
@@ -54,6 +56,7 @@ public abstract class BlockStaticPressurePlate extends BlockTestMod3 {
 	}
 
 	@SuppressWarnings("deprecation")
+	@Nullable
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		return NULL_AABB;

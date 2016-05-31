@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,10 +41,12 @@ public class BlockFluidTank extends BlockTestMod3 {
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		final ItemStack stack = new ItemStack(this);
-		final NBTTagCompound tankData = stack.getSubCompound("TankData", true);
 
 		final TileEntityFluidTank tileEntity = getTileEntity(world, pos);
-		tileEntity.writeTankData(tankData);
+		if (tileEntity != null) {
+			final NBTTagCompound tankData = stack.getSubCompound("TankData", true);
+			tileEntity.writeTankData(tankData);
+		}
 
 		final List<ItemStack> drops = new ArrayList<>();
 		drops.add(stack);
@@ -55,8 +58,8 @@ public class BlockFluidTank extends BlockTestMod3 {
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		final NBTTagCompound tankData = stack.getSubCompound("TankData", false);
 
-		if (tankData != null) {
-			final TileEntityFluidTank tileEntity = getTileEntity(worldIn, pos);
+		final TileEntityFluidTank tileEntity = getTileEntity(worldIn, pos);
+		if (tankData != null && tileEntity != null) {
 			tileEntity.readTankData(tankData);
 		}
 	}
@@ -68,7 +71,7 @@ public class BlockFluidTank extends BlockTestMod3 {
 	}
 
 	@Override
-	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
+	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
 		super.harvestBlock(world, player, pos, state, te, stack);
 		world.setBlockToAir(pos);
 	}
@@ -83,6 +86,7 @@ public class BlockFluidTank extends BlockTestMod3 {
 		return new TileEntityFluidTank();
 	}
 
+	@Nullable
 	protected TileEntityFluidTank getTileEntity(IBlockAccess world, BlockPos pos) {
 		return (TileEntityFluidTank) world.getTileEntity(pos);
 	}
@@ -109,15 +113,20 @@ public class BlockFluidTank extends BlockTestMod3 {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		final TileEntityFluidTank tileEntityFluidTank = getTileEntity(worldIn, pos);
-		final boolean result = FluidUtil.interactWithTank(heldItem, playerIn, tileEntityFluidTank, side);
 
-		if (!worldIn.isRemote) {
-			getFluidDataForDisplay(tileEntityFluidTank.getTankInfo(side)).forEach(playerIn::addChatComponentMessage);
+		if (tileEntityFluidTank != null) {
+			final boolean result = FluidUtil.interactWithTank(heldItem, playerIn, tileEntityFluidTank, side);
+
+			if (!worldIn.isRemote) {
+				getFluidDataForDisplay(tileEntityFluidTank.getTankInfo(side)).forEach(playerIn::addChatComponentMessage);
+			}
+
+			return result;
 		}
 
-		return result;
+		return false;
 	}
 
 	@SuppressWarnings("deprecation")

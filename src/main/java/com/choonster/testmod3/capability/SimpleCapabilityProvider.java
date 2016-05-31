@@ -6,6 +6,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
+import javax.annotation.Nullable;
+
 /**
  * A simple implementation of {@link ICapabilitySerializable} that supports a single {@link Capability} handler instance.
  * <p>
@@ -35,7 +37,7 @@ public class SimpleCapabilityProvider<HANDLER> implements ICapabilitySerializabl
 	 * @param capability The Capability instance to provide the handler for
 	 * @param facing     The EnumFacing to provide the handler for
 	 */
-	public SimpleCapabilityProvider(Capability<HANDLER> capability, EnumFacing facing) {
+	public SimpleCapabilityProvider(Capability<HANDLER> capability, @Nullable EnumFacing facing) {
 		this(capability, facing, capability.getDefaultInstance());
 	}
 
@@ -46,7 +48,7 @@ public class SimpleCapabilityProvider<HANDLER> implements ICapabilitySerializabl
 	 * @param facing     The EnumFacing to provide the handler for
 	 * @param instance   The handler instance to provide
 	 */
-	public SimpleCapabilityProvider(Capability<HANDLER> capability, EnumFacing facing, HANDLER instance) {
+	public SimpleCapabilityProvider(Capability<HANDLER> capability, @Nullable EnumFacing facing, HANDLER instance) {
 		this.capability = capability;
 		this.instance = instance;
 		this.facing = facing;
@@ -83,10 +85,10 @@ public class SimpleCapabilityProvider<HANDLER> implements ICapabilitySerializabl
 	 * @return The handler if this object supports the capability.
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
+	@Nullable
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if (capability == getCapability()) {
-			return (T) instance;
+			return getCapability().cast(getInstance());
 		}
 
 		return null;
@@ -116,6 +118,7 @@ public class SimpleCapabilityProvider<HANDLER> implements ICapabilitySerializabl
 	 *
 	 * @return The EnumFacing to provide the handler for
 	 */
+	@Nullable
 	public EnumFacing getFacing() {
 		return facing;
 	}

@@ -7,6 +7,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
+import javax.annotation.Nullable;
+
 /**
  * A block with a {@link TileEntity}.
  *
@@ -35,6 +37,7 @@ public abstract class BlockTileEntity<TE extends TileEntity> extends BlockTestMo
 	 * @return The TileEntity
 	 */
 	@SuppressWarnings("unchecked")
+	@Nullable
 	public TE getTileEntity(IBlockAccess world, BlockPos pos) {
 		return (TE) world.getTileEntity(pos);
 	}

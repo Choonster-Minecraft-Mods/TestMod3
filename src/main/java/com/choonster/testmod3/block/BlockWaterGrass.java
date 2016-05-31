@@ -14,6 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+
 /**
  * Tall grass that renders with water around it while in water.
  * <p>
@@ -59,7 +61,7 @@ public class BlockWaterGrass extends BlockBush {
 	}
 
 	@Override
-	public boolean canReplace(World worldIn, BlockPos pos, EnumFacing side, ItemStack stack) {
+	public boolean canReplace(World worldIn, BlockPos pos, EnumFacing side, @Nullable ItemStack stack) {
 		return canBlockStay(worldIn, pos, this.getDefaultState());
 	}
 

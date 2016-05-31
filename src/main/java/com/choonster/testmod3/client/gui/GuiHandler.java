@@ -9,10 +9,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
+import javax.annotation.Nullable;
+
 import static com.choonster.testmod3.client.gui.GuiIDs.*;
 
 public class GuiHandler implements IGuiHandler {
 	@Override
+	@Nullable
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		final TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 
@@ -22,7 +25,9 @@ public class GuiHandler implements IGuiHandler {
 				return null;
 
 			case MOD_CHEST:
-				return ((TileEntityModChest) tileEntity).createContainer(player);
+				if (tileEntity != null) {
+					return ((TileEntityModChest) tileEntity).createContainer(player);
+				}
 
 			default:
 				return null;
@@ -30,19 +35,24 @@ public class GuiHandler implements IGuiHandler {
 	}
 
 	@Override
+	@Nullable
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		final TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 
 		switch (ID) {
 			case SURVIVAL_COMMAND_BLOCK:
-				return new GuiSurvivalCommandBlock((TileEntitySurvivalCommandBlock) tileEntity);
+				if (tileEntity != null) {
+					return new GuiSurvivalCommandBlock((TileEntitySurvivalCommandBlock) tileEntity);
+				}
 
 			case SURVIVAL_COMMAND_BLOCK_MINECART:
 				// Get SurvivalCommandBlockLogic from Minecart using x as entityID (NYI)
 				return null;
 
 			case MOD_CHEST:
-				return new GuiModChest(((TileEntityModChest) tileEntity).createContainer(player));
+				if (tileEntity != null) {
+					return new GuiModChest(((TileEntityModChest) tileEntity).createContainer(player));
+				}
 
 			default:
 				return null;

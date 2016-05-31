@@ -82,7 +82,7 @@ public class CommandTestMod3 extends CommandBase {
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 		return subCommandHandler.getTabCompletionOptions(sender, joinArgs(args), pos);
 	}
 
@@ -152,7 +152,7 @@ public class CommandTestMod3 extends CommandBase {
 		}
 
 		@Override
-		public List<String> getTabCompletionOptions(ICommandSender sender, String input, BlockPos pos) {
+		public List<String> getTabCompletionOptions(ICommandSender sender, String input, @Nullable BlockPos pos) {
 			final String[] args = input.split(" ", -1);
 			final String commandName = args[0];
 

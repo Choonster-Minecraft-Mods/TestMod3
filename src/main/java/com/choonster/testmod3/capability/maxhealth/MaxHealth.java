@@ -9,6 +9,7 @@ import net.minecraft.entity.ai.attributes.AttributeMap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 /**
@@ -48,7 +49,7 @@ public class MaxHealth implements IMaxHealth {
 	private final IAttributeInstance dummyMaxHealthAttribute = new AttributeMap().registerAttribute(SharedMonsterAttributes.MAX_HEALTH);
 
 
-	public MaxHealth(EntityLivingBase entity) {
+	public MaxHealth(@Nullable EntityLivingBase entity) {
 		this.entity = entity;
 	}
 
@@ -71,9 +72,7 @@ public class MaxHealth implements IMaxHealth {
 	public final void setBonusMaxHealth(float bonusMaxHealth) {
 		this.bonusMaxHealth = bonusMaxHealth;
 
-		if (entity != null) {
-			onBonusMaxHealthChanged();
-		}
+		onBonusMaxHealthChanged();
 	}
 
 	/**
@@ -99,7 +98,10 @@ public class MaxHealth implements IMaxHealth {
 	 * Called when the bonus max health changes to re-apply the {@link AttributeModifier}.
 	 */
 	protected void onBonusMaxHealthChanged() {
-		final IAttributeInstance entityMaxHealthAttribute = entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
+		if (entity == null) return;
+
+		final IAttributeInstance entityMaxHealthAttribute;
+		entityMaxHealthAttribute = entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
 
 		// Remove all modifiers from the dummy attribute
 		dummyMaxHealthAttribute.getModifiers().stream().forEach(dummyMaxHealthAttribute::removeModifier);
