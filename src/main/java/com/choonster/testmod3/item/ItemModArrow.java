@@ -2,6 +2,7 @@ package com.choonster.testmod3.item;
 
 import com.choonster.testmod3.entity.EntityModArrow;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
@@ -22,5 +23,10 @@ public class ItemModArrow extends ItemArrow {
 		final EntityModArrow entityModArrow = new EntityModArrow(worldIn, shooter);
 		entityModArrow.setPotionEffect(stack);
 		return entityModArrow;
+	}
+
+	@Override
+	public boolean isInfinite(ItemStack stack, ItemStack bow, EntityPlayer player) {
+		return true;
 	}
 }
