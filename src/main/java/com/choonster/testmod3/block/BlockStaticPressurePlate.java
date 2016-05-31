@@ -55,7 +55,7 @@ public abstract class BlockStaticPressurePlate extends BlockTestMod3 {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		return NULL_AABB;
 	}
 
