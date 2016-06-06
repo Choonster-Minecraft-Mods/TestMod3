@@ -26,8 +26,8 @@ public class HUDHandlerVariantTileEntityBlocks implements IWailaDataProvider {
 	public static final HUDHandlerVariantTileEntityBlocks INSTANCE = new HUDHandlerVariantTileEntityBlocks();
 
 	/**
-	 * Callback used to override the default Waila lookup system.</br>
-	 * Will be used if the implementing class is registered via {@link IWailaRegistrar#registerStackProvider}.</br>
+	 * Callback used to override the default Waila lookup system.
+	 * Will be used if the implementing class is registered via {@link IWailaRegistrar#registerStackProvider}.
 	 *
 	 * @param accessor Contains most of the relevant information about the current environment.
 	 * @param config   Current configuration of Waila.
@@ -39,9 +39,9 @@ public class HUDHandlerVariantTileEntityBlocks implements IWailaDataProvider {
 	}
 
 	/**
-	 * Callback used to add lines to one of the three sections of the tooltip (Head, Body, Tail).</br>
-	 * Will be used if the implementing class is registered via {@link IWailaRegistrar#registerHeadProvider} client side.</br>
-	 * You are supposed to always return the modified input currenttip.</br>
+	 * Callback used to add lines to one of the three sections of the tooltip (Head, Body, Tail).
+	 * Will be used if the implementing class is registered via {@link IWailaRegistrar#registerHeadProvider} client side.
+	 * You are supposed to always return the modified input currenttip.
 	 *
 	 * @param itemStack  Current block scanned, in ItemStack form.
 	 * @param currenttip Current list of tooltip lines (might have been processed by other providers and might be processed by other providers).
@@ -55,9 +55,9 @@ public class HUDHandlerVariantTileEntityBlocks implements IWailaDataProvider {
 	}
 
 	/**
-	 * Callback used to add lines to one of the three sections of the tooltip (Head, Body, Tail).</br>
-	 * Will be used if the implementing class is registered via {@link IWailaRegistrar#registerBodyProvider} client side.</br>
-	 * You are supposed to always return the modified input currenttip.</br>
+	 * Callback used to add lines to one of the three sections of the tooltip (Head, Body, Tail).
+	 * Will be used if the implementing class is registered via {@link IWailaRegistrar#registerBodyProvider} client side.
+	 * You are supposed to always return the modified input currenttip.
 	 *
 	 * @param itemStack  Current block scanned, in ItemStack form.
 	 * @param currenttip Current list of tooltip lines (might have been processed by other providers and might be processed by other providers).
@@ -71,9 +71,9 @@ public class HUDHandlerVariantTileEntityBlocks implements IWailaDataProvider {
 	}
 
 	/**
-	 * Callback used to add lines to one of the three sections of the tooltip (Head, Body, Tail).</br>
-	 * Will be used if the implementing class is registered via {@link IWailaRegistrar#registerTailProvider} client side.</br>
-	 * You are supposed to always return the modified input currenttip.</br>
+	 * Callback used to add lines to one of the three sections of the tooltip (Head, Body, Tail).
+	 * Will be used if the implementing class is registered via {@link IWailaRegistrar#registerTailProvider} client side.
+	 * You are supposed to always return the modified input currenttip.
 	 *
 	 * @param itemStack  Current block scanned, in ItemStack form.
 	 * @param currenttip Current list of tooltip lines (might have been processed by other providers and might be processed by other providers).
@@ -87,9 +87,9 @@ public class HUDHandlerVariantTileEntityBlocks implements IWailaDataProvider {
 	}
 
 	/**
-	 * Callback used server side to return a custom synchronization NBTTagCompound.</br>
-	 * Will be used if the implementing class is registered via {@link IWailaRegistrar#registerNBTProvider} server and client side.</br>
-	 * You are supposed to always return the modified input NBTTagCompound tag.</br>
+	 * Callback used server side to return a custom synchronization NBTTagCompound.
+	 * Will be used if the implementing class is registered via {@link IWailaRegistrar#registerNBTProvider} server and client side.
+	 * You are supposed to always return the modified input NBTTagCompound tag.
 	 *
 	 * @param player The player requesting data synchronization (The owner of the current connection).
 	 * @param te     The TileEntity targeted for synchronization.
