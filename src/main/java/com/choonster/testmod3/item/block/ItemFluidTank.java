@@ -1,6 +1,7 @@
 package com.choonster.testmod3.item.block;
 
 import com.choonster.testmod3.block.BlockFluidTank;
+import com.choonster.testmod3.capability.SimpleCapabilityProvider;
 import com.choonster.testmod3.tileentity.TileEntityFluidTank;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -10,10 +11,13 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidContainerItem;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -26,7 +30,7 @@ import java.util.stream.Collectors;
  *
  * @author Choonster
  */
-public class ItemFluidTank extends ItemBlock implements IFluidContainerItem {
+public class ItemFluidTank extends ItemBlock {
 	private final List<ItemStack> tankItems = new ArrayList<>();
 
 	public ItemFluidTank(Block block) {
@@ -35,33 +39,27 @@ public class ItemFluidTank extends ItemBlock implements IFluidContainerItem {
 		setMaxStackSize(1);
 	}
 
-	private FluidTank loadTank(ItemStack stack) {
-		final NBTTagCompound teData = stack.getSubCompound("TankData", true);
-		return TileEntityFluidTank.loadTank(teData, null);
-	}
-
-	private void saveTank(ItemStack stack, FluidTank tank) {
-		final NBTTagCompound teData = new NBTTagCompound();
-		TileEntityFluidTank.saveTank(teData, tank);
-		stack.setTagInfo("TankData", teData);
-	}
-
 	public ItemStack addFluid(FluidStack fluidStack) {
 		final ItemStack filledTank = new ItemStack(this);
+		final IFluidHandler fluidHandler = FluidUtil.getFluidHandler(filledTank);
+		if (fluidHandler != null) {
+			fluidHandler.fill(fluidStack, true);
+		}
+
 		tankItems.add(filledTank);
-
-		fill(filledTank, fluidStack, true);
-
 		return filledTank;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-		final FluidTankInfo[] fluidTankInfos = new FluidTankInfo[]{loadTank(stack).getInfo()};
-		final List<String> lines = BlockFluidTank.getFluidDataForDisplay(fluidTankInfos).stream()
-				.map(ITextComponent::getFormattedText).collect(Collectors.toList());
-		tooltip.addAll(lines);
+		final IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stack);
+		if (fluidHandler != null) {
+			final IFluidTankProperties[] properties = fluidHandler.getTankProperties();
+			final List<String> lines = BlockFluidTank.getFluidDataForDisplay(properties).stream()
+					.map(ITextComponent::getFormattedText).collect(Collectors.toList());
+			tooltip.addAll(lines);
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -72,30 +70,7 @@ public class ItemFluidTank extends ItemBlock implements IFluidContainerItem {
 	}
 
 	@Override
-	public FluidStack getFluid(ItemStack container) {
-		return loadTank(container).getFluid();
-	}
-
-	@Override
-	public int getCapacity(ItemStack container) {
-		return loadTank(container).getCapacity();
-	}
-
-	@Override
-	public int fill(ItemStack container, FluidStack resource, boolean doFill) {
-		final FluidTank tank = loadTank(container);
-		final int result = tank.fill(resource, doFill);
-		saveTank(container, tank);
-
-		return result;
-	}
-
-	@Override
-	public FluidStack drain(ItemStack container, int maxDrain, boolean doDrain) {
-		final FluidTank tank = loadTank(container);
-		final FluidStack result = tank.drain(maxDrain, doDrain);
-		saveTank(container, tank);
-
-		return result;
+	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		return new SimpleCapabilityProvider<>(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null, new FluidTank(TileEntityFluidTank.CAPACITY));
 	}
 }

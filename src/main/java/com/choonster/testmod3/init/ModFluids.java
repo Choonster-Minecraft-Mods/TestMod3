@@ -117,8 +117,7 @@ public class ModFluids {
 	}
 
 	private static void registerTank(Fluid fluid) {
-		@SuppressWarnings("deprecation")
-		final FluidStack fluidStack = new FluidStack(fluid, 10 * FluidContainerRegistry.BUCKET_VOLUME);
+		final FluidStack fluidStack = new FluidStack(fluid, 10 * Fluid.BUCKET_VOLUME);
 		((ItemFluidTank) Item.getItemFromBlock(ModBlocks.FLUID_TANK)).addFluid(fluidStack);
 	}
 }

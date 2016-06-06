@@ -1,13 +1,16 @@
 package com.choonster.testmod3.block;
 
+import com.choonster.testmod3.TestMod3;
+import com.choonster.testmod3.network.MessageFluidTankContents;
 import com.choonster.testmod3.tileentity.TileEntityFluidTank;
+import com.choonster.testmod3.util.CapabilityUtils;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -18,8 +21,10 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -32,53 +37,46 @@ import java.util.List;
  *
  * @author Choonster
  */
-public class BlockFluidTank extends BlockTestMod3 {
+public class BlockFluidTank extends BlockTileEntity<TileEntityFluidTank> {
 	public BlockFluidTank() {
-		super(Material.GLASS, "fluidTank");
+		super(Material.GLASS, "fluidTank", true);
 		setSoundType(SoundType.GLASS);
 	}
 
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		final ItemStack stack = new ItemStack(this);
-
-		final TileEntityFluidTank tileEntity = getTileEntity(world, pos);
-		if (tileEntity != null) {
-			final NBTTagCompound tankData = stack.getSubCompound("TankData", true);
-			tileEntity.writeTankData(tankData);
-		}
-
 		final List<ItemStack> drops = new ArrayList<>();
-		drops.add(stack);
+
+		final IFluidHandler fluidHandler = getFluidHandler(world, pos);
+
+		if (fluidHandler != null) {
+			final ItemStack stack = FluidUtil.tryFillContainer(new ItemStack(this), fluidHandler, Integer.MAX_VALUE, null, true);
+			if (stack != null) {
+				drops.add(stack);
+			}
+		}
 
 		return drops;
 	}
 
+	/**
+	 * Get the {@link IFluidHandler} from the {@link TileEntity} at the specified position.
+	 *
+	 * @param world The world
+	 * @param pos   The position
+	 * @return The IFluidHandler
+	 */
+	@Nullable
+	private IFluidHandler getFluidHandler(IBlockAccess world, BlockPos pos) {
+		return CapabilityUtils.getCapability(getTileEntity(world, pos), CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+	}
+
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		final NBTTagCompound tankData = stack.getSubCompound("TankData", false);
-
-		final TileEntityFluidTank tileEntity = getTileEntity(worldIn, pos);
-		if (tankData != null && tileEntity != null) {
-			tileEntity.readTankData(tankData);
+		final IFluidHandler fluidHandler = getFluidHandler(worldIn, pos);
+		if (fluidHandler != null) {
+			FluidUtil.tryEmptyContainer(stack, fluidHandler, Integer.MAX_VALUE, null, true);
 		}
-	}
-
-	@Override
-	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		// If it will harvest, delay deletion of the block until after getDrops
-		return willHarvest || super.removedByPlayer(state, world, pos, player, false);
-	}
-
-	@Override
-	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
-		super.harvestBlock(world, player, pos, state, te, stack);
-		world.setBlockToAir(pos);
-	}
-
-	@Override
-	public boolean hasTileEntity(IBlockState state) {
-		return true;
 	}
 
 	@Override
@@ -86,22 +84,17 @@ public class BlockFluidTank extends BlockTestMod3 {
 		return new TileEntityFluidTank();
 	}
 
-	@Nullable
-	protected TileEntityFluidTank getTileEntity(IBlockAccess world, BlockPos pos) {
-		return (TileEntityFluidTank) world.getTileEntity(pos);
-	}
-
-	public static List<ITextComponent> getFluidDataForDisplay(FluidTankInfo[] infos) {
+	public static List<ITextComponent> getFluidDataForDisplay(IFluidTankProperties[] fluidTankProperties) {
 		final List<ITextComponent> data = new ArrayList<>();
 
 		boolean hasFluid = false;
 
-		for (final FluidTankInfo fluidTankInfo : infos) {
-			final FluidStack fluidStack = fluidTankInfo.fluid;
+		for (final IFluidTankProperties properties : fluidTankProperties) {
+			final FluidStack fluidStack = properties.getContents();
 
 			if (fluidStack != null && fluidStack.amount > 0) {
 				hasFluid = true;
-				data.add(new TextComponentTranslation("tile.testmod3:fluidTank.fluid.desc", fluidStack.getLocalizedName(), fluidStack.amount, fluidTankInfo.capacity));
+				data.add(new TextComponentTranslation("tile.testmod3:fluidTank.fluid.desc", fluidStack.getLocalizedName(), fluidStack.amount, properties.getCapacity()));
 			}
 		}
 
@@ -114,16 +107,19 @@ public class BlockFluidTank extends BlockTestMod3 {
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		final TileEntityFluidTank tileEntityFluidTank = getTileEntity(worldIn, pos);
+		final IFluidHandler fluidHandler = getFluidHandler(worldIn, pos);
 
-		if (tileEntityFluidTank != null) {
-			final boolean result = FluidUtil.interactWithTank(heldItem, playerIn, tileEntityFluidTank, side);
+		if (fluidHandler != null) {
+			// Try fill/empty the held fluid container from the tank
+			boolean success = FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, playerIn);
 
-			if (!worldIn.isRemote) {
-				getFluidDataForDisplay(tileEntityFluidTank.getTankInfo(side)).forEach(playerIn::addChatComponentMessage);
+			// If the contents changed or this is the off hand, send a chat message to the player
+			if (!worldIn.isRemote && (success || hand == EnumHand.OFF_HAND)) {
+				TestMod3.network.sendTo(new MessageFluidTankContents(fluidHandler.getTankProperties()), (EntityPlayerMP) playerIn);
 			}
 
-			return result;
+			// If the held item is a fluid container, stop processing here so it doesn't try to place its contents
+			return FluidUtil.getFluidHandler(heldItem) != null;
 		}
 
 		return false;
