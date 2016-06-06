@@ -14,14 +14,9 @@ import net.minecraft.world.World;
  *
  * @author Choonster
  */
-public class BlockPotionEffect extends BlockTestMod3 {
+public class BlockPotionEffect extends BlockTileEntity<TileEntityPotionEffect> {
 	public BlockPotionEffect() {
-		super(Material.ROCK, "potionEffect");
-	}
-
-	@Override
-	public boolean hasTileEntity(IBlockState state) {
-		return true;
+		super(Material.ROCK, "potionEffect", false);
 	}
 
 	@Override
