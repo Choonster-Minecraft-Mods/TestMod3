@@ -5,8 +5,7 @@
 			"top": "#all",
 			"bottom": "#all",
 			"side": "#all"
-		},
-		"transform": "forge:default-block"
+		}
 	},
 	"variants": {
 		"half": {

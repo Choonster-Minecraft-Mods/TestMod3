@@ -2,8 +2,7 @@
 	"forge_marker": 1,
 	"defaults": {
 		"model": "testmod3:orientable_single",
-		"uvlock": true,
-		"transform": "forge:default-block"
+		"uvlock": true
 	},
 	"variants": {
 		"color": {

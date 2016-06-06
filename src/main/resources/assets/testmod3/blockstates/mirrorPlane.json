@@ -6,8 +6,7 @@
 			"side": "testmod3:blocks/mirror_plane_side",
 			"base": "testmod3:blocks/mirror_plane_base",
 			"plane": "testmod3:blocks/mirror_plane_plane"
-		},
-		"transform": "forge:default-block"
+		}
 	},
 	"variants": {
 		"horizontal_rotation=north,vertical_rotation=up": { "x": 0, "y": 0 },
