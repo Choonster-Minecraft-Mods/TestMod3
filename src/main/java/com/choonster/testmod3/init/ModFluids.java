@@ -3,6 +3,7 @@ package com.choonster.testmod3.init;
 import com.choonster.testmod3.TestMod3;
 import com.choonster.testmod3.block.fluid.BlockFluidNoFlow;
 import com.choonster.testmod3.item.block.ItemFluidTank;
+import com.choonster.testmod3.tileentity.TileEntityFluidTank;
 import com.choonster.testmod3.util.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -117,7 +118,7 @@ public class ModFluids {
 	}
 
 	private static void registerTank(Fluid fluid) {
-		final FluidStack fluidStack = new FluidStack(fluid, 10 * Fluid.BUCKET_VOLUME);
+		final FluidStack fluidStack = new FluidStack(fluid, TileEntityFluidTank.CAPACITY);
 		((ItemFluidTank) Item.getItemFromBlock(ModBlocks.FLUID_TANK)).addFluid(fluidStack);
 	}
 }
