@@ -2,6 +2,8 @@ package com.choonster.testmod3.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
 
+import javax.annotation.Nullable;
+
 public interface IProxy {
 	void preInit();
 
@@ -19,5 +21,6 @@ public interface IProxy {
 	 *
 	 * @return The client player
 	 */
+	@Nullable
 	EntityPlayer getClientPlayer();
 }

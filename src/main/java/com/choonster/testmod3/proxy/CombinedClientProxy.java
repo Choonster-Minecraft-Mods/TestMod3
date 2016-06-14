@@ -15,6 +15,8 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+
 @SideOnly(Side.CLIENT)
 public class CombinedClientProxy implements IProxy {
 
@@ -45,6 +47,7 @@ public class CombinedClientProxy implements IProxy {
 		KeyBinding.onTick(minecraft.gameSettings.keyBindUseItem.getKeyCode());
 	}
 
+	@Nullable
 	@Override
 	public EntityPlayer getClientPlayer() {
 		return minecraft.thePlayer;
