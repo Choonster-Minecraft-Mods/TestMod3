@@ -1,8 +1,8 @@
 package choonster.testmod3.item;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.network.MessagePlayerReceivedLoot;
 import choonster.testmod3.init.ModLootTables;
+import choonster.testmod3.network.MessagePlayerReceivedLoot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;

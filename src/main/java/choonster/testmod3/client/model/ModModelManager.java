@@ -1,10 +1,10 @@
 package choonster.testmod3.client.model;
 
-import choonster.testmod3.block.BlockVariants;
-import choonster.testmod3.init.ModItems;
 import choonster.testmod3.block.BlockColouredSlab;
+import choonster.testmod3.block.BlockVariants;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.init.ModFluids;
+import choonster.testmod3.init.ModItems;
 import choonster.testmod3.util.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;

@@ -1,8 +1,8 @@
 package choonster.testmod3.client.gui;
 
 import choonster.testmod3.client.gui.inventory.GuiModChest;
-import choonster.testmod3.tileentity.TileEntitySurvivalCommandBlock;
 import choonster.testmod3.tileentity.TileEntityModChest;
+import choonster.testmod3.tileentity.TileEntitySurvivalCommandBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;

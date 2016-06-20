@@ -1,10 +1,10 @@
 package choonster.testmod3.tileentity;
 
-import choonster.testmod3.inventory.itemhandler.IItemHandlerNameable;
-import choonster.testmod3.inventory.itemhandler.wrapper.NameableCombinedInvWrapper;
 import choonster.testmod3.inventory.IContainerCallbacks;
 import choonster.testmod3.inventory.container.ContainerModChest;
+import choonster.testmod3.inventory.itemhandler.IItemHandlerNameable;
 import choonster.testmod3.inventory.itemhandler.ItemHandlerLoot;
+import choonster.testmod3.inventory.itemhandler.wrapper.NameableCombinedInvWrapper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;

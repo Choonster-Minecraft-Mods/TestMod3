@@ -1,7 +1,7 @@
 package choonster.testmod3.command;
 
-import choonster.testmod3.capability.maxhealth.CapabilityMaxHealth;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
+import choonster.testmod3.capability.maxhealth.CapabilityMaxHealth;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

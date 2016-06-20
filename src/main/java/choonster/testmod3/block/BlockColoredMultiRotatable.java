@@ -1,7 +1,7 @@
 package choonster.testmod3.block;
 
-import choonster.testmod3.util.EnumFaceRotation;
 import choonster.testmod3.tileentity.TileEntityColoredMultiRotatable;
+import choonster.testmod3.util.EnumFaceRotation;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;

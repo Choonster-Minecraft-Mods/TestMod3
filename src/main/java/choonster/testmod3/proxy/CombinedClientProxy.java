@@ -1,12 +1,12 @@
 package choonster.testmod3.proxy;
 
 
-import choonster.testmod3.client.model.ModModelManager;
-import choonster.testmod3.client.render.entity.RenderModArrow;
-import choonster.testmod3.entity.EntityModArrow;
 import choonster.testmod3.client.cape.CapeEventHandler;
 import choonster.testmod3.client.event.ClientEventHandler;
 import choonster.testmod3.client.model.ModColourManager;
+import choonster.testmod3.client.model.ModModelManager;
+import choonster.testmod3.client.render.entity.RenderModArrow;
+import choonster.testmod3.entity.EntityModArrow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;

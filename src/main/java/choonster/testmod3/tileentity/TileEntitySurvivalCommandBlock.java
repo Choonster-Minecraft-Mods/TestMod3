@@ -1,7 +1,7 @@
 package choonster.testmod3.tileentity;
 
-import choonster.testmod3.block.BlockSurvivalCommandBlock;
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.block.BlockSurvivalCommandBlock;
 import choonster.testmod3.client.gui.GuiIDs;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;

@@ -2,9 +2,9 @@ package choonster.testmod3.network;
 
 import choonster.testmod3.Logger;
 import choonster.testmod3.client.gui.GuiSurvivalCommandBlock;
+import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.tileentity.SurvivalCommandBlockLogic;
 import choonster.testmod3.tileentity.TileEntitySurvivalCommandBlock;
-import choonster.testmod3.init.ModBlocks;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCommandBlock;

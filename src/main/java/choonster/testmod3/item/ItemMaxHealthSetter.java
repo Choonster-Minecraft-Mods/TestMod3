@@ -1,7 +1,7 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.capability.maxhealth.CapabilityMaxHealth;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
+import choonster.testmod3.capability.maxhealth.CapabilityMaxHealth;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

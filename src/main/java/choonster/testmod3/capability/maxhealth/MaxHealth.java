@@ -1,8 +1,8 @@
 package choonster.testmod3.capability.maxhealth;
 
 import choonster.testmod3.Logger;
-import choonster.testmod3.util.Constants;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
+import choonster.testmod3.util.Constants;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeMap;

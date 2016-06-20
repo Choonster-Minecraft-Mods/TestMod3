@@ -1,7 +1,7 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.capability.lastusetime.LastUseTime;
 import choonster.testmod3.capability.lastusetime.CapabilityLastUseTime;
+import choonster.testmod3.capability.lastusetime.LastUseTime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

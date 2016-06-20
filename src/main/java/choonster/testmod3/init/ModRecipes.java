@@ -1,9 +1,9 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.Logger;
-import choonster.testmod3.recipe.ShapelessNBTRecipe;
 import choonster.testmod3.recipe.ShapedArmourUpgradeRecipe;
 import choonster.testmod3.recipe.ShapelessCuttingRecipe;
+import choonster.testmod3.recipe.ShapelessNBTRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.init.Blocks;

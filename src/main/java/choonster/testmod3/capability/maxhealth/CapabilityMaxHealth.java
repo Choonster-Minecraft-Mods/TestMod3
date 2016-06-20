@@ -2,8 +2,8 @@ package choonster.testmod3.capability.maxhealth;
 
 import choonster.testmod3.Logger;
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.capability.SimpleCapabilityProvider;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
+import choonster.testmod3.capability.SimpleCapabilityProvider;
 import choonster.testmod3.util.CapabilityUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
