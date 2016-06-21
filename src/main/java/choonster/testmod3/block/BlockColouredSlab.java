@@ -101,7 +101,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 
 	@Override
 	public Comparable<?> getTypeForItem(ItemStack stack) {
-		return variants.byOffsetMetadata(stack.getMetadata() & variants.values.size());
+		return variants.byOffsetMetadata(stack.getMetadata());
 	}
 
 	/**
