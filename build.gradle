@@ -57,7 +57,7 @@ shadowJar {
     }
 
     // Relocate fluent-hc to prevent conflicts with other mods that include it
-    relocate 'org.apache.http.client.fluent', 'com.choonster.testmod3.repack.org.apache.http.client.fluent'
+    relocate 'org.apache.http.client.fluent', 'choonster.testmod3.repack.org.apache.http.client.fluent'
 
     classifier '' // Replace the default JAR
 }
