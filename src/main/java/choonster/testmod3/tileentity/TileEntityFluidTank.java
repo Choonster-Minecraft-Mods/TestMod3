@@ -1,5 +1,6 @@
 package choonster.testmod3.tileentity;
 
+import choonster.testmod3.fluids.FluidTankWithTile;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -18,7 +19,7 @@ public class TileEntityFluidTank extends TileFluidHandler {
 	public static final int CAPACITY = 10 * Fluid.BUCKET_VOLUME;
 
 	public TileEntityFluidTank() {
-		tank = new FluidTank(CAPACITY);
+		tank = new FluidTankWithTile(this, CAPACITY);
 	}
 
 	@Override
