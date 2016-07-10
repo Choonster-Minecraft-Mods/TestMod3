@@ -85,6 +85,7 @@ public class TestMod3 {
 		ModRecipes.removeCraftingRecipes();
 
 		ModMapGen.registerWorldGenerators();
+		ModEntities.addSpawns();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 

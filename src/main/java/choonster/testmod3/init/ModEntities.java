@@ -3,11 +3,18 @@ package choonster.testmod3.init;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.entity.EntityModArrow;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.monster.EntityGuardian;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 public class ModEntities {
 	public static void registerEntities() {
 		registerEntity(EntityModArrow.class, "modArrow", 64, 20, false);
+	}
+
+	public static void addSpawns() {
+		EntityRegistry.addSpawn(EntityGuardian.class, 100, 5, 20, EnumCreatureType.WATER_CREATURE, BiomeDictionary.getBiomesForType(BiomeDictionary.Type.OCEAN));
 	}
 
 	private static int entityID = 0;
