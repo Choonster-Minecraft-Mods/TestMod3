@@ -10,7 +10,6 @@ import choonster.testmod3.proxy.IProxy;
 import choonster.testmod3.tests.Tests;
 import choonster.testmod3.tweak.snowbuildup.SnowBuildup;
 import choonster.testmod3.util.BlockDumper;
-import choonster.testmod3.world.gen.WorldGenOres;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.FMLLog;
@@ -21,7 +20,6 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.UUID;
 
@@ -79,11 +77,7 @@ public class TestMod3 {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		ModRecipes.registerRecipes();
-
-		GameRegistry.registerWorldGenerator(new WorldGenOres(), 0);
-
 		ModRecipes.removeCraftingRecipes();
-
 		ModMapGen.registerWorldGenerators();
 		ModEntities.addSpawns();
 

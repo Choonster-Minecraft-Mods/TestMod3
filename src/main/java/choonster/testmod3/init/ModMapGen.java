@@ -2,6 +2,7 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.event.MapGenHandler;
 import choonster.testmod3.world.gen.WorldGenBanner;
+import choonster.testmod3.world.gen.WorldGenOres;
 import choonster.testmod3.world.gen.structure.MapGenScatteredFeatureModBiomes;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
@@ -16,5 +17,6 @@ public class ModMapGen {
 
 	public static void registerWorldGenerators() {
 		GameRegistry.registerWorldGenerator(new WorldGenBanner(), 100);
+		GameRegistry.registerWorldGenerator(new WorldGenOres(), 0);
 	}
 }
