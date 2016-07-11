@@ -75,7 +75,7 @@ public class ModBlocks {
 		PIG_SPAWNER_REFILLER = registerBlock(new BlockPigSpawnerRefiller());
 		MIRROR_PLANE = registerBlock(new BlockPlane(Material.IRON, "mirrorPlane"));
 		VANILLA_MODEL_TEST = registerBlock(new BlockTestMod3(Material.IRON, "vanillaModelTest"));
-		FULLBRIGHT = registerBlock(new BlockTestMod3(Material.ROCK, "fullbright"));
+		FULLBRIGHT = (BlockTestMod3) registerBlock(new BlockTestMod3(Material.ROCK, "fullbright").setLightLevel(1));
 		NORMAL_BRIGHTNESS = registerBlock(new BlockTestMod3(Material.ROCK, "normalBrightness"));
 		MAX_HEALTH_SETTER = registerBlock(new BlockMaxHealthSetter());
 		MAX_HEALTH_GETTER = registerBlock(new BlockMaxHealthGetter());
