@@ -4,10 +4,12 @@ import choonster.testmod3.Logger;
 import choonster.testmod3.recipe.ShapedArmourUpgradeRecipe;
 import choonster.testmod3.recipe.ShapelessCuttingRecipe;
 import choonster.testmod3.recipe.ShapelessNBTRecipe;
+import choonster.testmod3.recipe.brewing.PotionTypeConversionBrewingRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -15,7 +17,9 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.RecipeFireworks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.potion.PotionType;
 import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -32,6 +36,7 @@ public class ModRecipes {
 	public static void registerRecipes() {
 		registerRecipeClasses();
 		addCraftingRecipes();
+		addBrewingRecipes();
 	}
 
 	private static void registerRecipeClasses() {
@@ -60,6 +65,32 @@ public class ModRecipes {
 
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.DIMENSION_REPLACEMENT), ModItems.SUBSCRIPTS, ModItems.SUPERSCRIPTS);
 		GameRegistry.addSmelting(ModItems.SUBSCRIPTS, new ItemStack(ModItems.DIMENSION_REPLACEMENT), 0.35f);
+	}
+
+	/**
+	 * Add this mod's brewing recipes.
+	 */
+	private static void addBrewingRecipes() {
+		addStandardConversionRecipes(ModPotionTypes.TEST, ModPotionTypes.LONG_TEST, ModPotionTypes.STRONG_TEST, new ItemStack(ModItems.ARROW));
+	}
+
+	/**
+	 * Add the standard conversion recipes for the specified {@link PotionType}s:
+	 * <ul>
+	 * <li>Awkward + Ingredient = Standard</li>
+	 * <li>Standard + Redstone = Long</li>
+	 * <li>Standard + Glowstone = Strong</li>
+	 * </ul>
+	 *
+	 * @param standardPotionType The standard PotionType
+	 * @param longPotionType     The long PotionType
+	 * @param strongPotionType   The strong PotionType
+	 * @param ingredient         The ingredient
+	 */
+	private static void addStandardConversionRecipes(PotionType standardPotionType, PotionType longPotionType, PotionType strongPotionType, ItemStack ingredient) {
+		BrewingRecipeRegistry.addRecipe(new PotionTypeConversionBrewingRecipe(PotionTypes.AWKWARD, ingredient, standardPotionType));
+		BrewingRecipeRegistry.addRecipe(new PotionTypeConversionBrewingRecipe(standardPotionType, new ItemStack(Items.REDSTONE), longPotionType));
+		BrewingRecipeRegistry.addRecipe(new PotionTypeConversionBrewingRecipe(standardPotionType, new ItemStack(Items.GLOWSTONE_DUST), strongPotionType));
 	}
 
 	public static void removeCraftingRecipes() {

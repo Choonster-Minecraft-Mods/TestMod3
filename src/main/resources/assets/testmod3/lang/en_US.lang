@@ -230,3 +230,14 @@ testmod3:faceRotation.left=Left
 testmod3:verticalRotation.down=Down
 testmod3:verticalRotation.up=Up
 testmod3:verticalRotation.side=Side
+
+# Potion Effects
+effect.testmod3:test=Test
+
+tipped_arrow.effect.testmod3:test=Arrow of Testing
+
+potion.effect.testmod3:test=Potion of Testing
+
+splash_potion.effect.testmod3:test=Splash Potion of Testing
+
+lingering_potion.effect.testmod3:test=Lingering Potion of Testing

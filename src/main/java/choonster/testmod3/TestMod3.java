@@ -68,6 +68,8 @@ public class TestMod3 {
 		ModBiomes.registerBiomes();
 		ModMapGen.registerMapGen();
 		ModEntities.registerEntities();
+		ModPotions.registerPotions();
+		ModPotionTypes.registerPotionTypes();
 
 		SnowBuildup.init();
 
