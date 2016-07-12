@@ -1,8 +1,8 @@
 package choonster.testmod3.potion;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.client.gui.GuiUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
@@ -63,7 +63,7 @@ public class PotionTestMod3 extends Potion {
 	public void renderInventoryEffect(int x, int y, PotionEffect effect, Minecraft mc) {
 		if (mc.currentScreen != null) {
 			mc.getTextureManager().bindTexture(iconTexture);
-			GuiUtils.drawTexturedModalRect(x + 6, y + 7, 0, 0, 18, 18, mc.currentScreen);
+			Gui.drawModalRectWithCustomSizedTexture(x + 6, y + 7, 0, 0, 18, 18, 18, 18);
 		}
 	}
 
@@ -81,6 +81,6 @@ public class PotionTestMod3 extends Potion {
 	@Override
 	public void renderHUDEffect(int x, int y, PotionEffect effect, Minecraft mc, float alpha) {
 		mc.getTextureManager().bindTexture(iconTexture);
-		GuiUtils.drawTexturedModalRect(x + 3, y + 3, 0, 0, 18, 18, mc.ingameGUI);
+		Gui.drawModalRectWithCustomSizedTexture(x + 3, y + 3, 0, 0, 18, 18, 18, 18);
 	}
 }
