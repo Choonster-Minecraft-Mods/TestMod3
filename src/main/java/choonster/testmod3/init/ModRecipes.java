@@ -32,19 +32,31 @@ import java.util.List;
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPELESS;
 
+/**
+ * Adds and removes recipes.
+ */
 public class ModRecipes {
+	/**
+	 * Add this mod's recipes.
+	 */
 	public static void registerRecipes() {
 		registerRecipeClasses();
 		addCraftingRecipes();
 		addBrewingRecipes();
 	}
 
+	/**
+	 * Register this mod's recipe classes.
+	 */
 	private static void registerRecipeClasses() {
 		RecipeSorter.register("testmod3:shapelesscutting", ShapelessCuttingRecipe.class, SHAPELESS, "after:minecraft:shapeless");
 		RecipeSorter.register("testmod3:shapedarmourupgrade", ShapedArmourUpgradeRecipe.class, SHAPED, "after:forge:shapedore before:minecraft:shapeless");
 		RecipeSorter.register("testmod3:shapelessnbt", ShapelessNBTRecipe.class, SHAPELESS, "after:forge:shapelessore");
 	}
 
+	/**
+	 * Add this mod's crafting recipes.
+	 */
 	private static void addCraftingRecipes() {
 		GameRegistry.addRecipe(new ShapelessCuttingRecipe(new ItemStack(Blocks.PLANKS, 2, BlockPlanks.EnumType.OAK.getMetadata()), new ItemStack(Items.WOODEN_AXE, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.LOG, 1, BlockPlanks.EnumType.OAK.getMetadata())));
 
@@ -93,18 +105,29 @@ public class ModRecipes {
 		BrewingRecipeRegistry.addRecipe(new PotionTypeConversionBrewingRecipe(standardPotionType, new ItemStack(Items.GLOWSTONE_DUST), strongPotionType));
 	}
 
+	/**
+	 * Remove crafting recipes.
+	 */
 	public static void removeCraftingRecipes() {
 		removeRecipeClass(RecipeFireworks.class);
 		removeRecipe(Items.DYE);
 		removeRecipe(Blocks.STAINED_HARDENED_CLAY);
 	}
 
+	/**
+	 * Remove all crafting recipes with the specified {@link Block} as their output.
+	 *
+	 * @param output The output Block
+	 */
 	private static void removeRecipe(Block output) {
-		removeRecipe(Item.getItemFromBlock(output));
+		final Item item = Item.getItemFromBlock(output);
+		assert item != null;
+
+		removeRecipe(item);
 	}
 
 	/**
-	 * Remove all recipes with the specified output Item.
+	 * Remove all crafting recipes with the specified {@link Item} as their output.
 	 * <p>
 	 * Adapted from Rohzek's code in this post:
 	 * http://www.minecraftforge.net/forum/index.php/topic,33631.0.html
@@ -132,7 +155,7 @@ public class ModRecipes {
 	}
 
 	/**
-	 * Remove all recipes that are instances of the specified class.
+	 * Remove all crafting recipes that are instances of the specified class.
 	 * <p>
 	 * Test for this thread:
 	 * http://www.minecraftforge.net/forum/index.php/topic,33631.0.html
