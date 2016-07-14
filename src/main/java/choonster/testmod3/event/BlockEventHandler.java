@@ -10,6 +10,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.annotation.Nullable;
+
 public class BlockEventHandler {
 
 	/**
@@ -22,7 +24,7 @@ public class BlockEventHandler {
 	 * @param stack The tool ItemStack
 	 * @return True if the tool can harvest the block
 	 */
-	private boolean canToolHarvestBlock(IBlockState state, ItemStack stack) {
+	private boolean canToolHarvestBlock(IBlockState state, @Nullable ItemStack stack) {
 		final String tool = state.getBlock().getHarvestTool(state);
 		return stack != null && tool != null
 				&& stack.getItem().getHarvestLevel(stack, tool) >= state.getBlock().getHarvestLevel(state);
@@ -38,7 +40,7 @@ public class BlockEventHandler {
 	 * @return True if the block is a log, the player isn't in creative mode and the player doesn't have the correct tool equipped
 	 */
 	private boolean isPlayerHarvestingLogWithoutCorrectTool(IBlockState state, IBlockAccess blockAccess, BlockPos pos, EntityPlayer player) {
-		return player != null && !player.capabilities.isCreativeMode
+		return !player.capabilities.isCreativeMode
 				&& state.getBlock().isWood(blockAccess, pos)
 				&& !canToolHarvestBlock(state, player.getHeldItemMainhand());
 	}

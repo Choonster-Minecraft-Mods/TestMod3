@@ -8,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.math.BlockPos;
@@ -43,7 +44,7 @@ public class ItemHarvestSword extends ItemTool {
 	private static final float DIG_SPEED_DEFAULT = 1.0f;
 
 	/**
-	 * The base attack damage before the {@link net.minecraft.item.Item.ToolMaterial}'s attack damage is factored in
+	 * The base attack damage before the {@link ToolMaterial}'s attack damage is factored in
 	 */
 	private static final float BASE_DAMAGE = 3.0f;
 
@@ -126,6 +127,7 @@ public class ItemHarvestSword extends ItemTool {
 		return DIG_SPEED_DEFAULT;
 	}
 
+	@Override
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker) {
 		itemStack.damageItem(1, attacker); // Only reduce the durability by 1 point (like swords do) instead of 2 (like tools do)
 		return true;
