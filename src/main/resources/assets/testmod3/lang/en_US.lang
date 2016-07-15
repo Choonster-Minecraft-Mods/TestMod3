@@ -185,8 +185,18 @@ message.testmod3:maxHealth.get=Max health of %s is %s (%s bonus)
 
 # Config GUI strings
 testmod3.config.title=TestMod3 Config
+
 testmod3.config.general=General
-testmod3.config.biomes=Biome IDs
+testmod3.config.general.tooltip=General Settings.
+testmod3.config.biomes=Biome IDs (NO LONGER USED)
+testmod3.config.biomes.tooltip=This section is no longer used.
+testmod3.config.client=Client
+testmod3.config.client.tooltip=Settings that only affect the local client.
+
+testmod3.config.fooBar=Foo Bar
+testmod3.config.fooBar.tooltip=This is an example boolean property.
+testmod3.config.baz=Baz
+testmod3.config.baz.tooltip=This is an example int property.
 
 # Entities
 entity.testmod3.modArrow.name=Mod Arrow

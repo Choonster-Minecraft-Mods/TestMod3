@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 
 public class GuiConfigTestMod3 extends GuiConfig {
 	public GuiConfigTestMod3(GuiScreen parentScreen) {
-		super(parentScreen, getConfigElements(), TestMod3.MODID, false, false, I18n.format("testmod3.config.title"));
+		super(parentScreen, getConfigElements(), TestMod3.MODID, false, false, I18n.format(Config.LANG_PREFIX + "title"));
 	}
 
 	private static List<IConfigElement> getConfigElements() {
 		return Config.config.getCategoryNames().stream()
-				.map(categoryName -> new ConfigElement(Config.config.getCategory(categoryName).setLanguageKey("testmod3.config." + categoryName)))
+				.map(categoryName -> new ConfigElement(Config.config.getCategory(categoryName).setLanguageKey(Config.LANG_PREFIX + categoryName)))
 				.collect(Collectors.toList());
 	}
 }
