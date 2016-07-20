@@ -1,5 +1,6 @@
 package choonster.testmod3.block;
 
+import choonster.testmod3.util.IVariant;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -11,7 +12,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -68,7 +68,7 @@ public class BlockVariants extends BlockTestMod3 {
 		}
 	}
 
-	public enum EnumType implements IStringSerializable {
+	public enum EnumType implements IVariant {
 		VARIANT_A(0, "a"),
 		VARIANT_B(1, "b");
 

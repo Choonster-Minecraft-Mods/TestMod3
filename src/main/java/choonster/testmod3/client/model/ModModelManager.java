@@ -80,9 +80,7 @@ public class ModModelManager {
 			}
 		}
 
-		for (final BlockVariants.EnumType enumType : BlockVariants.EnumType.values()) {
-			registerBlockItemModelForMeta(ModBlocks.VARIANTS, enumType.getMeta(), "variant=" + enumType.getName());
-		}
+		registerVariantBlockItemModels(ModBlocks.VARIANTS, "variant", BlockVariants.EnumType.values());
 
 		registerBlockItemModel(ModBlocks.MIRROR_PLANE, new ModelResourceLocation(ModBlocks.MIRROR_PLANE.getRegistryName(), "horizontal_rotation=north,vertical_rotation=up"));
 		registerBlockItemModel(ModBlocks.CHEST, new ModelResourceLocation(ModBlocks.CHEST.getRegistryName(), "facing=north"));
@@ -101,6 +99,13 @@ public class ModModelManager {
 		final Item item = Item.getItemFromBlock(block);
 		if (item != null) {
 			registerItemModel(item, modelLocation);
+		}
+	}
+
+	private <T extends IVariant> void registerVariantBlockItemModels(Block block, String variantName, T[] variants) {
+		final Item item = Item.getItemFromBlock(block);
+		if (item != null) {
+			registerVariantItemModels(item, variantName, variants);
 		}
 	}
 
