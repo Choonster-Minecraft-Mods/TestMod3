@@ -5,7 +5,9 @@ import choonster.testmod3.block.BlockVariants;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
+import choonster.testmod3.item.ItemVariants;
 import choonster.testmod3.util.Constants;
+import choonster.testmod3.util.IVariant;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -144,6 +146,8 @@ public class ModModelManager {
 		registerItemModel(ModItems.SLOW_SWORD_WOOD, "minecraft:wooden_sword");
 		registerItemModel(ModItems.SLOW_SWORD_DIAMOND, "minecraft:diamond_sword");
 
+		registerVariantItemModels(ModItems.VARIANTS, "variant", ItemVariants.EnumType.values());
+
 		// Then register items with default model names
 		ModItems.ITEMS.stream().filter(item -> !itemsRegistered.contains(item)).forEach(this::registerItemModel);
 	}
@@ -165,6 +169,12 @@ public class ModModelManager {
 	private void registerItemModel(Item item, ItemMeshDefinition meshDefinition) {
 		itemsRegistered.add(item);
 		ModelLoader.setCustomMeshDefinition(item, meshDefinition);
+	}
+
+	private <T extends IVariant> void registerVariantItemModels(Item item, String variantName, T[] variants) {
+		for (T variant : variants) {
+			registerItemModelForMeta(item, variant.getMeta(), variantName + "=" + variant.getName());
+		}
 	}
 
 	private void registerItemModelForMeta(Item item, int metadata, String variant) {
