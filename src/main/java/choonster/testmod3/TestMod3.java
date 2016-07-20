@@ -23,7 +23,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 import java.util.UUID;
 
-@Mod(modid = TestMod3.MODID, guiFactory = "choonster.testmod3.config.GuiConfigFactoryTestMod3")
+@Mod(modid = TestMod3.MODID, acceptedMinecraftVersions = "[1.10.2]", guiFactory = "choonster.testmod3.config.GuiConfigFactoryTestMod3")
 public class TestMod3 {
 	public static final String MODID = "testmod3";
 
