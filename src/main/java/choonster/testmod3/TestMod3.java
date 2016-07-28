@@ -9,6 +9,7 @@ import choonster.testmod3.init.*;
 import choonster.testmod3.proxy.IProxy;
 import choonster.testmod3.tests.Tests;
 import choonster.testmod3.tweak.snowbuildup.SnowBuildup;
+import choonster.testmod3.tweak.spawnerdrops.SpawnerDrops;
 import choonster.testmod3.util.BlockDumper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -72,6 +73,7 @@ public class TestMod3 {
 		ModPotionTypes.registerPotionTypes();
 
 		SnowBuildup.init();
+		SpawnerDrops.init();
 
 		proxy.preInit();
 	}
@@ -102,5 +104,10 @@ public class TestMod3 {
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
 		ModCommands.registerCommands(event);
+	}
+
+	@EventHandler
+	public void serverStopped(FMLServerStoppedEvent event) {
+		SpawnerDrops.serverStopped();
 	}
 }
