@@ -50,7 +50,7 @@ public class SnowBuildup {
 
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event) {
-		if (!event.world.isRemote) return;
+		if (event.world.isRemote) return;
 
 		final WorldServer world = (WorldServer) event.world;
 
