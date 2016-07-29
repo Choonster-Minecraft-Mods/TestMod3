@@ -4,7 +4,6 @@ import choonster.testmod3.Logger;
 import choonster.testmod3.recipe.ShapedArmourUpgradeRecipe;
 import choonster.testmod3.recipe.ShapelessCuttingRecipe;
 import choonster.testmod3.recipe.ShapelessNBTRecipe;
-import choonster.testmod3.recipe.brewing.PotionTypeConversionBrewingRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.init.Blocks;
@@ -17,9 +16,9 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.RecipeFireworks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.potion.PotionHelper;
 import net.minecraft.potion.PotionType;
 import net.minecraftforge.common.ForgeModContainer;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -83,7 +82,7 @@ public class ModRecipes {
 	 * Add this mod's brewing recipes.
 	 */
 	private static void addBrewingRecipes() {
-		addStandardConversionRecipes(ModPotionTypes.TEST, ModPotionTypes.LONG_TEST, ModPotionTypes.STRONG_TEST, new ItemStack(ModItems.ARROW));
+		addStandardConversionRecipes(ModPotionTypes.TEST, ModPotionTypes.LONG_TEST, ModPotionTypes.STRONG_TEST, ModItems.ARROW);
 	}
 
 	/**
@@ -99,10 +98,10 @@ public class ModRecipes {
 	 * @param strongPotionType   The strong PotionType
 	 * @param ingredient         The ingredient
 	 */
-	private static void addStandardConversionRecipes(PotionType standardPotionType, PotionType longPotionType, PotionType strongPotionType, ItemStack ingredient) {
-		BrewingRecipeRegistry.addRecipe(new PotionTypeConversionBrewingRecipe(PotionTypes.AWKWARD, ingredient, standardPotionType));
-		BrewingRecipeRegistry.addRecipe(new PotionTypeConversionBrewingRecipe(standardPotionType, new ItemStack(Items.REDSTONE), longPotionType));
-		BrewingRecipeRegistry.addRecipe(new PotionTypeConversionBrewingRecipe(standardPotionType, new ItemStack(Items.GLOWSTONE_DUST), strongPotionType));
+	private static void addStandardConversionRecipes(PotionType standardPotionType, PotionType longPotionType, PotionType strongPotionType, Item ingredient) {
+		PotionHelper.registerPotionTypeConversion(PotionTypes.AWKWARD, new PotionHelper.ItemPredicateInstance(ingredient), standardPotionType);
+		PotionHelper.registerPotionTypeConversion(standardPotionType, new PotionHelper.ItemPredicateInstance(Items.REDSTONE), longPotionType);
+		PotionHelper.registerPotionTypeConversion(standardPotionType, new PotionHelper.ItemPredicateInstance(Items.GLOWSTONE_DUST), strongPotionType);
 	}
 
 	/**
