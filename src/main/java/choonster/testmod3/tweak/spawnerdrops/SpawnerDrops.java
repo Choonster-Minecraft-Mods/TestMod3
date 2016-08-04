@@ -103,6 +103,10 @@ public class SpawnerDrops {
 		if (tileEntity == null) return; // If the TileEntity doesn't exist, do nothing
 
 		final NBTTagCompound tileData = tileEntity.serializeNBT(); // Write the TileEntity to NBT
+		tileData.removeTag("x"); // Remove the coordinate tags so spawners of the same type from different positions stack
+		tileData.removeTag("y");
+		tileData.removeTag("z");
+
 		final ItemStack droppedItem = new ItemStack(block); // Create an ItemStack of the Block
 		droppedItem.setTagInfo("BlockEntityTag", tileData); // Store the TileEntity data in the ItemStack
 		event.getDrops().add(droppedItem); // Add the ItemStack to the drops list
