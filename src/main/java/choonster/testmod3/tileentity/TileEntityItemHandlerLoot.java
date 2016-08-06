@@ -3,6 +3,7 @@ package choonster.testmod3.tileentity;
 import choonster.testmod3.inventory.itemhandler.ItemHandlerLoot;
 import choonster.testmod3.util.IWorldContainer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTable;
 
 /**
@@ -12,4 +13,8 @@ import net.minecraft.world.storage.loot.LootTable;
  */
 public abstract class TileEntityItemHandlerLoot extends TileEntityItemHandler<ItemHandlerLoot> implements IWorldContainer {
 
+	@Override
+	public World getContainedWorld() {
+		return getWorld();
+	}
 }

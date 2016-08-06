@@ -14,5 +14,5 @@ public interface IWorldContainer {
 	 *
 	 * @return The World
 	 */
-	World getWorld();
+	World getContainedWorld();
 }

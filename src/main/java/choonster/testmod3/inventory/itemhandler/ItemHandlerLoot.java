@@ -123,7 +123,7 @@ public class ItemHandlerLoot extends ItemHandlerNameable implements ILootContain
 	 * @param player The player whose Luck to use when generating loot
 	 */
 	public void fillWithLoot(@Nullable EntityPlayer player) {
-		final World world = worldContainer.getWorld();
+		final World world = worldContainer.getContainedWorld();
 		if (lootTableLocation != null && !world.isRemote) {
 			final LootTable lootTable = world.getLootTableManager().getLootTableFromLocation(lootTableLocation);
 			lootTableLocation = null;
