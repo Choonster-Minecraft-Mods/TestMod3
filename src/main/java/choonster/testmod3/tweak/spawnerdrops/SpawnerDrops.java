@@ -82,6 +82,8 @@ public class SpawnerDrops {
 
 		final Map<BlockPos, TileEntity> storedSpawnersInDimension = storedSpawners.get(dimensionID); // Get the map for this dimension
 		storedSpawnersInDimension.put(pos, world.getTileEntity(pos)); // Store the TileEntity in it
+
+		event.setExpToDrop(0); // Don't drop any XP
 	}
 
 	@SubscribeEvent
