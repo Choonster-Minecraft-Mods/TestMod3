@@ -130,6 +130,7 @@ item.testmod3:dimensionReplacement.name=Dimension Replacement
 item.testmod3:saddle.name=Mod Saddle
 item.testmod3:slowSwordWood.name=Slow Wooden Sword
 item.testmod3:slowSwordDiamond.name=Slow Diamond Sword
+item.testmod3:ritualChecker.name=Ritual Checker
 
 item.testmod3:headReplacement.name=Armour Replacement Helmet
 item.testmod3:chestReplacement.name=Armour Replacement Chestplate
@@ -187,6 +188,8 @@ message.testmod3:playerReceivedLoot.noLoot=No loot received.
 message.testmod3:maxHealth.add=Added %2$s bonus max health to %1$s
 message.testmod3:maxHealth.set=Set bonus max health of %s to %s
 message.testmod3:maxHealth.get=Max health of %s is %s (%s bonus)
+message.testmod3:ritualChecker.success=Ritual pattern is valid!
+message.testmod3:ritualChecker.failure=Ritual pattern is invalid at %d,%d,%d!
 
 # Config GUI strings
 testmod3.config.title=TestMod3 Config
