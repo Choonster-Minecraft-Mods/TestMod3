@@ -15,21 +15,17 @@ public class ItemCuttingAxe extends ItemAxe {
 		super(material);
 		ItemTestMod3.setItemName(this, itemName);
 		setCreativeTab(TestMod3.creativeTab);
-		setMaxDamage(59);
-		setMaxStackSize(1);
 	}
 
 	@Override
 	public boolean hasContainerItem(ItemStack stack) {
-		return stack.getItemDamage() < 59;
+		return true;
 	}
 
 	@Override
 	public ItemStack getContainerItem(ItemStack stack) {
-		if (stack.attemptDamageItem(1, itemRand)) {
-			return null;
-		}
-
+		stack = stack.copy();
+		stack.attemptDamageItem(1, itemRand);
 		return stack;
 	}
 }
