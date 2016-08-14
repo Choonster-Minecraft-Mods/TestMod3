@@ -38,14 +38,14 @@ public class PlayerEventHandler {
 		entityData.setTag(EntityPlayer.PERSISTED_NBT_TAG, persistedData);
 
 		final String key = Constants.RESOURCE_PREFIX + "ReceivedItems";
-		String message = "message.testmod3:login.alreadyReceived";
+		String message = "message.testmod3:login.already_received";
 
 		if (!persistedData.getBoolean(key)) {
 			persistedData.setBoolean(key, true);
 
 			ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(Items.APPLE));
 
-			message = "message.testmod3:login.freeApple";
+			message = "message.testmod3:login.free_apple";
 		}
 
 		final ITextComponent chatComponent = new TextComponentTranslation(message);

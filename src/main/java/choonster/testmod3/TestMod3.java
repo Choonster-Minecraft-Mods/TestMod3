@@ -7,6 +7,7 @@ import choonster.testmod3.event.NetworkEventHandler;
 import choonster.testmod3.event.PlayerEventHandler;
 import choonster.testmod3.init.*;
 import choonster.testmod3.proxy.IProxy;
+import choonster.testmod3.remap.Remapper;
 import choonster.testmod3.tests.Tests;
 import choonster.testmod3.tweak.snowbuildup.SnowBuildup;
 import choonster.testmod3.tweak.spawnerdrops.SpawnerDrops;
@@ -109,5 +110,10 @@ public class TestMod3 {
 	@EventHandler
 	public void serverStopped(FMLServerStoppedEvent event) {
 		SpawnerDrops.serverStopped();
+	}
+
+	@EventHandler
+	public void missingMapings(FMLMissingMappingsEvent event){
+		Remapper.remap(event.get());
 	}
 }

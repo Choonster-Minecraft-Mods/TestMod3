@@ -8,21 +8,21 @@
 			"predicate": {
 				"pulling": 1
 			},
-			"model": "testmod3:item/continuousBow_pulling_0"
+			"model": "testmod3:item/continuous_bow_pulling_0"
 		},
 		{
 			"predicate": {
 				"pulling": 1,
 				"testmod3:pull": 0.3
 			},
-			"model": "testmod3:item/continuousBow_pulling_1"
+			"model": "testmod3:item/continuous_bow_pulling_1"
 		},
 		{
 			"predicate": {
 				"pulling": 1,
 				"testmod3:pull": 0.45
 			},
-			"model": "testmod3:item/continuousBow_pulling_2"
+			"model": "testmod3:item/continuous_bow_pulling_2"
 		}
 	]
 }

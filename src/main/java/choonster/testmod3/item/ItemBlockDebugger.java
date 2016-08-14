@@ -18,7 +18,7 @@ import net.minecraft.world.World;
  */
 public class ItemBlockDebugger extends ItemTestMod3 {
 	public ItemBlockDebugger() {
-		super("blockDebugger");
+		super("block_debugger");
 	}
 
 	@SuppressWarnings("deprecation")

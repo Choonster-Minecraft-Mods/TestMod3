@@ -40,7 +40,7 @@ public class ModFluids {
 				fluid -> fluid.setLuminosity(10).setDensity(800).setViscosity(1500),
 				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.BROWN)));
 
-		STATIC_GAS = createFluid("staticGas", false,
+		STATIC_GAS = createFluid("staticgas", false,
 				fluid -> fluid.setLuminosity(10).setDensity(-800).setViscosity(1500).setGaseous(true),
 				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.BROWN)));
 
@@ -48,7 +48,7 @@ public class ModFluids {
 				fluid -> fluid.setLuminosity(10).setDensity(1600).setViscosity(100),
 				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.ADOBE)));
 
-		NORMAL_GAS = createFluid("normalGas", true,
+		NORMAL_GAS = createFluid("normalgas", true,
 				fluid -> fluid.setLuminosity(10).setDensity(-1600).setViscosity(100).setGaseous(true),
 				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.ADOBE)));
 

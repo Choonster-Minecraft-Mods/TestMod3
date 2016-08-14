@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
  */
 public class BlockMaxHealthSetter extends BlockTestMod3 {
 	public BlockMaxHealthSetter() {
-		super(Material.IRON, "maxHealthSetter");
+		super(Material.IRON, "max_health_setter");
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class BlockMaxHealthSetter extends BlockTestMod3 {
 			final float healthToAdd = playerIn.isSneaking() ? -1.0f : 1.0f;
 			maxHealth.addBonusMaxHealth(healthToAdd);
 
-			playerIn.addChatMessage(new TextComponentTranslation("message.testmod3:maxHealth.add", playerIn.getDisplayName(), healthToAdd));
+			playerIn.addChatMessage(new TextComponentTranslation("message.testmod3:max_health.add", playerIn.getDisplayName(), healthToAdd));
 		}
 
 		return true;

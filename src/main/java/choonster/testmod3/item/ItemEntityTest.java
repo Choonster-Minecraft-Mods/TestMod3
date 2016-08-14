@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class ItemEntityTest extends ItemTestMod3 {
 	public ItemEntityTest() {
-		super("entityTest");
+		super("entity_test");
 	}
 
 	@Override

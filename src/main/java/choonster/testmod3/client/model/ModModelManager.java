@@ -132,8 +132,8 @@ public class ModModelManager {
 		registerItemModel(ModItems.SWAP_TEST_A, "minecraft:brick");
 		registerItemModel(ModItems.SWAP_TEST_B, "minecraft:netherbrick");
 		registerItemModel(ModItems.BLOCK_DEBUGGER, "minecraft:nether_star");
-		registerItemModel(ModItems.HARVEST_SWORD_WOOD, "minecraft:wooden_sword");
-		registerItemModel(ModItems.HARVEST_SWORD_DIAMOND, "minecraft:diamond_sword");
+		registerItemModel(ModItems.WOODEN_HARVEST_SWORD, "minecraft:wooden_sword");
+		registerItemModel(ModItems.DIAMOND_HARVEST_SWORD, "minecraft:diamond_sword");
 		registerItemModel(ModItems.CLEARER, "minecraft:nether_star");
 		registerItemModel(ModItems.HEIGHT_TESTER, "minecraft:compass");
 		registerItemModel(ModItems.HEAVY, "minecraft:brick");
@@ -148,8 +148,8 @@ public class ModModelManager {
 		registerItemModel(ModItems.RESPAWNER, "minecraft:clock");
 		registerItemModel(ModItems.LOOT_TABLE_TEST, "minecraft:gold_ingot");
 		registerItemModel(ModItems.SADDLE, "minecraft:saddle");
-		registerItemModel(ModItems.SLOW_SWORD_WOOD, "minecraft:wooden_sword");
-		registerItemModel(ModItems.SLOW_SWORD_DIAMOND, "minecraft:diamond_sword");
+		registerItemModel(ModItems.WOODEN_SLOW_SWORD, "minecraft:wooden_sword");
+		registerItemModel(ModItems.DIAMOND_SLOW_SWORD, "minecraft:diamond_sword");
 
 		registerVariantItemModels(ModItems.VARIANTS, "variant", ItemVariants.EnumType.values());
 

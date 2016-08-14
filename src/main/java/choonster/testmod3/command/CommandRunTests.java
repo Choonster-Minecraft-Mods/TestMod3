@@ -36,7 +36,7 @@ public class CommandRunTests extends CommandBase {
 	 */
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "commands.testmod3.runTests.usage";
+		return "commands.testmod3.runtests.usage";
 	}
 
 	/**
@@ -49,9 +49,9 @@ public class CommandRunTests extends CommandBase {
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (Tests.runTests()) {
-			sender.addChatMessage(new TextComponentTranslation("commands.testmod3.runTests.testsPassed"));
+			sender.addChatMessage(new TextComponentTranslation("commands.testmod3.runtests.tests_passed"));
 		} else {
-			sender.addChatMessage(new TextComponentTranslation("commands.testmod3.runTests.testsFailed"));
+			sender.addChatMessage(new TextComponentTranslation("commands.testmod3.runtests.tests_failed"));
 		}
 	}
 }

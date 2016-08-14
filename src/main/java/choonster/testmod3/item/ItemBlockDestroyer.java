@@ -16,7 +16,7 @@ import net.minecraft.world.World;
  */
 public class ItemBlockDestroyer extends ItemTestMod3 {
 	public ItemBlockDestroyer() {
-		super("blockDestroyer");
+		super("block_destroyer");
 	}
 
 	@Override
@@ -24,7 +24,7 @@ public class ItemBlockDestroyer extends ItemTestMod3 {
 		if (!worldIn.isRemote) {
 			final IBlockState state = worldIn.getBlockState(pos);
 			if (state.getBlock() == Blocks.WHEAT && state.getValue(BlockCrops.AGE) >= 6) {
-				entityLiving.addChatMessage(new TextComponentTranslation("message.testmod3:blockDestroyer.destroy"));
+				entityLiving.addChatMessage(new TextComponentTranslation("message.testmod3:block_destroyer.destroy"));
 			}
 		}
 

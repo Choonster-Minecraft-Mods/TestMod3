@@ -33,7 +33,7 @@ import java.util.Optional;
  */
 public class ItemRitualChecker extends ItemTestMod3 {
 	public ItemRitualChecker() {
-		super("ritualChecker");
+		super("ritual_checker");
 	}
 
 	@Override
@@ -44,10 +44,10 @@ public class ItemRitualChecker extends ItemTestMod3 {
 			final Optional<BlockPos> invalidPosition = checkRitual(playerIn);
 			if (invalidPosition.isPresent()) {
 				final BlockPos pos = invalidPosition.get();
-				textComponent = new TextComponentTranslation("message.testmod3:ritualChecker.failure", pos.getX(), pos.getY(), pos.getZ());
+				textComponent = new TextComponentTranslation("message.testmod3:ritual_checker.failure", pos.getX(), pos.getY(), pos.getZ());
 				textComponent.getStyle().setColor(TextFormatting.RED);
 			} else {
-				textComponent = new TextComponentTranslation("message.testmod3:ritualChecker.success");
+				textComponent = new TextComponentTranslation("message.testmod3:ritual_checker.success");
 				textComponent.getStyle().setColor(TextFormatting.GREEN);
 			}
 

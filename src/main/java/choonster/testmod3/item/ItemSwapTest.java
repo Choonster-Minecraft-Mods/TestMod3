@@ -22,7 +22,7 @@ public class ItemSwapTest extends ItemTestMod3 {
 	private ItemStack otherItem;
 
 	public ItemSwapTest(String name) {
-		super("swapTest" + name);
+		super("swap_test_" + name);
 	}
 
 	public boolean hasOtherItem() {
@@ -38,9 +38,9 @@ public class ItemSwapTest extends ItemTestMod3 {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 
 		if (hasOtherItem()) {
-			tooltip.add(I18n.format("item.testmod3:swapTest.withItem.desc", otherItem.getDisplayName()));
+			tooltip.add(I18n.format("item.testmod3:swap_test.withItem.desc", otherItem.getDisplayName()));
 		} else {
-			tooltip.add(I18n.format("item.testmod3:swapTest.withoutItem.desc"));
+			tooltip.add(I18n.format("item.testmod3:swap_test.withoutItem.desc"));
 		}
 	}
 

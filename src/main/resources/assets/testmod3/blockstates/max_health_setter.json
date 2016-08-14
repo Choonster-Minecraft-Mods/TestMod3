@@ -3,7 +3,7 @@
 	"defaults": {
 		"model": "minecraft:cube_all",
 		"textures": {
-			"all": "testmod3:blocks/maxHealthSetter"
+			"all": "testmod3:blocks/max_health_setter"
 		}
 	},
 	"variants": {

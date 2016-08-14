@@ -39,7 +39,7 @@ import java.util.List;
  */
 public class BlockFluidTank extends BlockTileEntity<TileEntityFluidTank> {
 	public BlockFluidTank() {
-		super(Material.GLASS, "fluidTank", true);
+		super(Material.GLASS, "fluid_tank", true);
 		setSoundType(SoundType.GLASS);
 	}
 
@@ -94,12 +94,12 @@ public class BlockFluidTank extends BlockTileEntity<TileEntityFluidTank> {
 
 			if (fluidStack != null && fluidStack.amount > 0) {
 				hasFluid = true;
-				data.add(new TextComponentTranslation("tile.testmod3:fluidTank.fluid.desc", fluidStack.getLocalizedName(), fluidStack.amount, properties.getCapacity()));
+				data.add(new TextComponentTranslation("tile.testmod3:fluid_tank.fluid.desc", fluidStack.getLocalizedName(), fluidStack.amount, properties.getCapacity()));
 			}
 		}
 
 		if (!hasFluid) {
-			data.add(new TextComponentTranslation("tile.testmod3:fluidTank.empty.desc"));
+			data.add(new TextComponentTranslation("tile.testmod3:fluid_tank.empty.desc"));
 		}
 
 		return data;

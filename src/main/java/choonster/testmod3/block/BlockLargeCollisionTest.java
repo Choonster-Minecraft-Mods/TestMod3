@@ -22,7 +22,7 @@ public class BlockLargeCollisionTest extends Block {
 	public BlockLargeCollisionTest() {
 		super(Material.CLOTH);
 		setCreativeTab(TestMod3.creativeTab);
-		BlockTestMod3.setBlockName(this, "largeCollisionTest");
+		BlockTestMod3.setBlockName(this, "large_collision_test");
 	}
 
 	@SuppressWarnings("deprecation")

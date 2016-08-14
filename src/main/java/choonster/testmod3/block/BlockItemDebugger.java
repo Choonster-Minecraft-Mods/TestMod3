@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
  */
 public class BlockItemDebugger extends BlockTestMod3 {
 	public BlockItemDebugger() {
-		super(Material.IRON, "itemDebugger");
+		super(Material.IRON, "item_debugger");
 		setBlockUnbreakable();
 	}
 

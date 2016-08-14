@@ -43,7 +43,7 @@ public class CommandRotateVector extends CommandBase {
 	 */
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "commands.testmod3.rotateVector.usage";
+		return "commands.testmod3.rotatevector.usage";
 	}
 
 	/**
@@ -55,13 +55,13 @@ public class CommandRotateVector extends CommandBase {
 	 */
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		if (args.length < 5) throw new WrongUsageException("commands.testmod3.rotateVector.usage");
+		if (args.length < 5) throw new WrongUsageException("commands.testmod3.rotatevector.usage");
 
 		final double x = parseDouble(args[0]), y = parseDouble(args[1]), z = parseDouble(args[2]);
 		final Vector3d inputVector = new Vector3d(x, y, z);
 
 		final EnumFacing.Axis axis = EnumFacing.Axis.byName(args[3].toLowerCase(Locale.ENGLISH));
-		if (axis == null) throw new WrongUsageException("commands.testmod3.rotateVector.invalidAxis");
+		if (axis == null) throw new WrongUsageException("commands.testmod3.rotatevector.invalid_axis");
 
 		final int degrees = parseInt(args[4]);
 
@@ -69,6 +69,6 @@ public class CommandRotateVector extends CommandBase {
 
 		rotationMatrix.transform(inputVector);
 
-		sender.addChatMessage(new TextComponentTranslation("commands.testmod3.rotateVector.result", inputVector.getX(), inputVector.getY(), inputVector.getZ()));
+		sender.addChatMessage(new TextComponentTranslation("commands.testmod3.rotatevector.result", inputVector.getX(), inputVector.getY(), inputVector.getZ()));
 	}
 }

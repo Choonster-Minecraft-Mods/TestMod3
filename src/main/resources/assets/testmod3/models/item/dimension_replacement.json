@@ -1,6 +1,6 @@
 {
 	"parent": "testmod3:item/simple_model",
 	"textures": {
-		"layer0": "testmod3:items/dimensionReplacement"
+		"layer0": "testmod3:items/dimension_replacement"
 	}
 }

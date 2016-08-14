@@ -32,7 +32,7 @@ public class BlockSmallCollisionTest extends BlockTestMod3 {
 	}
 
 	public BlockSmallCollisionTest() {
-		super(Material.IRON, "smallCollisionTest");
+		super(Material.IRON, "small_collision_test");
 	}
 
 	@SuppressWarnings("deprecation")

@@ -18,7 +18,7 @@ import net.minecraft.world.chunk.Chunk;
  */
 public class ItemHeightTester extends ItemTestMod3 {
 	public ItemHeightTester() {
-		super("heightTester");
+		super("height_tester");
 	}
 
 	@Override
@@ -29,9 +29,9 @@ public class ItemHeightTester extends ItemTestMod3 {
 			if (playerIn.isSneaking()) {
 				final Chunk chunk = worldIn.getChunkFromBlockCoords(pos);
 				chunk.generateSkylightMap();
-				playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:heightTester.generate", chunk.xPosition, chunk.zPosition, pos.getX(), pos.getY(), pos.getZ()));
+				playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:height_tester.generate", chunk.xPosition, chunk.zPosition, pos.getX(), pos.getY(), pos.getZ()));
 			} else {
-				playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:heightTester.height", pos.getX(), pos.getZ(), worldIn.getHeight(pos).getY()));
+				playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:height_tester.height", pos.getX(), pos.getZ(), worldIn.getHeight(pos).getY()));
 			}
 		}
 

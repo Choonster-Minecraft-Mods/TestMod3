@@ -15,7 +15,7 @@ import net.minecraft.util.text.TextComponentTranslation;
  */
 public class ItemMaxHealthSetter extends ItemTestMod3 {
 	public ItemMaxHealthSetter() {
-		super("maxHealthSetterItem");
+		super("max_health_setter_item");
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class ItemMaxHealthSetter extends ItemTestMod3 {
 			final float healthToAdd = playerIn.isSneaking() ? -1.0f : 1.0f;
 			maxHealth.addBonusMaxHealth(healthToAdd);
 
-			playerIn.addChatMessage(new TextComponentTranslation("message.testmod3:maxHealth.add", target.getDisplayName(), healthToAdd));
+			playerIn.addChatMessage(new TextComponentTranslation("message.testmod3:max_health.add", target.getDisplayName(), healthToAdd));
 		}
 
 		return true;

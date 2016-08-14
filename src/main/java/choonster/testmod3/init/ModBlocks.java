@@ -48,8 +48,8 @@ public class ModBlocks {
 	public static final BlockSmallCollisionTest SMALL_COLLISION_TEST;
 	public static final BlockModChest CHEST;
 
-	public static final BlockPipeBasic PIPE_BASIC;
-	public static final BlockPipeFluid PIPE_FLUID;
+	public static final BlockPipeBasic BASIC_PIPE;
+	public static final BlockPipeFluid FLUID_PIPE;
 
 	public static final BlockSurvivalCommandBlock SURVIVAL_COMMAND_BLOCK;
 	public static final BlockSurvivalCommandBlock REPEATING_SURVIVAL_COMMAND_BLOCK;
@@ -66,32 +66,32 @@ public class ModBlocks {
 		ITEM_COLLISION_TEST = registerBlock(new BlockItemCollisionTest());
 		FLUID_TANK = registerBlock(new BlockFluidTank(), ItemFluidTank::new);
 		ITEM_DEBUGGER = registerBlock(new BlockItemDebugger());
-		END_PORTAL_FRAME_FULL = registerBlock(new BlockTestMod3(Material.ROCK, "endPortalFrameFull"));
-		COLORED_ROTATABLE = registerBlock(new BlockColoredRotatable(Material.CLOTH, "coloredRotatable"), ItemCloth::new);
-		COLORED_MULTI_ROTATABLE = registerBlock(new BlockColoredMultiRotatable(Material.CLOTH, "coloredMultiRotatable"), ItemCloth::new);
+		END_PORTAL_FRAME_FULL = registerBlock(new BlockTestMod3(Material.ROCK, "end_portal_frame_full"));
+		COLORED_ROTATABLE = registerBlock(new BlockColoredRotatable(Material.CLOTH, "colored_rotatable"), ItemCloth::new);
+		COLORED_MULTI_ROTATABLE = registerBlock(new BlockColoredMultiRotatable(Material.CLOTH, "colored_multi_rotatable"), ItemCloth::new);
 		POTION_EFFECT = registerBlock(new BlockPotionEffect());
 		VARIANTS = registerBlock(new BlockVariants(Material.IRON), block -> new ItemMultiTexture(block, block, BlockVariants.EnumType.getNames()));
 		CLIENT_PLAYER_ROTATION = registerBlock(new BlockClientPlayerRotation());
 		PIG_SPAWNER_REFILLER = registerBlock(new BlockPigSpawnerRefiller());
-		MIRROR_PLANE = registerBlock(new BlockPlane(Material.IRON, "mirrorPlane"));
-		VANILLA_MODEL_TEST = registerBlock(new BlockTestMod3(Material.IRON, "vanillaModelTest"));
+		MIRROR_PLANE = registerBlock(new BlockPlane(Material.IRON, "mirror_plane"));
+		VANILLA_MODEL_TEST = registerBlock(new BlockTestMod3(Material.IRON, "vanilla_model_test"));
 		FULLBRIGHT = (BlockTestMod3) registerBlock(new BlockTestMod3(Material.ROCK, "fullbright").setLightLevel(1));
-		NORMAL_BRIGHTNESS = registerBlock(new BlockTestMod3(Material.ROCK, "normalBrightness"));
+		NORMAL_BRIGHTNESS = registerBlock(new BlockTestMod3(Material.ROCK, "normal_brightness"));
 		MAX_HEALTH_SETTER = registerBlock(new BlockMaxHealthSetter());
 		MAX_HEALTH_GETTER = registerBlock(new BlockMaxHealthGetter());
 		SMALL_COLLISION_TEST = registerBlock(new BlockSmallCollisionTest());
 		CHEST = registerBlock(new BlockModChest());
 
-		PIPE_BASIC = registerBlock(new BlockPipeBasic("basicPipe"));
-		PIPE_FLUID = registerBlock(new BlockPipeFluid());
+		BASIC_PIPE = registerBlock(new BlockPipeBasic("basic_pipe"));
+		FLUID_PIPE = registerBlock(new BlockPipeFluid());
 
-		STAINED_CLAY_SLABS = new BlockColouredSlab.ColouredSlabGroup("stainedClaySlab", Material.ROCK);
+		STAINED_CLAY_SLABS = new BlockColouredSlab.ColouredSlabGroup("stained_clay_slab", Material.ROCK);
 		registerSlabGroup(STAINED_CLAY_SLABS.low);
 		registerSlabGroup(STAINED_CLAY_SLABS.high);
 
-		SURVIVAL_COMMAND_BLOCK = registerBlock(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.REDSTONE, "survivalCommandBlock"));
-		REPEATING_SURVIVAL_COMMAND_BLOCK = registerBlock(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.AUTO, "repeatingSurvivalCommandBlock"));
-		CHAIN_SURVIVAL_COMMAND_BLOCK = registerBlock(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.SEQUENCE, "chainSurvivalCommandBlock"));
+		SURVIVAL_COMMAND_BLOCK = registerBlock(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.REDSTONE, "survival_command_block"));
+		REPEATING_SURVIVAL_COMMAND_BLOCK = registerBlock(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.AUTO, "repeating_survival_command_block"));
+		CHAIN_SURVIVAL_COMMAND_BLOCK = registerBlock(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.SEQUENCE, "chain_survival_command_block"));
 	}
 
 	public static void registerBlocks() {

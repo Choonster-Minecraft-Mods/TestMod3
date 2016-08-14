@@ -63,9 +63,9 @@ public abstract class BlockSlabTestMod3<
 		// http://www.minecraftforge.net/forum/index.php/topic,36125.msg190252.html#msg190252
 		this.useNeighborBrightness = true;
 
-		String name = slabGroup.groupName + StringUtils.capitalize(variants.getName());
+		String name = slabGroup.groupName + "_" + variants.getName();
 		if (isDouble()) {
-			name += "Double";
+			name = "double_" + name;
 		}
 
 		setRegistryName(name);

@@ -16,7 +16,7 @@ import net.minecraft.world.World;
  */
 public class BlockPotionEffect extends BlockTileEntity<TileEntityPotionEffect> {
 	public BlockPotionEffect() {
-		super(Material.ROCK, "potionEffect", false);
+		super(Material.ROCK, "potion_effect", false);
 	}
 
 	@Override

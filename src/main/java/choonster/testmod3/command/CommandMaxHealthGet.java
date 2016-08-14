@@ -54,7 +54,7 @@ public class CommandMaxHealthGet extends CommandMaxHealthBase {
 	 */
 	@Override
 	protected String getSuccessMessage() {
-		return "message.testmod3:maxHealth.get";
+		return "message.testmod3:max_health.get";
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class CommandMaxHealthGet extends CommandMaxHealthBase {
 	 */
 	@Override
 	public String getCommandName() {
-		return "getMaxHealth";
+		return "get_max_health";
 	}
 
 	/**
@@ -72,6 +72,6 @@ public class CommandMaxHealthGet extends CommandMaxHealthBase {
 	 */
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "commands.testmod3.getMaxHealth.usage";
+		return "commands.testmod3.get_max_health.usage";
 	}
 }

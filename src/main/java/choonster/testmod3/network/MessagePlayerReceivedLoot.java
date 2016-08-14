@@ -76,7 +76,7 @@ public class MessagePlayerReceivedLoot implements IMessage {
 		 * @return The ITextComponent
 		 */
 		private ITextComponent getItemStackTextComponent(ItemStack itemStack) {
-			return new TextComponentTranslation("message.testmod3:playerReceivedLoot.item", itemStack.stackSize, itemStack.getTextComponent());
+			return new TextComponentTranslation("message.testmod3:player_received_loot.item", itemStack.stackSize, itemStack.getTextComponent());
 		}
 
 		/**
@@ -98,7 +98,7 @@ public class MessagePlayerReceivedLoot implements IMessage {
 					lootMessage.appendSibling(getItemStackTextComponent(message.itemStacks[i]));
 				}
 
-				final ITextComponent chatMessage = new TextComponentTranslation("message.testmod3:playerReceivedLoot.base", lootMessage);
+				final ITextComponent chatMessage = new TextComponentTranslation("message.testmod3:player_received_loot.base", lootMessage);
 
 				player.addChatComponentMessage(chatMessage);
 			});

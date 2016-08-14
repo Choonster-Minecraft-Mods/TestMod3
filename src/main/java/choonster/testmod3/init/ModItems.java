@@ -37,8 +37,8 @@ public class ModItems {
 	public static final ItemSwapTest SWAP_TEST_A;
 	public static final ItemSwapTest SWAP_TEST_B;
 	public static final ItemBlockDebugger BLOCK_DEBUGGER;
-	public static final ItemHarvestSword HARVEST_SWORD_WOOD;
-	public static final ItemHarvestSword HARVEST_SWORD_DIAMOND;
+	public static final ItemHarvestSword WOODEN_HARVEST_SWORD;
+	public static final ItemHarvestSword DIAMOND_HARVEST_SWORD;
 	public static final ItemClearer CLEARER;
 	public static final ItemModBow BOW;
 	public static final Item ARROW;
@@ -53,8 +53,8 @@ public class ModItems {
 	public static final ItemSoundEffect GUN;
 	public static final ItemDimensionReplacement DIMENSION_REPLACEMENT;
 	public static final ItemSoundEffect SADDLE;
-	public static final ItemSlowSword SLOW_SWORD_WOOD;
-	public static final ItemSlowSword SLOW_SWORD_DIAMOND;
+	public static final ItemSlowSword WOODEN_SLOW_SWORD;
+	public static final ItemSlowSword DIAMOND_SLOW_SWORD;
 	public static final ItemVariants VARIANTS;
 	public static final ItemRitualChecker RITUAL_CHECKER;
 
@@ -67,7 +67,7 @@ public class ModItems {
 	public static final ItemArmor.ArmorMaterial ARMOUR_MATERIAL_REPLACEMENT = EnumHelper.addArmorMaterial(Constants.RESOURCE_PREFIX + "replacement", Constants.RESOURCE_PREFIX + "replacement", 15, new int[]{1, 4, 5, 2}, 12, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, (float) 0);
 
 	static {
-		WOODEN_AXE = registerItem(new ItemCuttingAxe(Item.ToolMaterial.WOOD, "woodenAxe"));
+		WOODEN_AXE = registerItem(new ItemCuttingAxe(Item.ToolMaterial.WOOD, "wooden_axe"));
 		ENTITY_TEST = registerItem(new ItemEntityTest());
 		RECORD_SOLARIS = registerItem(new ItemRecordMod("solaris", ModSoundEvents.RECORD_SOLARIS));
 		HEAVY = registerItem(new ItemHeavy());
@@ -76,28 +76,28 @@ public class ModItems {
 		SUBSCRIPTS = registerItem(new ItemWithSubscripts());
 		SUPERSCRIPTS = registerItem(new ItemWithSuperscripts());
 		MODEL_TEST = registerItem(new ItemLastUseTimeModel("modeltest"));
-		SNOWBALL_LAUNCHER = registerItem(new ItemSnowballLauncher("snowballLauncher"));
+		SNOWBALL_LAUNCHER = registerItem(new ItemSnowballLauncher("snowball_launcher"));
 		SLINGSHOT = registerItem(new ItemSlingshot());
 		UNICODE_TOOLTIPS = registerItem(new ItemUnicodeTooltips());
 		BLOCK_DEBUGGER = registerItem(new ItemBlockDebugger());
-		HARVEST_SWORD_WOOD = registerItem(new ItemHarvestSword(Item.ToolMaterial.WOOD, "harvestSwordWood"));
-		HARVEST_SWORD_DIAMOND = registerItem(new ItemHarvestSword(Item.ToolMaterial.DIAMOND, "harvestSwordDiamond"));
+		WOODEN_HARVEST_SWORD = registerItem(new ItemHarvestSword(Item.ToolMaterial.WOOD, "wooden_harvest_sword"));
+		DIAMOND_HARVEST_SWORD = registerItem(new ItemHarvestSword(Item.ToolMaterial.DIAMOND, "diamond_harvest_sword"));
 		CLEARER = registerItem(new ItemClearer());
 		BOW = registerItem(new ItemModBow("bow"));
 		ARROW = registerItem(new ItemModArrow("arrow"));
 		HEIGHT_TESTER = registerItem(new ItemHeightTester());
-		CONTINUOUS_BOW = registerItem(new ItemContinuousBow("continuousBow"));
+		CONTINUOUS_BOW = registerItem(new ItemContinuousBow("continuous_bow"));
 		RESPAWNER = registerItem(new ItemRespawner());
 
-		SWAP_TEST_A = registerItem(new ItemSwapTest("A"));
-		SWAP_TEST_B = registerItem(new ItemSwapTest("B"));
+		SWAP_TEST_A = registerItem(new ItemSwapTest("a"));
+		SWAP_TEST_B = registerItem(new ItemSwapTest("b"));
 		SWAP_TEST_A.setOtherItem(new ItemStack(SWAP_TEST_B));
 		SWAP_TEST_B.setOtherItem(new ItemStack(SWAP_TEST_A));
 
-		REPLACEMENT_HELMET = registerItem(new ItemArmourReplacement(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD, "Replacement"));
-		REPLACEMENT_CHESTPLATE = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.CHEST, "Replacement"));
-		REPACEMENT_LEGGINGS = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.LEGS, "Replacement"));
-		REPLACEMENT_BOOTS = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.FEET, "Replacement"));
+		REPLACEMENT_HELMET = registerItem(new ItemArmourReplacement(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD, "replacement"));
+		REPLACEMENT_CHESTPLATE = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.CHEST, "replacement"));
+		REPACEMENT_LEGGINGS = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.LEGS, "replacement"));
+		REPLACEMENT_BOOTS = registerItem(new ItemArmourRestricted(ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.FEET, "replacement"));
 
 		final ItemStack chest = new ItemStack(REPLACEMENT_CHESTPLATE);
 		chest.addEnchantment(Enchantments.SHARPNESS, 1);
@@ -111,13 +111,13 @@ public class ModItems {
 		MAX_HEALTH_GETTER = registerItem(new ItemMaxHealthGetter());
 		GUN = registerItem(new ItemSoundEffect("gun", ModSoundEvents.NINE_MM_FIRE));
 
-		DIMENSION_REPLACEMENT = registerItem(new ItemDimensionReplacement("dimensionReplacement"));
+		DIMENSION_REPLACEMENT = registerItem(new ItemDimensionReplacement("dimension_replacement"));
 		DIMENSION_REPLACEMENT.addReplacement(DimensionType.NETHER, new ItemStack(Items.NETHER_STAR));
 		DIMENSION_REPLACEMENT.addReplacement(DimensionType.THE_END, new ItemStack(Items.ENDER_PEARL));
 
 		SADDLE = registerItem(new ItemSoundEffect("saddle", ModSoundEvents.ACTION_SADDLE));
-		SLOW_SWORD_WOOD = registerItem(new ItemSlowSword(Item.ToolMaterial.WOOD, "slowSwordWood"));
-		SLOW_SWORD_DIAMOND = registerItem(new ItemSlowSword(Item.ToolMaterial.DIAMOND, "slowSwordDiamond"));
+		WOODEN_SLOW_SWORD = registerItem(new ItemSlowSword(Item.ToolMaterial.WOOD, "wooden_slow_sword"));
+		DIAMOND_SLOW_SWORD = registerItem(new ItemSlowSword(Item.ToolMaterial.DIAMOND, "diamond_slow_sword"));
 		VARIANTS = registerItem(new ItemVariants());
 		RITUAL_CHECKER = registerItem(new ItemRitualChecker());
 

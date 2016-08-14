@@ -70,7 +70,7 @@ public class SimpleCapabilityProvider<HANDLER> implements ICapabilitySerializabl
 	 * @return True if this object supports the capability.
 	 */
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == getCapability();
 	}
 
@@ -86,7 +86,7 @@ public class SimpleCapabilityProvider<HANDLER> implements ICapabilitySerializabl
 	 */
 	@Override
 	@Nullable
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == getCapability()) {
 			return getCapability().cast(getInstance());
 		}

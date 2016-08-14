@@ -34,7 +34,7 @@ public class BlockRightClickTest extends BlockGlass {
 	public BlockRightClickTest() {
 		super(Material.GLASS, false);
 		setDefaultState(blockState.getBaseState().withProperty(HAS_ENDER_EYE, false));
-		BlockTestMod3.setBlockName(this, "rightClickTest");
+		BlockTestMod3.setBlockName(this, "right_click_test");
 		setCreativeTab(TestMod3.creativeTab);
 	}
 

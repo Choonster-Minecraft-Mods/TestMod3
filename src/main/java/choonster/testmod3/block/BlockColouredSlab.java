@@ -108,8 +108,8 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 	 * A group of {@link EnumDyeColor} values.
 	 */
 	public enum EnumColourGroup implements Iterable<EnumDyeColor>, IStringSerializable {
-		LOW("Low", colour -> colour.getMetadata() < 8, 0),
-		HIGH("High", colour -> colour.getMetadata() >= 8, 8);
+		LOW("low", colour -> colour.getMetadata() < 8, 0),
+		HIGH("high", colour -> colour.getMetadata() >= 8, 8);
 
 		/**
 		 * The property with this group's colours as the allowed values

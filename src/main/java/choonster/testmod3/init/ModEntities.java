@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 public class ModEntities {
 	public static void registerEntities() {
-		registerEntity(EntityModArrow.class, "modArrow", 64, 20, false);
+		registerEntity(EntityModArrow.class, "mod_arrow", 64, 20, false);
 	}
 
 	public static void addSpawns() {

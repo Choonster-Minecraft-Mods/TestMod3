@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderModArrow extends RenderTippedArrow {
-	private static final ResourceLocation ENTITY_TEXTURE = new ResourceLocation(TestMod3.MODID, "textures/entity/modArrow.png");
+	private static final ResourceLocation ENTITY_TEXTURE = new ResourceLocation(TestMod3.MODID, "textures/entity/mod_arrow.png");
 
 	public RenderModArrow(RenderManager renderManager) {
 		super(renderManager);

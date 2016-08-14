@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
  */
 public class BlockPigSpawnerRefiller extends BlockTestMod3 implements IPigSpawnerInteractable {
 	public BlockPigSpawnerRefiller() {
-		super(Material.IRON, "pigSpawnerRefiller");
+		super(Material.IRON, "pig_spawner_refiller");
 	}
 
 	/**
@@ -37,7 +37,7 @@ public class BlockPigSpawnerRefiller extends BlockTestMod3 implements IPigSpawne
 			pigSpawnerFinite.setNumPigs(pigSpawnerFinite.getMaxNumPigs());
 
 			if (iCommandSender != null) {
-				iCommandSender.addChatMessage(new TextComponentTranslation("message.testmod3:pigSpawnerRefiller.refilled"));
+				iCommandSender.addChatMessage(new TextComponentTranslation("message.testmod3:pig_spawner_refiller.refilled"));
 			}
 		}
 

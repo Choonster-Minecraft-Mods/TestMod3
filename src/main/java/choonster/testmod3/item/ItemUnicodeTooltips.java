@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class ItemUnicodeTooltips extends ItemTestMod3 {
 	public ItemUnicodeTooltips() {
-		super("unicodeTooltips");
+		super("unicode_tooltips");
 	}
 
 	@Override
@@ -27,8 +27,8 @@ public class ItemUnicodeTooltips extends ItemTestMod3 {
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 
-		tooltip.add(I18n.format("item.testmod3:unicodeTooltips.1.desc"));
-		tooltip.add("§a§o" + I18n.format("item.testmod3:unicodeTooltips.2.desc") + "§r");
-		tooltip.add("" + TextFormatting.GREEN + TextFormatting.ITALIC + I18n.format("item.testmod3:unicodeTooltips.3.desc") + TextFormatting.RESET);
+		tooltip.add(I18n.format("item.testmod3:unicode_tooltips.1.desc"));
+		tooltip.add("§a§o" + I18n.format("item.testmod3:unicode_tooltips.2.desc") + "§r");
+		tooltip.add("" + TextFormatting.GREEN + TextFormatting.ITALIC + I18n.format("item.testmod3:unicode_tooltips.3.desc") + TextFormatting.RESET);
 	}
 }

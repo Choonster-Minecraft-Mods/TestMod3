@@ -42,7 +42,7 @@ public class ItemRespawner extends ItemTestMod3 {
 			}
 
 			if (bedLocation == null) {
-				playerMP.addChatComponentMessage(new TextComponentTranslation("message.testmod3:respawner.noSpawnLocation"));
+				playerMP.addChatComponentMessage(new TextComponentTranslation("message.testmod3:respawner.no_spawn_location"));
 				return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
 			}
 

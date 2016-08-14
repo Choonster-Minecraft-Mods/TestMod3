@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  */
 public class ItemVariants extends ItemTestMod3 {
 	public ItemVariants() {
-		super("variantsItem");
+		super("variants_item");
 	}
 
 	@Override

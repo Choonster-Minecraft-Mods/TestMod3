@@ -3,7 +3,7 @@
 	"defaults": {
 		"model": "minecraft:cube_all",
 		"textures": {
-			"all": "testmod3:blocks/maxHealthGetter"
+			"all": "testmod3:blocks/pig_spawner_refiller"
 		}
 	},
 	"variants": {
