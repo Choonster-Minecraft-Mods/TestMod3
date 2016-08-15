@@ -40,7 +40,6 @@ public final class Remapper {
 	 * @param missingMappings This mod's missing mappings
 	 */
 	public static void remap(List<MissingMapping> missingMappings) {
-		int i = 1;
 		for (MissingMapping missingMapping : missingMappings) { // For each missing mapping,
 			Logger.info(MARKER, "Trying to remap %s", missingMapping.resourceLocation);
 
