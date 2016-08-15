@@ -100,11 +100,10 @@ public class MaxHealth implements IMaxHealth {
 	protected void onBonusMaxHealthChanged() {
 		if (entity == null) return;
 
-		final IAttributeInstance entityMaxHealthAttribute;
-		entityMaxHealthAttribute = entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
+		final IAttributeInstance entityMaxHealthAttribute = entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
 
 		// Remove all modifiers from the dummy attribute
-		dummyMaxHealthAttribute.getModifiers().stream().forEach(dummyMaxHealthAttribute::removeModifier);
+		dummyMaxHealthAttribute.getModifiers().forEach(dummyMaxHealthAttribute::removeModifier);
 
 		// Copy the base value and modifiers except this class's from the entity's attribute to the dummy attribute
 		dummyMaxHealthAttribute.setBaseValue(entityMaxHealthAttribute.getBaseValue());
