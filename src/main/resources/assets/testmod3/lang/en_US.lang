@@ -38,8 +38,8 @@ tile.testmod3:fluid_pipe.name=Fluid Pipe
 
 tile.testmod3:fluid.static.name=Static Fluid
 tile.testmod3:fluid.normal.name=Normal Fluid
-tile.testmod3:fluid.staticgas.name=Static Gas
-tile.testmod3:fluid.normalgas.name=Normal Gas
+tile.testmod3:fluid.static_gas.name=Static Gas
+tile.testmod3:fluid.normal_gas.name=Normal Gas
 tile.testmod3:fluid.finite.name=Finite Fluid
 
 tile.testmod3:colored_rotatable.name=Rotatable Block
