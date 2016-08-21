@@ -7,6 +7,7 @@ fluid.normal=Normal Fluid
 fluid.static_gas=Static Gas
 fluid.normal_gas=Normal Gas
 fluid.finite=Finite Fluid
+fluid.portal_displacement=Portal Displacement Fluid
 
 # Blocks
 tile.testmod3:watergrass.name=Water Grass
@@ -41,6 +42,7 @@ tile.testmod3:fluid.normal.name=Normal Fluid
 tile.testmod3:fluid.static_gas.name=Static Gas
 tile.testmod3:fluid.normal_gas.name=Normal Gas
 tile.testmod3:fluid.finite.name=Finite Fluid
+tile.testmod3:fluid.portal_displacement.name=Portal Displacement Fluid
 
 tile.testmod3:colored_rotatable.name=Rotatable Block
 tile.testmod3:colored_rotatable.white.name=White Rotatable Block

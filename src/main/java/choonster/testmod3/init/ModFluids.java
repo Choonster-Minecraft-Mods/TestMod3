@@ -2,6 +2,7 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.fluid.BlockFluidNoFlow;
+import choonster.testmod3.block.fluid.BlockFluidPortalDisplacement;
 import choonster.testmod3.item.block.ItemFluidTank;
 import choonster.testmod3.tileentity.TileEntityFluidTank;
 import choonster.testmod3.util.Constants;
@@ -24,6 +25,7 @@ public class ModFluids {
 	public static final Fluid NORMAL;
 	public static final Fluid NORMAL_GAS;
 	public static final Fluid FINITE;
+	public static final Fluid PORTAL_DISPLACEMENT;
 
 	/**
 	 * The fluids registered by this mod. Includes fluids that were already registered by another mod.
@@ -55,6 +57,10 @@ public class ModFluids {
 		FINITE = createFluid("finite", false,
 				fluid -> fluid.setLuminosity(10).setDensity(800).setViscosity(1500),
 				fluid -> new BlockFluidFinite(fluid, new MaterialLiquid(MapColor.BLACK)));
+
+		PORTAL_DISPLACEMENT = createFluid("portal_displacement", true,
+				fluid -> fluid.setLuminosity(10).setDensity(1600).setViscosity(100),
+				fluid -> new BlockFluidPortalDisplacement(fluid, new MaterialLiquid(MapColor.DIAMOND)));
 	}
 
 	public static void registerFluids() {

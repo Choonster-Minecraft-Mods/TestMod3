@@ -38,6 +38,13 @@
 					"fluid": "finite"
 				}
 			}
+		],
+		"portal_displacement": [
+			{
+				"custom": {
+					"fluid": "portal_displacement"
+				}
+			}
 		]
 	}
 }
