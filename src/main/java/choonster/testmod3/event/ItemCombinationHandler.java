@@ -49,10 +49,10 @@ public class ItemCombinationHandler {
 	public static void onWorldTick(final TickEvent.WorldTickEvent event) {
 		final World world = event.world;
 
-		// If this is the START phase or the client, do nothing
+		// If this is the END phase on the server,
 		if (event.phase == TickEvent.Phase.END && !world.isRemote) {
 
-			// For each loaded EntityItem with an input item,
+			// Handle each loaded EntityItem with an input item
 			world.loadedEntityList.stream()
 					.filter(isMatchingItemEntity(INPUTS))
 					.map(entity -> (EntityItem) entity)
