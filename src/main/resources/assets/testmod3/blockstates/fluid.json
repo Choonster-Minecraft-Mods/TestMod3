@@ -11,10 +11,10 @@
 				}
 			}
 		],
-		"normalgas": [
+		"normal_gas": [
 			{
 				"custom": {
-					"fluid": "normalgas"
+					"fluid": "normal_gas"
 				}
 			}
 		],
@@ -25,10 +25,10 @@
 				}
 			}
 		],
-		"staticgas": [
+		"static_gas": [
 			{
 				"custom": {
-					"fluid": "staticgas"
+					"fluid": "static_gas"
 				}
 			}
 		],
