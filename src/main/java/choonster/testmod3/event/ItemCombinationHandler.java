@@ -55,7 +55,7 @@ public class ItemCombinationHandler {
 			// For each loaded EntityItem with an input item,
 			world.loadedEntityList.stream()
 					.filter(isMatchingItemEntity(INPUTS))
-					.map(entity -> ((EntityItem) entity))
+					.map(entity -> (EntityItem) entity)
 					.collect(Collectors.toList())
 					.forEach(ItemCombinationHandler::handleEntity);
 		}
