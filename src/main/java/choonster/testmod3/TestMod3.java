@@ -3,6 +3,7 @@ package choonster.testmod3;
 import choonster.testmod3.client.gui.GuiHandler;
 import choonster.testmod3.config.Config;
 import choonster.testmod3.event.BlockEventHandler;
+import choonster.testmod3.event.ItemCombinationHandler;
 import choonster.testmod3.event.NetworkEventHandler;
 import choonster.testmod3.event.PlayerEventHandler;
 import choonster.testmod3.init.*;
@@ -57,6 +58,7 @@ public class TestMod3 {
 		MinecraftForge.EVENT_BUS.register(new BlockEventHandler());
 		MinecraftForge.EVENT_BUS.register(new NetworkEventHandler());
 		MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
+		MinecraftForge.EVENT_BUS.register(ItemCombinationHandler.class);
 
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 
