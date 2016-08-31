@@ -21,7 +21,7 @@ public class ItemPigSpawner extends ItemTestMod3 {
 	private final Supplier<IPigSpawner> spawnerFactory;
 
 	public ItemPigSpawner(String name, Supplier<IPigSpawner> spawnerFactory) {
-		super("pigSpawner." + name);
+		super("pig_spawner." + name);
 		this.spawnerFactory = spawnerFactory;
 		setHasSubtypes(true);
 	}
