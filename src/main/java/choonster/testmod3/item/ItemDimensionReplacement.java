@@ -84,9 +84,9 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 		final ItemStack replacement = getReplacement(playerIn.getEntityWorld());
 
 		if (replacement != null) {
-			tooltip.add(I18n.format("item.testmod3:dimensionReplacement.replacement.desc", replacement.getDisplayName()));
+			tooltip.add(I18n.format("item.testmod3:dimension_replacement.replacement.desc", replacement.getDisplayName()));
 		} else {
-			tooltip.add(I18n.format("item.testmod3:dimensionReplacement.noReplacement.desc"));
+			tooltip.add(I18n.format("item.testmod3:dimension_replacement.no_replacement.desc"));
 		}
 	}
 }
