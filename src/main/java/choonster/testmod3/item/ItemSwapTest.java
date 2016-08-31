@@ -38,9 +38,9 @@ public class ItemSwapTest extends ItemTestMod3 {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 
 		if (hasOtherItem()) {
-			tooltip.add(I18n.format("item.testmod3:swap_test.withItem.desc", otherItem.getDisplayName()));
+			tooltip.add(I18n.format("item.testmod3:swap_test.with_item.desc", otherItem.getDisplayName()));
 		} else {
-			tooltip.add(I18n.format("item.testmod3:swap_test.withoutItem.desc"));
+			tooltip.add(I18n.format("item.testmod3:swap_test.without_item.desc"));
 		}
 	}
 
