@@ -2,11 +2,9 @@ package choonster.testmod3.item;
 
 import choonster.testmod3.TestMod3;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Predicates;
 import com.google.common.collect.Maps;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
-import org.apache.commons.lang3.Validate;
 
 import java.util.HashMap;
 import java.util.Map;
