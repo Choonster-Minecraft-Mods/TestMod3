@@ -1,5 +1,6 @@
 package choonster.testmod3.init;
 
+import choonster.testmod3.capability.hiddenblockrevealer.CapabilityHiddenBlockRevealer;
 import choonster.testmod3.capability.lastusetime.CapabilityLastUseTime;
 import choonster.testmod3.capability.maxhealth.CapabilityMaxHealth;
 import choonster.testmod3.capability.pigspawner.CapabilityPigSpawner;
@@ -18,5 +19,6 @@ public class ModCapabilities {
 		CapabilityPigSpawner.register();
 		CapabilityLastUseTime.register();
 		CapabilityMaxHealth.register();
+		CapabilityHiddenBlockRevealer.register();
 	}
 }

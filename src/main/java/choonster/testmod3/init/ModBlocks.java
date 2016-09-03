@@ -47,6 +47,7 @@ public class ModBlocks {
 	public static final BlockMaxHealthGetter MAX_HEALTH_GETTER;
 	public static final BlockSmallCollisionTest SMALL_COLLISION_TEST;
 	public static final BlockModChest CHEST;
+	public static final BlockHidden HIDDEN;
 
 	public static final BlockPipeBasic BASIC_PIPE;
 	public static final BlockPipeFluid FLUID_PIPE;
@@ -81,6 +82,7 @@ public class ModBlocks {
 		MAX_HEALTH_GETTER = registerBlock(new BlockMaxHealthGetter());
 		SMALL_COLLISION_TEST = registerBlock(new BlockSmallCollisionTest());
 		CHEST = registerBlock(new BlockModChest());
+		HIDDEN = registerBlock(new BlockHidden(Material.ROCK, "hidden"));
 
 		BASIC_PIPE = registerBlock(new BlockPipeBasic("basic_pipe"));
 		FLUID_PIPE = registerBlock(new BlockPipeFluid());
@@ -153,6 +155,7 @@ public class ModBlocks {
 		registerTileEntity(TileEntityColoredMultiRotatable.class);
 		registerTileEntity(TileEntityPotionEffect.class);
 		registerTileEntity(TileEntityModChest.class);
+		registerTileEntity(TileEntityHidden.class);
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> tileEntityClass) {

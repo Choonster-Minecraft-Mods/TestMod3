@@ -57,6 +57,7 @@ public class ModItems {
 	public static final ItemSlowSword DIAMOND_SLOW_SWORD;
 	public static final ItemVariants VARIANTS;
 	public static final ItemRitualChecker RITUAL_CHECKER;
+	public static final ItemHiddenBlockRevealer HIDDEN_BLOCK_REVEALER;
 
 	public static final ItemArmourReplacement REPLACEMENT_HELMET;
 	public static final ItemArmourRestricted REPLACEMENT_CHESTPLATE;
@@ -120,6 +121,7 @@ public class ModItems {
 		DIAMOND_SLOW_SWORD = registerItem(new ItemSlowSword(Item.ToolMaterial.DIAMOND, "diamond_slow_sword"));
 		VARIANTS = registerItem(new ItemVariants());
 		RITUAL_CHECKER = registerItem(new ItemRitualChecker());
+		HIDDEN_BLOCK_REVEALER = registerItem(new ItemHiddenBlockRevealer());
 
 		TOOL_MATERIAL_GLOWSTONE.setRepairItem(new ItemStack(Items.GLOWSTONE_DUST));
 		ARMOUR_MATERIAL_REPLACEMENT.customCraftingMaterial = ARROW;

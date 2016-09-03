@@ -15,6 +15,7 @@ public class ModMessages {
 		registerMessage(MessageUpdateHeldLastUseTime.Handler.class, MessageUpdateHeldLastUseTime.class, Side.CLIENT);
 		registerMessage(MessagePlayerReceivedLoot.Handler.class, MessagePlayerReceivedLoot.class, Side.CLIENT);
 		registerMessage(MessageFluidTankContents.Handler.class, MessageFluidTankContents.class, Side.CLIENT);
+		registerMessage(MessageUpdateHeldHiddenBlockRevealer.Handler.class, MessageUpdateHeldHiddenBlockRevealer.class, Side.CLIENT);
 	}
 
 	private static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(Class<? extends IMessageHandler<REQ, REPLY>> messageHandler, Class<REQ> requestMessageType, Side receivingSide) {

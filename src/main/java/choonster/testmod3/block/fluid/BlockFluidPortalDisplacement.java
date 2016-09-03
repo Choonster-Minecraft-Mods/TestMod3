@@ -7,7 +7,7 @@ import net.minecraftforge.fluids.Fluid;
 
 /**
  * A fluid block that displaces portals.
- *
+ * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,41593.0.html
  *

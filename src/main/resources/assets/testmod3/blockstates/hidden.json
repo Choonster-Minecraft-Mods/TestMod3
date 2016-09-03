@@ -1,0 +1,18 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "minecraft:cube_all",
+		"textures": {
+			"all": "testmod3:blocks/hidden"
+		}
+	},
+	"variants": {
+		"hidden": {
+			"true": {
+				"model": "testmod3:empty"
+			},
+			"false": { }
+		},
+		"inventory": [ { } ]
+	}
+}

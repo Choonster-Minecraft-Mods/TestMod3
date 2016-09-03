@@ -33,6 +33,7 @@ tile.testmod3:small_collision_test.name=Small Collision Test
 tile.testmod3:chest.name=Mod Chest
 tile.testmod3:repeating_survival_command_block.name=Repeating Survival Command Block
 tile.testmod3:chain_survival_command_block.name=Chain Survival Command Block
+tile.testmod3:hidden.name=Hidden Block
 
 tile.testmod3:basic_pipe.name=Basic Pipe
 tile.testmod3:fluid_pipe.name=Fluid Pipe
@@ -136,6 +137,7 @@ item.testmod3:saddle.name=Mod Saddle
 item.testmod3:wooden_slow_sword.name=Slow Wooden Sword
 item.testmod3:diamond_slow_sword.name=Slow Diamond Sword
 item.testmod3:ritual_checker.name=Ritual Checker
+item.testmod3:hidden_block_revealer.name=Hidden Block Revealer
 
 item.testmod3:replacement_helmet.name=Armour Replacement Helmet
 item.testmod3:replacement_chestplate.name=Armour Replacement Chestplate
@@ -195,6 +197,8 @@ message.testmod3:max_health.set=Set bonus max health of %s to %s
 message.testmod3:max_health.get=Max health of %s is %s (%s bonus)
 message.testmod3:ritual_checker.success=Ritual pattern is valid!
 message.testmod3:ritual_checker.failure=Ritual pattern is invalid at %d,%d,%d!
+message.testmod3:hidden_block_revealer.reveal=Revealing hidden blocks.
+message.testmod3:hidden_block_revealer.hide=Hiding hidden blocks.
 
 # Config GUI strings
 testmod3.config.title=Test_mod3 Config

@@ -1,0 +1,14 @@
+{
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "testmod3:items/hidden_block_revealer"
+	},
+	"overrides": [
+		{
+			"predicate": {
+				"testmod3:reveal_hidden_blocks": 1
+			},
+			"model": "testmod3:item/hidden_block_revealer_active"
+		}
+	]
+}
