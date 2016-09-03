@@ -38,6 +38,9 @@ public abstract class BlockTileEntity<TE extends TileEntity> extends BlockTestMo
 		return true;
 	}
 
+	@Override
+	public abstract TileEntity createTileEntity(World world, IBlockState state);
+
 	/**
 	 * Get the {@link TileEntity} at the specified position.
 	 *
