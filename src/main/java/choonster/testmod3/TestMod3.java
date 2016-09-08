@@ -115,7 +115,7 @@ public class TestMod3 {
 	}
 
 	@EventHandler
-	public void missingMapings(FMLMissingMappingsEvent event) {
+	public void missingMappings(FMLMissingMappingsEvent event) {
 		Remapper.remap(event.get());
 	}
 }
