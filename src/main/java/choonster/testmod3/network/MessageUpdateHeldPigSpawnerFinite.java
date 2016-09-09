@@ -80,6 +80,8 @@ public class MessageUpdateHeldPigSpawnerFinite implements IMessage {
 			// Minecraft/FMLClientHandler.
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				final EntityPlayer player = TestMod3.proxy.getClientPlayer();
+				assert player != null;
+
 				final IPigSpawner pigSpawner = CapabilityPigSpawner.getPigSpawner(player.getHeldItem(message.hand));
 
 				if (pigSpawner instanceof IPigSpawnerFinite) {

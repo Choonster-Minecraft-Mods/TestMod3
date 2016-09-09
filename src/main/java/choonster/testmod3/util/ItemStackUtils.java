@@ -21,6 +21,9 @@ public class ItemStackUtils {
 			itemStack.setTagCompound(new NBTTagCompound());
 		}
 
-		return itemStack.getTagCompound();
+		final NBTTagCompound tagCompound = itemStack.getTagCompound();
+		assert tagCompound != null;
+
+		return tagCompound;
 	}
 }

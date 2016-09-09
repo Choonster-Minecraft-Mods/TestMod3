@@ -6,6 +6,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -72,8 +73,10 @@ public class WorldGenBanner implements IWorldGenerator {
 
 		world.setBlockState(newPos, Blocks.STANDING_BANNER.getDefaultState());
 
-		final TileEntityBanner tileEntityBanner = (TileEntityBanner) world.getTileEntity(newPos);
-		tileEntityBanner.setItemValues(bannerStack);
+		final TileEntity tileEntity = world.getTileEntity(newPos);
+		if (tileEntity instanceof TileEntityBanner) {
+			((TileEntityBanner) tileEntity).setItemValues(bannerStack);
+		}
 	}
 
 	@Override

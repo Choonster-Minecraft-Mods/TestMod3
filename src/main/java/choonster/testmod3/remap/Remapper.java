@@ -29,7 +29,7 @@ public final class Remapper {
 	/**
 	 * A list of remapping functions that return {@code true} if they took an action for the {@link MissingMapping}.
 	 */
-	private static List<Predicate<MissingMapping>> remappingFunctions = ImmutableList.of(Remapper::remapCustomName, Remapper::remapCamelCaseToUnderscores);
+	private static final List<Predicate<MissingMapping>> remappingFunctions = ImmutableList.of(Remapper::remapCustomName, Remapper::remapCamelCaseToUnderscores);
 
 	private Remapper() {
 	}

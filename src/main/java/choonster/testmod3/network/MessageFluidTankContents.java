@@ -99,6 +99,7 @@ public class MessageFluidTankContents implements IMessage {
 		public IMessage onMessage(MessageFluidTankContents message, MessageContext ctx) {
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				final EntityPlayer player = TestMod3.proxy.getClientPlayer();
+				assert player != null;
 
 				BlockFluidTank.getFluidDataForDisplay(message.fluidTankProperties).forEach(player::addChatComponentMessage);
 			});

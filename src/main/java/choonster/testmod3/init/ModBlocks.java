@@ -145,7 +145,10 @@ public class ModBlocks {
 			> void registerSlabGroup(BlockSlabTestMod3.SlabGroup<VARIANT, VARIANTS, SLAB> slabGroup) {
 		registerBlock(slabGroup.singleSlab, slab -> new ItemSlab(slab, slabGroup.singleSlab, slabGroup.doubleSlab));
 		registerBlock(slabGroup.doubleSlab, null); // No item form for the double slab
-		slabGroup.setItem((ItemSlab) Item.getItemFromBlock(slabGroup.singleSlab));
+
+		final Item item = Item.getItemFromBlock(slabGroup.singleSlab);
+		assert item instanceof ItemSlab;
+		slabGroup.setItem((ItemSlab) item);
 	}
 
 	public static void registerTileEntities() {

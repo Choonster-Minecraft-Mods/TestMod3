@@ -38,6 +38,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -102,7 +103,8 @@ public final class CapabilityPigSpawner {
 	 * @param itemStack The ItemStack
 	 * @return The IPigSpawner, or null if there isn't one
 	 */
-	public static IPigSpawner getPigSpawner(ItemStack itemStack) {
+	@Nullable
+	public static IPigSpawner getPigSpawner(@Nullable ItemStack itemStack) {
 		return CapabilityUtils.getCapability(itemStack, PIG_SPAWNER_CAPABILITY, DEFAULT_FACING);
 	}
 
@@ -129,8 +131,6 @@ public final class CapabilityPigSpawner {
 	 * Event handler for the {@link IPigSpawner} capability.
 	 */
 	public static class EventHandler {
-
-
 		/**
 		 * Attach the {@link IPigSpawner} capability to vanilla items.
 		 *
@@ -159,7 +159,7 @@ public final class CapabilityPigSpawner {
 		 * @return Was any action taken?
 		 */
 		private boolean trySpawnPig(IPigSpawner pigSpawner, World world, double x, double y, double z, @Nullable IPigSpawnerInteractable interactable, BlockPos interactablePos, @Nullable ICommandSender iCommandSender) {
-			if (world.isRemote || pigSpawner == null) return false;
+			if (world.isRemote) return false;
 
 			boolean actionTaken = false;
 			boolean shouldSpawnPig = true;
@@ -201,7 +201,10 @@ public final class CapabilityPigSpawner {
 		 */
 		@SubscribeEvent
 		public void playerInteract(PlayerInteractEvent.RightClickBlock event) {
-			final BlockPos spawnPos = event.getPos().offset(event.getFace());
+			final EnumFacing facing = event.getFace();
+			assert facing != null;
+
+			final BlockPos spawnPos = event.getPos().offset(facing);
 			final double x = spawnPos.getX() + 0.5, y = spawnPos.getY() + 0.5, z = spawnPos.getZ() + 0.5;
 
 			final World world = event.getWorld();
@@ -211,7 +214,7 @@ public final class CapabilityPigSpawner {
 			final EntityPlayer player = event.getEntityPlayer();
 			final IPigSpawner pigSpawner = getPigSpawner(event.getItemStack());
 
-			if (trySpawnPig(pigSpawner, world, x, y, z, interactable, event.getPos(), player)) {
+			if (pigSpawner != null && trySpawnPig(pigSpawner, world, x, y, z, interactable, event.getPos(), player)) {
 				sendToPlayer(pigSpawner, (EntityPlayerMP) player, event.getHand());
 			}
 		}
@@ -234,7 +237,7 @@ public final class CapabilityPigSpawner {
 			final EnumHand hand = event.getHand();
 
 			final IPigSpawner pigSpawner = getPigSpawner(event.getEntityPlayer().getHeldItem(hand));
-			if (trySpawnPig(pigSpawner, world, x, y, z, interactable, target.getPosition(), event.getEntityPlayer())) {
+			if (pigSpawner != null && trySpawnPig(pigSpawner, world, x, y, z, interactable, target.getPosition(), event.getEntityPlayer())) {
 				sendToPlayer(pigSpawner, (EntityPlayerMP) event.getEntityPlayer(), hand);
 			}
 		}

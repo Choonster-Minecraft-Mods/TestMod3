@@ -125,6 +125,10 @@ public class ModFluids {
 
 	private static void registerTank(Fluid fluid) {
 		final FluidStack fluidStack = new FluidStack(fluid, TileEntityFluidTank.CAPACITY);
-		((ItemFluidTank) Item.getItemFromBlock(ModBlocks.FLUID_TANK)).addFluid(fluidStack);
+
+		final Item item = Item.getItemFromBlock(ModBlocks.FLUID_TANK);
+		assert item instanceof ItemFluidTank;
+
+		((ItemFluidTank) item).addFluid(fluidStack);
 	}
 }

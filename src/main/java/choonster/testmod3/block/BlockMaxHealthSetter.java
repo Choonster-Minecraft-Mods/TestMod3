@@ -29,10 +29,13 @@ public class BlockMaxHealthSetter extends BlockTestMod3 {
 		if (!worldIn.isRemote) {
 			final IMaxHealth maxHealth = CapabilityMaxHealth.getMaxHealth(playerIn);
 
-			final float healthToAdd = playerIn.isSneaking() ? -1.0f : 1.0f;
-			maxHealth.addBonusMaxHealth(healthToAdd);
+			if (maxHealth != null) {
+				final float healthToAdd = playerIn.isSneaking() ? -1.0f : 1.0f;
 
-			playerIn.addChatMessage(new TextComponentTranslation("message.testmod3:max_health.add", playerIn.getDisplayName(), healthToAdd));
+				maxHealth.addBonusMaxHealth(healthToAdd);
+
+				playerIn.addChatMessage(new TextComponentTranslation("message.testmod3:max_health.add", playerIn.getDisplayName(), healthToAdd));
+			}
 		}
 
 		return true;

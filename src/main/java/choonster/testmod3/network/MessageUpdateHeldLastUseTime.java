@@ -76,8 +76,12 @@ public class MessageUpdateHeldLastUseTime implements IMessage {
 		public IMessage onMessage(MessageUpdateHeldLastUseTime message, MessageContext ctx) {
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				final EntityPlayer player = TestMod3.proxy.getClientPlayer();
+				assert player != null;
+
 				final ILastUseTime lastUseTime = CapabilityLastUseTime.getLastUseTime(player.getHeldItem(message.hand));
-				lastUseTime.set(message.lastUseTime);
+				if (lastUseTime != null) {
+					lastUseTime.set(message.lastUseTime);
+				}
 			});
 
 			return null;

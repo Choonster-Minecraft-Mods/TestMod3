@@ -76,7 +76,7 @@ public class ContainerModChest extends Container {
 	public ItemStack transferStackInSlot(EntityPlayer player, int index) {
 		final Slot slot = this.inventorySlots.get(index);
 
-		if (slot != null && slot.getHasStack()) {
+		if (slot != null && slot.getStack() != null) {
 			final ItemStack stack = slot.getStack();
 			final ItemStack originalStack = stack.copy();
 

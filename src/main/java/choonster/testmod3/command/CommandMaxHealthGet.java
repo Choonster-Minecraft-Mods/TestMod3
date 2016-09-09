@@ -42,7 +42,9 @@ public class CommandMaxHealthGet extends CommandMaxHealthBase {
 		final EntityLivingBase entity = getEntity(server, sender, args[0], EntityLivingBase.class);
 		final IMaxHealth maxHealth = CapabilityMaxHealth.getMaxHealth(entity);
 
-		notifyCommandListener(sender, this, getSuccessMessage(), entity.getDisplayName(), CapabilityMaxHealth.formatMaxHealth(entity.getMaxHealth()), CapabilityMaxHealth.formatMaxHealth(maxHealth.getBonusMaxHealth()));
+		if (maxHealth != null) {
+			notifyCommandListener(sender, this, getSuccessMessage(), entity.getDisplayName(), CapabilityMaxHealth.formatMaxHealth(entity.getMaxHealth()), CapabilityMaxHealth.formatMaxHealth(maxHealth.getBonusMaxHealth()));
+		}
 	}
 
 	/**

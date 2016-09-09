@@ -1,6 +1,7 @@
 package choonster.testmod3.item;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.util.CapabilityUtils;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -70,9 +71,8 @@ public class ItemModBow extends ItemBow {
 
 		// Vertical facing = main inventory
 		final EnumFacing mainInventoryFacing = EnumFacing.UP;
-		if (player.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, mainInventoryFacing)) {
-			final IItemHandler mainInventory = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, mainInventoryFacing);
-
+		final IItemHandler mainInventory = CapabilityUtils.getCapability(player, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, mainInventoryFacing);
+		if (mainInventory != null) {
 			if (isAmmo.test(player.getHeldItemMainhand())) {
 				final int currentItem = player.inventory.currentItem;
 				return new RangedWrapper((IItemHandlerModifiable) mainInventory, currentItem, currentItem + 1);

@@ -91,6 +91,7 @@ public class MessagePlayerReceivedLoot implements IMessage {
 		public IMessage onMessage(final MessagePlayerReceivedLoot message, final MessageContext ctx) {
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				final EntityPlayer player = TestMod3.proxy.getClientPlayer();
+				assert player != null;
 
 				final ITextComponent lootMessage = getItemStackTextComponent(message.itemStacks[0]);
 				for (int i = 1; i < message.itemStacks.length; i++) {

@@ -23,10 +23,13 @@ public class ItemMaxHealthSetter extends ItemTestMod3 {
 		if (!playerIn.worldObj.isRemote) {
 			final IMaxHealth maxHealth = CapabilityMaxHealth.getMaxHealth(target);
 
-			final float healthToAdd = playerIn.isSneaking() ? -1.0f : 1.0f;
-			maxHealth.addBonusMaxHealth(healthToAdd);
+			if (maxHealth != null) {
+				final float healthToAdd = playerIn.isSneaking() ? -1.0f : 1.0f;
 
-			playerIn.addChatMessage(new TextComponentTranslation("message.testmod3:max_health.add", target.getDisplayName(), healthToAdd));
+				maxHealth.addBonusMaxHealth(healthToAdd);
+
+				playerIn.addChatMessage(new TextComponentTranslation("message.testmod3:max_health.add", target.getDisplayName(), healthToAdd));
+			}
 		}
 
 		return true;

@@ -14,6 +14,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 
+import javax.annotation.Nullable;
+
 /**
  * An Item that fires Snowballs at a fixed rate while right click is held
  * <p>
@@ -60,7 +62,7 @@ public class ItemSnowballLauncher extends ItemTestMod3 {
 	 * @param stack The ItemStack
 	 * @return Is the ItemStack valid ammunition?
 	 */
-	protected boolean isAmmo(ItemStack stack) {
+	protected boolean isAmmo(@Nullable ItemStack stack) {
 		return stack != null && stack.getItem() == Items.SNOWBALL;
 	}
 
