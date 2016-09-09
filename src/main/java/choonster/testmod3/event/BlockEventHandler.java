@@ -6,6 +6,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -17,17 +18,18 @@ public class BlockEventHandler {
 	/**
 	 * Can the tool harvest the block?
 	 * <p>
-	 * Adapted from ForgeHooks.canToolHarvestBlock, but has an IBlockState parameter instead of getting the IBlockState
+	 * Adapted from {@link ForgeHooks#canToolHarvestBlock}, but has an IBlockState parameter instead of getting the IBlockState
 	 * from an IBlockAccess and a BlockPos.
 	 *
-	 * @param state The block's state
-	 * @param stack The tool ItemStack
+	 * @param state  The block's state
+	 * @param stack  The tool ItemStack
+	 * @param player The player harvesting the block
 	 * @return True if the tool can harvest the block
 	 */
-	private boolean canToolHarvestBlock(IBlockState state, @Nullable ItemStack stack) {
+	private boolean canToolHarvestBlock(IBlockState state, @Nullable ItemStack stack, EntityPlayer player) {
 		final String tool = state.getBlock().getHarvestTool(state);
 		return stack != null && tool != null
-				&& stack.getItem().getHarvestLevel(stack, tool) >= state.getBlock().getHarvestLevel(state);
+				&& stack.getItem().getHarvestLevel(stack, tool, player, state) >= state.getBlock().getHarvestLevel(state);
 	}
 
 	/**
@@ -42,7 +44,7 @@ public class BlockEventHandler {
 	private boolean isPlayerHarvestingLogWithoutCorrectTool(IBlockState state, IBlockAccess blockAccess, BlockPos pos, EntityPlayer player) {
 		return !player.capabilities.isCreativeMode
 				&& state.getBlock().isWood(blockAccess, pos)
-				&& !canToolHarvestBlock(state, player.getHeldItemMainhand());
+				&& !canToolHarvestBlock(state, player.getHeldItemMainhand(), player);
 	}
 
 	/**

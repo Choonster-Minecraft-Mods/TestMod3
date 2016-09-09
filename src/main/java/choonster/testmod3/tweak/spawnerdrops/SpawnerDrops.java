@@ -2,7 +2,7 @@ package choonster.testmod3.tweak.spawnerdrops;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -47,18 +47,18 @@ public class SpawnerDrops {
 	 *
 	 * @param world  The block's world
 	 * @param pos    The block's position
-	 * @param block  The block
+	 * @param state  The block state
 	 * @param player The player who broke the block
 	 * @return Is the event valid?
 	 */
-	private static boolean isValid(World world, BlockPos pos, Block block, @Nullable EntityPlayer player) {
+	private static boolean isValid(World world, BlockPos pos, IBlockState state, @Nullable EntityPlayer player) {
 		if (player == null) return false;
 
 		final ItemStack heldItem = player.getHeldItemMainhand();
 
 		return !world.isRemote && // Return true if this is the server,
-				block == Blocks.MOB_SPAWNER && // The block is a mob spawner,
-				heldItem != null && heldItem.getItem().getHarvestLevel(heldItem, "pickaxe") > 0 &&  // The held item is a pickaxe,
+				state.getBlock() == Blocks.MOB_SPAWNER && // The block is a mob spawner,
+				heldItem != null && heldItem.getItem().getHarvestLevel(heldItem, "pickaxe", player, state) > 0 &&  // The held item is a pickaxe,
 				EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, heldItem) > 0; // And the held item has Silk Touch
 	}
 
@@ -68,7 +68,7 @@ public class SpawnerDrops {
 		final BlockPos pos = event.getPos();
 
 		// If the event isn't valid, do nothing
-		if (!isValid(world, pos, event.getState().getBlock(), event.getPlayer())) return;
+		if (!isValid(world, pos, event.getState(), event.getPlayer())) return;
 
 		// If the TileEntity isn't a mob spawner, do nothing
 		if (!(world.getTileEntity(pos) instanceof TileEntityMobSpawner)) {
@@ -90,10 +90,10 @@ public class SpawnerDrops {
 	public static void blockHarvested(BlockEvent.HarvestDropsEvent event) {
 		final World world = event.getWorld();
 		final BlockPos pos = event.getPos();
-		final Block block = event.getState().getBlock();
+		final IBlockState state = event.getState();
 
 		// If the event isn't valid, do nothing
-		if (!isValid(world, pos, block, event.getHarvester())) return;
+		if (!isValid(world, pos, state, event.getHarvester())) return;
 
 		final int dimensionID = world.provider.getDimension(); // Get this dimension's ID
 		if (!storedSpawners.containsKey(dimensionID)) { // If the map for this dimension doesn't exist yet, do nothing
@@ -109,7 +109,7 @@ public class SpawnerDrops {
 		tileData.removeTag("y");
 		tileData.removeTag("z");
 
-		final ItemStack droppedItem = new ItemStack(block); // Create an ItemStack of the Block
+		final ItemStack droppedItem = new ItemStack(state.getBlock()); // Create an ItemStack of the Block
 		droppedItem.setTagInfo("BlockEntityTag", tileData); // Store the TileEntity data in the ItemStack
 		event.getDrops().add(droppedItem); // Add the ItemStack to the drops list
 	}
