@@ -4,6 +4,8 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.util.EnumFacing;
 
 /**
+ * Adds a line to the Waila tooltip body displaying the current value of an {@link EnumFacing} property.
+ *
  * @author Choonster
  */
 public class HUDHandlerRotatable extends HUDHandlerEnumProperty<EnumFacing> {

@@ -18,6 +18,8 @@ import net.minecraft.world.World;
 import java.util.List;
 
 /**
+ * Adds a line to the Waila tooltip body displaying the current value of an enum property.
+ *
  * @author Choonster
  */
 public class HUDHandlerEnumProperty<T extends Enum<T> & IStringSerializable> implements IWailaDataProvider {

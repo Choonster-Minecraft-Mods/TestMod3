@@ -4,6 +4,8 @@ import choonster.testmod3.util.EnumFaceRotation;
 import net.minecraft.block.properties.IProperty;
 
 /**
+ * Adds a line to the Waila tooltip body displaying the current value of an {@link EnumFaceRotation} property.
+ *
  * @author Choonster
  */
 public class HUDHandlerMultiRotatable extends HUDHandlerEnumProperty<EnumFaceRotation> {

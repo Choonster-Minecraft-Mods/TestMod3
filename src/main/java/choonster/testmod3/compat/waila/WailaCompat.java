@@ -4,6 +4,8 @@ import choonster.testmod3.block.*;
 import mcp.mobius.waila.api.IWailaRegistrar;
 
 /**
+ * Waila compatibility.
+ *
  * @author Choonster
  */
 public class WailaCompat {
