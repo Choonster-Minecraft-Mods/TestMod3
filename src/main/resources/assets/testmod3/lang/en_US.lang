@@ -224,14 +224,14 @@ item_group.testmod3=Test Mod 3
 
 # Commands
 commands.testmod3.rotatevector.usage=/testmod3 rotatevector <x> <y> <z> <axis> <degrees>
-commands.testmod3.rotatevector.invalidaxis=axis must be x, y or z
+commands.testmod3.rotatevector.invalid_axis=axis must be x, y or z
 commands.testmod3.rotatevector.result=Rotated vector: [%s, %s, %s]
 commands.testmod3.runtests.usage=/testmod3 runtests
-commands.testmod3.runtests.testspassed=All tests passed.
-commands.testmod3.runtests.testsfailed=Tests failed. See log for more details.
-commands.testmod3.addmaxhealth.usage=/testmod3 addmaxhealth <entity> <amount>
-commands.testmod3.setmaxhealth.usage=/testmod3 setmaxhealth <entity> <amount>
-commands.testmod3.getmaxhealth.usage=/testmod3 getmaxhealth <entity>
+commands.testmod3.runtests.tests_passed=All tests passed.
+commands.testmod3.runtests.tests_failed=Tests failed. See log for more details.
+commands.testmod3.add_max_health.usage=/testmod3 addmaxhealth <entity> <amount>
+commands.testmod3.set_max_health.usage=/testmod3 setmaxhealth <entity> <amount>
+commands.testmod3.get_max_health.usage=/testmod3 getmaxhealth <entity>
 commands.testmod3.usage=/testmod3 <command>
 commands.testmod3:help.usage=/testmod3 help [page|command name]
 
