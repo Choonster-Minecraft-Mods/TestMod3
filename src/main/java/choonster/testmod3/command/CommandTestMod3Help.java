@@ -15,12 +15,12 @@ import java.util.Map;
  */
 public class CommandTestMod3Help extends CommandHelp {
 	/**
-	 * The {@link ISubCommandManager} this is registered with.
+	 * The {@link CommandTestMod3} instance.
 	 */
-	private final ISubCommandManager subCommandManager;
+	private final CommandTestMod3 commandTestMod3;
 
-	public CommandTestMod3Help(ISubCommandManager subCommandManager) {
-		this.subCommandManager = subCommandManager;
+	public CommandTestMod3Help(CommandTestMod3 commandTestMod3) {
+		this.commandTestMod3 = commandTestMod3;
 	}
 
 	@Override
@@ -30,11 +30,11 @@ public class CommandTestMod3Help extends CommandHelp {
 
 	@Override
 	protected Map<String, ICommand> getCommandMap(MinecraftServer server) {
-		return subCommandManager.getCommands();
+		return commandTestMod3.getCommandMap();
 	}
 
 	@Override
 	protected List<ICommand> getSortedPossibleCommands(ICommandSender sender, MinecraftServer server) {
-		return subCommandManager.getPossibleCommands(sender);
+		return commandTestMod3.getSortedPossibleCommands(sender, server);
 	}
 }

@@ -16,20 +16,20 @@ public class ModCommands {
 	 * @param event The server starting event
 	 */
 	public static void registerCommands(FMLServerStartingEvent event) {
-		event.registerServerCommand(new CommandTestMod3(event.getServer()));
+		event.registerServerCommand(new CommandTestMod3());
 	}
 
 	/**
 	 * Register the sub-commands of the {@code /testmod3} command.
 	 *
-	 * @param subCommandManager The sub-command manager of the command
+	 * @param commandTestMod3 The /testmod3 command
 	 */
-	public static void registerSubCommands(ISubCommandManager subCommandManager) {
-		subCommandManager.registerSubCommand(new CommandTestMod3Help(subCommandManager));
-		subCommandManager.registerSubCommand(new CommandRotateVector());
-		subCommandManager.registerSubCommand(new CommandRunTests());
-		subCommandManager.registerSubCommand(new CommandMaxHealthAdd());
-		subCommandManager.registerSubCommand(new CommandMaxHealthSet());
-		subCommandManager.registerSubCommand(new CommandMaxHealthGet());
+	public static void registerSubCommands(CommandTestMod3 commandTestMod3) {
+		commandTestMod3.addSubcommand(new CommandTestMod3Help(commandTestMod3));
+		commandTestMod3.addSubcommand(new CommandRotateVector());
+		commandTestMod3.addSubcommand(new CommandRunTests());
+		commandTestMod3.addSubcommand(new CommandMaxHealthAdd());
+		commandTestMod3.addSubcommand(new CommandMaxHealthSet());
+		commandTestMod3.addSubcommand(new CommandMaxHealthGet());
 	}
 }
