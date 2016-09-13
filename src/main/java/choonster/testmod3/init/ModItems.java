@@ -58,6 +58,7 @@ public class ModItems {
 	public static final ItemVariants VARIANTS;
 	public static final ItemRitualChecker RITUAL_CHECKER;
 	public static final ItemHiddenBlockRevealer HIDDEN_BLOCK_REVEALER;
+	public static final ItemTestMod3 NO_MOD_NAME;
 
 	public static final ItemArmourReplacement REPLACEMENT_HELMET;
 	public static final ItemArmourRestricted REPLACEMENT_CHESTPLATE;
@@ -122,6 +123,7 @@ public class ModItems {
 		VARIANTS = registerItem(new ItemVariants());
 		RITUAL_CHECKER = registerItem(new ItemRitualChecker());
 		HIDDEN_BLOCK_REVEALER = registerItem(new ItemHiddenBlockRevealer());
+		NO_MOD_NAME = registerItem(new ItemTestMod3("no_mod_name"));
 
 		TOOL_MATERIAL_GLOWSTONE.setRepairItem(new ItemStack(Items.GLOWSTONE_DUST));
 		ARMOUR_MATERIAL_REPLACEMENT.customCraftingMaterial = ARROW;

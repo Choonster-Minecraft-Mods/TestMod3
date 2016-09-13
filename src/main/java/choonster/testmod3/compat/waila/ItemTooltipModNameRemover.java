@@ -1,0 +1,29 @@
+package choonster.testmod3.compat.waila;
+
+import choonster.testmod3.TestMod3;
+import choonster.testmod3.init.ModItems;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+/**
+ * Removes the mod name added by Waila to the tooltip of {@link ModItems#NO_MOD_NAME}.
+ *
+ * Test for this thread:
+ * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2677402-unable-to-get-current-blocks-tile-entity-metadata?comment=209
+ *
+ * @author Choonster
+ */
+public class ItemTooltipModNameRemover {
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public static void itemTooltip(ItemTooltipEvent event) {
+		if (event.getItemStack().getItem() == ModItems.NO_MOD_NAME) {
+			event.getToolTip().remove(TextFormatting.BLUE + "" + TextFormatting.ITALIC + TestMod3.NAME);
+		}
+	}
+}

@@ -150,6 +150,7 @@ public class ModModelManager {
 		registerItemModel(ModItems.SADDLE, "minecraft:saddle");
 		registerItemModel(ModItems.WOODEN_SLOW_SWORD, "minecraft:wooden_sword");
 		registerItemModel(ModItems.DIAMOND_SLOW_SWORD, "minecraft:diamond_sword");
+		registerItemModel(ModItems.NO_MOD_NAME, "minecraft:bread");
 
 		registerVariantItemModels(ModItems.VARIANTS, "variant", ItemVariants.EnumType.values());
 

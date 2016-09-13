@@ -138,6 +138,7 @@ item.testmod3:wooden_slow_sword.name=Slow Wooden Sword
 item.testmod3:diamond_slow_sword.name=Slow Diamond Sword
 item.testmod3:ritual_checker.name=Ritual Checker
 item.testmod3:hidden_block_revealer.name=Hidden Block Revealer
+item.testmod3:no_mod_name.name=No Mod Name
 
 item.testmod3:replacement_helmet.name=Armour Replacement Helmet
 item.testmod3:replacement_chestplate.name=Armour Replacement Chestplate

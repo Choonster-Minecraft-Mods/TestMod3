@@ -2,6 +2,7 @@ package choonster.testmod3.compat.waila;
 
 import choonster.testmod3.block.*;
 import mcp.mobius.waila.api.IWailaRegistrar;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * Waila compatibility.
@@ -21,5 +22,6 @@ public class WailaCompat {
 		registrar.registerBodyProvider(new HUDHandlerRotatable(BlockPlane.HORIZONTAL_ROTATION, "tile.testmod3:plane.horizontalRotation.desc"), BlockPlane.class);
 		registrar.registerBodyProvider(new HUDHandlerVerticalRotatable(BlockPlane.VERTICAL_ROTATION), BlockPlane.class);
 
+		MinecraftForge.EVENT_BUS.register(ItemTooltipModNameRemover.class);
 	}
 }
