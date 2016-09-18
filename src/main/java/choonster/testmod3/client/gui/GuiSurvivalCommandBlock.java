@@ -10,13 +10,10 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiCommandBlock;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.tileentity.TileEntityCommandBlock;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;
 
-@SideOnly(Side.CLIENT)
 public class GuiSurvivalCommandBlock extends GuiCommandBlock {
 	private static final MethodHandle COMMAND_TEXT_GETTER = ReflectionUtil.findFieldGetter(GuiCommandBlock.class, "commandTextField", "field_146485_f");
 	private static final MethodHandle COMMAND_BLOCK_MODE_GETTER = ReflectionUtil.findFieldGetter(GuiCommandBlock.class, "commandBlockMode", "field_184082_w");

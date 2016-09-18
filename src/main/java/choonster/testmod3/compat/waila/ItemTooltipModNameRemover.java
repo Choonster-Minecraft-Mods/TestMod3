@@ -8,7 +8,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Removes the mod name added by Waila to the tooltip of {@link ModItems#NO_MOD_NAME}.
@@ -20,8 +19,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class ItemTooltipModNameRemover {
-
-	@SideOnly(Side.CLIENT)
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void itemTooltip(ItemTooltipEvent event) {
 		if (event.getItemStack().getItem() == ModItems.NO_MOD_NAME) {

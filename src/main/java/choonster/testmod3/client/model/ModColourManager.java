@@ -10,15 +10,12 @@ import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.biome.BiomeColorHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Registers {@link IBlockColor}/{@link IItemColor} handlers for this mod's blocks/items.
  *
  * @author Choonster
  */
-@SideOnly(Side.CLIENT)
 public class ModColourManager {
 	private static final Minecraft minecraft = Minecraft.getMinecraft();
 

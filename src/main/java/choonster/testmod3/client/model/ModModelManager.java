@@ -21,12 +21,10 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@SideOnly(Side.CLIENT)
 public class ModModelManager {
 	public static final ModModelManager INSTANCE = new ModModelManager();
 

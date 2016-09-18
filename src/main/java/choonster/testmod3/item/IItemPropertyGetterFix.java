@@ -17,7 +17,6 @@ import javax.annotation.Nullable;
  * @see "MeshDefinitionFix"
  */
 public interface IItemPropertyGetterFix extends IItemPropertyGetter {
-	@SideOnly(Side.CLIENT)
 	float applyPropertyGetter(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn);
 
 	static IItemPropertyGetterFix create(IItemPropertyGetterFix lambda) {

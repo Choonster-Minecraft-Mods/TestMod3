@@ -5,10 +5,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderTippedArrow;
 import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public class RenderModArrow extends RenderTippedArrow {
 	private static final ResourceLocation ENTITY_TEXTURE = new ResourceLocation(TestMod3.MODID, "textures/entity/mod_arrow.png");
 

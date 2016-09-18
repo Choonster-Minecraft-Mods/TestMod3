@@ -41,7 +41,6 @@ public class BlockClientPlayerRotation extends BlockStaticPressurePlate {
 	 * <p>
 	 * This can safely be stored as a field because its value is determined by the client player's pitch.
 	 */
-	@SideOnly(Side.CLIENT)
 	private boolean isPitchingUp;
 
 	@Override

@@ -8,7 +8,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Handler for {@link FMLNetworkEvent} subclasses.
@@ -21,7 +20,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class NetworkEventHandler {
-
 	/**
 	 * Prints server connection info when the client connects to a server.
 	 * <p>
@@ -30,7 +28,6 @@ public class NetworkEventHandler {
 	 *
 	 * @param event The event
 	 */
-	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public static void clientConnectedToServer(FMLNetworkEvent.ClientConnectedToServerEvent event) {
 		final IThreadListener mainThread = Minecraft.getMinecraft();
