@@ -7,8 +7,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * Manages the hidden block state for the client.
@@ -17,6 +19,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
  *
  * @author Choonster
  */
+@Mod.EventBusSubscriber(Side.CLIENT)
 public class HiddenBlockManager {
 	private static volatile boolean lastCheckResult = false;
 	private static boolean toggled = false;

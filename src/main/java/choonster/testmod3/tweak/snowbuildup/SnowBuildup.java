@@ -6,7 +6,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -21,35 +21,32 @@ import java.util.Random;
  *
  * @author Choonster
  */
+@Mod.EventBusSubscriber
 public class SnowBuildup {
 
 	public static final SnowBuildup INSTANCE = new SnowBuildup();
 
-	public static void init() {
-		MinecraftForge.EVENT_BUS.register(INSTANCE);
-	}
-
 	/**
 	 * The number of ticks between each buildup.
 	 */
-	private final int NUM_TICKS = 10;
+	private static final int NUM_TICKS = 10;
 
 	/**
 	 * The maximum number of layers per snow layer block
 	 */
-	private final int MAX_LAYERS = 8;
+	private static final int MAX_LAYERS = 8;
 
 	/**
 	 * The random number generator
 	 */
-	private final Random random = new Random();
+	private static final Random random = new Random();
 
 
 	private SnowBuildup() {
 	}
 
 	@SubscribeEvent
-	public void onWorldTick(TickEvent.WorldTickEvent event) {
+	public static void onWorldTick(TickEvent.WorldTickEvent event) {
 		if (event.world.isRemote) return;
 
 		final WorldServer world = (WorldServer) event.world;

@@ -5,19 +5,20 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.SimpleCapabilityProvider;
 import choonster.testmod3.util.CapabilityUtils;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -61,8 +62,6 @@ public class CapabilityMaxHealth {
 				instance.setBonusMaxHealth(((NBTTagFloat) nbt).getFloat());
 			}
 		}, () -> new MaxHealth(null));
-
-		MinecraftForge.EVENT_BUS.register(new EventHandler());
 	}
 
 	/**
@@ -99,6 +98,7 @@ public class CapabilityMaxHealth {
 	/**
 	 * Event handler for the {@link IMaxHealth} capability.
 	 */
+	@Mod.EventBusSubscriber
 	public static class EventHandler {
 		/**
 		 * Attach the {@link IMaxHealth} capability to all living entities.
@@ -106,9 +106,9 @@ public class CapabilityMaxHealth {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public void attachCapabilities(AttachCapabilitiesEvent.Entity event) {
-			if (event.getEntity() instanceof EntityLivingBase) {
-				final MaxHealth maxHealth = new MaxHealth((EntityLivingBase) event.getEntity());
+		public static void attachCapabilities(AttachCapabilitiesEvent<Entity> event) {
+			if (event.getObject() instanceof EntityLivingBase) {
+				final MaxHealth maxHealth = new MaxHealth((EntityLivingBase) event.getObject());
 				event.addCapability(ID, createProvider(maxHealth));
 			}
 		}
@@ -119,7 +119,7 @@ public class CapabilityMaxHealth {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public void playerClone(PlayerEvent.Clone event) {
+		public static void playerClone(PlayerEvent.Clone event) {
 			final IMaxHealth oldMaxHealth = getMaxHealth(event.getOriginal());
 			final IMaxHealth newMaxHealth = getMaxHealth(event.getEntityPlayer());
 
@@ -128,6 +128,4 @@ public class CapabilityMaxHealth {
 			}
 		}
 	}
-
-
 }

@@ -56,11 +56,6 @@ public class TestMod3 {
 
 		ModCapabilities.registerCapabilities();
 
-		MinecraftForge.EVENT_BUS.register(new BlockEventHandler());
-		MinecraftForge.EVENT_BUS.register(new NetworkEventHandler());
-		MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
-		MinecraftForge.EVENT_BUS.register(ItemCombinationHandler.class);
-
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 
 		ModSoundEvents.registerSounds();
@@ -75,9 +70,6 @@ public class TestMod3 {
 		ModEntities.registerEntities();
 		ModPotions.registerPotions();
 		ModPotionTypes.registerPotionTypes();
-
-		SnowBuildup.init();
-		SpawnerDrops.init();
 
 		proxy.preInit();
 	}

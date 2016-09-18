@@ -1,12 +1,13 @@
 package choonster.testmod3.config;
 
 import choonster.testmod3.TestMod3;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@Mod.EventBusSubscriber
 public class Config {
 	static final String LANG_PREFIX = TestMod3.MODID + ".config.";
 
@@ -18,8 +19,6 @@ public class Config {
 	public static void load(FMLPreInitializationEvent event) {
 		config = new Configuration(event.getSuggestedConfigurationFile());
 		reloadConfig();
-
-		MinecraftForge.EVENT_BUS.register(Config.class);
 	}
 
 	private static void reloadConfig() {

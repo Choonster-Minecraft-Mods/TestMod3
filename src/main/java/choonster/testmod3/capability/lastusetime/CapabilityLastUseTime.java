@@ -17,12 +17,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nullable;
@@ -61,8 +61,6 @@ public class CapabilityLastUseTime {
 				instance.set(((NBTTagLong) nbt).getLong());
 			}
 		}, () -> new LastUseTime(true));
-
-		MinecraftForge.EVENT_BUS.register(new EventHandler());
 	}
 
 	/**
@@ -128,6 +126,7 @@ public class CapabilityLastUseTime {
 	/**
 	 * Event handler for the {@link ILastUseTime} capability.
 	 */
+	@Mod.EventBusSubscriber
 	public static class EventHandler {
 		/**
 		 * Update the {@link ILastUseTime} of the player's held item when they right click.
@@ -135,7 +134,7 @@ public class CapabilityLastUseTime {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public void playerInteract(PlayerInteractEvent.RightClickItem event) {
+		public static void playerInteract(PlayerInteractEvent.RightClickItem event) {
 			final ItemStack itemStack = event.getItemStack();
 			final ILastUseTime lastUseTime = getLastUseTime(itemStack);
 			if (lastUseTime != null && lastUseTime.automaticUpdates()) {

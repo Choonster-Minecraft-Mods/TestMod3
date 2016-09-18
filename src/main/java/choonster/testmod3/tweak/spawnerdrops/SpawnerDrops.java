@@ -13,8 +13,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nullable;
@@ -29,10 +29,8 @@ import java.util.Map;
  *
  * @author Choonster
  */
+@Mod.EventBusSubscriber
 public class SpawnerDrops {
-	public static void init() {
-		MinecraftForge.EVENT_BUS.register(SpawnerDrops.class);
-	}
 
 	/**
 	 * Stores the TileEntities of broken spawner blocks between {@link BlockEvent.BreakEvent} and {@link BlockEvent.HarvestDropsEvent}.

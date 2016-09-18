@@ -6,18 +6,20 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.FOVUpdateEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
+@Mod.EventBusSubscriber(Side.CLIENT)
 public class ClientEventHandler {
 
 	private final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
 	@SubscribeEvent
-	public void onFOVUpdate(FOVUpdateEvent event) {
+	public static void onFOVUpdate(FOVUpdateEvent event) {
 		if (event.getEntity().isHandActive() && event.getEntity().getActiveItemStack() != null && event.getEntity().getActiveItemStack().getItem() instanceof ItemModBow) {
 			float fovModifier = event.getEntity().getItemInUseMaxCount() / 20.0f;
 
@@ -40,7 +42,7 @@ public class ClientEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public void onClientTick(TickEvent.ClientTickEvent event) {
+	public static void onClientTick(TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.END && MINECRAFT.thePlayer != null) {
 			final EntityPlayer player = MINECRAFT.thePlayer;
 			if (MINECRAFT.theWorld.getBlockState(new BlockPos(player).down()).getBlock() == Blocks.IRON_BLOCK) {

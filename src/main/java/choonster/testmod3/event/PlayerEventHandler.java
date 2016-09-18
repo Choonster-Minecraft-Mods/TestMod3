@@ -10,6 +10,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -19,6 +20,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
  *
  * @author Choonster
  */
+@Mod.EventBusSubscriber
 public class PlayerEventHandler {
 
 	/**
@@ -30,7 +32,7 @@ public class PlayerEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public void playerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+	public static void playerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
 		final EntityPlayer player = event.player;
 
 		final NBTTagCompound entityData = player.getEntityData();
@@ -59,7 +61,7 @@ public class PlayerEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public void livingDeath(LivingDeathEvent event) {
+	public static void livingDeath(LivingDeathEvent event) {
 		if (event.getEntity() instanceof EntityPlayer) {
 			final EntityPlayer player = (EntityPlayer) event.getEntity();
 			final BlockPos pos = player.getPosition();

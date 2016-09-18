@@ -9,10 +9,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nullable;
 
+@Mod.EventBusSubscriber
 public class BlockEventHandler {
 
 	/**
@@ -26,7 +28,7 @@ public class BlockEventHandler {
 	 * @param player The player harvesting the block
 	 * @return True if the tool can harvest the block
 	 */
-	private boolean canToolHarvestBlock(IBlockState state, @Nullable ItemStack stack, EntityPlayer player) {
+	private static boolean canToolHarvestBlock(IBlockState state, @Nullable ItemStack stack, EntityPlayer player) {
 		final String tool = state.getBlock().getHarvestTool(state);
 		return stack != null && tool != null
 				&& stack.getItem().getHarvestLevel(stack, tool, player, state) >= state.getBlock().getHarvestLevel(state);
@@ -41,7 +43,7 @@ public class BlockEventHandler {
 	 * @param player      The player harvesting the block
 	 * @return True if the block is a log, the player isn't in creative mode and the player doesn't have the correct tool equipped
 	 */
-	private boolean isPlayerHarvestingLogWithoutCorrectTool(IBlockState state, IBlockAccess blockAccess, BlockPos pos, EntityPlayer player) {
+	private static boolean isPlayerHarvestingLogWithoutCorrectTool(IBlockState state, IBlockAccess blockAccess, BlockPos pos, EntityPlayer player) {
 		return !player.capabilities.isCreativeMode
 				&& state.getBlock().isWood(blockAccess, pos)
 				&& !canToolHarvestBlock(state, player.getHeldItemMainhand(), player);
@@ -53,7 +55,7 @@ public class BlockEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public void harvestDrops(BlockEvent.HarvestDropsEvent event) {
+	public static void harvestDrops(BlockEvent.HarvestDropsEvent event) {
 		if (event.getState().getBlock().isLeaves(event.getState(), event.getWorld(), event.getPos())) {
 			event.getDrops().add(new ItemStack(Items.STICK, 2));
 		}
@@ -65,7 +67,7 @@ public class BlockEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public void breakSpeed(PlayerEvent.BreakSpeed event) {
+	public static void breakSpeed(PlayerEvent.BreakSpeed event) {
 		if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getEntityPlayer().getEntityWorld(), event.getPos(), event.getEntityPlayer())) {
 			event.setCanceled(true);
 		}
@@ -77,7 +79,7 @@ public class BlockEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public void breakBlock(BlockEvent.BreakEvent event) {
+	public static void breakBlock(BlockEvent.BreakEvent event) {
 		if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getWorld(), event.getPos(), event.getPlayer())) {
 			event.setCanceled(true);
 		}

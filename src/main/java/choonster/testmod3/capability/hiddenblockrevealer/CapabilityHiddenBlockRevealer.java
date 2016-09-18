@@ -14,7 +14,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -59,8 +58,6 @@ public class CapabilityHiddenBlockRevealer {
 					}
 				}, HiddenBlockRevealer::new
 		);
-
-		MinecraftForge.EVENT_BUS.register(HiddenBlockManager.class);
 	}
 
 	/**

@@ -15,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,7 +27,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -34,11 +34,11 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -93,8 +93,6 @@ public final class CapabilityPigSpawner {
 				}
 			}
 		}, () -> new PigSpawnerFinite(20));
-
-		MinecraftForge.EVENT_BUS.register(new EventHandler());
 	}
 
 	/**
@@ -130,6 +128,7 @@ public final class CapabilityPigSpawner {
 	/**
 	 * Event handler for the {@link IPigSpawner} capability.
 	 */
+	@Mod.EventBusSubscriber
 	public static class EventHandler {
 		/**
 		 * Attach the {@link IPigSpawner} capability to vanilla items.
@@ -137,8 +136,8 @@ public final class CapabilityPigSpawner {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public void attachCapabilities(AttachCapabilitiesEvent.Item event) {
-			if (event.getItem() == Items.CLAY_BALL) {
+		public static void attachCapabilities(AttachCapabilitiesEvent<Item> event) {
+			if (event.getObject() == Items.CLAY_BALL) {
 				event.addCapability(ID, createProvider());
 			}
 		}
@@ -158,7 +157,7 @@ public final class CapabilityPigSpawner {
 		 * @param iCommandSender  The ICommandSender, if any
 		 * @return Was any action taken?
 		 */
-		private boolean trySpawnPig(IPigSpawner pigSpawner, World world, double x, double y, double z, @Nullable IPigSpawnerInteractable interactable, BlockPos interactablePos, @Nullable ICommandSender iCommandSender) {
+		private static boolean trySpawnPig(IPigSpawner pigSpawner, World world, double x, double y, double z, @Nullable IPigSpawnerInteractable interactable, BlockPos interactablePos, @Nullable ICommandSender iCommandSender) {
 			if (world.isRemote) return false;
 
 			boolean actionTaken = false;
@@ -184,7 +183,7 @@ public final class CapabilityPigSpawner {
 		 * @param player     The player
 		 * @param hand       The hand holding the pig spawner
 		 */
-		private void sendToPlayer(IPigSpawner pigSpawner, EntityPlayerMP player, EnumHand hand) {
+		private static void sendToPlayer(IPigSpawner pigSpawner, EntityPlayerMP player, EnumHand hand) {
 			if (pigSpawner instanceof IPigSpawnerFinite) {
 				final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) pigSpawner;
 				Logger.debug(LOG_MARKER, DebugUtil.getStackTrace(10), "Sending finite pig spawner to client. Player: %s - NumPigs: %d", player.getDisplayNameString(), pigSpawnerFinite.getNumPigs());
@@ -200,7 +199,7 @@ public final class CapabilityPigSpawner {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public void playerInteract(PlayerInteractEvent.RightClickBlock event) {
+		public static void playerInteract(PlayerInteractEvent.RightClickBlock event) {
 			final EnumFacing facing = event.getFace();
 			assert facing != null;
 
@@ -227,7 +226,7 @@ public final class CapabilityPigSpawner {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public void entityInteract(PlayerInteractEvent.EntityInteract event) {
+		public static void entityInteract(PlayerInteractEvent.EntityInteract event) {
 			final World world = event.getEntityPlayer().getEntityWorld();
 
 			final Entity target = event.getTarget();
@@ -248,7 +247,7 @@ public final class CapabilityPigSpawner {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public void itemTooltip(ItemTooltipEvent event) {
+		public static void itemTooltip(ItemTooltipEvent event) {
 			IPigSpawner pigSpawner = getPigSpawner(event.getItemStack());
 			if (pigSpawner == null) return;
 
@@ -263,6 +262,5 @@ public final class CapabilityPigSpawner {
 			event.getToolTip().add("");
 			event.getToolTip().addAll(tooltipLines);
 		}
-
 	}
 }

@@ -11,6 +11,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
  *
  * @author Choonster
  */
+@Mod.EventBusSubscriber
 public class ItemCombinationHandler {
 	/**
 	 * The input items.
