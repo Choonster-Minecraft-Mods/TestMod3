@@ -17,14 +17,14 @@ import net.minecraft.world.biome.BiomeColorHelper;
  * @author Choonster
  */
 public class ModColourManager {
-	private static final Minecraft minecraft = Minecraft.getMinecraft();
+	private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
 	/**
 	 * Register the colour handlers.
 	 */
 	public static void registerColourHandlers() {
-		final BlockColors blockColors = minecraft.getBlockColors();
-		final ItemColors itemColors = minecraft.getItemColors();
+		final BlockColors blockColors = MINECRAFT.getBlockColors();
+		final ItemColors itemColors = MINECRAFT.getItemColors();
 
 		registerBlockColourHandlers(blockColors);
 		registerItemColourHandlers(blockColors, itemColors);

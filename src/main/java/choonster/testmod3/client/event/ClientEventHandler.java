@@ -13,8 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class ClientEventHandler {
-
-	private final Minecraft MINECRAFT = Minecraft.getMinecraft();
+	private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
 	@SubscribeEvent
 	public static void onFOVUpdate(FOVUpdateEvent event) {
