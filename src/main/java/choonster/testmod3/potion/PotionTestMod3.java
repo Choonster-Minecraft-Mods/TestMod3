@@ -40,7 +40,7 @@ public class PotionTestMod3 extends Potion {
 	 * @param potionName The potion's name
 	 */
 	public static void setPotionName(Potion potion, String potionName) {
-		potion.setRegistryName(potionName);
+		potion.setRegistryName(TestMod3.MODID, potionName);
 		potion.setPotionName("effect." + potion.getRegistryName().toString());
 	}
 

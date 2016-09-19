@@ -18,13 +18,17 @@ import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.IFluidBlock;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Mod.EventBusSubscriber(Side.CLIENT)
 public class ModModelManager {
 	public static final ModModelManager INSTANCE = new ModModelManager();
 
@@ -33,10 +37,16 @@ public class ModModelManager {
 	private ModModelManager() {
 	}
 
-	public void registerAllModels() {
-		registerFluidModels();
-		registerBlockModels();
-		registerItemModels();
+	/**
+	 * Register this mod's fluid, block and item models.
+	 *
+	 * @param event The event
+	 */
+	@SubscribeEvent
+	public static void registerAllModels(ModelRegistryEvent event) {
+		INSTANCE.registerFluidModels();
+		INSTANCE.registerBlockModels();
+		INSTANCE.registerItemModels();
 	}
 
 	private void registerFluidModels() {
@@ -49,7 +59,7 @@ public class ModModelManager {
 
 		ModelBakery.registerItemVariants(item);
 
-		ModelResourceLocation modelResourceLocation = new ModelResourceLocation(FLUID_MODEL_PATH, fluidBlock.getFluid().getName());
+		final ModelResourceLocation modelResourceLocation = new ModelResourceLocation(FLUID_MODEL_PATH, fluidBlock.getFluid().getName());
 
 		ModelLoader.setCustomMeshDefinition(item, MeshDefinitionFix.create(stack -> modelResourceLocation));
 
@@ -59,8 +69,6 @@ public class ModModelManager {
 				return modelResourceLocation;
 			}
 		});
-
-		itemsRegistered.add(item);
 	}
 
 	private void registerBlockModels() {
@@ -74,7 +82,7 @@ public class ModModelManager {
 
 			final BlockColouredSlab.EnumColourGroup colourGroup = BlockColouredSlab.EnumColourGroup.getGroupForColour(color);
 			if (colourGroup != null) {
-				registerBlockItemModelForMeta(ModBlocks.STAINED_CLAY_SLABS.getSlabGroupByColourGroup(colourGroup).singleSlab, colourGroup.getOffsetMetadata(color), String.format("colour=%s,half=bottom", color.getName()));
+				registerItemModelForMeta(ModBlocks.Slabs.STAINED_CLAY_SLABS.getSlabGroupByColourGroup(colourGroup).item, colourGroup.getOffsetMetadata(color), String.format("colour=%s,half=bottom", color.getName()));
 			}
 		}
 
@@ -83,7 +91,7 @@ public class ModModelManager {
 		registerBlockItemModel(ModBlocks.MIRROR_PLANE, new ModelResourceLocation(ModBlocks.MIRROR_PLANE.getRegistryName(), "horizontal_rotation=north,vertical_rotation=up"));
 		registerBlockItemModel(ModBlocks.CHEST, new ModelResourceLocation(ModBlocks.CHEST.getRegistryName(), "facing=north"));
 
-		ModBlocks.BLOCKS.stream().filter(block -> !itemsRegistered.contains(Item.getItemFromBlock(block))).forEach(this::registerBlockItemModel);
+		ModBlocks.RegistrationHandler.ITEM_BLOCKS.stream().filter(item -> !itemsRegistered.contains(item)).forEach(this::registerItemModel);
 	}
 
 	private void registerBlockItemModel(Block block) {
@@ -150,10 +158,10 @@ public class ModModelManager {
 		registerItemModel(ModItems.DIAMOND_SLOW_SWORD, "minecraft:diamond_sword");
 		registerItemModel(ModItems.NO_MOD_NAME, "minecraft:bread");
 
-		registerVariantItemModels(ModItems.VARIANTS, "variant", ItemVariants.EnumType.values());
+		registerVariantItemModels(ModItems.VARIANTS_ITEM, "variant", ItemVariants.EnumType.values());
 
 		// Then register items with default model names
-		ModItems.ITEMS.stream().filter(item -> !itemsRegistered.contains(item)).forEach(this::registerItemModel);
+		ModItems.RegistrationHandler.ITEMS.stream().filter(item -> !itemsRegistered.contains(item)).forEach(this::registerItemModel);
 	}
 
 	private void registerItemModel(Item item) {

@@ -1,9 +1,13 @@
 package choonster.testmod3.init;
 
+import choonster.testmod3.TestMod3;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import javax.annotation.Nullable;
@@ -15,32 +19,25 @@ import javax.annotation.Nullable;
  */
 @SuppressWarnings("WeakerAccess")
 public class ModPotionTypes {
-	private static final String LONG_PREFIX = "long_";
-	private static final String STRONG_PREFIX = "strong_";
-
-	private static final int HELPFUL_DURATION_STANDARD = 3600;
-	private static final int HELPFUL_DURATION_LONG = 9600;
-	private static final int HELPFUL_DURATION_STRONG = 1800;
-
-	private static final int HARMFUL_DURATION_STANDARD = 1800;
-	private static final int HARMFUL_DURATION_LONG = 4800;
-	private static final int HARMFUL_DURATION_STRONG = 900;
-
 	public static final PotionType TEST;
 	public static final PotionType LONG_TEST;
 	public static final PotionType STRONG_TEST;
 
 	static {
+		final String LONG_PREFIX = "long_";
+		final String STRONG_PREFIX = "strong_";
+
+		final int HELPFUL_DURATION_STANDARD = 3600;
+		final int HELPFUL_DURATION_LONG = 9600;
+		final int HELPFUL_DURATION_STRONG = 1800;
+
+		final int HARMFUL_DURATION_STANDARD = 1800;
+		final int HARMFUL_DURATION_LONG = 4800;
+		final int HARMFUL_DURATION_STRONG = 900;
+
 		TEST = createPotionType(new PotionEffect(ModPotions.TEST, HELPFUL_DURATION_STANDARD));
 		LONG_TEST = createPotionType(new PotionEffect(ModPotions.TEST, HELPFUL_DURATION_LONG), LONG_PREFIX);
 		STRONG_TEST = createPotionType(new PotionEffect(ModPotions.TEST, HELPFUL_DURATION_STRONG, 1), STRONG_PREFIX);
-	}
-
-	/**
-	 * Dummy method to ensure the static initialiser runs.
-	 */
-	public static void registerPotionTypes() {
-
 	}
 
 	/**
@@ -74,6 +71,23 @@ public class ModPotionTypes {
 			potionTypeName = potionName;
 		}
 
-		return GameRegistry.register(new PotionType(potionName.toString(), potionEffect).setRegistryName(potionTypeName));
+		return new PotionType(potionName.toString(), potionEffect).setRegistryName(potionTypeName);
+	}
+
+	@Mod.EventBusSubscriber
+	public static class RegistrationHandler {
+		/**
+		 * Register this mod's {@link PotionType}s.
+		 *
+		 * @param event The event
+		 */
+		@SubscribeEvent
+		public static void registerPotionTypes(RegistryEvent.Register<PotionType> event) {
+			event.getRegistry().registerAll(
+					TEST,
+					LONG_TEST,
+					STRONG_TEST
+			);
+		}
 	}
 }

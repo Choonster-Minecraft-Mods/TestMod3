@@ -28,7 +28,7 @@ public class BlockTestMod3 extends Block {
 	 * @param blockName The block's name
 	 */
 	public static void setBlockName(Block block, String blockName) {
-		block.setRegistryName(blockName);
+		block.setRegistryName(TestMod3.MODID, blockName);
 		block.setUnlocalizedName(block.getRegistryName().toString());
 	}
 }

@@ -21,7 +21,7 @@ public class ItemTestMod3 extends Item {
 	 * @param itemName The item's name
 	 */
 	public static void setItemName(Item item, String itemName) {
-		item.setRegistryName(itemName);
+		item.setRegistryName(TestMod3.MODID, itemName);
 		item.setUnlocalizedName(item.getRegistryName().toString());
 	}
 }

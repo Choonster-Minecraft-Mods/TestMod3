@@ -1,7 +1,11 @@
 package choonster.testmod3.init;
 
+import choonster.testmod3.TestMod3;
 import choonster.testmod3.potion.PotionTestMod3;
 import net.minecraft.potion.Potion;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
@@ -11,27 +15,21 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  */
 @SuppressWarnings("WeakerAccess")
 public class ModPotions {
-	public static final PotionTestMod3 TEST;
+	public static final PotionTestMod3 TEST = new PotionTestMod3(false, 2, 2, 2, "test");
 
-	static {
-		TEST = registerPotion(new PotionTestMod3(false, 2, 2, 2, "test"));
+	@Mod.EventBusSubscriber
+	public static class RegistrationHandler {
+		/**
+		 * Register this mod's {@link Potion}s.
+		 *
+		 * @param event The event
+		 */
+		@SubscribeEvent
+		public static void registerPotions(RegistryEvent.Register<Potion> event) {
+			event.getRegistry().registerAll(
+					TEST
+			);
+		}
 	}
 
-	/**
-	 * Dummy method to ensure the static initialiser runs.
-	 */
-	public static void registerPotions() {
-
-	}
-
-	/**
-	 * Register a {@link Potion}.
-	 *
-	 * @param potion   The Potion instance
-	 * @param <POTION> The Potion type
-	 * @return The Potion instance
-	 */
-	private static <POTION extends Potion> POTION registerPotion(POTION potion) {
-		return GameRegistry.register(potion);
-	}
 }

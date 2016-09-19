@@ -67,7 +67,7 @@ public abstract class BlockSlabTestMod3<
 			name = "double_" + name;
 		}
 
-		setRegistryName(name);
+		setRegistryName(TestMod3.MODID, name);
 		setUnlocalizedName(Constants.RESOURCE_PREFIX + slabGroup.groupName);
 
 		IBlockState iblockstate = this.blockState.getBaseState();
@@ -104,7 +104,7 @@ public abstract class BlockSlabTestMod3<
 
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return slabGroup.getItem();
+		return slabGroup.item;
 	}
 
 	@Override
@@ -168,7 +168,7 @@ public abstract class BlockSlabTestMod3<
 		public final SLAB singleSlab;
 		public final SLAB doubleSlab;
 		public final String groupName;
-		private ItemSlab item;
+		public final ItemSlab item;
 
 		/**
 		 * Create a slab group.
@@ -181,6 +181,7 @@ public abstract class BlockSlabTestMod3<
 			this.groupName = groupName;
 			this.singleSlab = createSlab(material, false, variants);
 			this.doubleSlab = createSlab(material, true, variants);
+			this.item = new ItemSlab(singleSlab, singleSlab, doubleSlab);
 		}
 
 		/**
@@ -192,13 +193,5 @@ public abstract class BlockSlabTestMod3<
 		 * @return The slab block
 		 */
 		public abstract SLAB createSlab(Material material, boolean isDouble, VARIANTS variants);
-
-		public ItemSlab getItem() {
-			return item;
-		}
-
-		public void setItem(ItemSlab item) {
-			this.item = item;
-		}
 	}
 }
