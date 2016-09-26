@@ -164,6 +164,7 @@ public class ItemHandlerLoot extends ItemHandlerNameable implements ILootContain
 		super.setStackInSlot(slot, stack);
 	}
 
+	@Nullable
 	@Override
 	public ResourceLocation getLootTable() {
 		return lootTableLocation;
