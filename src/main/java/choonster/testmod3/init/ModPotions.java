@@ -1,12 +1,10 @@
 package choonster.testmod3.init;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.potion.PotionTestMod3;
 import net.minecraft.potion.Potion;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * Registers this mod's {@link Potion}s.
