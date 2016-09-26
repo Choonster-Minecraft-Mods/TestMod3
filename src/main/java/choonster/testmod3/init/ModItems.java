@@ -145,6 +145,9 @@ public class ModItems {
 	@ObjectHolder("no_mod_name")
 	public static final ItemTestMod3 NO_MOD_NAME = new ItemTestMod3("no_mod_name");
 
+	@ObjectHolder("key")
+	public static final ItemKey KEY = new ItemKey();
+
 
 	@ObjectHolder("replacement_helmet")
 	public static final ItemArmourReplacement REPLACEMENT_HELMET = new ItemArmourReplacement(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD, "replacement");
@@ -228,6 +231,7 @@ public class ModItems {
 					RITUAL_CHECKER,
 					HIDDEN_BLOCK_REVEALER,
 					NO_MOD_NAME,
+					KEY,
 					REPLACEMENT_HELMET,
 					REPLACEMENT_CHESTPLATE,
 					REPACEMENT_LEGGINGS,

@@ -2,3 +2,6 @@ The file src/main/resources/assets/testmod3/sounds/records/solaris.ogg is taken 
 
 The file src/main/resources/assets/testmod3/sounds/items/gun/9mm_fire.ogg was recorded by Mike Koenig.
 It is available from SoundBible.com (http://soundbible.com/2120-9mm-Gunshot.html) under the Creative Commons Attribution 3.0 license: https://creativecommons.org/licenses/by/3.0/
+
+The file src/main/resources/assets/testmod3/textures/items/key.png was created by paomedia (https://github.com/paomedia and http://www.paomedia.com/).
+It is available from IconArchive.com (http://www.iconarchive.com/show/small-n-flat-icons-by-paomedia/key-icon.html) under the CC0 1.0 Universal Public Domain Dedication license: https://creativecommons.org/publicdomain/zero/1.0/
