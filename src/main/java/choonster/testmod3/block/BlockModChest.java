@@ -1,7 +1,5 @@
 package choonster.testmod3.block;
 
-import choonster.testmod3.TestMod3;
-import choonster.testmod3.client.gui.GuiIDs;
 import choonster.testmod3.tileentity.TileEntityModChest;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -79,7 +77,10 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!worldIn.isRemote && !isBlocked(worldIn, pos)) {
-			playerIn.openGui(TestMod3.instance, GuiIDs.MOD_CHEST, worldIn, pos.getX(), pos.getY(), pos.getZ());
+			final TileEntityModChest tileEntity = getTileEntity(worldIn, pos);
+			if (tileEntity != null) {
+				tileEntity.openGUI(worldIn, playerIn);
+			}
 		}
 
 		return true;

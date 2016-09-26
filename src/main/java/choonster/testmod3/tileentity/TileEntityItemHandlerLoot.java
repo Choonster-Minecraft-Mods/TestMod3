@@ -12,6 +12,14 @@ import net.minecraft.world.storage.loot.LootTable;
  * @author Choonster
  */
 public abstract class TileEntityItemHandlerLoot extends TileEntityItemHandler<ItemHandlerLoot> implements IWorldContainer {
+	@Override
+	public void openGUI(World world, EntityPlayer player) {
+		if (inventory.getLootTable() != null && player.isSpectator()) {
+			player.addChatMessage(new TextComponentTranslation("container.spectatorCantOpen").setStyle(new Style().setColor(TextFormatting.RED)));
+		} else {
+			super.openGUI(world, player);
+		}
+	}
 
 	@Override
 	public World getContainedWorld() {

@@ -1,5 +1,6 @@
 package choonster.testmod3.tileentity;
 
+import choonster.testmod3.client.gui.GuiIDs;
 import choonster.testmod3.inventory.IContainerCallbacks;
 import choonster.testmod3.inventory.container.ContainerModChest;
 import choonster.testmod3.inventory.itemhandler.IItemHandlerNameable;
@@ -43,6 +44,17 @@ public class TileEntityModChest extends TileEntityItemHandlerLoot implements ICo
 	@Override
 	protected ItemHandlerLoot createInventory() {
 		return new ItemHandlerLoot(INVENTORY_SIZE, DEFAULT_NAME, this);
+	}
+
+	/**
+	/**
+	 * Get the GUI ID.
+	 *
+	 * @return The GUI ID
+	 */
+	@Override
+	protected int getGuiId() {
+		return GuiIDs.MOD_CHEST;
 	}
 
 	/**
