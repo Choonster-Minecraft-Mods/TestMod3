@@ -25,7 +25,7 @@ public class TestMod3 {
 	public static final String MODID = "testmod3";
 	public static final String NAME = "Test Mod 3";
 
-	public static CreativeTabTestMod3 creativeTab;
+	public static final CreativeTabTestMod3 creativeTab = new CreativeTabTestMod3();
 
 	@SidedProxy(clientSide = "choonster.testmod3.proxy.CombinedClientProxy", serverSide = "choonster.testmod3.proxy.DedicatedServerProxy")
 	public static IProxy proxy;
@@ -45,7 +45,6 @@ public class TestMod3 {
 
 		FMLLog.bigWarning("Random UUID: %s", UUID.randomUUID().toString());
 
-		creativeTab = new CreativeTabTestMod3();
 		Config.load(event);
 
 		ModCapabilities.registerCapabilities();
