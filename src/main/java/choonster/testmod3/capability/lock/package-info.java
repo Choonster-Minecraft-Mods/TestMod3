@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package choonster.testmod3.api.capability.lockable;
+package choonster.testmod3.capability.lock;
 
 import mcp.MethodsReturnNonnullByDefault;
 

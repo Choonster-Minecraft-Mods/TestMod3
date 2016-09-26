@@ -1,5 +1,6 @@
 package choonster.testmod3.tileentity;
 
+import choonster.testmod3.capability.lock.Lock;
 import choonster.testmod3.client.gui.GuiIDs;
 import choonster.testmod3.inventory.IContainerCallbacks;
 import choonster.testmod3.inventory.container.ContainerModChest;
@@ -47,6 +48,15 @@ public class TileEntityModChest extends TileEntityItemHandlerLoot implements ICo
 	}
 
 	/**
+	 * Create and return the lock.
+	 *
+	 * @return The lock
+	 */
+	@Override
+	protected Lock createLock() {
+		return new Lock(DEFAULT_NAME);
+	}
+
 	/**
 	 * Get the GUI ID.
 	 *
@@ -72,7 +82,6 @@ public class TileEntityModChest extends TileEntityItemHandlerLoot implements ICo
 
 		return new ContainerModChest(playerInventoryWrapper, inventory, player, this);
 	}
-
 
 	/**
 	 * Called when the {@link Container} is opened by a player.
@@ -111,6 +120,8 @@ public class TileEntityModChest extends TileEntityItemHandlerLoot implements ICo
 	 * @param displayName The display name
 	 */
 	public void setDisplayName(String displayName) {
-		inventory.setDisplayName(new TextComponentString(displayName));
+		final TextComponentString diplayNameComponent = new TextComponentString(displayName);
+		inventory.setDisplayName(diplayNameComponent);
+		lock.setDisplayName(diplayNameComponent);
 	}
 }
