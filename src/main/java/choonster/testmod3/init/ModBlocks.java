@@ -1,5 +1,6 @@
 package choonster.testmod3.init;
 
+import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.*;
 import choonster.testmod3.block.pipe.BlockPipeBasic;
 import choonster.testmod3.block.pipe.BlockPipeFluid;
@@ -8,147 +9,224 @@ import choonster.testmod3.tileentity.*;
 import choonster.testmod3.util.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemCloth;
+import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityCommandBlock;
-import net.minecraft.util.IStringSerializable;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
 
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Function;
 
 @SuppressWarnings("WeakerAccess")
+@ObjectHolder(TestMod3.MODID)
 public class ModBlocks {
+	@ObjectHolder("water_grass")
+	public static final BlockWaterGrass WATER_GRASS = new BlockWaterGrass();
 
-	public static final Set<Block> BLOCKS = new HashSet<>();
+	@ObjectHolder("large_collision_test")
+	public static final BlockLargeCollisionTest LARGE_COLLISION_TEST = new BlockLargeCollisionTest();
 
-	public static final BlockWaterGrass WATER_GRASS;
-	public static final BlockLargeCollisionTest LARGE_COLLISION_TEST;
-	public static final BlockRightClickTest RIGHT_CLICK_TEST;
-	public static final BlockClientPlayerRightClick CLIENT_PLAYER_RIGHT_CLICK;
-	public static final BlockRotatableLamp ROTATABLE_LAMP;
-	public static final BlockItemCollisionTest ITEM_COLLISION_TEST;
-	public static final BlockFluidTank FLUID_TANK;
-	public static final BlockItemDebugger ITEM_DEBUGGER;
-	public static final Block END_PORTAL_FRAME_FULL;
-	public static final BlockColoredRotatable COLORED_ROTATABLE;
-	public static final BlockColoredMultiRotatable COLORED_MULTI_ROTATABLE;
-	public static final BlockPotionEffect POTION_EFFECT;
-	public static final BlockVariants VARIANTS;
-	public static final BlockClientPlayerRotation CLIENT_PLAYER_ROTATION;
-	public static final BlockPigSpawnerRefiller PIG_SPAWNER_REFILLER;
-	public static final BlockPlane MIRROR_PLANE;
-	public static final BlockTestMod3 VANILLA_MODEL_TEST;
-	public static final BlockTestMod3 FULLBRIGHT;
-	public static final BlockTestMod3 NORMAL_BRIGHTNESS;
-	public static final BlockMaxHealthSetter MAX_HEALTH_SETTER;
-	public static final BlockMaxHealthGetter MAX_HEALTH_GETTER;
-	public static final BlockSmallCollisionTest SMALL_COLLISION_TEST;
-	public static final BlockModChest CHEST;
-	public static final BlockHidden HIDDEN;
+	@ObjectHolder("right_click_test")
+	public static final BlockRightClickTest RIGHT_CLICK_TEST = new BlockRightClickTest();
 
-	public static final BlockPipeBasic BASIC_PIPE;
-	public static final BlockPipeFluid FLUID_PIPE;
+	@ObjectHolder("client_player_right_click")
+	public static final BlockClientPlayerRightClick CLIENT_PLAYER_RIGHT_CLICK = new BlockClientPlayerRightClick();
 
-	public static final BlockSurvivalCommandBlock SURVIVAL_COMMAND_BLOCK;
-	public static final BlockSurvivalCommandBlock REPEATING_SURVIVAL_COMMAND_BLOCK;
-	public static final BlockSurvivalCommandBlock CHAIN_SURVIVAL_COMMAND_BLOCK;
+	@ObjectHolder("rotatable_lamp")
+	public static final BlockRotatableLamp ROTATABLE_LAMP = new BlockRotatableLamp();
 
-	public static final BlockColouredSlab.ColouredSlabGroup STAINED_CLAY_SLABS;
+	@ObjectHolder("item_collision_test")
+	public static final BlockItemCollisionTest ITEM_COLLISION_TEST = new BlockItemCollisionTest();
 
-	static {
-		WATER_GRASS = registerBlock(new BlockWaterGrass());
-		LARGE_COLLISION_TEST = registerBlock(new BlockLargeCollisionTest());
-		RIGHT_CLICK_TEST = registerBlock(new BlockRightClickTest());
-		CLIENT_PLAYER_RIGHT_CLICK = registerBlock(new BlockClientPlayerRightClick());
-		ROTATABLE_LAMP = registerBlock(new BlockRotatableLamp());
-		ITEM_COLLISION_TEST = registerBlock(new BlockItemCollisionTest());
-		FLUID_TANK = registerBlock(new BlockFluidTank(), ItemFluidTank::new);
-		ITEM_DEBUGGER = registerBlock(new BlockItemDebugger());
-		END_PORTAL_FRAME_FULL = registerBlock(new BlockTestMod3(Material.ROCK, "end_portal_frame_full"));
-		COLORED_ROTATABLE = registerBlock(new BlockColoredRotatable(Material.CLOTH, "colored_rotatable"), ItemCloth::new);
-		COLORED_MULTI_ROTATABLE = registerBlock(new BlockColoredMultiRotatable(Material.CLOTH, "colored_multi_rotatable"), ItemCloth::new);
-		POTION_EFFECT = registerBlock(new BlockPotionEffect());
-		VARIANTS = registerBlock(new BlockVariants(Material.IRON), block -> new ItemMultiTexture(block, block, BlockVariants.EnumType.getNames()));
-		CLIENT_PLAYER_ROTATION = registerBlock(new BlockClientPlayerRotation());
-		PIG_SPAWNER_REFILLER = registerBlock(new BlockPigSpawnerRefiller());
-		MIRROR_PLANE = registerBlock(new BlockPlane(Material.IRON, "mirror_plane"));
-		VANILLA_MODEL_TEST = registerBlock(new BlockTestMod3(Material.IRON, "vanilla_model_test"));
-		FULLBRIGHT = (BlockTestMod3) registerBlock(new BlockTestMod3(Material.ROCK, "fullbright").setLightLevel(1));
-		NORMAL_BRIGHTNESS = registerBlock(new BlockTestMod3(Material.ROCK, "normal_brightness"));
-		MAX_HEALTH_SETTER = registerBlock(new BlockMaxHealthSetter());
-		MAX_HEALTH_GETTER = registerBlock(new BlockMaxHealthGetter());
-		SMALL_COLLISION_TEST = registerBlock(new BlockSmallCollisionTest());
-		CHEST = registerBlock(new BlockModChest());
-		HIDDEN = registerBlock(new BlockHidden(Material.ROCK, "hidden"));
+	@ObjectHolder("fluid_tank")
+	public static final BlockFluidTank FLUID_TANK = new BlockFluidTank();
 
-		BASIC_PIPE = registerBlock(new BlockPipeBasic("basic_pipe"));
-		FLUID_PIPE = registerBlock(new BlockPipeFluid());
+	@ObjectHolder("item_debugger")
+	public static final BlockItemDebugger ITEM_DEBUGGER = new BlockItemDebugger();
 
-		STAINED_CLAY_SLABS = new BlockColouredSlab.ColouredSlabGroup("stained_clay_slab", Material.ROCK);
-		registerSlabGroup(STAINED_CLAY_SLABS.low);
-		registerSlabGroup(STAINED_CLAY_SLABS.high);
+	@ObjectHolder("end_portal_frame_full")
+	public static final Block END_PORTAL_FRAME_FULL = new BlockTestMod3(Material.ROCK, "end_portal_frame_full");
 
-		SURVIVAL_COMMAND_BLOCK = registerBlock(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.REDSTONE, "survival_command_block"));
-		REPEATING_SURVIVAL_COMMAND_BLOCK = registerBlock(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.AUTO, "repeating_survival_command_block"));
-		CHAIN_SURVIVAL_COMMAND_BLOCK = registerBlock(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.SEQUENCE, "chain_survival_command_block"));
+	@ObjectHolder("colored_rotatable")
+	public static final BlockColoredRotatable COLORED_ROTATABLE = new BlockColoredRotatable(Material.CLOTH, "colored_rotatable");
+
+	@ObjectHolder("colored_multi_rotatable")
+	public static final BlockColoredMultiRotatable COLORED_MULTI_ROTATABLE = new BlockColoredMultiRotatable(Material.CLOTH, "colored_multi_rotatable");
+
+	@ObjectHolder("potion_effect")
+	public static final BlockPotionEffect POTION_EFFECT = new BlockPotionEffect();
+
+	@ObjectHolder("variants")
+	public static final BlockVariants VARIANTS = new BlockVariants(Material.IRON);
+
+	@ObjectHolder("client_player_rotation")
+	public static final BlockClientPlayerRotation CLIENT_PLAYER_ROTATION = new BlockClientPlayerRotation();
+
+	@ObjectHolder("pig_spawner_refiller")
+	public static final BlockPigSpawnerRefiller PIG_SPAWNER_REFILLER = new BlockPigSpawnerRefiller();
+
+	@ObjectHolder("mirror_plane")
+	public static final BlockPlane MIRROR_PLANE = new BlockPlane(Material.IRON, "mirror_plane");
+
+	@ObjectHolder("vanilla_model_test")
+	public static final BlockTestMod3 VANILLA_MODEL_TEST = new BlockTestMod3(Material.IRON, "vanilla_model_test");
+
+	@ObjectHolder("fullbright")
+	public static final BlockTestMod3 FULLBRIGHT = (BlockTestMod3) new BlockTestMod3(Material.ROCK, "fullbright").setLightLevel(1);
+
+	@ObjectHolder("normal_brightness")
+	public static final BlockTestMod3 NORMAL_BRIGHTNESS = new BlockTestMod3(Material.ROCK, "normal_brightness");
+
+	@ObjectHolder("max_health_setter")
+	public static final BlockMaxHealthSetter MAX_HEALTH_SETTER = new BlockMaxHealthSetter();
+
+	@ObjectHolder("max_health_getter")
+	public static final BlockMaxHealthGetter MAX_HEALTH_GETTER = new BlockMaxHealthGetter();
+
+	@ObjectHolder("small_collision_test")
+	public static final BlockSmallCollisionTest SMALL_COLLISION_TEST = new BlockSmallCollisionTest();
+
+	@ObjectHolder("chest")
+	public static final BlockModChest CHEST = new BlockModChest();
+
+	@ObjectHolder("hidden")
+	public static final BlockHidden HIDDEN = new BlockHidden(Material.ROCK, "hidden");
+
+	@ObjectHolder("basic_pipe")
+	public static final BlockPipeBasic BASIC_PIPE = new BlockPipeBasic("basic_pipe");
+
+	@ObjectHolder("fluid_pipe")
+	public static final BlockPipeFluid FLUID_PIPE = new BlockPipeFluid();
+
+	@ObjectHolder("survival_command_block")
+	public static final BlockSurvivalCommandBlock SURVIVAL_COMMAND_BLOCK = new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.REDSTONE, "survival_command_block");
+
+	@ObjectHolder("repeating_survival_command_block")
+	public static final BlockSurvivalCommandBlock REPEATING_SURVIVAL_COMMAND_BLOCK = new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.AUTO, "repeating_survival_command_block");
+
+	@ObjectHolder("chain_survival_command_block")
+	public static final BlockSurvivalCommandBlock CHAIN_SURVIVAL_COMMAND_BLOCK = new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.SEQUENCE, "chain_survival_command_block");
+
+	public static class Slabs {
+		public static final BlockColouredSlab.ColouredSlabGroup STAINED_CLAY_SLABS = new BlockColouredSlab.ColouredSlabGroup("stained_clay_slab", Material.ROCK);
 	}
 
-	public static void registerBlocks() {
-		// Dummy method to make sure the static initialiser runs
-	}
+	@Mod.EventBusSubscriber
+	public static class RegistrationHandler {
+		public static final Set<ItemBlock> ITEM_BLOCKS = new HashSet<>();
 
-	/**
-	 * Register a Block with the default ItemBlock class.
-	 *
-	 * @param block   The Block instance
-	 * @param <BLOCK> The Block type
-	 * @return The Block instance
-	 */
-	protected static <BLOCK extends Block> BLOCK registerBlock(BLOCK block) {
-		return registerBlock(block, ItemBlock::new);
-	}
+		/**
+		 * Register this mod's {@link Block}s.
+		 *
+		 * @param event The event
+		 */
+		@SubscribeEvent
+		public static void registerBlocks(RegistryEvent.Register<Block> event) {
+			final IForgeRegistry<Block> registry = event.getRegistry();
 
-	/**
-	 * Register a Block with a custom ItemBlock class.
-	 *
-	 * @param <BLOCK>     The Block type
-	 * @param block       The Block instance
-	 * @param itemFactory A function that creates the ItemBlock instance, or null if no ItemBlock should be created
-	 * @return The Block instance
-	 */
-	protected static <BLOCK extends Block> BLOCK registerBlock(BLOCK block, @Nullable Function<BLOCK, ItemBlock> itemFactory) {
-		GameRegistry.register(block);
+			registry.registerAll(
+					WATER_GRASS,
+					LARGE_COLLISION_TEST,
+					RIGHT_CLICK_TEST,
+					CLIENT_PLAYER_RIGHT_CLICK,
+					ROTATABLE_LAMP,
+					ITEM_COLLISION_TEST,
+					FLUID_TANK,
+					ITEM_DEBUGGER,
+					END_PORTAL_FRAME_FULL,
+					COLORED_ROTATABLE,
+					COLORED_MULTI_ROTATABLE,
+					POTION_EFFECT,
+					VARIANTS,
+					CLIENT_PLAYER_ROTATION,
+					PIG_SPAWNER_REFILLER,
+					MIRROR_PLANE,
+					VANILLA_MODEL_TEST,
+					FULLBRIGHT,
+					NORMAL_BRIGHTNESS,
+					MAX_HEALTH_SETTER,
+					MAX_HEALTH_GETTER,
+					SMALL_COLLISION_TEST,
+					CHEST,
+					HIDDEN,
+					BASIC_PIPE,
+					FLUID_PIPE,
+					SURVIVAL_COMMAND_BLOCK,
+					REPEATING_SURVIVAL_COMMAND_BLOCK,
+					CHAIN_SURVIVAL_COMMAND_BLOCK
+			);
 
-		if (itemFactory != null) {
-			final ItemBlock itemBlock = itemFactory.apply(block);
-
-			GameRegistry.register(itemBlock.setRegistryName(block.getRegistryName()));
+			registerSlabGroup(registry, Slabs.STAINED_CLAY_SLABS.high);
+			registerSlabGroup(registry, Slabs.STAINED_CLAY_SLABS.low);
 		}
 
-		BLOCKS.add(block);
-		return block;
-	}
+		/**
+		 * Register the {@link Block}s of a {@link BlockSlabTestMod3.SlabGroup}.
+		 *
+		 * @param registry  The registry
+		 * @param slabGroup The slab group
+		 */
+		private static void registerSlabGroup(IForgeRegistry<Block> registry, BlockSlabTestMod3.SlabGroup<?, ?, ?> slabGroup) {
+			registry.register(slabGroup.singleSlab);
+			registry.register(slabGroup.doubleSlab);
+		}
 
-	/**
-	 * Register a group of slab blocks
-	 *
-	 * @param slabGroup The slab group
-	 */
-	@SuppressWarnings("unchecked")
-	private static <
-			VARIANT extends Enum<VARIANT> & IStringSerializable,
-			VARIANTS extends Iterable<VARIANT> & IStringSerializable,
-			SLAB extends BlockSlabTestMod3<VARIANT, VARIANTS, SLAB>
-			> void registerSlabGroup(BlockSlabTestMod3.SlabGroup<VARIANT, VARIANTS, SLAB> slabGroup) {
-		registerBlock(slabGroup.singleSlab, slab -> new ItemSlab(slab, slabGroup.singleSlab, slabGroup.doubleSlab));
-		registerBlock(slabGroup.doubleSlab, null); // No item form for the double slab
+		/**
+		 * Register this mod's {@link ItemBlock}s.
+		 *
+		 * @param event The event
+		 */
+		@SubscribeEvent
+		public static void registerItemBlocks(RegistryEvent.Register<Item> event) {
+			final ItemBlock[] items = {
+					new ItemBlock(WATER_GRASS),
+					new ItemBlock(LARGE_COLLISION_TEST),
+					new ItemBlock(RIGHT_CLICK_TEST),
+					new ItemBlock(CLIENT_PLAYER_RIGHT_CLICK),
+					new ItemBlock(ROTATABLE_LAMP),
+					new ItemBlock(ITEM_COLLISION_TEST),
+					new ItemFluidTank(FLUID_TANK),
+					new ItemBlock(ITEM_DEBUGGER),
+					new ItemBlock(END_PORTAL_FRAME_FULL),
+					new ItemCloth(COLORED_ROTATABLE),
+					new ItemCloth(COLORED_MULTI_ROTATABLE),
+					new ItemBlock(POTION_EFFECT),
+					new ItemMultiTexture(VARIANTS, VARIANTS, VARIANTS::getName),
+					new ItemBlock(CLIENT_PLAYER_ROTATION),
+					new ItemBlock(PIG_SPAWNER_REFILLER),
+					new ItemBlock(MIRROR_PLANE),
+					new ItemBlock(VANILLA_MODEL_TEST),
+					new ItemBlock(FULLBRIGHT),
+					new ItemBlock(NORMAL_BRIGHTNESS),
+					new ItemBlock(MAX_HEALTH_SETTER),
+					new ItemBlock(MAX_HEALTH_GETTER),
+					new ItemBlock(SMALL_COLLISION_TEST),
+					new ItemBlock(CHEST),
+					new ItemBlock(HIDDEN),
+					new ItemBlock(BASIC_PIPE),
+					new ItemBlock(FLUID_PIPE),
+					new ItemBlock(SURVIVAL_COMMAND_BLOCK),
+					new ItemBlock(REPEATING_SURVIVAL_COMMAND_BLOCK),
+					new ItemBlock(CHAIN_SURVIVAL_COMMAND_BLOCK),
+					Slabs.STAINED_CLAY_SLABS.low.item,
+					Slabs.STAINED_CLAY_SLABS.high.item,
+			};
 
-		final Item item = Item.getItemFromBlock(slabGroup.singleSlab);
-		assert item instanceof ItemSlab;
-		slabGroup.setItem((ItemSlab) item);
+			final IForgeRegistry<Item> registry = event.getRegistry();
+
+			for (final ItemBlock item : items) {
+				registry.register(item.setRegistryName(item.getBlock().getRegistryName()));
+				ITEM_BLOCKS.add(item);
+			}
+		}
 	}
 
 	public static void registerTileEntities() {

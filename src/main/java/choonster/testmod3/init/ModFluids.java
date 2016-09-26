@@ -10,8 +10,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,13 +25,6 @@ import java.util.function.Function;
 
 @SuppressWarnings("WeakerAccess")
 public class ModFluids {
-	public static final Fluid STATIC;
-	public static final Fluid STATIC_GAS;
-	public static final Fluid NORMAL;
-	public static final Fluid NORMAL_GAS;
-	public static final Fluid FINITE;
-	public static final Fluid PORTAL_DISPLACEMENT;
-
 	/**
 	 * The fluids registered by this mod. Includes fluids that were already registered by another mod.
 	 */
@@ -37,45 +35,29 @@ public class ModFluids {
 	 */
 	public static final Set<IFluidBlock> MOD_FLUID_BLOCKS = new HashSet<>();
 
-	static {
-		STATIC = createFluid("static", false,
-				fluid -> fluid.setLuminosity(10).setDensity(800).setViscosity(1500),
-				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.BROWN)));
+	public static final Fluid STATIC = createFluid("static", false,
+			fluid -> fluid.setLuminosity(10).setDensity(800).setViscosity(1500),
+			fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.BROWN)));
 
-		STATIC_GAS = createFluid("static_gas", false,
-				fluid -> fluid.setLuminosity(10).setDensity(-800).setViscosity(1500).setGaseous(true),
-				fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.BROWN)));
+	public static final Fluid STATIC_GAS = createFluid("static_gas", false,
+			fluid -> fluid.setLuminosity(10).setDensity(-800).setViscosity(1500).setGaseous(true),
+			fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.BROWN)));
 
-		NORMAL = createFluid("normal", true,
-				fluid -> fluid.setLuminosity(10).setDensity(1600).setViscosity(100),
-				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.ADOBE)));
+	public static final Fluid NORMAL = createFluid("normal", true,
+			fluid -> fluid.setLuminosity(10).setDensity(1600).setViscosity(100),
+			fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.ADOBE)));
 
-		NORMAL_GAS = createFluid("normal_gas", true,
-				fluid -> fluid.setLuminosity(10).setDensity(-1600).setViscosity(100).setGaseous(true),
-				fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.ADOBE)));
+	public static final Fluid NORMAL_GAS = createFluid("normal_gas", true,
+			fluid -> fluid.setLuminosity(10).setDensity(-1600).setViscosity(100).setGaseous(true),
+			fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.ADOBE)));
 
-		FINITE = createFluid("finite", false,
-				fluid -> fluid.setLuminosity(10).setDensity(800).setViscosity(1500),
-				fluid -> new BlockFluidFinite(fluid, new MaterialLiquid(MapColor.BLACK)));
+	public static final Fluid FINITE = createFluid("finite", false,
+			fluid -> fluid.setLuminosity(10).setDensity(800).setViscosity(1500),
+			fluid -> new BlockFluidFinite(fluid, new MaterialLiquid(MapColor.BLACK)));
 
-		PORTAL_DISPLACEMENT = createFluid("portal_displacement", true,
-				fluid -> fluid.setLuminosity(10).setDensity(1600).setViscosity(100),
-				fluid -> new BlockFluidPortalDisplacement(fluid, new MaterialLiquid(MapColor.DIAMOND)));
-	}
-
-	public static void registerFluids() {
-		// Dummy method to make sure the static initialiser runs
-	}
-
-	public static void registerFluidContainers() {
-		registerTank(FluidRegistry.WATER);
-		registerTank(FluidRegistry.LAVA);
-
-		for (final Fluid fluid : FLUIDS) {
-			registerBucket(fluid);
-			registerTank(fluid);
-		}
-	}
+	public static final Fluid PORTAL_DISPLACEMENT = createFluid("portal_displacement", true,
+			fluid -> fluid.setLuminosity(10).setDensity(1600).setViscosity(100),
+			fluid -> new BlockFluidPortalDisplacement(fluid, new MaterialLiquid(MapColor.DIAMOND)));
 
 	/**
 	 * Create a {@link Fluid} and its {@link IFluidBlock}, or use the existing ones if a fluid has already been registered with the same name.
@@ -97,7 +79,7 @@ public class ModFluids {
 
 		if (useOwnFluid) {
 			fluidPropertyApplier.accept(fluid);
-			registerFluidBlock(blockFactory.apply(fluid));
+			MOD_FLUID_BLOCKS.add(blockFactory.apply(fluid));
 		} else {
 			fluid = FluidRegistry.getFluid(name);
 		}
@@ -107,16 +89,53 @@ public class ModFluids {
 		return fluid;
 	}
 
-	private static <T extends Block & IFluidBlock> T registerFluidBlock(T block) {
-		block.setRegistryName("fluid." + block.getFluid().getName());
-		block.setUnlocalizedName(Constants.RESOURCE_PREFIX + block.getFluid().getUnlocalizedName());
-		block.setCreativeTab(TestMod3.creativeTab);
+	@Mod.EventBusSubscriber
+	public static class RegistrationHandler {
 
-		ModBlocks.registerBlock(block);
+		/**
+		 * Register this mod's fluid {@link Block}s.
+		 *
+		 * @param event The event
+		 */
+		@SubscribeEvent
+		public static void registerBlocks(RegistryEvent.Register<Block> event) {
+			final IForgeRegistry<Block> registry = event.getRegistry();
 
-		MOD_FLUID_BLOCKS.add(block);
+			for (final IFluidBlock fluidBlock : MOD_FLUID_BLOCKS) {
+				final Block block = (Block) fluidBlock;
+				block.setRegistryName(TestMod3.MODID, "fluid." + fluidBlock.getFluid().getName());
+				block.setUnlocalizedName(Constants.RESOURCE_PREFIX + fluidBlock.getFluid().getUnlocalizedName());
+				block.setCreativeTab(TestMod3.creativeTab);
+				registry.register(block);
+			}
+		}
 
-		return block;
+		/**
+		 * Register this mod's fluid {@link ItemBlock}s.
+		 *
+		 * @param event The event
+		 */
+		@SubscribeEvent
+		public static void registerItems(RegistryEvent.Register<Item> event) {
+			final IForgeRegistry<Item> registry = event.getRegistry();
+
+			for (final IFluidBlock fluidBlock : MOD_FLUID_BLOCKS) {
+				final Block block = (Block) fluidBlock;
+				final ItemBlock itemBlock = new ItemBlock(block);
+				itemBlock.setRegistryName(block.getRegistryName());
+				registry.register(itemBlock);
+			}
+		}
+	}
+
+	public static void registerFluidContainers() {
+		registerTank(FluidRegistry.WATER);
+		registerTank(FluidRegistry.LAVA);
+
+		for (final Fluid fluid : FLUIDS) {
+			registerBucket(fluid);
+			registerTank(fluid);
+		}
 	}
 
 	private static void registerBucket(Fluid fluid) {

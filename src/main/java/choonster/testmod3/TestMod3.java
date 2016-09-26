@@ -2,18 +2,12 @@ package choonster.testmod3;
 
 import choonster.testmod3.client.gui.GuiHandler;
 import choonster.testmod3.config.Config;
-import choonster.testmod3.event.BlockEventHandler;
-import choonster.testmod3.event.ItemCombinationHandler;
-import choonster.testmod3.event.NetworkEventHandler;
-import choonster.testmod3.event.PlayerEventHandler;
 import choonster.testmod3.init.*;
 import choonster.testmod3.proxy.IProxy;
 import choonster.testmod3.remap.Remapper;
 import choonster.testmod3.tests.Tests;
-import choonster.testmod3.tweak.snowbuildup.SnowBuildup;
 import choonster.testmod3.tweak.spawnerdrops.SpawnerDrops;
 import choonster.testmod3.util.BlockDumper;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
@@ -58,18 +52,12 @@ public class TestMod3 {
 
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 
-		ModSoundEvents.registerSounds();
 		ModMessages.registerMessages();
-		ModFluids.registerFluids();
-		ModBlocks.registerBlocks();
 		ModBlocks.registerTileEntities();
-		ModItems.registerItems();
+		ModItems.initialiseItems();
 		ModFluids.registerFluidContainers();
-		ModBiomes.registerBiomes();
 		ModMapGen.registerMapGen();
 		ModEntities.registerEntities();
-		ModPotions.registerPotions();
-		ModPotionTypes.registerPotionTypes();
 
 		proxy.preInit();
 	}

@@ -68,6 +68,18 @@ public class BlockVariants extends BlockTestMod3 {
 		}
 	}
 
+	/**
+	 * Get the unlocalised name suffix for the specified {@link ItemStack}.
+	 *
+	 * @param stack The ItemStack
+	 * @return The unlocalised name suffix
+	 */
+	public String getName(ItemStack stack) {
+		final int metadata = stack.getMetadata();
+
+		return EnumType.byMetadata(metadata).getName();
+	}
+
 	public enum EnumType implements IVariant {
 		VARIANT_A(0, "a"),
 		VARIANT_B(1, "b");
@@ -97,10 +109,6 @@ public class BlockVariants extends BlockTestMod3 {
 			}
 
 			return META_LOOKUP[meta];
-		}
-
-		public static String[] getNames() {
-			return Stream.of(META_LOOKUP).map(EnumType::getName).toArray(String[]::new);
 		}
 	}
 }
