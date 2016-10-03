@@ -63,7 +63,7 @@ class CapeUtils {
 		final NetworkPlayerInfo playerInfo;
 
 		try {
-			playerInfo = (NetworkPlayerInfo) GET_PLAYER_INFO.invoke(player);
+			playerInfo = (NetworkPlayerInfo) GET_PLAYER_INFO.invokeExact(player);
 		} catch (Throwable throwable) {
 			Logger.fatal(throwable, "Failed to get NetworkPlayerInfo of %s", displayName);
 			return;
@@ -77,7 +77,7 @@ class CapeUtils {
 
 		final Map<MinecraftProfileTexture.Type, ResourceLocation> playerTextures;
 		try {
-			playerTextures = (Map<MinecraftProfileTexture.Type, ResourceLocation>) GET_PLAYER_TEXTURES.invoke(playerInfo);
+			playerTextures = (Map<MinecraftProfileTexture.Type, ResourceLocation>) GET_PLAYER_TEXTURES.invokeExact(playerInfo);
 		} catch (Throwable throwable) {
 			Logger.fatal(throwable, "Failed to get player textures of %s", displayName);
 			return;

@@ -58,7 +58,7 @@ public class InventoryUtils {
 		final List<Integer> emptySlots = getEmptySlotsRandomized(itemHandler, random);
 
 		try {
-			SHUFFLE_ITEMS.invoke(lootTable, items, emptySlots.size(), random);
+			SHUFFLE_ITEMS.invokeExact(lootTable, items, emptySlots.size(), random);
 		} catch (Throwable throwable) {
 			Throwables.propagate(throwable);
 		}
