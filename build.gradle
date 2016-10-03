@@ -12,7 +12,7 @@ buildscript {
 }
 
 plugins {
-    id 'org.ajoberstar.grgit' version '1.4.2'
+    id 'org.ajoberstar.grgit' version '1.5.1'
     id 'com.github.johnrengelman.shadow' version '1.2.3'
 }
 
