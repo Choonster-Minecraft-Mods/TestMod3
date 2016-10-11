@@ -8,12 +8,17 @@ import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.fml.common.registry.IForgeRegistry;
 
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @SuppressWarnings("WeakerAccess")
+@ObjectHolder(TestMod3.MODID)
 public class ModBiomes {
+
+	@ObjectHolder("desert_test")
 	public static final BiomeDesertTest DESERT_TEST = new BiomeDesertTest(new Biome.BiomeProperties("TestMod3 Desert Test")
 			.setBaseHeight(0.125F)
 			.setHeightVariation(0.05F)

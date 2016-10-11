@@ -6,6 +6,8 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 
 /**
  * Registers this mod's {@link SoundEvent}s.
@@ -13,9 +15,16 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * @author Choonster
  */
 @SuppressWarnings("WeakerAccess")
+@ObjectHolder(TestMod3.MODID)
 public class ModSoundEvents {
+
+	@ObjectHolder("record.solaris")
 	public static final SoundEvent RECORD_SOLARIS = createSoundEvent("record.solaris");
+
+	@ObjectHolder("9mm.fire")
 	public static final SoundEvent NINE_MM_FIRE = createSoundEvent("9mm.fire");
+
+	@ObjectHolder("action.saddle")
 	public static final SoundEvent ACTION_SADDLE = createSoundEvent("action.saddle");
 
 	/**

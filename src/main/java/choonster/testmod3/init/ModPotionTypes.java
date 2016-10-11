@@ -1,5 +1,6 @@
 package choonster.testmod3.init;
 
+import choonster.testmod3.TestMod3;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionType;
@@ -7,6 +8,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 
 import javax.annotation.Nullable;
 
@@ -16,9 +19,16 @@ import javax.annotation.Nullable;
  * @author Choonster
  */
 @SuppressWarnings("WeakerAccess")
+@ObjectHolder(TestMod3.MODID)
 public class ModPotionTypes {
+
+	@ObjectHolder("test")
 	public static final PotionType TEST;
+
+	@ObjectHolder("long_test")
 	public static final PotionType LONG_TEST;
+
+	@ObjectHolder("strong_test")
 	public static final PotionType STRONG_TEST;
 
 	static {
