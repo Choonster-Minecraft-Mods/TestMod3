@@ -45,7 +45,8 @@ repositories {
 }
 
 dependencies {
-    deobfProvided "mezz.jei:jei_${mc_version}:${jei_version}"
+    deobfProvided "mezz.jei:jei_${mc_version}:${jei_version}:api"
+    runtime "mezz.jei:jei_${mc_version}:${jei_version}"
     compile "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
     deobfProvided "mcp.mobius.waila:Waila:${waila_version}_1.9.4"
 }
