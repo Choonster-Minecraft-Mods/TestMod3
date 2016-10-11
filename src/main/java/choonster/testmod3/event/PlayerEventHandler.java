@@ -40,9 +40,11 @@ public class PlayerEventHandler {
 		entityData.setTag(EntityPlayer.PERSISTED_NBT_TAG, persistedData);
 
 		final String key = Constants.RESOURCE_PREFIX + "ReceivedItems";
-		String message = "message.testmod3:login.already_received";
+		final String message;
 
-		if (!persistedData.getBoolean(key)) {
+		if (persistedData.getBoolean(key)) {
+			message = "message.testmod3:login.already_received";
+		} else {
 			persistedData.setBoolean(key, true);
 
 			ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(Items.APPLE));
