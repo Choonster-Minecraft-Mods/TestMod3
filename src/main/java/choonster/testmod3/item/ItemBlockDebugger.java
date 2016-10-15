@@ -21,11 +21,9 @@ public class ItemBlockDebugger extends ItemTestMod3 {
 		super("block_debugger");
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		IBlockState state = worldIn.getBlockState(pos);
-		state = state.getBlock().getActualState(state, worldIn, pos);
+		final IBlockState state = worldIn.getBlockState(pos).getActualState(worldIn, pos);
 		Logger.info("Block at %d,%d,%d: %s", pos.getX(), pos.getY(), pos.getZ(), state);
 
 		final TileEntity tileEntity = worldIn.getTileEntity(pos);
