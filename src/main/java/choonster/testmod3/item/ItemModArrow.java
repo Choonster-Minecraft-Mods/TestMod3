@@ -1,12 +1,14 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.entity.EntityModArrow;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import java.util.function.BiFunction;
 
 /**
  * An arrow fired from this mod's bows.
@@ -14,13 +16,19 @@ import net.minecraft.world.World;
  * @author Choonster
  */
 public class ItemModArrow extends ItemArrow {
-	public ItemModArrow(String itemName) {
+	/**
+	 * A factory function to create the arrow entity.
+	 */
+	private final BiFunction<World, EntityLivingBase, EntityTippedArrow> entityFactory;
+
+	public ItemModArrow(String itemName, BiFunction<World, EntityLivingBase, EntityTippedArrow> entityFactory) {
 		ItemTestMod3.setItemName(this, itemName);
+		this.entityFactory = entityFactory;
 	}
 
 	@Override
 	public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
-		final EntityModArrow entityModArrow = new EntityModArrow(worldIn, shooter);
+		final EntityTippedArrow entityModArrow = entityFactory.apply(worldIn, shooter);
 		entityModArrow.setPotionEffect(stack);
 		return entityModArrow;
 	}

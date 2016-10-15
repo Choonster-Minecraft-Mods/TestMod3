@@ -3,6 +3,7 @@ package choonster.testmod3.init;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.capability.pigspawner.CapabilityPigSpawner;
 import choonster.testmod3.capability.pigspawner.PigSpawnerInfinite;
+import choonster.testmod3.entity.EntityModArrow;
 import choonster.testmod3.item.*;
 import choonster.testmod3.util.Constants;
 import net.minecraft.init.Enchantments;
@@ -92,7 +93,7 @@ public class ModItems {
 	public static final ItemModBow BOW = new ItemModBow("bow");
 
 	@ObjectHolder("arrow")
-	public static final Item ARROW = new ItemModArrow("arrow");
+	public static final Item ARROW = new ItemModArrow("arrow", EntityModArrow::new);
 
 	@ObjectHolder("height_tester")
 	public static final ItemHeightTester HEIGHT_TESTER = new ItemHeightTester();

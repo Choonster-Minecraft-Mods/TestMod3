@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package choonster.testmod3.client.render.entity;
+package choonster.testmod3.client.renderer.entity;
 
 import mcp.MethodsReturnNonnullByDefault;
 
