@@ -1,6 +1,7 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.entity.EntityBlockDetectionArrow;
 import choonster.testmod3.entity.EntityModArrow;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
@@ -11,6 +12,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 public class ModEntities {
 	public static void registerEntities() {
 		registerEntity(EntityModArrow.class, "mod_arrow", 64, 20, false);
+		registerEntity(EntityBlockDetectionArrow.class, "block_detection_arrow", 64, 20, false);
 	}
 
 	public static void addSpawns() {

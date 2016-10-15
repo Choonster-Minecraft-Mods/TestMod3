@@ -3,6 +3,7 @@ package choonster.testmod3.init;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.capability.pigspawner.CapabilityPigSpawner;
 import choonster.testmod3.capability.pigspawner.PigSpawnerInfinite;
+import choonster.testmod3.entity.EntityBlockDetectionArrow;
 import choonster.testmod3.entity.EntityModArrow;
 import choonster.testmod3.item.*;
 import choonster.testmod3.util.Constants;
@@ -149,6 +150,9 @@ public class ModItems {
 	@ObjectHolder("key")
 	public static final ItemKey KEY = new ItemKey();
 
+	@ObjectHolder("block_detection_arrow")
+	public static final ItemModArrow BLOCK_DETECTION_ARROW = new ItemModArrow("block_detection_arrow", EntityBlockDetectionArrow::new);
+
 
 	@ObjectHolder("replacement_helmet")
 	public static final ItemArmourReplacement REPLACEMENT_HELMET = new ItemArmourReplacement(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD, "replacement");
@@ -237,6 +241,7 @@ public class ModItems {
 					REPLACEMENT_CHESTPLATE,
 					REPACEMENT_LEGGINGS,
 					REPLACEMENT_BOOTS,
+					BLOCK_DETECTION_ARROW,
 			};
 
 			final IForgeRegistry<Item> registry = event.getRegistry();
