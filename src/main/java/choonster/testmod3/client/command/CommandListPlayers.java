@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
 
 /**
  * A client-side command that lists the players currently on the server.
+ * <p>
+ * Test for this thread:
+ * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2751363-get-list-of-current-players-in-the-game-from-the
  *
  * @author Choonster
  */
