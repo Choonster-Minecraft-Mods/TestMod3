@@ -237,6 +237,8 @@ commands.testmod3.set_max_health.usage=/testmod3 setmaxhealth <entity> <amount>
 commands.testmod3.get_max_health.usage=/testmod3 getmaxhealth <entity>
 commands.testmod3.usage=/testmod3 <command>
 commands.testmod3:help.usage=/testmod3 help [page|command name]
+commands.testmod3:listplayers.usage=/listplayers
+commands.testmod3:listplayers.players=Players:
 
 # Subtitles
 subtitles.item.testmod3:gun.fire=Gun fires

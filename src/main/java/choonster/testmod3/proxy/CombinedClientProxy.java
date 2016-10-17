@@ -1,6 +1,7 @@
 package choonster.testmod3.proxy;
 
 
+import choonster.testmod3.client.command.ModCommandsClient;
 import choonster.testmod3.client.model.ModColourManager;
 import choonster.testmod3.client.renderer.entity.ModRenderers;
 import net.minecraft.client.Minecraft;
@@ -16,6 +17,7 @@ public class CombinedClientProxy implements IProxy {
 	@Override
 	public void preInit() {
 		ModRenderers.register();
+		ModCommandsClient.registerCommands();
 	}
 
 	@Override
