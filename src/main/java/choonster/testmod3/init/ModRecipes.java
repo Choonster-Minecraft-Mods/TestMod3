@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.util.Iterator;
@@ -77,6 +78,9 @@ public class ModRecipes {
 
 		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.DIMENSION_REPLACEMENT), ModItems.SUBSCRIPTS, ModItems.SUPERSCRIPTS);
 		GameRegistry.addSmelting(ModItems.SUBSCRIPTS, new ItemStack(ModItems.DIMENSION_REPLACEMENT), 0.35f);
+
+		// Recipe that uses a non-existent ore name - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2751505-ore-dictionary-dependant-item-registration
+		GameRegistry.addRecipe(new ShapedOreRecipe(Items.ACACIA_BOAT, "F", 'F', "fooBar"));
 	}
 
 	/**
