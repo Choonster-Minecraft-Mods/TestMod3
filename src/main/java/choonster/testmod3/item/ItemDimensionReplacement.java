@@ -1,5 +1,8 @@
 package choonster.testmod3.item;
 
+import choonster.testmod3.Logger;
+import choonster.testmod3.util.InventoryUtils;
+import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import choonster.testmod3.util.ItemStackUtils;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -10,8 +13,8 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,12 +55,21 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 	}
 
 	/**
+	 * Does the specified {@link World} have a replacement?
+	 *
+	 * @param world The World
+	 * @return Does the World have a replacement?
+	 */
+	private boolean hasReplacement(World world) {
+		return replacements.containsKey(world.provider.getDimensionType());
+	}
+
+	/**
 	 * Get the replacement for the specified {@link World}.
 	 *
 	 * @param world The World
 	 * @return The replacement
 	 */
-	@Nullable
 	private ItemStack getReplacement(World world) {
 		return replacements.get(world.provider.getDimensionType());
 	}
@@ -69,22 +81,50 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 		if (!stackTagCompound.getBoolean(KEY_REPLACED)) { // If the replacement logic hasn't been run,
 			stackTagCompound.setBoolean(KEY_REPLACED, true); // Mark it as run
 
-			final ItemStack replacement = getReplacement(worldIn); // Get the replacement for this dimension
-			if (replacement != null) { // If it exists,
-				final int stackSize = stack.stackSize; // Record the original stack size
-				stack.deserializeNBT(replacement.serializeNBT()); // Replace this item
-				stack.stackSize = stackSize; // Restore the original stack size
+			if (hasReplacement(worldIn)) { // If there's a replacement for this dimension
+				final ItemStack replacement = getReplacement(worldIn).copy(); // Get it
+				replacement.stackSize = stack.stackSize; // Copy the stack size from this item
+
+				// Try to replace this item
+				final EntityInventoryType successfulInventoryType = InventoryUtils.forEachEntityInventory(
+						entityIn,
+						inventory -> tryReplaceItem(inventory, itemSlot, stack, replacement),
+						EntityInventoryType.MAIN, EntityInventoryType.HAND
+				);
+
+				if (successfulInventoryType != null) {
+					Logger.info("Replaced item in slot %d of %s's %s inventory with %s", itemSlot, entityIn.getName(), successfulInventoryType, replacement.getDisplayName());
+				}
 			}
 		}
+	}
+
+	/**
+	 * Replace the item in the specified inventory slot if the slot contains the specified ItemStack.
+	 *
+	 * @param inventory        The inventory
+	 * @param slot             The inventory slot
+	 * @param stackToReplace   The ItemStack to replace
+	 * @param replacementStack The replacement ItemStack
+	 * @return Was the item replaced?
+	 */
+	private boolean tryReplaceItem(final IItemHandler inventory, final int slot, final ItemStack stackToReplace, final ItemStack replacementStack) {
+		if (inventory.getStackInSlot(slot) == stackToReplace && inventory.extractItem(slot, stackToReplace.stackSize, true) != null) {
+			inventory.extractItem(slot, stackToReplace.stackSize, false);
+			inventory.insertItem(slot, replacementStack, false);
+			return true;
+		}
+
+		return false;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-		final ItemStack replacement = getReplacement(playerIn.getEntityWorld());
+		final World world = playerIn.getEntityWorld();
 
-		if (replacement != null) {
-			tooltip.add(I18n.format("item.testmod3:dimension_replacement.replacement.desc", replacement.getDisplayName()));
+		if (hasReplacement(world)) {
+			tooltip.add(I18n.format("item.testmod3:dimension_replacement.replacement.desc", getReplacement(world).getDisplayName()));
 		} else {
 			tooltip.add(I18n.format("item.testmod3:dimension_replacement.no_replacement.desc"));
 		}

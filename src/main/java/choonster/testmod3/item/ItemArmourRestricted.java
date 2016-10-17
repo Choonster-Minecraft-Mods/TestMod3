@@ -1,19 +1,20 @@
 package choonster.testmod3.item;
 
 import choonster.testmod3.Logger;
+import choonster.testmod3.util.InventoryUtils;
+import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -41,16 +42,34 @@ public class ItemArmourRestricted extends ItemArmourTestMod3 {
 	@Override
 	public void onUpdate(final ItemStack stack, final World worldIn, final Entity entity, final int itemSlot, final boolean isSelected) {
 		if (!worldIn.isRemote) { // If this is the server,
-			// Get the entity's main inventory
-			final IItemHandler mainInventory = entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
+			// Try to remove the item from the entity's inventories
+			final EntityInventoryType successfulInventoryType = InventoryUtils.forEachEntityInventory(
+					entity,
+					inventory -> tryRemoveStack(inventory, itemSlot, stack),
+					EntityInventoryType.MAIN, EntityInventoryType.HAND
+			);
 
-			// If this item is in their main inventory and it can be extracted.
-			if (mainInventory != null && mainInventory.getStackInSlot(itemSlot) == stack && mainInventory.extractItem(itemSlot, stack.stackSize, true) != null) {
-				mainInventory.extractItem(itemSlot, stack.stackSize, false); // Remove this item from their inventory
-
-				Logger.info("Restricted armour deleted from slot %d of %s's inventory", itemSlot, entity.getName());
+			if (successfulInventoryType != null) {
+				Logger.info("Restricted armour deleted from slot %d of %s's %s inventory", itemSlot, entity.getName(), successfulInventoryType);
 			}
 		}
+	}
+
+	/**
+	 * Try to remove the {@link ItemStack} from the specified inventory slot
+	 *
+	 * @param inventory The inventory
+	 * @param slot      The inventory slot
+	 * @param stack     The ItemStack to remove
+	 * @return Was the ItemStack removed?
+	 */
+	private boolean tryRemoveStack(@Nullable final IItemHandler inventory, final int slot, final ItemStack stack) {
+		if (inventory != null && inventory.getStackInSlot(slot) == stack && inventory.extractItem(slot, stack.stackSize, true) != null) {
+			inventory.extractItem(slot, stack.stackSize, false); // Remove this item from their inventory
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

@@ -3,6 +3,7 @@ package choonster.testmod3.item;
 import choonster.testmod3.Logger;
 import choonster.testmod3.util.Constants;
 import choonster.testmod3.util.InventoryUtils;
+import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import choonster.testmod3.util.ItemStackUtils;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.client.resources.I18n;
@@ -13,11 +14,9 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -173,6 +172,24 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 	}
 
 	/**
+	 * Restore the entity's saved armour if the ItemStack is in the specified inventory slot.
+	 *
+	 * @param inventory The inventory
+	 * @param slot      The inventory slot
+	 * @param stack     The ItemStack of this item
+	 * @param entity    The entity
+	 * @return Was the armour restored?
+	 */
+	private boolean tryRestoreArmour(final IItemHandler inventory, final int slot, final ItemStack stack, final EntityLivingBase entity) {
+		if (inventory.getStackInSlot(slot) == stack) {
+			restoreArmour(stack, entity); // Restore the entity's armour
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Called every tick while the item is worn by a player.
 	 *
 	 * @param world     The player's world
@@ -200,12 +217,16 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 	public void onUpdate(final ItemStack stack, final World worldIn, final Entity entity, final int itemSlot, final boolean isSelected) {
 		// If this is the server, the entity is living and the entity's armour has been replaced,
 		if (!worldIn.isRemote && entity instanceof EntityLivingBase && hasReplacedArmour(stack)) {
-			// Get the entity's main inventory
-			final IItemHandler mainInventory = entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
 
-			// If this item is in their main inventory,
-			if (mainInventory != null && mainInventory.getStackInSlot(itemSlot) == stack) {
-				restoreArmour(stack, (EntityLivingBase) entity); // Restore the entity's armour
+			// Try to restore the entity's armour
+			final EntityInventoryType successfulInventoryType = InventoryUtils.forEachEntityInventory(
+					entity,
+					inventory -> tryRestoreArmour(inventory, itemSlot, stack, (EntityLivingBase) entity),
+					EntityInventoryType.MAIN, EntityInventoryType.HAND
+			);
+
+			if (successfulInventoryType != null) {
+				Logger.info("Restored saved armour for slot %d of %s's %s inventory", itemSlot, entity.getName(), successfulInventoryType);
 			}
 		}
 	}
