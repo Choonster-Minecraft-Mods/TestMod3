@@ -3,7 +3,8 @@
 	"defaults": {
 		"model": "minecraft:cube_all",
 		"textures": {
-			"all": "testmod3:blocks/hidden"
+			"all": "testmod3:blocks/hidden",
+			"particle": "#all"
 		}
 	},
 	"variants": {
