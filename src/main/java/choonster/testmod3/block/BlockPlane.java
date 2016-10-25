@@ -159,11 +159,11 @@ public class BlockPlane extends BlockTestMod3 {
 	}
 
 	@Override
-	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, ItemStack stack) {
 		final EnumFacing horizontalRotation = placer.getHorizontalFacing();
 		final EnumVerticalRotation verticalRotation = EnumVerticalRotation.fromFacing(facing);
 
-		return super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer)
+		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, stack)
 				.withProperty(HORIZONTAL_ROTATION, horizontalRotation)
 				.withProperty(VERTICAL_ROTATION, verticalRotation);
 	}
