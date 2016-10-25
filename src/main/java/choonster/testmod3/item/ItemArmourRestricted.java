@@ -14,7 +14,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -63,8 +62,8 @@ public class ItemArmourRestricted extends ItemArmourTestMod3 {
 	 * @param stack     The ItemStack to remove
 	 * @return Was the ItemStack removed?
 	 */
-	private boolean tryRemoveStack(@Nullable final IItemHandler inventory, final int slot, final ItemStack stack) {
-		if (inventory != null && inventory.getStackInSlot(slot) == stack && inventory.extractItem(slot, stack.stackSize, true) != null) {
+	private boolean tryRemoveStack(final IItemHandler inventory, final int slot, final ItemStack stack) {
+		if (slot < inventory.getSlots() && inventory.getStackInSlot(slot) == stack && inventory.extractItem(slot, stack.stackSize, true) != null) {
 			inventory.extractItem(slot, stack.stackSize, false); // Remove this item from their inventory
 			return true;
 		}

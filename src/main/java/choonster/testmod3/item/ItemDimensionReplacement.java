@@ -109,7 +109,7 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 	 * @return Was the item replaced?
 	 */
 	private boolean tryReplaceItem(final IItemHandler inventory, final int slot, final ItemStack stackToReplace, final ItemStack replacementStack) {
-		if (inventory.getStackInSlot(slot) == stackToReplace && inventory.extractItem(slot, stackToReplace.stackSize, true) != null) {
+		if (slot < inventory.getSlots() && inventory.getStackInSlot(slot) == stackToReplace && inventory.extractItem(slot, stackToReplace.stackSize, true) != null) {
 			inventory.extractItem(slot, stackToReplace.stackSize, false);
 			inventory.insertItem(slot, replacementStack, false);
 			return true;

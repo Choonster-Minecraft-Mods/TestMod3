@@ -181,7 +181,7 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 	 * @return Was the armour restored?
 	 */
 	private boolean tryRestoreArmour(final IItemHandler inventory, final int slot, final ItemStack stack, final EntityLivingBase entity) {
-		if (inventory.getStackInSlot(slot) == stack) {
+		if (slot < inventory.getSlots() && inventory.getStackInSlot(slot) == stack) {
 			restoreArmour(stack, entity); // Restore the entity's armour
 			return true;
 		}
