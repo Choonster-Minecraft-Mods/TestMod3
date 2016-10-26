@@ -204,19 +204,15 @@ message.testmod3:hidden_block_revealer.reveal=Revealing hidden blocks.
 message.testmod3:hidden_block_revealer.hide=Hiding hidden blocks.
 
 # Config GUI strings
-testmod3.config.title=Test_mod3 Config
+testmod3.config.title=TestMod3 Config
 
-testmod3.config.general=General
-testmod3.config.general.tooltip=General Settings.
-testmod3.config.biomes=Biome IDs (NO LONGER USED)
-testmod3.config.biomes.tooltip=This section is no longer used.
-testmod3.config.client=Client
-testmod3.config.client.tooltip=Settings that only affect the local client.
+testmod3.category.client=Client
+testmod3.category.client.tooltip=Settings that only affect the local client.
 
-testmod3.config.foo_bar=Foo Bar
-testmod3.config.foo_bar.tooltip=This is an example boolean property.
-testmod3.config.baz=Baz
-testmod3.config.baz.tooltip=This is an example int property.
+testmod3.general.foobar=Foo Bar
+testmod3.general.foobar.tooltip=This is an example boolean property.
+testmod3.general.client.baz=Baz
+testmod3.general.client.baz.tooltip=This is an example int property.
 
 # Entities
 entity.testmod3.mod_arrow.name=Mod Arrow

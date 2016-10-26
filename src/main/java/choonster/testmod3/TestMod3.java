@@ -1,7 +1,6 @@
 package choonster.testmod3;
 
 import choonster.testmod3.client.gui.GuiHandler;
-import choonster.testmod3.config.Config;
 import choonster.testmod3.init.*;
 import choonster.testmod3.proxy.IProxy;
 import choonster.testmod3.remap.Remapper;
@@ -44,8 +43,6 @@ public class TestMod3 {
 		Logger.setLogger(event.getModLog());
 
 		FMLLog.bigWarning("Random UUID: %s", UUID.randomUUID().toString());
-
-		Config.load(event);
 
 		ModCapabilities.registerCapabilities();
 
