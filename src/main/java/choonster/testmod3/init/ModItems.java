@@ -153,6 +153,9 @@ public class ModItems {
 	@ObjectHolder("block_detection_arrow")
 	public static final ItemModArrow BLOCK_DETECTION_ARROW = new ItemModArrow("block_detection_arrow", EntityBlockDetectionArrow::new);
 
+	@ObjectHolder("translucent_item")
+	public static final ItemTestMod3 TRANSLUCENT_ITEM = new ItemTestMod3("translucent_item");
+
 
 	@ObjectHolder("replacement_helmet")
 	public static final ItemArmourReplacement REPLACEMENT_HELMET = new ItemArmourReplacement(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD, "replacement");
@@ -242,6 +245,7 @@ public class ModItems {
 					REPACEMENT_LEGGINGS,
 					REPLACEMENT_BOOTS,
 					BLOCK_DETECTION_ARROW,
+					TRANSLUCENT_ITEM
 			};
 
 			final IForgeRegistry<Item> registry = event.getRegistry();
