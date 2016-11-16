@@ -20,7 +20,7 @@ public class ItemMaxHealthSetter extends ItemTestMod3 {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
-		if (!playerIn.worldObj.isRemote) {
+		if (!playerIn.world.isRemote) {
 			final IMaxHealth maxHealth = CapabilityMaxHealth.getMaxHealth(target);
 
 			if (maxHealth != null) {

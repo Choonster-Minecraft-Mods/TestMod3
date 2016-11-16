@@ -111,7 +111,7 @@ public class TileEntityModChest extends TileEntityItemHandlerLoot implements ICo
 	 */
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer player) {
-		return this.worldObj.getTileEntity(this.pos) == this && player.getDistanceSq(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5) <= 64;
+		return this.world.getTileEntity(this.pos) == this && player.getDistanceSq(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5) <= 64;
 	}
 
 	/**

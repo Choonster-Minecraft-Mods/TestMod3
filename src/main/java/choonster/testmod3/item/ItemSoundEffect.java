@@ -35,7 +35,7 @@ public class ItemSoundEffect extends ItemTestMod3 {
 	@Override
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
 		final EntityPlayer player = entityLiving instanceof EntityPlayer ? ((EntityPlayer) entityLiving) : null;
-		entityLiving.worldObj.playSound(player, entityLiving.posX, entityLiving.posY, entityLiving.posZ, soundEvent, SoundCategory.PLAYERS, 0.5F, 1.0f);
+		entityLiving.world.playSound(player, entityLiving.posX, entityLiving.posY, entityLiving.posZ, soundEvent, SoundCategory.PLAYERS, 0.5F, 1.0f);
 
 		return false;
 	}

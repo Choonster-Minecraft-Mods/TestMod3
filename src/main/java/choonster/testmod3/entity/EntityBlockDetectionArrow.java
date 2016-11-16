@@ -41,8 +41,8 @@ public class EntityBlockDetectionArrow extends EntityModArrow {
 
 		if (raytraceResultIn.typeOfHit == RayTraceResult.Type.BLOCK && shootingEntity != null) {
 			final BlockPos pos = raytraceResultIn.getBlockPos();
-			final IBlockState state = worldObj.getBlockState(pos).getActualState(worldObj, pos);
-			shootingEntity.addChatMessage(new TextComponentTranslation("[%s] Block at %s,%s,%s: %s", worldObj.isRemote ? "CLIENT" : "SERVER", pos.getX(), pos.getY(), pos.getZ(), state));
+			final IBlockState state = world.getBlockState(pos).getActualState(world, pos);
+			shootingEntity.addChatMessage(new TextComponentTranslation("[%s] Block at %s,%s,%s: %s", world.isRemote ? "CLIENT" : "SERVER", pos.getX(), pos.getY(), pos.getZ(), state));
 		}
 	}
 }

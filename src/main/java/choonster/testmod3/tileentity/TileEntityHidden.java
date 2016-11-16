@@ -14,8 +14,8 @@ public class TileEntityHidden extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if (worldObj.isRemote) {
-			HiddenBlockManager.refresh(worldObj, pos);
+		if (world.isRemote) {
+			HiddenBlockManager.refresh(world, pos);
 		}
 	}
 }

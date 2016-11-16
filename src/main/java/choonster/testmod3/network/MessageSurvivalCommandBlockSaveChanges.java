@@ -111,7 +111,7 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 		@Override
 		public IMessage onMessage(MessageSurvivalCommandBlockSaveChanges message, MessageContext ctx) {
 			final EntityPlayer player = ctx.getServerHandler().playerEntity;
-			final World world = player.worldObj;
+			final World world = player.world;
 
 			final IThreadListener mainThread = (WorldServer) world;
 			mainThread.addScheduledTask(() -> {

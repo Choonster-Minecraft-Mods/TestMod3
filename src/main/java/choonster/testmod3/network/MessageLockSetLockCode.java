@@ -88,7 +88,7 @@ public class MessageLockSetLockCode implements IMessage {
 		@Override
 		public IMessage onMessage(MessageLockSetLockCode message, MessageContext ctx) {
 			final EntityPlayerMP player = ctx.getServerHandler().playerEntity;
-			final World world = player.worldObj;
+			final World world = player.world;
 
 			final IThreadListener mainThread = (WorldServer) world;
 			mainThread.addScheduledTask(() -> {

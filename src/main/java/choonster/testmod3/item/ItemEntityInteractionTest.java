@@ -29,7 +29,7 @@ public class ItemEntityInteractionTest extends ItemTestMod3 {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
-		if (!playerIn.worldObj.isRemote) {
+		if (!playerIn.world.isRemote) {
 			final int count = getInteractCount(stack) + 1;
 			stack.getTagCompound().setInteger("Count", count);
 
@@ -41,7 +41,7 @@ public class ItemEntityInteractionTest extends ItemTestMod3 {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-		if (!playerIn.worldObj.isRemote) {
+		if (!playerIn.world.isRemote) {
 			final int count = getInteractCount(itemStackIn);
 
 			playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:entity_interact_count", count));

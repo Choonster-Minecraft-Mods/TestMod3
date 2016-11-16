@@ -39,6 +39,6 @@ public class CombinedClientProxy implements IProxy {
 	@Nullable
 	@Override
 	public EntityPlayer getClientPlayer() {
-		return MINECRAFT.thePlayer;
+		return MINECRAFT.player;
 	}
 }

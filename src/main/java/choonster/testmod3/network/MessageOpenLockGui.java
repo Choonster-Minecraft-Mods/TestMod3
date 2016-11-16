@@ -79,7 +79,7 @@ public class MessageOpenLockGui implements IMessage {
 			final Minecraft minecraft = Minecraft.getMinecraft();
 
 			minecraft.addScheduledTask(() -> {
-				final ILock lock = CapabilityLock.getLock(minecraft.theWorld, message.pos, message.facing);
+				final ILock lock = CapabilityLock.getLock(minecraft.world, message.pos, message.facing);
 				if (lock != null) {
 					minecraft.displayGuiScreen(new GuiLock(lock, message.pos, message.facing));
 				}
