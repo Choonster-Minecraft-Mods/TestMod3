@@ -32,7 +32,7 @@ public class ItemLootTableTest extends ItemTestMod3 {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		if (!worldIn.isRemote) {
 			final LootTable lootTable = worldIn.getLootTableManager().getLootTableFromLocation(ModLootTables.LOOT_TABLE_TEST);
 
@@ -48,11 +48,11 @@ public class ItemLootTableTest extends ItemTestMod3 {
 			if (itemStacks.size() > 0) {
 				TestMod3.network.sendTo(new MessagePlayerReceivedLoot(itemStacks), (EntityPlayerMP) playerIn);
 			} else {
-				playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:player_received_loot.noLoot"));
+				playerIn.addChatMessage(new TextComponentTranslation("message.testmod3:player_received_loot.noLoot"));
 			}
 		}
 
 
-		return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
+		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
 	}
 }

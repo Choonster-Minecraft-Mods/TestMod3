@@ -6,6 +6,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.util.math.BlockPos;
@@ -36,12 +37,12 @@ public class WorldGenBanner implements IWorldGenerator {
 	protected ItemStack createBannerStack() {
 		final ItemStack bannerStack = new ItemStack(Items.BANNER);
 
-		final NBTTagCompound bannerData = bannerStack.getSubCompound("BlockEntityTag", true);
+		final NBTTagCompound bannerData = bannerStack.func_190925_c("BlockEntityTag");
 
 		final NBTTagList patternsList = new NBTTagList();
 		bannerData.setTag("Patterns", patternsList);
-		patternsList.appendTag(createPatternTag(TileEntityBanner.EnumBannerPattern.GRADIENT_UP, EnumDyeColor.MAGENTA));
-		patternsList.appendTag(createPatternTag(TileEntityBanner.EnumBannerPattern.FLOWER, EnumDyeColor.BLACK));
+		patternsList.appendTag(createPatternTag(BannerPattern.GRADIENT_UP, EnumDyeColor.MAGENTA));
+		patternsList.appendTag(createPatternTag(BannerPattern.FLOWER, EnumDyeColor.BLACK));
 
 		bannerData.setInteger("Base", EnumDyeColor.PINK.getDyeDamage());
 
@@ -55,9 +56,9 @@ public class WorldGenBanner implements IWorldGenerator {
 	 * @param color   The colour
 	 * @return The compound tag
 	 */
-	protected NBTTagCompound createPatternTag(TileEntityBanner.EnumBannerPattern pattern, EnumDyeColor color) {
+	protected NBTTagCompound createPatternTag(BannerPattern pattern, EnumDyeColor color) {
 		final NBTTagCompound tag = new NBTTagCompound();
-		tag.setString("Pattern", pattern.getPatternID());
+		tag.setString("Pattern", pattern.func_190993_b());
 		tag.setInteger("Color", color.getDyeDamage());
 		return tag;
 	}
@@ -75,7 +76,7 @@ public class WorldGenBanner implements IWorldGenerator {
 
 		final TileEntity tileEntity = world.getTileEntity(newPos);
 		if (tileEntity instanceof TileEntityBanner) {
-			((TileEntityBanner) tileEntity).setItemValues(bannerStack);
+			((TileEntityBanner) tileEntity).setItemValues(bannerStack, true); // Read the base colour from NBT rather than metadata
 		}
 	}
 

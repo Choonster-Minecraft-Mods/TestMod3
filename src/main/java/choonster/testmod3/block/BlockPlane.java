@@ -12,7 +12,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -154,16 +153,16 @@ public class BlockPlane extends BlockTestMod3 {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		return rotateBlock(worldIn, pos, side);
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, ItemStack stack) {
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		final EnumFacing horizontalRotation = placer.getHorizontalFacing();
 		final EnumVerticalRotation verticalRotation = EnumVerticalRotation.fromFacing(facing);
 
-		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, stack)
+		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer)
 				.withProperty(HORIZONTAL_ROTATION, horizontalRotation)
 				.withProperty(VERTICAL_ROTATION, verticalRotation);
 	}
@@ -226,7 +225,7 @@ public class BlockPlane extends BlockTestMod3 {
 		 * @return The value
 		 */
 		public static EnumVerticalRotation fromIndex(int index) {
-			return VALUES[MathHelper.abs_int(index % VALUES.length)];
+			return VALUES[MathHelper.abs(index % VALUES.length)];
 		}
 
 		/**

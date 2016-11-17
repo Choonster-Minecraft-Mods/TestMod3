@@ -45,9 +45,7 @@ public class CapabilityLock {
 				final NBTTagCompound tagCompound = new NBTTagCompound();
 
 				final LockCode lockCode = instance.getLockCode();
-				if (lockCode != null) {
-					lockCode.toNBT(tagCompound);
-				}
+				lockCode.toNBT(tagCompound);
 
 				if (instance.hasCustomName()) {
 					tagCompound.setString("DisplayName", ITextComponent.Serializer.componentToJson(instance.getDisplayName()));

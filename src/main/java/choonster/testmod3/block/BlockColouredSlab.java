@@ -15,7 +15,6 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Optional;
@@ -84,13 +83,15 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (heldItem != null) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		final ItemStack heldItem = playerIn.getHeldItem(hand);
+
+		if (!heldItem.func_190926_b()) {
 			final Optional<EnumDyeColor> dyeColour = OreDictUtils.INSTANCE.getDyeColour(heldItem);
 			if (dyeColour.isPresent()) {
 				final boolean success = recolorBlock(worldIn, pos, side, dyeColour.get());
 				if (success) {
-					heldItem.stackSize--;
+					heldItem.func_190918_g(1);
 					return true;
 				}
 			}

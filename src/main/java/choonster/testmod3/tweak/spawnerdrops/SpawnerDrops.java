@@ -44,19 +44,18 @@ public class SpawnerDrops {
 	 * Was the event fired on the server for a mob spawner broken by a player holding a pickaxe?
 	 *
 	 * @param world  The block's world
-	 * @param pos    The block's position
 	 * @param state  The block state
 	 * @param player The player who broke the block
 	 * @return Is the event valid?
 	 */
-	private static boolean isValid(World world, BlockPos pos, IBlockState state, @Nullable EntityPlayer player) {
+	private static boolean isValid(World world, IBlockState state, @Nullable EntityPlayer player) {
 		if (player == null) return false;
 
 		final ItemStack heldItem = player.getHeldItemMainhand();
 
 		return !world.isRemote && // Return true if this is the server,
 				state.getBlock() == Blocks.MOB_SPAWNER && // The block is a mob spawner,
-				heldItem != null && heldItem.getItem().getHarvestLevel(heldItem, "pickaxe", player, state) > 0 &&  // The held item is a pickaxe,
+				!heldItem.func_190926_b() && heldItem.getItem().getHarvestLevel(heldItem, "pickaxe", player, state) > 0 &&  // The held item is a pickaxe,
 				EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, heldItem) > 0; // And the held item has Silk Touch
 	}
 
@@ -66,7 +65,7 @@ public class SpawnerDrops {
 		final BlockPos pos = event.getPos();
 
 		// If the event isn't valid, do nothing
-		if (!isValid(world, pos, event.getState(), event.getPlayer())) return;
+		if (!isValid(world, event.getState(), event.getPlayer())) return;
 
 		// If the TileEntity isn't a mob spawner, do nothing
 		if (!(world.getTileEntity(pos) instanceof TileEntityMobSpawner)) {
@@ -91,7 +90,7 @@ public class SpawnerDrops {
 		final IBlockState state = event.getState();
 
 		// If the event isn't valid, do nothing
-		if (!isValid(world, pos, state, event.getHarvester())) return;
+		if (!isValid(world, state, event.getHarvester())) return;
 
 		final int dimensionID = world.provider.getDimension(); // Get this dimension's ID
 		if (!storedSpawners.containsKey(dimensionID)) { // If the map for this dimension doesn't exist yet, do nothing

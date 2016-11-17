@@ -76,20 +76,20 @@ public class ContainerModChest extends Container {
 	public ItemStack transferStackInSlot(EntityPlayer player, int index) {
 		final Slot slot = this.inventorySlots.get(index);
 
-		if (slot != null && slot.getStack() != null) {
+		if (slot != null && !slot.getStack().func_190926_b()) {
 			final ItemStack stack = slot.getStack();
 			final ItemStack originalStack = stack.copy();
 
 			if (index < this.numRows * SLOTS_PER_ROW) {
 				if (!this.mergeItemStack(stack, this.numRows * SLOTS_PER_ROW, this.inventorySlots.size(), true)) {
-					return null;
+					return ItemStack.field_190927_a;
 				}
 			} else if (!this.mergeItemStack(stack, 0, this.numRows * SLOTS_PER_ROW, false)) {
-				return null;
+				return ItemStack.field_190927_a;
 			}
 
-			if (stack.stackSize == 0) {
-				slot.putStack(null);
+			if (stack.func_190926_b()) {
+				slot.putStack(ItemStack.field_190927_a);
 			} else {
 				slot.onSlotChanged();
 			}
@@ -97,7 +97,7 @@ public class ContainerModChest extends Container {
 			return originalStack;
 		}
 
-		return null;
+		return ItemStack.field_190927_a;
 	}
 
 	@Override

@@ -55,10 +55,10 @@ public abstract class BlockStaticPressurePlate extends BlockTestMod3 {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
-		if (!this.canBePlacedOn(worldIn, pos.down())) {
-			this.dropBlockAsItem(worldIn, pos, state, 0);
-			worldIn.setBlockToAir(pos);
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos thisPos, Block blockIn, BlockPos neighbourPos) {
+		if (!this.canBePlacedOn(worldIn, thisPos.down())) {
+			this.dropBlockAsItem(worldIn, thisPos, state, 0);
+			worldIn.setBlockToAir(thisPos);
 		}
 	}
 
@@ -69,7 +69,7 @@ public abstract class BlockStaticPressurePlate extends BlockTestMod3 {
 	@SuppressWarnings("deprecation")
 	@Nullable
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return NULL_AABB;
 	}
 

@@ -11,6 +11,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
+import javax.annotation.Nullable;
+
 /**
  * An Item with a different model depending on how long ago it was last used.
  * <p>
@@ -29,12 +31,12 @@ public class ItemLastUseTimeModel extends ItemTestMod3 {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-		return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
 		return CapabilityLastUseTime.createProvider();
 	}
 }

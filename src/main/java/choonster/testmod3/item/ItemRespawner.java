@@ -22,7 +22,9 @@ public class ItemRespawner extends ItemTestMod3 {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		final ItemStack heldItem = playerIn.getHeldItem(hand);
+
 		if (!worldIn.isRemote) {
 			final EntityPlayerMP playerMP = (EntityPlayerMP) playerIn;
 
@@ -38,19 +40,19 @@ public class ItemRespawner extends ItemTestMod3 {
 			final WorldServer worldServer = worldIn.getMinecraftServer() != null ? worldIn.getMinecraftServer().worldServerForDimension(dimension) : null;
 
 			if (worldServer == null) {
-				return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
+				return new ActionResult<>(EnumActionResult.FAIL, heldItem);
 			}
 
 			if (bedLocation == null) {
-				playerMP.addChatComponentMessage(new TextComponentTranslation("message.testmod3:respawner.no_spawn_location"));
-				return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
+				playerMP.addChatMessage(new TextComponentTranslation("message.testmod3:respawner.no_spawn_location"));
+				return new ActionResult<>(EnumActionResult.FAIL, heldItem);
 			}
 
 			final boolean spawnForced = playerMP.isSpawnForced(dimension);
 			final BlockPos spawnLocation = EntityPlayer.getBedSpawnLocation(worldServer, bedLocation, spawnForced);
 
 			if (spawnLocation == null) {
-				return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
+				return new ActionResult<>(EnumActionResult.FAIL, heldItem);
 			}
 
 			playerMP.setLocationAndAngles(spawnLocation.getX() + 0.5, spawnLocation.getY() + 0.1, spawnLocation.getZ() + 0.5, 0, 0);
@@ -61,11 +63,11 @@ public class ItemRespawner extends ItemTestMod3 {
 				playerMP.setPosition(playerMP.posX, playerMP.posY + 1.0D, playerMP.posZ);
 			}
 
-			playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:respawner.teleporting", spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ(), dimension));
+			playerIn.addChatMessage(new TextComponentTranslation("message.testmod3:respawner.teleporting", spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ(), dimension));
 
-			return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
+			return new ActionResult<>(EnumActionResult.SUCCESS, heldItem);
 		}
 
-		return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
+		return new ActionResult<>(EnumActionResult.SUCCESS, heldItem);
 	}
 }

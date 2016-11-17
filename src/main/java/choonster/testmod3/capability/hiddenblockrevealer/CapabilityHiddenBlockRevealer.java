@@ -67,7 +67,7 @@ public class CapabilityHiddenBlockRevealer {
 	 * @return The {@link IHiddenBlockRevealer} for the {@link ItemStack}, if any
 	 */
 	@Nullable
-	public static IHiddenBlockRevealer getHiddenBlockRevealer(@Nullable ItemStack stack) {
+	public static IHiddenBlockRevealer getHiddenBlockRevealer(ItemStack stack) {
 		return CapabilityUtils.getCapability(stack, HIDDEN_BLOCK_REVEALER_CAPABILITY, DEFAULT_FACING);
 	}
 

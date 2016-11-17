@@ -11,6 +11,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
+import javax.annotation.Nullable;
+
 /**
  * A slingshot that fires Snowballs when used.
  * <p>
@@ -37,16 +39,16 @@ public class ItemSlingshot extends ItemSnowballLauncher {
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
 		return CapabilityLastUseTime.createProvider(new LastUseTime(false));
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-		final ActionResult<ItemStack> result = super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		final ActionResult<ItemStack> result = super.onItemRightClick(worldIn, playerIn, hand);
 
 		if (result.getType() == EnumActionResult.SUCCESS) {
-			CapabilityLastUseTime.updateLastUseTime(playerIn, itemStackIn, hand);
+			CapabilityLastUseTime.updateLastUseTime(playerIn, playerIn.getHeldItem(hand), hand);
 		}
 
 		return result;

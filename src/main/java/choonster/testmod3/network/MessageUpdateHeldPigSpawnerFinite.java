@@ -13,6 +13,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+import javax.annotation.Nullable;
+
 /**
  * Sent from the server to update the values of the {@link IPigSpawnerFinite} for the player's held item.
  *
@@ -73,6 +75,7 @@ public class MessageUpdateHeldPigSpawnerFinite implements IMessage {
 		 * @param ctx     The message context
 		 * @return an optional return message
 		 */
+		@Nullable
 		@Override
 		public IMessage onMessage(final MessageUpdateHeldPigSpawnerFinite message, final MessageContext ctx) {
 			// Using Minecraft or FMLClientHandler inside the lambda causes the server to attempt to load them, crashing it.

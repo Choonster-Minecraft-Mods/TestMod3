@@ -20,6 +20,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -50,9 +51,10 @@ public class BlockFluidTank extends BlockTileEntity<TileEntityFluidTank> {
 		final IFluidHandler fluidHandler = getFluidHandler(world, pos);
 
 		if (fluidHandler != null) {
-			final ItemStack stack = FluidUtil.tryFillContainer(new ItemStack(this), fluidHandler, Integer.MAX_VALUE, null, true);
-			if (stack != null) {
-				drops.add(stack);
+			final FluidActionResult fluidActionResult = FluidUtil.tryFillContainer(new ItemStack(this), fluidHandler, Integer.MAX_VALUE, null, true);
+
+			if (fluidActionResult.isSuccess()) {
+				drops.add(fluidActionResult.getResult());
 			}
 		}
 
@@ -106,16 +108,21 @@ public class BlockFluidTank extends BlockTileEntity<TileEntityFluidTank> {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		final ItemStack heldItem = playerIn.getHeldItem(hand);
 		final IFluidHandler fluidHandler = getFluidHandler(worldIn, pos);
 
 		if (fluidHandler != null) {
 			// Try fill/empty the held fluid container from the tank
-			boolean success = FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, playerIn);
+			final FluidActionResult fluidActionResult = FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, playerIn);
 
 			// If the contents changed or this is the off hand, send a chat message to the player
-			if (!worldIn.isRemote && (success || hand == EnumHand.OFF_HAND)) {
+			if (!worldIn.isRemote && (fluidActionResult.isSuccess() || hand == EnumHand.OFF_HAND)) {
 				TestMod3.network.sendTo(new MessageFluidTankContents(fluidHandler.getTankProperties()), (EntityPlayerMP) playerIn);
+			}
+
+			if (fluidActionResult.isSuccess()) {
+				playerIn.setHeldItem(hand, fluidActionResult.getResult());
 			}
 
 			// If the held item is a fluid container, stop processing here so it doesn't try to place its contents

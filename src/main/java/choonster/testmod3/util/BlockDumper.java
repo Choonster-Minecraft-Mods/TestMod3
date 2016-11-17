@@ -2,6 +2,7 @@ package choonster.testmod3.util;
 
 import choonster.testmod3.Logger;
 import choonster.testmod3.TestMod3;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -25,7 +26,7 @@ public class BlockDumper {
 					.filter(block -> block.getRegistryName().getResourceDomain().equals(TestMod3.MODID))
 					.forEach(block -> {
 						final Item item = Item.getItemFromBlock(block);
-						if (item != null) {
+						if (item != Items.field_190931_a) {
 							writer.printf("%s - %s\n", item.getUnlocalizedName(), item.toString());
 						}
 					});

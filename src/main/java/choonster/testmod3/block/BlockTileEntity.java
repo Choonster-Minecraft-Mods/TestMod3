@@ -61,7 +61,7 @@ public abstract class BlockTileEntity<TE extends TileEntity> extends BlockTestMo
 	}
 
 	@Override
-	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
+	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack) {
 		super.harvestBlock(world, player, pos, state, te, stack);
 
 		if (preserveTileEntity) {

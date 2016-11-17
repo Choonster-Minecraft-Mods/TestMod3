@@ -26,7 +26,9 @@ public class ItemEntityTest extends ItemTestMod3 {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		final ItemStack heldItem = player.getHeldItem(hand);
+
 		final float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch);
 		final float yaw = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw);
 
@@ -48,7 +50,7 @@ public class ItemEntityTest extends ItemTestMod3 {
 		final Vec3d endVector = startVector.addVector((double) f7 * multiplier, (double) f6 * multiplier, (double) f8 * multiplier);
 		final RayTraceResult rayTraceResult = world.rayTraceBlocks(startVector, endVector, true);
 
-		if (rayTraceResult == null) return new ActionResult<>(EnumActionResult.PASS, itemStack);
+		if (rayTraceResult == null) return new ActionResult<>(EnumActionResult.PASS, heldItem);
 
 		final Vec3d lookVector = player.getLook(1.0F);
 		final List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().addCoord(lookVector.xCoord * multiplier, lookVector.yCoord * multiplier, lookVector.zCoord * multiplier).expand(1.0, 1.0, 1.0)); // Use entity.getEntityBoundingBox() instead of entity.boundingBox
@@ -59,7 +61,7 @@ public class ItemEntityTest extends ItemTestMod3 {
 				final AxisAlignedBB axisAlignedBB = entity.getEntityBoundingBox().expand(collisionBorderSize, collisionBorderSize, collisionBorderSize);
 
 				if (axisAlignedBB.isVecInside(startVector)) {
-					return new ActionResult<>(EnumActionResult.PASS, itemStack);
+					return new ActionResult<>(EnumActionResult.PASS, heldItem);
 				}
 			}
 		}
@@ -73,11 +75,11 @@ public class ItemEntityTest extends ItemTestMod3 {
 			}
 
 			final EntityPig entity = new EntityPig(world);
-			entity.rotationYaw = (float) (((MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) - 1) * 90);
+			entity.rotationYaw = (float) (((MathHelper.floor((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) - 1) * 90);
 			entity.setPosition(blockPos.getX(), blockPos.getY() + 2, blockPos.getZ());
 
 			if (!world.getCollisionBoxes(entity, entity.getEntityBoundingBox().expand(-0.1D, -0.1D, -0.1D)).isEmpty()) {
-				return new ActionResult<>(EnumActionResult.FAIL, itemStack);
+				return new ActionResult<>(EnumActionResult.FAIL, heldItem);
 			}
 
 			if (!world.isRemote) {
@@ -85,12 +87,12 @@ public class ItemEntityTest extends ItemTestMod3 {
 			}
 
 			if (!player.capabilities.isCreativeMode) {
-				--itemStack.stackSize;
+				heldItem.func_190918_g(1);
 			}
 
 			player.addStat(StatList.getObjectUseStats(this));
 		}
 
-		return new ActionResult<>(EnumActionResult.PASS, itemStack);
+		return new ActionResult<>(EnumActionResult.PASS, heldItem);
 	}
 }

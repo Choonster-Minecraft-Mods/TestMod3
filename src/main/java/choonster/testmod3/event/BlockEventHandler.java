@@ -12,8 +12,6 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import javax.annotation.Nullable;
-
 @Mod.EventBusSubscriber
 public class BlockEventHandler {
 
@@ -28,9 +26,9 @@ public class BlockEventHandler {
 	 * @param player The player harvesting the block
 	 * @return True if the tool can harvest the block
 	 */
-	private static boolean canToolHarvestBlock(IBlockState state, @Nullable ItemStack stack, EntityPlayer player) {
+	private static boolean canToolHarvestBlock(IBlockState state, ItemStack stack, EntityPlayer player) {
 		final String tool = state.getBlock().getHarvestTool(state);
-		return stack != null && tool != null
+		return !stack.func_190926_b() && tool != null
 				&& stack.getItem().getHarvestLevel(stack, tool, player, state) >= state.getBlock().getHarvestLevel(state);
 	}
 

@@ -4,6 +4,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
 
@@ -25,23 +26,23 @@ public class ShapelessCuttingRecipe extends ShapelessRecipes {
 	private ItemStack damageAxe(ItemStack stack) {
 		if (stack.attemptDamageItem(1, random)) {
 			ForgeEventFactory.onPlayerDestroyItem(ForgeHooks.getCraftingPlayer(), stack, null);
-			return null;
+			return ItemStack.field_190927_a;
 		}
 
 		return stack;
 	}
 
 	@Override
-	public ItemStack[] getRemainingItems(InventoryCrafting inventoryCrafting) {
-		final ItemStack[] remainingItems = new ItemStack[inventoryCrafting.getSizeInventory()];
+	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inventoryCrafting) {
+		final NonNullList<ItemStack> remainingItems = NonNullList.func_191197_a(inventoryCrafting.getSizeInventory(), ItemStack.field_190927_a);
 
-		for (int i = 0; i < remainingItems.length; ++i) {
+		for (int i = 0; i < remainingItems.size(); ++i) {
 			final ItemStack itemstack = inventoryCrafting.getStackInSlot(i);
 
-			if (itemstack != null && itemstack.getItem() instanceof ItemAxe) {
-				remainingItems[i] = damageAxe(itemstack.copy());
+			if (!itemstack.func_190926_b() && itemstack.getItem() instanceof ItemAxe) {
+				remainingItems.set(i, damageAxe(itemstack.copy()));
 			} else {
-				remainingItems[i] = ForgeHooks.getContainerItem(itemstack);
+				remainingItems.set(i, ForgeHooks.getContainerItem(itemstack));
 			}
 		}
 

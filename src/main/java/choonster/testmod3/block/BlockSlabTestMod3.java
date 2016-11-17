@@ -12,10 +12,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSlab;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -112,7 +112,7 @@ public abstract class BlockSlabTestMod3<
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
 		list.addAll(getVariantProperty().getAllowedValues().stream()
 				.map(variant -> new ItemStack(item, 1, getMetadata(variant)))
 				.collect(Collectors.toList()));

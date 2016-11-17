@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityLockableLoot;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
@@ -53,7 +54,7 @@ public class ItemHandlerLoot extends ItemHandlerNameable implements ILootContain
 		this.worldContainer = worldContainer;
 	}
 
-	public ItemHandlerLoot(ItemStack[] stacks, ITextComponent defaultName, IWorldContainer worldContainer) {
+	public ItemHandlerLoot(NonNullList<ItemStack> stacks, ITextComponent defaultName, IWorldContainer worldContainer) {
 		super(stacks, defaultName);
 		this.worldContainer = worldContainer;
 	}
@@ -108,7 +109,7 @@ public class ItemHandlerLoot extends ItemHandlerNameable implements ILootContain
 	@Override
 	public void deserializeNBT(NBTTagCompound nbt) {
 		if (checkLootAndRead(nbt)) { // If the LootTable location exists, don't read the inventory contents from NBT
-			setSize(nbt.hasKey("Size", Constants.NBT.TAG_INT) ? nbt.getInteger("Size") : stacks.length);
+			setSize(nbt.hasKey("Size", Constants.NBT.TAG_INT) ? nbt.getInteger("Size") : stacks.size());
 			onLoad();
 		} else {
 			super.deserializeNBT(nbt);

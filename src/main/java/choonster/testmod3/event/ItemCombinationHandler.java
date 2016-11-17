@@ -101,8 +101,8 @@ public class ItemCombinationHandler {
 					// Consume one item from each matching entity
 					matchingEntityItems.forEach(matchingEntityItem -> {
 						final ItemStack itemStack = matchingEntityItem.getEntityItem();
-						itemStack.stackSize--;
-						if (itemStack.stackSize <= 0) {
+						itemStack.func_190918_g(1);
+						if (itemStack.func_190926_b()) {
 							matchingEntityItem.setDead();
 						}
 					});

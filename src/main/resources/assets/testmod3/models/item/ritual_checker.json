@@ -1,6 +1,6 @@
 {
 	"parent": "minecraft:item/handheld",
 	"textures": {
-		"layer0": "minecraft:items/banner_base"
+		"layer0": "testmod3:items/banner_base"
 	}
 }

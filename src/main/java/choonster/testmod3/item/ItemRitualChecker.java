@@ -37,7 +37,7 @@ public class ItemRitualChecker extends ItemTestMod3 {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		if (!worldIn.isRemote) {
 			final ITextComponent textComponent;
 
@@ -51,10 +51,10 @@ public class ItemRitualChecker extends ItemTestMod3 {
 				textComponent.getStyle().setColor(TextFormatting.GREEN);
 			}
 
-			playerIn.addChatComponentMessage(textComponent);
+			playerIn.addChatMessage(textComponent);
 		}
 
-		return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
+		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
 	}
 
 	/**

@@ -230,16 +230,20 @@ public class ModBlocks {
 	}
 
 	public static void registerTileEntities() {
-		registerTileEntity(TileEntitySurvivalCommandBlock.class);
-		registerTileEntity(TileEntityFluidTank.class);
-		registerTileEntity(TileEntityColoredRotatable.class);
-		registerTileEntity(TileEntityColoredMultiRotatable.class);
-		registerTileEntity(TileEntityPotionEffect.class);
-		registerTileEntity(TileEntityModChest.class);
-		registerTileEntity(TileEntityHidden.class);
+		registerTileEntity(TileEntitySurvivalCommandBlock.class, "survival_command_block", "SurvivalCommandBlock");
+		registerTileEntity(TileEntityFluidTank.class, "fluid_tank", "FluidTank");
+		registerTileEntity(TileEntityColoredRotatable.class, "colored_rotatable", "ColoredRotatable");
+		registerTileEntity(TileEntityColoredMultiRotatable.class, "colored_multi_rotatable", "ColoredMultiRotatable");
+		registerTileEntity(TileEntityPotionEffect.class, "potion_effect", "PotionEffect");
+		registerTileEntity(TileEntityModChest.class, "mod_chest", "ModChest");
+		registerTileEntity(TileEntityHidden.class, "hidden");
 	}
 
-	private static void registerTileEntity(Class<? extends TileEntity> tileEntityClass) {
-		GameRegistry.registerTileEntity(tileEntityClass, Constants.RESOURCE_PREFIX + tileEntityClass.getSimpleName().replaceFirst("TileEntity", ""));
+	private static void registerTileEntity(Class<? extends TileEntity> tileEntityClass, String name) {
+		GameRegistry.registerTileEntity(tileEntityClass, Constants.RESOURCE_PREFIX + name);
+	}
+
+	private static void registerTileEntity(Class<? extends TileEntity> tileEntityClass, String name, String legacyName) {
+		GameRegistry.registerTileEntityWithAlternatives(tileEntityClass, Constants.RESOURCE_PREFIX + name, Constants.RESOURCE_PREFIX + legacyName);
 	}
 }

@@ -17,6 +17,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+import javax.annotation.Nullable;
+
 /**
  * Sent by {@link BlockFluidTank} to notify the player of the tank's contents.
  * <p>
@@ -95,13 +97,14 @@ public class MessageFluidTankContents implements IMessage {
 		 * @param ctx     The context
 		 * @return an optional return message
 		 */
+		@Nullable
 		@Override
 		public IMessage onMessage(MessageFluidTankContents message, MessageContext ctx) {
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				final EntityPlayer player = TestMod3.proxy.getClientPlayer();
 				assert player != null;
 
-				BlockFluidTank.getFluidDataForDisplay(message.fluidTankProperties).forEach(player::addChatComponentMessage);
+				BlockFluidTank.getFluidDataForDisplay(message.fluidTankProperties).forEach(player::addChatMessage);
 			});
 
 			return null;

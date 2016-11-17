@@ -74,6 +74,7 @@ public class MessageOpenLockGui implements IMessage {
 		 * @param ctx     The message context
 		 * @return an optional return message
 		 */
+		@Nullable
 		@Override
 		public IMessage onMessage(MessageOpenLockGui message, MessageContext ctx) {
 			final Minecraft minecraft = Minecraft.getMinecraft();

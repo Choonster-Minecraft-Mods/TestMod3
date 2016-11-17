@@ -48,7 +48,7 @@ dependencies {
     deobfProvided "mezz.jei:jei_${mc_version}:${jei_version}:api"
     runtime "mezz.jei:jei_${mc_version}:${jei_version}"
     compile "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
-    deobfProvided "mcp.mobius.waila:Waila:${waila_version}_1.9.4"
+//    deobfProvided "mcp.mobius.waila:Waila:${waila_version}_1.9.4"
 }
 
 shadowJar {
@@ -80,7 +80,7 @@ processResources {
         expand 'version': project.version, 'mcversion': project.minecraft.version
     }
 
-    // copy everything else, thats not the mcmod.info
+    // copy everything else, that's not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
         exclude 'log4j2.xml'

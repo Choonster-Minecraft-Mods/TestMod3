@@ -4,7 +4,6 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.tileentity.TileEntityColoredRotatable;
 import choonster.testmod3.util.OreDictUtils;
 import net.minecraft.block.BlockColored;
-import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
@@ -72,7 +71,7 @@ public class BlockColoredRotatable extends BlockColored {
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		setFacing(worldIn, pos, BlockPistonBase.getFacingFromEntity(pos, placer));
+		setFacing(worldIn, pos, EnumFacing.func_190914_a(pos, placer));
 	}
 
 	@SuppressWarnings("deprecation")
@@ -93,13 +92,15 @@ public class BlockColoredRotatable extends BlockColored {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (heldItem != null) { // If the player is holding dye, change the colour
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		final ItemStack heldItem = playerIn.getHeldItem(hand);
+
+		if (!heldItem.func_190926_b()) { // If the player is holding dye, change the colour
 			final Optional<EnumDyeColor> dyeColour = OreDictUtils.INSTANCE.getDyeColour(heldItem);
 			if (dyeColour.isPresent()) {
 				final boolean success = recolorBlock(worldIn, pos, side, dyeColour.get());
 				if (success) {
-					heldItem.stackSize--;
+					heldItem.func_190918_g(1);
 					return true;
 				}
 			}

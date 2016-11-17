@@ -102,7 +102,7 @@ public final class CapabilityPigSpawner {
 	 * @return The IPigSpawner, or null if there isn't one
 	 */
 	@Nullable
-	public static IPigSpawner getPigSpawner(@Nullable ItemStack itemStack) {
+	public static IPigSpawner getPigSpawner(ItemStack itemStack) {
 		return CapabilityUtils.getCapability(itemStack, PIG_SPAWNER_CAPABILITY, DEFAULT_FACING);
 	}
 

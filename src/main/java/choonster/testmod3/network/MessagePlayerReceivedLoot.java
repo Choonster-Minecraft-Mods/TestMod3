@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 /**
@@ -76,7 +77,7 @@ public class MessagePlayerReceivedLoot implements IMessage {
 		 * @return The ITextComponent
 		 */
 		private ITextComponent getItemStackTextComponent(ItemStack itemStack) {
-			return new TextComponentTranslation("message.testmod3:player_received_loot.item", itemStack.stackSize, itemStack.getTextComponent());
+			return new TextComponentTranslation("message.testmod3:player_received_loot.item", itemStack.func_190916_E(), itemStack.getTextComponent());
 		}
 
 		/**
@@ -87,6 +88,7 @@ public class MessagePlayerReceivedLoot implements IMessage {
 		 * @param ctx     The message context
 		 * @return an optional return message
 		 */
+		@Nullable
 		@Override
 		public IMessage onMessage(final MessagePlayerReceivedLoot message, final MessageContext ctx) {
 			Minecraft.getMinecraft().addScheduledTask(() -> {
@@ -101,7 +103,7 @@ public class MessagePlayerReceivedLoot implements IMessage {
 
 				final ITextComponent chatMessage = new TextComponentTranslation("message.testmod3:player_received_loot.base", lootMessage);
 
-				player.addChatComponentMessage(chatMessage);
+				player.addChatMessage(chatMessage);
 			});
 
 			return null;

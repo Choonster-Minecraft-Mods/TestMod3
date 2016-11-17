@@ -85,6 +85,7 @@ public class MessageLockSetLockCode implements IMessage {
 		 * @param ctx     The message context
 		 * @return an optional return message
 		 */
+		@Nullable
 		@Override
 		public IMessage onMessage(MessageLockSetLockCode message, MessageContext ctx) {
 			final EntityPlayerMP player = ctx.getServerHandler().playerEntity;
@@ -98,7 +99,7 @@ public class MessageLockSetLockCode implements IMessage {
 					final ILock lock = CapabilityLock.getLock(world, message.pos, message.facing);
 					if (lock != null) {
 						if (lock.isLocked()) {
-							player.addChatComponentMessage(new TextComponentTranslation("testmod3:lock.already_locked"));
+							player.addChatMessage(new TextComponentTranslation("testmod3:lock.already_locked"));
 						}
 						lock.setLockCode(new LockCode(message.lockCode));
 					}

@@ -18,7 +18,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -48,7 +47,7 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		final TileEntity tileEntity = worldIn.getTileEntity(pos);
 		return tileEntity instanceof TileEntitySurvivalCommandBlock && ((TileEntitySurvivalCommandBlock) tileEntity).getCommandBlockLogic().tryOpenEditCommandBlock(playerIn);
 	}

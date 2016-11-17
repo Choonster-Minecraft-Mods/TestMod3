@@ -137,7 +137,7 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 
 		for (int i = 0; i < replacedArmour.tagCount(); i++) { // For each saved armour item,
 			final NBTTagCompound replacedTagCompound = replacedArmour.getCompoundTagAt(i);
-			final ItemStack original = ItemStack.loadItemStackFromNBT(replacedTagCompound.getCompoundTag(KEY_STACK)); // Load the original ItemStack from the NBT
+			final ItemStack original = new ItemStack(replacedTagCompound.getCompoundTag(KEY_STACK)); // Load the original ItemStack from the NBT
 
 			final EntityEquipmentSlot equipmentSlot = InventoryUtils.getEquipmentSlotFromIndex(replacedTagCompound.getByte(KEY_SLOT)); // Get the armour slot
 			final ItemStack current = entity.getItemStackFromSlot(equipmentSlot);
@@ -145,10 +145,10 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 			// Is the item currently in the slot one of the replacements defined for this item?
 			final boolean isReplacement = replacementItems.stream().anyMatch(replacement -> ItemStack.areItemStacksEqual(replacement, current));
 
-			if (original == null) { // If the original item is null,
+			if (original.func_190926_b()) { // If the original item is empty/invalid,
 				if (isReplacement) { // If the current item is a replacement,
 					Logger.info("Original item for %s is null, clearing replacement", equipmentSlot);
-					entity.setItemStackToSlot(equipmentSlot, null); // Delete it
+					entity.setItemStackToSlot(equipmentSlot, ItemStack.field_190927_a); // Delete it
 				} else { // Else do nothing
 					Logger.info("Original item for %s is null, leaving current item", equipmentSlot);
 				}

@@ -38,11 +38,13 @@ public abstract class ItemWithScripts extends ItemTestMod3 {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		final ItemStack heldItem = playerIn.getHeldItem(hand);
+
 		if (!worldIn.isRemote) {
-			playerIn.addChatComponentMessage(new TextComponentTranslation("message." + getRegistryName() + ".rightClick", scriptFunction.apply(getNumber(itemStackIn))));
+			playerIn.addChatMessage(new TextComponentTranslation("message." + getRegistryName() + ".right_click", scriptFunction.apply(getNumber(heldItem))));
 		}
 
-		return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
+		return new ActionResult<>(EnumActionResult.SUCCESS, heldItem);
 	}
 }

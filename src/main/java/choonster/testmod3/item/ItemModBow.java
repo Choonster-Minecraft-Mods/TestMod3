@@ -44,7 +44,7 @@ public class ItemModBow extends ItemBow {
 					if (entityIn == null) return 0.0f;
 
 					final ItemStack activeItemStack = entityIn.getActiveItemStack();
-					if (activeItemStack != null && activeItemStack.getItem() instanceof ItemModBow) {
+					if (!activeItemStack.func_190926_b() && activeItemStack.getItem() instanceof ItemModBow) {
 						return (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0f;
 					}
 
@@ -144,7 +144,7 @@ public class ItemModBow extends ItemBow {
 
 		if (ammoSlot != null || !ammoRequired) {
 			if (ammoSlot == null) {
-				ammoSlot = new ItemStackHandler(new ItemStack[]{new ItemStack(Items.ARROW)});
+				ammoSlot = new ItemStackHandler(NonNullList.func_191197_a(1, new ItemStack(Items.ARROW)));
 			}
 
 			final ItemStack ammo = ammoSlot.getStackInSlot(0);
@@ -188,7 +188,7 @@ public class ItemModBow extends ItemBow {
 
 				world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + arrowVelocity * 0.5F);
 
-				if (!isInfinite && ammoSlot.extractItem(0, 1, true) != null) {
+				if (!isInfinite && !ammoSlot.extractItem(0, 1, true).func_190926_b()) {
 					ammoSlot.extractItem(0, 1, false);
 				}
 
@@ -204,7 +204,7 @@ public class ItemModBow extends ItemBow {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-		return nockArrow(itemStackIn, worldIn, playerIn, hand);
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		return nockArrow(playerIn.getHeldItem(hand), worldIn, playerIn, hand);
 	}
 }

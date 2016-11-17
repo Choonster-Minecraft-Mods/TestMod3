@@ -45,11 +45,11 @@ public class ItemSwapTest extends ItemTestMod3 {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		if (hasOtherItem() && playerIn.isSneaking()) {
 			return new ActionResult<>(EnumActionResult.SUCCESS, otherItem.copy());
 		}
 
-		return new ActionResult<>(EnumActionResult.PASS, itemStackIn);
+		return new ActionResult<>(EnumActionResult.PASS, playerIn.getHeldItem(hand));
 	}
 }

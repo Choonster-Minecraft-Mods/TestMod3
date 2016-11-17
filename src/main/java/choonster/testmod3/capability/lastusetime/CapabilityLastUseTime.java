@@ -70,7 +70,7 @@ public class CapabilityLastUseTime {
 	 * @return The ILastUseTime, or null if there isn't one
 	 */
 	@Nullable
-	public static ILastUseTime getLastUseTime(@Nullable ItemStack itemStack) {
+	public static ILastUseTime getLastUseTime(ItemStack itemStack) {
 		return CapabilityUtils.getCapability(itemStack, LAST_USE_TIME_CAPABILITY, DEFAULT_FACING);
 	}
 

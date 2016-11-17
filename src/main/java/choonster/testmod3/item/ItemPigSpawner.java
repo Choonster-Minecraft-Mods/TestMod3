@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
+import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 /**
@@ -26,7 +27,7 @@ public class ItemPigSpawner extends ItemTestMod3 {
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
 		return CapabilityPigSpawner.createProvider(spawnerFactory.get());
 	}
 
@@ -73,7 +74,8 @@ public class ItemPigSpawner extends ItemTestMod3 {
 	}
 
 	public void setSpawnerFactory(Supplier<IPigSpawner> spawnerFactory) {
-		if (this.spawnerFactory != null) throw new IllegalStateException("Attempt to replace the spawner factory of " + getRegistryName().toString());
+		if (this.spawnerFactory != null)
+			throw new IllegalStateException("Attempt to replace the spawner factory of " + getRegistryName().toString());
 
 		this.spawnerFactory = spawnerFactory;
 	}

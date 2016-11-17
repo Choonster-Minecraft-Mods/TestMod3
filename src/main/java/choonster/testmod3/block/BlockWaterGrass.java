@@ -7,14 +7,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
 
 /**
  * Tall grass that renders with water around it while in water.
@@ -61,7 +58,7 @@ public class BlockWaterGrass extends BlockBush {
 	}
 
 	@Override
-	public boolean canReplace(World worldIn, BlockPos pos, EnumFacing side, @Nullable ItemStack stack) {
+	public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side) {
 		return canBlockStay(worldIn, pos, this.getDefaultState());
 	}
 

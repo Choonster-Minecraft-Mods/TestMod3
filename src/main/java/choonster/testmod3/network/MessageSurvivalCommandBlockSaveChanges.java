@@ -25,6 +25,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+import javax.annotation.Nullable;
+
 /**
  * Sent by {@link GuiSurvivalCommandBlock} to save changes made to a Survival Command Block.
  * <p>
@@ -108,6 +110,7 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 
 	public static class Handler implements IMessageHandler<MessageSurvivalCommandBlockSaveChanges, IMessage> {
 
+		@Nullable
 		@Override
 		public IMessage onMessage(MessageSurvivalCommandBlockSaveChanges message, MessageContext ctx) {
 			final EntityPlayer player = ctx.getServerHandler().playerEntity;

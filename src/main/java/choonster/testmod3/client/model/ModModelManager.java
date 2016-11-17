@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -55,7 +56,7 @@ public class ModModelManager {
 
 	private void registerFluidModel(IFluidBlock fluidBlock) {
 		final Item item = Item.getItemFromBlock((Block) fluidBlock);
-		assert item != null;
+		assert item != Items.field_190931_a;
 
 		ModelBakery.registerItemVariants(item);
 
@@ -96,35 +97,35 @@ public class ModModelManager {
 
 	private void registerBlockItemModel(Block block) {
 		final Item item = Item.getItemFromBlock(block);
-		if (item != null) {
+		if (item != Items.field_190931_a) {
 			registerItemModel(item);
 		}
 	}
 
 	private void registerBlockItemModel(Block block, String modelLocation) {
 		final Item item = Item.getItemFromBlock(block);
-		if (item != null) {
+		if (item != Items.field_190931_a) {
 			registerItemModel(item, modelLocation);
 		}
 	}
 
 	private <T extends IVariant> void registerVariantBlockItemModels(Block block, String variantName, T[] variants) {
 		final Item item = Item.getItemFromBlock(block);
-		if (item != null) {
+		if (item != Items.field_190931_a) {
 			registerVariantItemModels(item, variantName, variants);
 		}
 	}
 
 	private void registerBlockItemModel(Block block, ModelResourceLocation fullModelLocation) {
 		final Item item = Item.getItemFromBlock(block);
-		if (item != null) {
+		if (item != Items.field_190931_a) {
 			registerItemModel(item, fullModelLocation);
 		}
 	}
 
 	private void registerBlockItemModelForMeta(Block block, int metadata, String variant) {
 		final Item item = Item.getItemFromBlock(block);
-		if (item != null) {
+		if (item != Items.field_190931_a) {
 			registerItemModelForMeta(item, metadata, variant);
 		}
 	}

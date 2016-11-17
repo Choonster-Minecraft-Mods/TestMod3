@@ -2,6 +2,7 @@ package choonster.testmod3.item.block;
 
 import choonster.testmod3.block.BlockFluidTank;
 import choonster.testmod3.capability.SimpleCapabilityProvider;
+import choonster.testmod3.fluids.FluidTankItem;
 import choonster.testmod3.tileentity.TileEntityFluidTank;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -10,10 +11,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -21,6 +22,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,7 +41,7 @@ public class ItemFluidTank extends ItemBlock {
 		setMaxStackSize(1);
 	}
 
-	public ItemStack addFluid(FluidStack fluidStack) {
+	public void addFluid(FluidStack fluidStack) {
 		final ItemStack filledTank = new ItemStack(this);
 		final IFluidHandler fluidHandler = FluidUtil.getFluidHandler(filledTank);
 		if (fluidHandler != null) {
@@ -47,7 +49,6 @@ public class ItemFluidTank extends ItemBlock {
 		}
 
 		tankItems.add(filledTank);
-		return filledTank;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -64,13 +65,13 @@ public class ItemFluidTank extends ItemBlock {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		super.getSubItems(itemIn, tab, subItems);
 		subItems.addAll(tankItems);
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		return new SimpleCapabilityProvider<>(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null, new FluidTank(TileEntityFluidTank.CAPACITY));
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+		return new SimpleCapabilityProvider<>(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null, new FluidTankItem(stack, TileEntityFluidTank.CAPACITY));
 	}
 }

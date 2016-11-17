@@ -40,12 +40,10 @@ public class ModBiomes {
 			registerBiome(registry, DESERT_TEST, "desert_test", BiomeManager.BiomeType.DESERT, 1000, HOT, DRY, SANDY, JUNGLE, SWAMP);
 		}
 
-		private static <T extends Biome> T registerBiome(IForgeRegistry<Biome> registry, T biome, String biomeName, BiomeManager.BiomeType biomeType, int weight, BiomeDictionary.Type... types) {
+		private static <T extends Biome> void registerBiome(IForgeRegistry<Biome> registry, T biome, String biomeName, BiomeManager.BiomeType biomeType, int weight, BiomeDictionary.Type... types) {
 			registry.register(biome.setRegistryName(TestMod3.MODID, biomeName));
 			BiomeDictionary.registerBiomeType(biome, types);
 			BiomeManager.addBiome(biomeType, new BiomeManager.BiomeEntry(biome, weight));
-
-			return biome;
 		}
 
 	}

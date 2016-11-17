@@ -14,8 +14,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 
-import javax.annotation.Nullable;
-
 /**
  * An Item that fires Snowballs at a fixed rate while right click is held
  * <p>
@@ -62,18 +60,20 @@ public class ItemSnowballLauncher extends ItemTestMod3 {
 	 * @param stack The ItemStack
 	 * @return Is the ItemStack valid ammunition?
 	 */
-	protected boolean isAmmo(@Nullable ItemStack stack) {
-		return stack != null && stack.getItem() == Items.SNOWBALL;
+	protected boolean isAmmo(ItemStack stack) {
+		return !stack.func_190926_b() && stack.getItem() == Items.SNOWBALL;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-		final boolean ammoRequired = isAmmoRequired(itemStackIn, playerIn);
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		final ItemStack heldItem = playerIn.getHeldItem(hand);
+
+		final boolean ammoRequired = isAmmoRequired(heldItem, playerIn);
 		final IItemHandler ammoSlot = ammoRequired ? ItemModBow.findAmmoSlot(playerIn, this::isAmmo) : null;
 		final boolean hasAmmo = ammoSlot != null;
 
 		if (!ammoRequired || hasAmmo) {
-			final int cooldown = getCooldown(itemStackIn);
+			final int cooldown = getCooldown(heldItem);
 			if (cooldown > 0) {
 				playerIn.getCooldownTracker().setCooldown(this, cooldown);
 			}
@@ -86,14 +86,14 @@ public class ItemSnowballLauncher extends ItemTestMod3 {
 				worldIn.spawnEntityInWorld(entitySnowball);
 			}
 
-			if (hasAmmo && ammoSlot.extractItem(0, 1, true) != null) {
+			if (hasAmmo && !ammoSlot.extractItem(0, 1, true).func_190926_b()) {
 				ammoSlot.extractItem(0, 1, false);
 				playerIn.inventoryContainer.detectAndSendChanges();
 			}
 
-			return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
+			return new ActionResult<>(EnumActionResult.SUCCESS, heldItem);
 		}
 
-		return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
+		return new ActionResult<>(EnumActionResult.FAIL, heldItem);
 	}
 }

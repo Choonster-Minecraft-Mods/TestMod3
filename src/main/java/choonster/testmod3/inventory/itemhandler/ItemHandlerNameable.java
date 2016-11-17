@@ -2,6 +2,7 @@ package choonster.testmod3.inventory.itemhandler;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -30,7 +31,7 @@ public class ItemHandlerNameable extends ItemStackHandler implements IItemHandle
 		this.defaultName = defaultName.createCopy();
 	}
 
-	public ItemHandlerNameable(ItemStack[] stacks, ITextComponent defaultName) {
+	public ItemHandlerNameable(NonNullList<ItemStack> stacks, ITextComponent defaultName) {
 		super(stacks);
 		this.defaultName = defaultName.createCopy();
 	}
