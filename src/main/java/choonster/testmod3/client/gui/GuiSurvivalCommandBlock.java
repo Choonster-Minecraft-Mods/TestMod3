@@ -31,10 +31,10 @@ public class GuiSurvivalCommandBlock extends GuiCommandBlock {
 	protected void actionPerformed(GuiButton button) throws IOException {
 		if (button.enabled && button.id == 0) {
 			try {
-				final GuiTextField commandTextField = (GuiTextField) COMMAND_TEXT_GETTER.invokeExact(this);
-				final TileEntityCommandBlock.Mode commandBlockMode = (TileEntityCommandBlock.Mode) COMMAND_BLOCK_MODE_GETTER.invokeExact(this);
-				final boolean conditional = (boolean) CONDITIONAL_GETTER.invokeExact(this);
-				final boolean automatic = (boolean) AUTOMATIC_GETTER.invokeExact(this);
+				final GuiTextField commandTextField = (GuiTextField) COMMAND_TEXT_GETTER.invokeExact((GuiCommandBlock) this);
+				final TileEntityCommandBlock.Mode commandBlockMode = (TileEntityCommandBlock.Mode) COMMAND_BLOCK_MODE_GETTER.invokeExact((GuiCommandBlock) this);
+				final boolean conditional = (boolean) CONDITIONAL_GETTER.invokeExact((GuiCommandBlock) this);
+				final boolean automatic = (boolean) AUTOMATIC_GETTER.invokeExact((GuiCommandBlock) this);
 
 				TestMod3.network.sendToServer(new MessageSurvivalCommandBlockSaveChanges(survivalCommandBlockLogic, commandTextField.getText(), commandBlockMode, conditional, automatic));
 			} catch (Throwable throwable) {
