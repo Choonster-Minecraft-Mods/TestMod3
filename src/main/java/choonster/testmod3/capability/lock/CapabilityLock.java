@@ -76,6 +76,7 @@ public class CapabilityLock {
 	 *
 	 * @param world The world
 	 * @param pos   The position
+	 * @param side  The side
 	 * @return The ILock, or null if there isn't one.
 	 */
 	@Nullable
