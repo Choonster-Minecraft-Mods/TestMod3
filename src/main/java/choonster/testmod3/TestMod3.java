@@ -67,8 +67,6 @@ public class TestMod3 {
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
-		FMLInterModComms.sendMessage("Waila", "register", "choonster.testmod3.compat.waila.WailaCompat.register");
-
 		proxy.init();
 	}
 

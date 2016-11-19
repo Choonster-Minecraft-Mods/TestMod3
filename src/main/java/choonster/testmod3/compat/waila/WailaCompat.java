@@ -1,16 +1,19 @@
 package choonster.testmod3.compat.waila;
 
 import choonster.testmod3.block.*;
+import mcp.mobius.waila.api.IWailaPlugin;
 import mcp.mobius.waila.api.IWailaRegistrar;
+import mcp.mobius.waila.api.WailaPlugin;
 
 /**
  * Waila compatibility.
  *
  * @author Choonster
  */
-public class WailaCompat {
+@WailaPlugin
+public class WailaCompat implements IWailaPlugin {
 
-	public static void register(IWailaRegistrar registrar) {
+	public void register(IWailaRegistrar registrar) {
 		registrar.registerStackProvider(HUDHandlerVariantTileEntityBlocks.INSTANCE, BlockColoredRotatable.class);
 		registrar.registerBodyProvider(new HUDHandlerRotatable(BlockColoredRotatable.FACING), BlockColoredRotatable.class);
 		registrar.registerBodyProvider(new HUDHandlerMultiRotatable(BlockColoredMultiRotatable.FACE_ROTATION), BlockColoredMultiRotatable.class);
