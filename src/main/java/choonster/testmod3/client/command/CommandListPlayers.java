@@ -30,7 +30,7 @@ public class CommandListPlayers extends CommandBase {
 	 * Gets the name of the command
 	 */
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "listplayers";
 	}
 
@@ -40,7 +40,7 @@ public class CommandListPlayers extends CommandBase {
 	 * @param sender The command sender
 	 */
 	@Override
-	public String getCommandUsage(ICommandSender sender) {
+	public String getUsage(ICommandSender sender) {
 		return "commands.testmod3:listplayers.usage";
 	}
 
@@ -63,8 +63,8 @@ public class CommandListPlayers extends CommandBase {
 					.map(tabOverlay::getPlayerName)
 					.collect(Collectors.joining(", "));
 
-			sender.addChatMessage(new TextComponentTranslation("commands.testmod3:listplayers.players"));
-			sender.addChatMessage(new TextComponentString(outputText));
+			sender.sendMessage(new TextComponentTranslation("commands.testmod3:listplayers.players"));
+			sender.sendMessage(new TextComponentString(outputText));
 		}
 	}
 }

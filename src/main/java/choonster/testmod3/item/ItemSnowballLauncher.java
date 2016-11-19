@@ -61,7 +61,7 @@ public class ItemSnowballLauncher extends ItemTestMod3 {
 	 * @return Is the ItemStack valid ammunition?
 	 */
 	protected boolean isAmmo(ItemStack stack) {
-		return !stack.func_190926_b() && stack.getItem() == Items.SNOWBALL;
+		return !stack.isEmpty() && stack.getItem() == Items.SNOWBALL;
 	}
 
 	@Override
@@ -83,10 +83,10 @@ public class ItemSnowballLauncher extends ItemTestMod3 {
 			if (!worldIn.isRemote) {
 				final EntitySnowball entitySnowball = new EntitySnowball(worldIn, playerIn);
 				entitySnowball.setHeadingFromThrower(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
-				worldIn.spawnEntityInWorld(entitySnowball);
+				worldIn.spawnEntity(entitySnowball);
 			}
 
-			if (hasAmmo && !ammoSlot.extractItem(0, 1, true).func_190926_b()) {
+			if (hasAmmo && !ammoSlot.extractItem(0, 1, true).isEmpty()) {
 				ammoSlot.extractItem(0, 1, false);
 				playerIn.inventoryContainer.detectAndSendChanges();
 			}

@@ -6,6 +6,7 @@ import choonster.testmod3.entity.EntityModArrow;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.EntityGuardian;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
@@ -31,6 +32,7 @@ public class ModEntities {
 	 * @param sendsVelocityUpdates Whether to send velocity information packets as well
 	 */
 	private static void registerEntity(Class<? extends Entity> entityClass, String entityName, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates) {
-		EntityRegistry.registerModEntity(entityClass, entityName, entityID++, TestMod3.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
+		final ResourceLocation registryName = new ResourceLocation(TestMod3.MODID, entityName);
+		EntityRegistry.registerModEntity(registryName, entityClass, registryName.toString(), entityID++, TestMod3.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
 	}
 }

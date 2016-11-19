@@ -37,7 +37,7 @@ public class ShapedArmourUpgradeRecipe extends ShapedOreRecipe {
 			for (int i = 0; i < inv.getSizeInventory(); i++) { // For each slot in the crafting inventory,
 				final ItemStack ingredient = inv.getStackInSlot(i); // Get the ingredient in the slot
 
-				if (!ingredient.func_190926_b() && ingredient.getItem() instanceof ItemArmor) { // If it's an armour item,
+				if (!ingredient.isEmpty() && ingredient.getItem() instanceof ItemArmor) { // If it's an armour item,
 					// Clone its item damage, clamping it to the output's damage range
 					final int newDamage = MathHelper.clamp(ingredient.getItemDamage(), 0, output.getMaxDamage());
 					output.setItemDamage(newDamage);

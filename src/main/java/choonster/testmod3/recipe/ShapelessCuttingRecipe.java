@@ -26,7 +26,7 @@ public class ShapelessCuttingRecipe extends ShapelessRecipes {
 	private ItemStack damageAxe(ItemStack stack) {
 		if (stack.attemptDamageItem(1, random)) {
 			ForgeEventFactory.onPlayerDestroyItem(ForgeHooks.getCraftingPlayer(), stack, null);
-			return ItemStack.field_190927_a;
+			return ItemStack.EMPTY;
 		}
 
 		return stack;
@@ -34,12 +34,12 @@ public class ShapelessCuttingRecipe extends ShapelessRecipes {
 
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inventoryCrafting) {
-		final NonNullList<ItemStack> remainingItems = NonNullList.func_191197_a(inventoryCrafting.getSizeInventory(), ItemStack.field_190927_a);
+		final NonNullList<ItemStack> remainingItems = NonNullList.withSize(inventoryCrafting.getSizeInventory(), ItemStack.EMPTY);
 
 		for (int i = 0; i < remainingItems.size(); ++i) {
 			final ItemStack itemstack = inventoryCrafting.getStackInSlot(i);
 
-			if (!itemstack.func_190926_b() && itemstack.getItem() instanceof ItemAxe) {
+			if (!itemstack.isEmpty() && itemstack.getItem() instanceof ItemAxe) {
 				remainingItems.set(i, damageAxe(itemstack.copy()));
 			} else {
 				remainingItems.set(i, ForgeHooks.getContainerItem(itemstack));

@@ -66,7 +66,7 @@ public class ModRecipes {
 
 		// Recipe for Guardian Spawner - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2424619-help-needed-creating-non-pig-mob-spawners
 		final ItemStack guardianSpawner = new ItemStack(Blocks.MOB_SPAWNER);
-		final NBTTagCompound tileEntityData = guardianSpawner.func_190925_c("BlockEntityTag");
+		final NBTTagCompound tileEntityData = guardianSpawner.getOrCreateSubCompound("BlockEntityTag");
 		final NBTTagCompound spawnData = new NBTTagCompound();
 		spawnData.setString("id", "Guardian");
 		tileEntityData.setTag("SpawnData", spawnData);
@@ -125,7 +125,7 @@ public class ModRecipes {
 	 */
 	private static void removeRecipe(Block output) {
 		final Item item = Item.getItemFromBlock(output);
-		assert item != Items.field_190931_a;
+		assert item != Items.AIR;
 
 		removeRecipe(item);
 	}
@@ -148,7 +148,7 @@ public class ModRecipes {
 			final ItemStack itemstack = remover.next().getRecipeOutput();
 
 			// If the recipe's output Item is the specified Item,
-			if (!itemstack.func_190926_b() && itemstack.getItem() == output) {
+			if (!itemstack.isEmpty() && itemstack.getItem() == output) {
 				// Remove the recipe
 				remover.remove();
 				recipesRemoved++;

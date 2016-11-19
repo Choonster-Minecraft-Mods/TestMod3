@@ -78,8 +78,8 @@ public class InventoryUtils {
 
 			final int slot = emptySlots.remove(emptySlots.size() - 1);
 			final ItemStack remainder = itemHandler.insertItem(slot, itemStack, false);
-			if (!remainder.func_190926_b()) {
-				Logger.warn("Couldn't fully insert %s into slot %d of %s, %d items remain.", itemStack, slot, itemHandler, remainder.func_190916_E());
+			if (!remainder.isEmpty()) {
+				Logger.warn("Couldn't fully insert %s into slot %d of %s, %d items remain.", itemStack, slot, itemHandler, remainder.getCount());
 			}
 		}
 	}
@@ -97,7 +97,7 @@ public class InventoryUtils {
 		final List<Integer> emptySlots = new ArrayList<>();
 
 		for (int slot = 0; slot < itemHandler.getSlots(); ++slot) {
-			if (itemHandler.getStackInSlot(slot).func_190926_b()) {
+			if (itemHandler.getStackInSlot(slot).isEmpty()) {
 				emptySlots.add(slot);
 			}
 		}
@@ -120,10 +120,10 @@ public class InventoryUtils {
 		final List<ItemStack> drops = new ArrayList<>();
 
 		for (int slot = 0; slot < itemHandler.getSlots(); ++slot) {
-			while (!itemHandler.getStackInSlot(slot).func_190926_b()) {
+			while (!itemHandler.getStackInSlot(slot).isEmpty()) {
 				final int amount = random.nextInt(21) + 10;
 
-				if (!itemHandler.extractItem(slot, amount, true).func_190926_b()) {
+				if (!itemHandler.extractItem(slot, amount, true).isEmpty()) {
 					final ItemStack itemStack = itemHandler.extractItem(slot, amount, false);
 					drops.add(itemStack);
 				}

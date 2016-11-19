@@ -24,7 +24,7 @@ public class BlockItemDebugger extends BlockTestMod3 {
 	}
 
 	private void logItem(ItemStack stack) {
-		if (!stack.func_190926_b()) {
+		if (!stack.isEmpty()) {
 			Logger.info("ItemStack: %s", stack.serializeNBT());
 			logCapability(stack, CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY, EnumFacing.NORTH);
 		}

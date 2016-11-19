@@ -37,7 +37,7 @@ public class WorldGenBanner implements IWorldGenerator {
 	protected ItemStack createBannerStack() {
 		final ItemStack bannerStack = new ItemStack(Items.BANNER);
 
-		final NBTTagCompound bannerData = bannerStack.func_190925_c("BlockEntityTag");
+		final NBTTagCompound bannerData = bannerStack.getOrCreateSubCompound("BlockEntityTag");
 
 		final NBTTagList patternsList = new NBTTagList();
 		bannerData.setTag("Patterns", patternsList);
@@ -58,7 +58,7 @@ public class WorldGenBanner implements IWorldGenerator {
 	 */
 	protected NBTTagCompound createPatternTag(BannerPattern pattern, EnumDyeColor color) {
 		final NBTTagCompound tag = new NBTTagCompound();
-		tag.setString("Pattern", pattern.func_190993_b());
+		tag.setString("Pattern", pattern.getHashname());
 		tag.setInteger("Color", color.getDyeDamage());
 		return tag;
 	}

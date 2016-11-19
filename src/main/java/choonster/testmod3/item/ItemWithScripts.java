@@ -42,7 +42,7 @@ public abstract class ItemWithScripts extends ItemTestMod3 {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);
 
 		if (!worldIn.isRemote) {
-			playerIn.addChatMessage(new TextComponentTranslation("message." + getRegistryName() + ".right_click", scriptFunction.apply(getNumber(heldItem))));
+			playerIn.sendMessage(new TextComponentTranslation("message." + getRegistryName() + ".right_click", scriptFunction.apply(getNumber(heldItem))));
 		}
 
 		return new ActionResult<>(EnumActionResult.SUCCESS, heldItem);

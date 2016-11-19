@@ -31,7 +31,7 @@ public class BlockMaxHealthSetter extends BlockTestMod3 {
 
 				maxHealth.addBonusMaxHealth(healthToAdd);
 
-				playerIn.addChatMessage(new TextComponentTranslation("message.testmod3:max_health.add", playerIn.getDisplayName(), healthToAdd));
+				playerIn.sendMessage(new TextComponentTranslation("message.testmod3:max_health.add", playerIn.getDisplayName(), healthToAdd));
 			}
 		}
 

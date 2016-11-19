@@ -28,7 +28,7 @@ public class BlockEventHandler {
 	 */
 	private static boolean canToolHarvestBlock(IBlockState state, ItemStack stack, EntityPlayer player) {
 		final String tool = state.getBlock().getHarvestTool(state);
-		return !stack.func_190926_b() && tool != null
+		return !stack.isEmpty() && tool != null
 				&& stack.getItem().getHarvestLevel(stack, tool, player, state) >= state.getBlock().getHarvestLevel(state);
 	}
 

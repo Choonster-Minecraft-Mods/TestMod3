@@ -51,7 +51,7 @@ public class ItemRitualChecker extends ItemTestMod3 {
 				textComponent.getStyle().setColor(TextFormatting.GREEN);
 			}
 
-			playerIn.addChatMessage(textComponent);
+			playerIn.sendMessage(textComponent);
 		}
 
 		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));

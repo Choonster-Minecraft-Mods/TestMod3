@@ -35,7 +35,7 @@ public class CommandTestMod3 extends CommandTreeBase {
 	 * Gets the name of the command
 	 */
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "testmod3";
 	}
 
@@ -45,7 +45,7 @@ public class CommandTestMod3 extends CommandTreeBase {
 	 * @param sender The command sender
 	 */
 	@Override
-	public String getCommandUsage(ICommandSender sender) {
+	public String getUsage(ICommandSender sender) {
 		return "commands.testmod3.usage";
 	}
 

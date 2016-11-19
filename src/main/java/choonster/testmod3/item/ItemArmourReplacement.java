@@ -113,7 +113,7 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 
 						// If the original item exists, add it to the compound tag
 						final ItemStack original = entity.getItemStackFromSlot(equipmentSlot);
-						if (original != null) {
+						if (!original.isEmpty()) {
 							tagCompound.setTag(KEY_STACK, original.serializeNBT());
 						}
 
@@ -145,10 +145,10 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 			// Is the item currently in the slot one of the replacements defined for this item?
 			final boolean isReplacement = replacementItems.stream().anyMatch(replacement -> ItemStack.areItemStacksEqual(replacement, current));
 
-			if (original.func_190926_b()) { // If the original item is empty/invalid,
+			if (original.isEmpty()) { // If the original item is empty,
 				if (isReplacement) { // If the current item is a replacement,
 					Logger.info("Original item for %s is null, clearing replacement", equipmentSlot);
-					entity.setItemStackToSlot(equipmentSlot, ItemStack.field_190927_a); // Delete it
+					entity.setItemStackToSlot(equipmentSlot, ItemStack.EMPTY); // Delete it
 				} else { // Else do nothing
 					Logger.info("Original item for %s is null, leaving current item", equipmentSlot);
 				}

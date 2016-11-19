@@ -55,7 +55,7 @@ public class SpawnerDrops {
 
 		return !world.isRemote && // Return true if this is the server,
 				state.getBlock() == Blocks.MOB_SPAWNER && // The block is a mob spawner,
-				!heldItem.func_190926_b() && heldItem.getItem().getHarvestLevel(heldItem, "pickaxe", player, state) > 0 &&  // The held item is a pickaxe,
+				!heldItem.isEmpty() && heldItem.getItem().getHarvestLevel(heldItem, "pickaxe", player, state) > 0 &&  // The held item is a pickaxe,
 				EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, heldItem) > 0; // And the held item has Silk Touch
 	}
 

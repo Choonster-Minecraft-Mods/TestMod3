@@ -24,7 +24,7 @@ public class ItemMaxHealthGetter extends ItemTestMod3 {
 			final IMaxHealth maxHealth = CapabilityMaxHealth.getMaxHealth(target);
 
 			if (maxHealth != null) {
-				playerIn.addChatMessage(new TextComponentTranslation("message.testmod3:max_health.get", target.getDisplayName(), target.getMaxHealth(), maxHealth.getBonusMaxHealth()));
+				playerIn.sendMessage(new TextComponentTranslation("message.testmod3:max_health.get", target.getDisplayName(), target.getMaxHealth(), maxHealth.getBonusMaxHealth()));
 			}
 		}
 

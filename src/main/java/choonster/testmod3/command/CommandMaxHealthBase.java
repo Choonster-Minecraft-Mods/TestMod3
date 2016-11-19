@@ -48,7 +48,7 @@ public abstract class CommandMaxHealthBase extends CommandBase {
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length < 2) {
-			throw new WrongUsageException(getCommandUsage(sender));
+			throw new WrongUsageException(getUsage(sender));
 		}
 
 		final EntityLivingBase entity = getEntity(server, sender, args[0], EntityLivingBase.class);
@@ -63,7 +63,7 @@ public abstract class CommandMaxHealthBase extends CommandBase {
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
-		return args.length == 1 ? getListOfStringsMatchingLastWord(args, server.getAllUsernames()) : Collections.emptyList();
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+		return args.length == 1 ? getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames()) : Collections.emptyList();
 	}
 }

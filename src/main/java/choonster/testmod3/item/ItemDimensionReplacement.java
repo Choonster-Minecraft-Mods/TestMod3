@@ -83,7 +83,7 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 
 			if (hasReplacement(worldIn)) { // If there's a replacement for this dimension
 				final ItemStack replacement = getReplacement(worldIn).copy(); // Get it
-				replacement.func_190920_e(stack.func_190916_E()); // Copy the stack size from this item
+				replacement.setCount(stack.getCount()); // Copy the stack size from this item
 
 				// Try to replace this item
 				final EntityInventoryType successfulInventoryType = InventoryUtils.forEachEntityInventory(
@@ -109,8 +109,8 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 	 * @return Was the item replaced?
 	 */
 	private boolean tryReplaceItem(final IItemHandler inventory, final int slot, final ItemStack stackToReplace, final ItemStack replacementStack) {
-		if (slot < inventory.getSlots() && inventory.getStackInSlot(slot) == stackToReplace && !inventory.extractItem(slot, stackToReplace.func_190916_E(), true).func_190926_b()) {
-			inventory.extractItem(slot, stackToReplace.func_190916_E(), false);
+		if (slot < inventory.getSlots() && inventory.getStackInSlot(slot) == stackToReplace && !inventory.extractItem(slot, stackToReplace.getCount(), true).isEmpty()) {
+			inventory.extractItem(slot, stackToReplace.getCount(), false);
 			inventory.insertItem(slot, replacementStack, false);
 			return true;
 		}

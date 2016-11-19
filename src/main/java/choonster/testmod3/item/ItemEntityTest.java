@@ -83,11 +83,11 @@ public class ItemEntityTest extends ItemTestMod3 {
 			}
 
 			if (!world.isRemote) {
-				world.spawnEntityInWorld(entity);
+				world.spawnEntity(entity);
 			}
 
 			if (!player.capabilities.isCreativeMode) {
-				heldItem.func_190918_g(1);
+				heldItem.shrink(1);
 			}
 
 			player.addStat(StatList.getObjectUseStats(this));

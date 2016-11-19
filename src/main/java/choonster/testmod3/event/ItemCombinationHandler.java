@@ -94,15 +94,15 @@ public class ItemCombinationHandler {
 					// Spawn the output item at the first item's position
 					final double x = entityItem.posX, y = entityItem.posY, z = entityItem.posZ;
 					final EntityItem outputEntityItem = new EntityItem(world, x, y, z, OUTPUT.copy());
-					world.spawnEntityInWorld(outputEntityItem);
+					world.spawnEntity(outputEntityItem);
 
 					((WorldServer) world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, x + 0.5, y + 1.0, z + 0.5, 1, 0, 0, 0, 0, new int[0]);
 
 					// Consume one item from each matching entity
 					matchingEntityItems.forEach(matchingEntityItem -> {
 						final ItemStack itemStack = matchingEntityItem.getEntityItem();
-						itemStack.func_190918_g(1);
-						if (itemStack.func_190926_b()) {
+						itemStack.shrink(1);
+						if (itemStack.isEmpty()) {
 							matchingEntityItem.setDead();
 						}
 					});

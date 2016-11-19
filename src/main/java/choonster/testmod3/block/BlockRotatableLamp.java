@@ -57,10 +57,10 @@ public class BlockRotatableLamp extends BlockTestMod3 {
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		final EnumFacing newFacing = EnumFacing.func_190914_a(pos, placer);
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+		final EnumFacing newFacing = EnumFacing.getDirectionFromEntityLiving(pos, placer);
 
-		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, newFacing);
+		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(FACING, newFacing);
 	}
 
 	@Override

@@ -86,12 +86,12 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);
 
-		if (!heldItem.func_190926_b()) {
+		if (!heldItem.isEmpty()) {
 			final Optional<EnumDyeColor> dyeColour = OreDictUtils.INSTANCE.getDyeColour(heldItem);
 			if (dyeColour.isPresent()) {
 				final boolean success = recolorBlock(worldIn, pos, side, dyeColour.get());
 				if (success) {
-					heldItem.func_190918_g(1);
+					heldItem.shrink(1);
 					return true;
 				}
 			}

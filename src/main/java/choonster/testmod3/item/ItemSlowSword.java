@@ -50,7 +50,7 @@ public class ItemSlowSword extends ItemSword {
 	 */
 	private void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id, double multiplier) {
 		// Get the modifiers for the specified attribute
-		final Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getAttributeUnlocalizedName());
+		final Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
 
 		// Find the modifier with the specified ID, if any
 		final Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();

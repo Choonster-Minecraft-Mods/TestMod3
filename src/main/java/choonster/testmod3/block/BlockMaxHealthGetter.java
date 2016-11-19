@@ -27,7 +27,7 @@ public class BlockMaxHealthGetter extends BlockTestMod3 {
 			final IMaxHealth maxHealth = CapabilityMaxHealth.getMaxHealth(playerIn);
 
 			if (maxHealth != null) {
-				playerIn.addChatMessage(new TextComponentTranslation("message.testmod3:max_health.get", playerIn.getDisplayName(), playerIn.getMaxHealth(), maxHealth.getBonusMaxHealth()));
+				playerIn.sendMessage(new TextComponentTranslation("message.testmod3:max_health.get", playerIn.getDisplayName(), playerIn.getMaxHealth(), maxHealth.getBonusMaxHealth()));
 			}
 		}
 

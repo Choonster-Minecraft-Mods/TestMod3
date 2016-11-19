@@ -26,7 +26,7 @@ public class BlockDumper {
 					.filter(block -> block.getRegistryName().getResourceDomain().equals(TestMod3.MODID))
 					.forEach(block -> {
 						final Item item = Item.getItemFromBlock(block);
-						if (item != Items.field_190931_a) {
+						if (item != Items.AIR) {
 							writer.printf("%s - %s\n", item.getUnlocalizedName(), item.toString());
 						}
 					});

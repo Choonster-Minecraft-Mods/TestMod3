@@ -44,7 +44,7 @@ public class ItemModBow extends ItemBow {
 					if (entityIn == null) return 0.0f;
 
 					final ItemStack activeItemStack = entityIn.getActiveItemStack();
-					if (!activeItemStack.func_190926_b() && activeItemStack.getItem() instanceof ItemModBow) {
+					if (!activeItemStack.isEmpty() && activeItemStack.getItem() instanceof ItemModBow) {
 						return (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0f;
 					}
 
@@ -144,7 +144,7 @@ public class ItemModBow extends ItemBow {
 
 		if (ammoSlot != null || !ammoRequired) {
 			if (ammoSlot == null) {
-				ammoSlot = new ItemStackHandler(NonNullList.func_191197_a(1, new ItemStack(Items.ARROW)));
+				ammoSlot = new ItemStackHandler(NonNullList.withSize(1, new ItemStack(Items.ARROW)));
 			}
 
 			final ItemStack ammo = ammoSlot.getStackInSlot(0);
@@ -183,12 +183,12 @@ public class ItemModBow extends ItemBow {
 						entityArrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
 					}
 
-					world.spawnEntityInWorld(entityArrow);
+					world.spawnEntity(entityArrow);
 				}
 
 				world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + arrowVelocity * 0.5F);
 
-				if (!isInfinite && !ammoSlot.extractItem(0, 1, true).func_190926_b()) {
+				if (!isInfinite && !ammoSlot.extractItem(0, 1, true).isEmpty()) {
 					ammoSlot.extractItem(0, 1, false);
 				}
 

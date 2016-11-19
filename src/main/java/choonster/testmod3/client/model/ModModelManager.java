@@ -56,7 +56,7 @@ public class ModModelManager {
 
 	private void registerFluidModel(IFluidBlock fluidBlock) {
 		final Item item = Item.getItemFromBlock((Block) fluidBlock);
-		assert item != Items.field_190931_a;
+		assert item != Items.AIR;
 
 		ModelBakery.registerItemVariants(item);
 
@@ -97,35 +97,35 @@ public class ModModelManager {
 
 	private void registerBlockItemModel(Block block) {
 		final Item item = Item.getItemFromBlock(block);
-		if (item != Items.field_190931_a) {
+		if (item != Items.AIR) {
 			registerItemModel(item);
 		}
 	}
 
 	private void registerBlockItemModel(Block block, String modelLocation) {
 		final Item item = Item.getItemFromBlock(block);
-		if (item != Items.field_190931_a) {
+		if (item != Items.AIR) {
 			registerItemModel(item, modelLocation);
 		}
 	}
 
 	private <T extends IVariant> void registerVariantBlockItemModels(Block block, String variantName, T[] variants) {
 		final Item item = Item.getItemFromBlock(block);
-		if (item != Items.field_190931_a) {
+		if (item != Items.AIR) {
 			registerVariantItemModels(item, variantName, variants);
 		}
 	}
 
 	private void registerBlockItemModel(Block block, ModelResourceLocation fullModelLocation) {
 		final Item item = Item.getItemFromBlock(block);
-		if (item != Items.field_190931_a) {
+		if (item != Items.AIR) {
 			registerItemModel(item, fullModelLocation);
 		}
 	}
 
 	private void registerBlockItemModelForMeta(Block block, int metadata, String variant) {
 		final Item item = Item.getItemFromBlock(block);
-		if (item != Items.field_190931_a) {
+		if (item != Items.AIR) {
 			registerItemModelForMeta(item, metadata, variant);
 		}
 	}

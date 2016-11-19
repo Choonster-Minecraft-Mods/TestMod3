@@ -57,9 +57,9 @@ public class BlockRightClickTest extends BlockGlass {
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);
 
-		if (!heldItem.func_190926_b() && heldItem.getItem() == Items.ENDER_EYE && !state.getValue(HAS_ENDER_EYE)) {
+		if (!heldItem.isEmpty() && heldItem.getItem() == Items.ENDER_EYE && !state.getValue(HAS_ENDER_EYE)) {
 			if (!playerIn.capabilities.isCreativeMode) {
-				heldItem.func_190918_g(1);
+				heldItem.shrink(1);
 			}
 
 			worldIn.setBlockState(pos, state.withProperty(HAS_ENDER_EYE, true));

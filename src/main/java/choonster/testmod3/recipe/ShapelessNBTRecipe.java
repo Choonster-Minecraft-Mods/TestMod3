@@ -40,7 +40,7 @@ public class ShapelessNBTRecipe extends ShapelessOreRecipe {
 		for (int x = 0; x < var1.getSizeInventory(); x++) {
 			final ItemStack slot = var1.getStackInSlot(x);
 
-			if (!slot.func_190926_b()) {
+			if (!slot.isEmpty()) {
 				boolean inRecipe = false;
 				final Iterator<Object> req = required.iterator();
 

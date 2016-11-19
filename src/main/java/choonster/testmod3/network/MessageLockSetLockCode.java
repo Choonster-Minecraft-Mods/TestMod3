@@ -99,7 +99,7 @@ public class MessageLockSetLockCode implements IMessage {
 					final ILock lock = CapabilityLock.getLock(world, message.pos, message.facing);
 					if (lock != null) {
 						if (lock.isLocked()) {
-							player.addChatMessage(new TextComponentTranslation("testmod3:lock.already_locked"));
+							player.sendMessage(new TextComponentTranslation("testmod3:lock.already_locked"));
 						}
 						lock.setLockCode(new LockCode(message.lockCode));
 					}

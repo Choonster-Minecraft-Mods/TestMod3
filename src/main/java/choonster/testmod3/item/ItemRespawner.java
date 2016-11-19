@@ -44,7 +44,7 @@ public class ItemRespawner extends ItemTestMod3 {
 			}
 
 			if (bedLocation == null) {
-				playerMP.addChatMessage(new TextComponentTranslation("message.testmod3:respawner.no_spawn_location"));
+				playerMP.sendMessage(new TextComponentTranslation("message.testmod3:respawner.no_spawn_location"));
 				return new ActionResult<>(EnumActionResult.FAIL, heldItem);
 			}
 
@@ -63,7 +63,7 @@ public class ItemRespawner extends ItemTestMod3 {
 				playerMP.setPosition(playerMP.posX, playerMP.posY + 1.0D, playerMP.posZ);
 			}
 
-			playerIn.addChatMessage(new TextComponentTranslation("message.testmod3:respawner.teleporting", spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ(), dimension));
+			playerIn.sendMessage(new TextComponentTranslation("message.testmod3:respawner.teleporting", spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ(), dimension));
 
 			return new ActionResult<>(EnumActionResult.SUCCESS, heldItem);
 		}

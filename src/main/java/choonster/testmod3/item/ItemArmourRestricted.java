@@ -63,8 +63,8 @@ public class ItemArmourRestricted extends ItemArmourTestMod3 {
 	 * @return Was the ItemStack removed?
 	 */
 	private boolean tryRemoveStack(final IItemHandler inventory, final int slot, final ItemStack stack) {
-		if (slot < inventory.getSlots() && inventory.getStackInSlot(slot) == stack && !inventory.extractItem(slot, stack.func_190916_E(), true).func_190926_b()) {
-			inventory.extractItem(slot, stack.func_190916_E(), false); // Remove this item from their inventory
+		if (slot < inventory.getSlots() && inventory.getStackInSlot(slot) == stack && !inventory.extractItem(slot, stack.getCount(), true).isEmpty()) {
+			inventory.extractItem(slot, stack.getCount(), false); // Remove this item from their inventory
 			return true;
 		}
 
