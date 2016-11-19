@@ -29,7 +29,7 @@ public final class Remapper {
 	/**
 	 * A list of remapping functions that return {@code true} if they took an action for the {@link MissingMapping}.
 	 */
-	private static final List<Predicate<MissingMapping>> remappingFunctions = ImmutableList.of(Remapper::remapCustomName, Remapper::remapCamelCaseToUnderscores);
+	private static final List<Predicate<MissingMapping>> remappingFunctions = ImmutableList.of(Remapper::remapCustomName);
 
 	private Remapper() {
 	}
@@ -89,44 +89,22 @@ public final class Remapper {
 		return false;
 	}
 
-	private static final Pattern UPPER_CASE_LETTER = Pattern.compile("\\p{Lu}");
-
-	/**
-	 * Remap {@code camelCase} names to {@code lowercase_underscores} names.
-	 *
-	 * @param missingMapping The missing mapping
-	 * @return True if the missing mapping was remapped
-	 */
-	private static boolean remapCamelCaseToUnderscores(MissingMapping missingMapping) {
-		final String missingPath = missingMapping.resourceLocation.getResourcePath();
-
-		// If the name is already lowercase, ignore it
-		if (missingPath.toLowerCase().equals(missingPath)) return false;
-
-		// Put an underscore in front of every uppercase letter, then convert it to lowercase.
-		final String newPath = UPPER_CASE_LETTER.matcher(missingPath).replaceAll("_$0").toLowerCase();
-		final ResourceLocation newRegistryName = new ResourceLocation(missingMapping.resourceLocation.getResourceDomain(), newPath);
-
-		// Try to remap to the new registry name
-		return tryRemap(missingMapping, newRegistryName);
-	}
-
 	/**
 	 * Custom names to remap. Keys are the old names, values are the new names.
 	 */
 	private static final Map<String, String> customNames = ImmutableMap.<String, String>builder()
-			.put("harvestSwordWood", "wooden_harvest_sword")
-			.put("harvestSwordDiamond", "diamond_harvest_sword")
-			.put("slowSwordWood", "wooden_slow_sword")
-			.put("slowSwordDiamond", "diamond_slow_sword")
+			.put("harvestswordwood", "wooden_harvest_sword")
+			.put("harvestsworddiamond", "diamond_harvest_sword")
+			.put("slowswordwood", "wooden_slow_sword")
+			.put("slowsworddiamond", "diamond_slow_sword")
 			.put("fluid.staticgas", "fluid.static_gas")
 			.put("fluid.normalgas", "fluid.normal_gas")
-			.put("stainedClaySlabLowDouble", "double_stained_clay_slab_low")
-			.put("stainedClaySlabHighDouble", "double_stained_clay_slab_high")
-			.put("headReplacement", "replacement_helmet")
-			.put("chestReplacement", "replacement_chestplate")
-			.put("legsReplacement", "replacement_leggings")
-			.put("feetReplacement", "replacement_boots")
+			.put("stainedclayslablowdouble", "double_stained_clay_slab_low")
+			.put("stainedclayslabhighdouble", "double_stained_clay_slab_high")
+			.put("headreplacement", "replacement_helmet")
+			.put("chestreplacement", "replacement_chestplate")
+			.put("legsreplacement", "replacement_leggings")
+			.put("feetreplacement", "replacement_boots")
 			.put("modeltest", "model_test")
 			.put("pig_spawner.finite", "pig_spawner_finite")
 			.put("pig_spawner.infinite", "pig_spawner_infinite")
