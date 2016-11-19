@@ -22,7 +22,7 @@ public class ItemPigSpawner extends ItemTestMod3 {
 	private Supplier<IPigSpawner> spawnerFactory;
 
 	public ItemPigSpawner(String name) {
-		super("pig_spawner." + name);
+		super("pig_spawner_" + name);
 		setHasSubtypes(true);
 	}
 

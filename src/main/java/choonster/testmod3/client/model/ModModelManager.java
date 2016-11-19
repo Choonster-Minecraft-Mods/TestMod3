@@ -148,7 +148,7 @@ public class ModModelManager {
 		registerItemModel(ModItems.BLOCK_DESTROYER, "minecraft:tnt_minecart");
 		registerItemModel(ModItems.REPLACEMENT_HELMET, "minecraft:chainmail_helmet");
 		registerItemModel(ModItems.REPLACEMENT_CHESTPLATE, "minecraft:chainmail_chestplate");
-		registerItemModel(ModItems.REPACEMENT_LEGGINGS, "minecraft:chainmail_leggings");
+		registerItemModel(ModItems.REPLACEMENT_LEGGINGS, "minecraft:chainmail_leggings");
 		registerItemModel(ModItems.REPLACEMENT_BOOTS, "minecraft:chainmail_boots");
 		registerItemModel(ModItems.PIG_SPAWNER_FINITE, "minecraft:porkchop");
 		registerItemModel(ModItems.PIG_SPAWNER_INFINITE, "minecraft:porkchop");

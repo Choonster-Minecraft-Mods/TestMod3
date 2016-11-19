@@ -61,7 +61,7 @@ public class ModItems {
 	public static final ItemWithSuperscripts SUPERSCRIPTS = new ItemWithSuperscripts();
 
 	@ObjectHolder("model_test")
-	public static final ItemLastUseTimeModel MODEL_TEST = new ItemLastUseTimeModel("modeltest");
+	public static final ItemLastUseTimeModel MODEL_TEST = new ItemLastUseTimeModel("model_test");
 
 	@ObjectHolder("snowball_launcher")
 	public static final ItemSnowballLauncher SNOWBALL_LAUNCHER = new ItemSnowballLauncher("snowball_launcher");
@@ -163,8 +163,8 @@ public class ModItems {
 	@ObjectHolder("replacement_chestplate")
 	public static final ItemArmourRestricted REPLACEMENT_CHESTPLATE = new ItemArmourRestricted(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.CHEST, "replacement");
 
-	@ObjectHolder("repacement_leggings")
-	public static final ItemArmourRestricted REPACEMENT_LEGGINGS = new ItemArmourRestricted(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.LEGS, "replacement");
+	@ObjectHolder("replacement_leggings")
+	public static final ItemArmourRestricted REPLACEMENT_LEGGINGS = new ItemArmourRestricted(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.LEGS, "replacement");
 
 	@ObjectHolder("replacement_boots")
 	public static final ItemArmourRestricted REPLACEMENT_BOOTS = new ItemArmourRestricted(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.FEET, "replacement");
@@ -184,7 +184,7 @@ public class ModItems {
 
 		final ItemStack chest = new ItemStack(REPLACEMENT_CHESTPLATE);
 		chest.addEnchantment(Enchantments.SHARPNESS, 1);
-		REPLACEMENT_HELMET.setReplacementItems(chest, new ItemStack(REPACEMENT_LEGGINGS), new ItemStack(REPLACEMENT_BOOTS));
+		REPLACEMENT_HELMET.setReplacementItems(chest, new ItemStack(REPLACEMENT_LEGGINGS), new ItemStack(REPLACEMENT_BOOTS));
 
 		DIMENSION_REPLACEMENT.addReplacement(DimensionType.NETHER, new ItemStack(Items.NETHER_STAR));
 		DIMENSION_REPLACEMENT.addReplacement(DimensionType.THE_END, new ItemStack(Items.ENDER_PEARL));
@@ -242,7 +242,7 @@ public class ModItems {
 					KEY,
 					REPLACEMENT_HELMET,
 					REPLACEMENT_CHESTPLATE,
-					REPACEMENT_LEGGINGS,
+					REPLACEMENT_LEGGINGS,
 					REPLACEMENT_BOOTS,
 					BLOCK_DETECTION_ARROW,
 					TRANSLUCENT_ITEM
