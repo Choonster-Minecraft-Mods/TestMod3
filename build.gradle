@@ -33,8 +33,6 @@ minecraft {
     version = "${mc_version}-${forge_version}"
     runDir = "run"
 
-    useDepAts = true
-
     if (project.hasProperty('mappings_version'))
         mappings = project.mappings_version
 }
