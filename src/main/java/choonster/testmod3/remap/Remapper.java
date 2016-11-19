@@ -127,6 +127,9 @@ public final class Remapper {
 			.put("chestReplacement", "replacement_chestplate")
 			.put("legsReplacement", "replacement_leggings")
 			.put("feetReplacement", "replacement_boots")
+			.put("modeltest", "model_test")
+			.put("pig_spawner.finite", "pig_spawner_finite")
+			.put("pig_spawner.infinite", "pig_spawner_infinite")
 			.build();
 
 	/**
