@@ -10,6 +10,6 @@ import net.minecraft.block.properties.IProperty;
  */
 public class HUDHandlerMultiRotatable extends HUDHandlerEnumProperty<EnumFaceRotation> {
 	public HUDHandlerMultiRotatable(IProperty<EnumFaceRotation> property) {
-		super(property, "testmod3:multiRotatable.faceRotation.desc", "testmod3:faceRotation");
+		super(property, "testmod3:multi_rotatable.face_rotation.desc", "testmod3:face_rotation");
 	}
 }
