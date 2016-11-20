@@ -36,137 +36,93 @@ public class ModItems {
 		public static final Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10);
 	}
 
-	@ObjectHolder("wooden_axe")
 	public static final ItemCuttingAxe WOODEN_AXE = new ItemCuttingAxe(Item.ToolMaterial.WOOD, "wooden_axe");
 
-	@ObjectHolder("entity_test")
 	public static final ItemEntityTest ENTITY_TEST = new ItemEntityTest();
 
-	@ObjectHolder("record_solaris")
 	public static final ItemRecordMod RECORD_SOLARIS = new ItemRecordMod("solaris", ModSoundEvents.RECORD_SOLARIS);
 
-	@ObjectHolder("heavy")
 	public static final ItemHeavy HEAVY = new ItemHeavy();
 
-	@ObjectHolder("entity_interaction_test")
 	public static final ItemEntityInteractionTest ENTITY_INTERACTION_TEST = new ItemEntityInteractionTest();
 
-	@ObjectHolder("block_destroyer")
 	public static final ItemBlockDestroyer BLOCK_DESTROYER = new ItemBlockDestroyer();
 
-	@ObjectHolder("subscripts")
 	public static final ItemWithSubscripts SUBSCRIPTS = new ItemWithSubscripts();
 
-	@ObjectHolder("superscripts")
 	public static final ItemWithSuperscripts SUPERSCRIPTS = new ItemWithSuperscripts();
 
-	@ObjectHolder("model_test")
 	public static final ItemLastUseTimeModel MODEL_TEST = new ItemLastUseTimeModel("model_test");
 
-	@ObjectHolder("snowball_launcher")
 	public static final ItemSnowballLauncher SNOWBALL_LAUNCHER = new ItemSnowballLauncher("snowball_launcher");
 
-	@ObjectHolder("slingshot")
 	public static final ItemSlingshot SLINGSHOT = new ItemSlingshot();
 
-	@ObjectHolder("unicode_tooltips")
 	public static final ItemUnicodeTooltips UNICODE_TOOLTIPS = new ItemUnicodeTooltips();
 
-	@ObjectHolder("swap_test_a")
 	public static final ItemSwapTest SWAP_TEST_A = new ItemSwapTest("a");
 
-	@ObjectHolder("swap_test_b")
 	public static final ItemSwapTest SWAP_TEST_B = new ItemSwapTest("b");
 
-	@ObjectHolder("block_debugger")
 	public static final ItemBlockDebugger BLOCK_DEBUGGER = new ItemBlockDebugger();
 
-	@ObjectHolder("wooden_harvest_sword")
 	public static final ItemHarvestSword WOODEN_HARVEST_SWORD = new ItemHarvestSword(Item.ToolMaterial.WOOD, "wooden_harvest_sword");
 
-	@ObjectHolder("diamond_harvest_sword")
 	public static final ItemHarvestSword DIAMOND_HARVEST_SWORD = new ItemHarvestSword(Item.ToolMaterial.DIAMOND, "diamond_harvest_sword");
 
-	@ObjectHolder("clearer")
 	public static final ItemClearer CLEARER = new ItemClearer();
 
-	@ObjectHolder("bow")
 	public static final ItemModBow BOW = new ItemModBow("bow");
 
-	@ObjectHolder("arrow")
 	public static final Item ARROW = new ItemModArrow("arrow", EntityModArrow::new);
 
-	@ObjectHolder("height_tester")
 	public static final ItemHeightTester HEIGHT_TESTER = new ItemHeightTester();
 
-	@ObjectHolder("pig_spawner_finite")
 	public static final ItemPigSpawner PIG_SPAWNER_FINITE = new ItemPigSpawner("finite");
 
-	@ObjectHolder("pig_spawner_infinite")
 	public static final ItemPigSpawner PIG_SPAWNER_INFINITE = new ItemPigSpawner("infinite");
 
-	@ObjectHolder("continuous_bow")
 	public static final ItemContinuousBow CONTINUOUS_BOW = new ItemContinuousBow("continuous_bow");
 
-	@ObjectHolder("respawner")
 	public static final ItemRespawner RESPAWNER = new ItemRespawner();
 
-	@ObjectHolder("loot_table_test")
 	public static final ItemLootTableTest LOOT_TABLE_TEST = new ItemLootTableTest();
 
-	@ObjectHolder("max_health_setter_item")
 	public static final ItemMaxHealthSetter MAX_HEALTH_SETTER_ITEM = new ItemMaxHealthSetter();
 
-	@ObjectHolder("max_health_getter_item")
 	public static final ItemMaxHealthGetter MAX_HEALTH_GETTER_ITEM = new ItemMaxHealthGetter();
 
-	@ObjectHolder("gun")
 	public static final ItemSoundEffect GUN = new ItemSoundEffect("gun", ModSoundEvents.NINE_MM_FIRE);
 
-	@ObjectHolder("dimension_replacement")
 	public static final ItemDimensionReplacement DIMENSION_REPLACEMENT = new ItemDimensionReplacement("dimension_replacement");
 
-	@ObjectHolder("saddle")
 	public static final ItemSoundEffect SADDLE = new ItemSoundEffect("saddle", ModSoundEvents.ACTION_SADDLE);
 
-	@ObjectHolder("wooden_slow_sword")
 	public static final ItemSlowSword WOODEN_SLOW_SWORD = new ItemSlowSword(Item.ToolMaterial.WOOD, "wooden_slow_sword");
 
-	@ObjectHolder("diamond_slow_sword")
 	public static final ItemSlowSword DIAMOND_SLOW_SWORD = new ItemSlowSword(Item.ToolMaterial.DIAMOND, "diamond_slow_sword");
 
-	@ObjectHolder("variants_item")
 	public static final ItemVariants VARIANTS_ITEM = new ItemVariants();
 
-	@ObjectHolder("ritual_checker")
 	public static final ItemRitualChecker RITUAL_CHECKER = new ItemRitualChecker();
 
-	@ObjectHolder("hidden_block_revealer")
 	public static final ItemHiddenBlockRevealer HIDDEN_BLOCK_REVEALER = new ItemHiddenBlockRevealer();
 
-	@ObjectHolder("no_mod_name")
 	public static final ItemTestMod3 NO_MOD_NAME = new ItemTestMod3("no_mod_name");
 
-	@ObjectHolder("key")
 	public static final ItemKey KEY = new ItemKey();
 
-	@ObjectHolder("block_detection_arrow")
 	public static final ItemModArrow BLOCK_DETECTION_ARROW = new ItemModArrow("block_detection_arrow", EntityBlockDetectionArrow::new);
 
-	@ObjectHolder("translucent_item")
 	public static final ItemTestMod3 TRANSLUCENT_ITEM = new ItemTestMod3("translucent_item");
 
 
-	@ObjectHolder("replacement_helmet")
 	public static final ItemArmourReplacement REPLACEMENT_HELMET = new ItemArmourReplacement(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD, "replacement");
 
-	@ObjectHolder("replacement_chestplate")
 	public static final ItemArmourRestricted REPLACEMENT_CHESTPLATE = new ItemArmourRestricted(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.CHEST, "replacement");
 
-	@ObjectHolder("replacement_leggings")
 	public static final ItemArmourRestricted REPLACEMENT_LEGGINGS = new ItemArmourRestricted(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.LEGS, "replacement");
 
-	@ObjectHolder("replacement_boots")
 	public static final ItemArmourRestricted REPLACEMENT_BOOTS = new ItemArmourRestricted(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.FEET, "replacement");
 
 	/**

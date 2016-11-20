@@ -17,7 +17,6 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
 @ObjectHolder(TestMod3.MODID)
 public class ModBiomes {
 
-	@ObjectHolder("desert_test")
 	public static final BiomeDesertTest DESERT_TEST = new BiomeDesertTest(new Biome.BiomeProperties("TestMod3 Desert Test")
 			.setBaseHeight(0.125F)
 			.setHeightVariation(0.05F)

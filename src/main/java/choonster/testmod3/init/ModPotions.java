@@ -17,7 +17,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 @ObjectHolder(TestMod3.MODID)
 public class ModPotions {
 
-	@ObjectHolder("test")
 	public static final PotionTestMod3 TEST = new PotionTestMod3(false, 2, 2, 2, "test");
 
 	@Mod.EventBusSubscriber

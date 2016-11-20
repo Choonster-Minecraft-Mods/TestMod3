@@ -21,13 +21,10 @@ import javax.annotation.Nullable;
 @ObjectHolder(TestMod3.MODID)
 public class ModPotionTypes {
 
-	@ObjectHolder("test")
 	public static final PotionType TEST;
 
-	@ObjectHolder("long_test")
 	public static final PotionType LONG_TEST;
 
-	@ObjectHolder("strong_test")
 	public static final PotionType STRONG_TEST;
 
 	static {
