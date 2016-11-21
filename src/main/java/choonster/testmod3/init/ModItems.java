@@ -116,6 +116,8 @@ public class ModItems {
 
 	public static final ItemTestMod3 TRANSLUCENT_ITEM = new ItemTestMod3("translucent_item");
 
+	public static final ItemEntityKiller ENTITY_KILLER = new ItemEntityKiller();
+
 
 	public static final ItemArmourReplacement REPLACEMENT_HELMET = new ItemArmourReplacement(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD, "replacement");
 
@@ -201,7 +203,8 @@ public class ModItems {
 					REPLACEMENT_LEGGINGS,
 					REPLACEMENT_BOOTS,
 					BLOCK_DETECTION_ARROW,
-					TRANSLUCENT_ITEM
+					TRANSLUCENT_ITEM,
+					ENTITY_KILLER,
 			};
 
 			final IForgeRegistry<Item> registry = event.getRegistry();
