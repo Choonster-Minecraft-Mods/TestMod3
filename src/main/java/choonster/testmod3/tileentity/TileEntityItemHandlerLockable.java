@@ -67,12 +67,12 @@ public abstract class TileEntityItemHandlerLockable<INVENTORY extends IItemHandl
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityLock.LOCK_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityLock.LOCK_CAPABILITY) {
 			return CapabilityLock.LOCK_CAPABILITY.cast(lock);
 		}
