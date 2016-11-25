@@ -33,7 +33,7 @@ public class ShapedArmourUpgradeRecipe extends ShapedOreRecipe {
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
 		final ItemStack output = super.getCraftingResult(inv); // Get the default output
 
-		if (output != null) {
+		if (!output.isEmpty()) {
 			for (int i = 0; i < inv.getSizeInventory(); i++) { // For each slot in the crafting inventory,
 				final ItemStack ingredient = inv.getStackInSlot(i); // Get the ingredient in the slot
 
