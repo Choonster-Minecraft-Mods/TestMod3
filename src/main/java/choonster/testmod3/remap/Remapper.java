@@ -16,7 +16,6 @@ import org.apache.logging.log4j.MarkerManager;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
 
 /**
  * Remaps this mod's {@link Block}s and {@link Item}s after registry names have been changed.
