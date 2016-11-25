@@ -23,6 +23,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.PlayerOffhandInvWrapper;
 import net.minecraftforge.items.wrapper.RangedWrapper;
 
+import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 /**
@@ -64,6 +65,7 @@ public class ItemModBow extends ItemBow {
 	 * @param isAmmo A function that detects whether a given ItemStack is valid ammunition
 	 * @return The ammunition slot's IItemHandler, or null if there isn't any ammunition
 	 */
+	@Nullable
 	public static IItemHandler findAmmoSlot(EntityPlayer player, Predicate<ItemStack> isAmmo) {
 		if (isAmmo.test(player.getHeldItemOffhand())) {
 			return new PlayerOffhandInvWrapper(player.inventory);

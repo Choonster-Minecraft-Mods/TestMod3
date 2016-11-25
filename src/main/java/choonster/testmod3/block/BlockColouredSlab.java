@@ -15,6 +15,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Optional;
@@ -197,6 +198,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		 * @param colour The colour
 		 * @return A group containing the colour, or null if there isn't one
 		 */
+		@Nullable
 		public static EnumColourGroup getGroupForColour(EnumDyeColor colour) {
 			for (final EnumColourGroup colourGroup : values()) {
 				if (colourGroup.isColourInGroup(colour)) {
