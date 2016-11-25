@@ -62,9 +62,7 @@ public class ModConfig {
 							.filter(entry -> fileName.equals(new File(entry.getKey()).getName()))
 							.findFirst();
 
-					if (entryOptional.isPresent()) {
-						configuration = entryOptional.get().getValue();
-					}
+					entryOptional.ifPresent(stringConfigurationEntry -> configuration = stringConfigurationEntry.getValue());
 				} catch (Throwable throwable) {
 					Logger.error(throwable, "Failed to get Configuration instance");
 				}
