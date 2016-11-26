@@ -48,7 +48,7 @@ public class ItemLootTableTest extends ItemTestMod3 {
 			if (itemStacks.size() > 0) {
 				TestMod3.network.sendTo(new MessagePlayerReceivedLoot(itemStacks), (EntityPlayerMP) playerIn);
 			} else {
-				playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:player_received_loot.noLoot"));
+				playerIn.addChatComponentMessage(new TextComponentTranslation("message.testmod3:player_received_loot.no_loot"));
 			}
 		}
 
