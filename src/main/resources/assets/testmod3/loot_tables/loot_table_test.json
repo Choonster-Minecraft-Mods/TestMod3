@@ -53,6 +53,20 @@
 							}
 						}
 					]
+				},
+				{
+					"type": "item",
+					"name": "minecraft:wooden_axe",
+					"weight": 1,
+					"functions": [
+						{
+							"function": "set_damage",
+							"damage": {
+								"min": 0.28,
+								"max": 0.28
+							}
+						}
+					]
 				}
 			]
 		}
