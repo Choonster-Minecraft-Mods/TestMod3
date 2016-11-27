@@ -10,6 +10,7 @@ import choonster.testmod3.util.EnumFaceRotation;
 import choonster.testmod3.util.IVariant;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -139,6 +140,12 @@ public class ModModelManager {
 						.withProperty(BlockModChest.FACING, EnumFacing.NORTH)
 		);
 
+		registerVariantBlockItemModels(
+				ModBlocks.SAPLING.getDefaultState()
+						.withProperty(BlockSaplingTestMod3.STAGE, 0)
+						.withProperty(BlockSaplingTestMod3.ITEM, true),
+				BlockSaplingTestMod3.TYPE, BlockPlanks.EnumType::getMetadata
+		);
 
 		ModBlocks.RegistrationHandler.ITEM_BLOCKS.stream().filter(item -> !itemsRegistered.contains(item)).forEach(this::registerItemModel);
 	}

@@ -1,0 +1,55 @@
+{
+	"forge_marker": 1,
+	"variants": {
+		"item": {
+			"true": {
+				"model": "testmod3:item/generated",
+				"textures": {
+					"layer0": "#sapling"
+				}
+			},
+			"false": {
+				"model": "minecraft:cross",
+				"textures": {
+					"cross": "#sapling"
+				}
+			}
+		},
+		"stage": {
+			"0": { },
+			"1": { }
+		},
+		"type": {
+			"oak": {
+				"textures": {
+					"sapling": "minecraft:blocks/sapling_oak"
+				}
+			},
+			"spruce": {
+				"textures": {
+					"sapling": "minecraft:blocks/sapling_spruce"
+				}
+			},
+			"birch": {
+				"textures": {
+					"sapling": "minecraft:blocks/sapling_birch"
+				}
+			},
+			"jungle": {
+				"textures": {
+					"sapling": "minecraft:blocks/sapling_jungle"
+				}
+			},
+			"acacia": {
+				"textures": {
+					"sapling": "minecraft:blocks/sapling_acacia"
+				}
+			},
+			"dark_oak": {
+				"textures": {
+					"sapling": "minecraft:blocks/sapling_roofed_oak"
+				}
+			}
+		}
+	}
+}

@@ -87,6 +87,8 @@ public class ModBlocks {
 
 	public static final BlockSurvivalCommandBlock CHAIN_SURVIVAL_COMMAND_BLOCK = new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.SEQUENCE, "chain_survival_command_block");
 
+	public static final BlockSaplingTestMod3 SAPLING = new BlockSaplingTestMod3();
+
 	public static class Slabs {
 		public static final BlockColouredSlab.ColouredSlabGroup STAINED_CLAY_SLABS = new BlockColouredSlab.ColouredSlabGroup("stained_clay_slab", Material.ROCK);
 	}
@@ -134,6 +136,7 @@ public class ModBlocks {
 					SURVIVAL_COMMAND_BLOCK,
 					REPEATING_SURVIVAL_COMMAND_BLOCK,
 					CHAIN_SURVIVAL_COMMAND_BLOCK,
+					SAPLING,
 			};
 
 			registry.registerAll(blocks);
@@ -190,6 +193,7 @@ public class ModBlocks {
 					new ItemBlock(SURVIVAL_COMMAND_BLOCK),
 					new ItemBlock(REPEATING_SURVIVAL_COMMAND_BLOCK),
 					new ItemBlock(CHAIN_SURVIVAL_COMMAND_BLOCK),
+					new ItemMultiTexture(SAPLING, SAPLING, BlockSaplingTestMod3::getName),
 					Slabs.STAINED_CLAY_SLABS.low.item,
 					Slabs.STAINED_CLAY_SLABS.high.item,
 			};
