@@ -60,7 +60,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 	 * @return The metadata value
 	 */
 	@Override
-	protected int getMetadata(EnumDyeColor colour) {
+	public int getMetadata(EnumDyeColor colour) {
 		return variants.getOffsetMetadata(colour);
 	}
 

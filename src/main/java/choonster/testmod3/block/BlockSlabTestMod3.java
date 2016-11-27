@@ -92,7 +92,7 @@ public abstract class BlockSlabTestMod3<
 	 * @param variant The variant
 	 * @return The metadata value
 	 */
-	protected abstract int getMetadata(VARIANT variant);
+	public abstract int getMetadata(VARIANT variant);
 
 	/**
 	 * Get the variant for the specified metadata value
