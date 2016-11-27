@@ -103,6 +103,13 @@ tile.testmod3:stained_clay_slab.green.name=Green Stained Clay Slab
 tile.testmod3:stained_clay_slab.red.name=Red Stained Clay Slab
 tile.testmod3:stained_clay_slab.black.name=Black Stained Clay Slab
 
+tile.testmod3:sapling.oak.name=Oak TestMod3 Sapling
+tile.testmod3:sapling.spruce.name=Spruce TestMod3 Sapling
+tile.testmod3:sapling.birch.name=Birch TestMod3 Sapling
+tile.testmod3:sapling.jungle.name=Jungle TestMod3 Sapling
+tile.testmod3:sapling.acacia.name=Acacia TestMod3 Sapling
+tile.testmod3:sapling.big_oak.name=Dark Oak TestMod3 Sapling
+
 # Items
 item.testmod3:heavy.name=Heavy Item
 item.testmod3:entity_interaction_test.name=Entity Interaction Test
