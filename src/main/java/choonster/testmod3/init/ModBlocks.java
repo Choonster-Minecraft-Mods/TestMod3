@@ -104,7 +104,7 @@ public class ModBlocks {
 		public static void registerBlocks(RegistryEvent.Register<Block> event) {
 			final IForgeRegistry<Block> registry = event.getRegistry();
 
-			registry.registerAll(
+			final Block[] blocks = {
 					WATER_GRASS,
 					LARGE_COLLISION_TEST,
 					RIGHT_CLICK_TEST,
@@ -133,8 +133,10 @@ public class ModBlocks {
 					FLUID_PIPE,
 					SURVIVAL_COMMAND_BLOCK,
 					REPEATING_SURVIVAL_COMMAND_BLOCK,
-					CHAIN_SURVIVAL_COMMAND_BLOCK
-			);
+					CHAIN_SURVIVAL_COMMAND_BLOCK,
+			};
+
+			registry.registerAll(blocks);
 
 			registerSlabGroup(registry, Slabs.STAINED_CLAY_SLABS.high);
 			registerSlabGroup(registry, Slabs.STAINED_CLAY_SLABS.low);
