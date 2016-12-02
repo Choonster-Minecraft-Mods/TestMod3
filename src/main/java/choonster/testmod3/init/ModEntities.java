@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
@@ -17,7 +18,17 @@ public class ModEntities {
 	}
 
 	public static void addSpawns() {
-		EntityRegistry.addSpawn(EntityGuardian.class, 100, 5, 20, EnumCreatureType.WATER_CREATURE, BiomeDictionary.getBiomesForType(BiomeDictionary.Type.OCEAN));
+		EntityRegistry.addSpawn(EntityGuardian.class, 100, 5, 20, EnumCreatureType.WATER_CREATURE, getBiomes(BiomeDictionary.Type.OCEAN));
+	}
+
+	/**
+	 * Get an array of {@link Biome}s with the specified {@link BiomeDictionary.Type}.
+	 *
+	 * @param type The Type
+	 * @return An array of Biomes
+	 */
+	private static Biome[] getBiomes(BiomeDictionary.Type type) {
+		return BiomeDictionary.getBiomes(type).stream().toArray(Biome[]::new);
 	}
 
 	private static int entityID = 0;

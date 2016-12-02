@@ -132,7 +132,7 @@ public class ModItems {
 	 */
 	public static void initialiseItems() {
 		ToolMaterials.TOOL_MATERIAL_GLOWSTONE.setRepairItem(new ItemStack(Items.GLOWSTONE_DUST));
-		ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT.customCraftingMaterial = ARROW;
+		ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT.setRepairItem(new ItemStack(ARROW));
 
 		SWAP_TEST_A.setOtherItem(new ItemStack(SWAP_TEST_B));
 		SWAP_TEST_B.setOtherItem(new ItemStack(SWAP_TEST_A));

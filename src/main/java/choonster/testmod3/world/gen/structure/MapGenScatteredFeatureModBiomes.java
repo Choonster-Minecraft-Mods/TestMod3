@@ -54,7 +54,7 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 			final Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
 
 			for (final BiomeDictionary.Type type : biomeTypes) {
-				if (BiomeDictionary.isBiomeOfType(biome, type)) {
+				if (BiomeDictionary.hasType(biome, type)) {
 					return true;
 				}
 			}
@@ -91,17 +91,17 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 
 			final List<WeightedRandomScatteredFeature> possibleFeatures = new ArrayList<>();
 
-			if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.SANDY)) {
+			if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY)) {
 				final ComponentScatteredFeaturePieces.DesertPyramid desertPyramid = new ComponentScatteredFeaturePieces.DesertPyramid(random, chunkX * 16, chunkZ * 16);
 				possibleFeatures.add(new WeightedRandomScatteredFeature(desertPyramid, 100));
 			}
 
-			if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.JUNGLE)) {
+			if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.JUNGLE)) {
 				final ComponentScatteredFeaturePieces.JunglePyramid junglePyramid = new ComponentScatteredFeaturePieces.JunglePyramid(random, chunkX * 16, chunkZ * 16);
 				possibleFeatures.add(new WeightedRandomScatteredFeature(junglePyramid, 100));
 			}
 
-			if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.SWAMP)) {
+			if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.SWAMP)) {
 				final ComponentScatteredFeaturePieces.SwampHut swampHut = new ComponentScatteredFeaturePieces.SwampHut(random, chunkX * 16, chunkZ * 16);
 				possibleFeatures.add(new WeightedRandomScatteredFeature(swampHut, 100));
 			}

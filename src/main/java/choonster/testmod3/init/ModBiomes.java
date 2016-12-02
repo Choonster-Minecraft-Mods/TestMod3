@@ -41,7 +41,7 @@ public class ModBiomes {
 
 		private static <T extends Biome> void registerBiome(IForgeRegistry<Biome> registry, T biome, String biomeName, BiomeManager.BiomeType biomeType, int weight, BiomeDictionary.Type... types) {
 			registry.register(biome.setRegistryName(TestMod3.MODID, biomeName));
-			BiomeDictionary.registerBiomeType(biome, types);
+			BiomeDictionary.addTypes(biome, types);
 			BiomeManager.addBiome(biomeType, new BiomeManager.BiomeEntry(biome, weight));
 		}
 
