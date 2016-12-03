@@ -73,7 +73,7 @@ public class ItemEntityTest extends ItemTestMod3 {
 			}
 
 			final EntityPig entity = new EntityPig(world);
-			entity.rotationYaw = (float) (((MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) - 1) * 90);
+			entity.rotationYaw = (float) (((MathHelper.floor((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) - 1) * 90);
 			entity.setPosition(blockPos.getX(), blockPos.getY() + 2, blockPos.getZ());
 
 			if (!world.getCollisionBoxes(entity, entity.getEntityBoundingBox().expand(-0.1D, -0.1D, -0.1D)).isEmpty()) {
@@ -81,7 +81,7 @@ public class ItemEntityTest extends ItemTestMod3 {
 			}
 
 			if (!world.isRemote) {
-				world.spawnEntityInWorld(entity);
+				world.spawnEntity(entity);
 			}
 
 			if (!player.capabilities.isCreativeMode) {

@@ -49,7 +49,7 @@ public class BlockClientPlayerRotation extends BlockStaticPressurePlate {
 				Logger.info("Switching pitch direction! Now pitching %s.", isPitchingUp ? "up" : "down");
 			}
 
-			entityIn.setAngles(ROTATION_YAW, isPitchingUp ? ROTATION_PITCH : -ROTATION_PITCH);
+			entityIn.turn(ROTATION_YAW, isPitchingUp ? ROTATION_PITCH : -ROTATION_PITCH);
 		}
 	}
 }

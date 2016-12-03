@@ -101,7 +101,7 @@ public class MessageFluidTankContents implements IMessage {
 				final EntityPlayer player = TestMod3.proxy.getClientPlayer();
 				assert player != null;
 
-				BlockFluidTank.getFluidDataForDisplay(message.fluidTankProperties).forEach(player::addChatComponentMessage);
+				BlockFluidTank.getFluidDataForDisplay(message.fluidTankProperties).forEach(player::sendMessage);
 			});
 
 			return null;

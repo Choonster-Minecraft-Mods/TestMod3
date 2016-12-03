@@ -118,9 +118,9 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 				final MinecraftServer minecraftServer = world.getMinecraftServer();
 
 				if (minecraftServer != null && !minecraftServer.isCommandBlockEnabled()) {
-					player.addChatMessage(new TextComponentTranslation("advMode.notEnabled"));
-				} else if (!player.canCommandSenderUseCommand(2, "")) {
-					player.addChatMessage(new TextComponentTranslation("advMode.notAllowed"));
+					player.sendMessage(new TextComponentTranslation("advMode.notEnabled"));
+				} else if (!player.canUseCommand(2, "")) {
+					player.sendMessage(new TextComponentTranslation("advMode.notAllowed"));
 				} else {
 					try {
 						SurvivalCommandBlockLogic survivalCommandBlockLogic = null;
@@ -169,7 +169,7 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 							survivalCommandBlockLogic.updateCommand();
 
 							if (!StringUtils.isNullOrEmpty(message.command)) {
-								player.addChatMessage(new TextComponentTranslation("advMode.setCommand.success", message.command));
+								player.sendMessage(new TextComponentTranslation("advMode.setCommand.success", message.command));
 							}
 						}
 					} catch (Exception e) {

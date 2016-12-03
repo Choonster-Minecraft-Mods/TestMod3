@@ -39,7 +39,7 @@ public class ShapedArmourUpgradeRecipe extends ShapedOreRecipe {
 
 				if (ingredient != null && ingredient.getItem() instanceof ItemArmor) { // If it's an armour item,
 					// Clone its item damage, clamping it to the output's damage range
-					final int newDamage = MathHelper.clamp_int(ingredient.getItemDamage(), 0, output.getMaxDamage());
+					final int newDamage = MathHelper.clamp(ingredient.getItemDamage(), 0, output.getMaxDamage());
 					output.setItemDamage(newDamage);
 					break; // Break now
 				}

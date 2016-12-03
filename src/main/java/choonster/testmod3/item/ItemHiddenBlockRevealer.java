@@ -31,7 +31,7 @@ public class ItemHiddenBlockRevealer extends ItemTestMod3 {
 
 			if (revealHiddenBlocks != null) {
 				final String message = revealHiddenBlocks ? "message.testmod3:hidden_block_revealer.reveal" : "message.testmod3:hidden_block_revealer.hide";
-				playerIn.addChatComponentMessage(new TextComponentTranslation(message));
+				playerIn.sendMessage(new TextComponentTranslation(message));
 			}
 		}
 

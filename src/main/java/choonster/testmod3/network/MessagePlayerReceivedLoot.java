@@ -101,7 +101,7 @@ public class MessagePlayerReceivedLoot implements IMessage {
 
 				final ITextComponent chatMessage = new TextComponentTranslation("message.testmod3:player_received_loot.base", lootMessage);
 
-				player.addChatComponentMessage(chatMessage);
+				player.sendMessage(chatMessage);
 			});
 
 			return null;

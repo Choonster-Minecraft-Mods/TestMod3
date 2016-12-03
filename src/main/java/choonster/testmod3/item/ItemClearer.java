@@ -39,12 +39,12 @@ public class ItemClearer extends ItemTestMod3 {
 			if (player.isSneaking()) {
 				final int newMode = currentMode == MODE_ALL ? MODE_WHITELIST : MODE_ALL;
 				stack.setItemDamage(newMode);
-				player.addChatComponentMessage(new TextComponentTranslation("message.testmod3:clearer.mode.%s", newMode));
+				player.sendMessage(new TextComponentTranslation("message.testmod3:clearer.mode.%s", newMode));
 			} else {
-				final int minX = MathHelper.floor_double(player.posX / 16) * 16;
-				final int minZ = MathHelper.floor_double(player.posZ / 16) * 16;
+				final int minX = MathHelper.floor(player.posX / 16) * 16;
+				final int minZ = MathHelper.floor(player.posZ / 16) * 16;
 
-				player.addChatComponentMessage(new TextComponentTranslation("message.testmod3:clearer.clearing", minX, minZ));
+				player.sendMessage(new TextComponentTranslation("message.testmod3:clearer.clearing", minX, minZ));
 
 				for (int x = minX; x < minX + 16; x++) {
 					for (int z = minZ; z < minZ + 16; z++) {
@@ -62,7 +62,7 @@ public class ItemClearer extends ItemTestMod3 {
 				final IBlockState state = world.getBlockState(pos);
 				world.notifyBlockUpdate(pos, state, state, 3);
 
-				player.addChatComponentMessage(new TextComponentTranslation("message.testmod3:clearer.cleared"));
+				player.sendMessage(new TextComponentTranslation("message.testmod3:clearer.cleared"));
 			}
 		}
 

@@ -185,7 +185,7 @@ public class ItemModBow extends ItemBow {
 						entityArrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
 					}
 
-					world.spawnEntityInWorld(entityArrow);
+					world.spawnEntity(entityArrow);
 				}
 
 				world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + arrowVelocity * 0.5F);

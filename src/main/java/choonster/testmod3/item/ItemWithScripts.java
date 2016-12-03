@@ -40,7 +40,7 @@ public abstract class ItemWithScripts extends ItemTestMod3 {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		if (!worldIn.isRemote) {
-			playerIn.addChatComponentMessage(new TextComponentTranslation("message." + getRegistryName() + ".rightClick", scriptFunction.apply(getNumber(itemStackIn))));
+			playerIn.sendMessage(new TextComponentTranslation("message." + getRegistryName() + ".rightClick", scriptFunction.apply(getNumber(itemStackIn))));
 		}
 
 		return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);

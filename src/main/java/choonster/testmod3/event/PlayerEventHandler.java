@@ -54,7 +54,7 @@ public class PlayerEventHandler {
 
 		final ITextComponent chatComponent = new TextComponentTranslation(message);
 		chatComponent.getStyle().setColor(TextFormatting.LIGHT_PURPLE);
-		player.addChatComponentMessage(chatComponent);
+		player.sendMessage(chatComponent);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class PlayerEventHandler {
 		if (event.getEntity() instanceof EntityPlayer) {
 			final EntityPlayer player = (EntityPlayer) event.getEntity();
 			final BlockPos pos = player.getPosition();
-			player.addChatComponentMessage(new TextComponentTranslation("message.testmod3:death.coordinates", pos.getX(), pos.getY(), pos.getZ()));
+			player.sendMessage(new TextComponentTranslation("message.testmod3:death.coordinates", pos.getX(), pos.getY(), pos.getZ()));
 		}
 	}
 }

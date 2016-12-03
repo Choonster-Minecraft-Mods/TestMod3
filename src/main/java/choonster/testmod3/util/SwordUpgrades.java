@@ -47,7 +47,7 @@ public class SwordUpgrades {
 		final AttributeModifier attackDamageModifier = new AttributeModifier(MODIFIER_UUID, MODIFIER_NAME, MODIFIER_AMOUNT, Constants.ATTRIBUTE_MODIFIER_OPERATION_ADD);
 
 		// Add it to the output ItemStack
-		outputStack.addAttributeModifier(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), attackDamageModifier, EntityEquipmentSlot.MAINHAND);
+		outputStack.addAttributeModifier(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), attackDamageModifier, EntityEquipmentSlot.MAINHAND);
 
 		return outputStack;
 	}

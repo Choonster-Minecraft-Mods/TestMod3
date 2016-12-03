@@ -26,7 +26,7 @@ public class BlockClientPlayerRightClick extends BlockStaticPressurePlate {
 		// If on the client side, the colliding Entity is the client player and the total world time is a multiple of 10
 		if (worldIn.isRemote && entityIn == TestMod3.proxy.getClientPlayer() && worldIn.getTotalWorldTime() % 10 == 0) {
 			// Make the player right click
-			entityIn.addChatMessage(new TextComponentTranslation("message.testmod3:client_player_right_click.right_click"));
+			entityIn.sendMessage(new TextComponentTranslation("message.testmod3:client_player_right_click.right_click"));
 			TestMod3.proxy.doClientRightClick();
 		}
 	}

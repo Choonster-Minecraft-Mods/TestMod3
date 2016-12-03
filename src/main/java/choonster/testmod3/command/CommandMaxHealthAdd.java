@@ -38,7 +38,7 @@ public class CommandMaxHealthAdd extends CommandMaxHealthBase {
 	 * Gets the name of the command
 	 */
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "add_max_health";
 	}
 
@@ -48,7 +48,7 @@ public class CommandMaxHealthAdd extends CommandMaxHealthBase {
 	 * @param sender The command sender
 	 */
 	@Override
-	public String getCommandUsage(ICommandSender sender) {
+	public String getUsage(ICommandSender sender) {
 		return "commands.testmod3.add_max_health.usage";
 	}
 }

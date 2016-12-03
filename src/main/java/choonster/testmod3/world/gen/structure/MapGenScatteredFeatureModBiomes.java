@@ -44,14 +44,14 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 
 		int i1 = chunkX / maxDistanceBetweenScatteredFeatures;
 		int j1 = chunkZ / maxDistanceBetweenScatteredFeatures;
-		final Random random = this.worldObj.setRandomSeed(i1, j1, 14357617);
+		final Random random = world.setRandomSeed(i1, j1, 14357617);
 		i1 *= maxDistanceBetweenScatteredFeatures;
 		j1 *= maxDistanceBetweenScatteredFeatures;
 		i1 += random.nextInt(maxDistanceBetweenScatteredFeatures - minDistanceBetweenScatteredFeatures);
 		j1 += random.nextInt(maxDistanceBetweenScatteredFeatures - minDistanceBetweenScatteredFeatures);
 
 		if (chunkX == i1 && chunkZ == j1) {
-			final Biome biome = this.worldObj.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
+			final Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
 
 			for (final BiomeDictionary.Type type : biomeTypes) {
 				if (BiomeDictionary.isBiomeOfType(biome, type)) {
@@ -65,7 +65,7 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 
 	@Override
 	protected StructureStart getStructureStart(int chunkX, int chunkZ) {
-		return new Start(worldObj, rand, chunkX, chunkZ);
+		return new Start(world, rand, chunkX, chunkZ);
 	}
 
 	public static class WeightedRandomScatteredFeature extends WeightedRandom.Item {
@@ -85,7 +85,7 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 		public Start(World worldIn, Random random, int chunkX, int chunkZ) {
 			super(worldIn, random, chunkX, chunkZ);
 
-			this.components.clear();
+			components.clear();
 
 			final Biome biome = worldIn.getBiome(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
 
@@ -108,11 +108,11 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 
 			if (!possibleFeatures.isEmpty()) {
 				final WeightedRandomScatteredFeature featureToGenerate = WeightedRandom.getRandomItem(random, possibleFeatures);
-				this.components.add(featureToGenerate.feature);
+				components.add(featureToGenerate.feature);
 				Logger.info("Scattered feature %s at %d, %d", featureToGenerate.feature.toString(), chunkX * 16, chunkZ * 16);
 			}
 
-			this.updateBoundingBox();
+			updateBoundingBox();
 		}
 	}
 }

@@ -226,7 +226,7 @@ public class BlockPlane extends BlockTestMod3 {
 		 * @return The value
 		 */
 		public static EnumVerticalRotation fromIndex(int index) {
-			return VALUES[MathHelper.abs_int(index % VALUES.length)];
+			return VALUES[MathHelper.abs(index % VALUES.length)];
 		}
 
 		/**

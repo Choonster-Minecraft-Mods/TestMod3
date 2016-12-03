@@ -36,7 +36,7 @@ public class CommandMaxHealthGet extends CommandMaxHealthBase {
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length < 1) {
-			throw new WrongUsageException(getCommandUsage(sender));
+			throw new WrongUsageException(getUsage(sender));
 		}
 
 		final EntityLivingBase entity = getEntity(server, sender, args[0], EntityLivingBase.class);
@@ -63,7 +63,7 @@ public class CommandMaxHealthGet extends CommandMaxHealthBase {
 	 * Gets the name of the command
 	 */
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "get_max_health";
 	}
 
@@ -73,7 +73,7 @@ public class CommandMaxHealthGet extends CommandMaxHealthBase {
 	 * @param sender The command sender
 	 */
 	@Override
-	public String getCommandUsage(ICommandSender sender) {
+	public String getUsage(ICommandSender sender) {
 		return "commands.testmod3.get_max_health.usage";
 	}
 }

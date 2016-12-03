@@ -32,7 +32,7 @@ public class CommandRotateVector extends CommandBase {
 	 * Gets the name of the command.
 	 */
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "rotatevector";
 	}
 
@@ -42,7 +42,7 @@ public class CommandRotateVector extends CommandBase {
 	 * @param sender The command sender that executed the command
 	 */
 	@Override
-	public String getCommandUsage(ICommandSender sender) {
+	public String getUsage(ICommandSender sender) {
 		return "commands.testmod3.rotatevector.usage";
 	}
 
@@ -69,6 +69,6 @@ public class CommandRotateVector extends CommandBase {
 
 		rotationMatrix.transform(inputVector);
 
-		sender.addChatMessage(new TextComponentTranslation("commands.testmod3.rotatevector.result", inputVector.getX(), inputVector.getY(), inputVector.getZ()));
+		sender.sendMessage(new TextComponentTranslation("commands.testmod3.rotatevector.result", inputVector.getX(), inputVector.getY(), inputVector.getZ()));
 	}
 }

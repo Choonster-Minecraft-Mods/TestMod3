@@ -37,7 +37,7 @@ public class BlockPigSpawnerRefiller extends BlockTestMod3 implements IPigSpawne
 			pigSpawnerFinite.setNumPigs(pigSpawnerFinite.getMaxNumPigs());
 
 			if (iCommandSender != null) {
-				iCommandSender.addChatMessage(new TextComponentTranslation("message.testmod3:pig_spawner_refiller.refilled"));
+				iCommandSender.sendMessage(new TextComponentTranslation("message.testmod3:pig_spawner_refiller.refilled"));
 			}
 		}
 

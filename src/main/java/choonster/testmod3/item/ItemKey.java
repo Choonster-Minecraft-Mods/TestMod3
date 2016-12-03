@@ -31,7 +31,7 @@ public class ItemKey extends ItemTestMod3 {
 		if (lock != null) {
 			if (!worldIn.isRemote) {
 				if (lock.isLocked()) {
-					playerIn.addChatComponentMessage(new TextComponentTranslation("testmod3:lock.already_locked"));
+					playerIn.sendMessage(new TextComponentTranslation("testmod3:lock.already_locked"));
 				} else {
 					TestMod3.network.sendTo(new MessageOpenLockGui(pos, facing), (EntityPlayerMP) playerIn);
 				}

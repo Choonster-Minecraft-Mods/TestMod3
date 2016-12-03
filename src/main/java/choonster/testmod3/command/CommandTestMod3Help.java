@@ -24,7 +24,7 @@ public class CommandTestMod3Help extends CommandHelp {
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender sender) {
+	public String getUsage(ICommandSender sender) {
 		return "commands.testmod3:help.usage";
 	}
 
