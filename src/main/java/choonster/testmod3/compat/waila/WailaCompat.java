@@ -20,7 +20,7 @@ public class WailaCompat implements IWailaPlugin {
 		registrar.registerBodyProvider(new HUDHandlerRotatable(BlockRotatableLamp.FACING), BlockRotatableLamp.class);
 		registrar.registerBodyProvider(new HUDHandlerRotatable(BlockModChest.FACING), BlockModChest.class);
 
-		registrar.registerBodyProvider(new HUDHandlerRotatable(BlockPlane.HORIZONTAL_ROTATION, "tile.testmod3:plane.horizontalRotation.desc"), BlockPlane.class);
+		registrar.registerBodyProvider(new HUDHandlerRotatable(BlockPlane.HORIZONTAL_ROTATION, "tile.testmod3:plane.horizontal_rotation.desc"), BlockPlane.class);
 		registrar.registerBodyProvider(new HUDHandlerVerticalRotatable(BlockPlane.VERTICAL_ROTATION), BlockPlane.class);
 	}
 }
