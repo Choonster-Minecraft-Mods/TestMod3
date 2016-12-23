@@ -9,7 +9,13 @@
 		}
 	},
 	"variants": {
-		"horizontal_rotation=north,vertical_rotation=up": { "x": 0, "y": 0 },
+		"horizontal_rotation=north,vertical_rotation=up": {
+			"x": 0,
+			"y": 0,
+			"textures": {
+				"plane": "testmod3:blocks/mirror_plane_plane_t"
+			}
+		},
 		"horizontal_rotation=north,vertical_rotation=down": { "x": 180, "y": 180 },
 		"horizontal_rotation=north,vertical_rotation=side": { "x": 270, "y": 0 },
 
