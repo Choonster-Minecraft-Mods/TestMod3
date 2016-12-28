@@ -188,15 +188,15 @@ public class BlockPlane extends BlockTestMod3 {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, @Nullable Entity entity) {
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
 		final Pair<EnumFacing, EnumVerticalRotation> key = Pair.of(state.getValue(HORIZONTAL_ROTATION), state.getValue(VERTICAL_ROTATION));
 		final Pair<AxisAlignedBB, AxisAlignedBB> boundingBoxes = ROTATED_BOUNDING_BOXES.get(key);
 
 		final AxisAlignedBB baseBoundingBox = boundingBoxes.getLeft();
-		addCollisionBoxToList(pos, mask, list, baseBoundingBox);
+		addCollisionBoxToList(pos, entityBox, collidingBoxes, baseBoundingBox);
 
 		final AxisAlignedBB topBoundingBox = boundingBoxes.getRight();
-		addCollisionBoxToList(pos, mask, list, topBoundingBox);
+		addCollisionBoxToList(pos, entityBox, collidingBoxes, topBoundingBox);
 	}
 
 	/**

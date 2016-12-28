@@ -121,16 +121,18 @@ public abstract class BlockPipeBase extends BlockTestMod3 {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, @Nullable Entity collidingEntity) {
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
 		final AxisAlignedBB bb = new AxisAlignedBB(PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MAX_POS, PIPE_MAX_POS, PIPE_MAX_POS);
-		addCollisionBoxToList(pos, mask, list, bb);
+		addCollisionBoxToList(pos, entityBox, collidingBoxes, bb);
 
-		state = getActualState(state, worldIn, pos);
+		if (!p_185477_7_) {
+			state = state.getActualState(worldIn, pos);
+		}
 
 		for (final EnumFacing facing : EnumFacing.VALUES) {
 			if (isConnected(state, facing)) {
 				final AxisAlignedBB axisAlignedBB = CONNECTED_BOUNDING_BOXES.get(facing.getIndex());
-				addCollisionBoxToList(pos, mask, list, axisAlignedBB);
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, axisAlignedBB);
 			}
 		}
 	}
