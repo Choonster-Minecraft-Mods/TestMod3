@@ -62,7 +62,7 @@ public class SnowBuildup {
 			for (int x = 0; x < 16; x++) {
 				for (int z = 0; z < 16; z++) {
 					// Get the position of top block at the current x and z coordinates within the chunk
-					final BlockPos pos = world.getHeight(chunk.getChunkCoordIntPair().getBlock(x, 0, z));
+					final BlockPos pos = world.getHeight(chunk.getPos().getBlock(x, 0, z));
 
 					// Get the state of the block at that position
 					final IBlockState state = world.getBlockState(pos);
