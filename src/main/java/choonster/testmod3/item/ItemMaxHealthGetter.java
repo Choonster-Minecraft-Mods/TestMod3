@@ -9,7 +9,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
 
 /**
- * An item that tells the player the current max health and the bonus max health provided by the entity's {@link IMaxHealth} when right on an entity.
+ * An item that tells the player the current max health and the bonus max health provided by the entity's {@link IMaxHealth} when right clicked on an entity.
  *
  * @author Choonster
  */
