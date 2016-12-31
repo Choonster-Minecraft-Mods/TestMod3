@@ -1,56 +1,33 @@
 package choonster.testmod3.capability;
 
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.Capability.IStorage;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 
 /**
- * A simple implementation of {@link ICapabilitySerializable} that supports a single {@link Capability} handler instance.
- * <p>
- * Uses the {@link Capability}'s {@link IStorage} to serialise/deserialise NBT.
+ * A simple implementation of {@link ICapabilityProvider} that supports a single {@link Capability} handler instance.
  *
  * @author Choonster
  */
-public class SimpleCapabilityProvider<HANDLER> implements ICapabilitySerializable<NBTBase> {
+public class CapabilityProviderSimple<HANDLER> implements ICapabilityProvider {
 	/**
 	 * The {@link Capability} instance to provide the handler for.
 	 */
-	private final Capability<HANDLER> capability;
-
+	protected final Capability<HANDLER> capability;
 	/**
 	 * The {@link EnumFacing} to provide the handler for.
 	 */
-	private final EnumFacing facing;
-
+	protected final EnumFacing facing;
 	/**
 	 * The handler instance to provide.
 	 */
-	private final HANDLER instance;
+	protected final HANDLER instance;
 
-	/**
-	 * Create a provider for the default handler instance.
-	 *
-	 * @param capability The Capability instance to provide the handler for
-	 * @param facing     The EnumFacing to provide the handler for
-	 */
-	public SimpleCapabilityProvider(Capability<HANDLER> capability, @Nullable EnumFacing facing) {
-		this(capability, facing, capability.getDefaultInstance());
-	}
-
-	/**
-	 * Create a provider for the specified handler instance.
-	 *
-	 * @param capability The Capability instance to provide the handler for
-	 * @param facing     The EnumFacing to provide the handler for
-	 * @param instance   The handler instance to provide
-	 */
-	public SimpleCapabilityProvider(Capability<HANDLER> capability, @Nullable EnumFacing facing, HANDLER instance) {
-		this.capability = capability;
+	public CapabilityProviderSimple(HANDLER instance, Capability<HANDLER> capability, @Nullable EnumFacing facing) {
 		this.instance = instance;
+		this.capability = capability;
 		this.facing = facing;
 	}
 
@@ -92,16 +69,6 @@ public class SimpleCapabilityProvider<HANDLER> implements ICapabilitySerializabl
 		}
 
 		return null;
-	}
-
-	@Override
-	public NBTBase serializeNBT() {
-		return getCapability().writeNBT(getInstance(), getFacing());
-	}
-
-	@Override
-	public void deserializeNBT(NBTBase nbt) {
-		getCapability().readNBT(getInstance(), getFacing(), nbt);
 	}
 
 	/**

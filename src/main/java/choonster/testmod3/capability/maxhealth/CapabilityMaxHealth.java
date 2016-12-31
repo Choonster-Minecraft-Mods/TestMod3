@@ -3,7 +3,7 @@ package choonster.testmod3.capability.maxhealth;
 import choonster.testmod3.Logger;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
-import choonster.testmod3.capability.SimpleCapabilityProvider;
+import choonster.testmod3.capability.CapabilityProviderSerializable;
 import choonster.testmod3.util.CapabilityUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -82,7 +82,7 @@ public class CapabilityMaxHealth {
 	 * @return The provider
 	 */
 	public static ICapabilityProvider createProvider(IMaxHealth maxHealth) {
-		return new SimpleCapabilityProvider<>(MAX_HEALTH_CAPABILITY, DEFAULT_FACING, maxHealth);
+		return new CapabilityProviderSerializable<>(MAX_HEALTH_CAPABILITY, DEFAULT_FACING, maxHealth);
 	}
 
 	/**

@@ -1,7 +1,7 @@
 package choonster.testmod3.item.block;
 
 import choonster.testmod3.block.BlockFluidTank;
-import choonster.testmod3.capability.SimpleCapabilityProvider;
+import choonster.testmod3.capability.CapabilityProviderSerializable;
 import choonster.testmod3.fluids.FluidTankItem;
 import choonster.testmod3.tileentity.TileEntityFluidTank;
 import net.minecraft.block.Block;
@@ -72,6 +72,6 @@ public class ItemFluidTank extends ItemBlock {
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-		return new SimpleCapabilityProvider<>(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null, new FluidTankItem(stack, TileEntityFluidTank.CAPACITY));
+		return new CapabilityProviderSerializable<>(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null, new FluidTankItem(stack, TileEntityFluidTank.CAPACITY));
 	}
 }

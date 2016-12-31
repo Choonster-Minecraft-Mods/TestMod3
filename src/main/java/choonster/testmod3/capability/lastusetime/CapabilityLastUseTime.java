@@ -2,7 +2,7 @@ package choonster.testmod3.capability.lastusetime;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.lastusetime.ILastUseTime;
-import choonster.testmod3.capability.SimpleCapabilityProvider;
+import choonster.testmod3.capability.CapabilityProviderSerializable;
 import choonster.testmod3.item.IItemPropertyGetterFix;
 import choonster.testmod3.network.MessageUpdateHeldLastUseTime;
 import choonster.testmod3.util.CapabilityUtils;
@@ -110,7 +110,7 @@ public class CapabilityLastUseTime {
 	 * @return The provider
 	 */
 	public static ICapabilityProvider createProvider() {
-		return new SimpleCapabilityProvider<>(LAST_USE_TIME_CAPABILITY, DEFAULT_FACING);
+		return new CapabilityProviderSerializable<>(LAST_USE_TIME_CAPABILITY, DEFAULT_FACING);
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class CapabilityLastUseTime {
 	 * @return The provider
 	 */
 	public static ICapabilityProvider createProvider(ILastUseTime lastUseTime) {
-		return new SimpleCapabilityProvider<>(LAST_USE_TIME_CAPABILITY, DEFAULT_FACING, lastUseTime);
+		return new CapabilityProviderSerializable<>(LAST_USE_TIME_CAPABILITY, DEFAULT_FACING, lastUseTime);
 	}
 
 	/**

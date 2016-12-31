@@ -1,6 +1,6 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.capability.SimpleCapabilityProvider;
+import choonster.testmod3.capability.CapabilityProviderSerializable;
 import choonster.testmod3.capability.hiddenblockrevealer.CapabilityHiddenBlockRevealer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -42,6 +42,6 @@ public class ItemHiddenBlockRevealer extends ItemTestMod3 {
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-		return new SimpleCapabilityProvider<>(CapabilityHiddenBlockRevealer.HIDDEN_BLOCK_REVEALER_CAPABILITY, CapabilityHiddenBlockRevealer.DEFAULT_FACING);
+		return new CapabilityProviderSerializable<>(CapabilityHiddenBlockRevealer.HIDDEN_BLOCK_REVEALER_CAPABILITY, CapabilityHiddenBlockRevealer.DEFAULT_FACING);
 	}
 }

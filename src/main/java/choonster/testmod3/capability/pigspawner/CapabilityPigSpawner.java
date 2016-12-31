@@ -5,7 +5,7 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawner;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerInteractable;
-import choonster.testmod3.capability.SimpleCapabilityProvider;
+import choonster.testmod3.capability.CapabilityProviderSerializable;
 import choonster.testmod3.network.MessageUpdateHeldPigSpawnerFinite;
 import choonster.testmod3.util.CapabilityUtils;
 import choonster.testmod3.util.DebugUtil;
@@ -112,7 +112,7 @@ public final class CapabilityPigSpawner {
 	 * @return The provider
 	 */
 	public static ICapabilityProvider createProvider() {
-		return new SimpleCapabilityProvider<>(PIG_SPAWNER_CAPABILITY, DEFAULT_FACING);
+		return new CapabilityProviderSerializable<>(PIG_SPAWNER_CAPABILITY, DEFAULT_FACING);
 	}
 
 	/**
@@ -122,7 +122,7 @@ public final class CapabilityPigSpawner {
 	 * @return The provider
 	 */
 	public static ICapabilityProvider createProvider(IPigSpawner pigSpawner) {
-		return new SimpleCapabilityProvider<>(PIG_SPAWNER_CAPABILITY, DEFAULT_FACING, pigSpawner);
+		return new CapabilityProviderSerializable<>(PIG_SPAWNER_CAPABILITY, DEFAULT_FACING, pigSpawner);
 	}
 
 	/**
