@@ -150,6 +150,8 @@ item.testmod3:key.name=Key
 item.testmod3:block_detection_arrow.name=Block Detection Arrow
 item.testmod3:translucent_item.name=Translucent Item
 item.testmod3:entity_killer.name=Entity Killer
+item.testmod3:chunk_energy_setter.name=Chunk Energy Setter
+item.testmod3:chunk_energy_getter.name=Chunk Energy Getter
 
 item.testmod3:replacement_helmet.name=Armour Replacement Helmet
 item.testmod3:replacement_chestplate.name=Armour Replacement Chestplate
@@ -211,6 +213,10 @@ message.testmod3:ritual_checker.success=Ritual pattern is valid!
 message.testmod3:ritual_checker.failure=Ritual pattern is invalid at %d,%d,%d!
 message.testmod3:hidden_block_revealer.reveal=Revealing hidden blocks.
 message.testmod3:hidden_block_revealer.hide=Hiding hidden blocks.
+message.testmod3:chunk_energy.add=Added %d energy to chunk %s
+message.testmod3:chunk_energy.remove=Removed %d energy from chunk %s
+message.testmod3:chunk_energy.get=Chunk %s contains %d energy
+message.testmod3:chunk_energy.not_found=No chunk energy found for chunk %s
 
 # Config GUI strings
 testmod3.config.title=TestMod3 Config

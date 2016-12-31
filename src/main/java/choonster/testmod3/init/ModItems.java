@@ -118,6 +118,10 @@ public class ModItems {
 
 	public static final ItemEntityKiller ENTITY_KILLER = new ItemEntityKiller();
 
+	public static final ItemChunkEnergySetter CHUNK_ENERGY_SETTER = new ItemChunkEnergySetter();
+
+	public static final ItemChunkEnergyGetter CHUNK_ENERGY_GETTER = new ItemChunkEnergyGetter();
+
 
 	public static final ItemArmourReplacement REPLACEMENT_HELMET = new ItemArmourReplacement(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD, "replacement");
 
@@ -205,6 +209,8 @@ public class ModItems {
 					BLOCK_DETECTION_ARROW,
 					TRANSLUCENT_ITEM,
 					ENTITY_KILLER,
+					CHUNK_ENERGY_SETTER,
+					CHUNK_ENERGY_GETTER
 			};
 
 			final IForgeRegistry<Item> registry = event.getRegistry();
