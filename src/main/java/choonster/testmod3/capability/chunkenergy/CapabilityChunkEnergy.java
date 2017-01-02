@@ -137,7 +137,7 @@ public class CapabilityChunkEnergy {
 			final IChunkEnergy chunkEnergy = new ChunkEnergy(DEFAULT_CAPACITY);
 
 			final NBTTagCompound chunkData = event.getData();
-			final NBTTagInt energyTag = chunkData.hasKey(ID_STRING, Constants.NBT.TAG_INT) ? (NBTTagInt) chunkData.getTag(ID_STRING) : new NBTTagInt(0);
+			final NBTTagInt energyTag = chunkData.hasKey(ID_STRING, Constants.NBT.TAG_INT) ? (NBTTagInt) chunkData.getTag(ID_STRING) : new NBTTagInt(DEFAULT_CAPACITY);
 			chunkEnergy.deserializeNBT(energyTag);
 
 			((IChunkEnergyHolderModifiable) chunkEnergyHolder).setChunkEnergy(event.getChunk().getPos(), chunkEnergy);
