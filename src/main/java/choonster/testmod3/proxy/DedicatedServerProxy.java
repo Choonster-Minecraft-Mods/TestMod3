@@ -1,6 +1,7 @@
 package choonster.testmod3.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
@@ -36,6 +37,12 @@ public class DedicatedServerProxy implements IProxy {
 	@Nullable
 	@Override
 	public EntityPlayer getClientPlayer() {
+		return null;
+	}
+
+	@Nullable
+	@Override
+	public World getClientWorld() {
 		return null;
 	}
 }

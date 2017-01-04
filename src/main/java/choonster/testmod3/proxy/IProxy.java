@@ -1,6 +1,7 @@
 package choonster.testmod3.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
@@ -23,4 +24,12 @@ public interface IProxy {
 	 */
 	@Nullable
 	EntityPlayer getClientPlayer();
+
+	/**
+	 * Get the client {@link World} if on the client, or null if on the dedicated server.
+	 *
+	 * @return The client World
+	 */
+	@Nullable
+	World getClientWorld();
 }

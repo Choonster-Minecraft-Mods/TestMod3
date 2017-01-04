@@ -18,6 +18,7 @@ public class ModMessages {
 		registerMessage(MessageUpdateHeldHiddenBlockRevealer.Handler.class, MessageUpdateHeldHiddenBlockRevealer.class, Side.CLIENT);
 		registerMessage(MessageLockSetLockCode.Handler.class, MessageLockSetLockCode.class, Side.SERVER);
 		registerMessage(MessageOpenLockGui.Handler.class, MessageOpenLockGui.class, Side.CLIENT);
+		registerMessage(MessageUpdateChunkEnergyValue.Handler.class, MessageUpdateChunkEnergyValue.class, Side.CLIENT);
 	}
 
 	private static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(Class<? extends IMessageHandler<REQ, REPLY>> messageHandler, Class<REQ> requestMessageType, Side receivingSide) {

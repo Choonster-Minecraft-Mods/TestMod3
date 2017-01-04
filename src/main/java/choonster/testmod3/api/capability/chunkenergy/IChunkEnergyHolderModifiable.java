@@ -12,7 +12,7 @@ public interface IChunkEnergyHolderModifiable extends IChunkEnergyHolder {
 	/**
 	 * Set the {@link IChunkEnergy} for the specified chunk position.
 	 *
-	 * @param chunkPos           The chunk position
+	 * @param chunkPos    The chunk position
 	 * @param chunkEnergy The IChunkEnergy
 	 */
 	void setChunkEnergy(ChunkPos chunkPos, IChunkEnergy chunkEnergy);

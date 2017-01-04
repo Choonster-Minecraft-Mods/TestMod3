@@ -5,7 +5,9 @@ import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergyHolder;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergyHolderModifiable;
 import choonster.testmod3.capability.CapabilityProviderSimple;
+import choonster.testmod3.network.MessageUpdateChunkEnergyValue;
 import choonster.testmod3.util.CapabilityUtils;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
@@ -21,6 +23,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -125,22 +128,49 @@ public class CapabilityChunkEnergy {
 		}
 
 		/**
-		 * Load the {@link ChunkEnergy} for a chunk when the chunk is loaded.
+		 * Load the {@link IChunkEnergy} for a chunk when the chunk is loaded.
 		 *
 		 * @param event The event
 		 */
 		@SubscribeEvent
 		public static void chunkDataLoad(ChunkDataEvent.Load event) {
-			final IChunkEnergyHolder chunkEnergyHolder = getChunkEnergyHolder(event.getWorld());
+			final World world = event.getWorld();
+			final ChunkPos chunkPos = event.getChunk().getPos();
+
+			final IChunkEnergyHolder chunkEnergyHolder = getChunkEnergyHolder(world);
 			if (!(chunkEnergyHolder instanceof IChunkEnergyHolderModifiable)) return;
 
-			final IChunkEnergy chunkEnergy = new ChunkEnergy(DEFAULT_CAPACITY);
+			final ChunkEnergy chunkEnergy = new ChunkEnergy(DEFAULT_CAPACITY, world, chunkPos);
 
 			final NBTTagCompound chunkData = event.getData();
-			final NBTTagInt energyTag = chunkData.hasKey(ID_STRING, Constants.NBT.TAG_INT) ? (NBTTagInt) chunkData.getTag(ID_STRING) : new NBTTagInt(DEFAULT_CAPACITY);
-			chunkEnergy.deserializeNBT(energyTag);
+			if (chunkData.hasKey(ID_STRING, Constants.NBT.TAG_INT)) {
+				final NBTTagInt energyTag = (NBTTagInt) chunkData.getTag(ID_STRING);
+				chunkEnergy.deserializeNBT(energyTag);
+			}
 
-			((IChunkEnergyHolderModifiable) chunkEnergyHolder).setChunkEnergy(event.getChunk().getPos(), chunkEnergy);
+			((IChunkEnergyHolderModifiable) chunkEnergyHolder).setChunkEnergy(chunkPos, chunkEnergy);
+		}
+
+		/**
+		 * Create a default {@link IChunkEnergy} for a chunk when it's loaded, if it doesn't already have one.
+		 * <p>
+		 * {@link ChunkDataEvent.Load} is never fired for client-side chunks, so this allows them to have a default
+		 * {@link IChunkEnergy} created when they load.
+		 *
+		 * @param event The event
+		 */
+		@SubscribeEvent
+		public static void chunkLoad(ChunkEvent.Load event) {
+			final World world = event.getWorld();
+			final ChunkPos chunkPos = event.getChunk().getPos();
+
+			final IChunkEnergyHolder chunkEnergyHolder = getChunkEnergyHolder(world);
+			if (!(chunkEnergyHolder instanceof IChunkEnergyHolderModifiable)) return;
+
+			if (chunkEnergyHolder.getChunkEnergy(chunkPos) != null) return;
+
+			final IChunkEnergy chunkEnergy = new ChunkEnergy(DEFAULT_CAPACITY, world, chunkPos);
+			((IChunkEnergyHolderModifiable) chunkEnergyHolder).setChunkEnergy(chunkPos, chunkEnergy);
 		}
 
 		/**
@@ -151,9 +181,9 @@ public class CapabilityChunkEnergy {
 		@SubscribeEvent
 		public static void chunkDataSave(ChunkDataEvent.Save event) {
 			final IChunkEnergy chunkEnergy = getChunkEnergy(event.getChunk());
-			if (chunkEnergy == null) return;
+			if (!(chunkEnergy instanceof ChunkEnergy)) return;
 
-			event.getData().setTag(ID_STRING, chunkEnergy.serializeNBT());
+			event.getData().setTag(ID_STRING, ((ChunkEnergy) chunkEnergy).serializeNBT());
 		}
 
 		/**
@@ -167,6 +197,20 @@ public class CapabilityChunkEnergy {
 			if (!(chunkEnergyHolder instanceof IChunkEnergyHolderModifiable)) return;
 
 			((IChunkEnergyHolderModifiable) chunkEnergyHolder).removeChunkEnergy(event.getChunk().getPos());
+		}
+
+		/**
+		 * Send the {@link IChunkEnergy} to the client when a player starts watching the chunk.
+		 *
+		 * @param event The event
+		 */
+		@SubscribeEvent
+		public static void chunkWatch(ChunkWatchEvent.Watch event) {
+			final EntityPlayerMP player = event.getPlayer();
+			final IChunkEnergy chunkEnergy = getChunkEnergy(player.getEntityWorld(), event.getChunk());
+			if (chunkEnergy == null) return;
+
+			TestMod3.network.sendTo(new MessageUpdateChunkEnergyValue(chunkEnergy), player);
 		}
 	}
 }

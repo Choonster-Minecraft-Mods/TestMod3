@@ -7,6 +7,7 @@ import choonster.testmod3.client.renderer.entity.ModRenderers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
@@ -40,5 +41,11 @@ public class CombinedClientProxy implements IProxy {
 	@Override
 	public EntityPlayer getClientPlayer() {
 		return MINECRAFT.player;
+	}
+
+	@Nullable
+	@Override
+	public World getClientWorld() {
+		return MINECRAFT.world;
 	}
 }
