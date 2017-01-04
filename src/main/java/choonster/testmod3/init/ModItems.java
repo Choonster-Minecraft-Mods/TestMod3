@@ -122,6 +122,8 @@ public class ModItems {
 
 	public static final ItemChunkEnergyGetter CHUNK_ENERGY_GETTER = new ItemChunkEnergyGetter();
 
+	public static final ItemTestMod3 CHUNK_ENERGY_DISPLAY = new ItemTestMod3("chunk_energy_display");
+
 
 	public static final ItemArmourReplacement REPLACEMENT_HELMET = new ItemArmourReplacement(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD, "replacement");
 
@@ -210,7 +212,8 @@ public class ModItems {
 					TRANSLUCENT_ITEM,
 					ENTITY_KILLER,
 					CHUNK_ENERGY_SETTER,
-					CHUNK_ENERGY_GETTER
+					CHUNK_ENERGY_GETTER,
+					CHUNK_ENERGY_DISPLAY,
 			};
 
 			final IForgeRegistry<Item> registry = event.getRegistry();

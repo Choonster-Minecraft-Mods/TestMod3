@@ -28,6 +28,21 @@ public class ModConfig {
 
 		@Config.Comment("This is an example int property.")
 		public int baz = -100;
+
+		public HUDPos chunkEnergyHUDPos = new HUDPos(0, 0);
+
+		public static class HUDPos {
+			public HUDPos(int x, int y) {
+				this.x = x;
+				this.y = y;
+			}
+
+			@Config.Comment("The x coordinate")
+			public int x;
+
+			@Config.Comment("The y coordinate")
+			public int y;
+		}
 	}
 
 	@Mod.EventBusSubscriber

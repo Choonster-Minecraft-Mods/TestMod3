@@ -6,5 +6,5 @@ It is available from SoundBible.com (http://soundbible.com/2120-9mm-Gunshot.html
 The file textures/items/key.png was created by paomedia (https://github.com/paomedia and http://www.paomedia.com/).
 It is available from IconArchive.com (http://www.iconarchive.com/show/small-n-flat-icons-by-paomedia/key-icon.html) under the CC0 1.0 Universal Public Domain Dedication license: https://creativecommons.org/publicdomain/zero/1.0/
 
-The files textures/items/chunk_energy_getter.png and textures/items/chunk_energy_setter.png were created by FatCow Web Hosting (http://www.fatcow.com/free-icons)
-They are available from IconArchive.com (http://www.iconarchive.com/show/farm-fresh-icons-by-fatcow/lightning-icon.html and http://www.iconarchive.com/show/farm-fresh-icons-by-fatcow/lightning-add-icon.html) or FatCow Web Hosting (http://www.fatcow.com/free-icons) under the CC Attribution 3.0 license: https://creativecommons.org/licenses/by/3.0/
+The files textures/items/chunk_energy_getter.png, textures/items/chunk_energy_setter.png and textures/items/chunk_energy_display.png were created by FatCow Web Hosting (http://www.fatcow.com/free-icons)
+They are available from IconArchive.com (http://www.iconarchive.com/show/farm-fresh-icons-by-fatcow/lightning-icon.html, http://www.iconarchive.com/show/farm-fresh-icons-by-fatcow/lightning-add-icon.html and http://www.iconarchive.com/show/farm-fresh-icons-by-fatcow/monitor-lightning-icon.html) or FatCow Web Hosting (http://www.fatcow.com/free-icons) under the CC Attribution 3.0 license: https://creativecommons.org/licenses/by/3.0/
