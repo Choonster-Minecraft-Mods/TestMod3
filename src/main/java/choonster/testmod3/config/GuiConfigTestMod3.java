@@ -11,6 +11,7 @@ import net.minecraftforge.fml.client.config.GuiConfig;
 import net.minecraftforge.fml.client.config.IConfigElement;
 
 import java.util.List;
+import java.util.Set;
 
 public class GuiConfigTestMod3 extends GuiConfig {
 	private static final String LANG_PREFIX = TestMod3.MODID + ".category.";
@@ -23,8 +24,19 @@ public class GuiConfigTestMod3 extends GuiConfig {
 		final Configuration configuration = ModConfig.ConfigurationHolder.getConfiguration();
 
 		final ConfigCategory topLevelCategory = configuration.getCategory(Configuration.CATEGORY_GENERAL);
-		topLevelCategory.getChildren().forEach(configCategory -> configCategory.setLanguageKey(LANG_PREFIX + configCategory.getName()));
+		setLangKeys(topLevelCategory.getChildren());
 
 		return new ConfigElement(topLevelCategory).getChildElements();
+	}
+
+	private static void setLangKeys(Set<ConfigCategory> configCategories) {
+		configCategories.forEach(configCategory -> {
+			configCategory.setLanguageKey(LANG_PREFIX + configCategory.getName());
+
+			final Set<ConfigCategory> children = configCategory.getChildren();
+			if (!children.isEmpty()) {
+				setLangKeys(children);
+			}
+		});
 	}
 }
