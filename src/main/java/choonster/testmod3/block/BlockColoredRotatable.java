@@ -2,6 +2,7 @@ package choonster.testmod3.block;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.tileentity.TileEntityColoredRotatable;
+import choonster.testmod3.util.BlockUtils;
 import choonster.testmod3.util.OreDictUtils;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.material.Material;
@@ -54,7 +55,7 @@ public class BlockColoredRotatable extends BlockColored {
 
 	@Nullable
 	public TileEntityColoredRotatable getTileEntity(IBlockAccess world, BlockPos pos) {
-		return (TileEntityColoredRotatable) world.getTileEntity(pos);
+		return (TileEntityColoredRotatable) BlockUtils.getTileEntitySafe(world, pos);
 	}
 
 	public EnumFacing getFacing(IBlockAccess world, BlockPos pos) {
