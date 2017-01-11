@@ -24,7 +24,7 @@ public class BlockUtils {
 	 * @param blockAccess The world
 	 * @param pos         The block position
 	 * @return The TileEntity, if any
-	 * @see	<a href="https://github.com/MinecraftForge/Documentation/pull/81"></a>
+	 * @see    <a href="https://github.com/MinecraftForge/Documentation/pull/81"></a>
 	 */
 	@Nullable
 	public static TileEntity getTileEntitySafe(IBlockAccess blockAccess, BlockPos pos) {
