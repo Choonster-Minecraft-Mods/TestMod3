@@ -235,6 +235,7 @@ testmod3.general.client.baz.tooltip=This is an example int property.
 # Entities
 entity.testmod3:mod_arrow.name=Mod Arrow
 entity.testmod3:block_detection_arrow.name=Block Detection Arrow
+entity.testmod3:player_avoiding_creeper.name=Player-Avoiding Creeper
 
 # Creative Tabs
 item_group.testmod3=Test Mod 3
