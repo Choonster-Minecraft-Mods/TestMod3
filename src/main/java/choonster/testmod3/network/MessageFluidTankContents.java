@@ -3,7 +3,6 @@ package choonster.testmod3.network;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.BlockFluidTank;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
@@ -100,9 +99,8 @@ public class MessageFluidTankContents implements IMessage {
 		@Nullable
 		@Override
 		public IMessage onMessage(MessageFluidTankContents message, MessageContext ctx) {
-			Minecraft.getMinecraft().addScheduledTask(() -> {
-				final EntityPlayer player = TestMod3.proxy.getClientPlayer();
-				assert player != null;
+			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
+				final EntityPlayer player = TestMod3.proxy.getPlayer(ctx);
 
 				BlockFluidTank.getFluidDataForDisplay(message.fluidTankProperties).forEach(player::sendMessage);
 			});

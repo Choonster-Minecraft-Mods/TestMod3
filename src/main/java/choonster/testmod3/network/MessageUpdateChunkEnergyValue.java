@@ -5,7 +5,6 @@ import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.capability.chunkenergy.CapabilityChunkEnergy;
 import choonster.testmod3.capability.chunkenergy.ChunkEnergy;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -77,7 +76,7 @@ public class MessageUpdateChunkEnergyValue implements IMessage {
 		@Nullable
 		@Override
 		public IMessage onMessage(MessageUpdateChunkEnergyValue message, MessageContext ctx) {
-			Minecraft.getMinecraft().addScheduledTask(() -> {
+			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
 				final World world = TestMod3.proxy.getClientWorld();
 				assert world != null;
 

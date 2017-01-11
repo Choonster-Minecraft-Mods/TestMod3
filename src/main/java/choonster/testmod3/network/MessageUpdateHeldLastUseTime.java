@@ -4,7 +4,6 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.lastusetime.ILastUseTime;
 import choonster.testmod3.capability.lastusetime.CapabilityLastUseTime;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -77,9 +76,8 @@ public class MessageUpdateHeldLastUseTime implements IMessage {
 		@Nullable
 		@Override
 		public IMessage onMessage(MessageUpdateHeldLastUseTime message, MessageContext ctx) {
-			Minecraft.getMinecraft().addScheduledTask(() -> {
-				final EntityPlayer player = TestMod3.proxy.getClientPlayer();
-				assert player != null;
+			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
+				final EntityPlayer player = TestMod3.proxy.getPlayer(ctx);
 
 				final ILastUseTime lastUseTime = CapabilityLastUseTime.getLastUseTime(player.getHeldItem(message.hand));
 				if (lastUseTime != null) {

@@ -1,6 +1,7 @@
 package choonster.testmod3.network;
 
 import choonster.testmod3.Logger;
+import choonster.testmod3.TestMod3;
 import choonster.testmod3.client.gui.GuiSurvivalCommandBlock;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.tileentity.SurvivalCommandBlockLogic;
@@ -14,12 +15,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IThreadListener;
 import net.minecraft.util.StringUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -113,11 +112,9 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 		@Nullable
 		@Override
 		public IMessage onMessage(MessageSurvivalCommandBlockSaveChanges message, MessageContext ctx) {
-			final EntityPlayer player = ctx.getServerHandler().playerEntity;
-			final World world = player.world;
-
-			final IThreadListener mainThread = (WorldServer) world;
-			mainThread.addScheduledTask(() -> {
+			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
+				final EntityPlayer player = TestMod3.proxy.getPlayer(ctx);
+				final World world = player.world;
 				final MinecraftServer minecraftServer = world.getMinecraftServer();
 
 				if (minecraftServer != null && !minecraftServer.isCommandBlockEnabled()) {

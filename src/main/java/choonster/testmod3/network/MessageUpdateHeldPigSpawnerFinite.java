@@ -6,7 +6,6 @@ import choonster.testmod3.api.capability.pigspawner.IPigSpawner;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
 import choonster.testmod3.capability.pigspawner.CapabilityPigSpawner;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -81,9 +80,8 @@ public class MessageUpdateHeldPigSpawnerFinite implements IMessage {
 			// Using Minecraft or FMLClientHandler inside the lambda causes the server to attempt to load them, crashing it.
 			// This can be worked around by using an anonymous class instead of a lambda or the mod's sided proxy instead of
 			// Minecraft/FMLClientHandler.
-			Minecraft.getMinecraft().addScheduledTask(() -> {
-				final EntityPlayer player = TestMod3.proxy.getClientPlayer();
-				assert player != null;
+			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
+				final EntityPlayer player = TestMod3.proxy.getPlayer(ctx);
 
 				final IPigSpawner pigSpawner = CapabilityPigSpawner.getPigSpawner(player.getHeldItem(message.hand));
 

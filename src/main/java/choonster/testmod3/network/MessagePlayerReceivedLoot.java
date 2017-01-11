@@ -3,7 +3,6 @@ package choonster.testmod3.network;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.item.ItemLootTableTest;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
@@ -91,9 +90,8 @@ public class MessagePlayerReceivedLoot implements IMessage {
 		@Nullable
 		@Override
 		public IMessage onMessage(final MessagePlayerReceivedLoot message, final MessageContext ctx) {
-			Minecraft.getMinecraft().addScheduledTask(() -> {
-				final EntityPlayer player = TestMod3.proxy.getClientPlayer();
-				assert player != null;
+			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
+				final EntityPlayer player = TestMod3.proxy.getPlayer(ctx);
 
 				final ITextComponent lootMessage = getItemStackTextComponent(message.itemStacks[0]);
 				for (int i = 1; i < message.itemStacks.length; i++) {

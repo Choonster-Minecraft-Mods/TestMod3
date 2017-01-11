@@ -1,7 +1,11 @@
 package choonster.testmod3.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IThreadListener;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import javax.annotation.Nullable;
 
@@ -44,5 +48,20 @@ public class DedicatedServerProxy implements IProxy {
 	@Override
 	public World getClientWorld() {
 		return null;
+	}
+
+	@Override
+	public IThreadListener getThreadListener(MessageContext context) {
+		return context.getServerHandler().playerEntity.mcServer;
+	}
+
+	@Override
+	public EntityPlayer getPlayer(MessageContext context) {
+		return context.getServerHandler().playerEntity;
+	}
+
+	@Override
+	public void displayLockGUI(World world, BlockPos pos, EnumFacing facing) {
+
 	}
 }

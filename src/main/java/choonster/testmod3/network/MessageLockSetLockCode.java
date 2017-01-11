@@ -1,17 +1,16 @@
 package choonster.testmod3.network;
 
+import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.lock.ILock;
 import choonster.testmod3.capability.lock.CapabilityLock;
 import choonster.testmod3.client.gui.GuiLock;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -88,11 +87,10 @@ public class MessageLockSetLockCode implements IMessage {
 		@Nullable
 		@Override
 		public IMessage onMessage(MessageLockSetLockCode message, MessageContext ctx) {
-			final EntityPlayerMP player = ctx.getServerHandler().playerEntity;
-			final World world = player.world;
+			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
+				final EntityPlayerMP player = (EntityPlayerMP) TestMod3.proxy.getPlayer(ctx);
+				final World world = player.world;
 
-			final IThreadListener mainThread = (WorldServer) world;
-			mainThread.addScheduledTask(() -> {
 				player.markPlayerActive();
 
 				if (world.isBlockLoaded(message.pos)) {

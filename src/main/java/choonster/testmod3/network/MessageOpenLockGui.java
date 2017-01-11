@@ -1,13 +1,12 @@
 package choonster.testmod3.network;
 
-import choonster.testmod3.api.capability.lock.ILock;
-import choonster.testmod3.capability.lock.CapabilityLock;
+import choonster.testmod3.TestMod3;
 import choonster.testmod3.client.gui.GuiLock;
 import choonster.testmod3.item.ItemKey;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -77,13 +76,11 @@ public class MessageOpenLockGui implements IMessage {
 		@Nullable
 		@Override
 		public IMessage onMessage(MessageOpenLockGui message, MessageContext ctx) {
-			final Minecraft minecraft = Minecraft.getMinecraft();
+			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
+				final World clientWorld = TestMod3.proxy.getClientWorld();
+				assert clientWorld != null;
 
-			minecraft.addScheduledTask(() -> {
-				final ILock lock = CapabilityLock.getLock(minecraft.world, message.pos, message.facing);
-				if (lock != null) {
-					minecraft.displayGuiScreen(new GuiLock(lock, message.pos, message.facing));
-				}
+				TestMod3.proxy.displayLockGUI(clientWorld, message.pos, message.facing);
 			});
 
 			return null;

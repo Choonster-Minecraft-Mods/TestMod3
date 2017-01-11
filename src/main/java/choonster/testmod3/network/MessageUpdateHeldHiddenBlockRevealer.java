@@ -4,7 +4,6 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockRevealer;
 import choonster.testmod3.capability.hiddenblockrevealer.CapabilityHiddenBlockRevealer;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -77,13 +76,12 @@ public class MessageUpdateHeldHiddenBlockRevealer implements IMessage {
 		@Nullable
 		@Override
 		public IMessage onMessage(MessageUpdateHeldHiddenBlockRevealer message, MessageContext ctx) {
-			Minecraft.getMinecraft().addScheduledTask(() -> {
-				final EntityPlayer player = TestMod3.proxy.getClientPlayer();
-				if (player != null) {
-					final IHiddenBlockRevealer hiddenBlockRevealer = CapabilityHiddenBlockRevealer.getHiddenBlockRevealer(player.getHeldItem(message.hand));
-					if (hiddenBlockRevealer != null) {
-						hiddenBlockRevealer.setRevealHiddenBlocks(message.revealHiddenBlocks);
-					}
+			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
+				final EntityPlayer player = TestMod3.proxy.getPlayer(ctx);
+
+				final IHiddenBlockRevealer hiddenBlockRevealer = CapabilityHiddenBlockRevealer.getHiddenBlockRevealer(player.getHeldItem(message.hand));
+				if (hiddenBlockRevealer != null) {
+					hiddenBlockRevealer.setRevealHiddenBlocks(message.revealHiddenBlocks);
 				}
 			});
 
