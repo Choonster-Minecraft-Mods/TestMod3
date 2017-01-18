@@ -64,10 +64,10 @@ public class PlayerEventHandler {
 	 */
 	@SubscribeEvent
 	public static void livingDeath(LivingDeathEvent event) {
-		if (event.getEntity() instanceof EntityPlayer) {
+		if (event.getEntity() instanceof EntityPlayer && !event.getEntity().getEntityWorld().isRemote) {
 			final EntityPlayer player = (EntityPlayer) event.getEntity();
 			final BlockPos pos = player.getPosition();
-			player.sendMessage(new TextComponentTranslation("message.testmod3:death.coordinates", pos.getX(), pos.getY(), pos.getZ()));
+			player.sendMessage(new TextComponentTranslation("message.testmod3:death.coordinates", pos.getX(), pos.getY(), pos.getZ(), player.dimension, player.getEntityWorld().provider.getDimensionType().getName()));
 		}
 	}
 }
