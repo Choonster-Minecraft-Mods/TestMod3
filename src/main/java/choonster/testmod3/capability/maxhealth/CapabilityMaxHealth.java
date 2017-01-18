@@ -20,6 +20,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 
@@ -125,6 +126,20 @@ public class CapabilityMaxHealth {
 
 			if (newMaxHealth != null && oldMaxHealth != null) {
 				newMaxHealth.setBonusMaxHealth(oldMaxHealth.getBonusMaxHealth());
+			}
+		}
+
+		/**
+		 * Synchronise a player's max health to watching clients when they change dimensions.
+		 *
+		 * @param event The event
+		 */
+		@SubscribeEvent
+		public static void playerChangeDimension(PlayerChangedDimensionEvent event) {
+			final IMaxHealth maxHealth = getMaxHealth(event.player);
+
+			if (maxHealth != null) {
+				maxHealth.synchronise();
 			}
 		}
 	}
