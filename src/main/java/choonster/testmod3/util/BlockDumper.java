@@ -2,6 +2,7 @@ package choonster.testmod3.util;
 
 import choonster.testmod3.Logger;
 import choonster.testmod3.TestMod3;
+import com.google.common.base.Charsets;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -19,7 +20,7 @@ import java.util.stream.StreamSupport;
  */
 public class BlockDumper {
 	public static void dump() {
-		try (final PrintWriter writer = new PrintWriter("TestMod3_BlockDump_" + (FMLCommonHandler.instance().getEffectiveSide().isClient() ? "Client" : "Server") + ".txt", "UTF-8")) {
+		try (final PrintWriter writer = new PrintWriter("TestMod3_BlockDump_" + (FMLCommonHandler.instance().getSide().isClient() ? "Client" : "Server") + ".txt", Charsets.UTF_8.toString())) {
 			writer.println("Name - toString");
 
 			StreamSupport.stream(ForgeRegistries.BLOCKS.spliterator(), false)
