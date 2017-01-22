@@ -22,6 +22,6 @@ public class GuiChunkEnergyHUD extends Gui {
 
 		final String text = I18n.format("testmod3:chunk_energy.hud", chunkEnergy.getEnergyStored(), chunkEnergy.getMaxEnergyStored());
 		final ModConfig.Client.HUDPos hudPos = ModConfig.client.chunkEnergyHUDPos;
-		drawString(minecraft.fontRendererObj, text, hudPos.x, hudPos.y, 0xFFFFFF);
+		drawString(minecraft.fontRenderer, text, hudPos.x, hudPos.y, 0xFFFFFF);
 	}
 }

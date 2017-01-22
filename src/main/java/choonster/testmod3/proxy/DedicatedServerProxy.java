@@ -52,12 +52,12 @@ public class DedicatedServerProxy implements IProxy {
 
 	@Override
 	public IThreadListener getThreadListener(MessageContext context) {
-		return context.getServerHandler().playerEntity.mcServer;
+		return context.getServerHandler().player.mcServer;
 	}
 
 	@Override
 	public EntityPlayer getPlayer(MessageContext context) {
-		return context.getServerHandler().playerEntity;
+		return context.getServerHandler().player;
 	}
 
 	@Override

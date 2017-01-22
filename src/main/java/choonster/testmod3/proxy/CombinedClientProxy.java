@@ -61,7 +61,7 @@ public class CombinedClientProxy implements IProxy {
 		if (context.side.isClient()) {
 			return MINECRAFT;
 		} else {
-			return context.getServerHandler().playerEntity.mcServer;
+			return context.getServerHandler().player.mcServer;
 		}
 	}
 
@@ -70,7 +70,7 @@ public class CombinedClientProxy implements IProxy {
 		if (context.side.isClient()) {
 			return MINECRAFT.player;
 		} else {
-			return context.getServerHandler().playerEntity;
+			return context.getServerHandler().player;
 		}
 	}
 
