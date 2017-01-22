@@ -297,3 +297,8 @@ testmod3:lock.already_locked=Can't lock container that's already locked.
 
 # GUIs
 testmod3:chunk_energy.hud=Chunk Energy: %d/%d
+
+# Key Bindings
+key.category.testmod3:general=TestMod3
+
+key.testmod3:place_held_block=Place Held Block
