@@ -8,7 +8,7 @@ import choonster.testmod3.capability.maxhealth.CapabilityMaxHealth;
 import choonster.testmod3.capability.pigspawner.CapabilityPigSpawner;
 
 /**
- * Registers this mods capabilities.
+ * Registers this mod's capabilities.
  *
  * @author Choonster
  */
