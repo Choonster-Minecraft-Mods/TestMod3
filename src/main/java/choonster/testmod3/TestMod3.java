@@ -54,6 +54,7 @@ public class TestMod3 {
 		ModFluids.registerFluidContainers();
 		ModMapGen.registerMapGen();
 		ModEntities.registerEntities();
+		ModDispenseBehaviors.register();
 
 		proxy.preInit();
 	}
