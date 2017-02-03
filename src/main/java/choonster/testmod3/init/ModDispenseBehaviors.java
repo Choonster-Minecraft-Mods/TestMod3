@@ -25,7 +25,10 @@ public class ModDispenseBehaviors {
 
 	private static final RegistryDefaulted<Item, IBehaviorDispenseItem> REGISTRY = BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY;
 
-	public static void register() {
+	/**
+	 * Register this mod's {@link IBehaviorDispenseItem}s.
+	 */
+	public static void registerDispenseBehaviors() {
 		// Replace the dye behavior with one that causes Ink Sacs to place Black Wool and all other dyes to run the vanilla behavior.
 		// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2789286-override-dispenser-dispense-only-for-a-certain
 		register(Items.DYE, new BehaviorDispenseDelegate(REGISTRY.getObject(Items.DYE)) {
