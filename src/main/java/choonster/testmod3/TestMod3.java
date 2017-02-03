@@ -55,6 +55,7 @@ public class TestMod3 {
 		ModMapGen.registerMapGen();
 		ModEntities.registerEntities();
 		ModDispenseBehaviors.registerDispenseBehaviors();
+		ModLootTables.registerLootTables();
 
 		proxy.preInit();
 	}
