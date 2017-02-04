@@ -34,6 +34,7 @@ tile.testmod3:chest.name=Mod Chest
 tile.testmod3:repeating_survival_command_block.name=Repeating Survival Command Block
 tile.testmod3:chain_survival_command_block.name=Chain Survival Command Block
 tile.testmod3:hidden.name=Hidden Block
+tile.testmod3:invisible.name=Invisible Block
 
 tile.testmod3:basic_pipe.name=Basic Pipe
 tile.testmod3:fluid_pipe.name=Fluid Pipe

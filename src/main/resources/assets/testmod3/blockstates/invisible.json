@@ -1,0 +1,10 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "minecraft:stone"
+	},
+	"variants": {
+		"normal": [ { } ],
+		"inventory": [ { } ]
+	}
+}
