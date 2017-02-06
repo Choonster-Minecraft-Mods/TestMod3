@@ -19,21 +19,25 @@ public interface IProxy {
 
 	/**
 	 * Perform a right click on the client side.
+	 *
+	 * @throws WrongSideException If called on the dedicated server.
 	 */
 	void doClientRightClick();
 
 	/**
-	 * Get the client player if on the client, or null if on the dedicated server.
+	 * Get the client player.
 	 *
 	 * @return The client player
+	 * @throws WrongSideException If called on the dedicated server.
 	 */
 	@Nullable
 	EntityPlayer getClientPlayer();
 
 	/**
-	 * Get the client {@link World} if on the client, or null if on the dedicated server.
+	 * Get the client {@link World}.
 	 *
 	 * @return The client World
+	 * @throws WrongSideException If called on the dedicated server.
 	 */
 	@Nullable
 	World getClientWorld();
@@ -60,6 +64,19 @@ public interface IProxy {
 	 * @param world  The lock's World
 	 * @param pos    The lock's block position
 	 * @param facing The lock's facing
+	 * @throws WrongSideException If called on the dedicated server.
 	 */
 	void displayLockGUI(World world, BlockPos pos, EnumFacing facing);
+
+	/**
+	 * Thrown when a proxy method is called from the wrong side.
+	 */
+	class WrongSideException extends RuntimeException {
+		public WrongSideException(String s) {
+		}
+
+		public WrongSideException(String message, Throwable cause) {
+			super(message, cause);
+		}
+	}
 }

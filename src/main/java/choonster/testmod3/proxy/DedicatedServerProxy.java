@@ -25,43 +25,43 @@ public class DedicatedServerProxy implements IProxy {
 
 	}
 
-	/**
-	 * Perform a right click on the client side.
-	 */
 	@Override
 	public void doClientRightClick() {
-
+		throw new WrongSideException("Tried to perform client right click on the dedicated server");
 	}
 
-	/**
-	 * Get the client player if on the client, or null if on the dedicated server.
-	 *
-	 * @return The client player
-	 */
 	@Nullable
 	@Override
 	public EntityPlayer getClientPlayer() {
-		return null;
+		throw new WrongSideException("Tried to get the client player on the dedicated server");
 	}
 
 	@Nullable
 	@Override
 	public World getClientWorld() {
-		return null;
+		throw new WrongSideException("Tried to get the client world on the dedicated server");
 	}
 
 	@Override
 	public IThreadListener getThreadListener(MessageContext context) {
-		return context.getServerHandler().player.mcServer;
+		if (context.side.isServer()) {
+			return context.getServerHandler().player.mcServer;
+		} else {
+			throw new WrongSideException("Tried to get the IThreadListener from a client-side MessageContext on the dedicated server");
+		}
 	}
 
 	@Override
 	public EntityPlayer getPlayer(MessageContext context) {
-		return context.getServerHandler().player;
+		if (context.side.isServer()) {
+			return context.getServerHandler().player;
+		} else {
+			throw new WrongSideException("Tried to get the player from a client-side MessageContext on the dedicated server");
+		}
 	}
 
 	@Override
 	public void displayLockGUI(World world, BlockPos pos, EnumFacing facing) {
-
+		throw new WrongSideException("Tried to open the Lock GUI on the dedicated server");
 	}
 }
