@@ -77,7 +77,7 @@ public class CombinedClientProxy implements IProxy {
 	}
 
 	@Override
-	public void displayLockGUI(World world, BlockPos pos, EnumFacing facing) {
+	public void displayLockGUI(BlockPos pos, EnumFacing facing) {
 		final ILock lock = CapabilityLock.getLock(MINECRAFT.world, pos, facing);
 		if (lock != null) {
 			MINECRAFT.displayGuiScreen(new GuiLock(lock, pos, facing));

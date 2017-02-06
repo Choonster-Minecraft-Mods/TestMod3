@@ -61,12 +61,11 @@ public interface IProxy {
 	/**
 	 * Display the lock GUI.
 	 *
-	 * @param world  The lock's World
 	 * @param pos    The lock's block position
 	 * @param facing The lock's facing
 	 * @throws WrongSideException If called on the dedicated server.
 	 */
-	void displayLockGUI(World world, BlockPos pos, EnumFacing facing);
+	void displayLockGUI(BlockPos pos, EnumFacing facing);
 
 	/**
 	 * Thrown when a proxy method is called from the wrong side.

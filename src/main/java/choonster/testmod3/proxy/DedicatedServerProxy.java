@@ -61,7 +61,7 @@ public class DedicatedServerProxy implements IProxy {
 	}
 
 	@Override
-	public void displayLockGUI(World world, BlockPos pos, EnumFacing facing) {
+	public void displayLockGUI(BlockPos pos, EnumFacing facing) {
 		throw new WrongSideException("Tried to open the Lock GUI on the dedicated server");
 	}
 }
