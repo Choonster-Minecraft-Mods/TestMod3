@@ -22,5 +22,5 @@ public interface IPigSpawnerInteractable {
 	 * @param iCommandSender The ICommandSender that caused the interaction, if any
 	 * @return {@code true} to prevent the default action of the IPigSpawner
 	 */
-	boolean interact(IPigSpawner pigSpawner, World world, BlockPos pos, @Nullable ICommandSender iCommandSender);
+	boolean interact(final IPigSpawner pigSpawner, final World world, final BlockPos pos, @Nullable final ICommandSender iCommandSender);
 }

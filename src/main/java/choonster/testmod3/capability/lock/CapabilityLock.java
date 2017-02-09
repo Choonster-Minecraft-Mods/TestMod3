@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
  *
  * @author Choonster
  */
-public class CapabilityLock {
+public final class CapabilityLock {
 	/**
 	 * The {@link Capability} instance.
 	 */
@@ -41,7 +41,7 @@ public class CapabilityLock {
 	public static void register() {
 		CapabilityManager.INSTANCE.register(ILock.class, new Capability.IStorage<ILock>() {
 			@Override
-			public NBTBase writeNBT(Capability<ILock> capability, ILock instance, EnumFacing side) {
+			public NBTBase writeNBT(final Capability<ILock> capability, final ILock instance, final EnumFacing side) {
 				final NBTTagCompound tagCompound = new NBTTagCompound();
 
 				final LockCode lockCode = instance.getLockCode();
@@ -55,7 +55,7 @@ public class CapabilityLock {
 			}
 
 			@Override
-			public void readNBT(Capability<ILock> capability, ILock instance, EnumFacing side, NBTBase nbt) {
+			public void readNBT(final Capability<ILock> capability, final ILock instance, final EnumFacing side, final NBTBase nbt) {
 				if (!(instance instanceof Lock))
 					throw new RuntimeException("Can not deserialise to an instance that isn't the default implementation");
 

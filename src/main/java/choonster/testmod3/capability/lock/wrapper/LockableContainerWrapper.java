@@ -13,7 +13,7 @@ import net.minecraft.world.LockCode;
 public class LockableContainerWrapper implements ILock {
 	private final ILockableContainer lockableContainer;
 
-	public LockableContainerWrapper(ILockableContainer lockableContainer) {
+	public LockableContainerWrapper(final ILockableContainer lockableContainer) {
 		this.lockableContainer = lockableContainer;
 	}
 
@@ -31,7 +31,7 @@ public class LockableContainerWrapper implements ILock {
 	 * @param code The lock code
 	 */
 	@Override
-	public void setLockCode(LockCode code) {
+	public void setLockCode(final LockCode code) {
 		lockableContainer.setLockCode(code);
 	}
 

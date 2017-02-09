@@ -18,5 +18,5 @@ public interface IChunkEnergyHolder {
 	 * @return The IChunkEnergy, or null if the chunk isn't loaded
 	 */
 	@Nullable
-	IChunkEnergy getChunkEnergy(ChunkPos chunkPos);
+	IChunkEnergy getChunkEnergy(final ChunkPos chunkPos);
 }

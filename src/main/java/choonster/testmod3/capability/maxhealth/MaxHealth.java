@@ -52,7 +52,7 @@ public class MaxHealth implements IMaxHealth {
 	private final IAttributeInstance dummyMaxHealthAttribute = new AttributeMap().registerAttribute(SharedMonsterAttributes.MAX_HEALTH);
 
 
-	public MaxHealth(@Nullable EntityLivingBase entity) {
+	public MaxHealth(@Nullable final EntityLivingBase entity) {
 		this.entity = entity;
 	}
 
@@ -72,7 +72,7 @@ public class MaxHealth implements IMaxHealth {
 	 * @param bonusMaxHealth The bonus max health
 	 */
 	@Override
-	public final void setBonusMaxHealth(float bonusMaxHealth) {
+	public final void setBonusMaxHealth(final float bonusMaxHealth) {
 		this.bonusMaxHealth = bonusMaxHealth;
 
 		onBonusMaxHealthChanged();
@@ -84,7 +84,7 @@ public class MaxHealth implements IMaxHealth {
 	 * @param healthToAdd The amount of health to add
 	 */
 	@Override
-	public final void addBonusMaxHealth(float healthToAdd) {
+	public final void addBonusMaxHealth(final float healthToAdd) {
 		setBonusMaxHealth(getBonusMaxHealth() + healthToAdd);
 	}
 

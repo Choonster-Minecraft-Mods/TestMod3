@@ -28,7 +28,7 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 	 */
 	private final ChunkPos chunkPos;
 
-	public ChunkEnergy(int capacity, World world, ChunkPos chunkPos) {
+	public ChunkEnergy(final int capacity, final World world, final ChunkPos chunkPos) {
 		super(capacity);
 		this.world = world;
 		this.chunkPos = chunkPos;
@@ -41,7 +41,7 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 	}
 
 	@Override
-	public void deserializeNBT(NBTTagInt nbt) {
+	public void deserializeNBT(final NBTTagInt nbt) {
 		energy = nbt.getInt();
 	}
 
@@ -56,7 +56,7 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 	}
 
 	@Override
-	public int receiveEnergy(int maxReceive, boolean simulate) {
+	public int receiveEnergy(final int maxReceive, final boolean simulate) {
 		final int energyReceived = super.receiveEnergy(maxReceive, simulate);
 
 		if (!simulate && energyReceived != 0) {
@@ -67,7 +67,7 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 	}
 
 	@Override
-	public int extractEnergy(int maxExtract, boolean simulate) {
+	public int extractEnergy(final int maxExtract, final boolean simulate) {
 		final int energyExtracted = super.extractEnergy(maxExtract, simulate);
 
 		if (!simulate && energyExtracted != 0) {
@@ -82,7 +82,7 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 	 *
 	 * @param energy The new energy value
 	 */
-	public void setEnergy(int energy) {
+	public void setEnergy(final int energy) {
 		this.energy = energy;
 		onEnergyChanged();
 	}

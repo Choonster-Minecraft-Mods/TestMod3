@@ -24,7 +24,7 @@ public class CapabilityProviderSerializable<HANDLER> extends CapabilityProviderS
 	 * @param capability The Capability instance to provide the handler for
 	 * @param facing     The EnumFacing to provide the handler for
 	 */
-	public CapabilityProviderSerializable(Capability<HANDLER> capability, @Nullable EnumFacing facing) {
+	public CapabilityProviderSerializable(final Capability<HANDLER> capability, @Nullable final EnumFacing facing) {
 		this(capability, facing, capability.getDefaultInstance());
 	}
 
@@ -35,7 +35,7 @@ public class CapabilityProviderSerializable<HANDLER> extends CapabilityProviderS
 	 * @param facing     The EnumFacing to provide the handler for
 	 * @param instance   The handler instance to provide
 	 */
-	public CapabilityProviderSerializable(Capability<HANDLER> capability, @Nullable EnumFacing facing, HANDLER instance) {
+	public CapabilityProviderSerializable(final Capability<HANDLER> capability, @Nullable final EnumFacing facing, final HANDLER instance) {
 		super(instance, capability, facing);
 	}
 
@@ -45,7 +45,7 @@ public class CapabilityProviderSerializable<HANDLER> extends CapabilityProviderS
 	}
 
 	@Override
-	public void deserializeNBT(NBTBase nbt) {
+	public void deserializeNBT(final NBTBase nbt) {
 		getCapability().readNBT(getInstance(), getFacing(), nbt);
 	}
 

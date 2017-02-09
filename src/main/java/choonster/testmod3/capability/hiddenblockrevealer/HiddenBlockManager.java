@@ -30,7 +30,7 @@ public class HiddenBlockManager {
 	 * @param player The player
 	 * @return Should hidden blocks be revealed?
 	 */
-	private static boolean shouldHeldItemRevealHiddenBlocks(EntityPlayer player) {
+	private static boolean shouldHeldItemRevealHiddenBlocks(final EntityPlayer player) {
 		for (final EnumHand hand : EnumHand.values()) {
 			final IHiddenBlockRevealer hiddenBlockRevealer = CapabilityHiddenBlockRevealer.getHiddenBlockRevealer(player.getHeldItem(hand));
 			if (hiddenBlockRevealer != null && hiddenBlockRevealer.revealHiddenBlocks()) {
@@ -42,7 +42,7 @@ public class HiddenBlockManager {
 	}
 
 	@SubscribeEvent
-	public static void clientTick(TickEvent.ClientTickEvent event) {
+	public static void clientTick(final TickEvent.ClientTickEvent event) {
 		if (event.phase != TickEvent.Phase.END) return;
 
 		final EntityPlayer player = TestMod3.proxy.getClientPlayer();
@@ -70,7 +70,7 @@ public class HiddenBlockManager {
 	 * @param world The world
 	 * @param pos   The position of the hidden block to update
 	 */
-	public static void refresh(World world, BlockPos pos) {
+	public static void refresh(final World world, final BlockPos pos) {
 		if (toggled) {
 			final IBlockState state = world.getBlockState(pos);
 			world.notifyBlockUpdate(pos, state, state, 3);

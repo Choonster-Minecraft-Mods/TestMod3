@@ -28,7 +28,7 @@ public class PigSpawnerFinite extends PigSpawnerBase implements IPigSpawnerFinit
 	 */
 	private final int maxNumPigs;
 
-	public PigSpawnerFinite(int maxNumPigs) {
+	public PigSpawnerFinite(final int maxNumPigs) {
 		this.maxNumPigs = maxNumPigs;
 		Logger.debug(CapabilityPigSpawner.LOG_MARKER, DebugUtil.getStackTrace(10), "Creating finite pig spawner: %s", this);
 	}
@@ -60,7 +60,7 @@ public class PigSpawnerFinite extends PigSpawnerBase implements IPigSpawnerFinit
 	 * @throws IllegalArgumentException If {@code numPigs} is greater than {@link #getMaxNumPigs()}
 	 */
 	@Override
-	public void setNumPigs(int numPigs) {
+	public void setNumPigs(final int numPigs) {
 		Preconditions.checkArgument(numPigs <= getMaxNumPigs(), "Attempted to set numPigs to %s, but maximum is %s", numPigs, getMaxNumPigs());
 		this.numPigs = numPigs;
 	}
@@ -75,7 +75,7 @@ public class PigSpawnerFinite extends PigSpawnerBase implements IPigSpawnerFinit
 	 * @return Can a pig be spawned?
 	 */
 	@Override
-	public boolean canSpawnPig(World world, double x, double y, double z) {
+	public boolean canSpawnPig(final World world, final double x, final double y, final double z) {
 		return getNumPigs() > 0;
 	}
 
@@ -89,7 +89,7 @@ public class PigSpawnerFinite extends PigSpawnerBase implements IPigSpawnerFinit
 	 * @return Was the pig successfully spawned?
 	 */
 	@Override
-	public boolean spawnPig(World world, double x, double y, double z) {
+	public boolean spawnPig(final World world, final double x, final double y, final double z) {
 		setNumPigs(getNumPigs() - 1);
 		return super.spawnPig(world, x, y, z);
 	}

@@ -17,7 +17,7 @@ public interface IHiddenBlockRevealer {
 	/**
 	 * @param revealHiddenBlocks Should hidden blocks be revealed?
 	 */
-	void setRevealHiddenBlocks(boolean revealHiddenBlocks);
+	void setRevealHiddenBlocks(final boolean revealHiddenBlocks);
 
 	/**
 	 * {@inheritDoc}

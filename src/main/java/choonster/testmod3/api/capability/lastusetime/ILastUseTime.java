@@ -20,7 +20,7 @@ public interface ILastUseTime {
 	 *
 	 * @param lastUseTime The last use time
 	 */
-	void set(long lastUseTime);
+	void set(final long lastUseTime);
 
 	/**
 	 * Should this object's last use time be updated automatically?

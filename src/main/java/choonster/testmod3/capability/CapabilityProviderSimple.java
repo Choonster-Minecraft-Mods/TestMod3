@@ -12,20 +12,23 @@ import javax.annotation.Nullable;
  * @author Choonster
  */
 public class CapabilityProviderSimple<HANDLER> implements ICapabilityProvider {
+
 	/**
 	 * The {@link Capability} instance to provide the handler for.
 	 */
 	protected final Capability<HANDLER> capability;
+
 	/**
 	 * The {@link EnumFacing} to provide the handler for.
 	 */
 	protected final EnumFacing facing;
+
 	/**
 	 * The handler instance to provide.
 	 */
 	protected final HANDLER instance;
 
-	public CapabilityProviderSimple(HANDLER instance, Capability<HANDLER> capability, @Nullable EnumFacing facing) {
+	public CapabilityProviderSimple(final HANDLER instance, final Capability<HANDLER> capability, @Nullable final EnumFacing facing) {
 		this.instance = instance;
 		this.capability = capability;
 		this.facing = facing;
@@ -47,7 +50,7 @@ public class CapabilityProviderSimple<HANDLER> implements ICapabilityProvider {
 	 * @return True if this object supports the capability.
 	 */
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(final Capability<?> capability, @Nullable final EnumFacing facing) {
 		return capability == getCapability();
 	}
 
@@ -63,7 +66,7 @@ public class CapabilityProviderSimple<HANDLER> implements ICapabilityProvider {
 	 */
 	@Override
 	@Nullable
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> T getCapability(final Capability<T> capability, @Nullable final EnumFacing facing) {
 		if (capability == getCapability()) {
 			return getCapability().cast(getInstance());
 		}

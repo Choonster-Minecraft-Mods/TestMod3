@@ -29,7 +29,7 @@ public interface ILock extends IWorldNameable {
 	 *
 	 * @param code The lock code
 	 */
-	void setLockCode(LockCode code);
+	void setLockCode(final LockCode code);
 
 	/**
 	 * Get the lock code.
@@ -44,7 +44,7 @@ public interface ILock extends IWorldNameable {
 	 * @param player The player opening the lock
 	 * @return Was the player allowed to open the lock?
 	 */
-	default boolean tryOpen(EntityPlayer player) {
+	default boolean tryOpen(final EntityPlayer player) {
 		// Adapted from EntityPlayerMP#displayGUIChest
 
 		final LockCode lockCode = getLockCode();

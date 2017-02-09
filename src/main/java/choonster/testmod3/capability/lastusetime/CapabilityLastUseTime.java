@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
  *
  * @author Choonster
  */
-public class CapabilityLastUseTime {
+public final class CapabilityLastUseTime {
 	/**
 	 * The {@link Capability} instance.
 	 */
@@ -50,12 +50,12 @@ public class CapabilityLastUseTime {
 	public static void register() {
 		CapabilityManager.INSTANCE.register(ILastUseTime.class, new Capability.IStorage<ILastUseTime>() {
 			@Override
-			public NBTBase writeNBT(Capability<ILastUseTime> capability, ILastUseTime instance, EnumFacing side) {
+			public NBTBase writeNBT(final Capability<ILastUseTime> capability, final ILastUseTime instance, final EnumFacing side) {
 				return new NBTTagLong(instance.get());
 			}
 
 			@Override
-			public void readNBT(Capability<ILastUseTime> capability, ILastUseTime instance, EnumFacing side, NBTBase nbt) {
+			public void readNBT(final Capability<ILastUseTime> capability, final ILastUseTime instance, final EnumFacing side, final NBTBase nbt) {
 				instance.set(((NBTTagLong) nbt).getLong());
 			}
 		}, () -> new LastUseTime(true));
@@ -70,7 +70,7 @@ public class CapabilityLastUseTime {
 	 * @return The ILastUseTime, or null if there isn't one
 	 */
 	@Nullable
-	public static ILastUseTime getLastUseTime(ItemStack itemStack) {
+	public static ILastUseTime getLastUseTime(final ItemStack itemStack) {
 		return CapabilityUtils.getCapability(itemStack, LAST_USE_TIME_CAPABILITY, DEFAULT_FACING);
 	}
 
@@ -104,7 +104,7 @@ public class CapabilityLastUseTime {
 	 * @param lastUseTime The ILastUseTime
 	 * @return The provider
 	 */
-	public static ICapabilityProvider createProvider(ILastUseTime lastUseTime) {
+	public static ICapabilityProvider createProvider(final ILastUseTime lastUseTime) {
 		return new CapabilityProviderSerializable<>(LAST_USE_TIME_CAPABILITY, DEFAULT_FACING, lastUseTime);
 	}
 
@@ -119,7 +119,7 @@ public class CapabilityLastUseTime {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void playerInteract(PlayerInteractEvent.RightClickItem event) {
+		public static void playerInteract(final PlayerInteractEvent.RightClickItem event) {
 			final ItemStack itemStack = event.getItemStack();
 			final ILastUseTime lastUseTime = getLastUseTime(itemStack);
 			if (lastUseTime != null && lastUseTime.automaticUpdates()) {
@@ -153,7 +153,7 @@ public class CapabilityLastUseTime {
 		 *
 		 * @param item The item
 		 */
-		public static void addToItem(Item item) {
+		public static void addToItem(final Item item) {
 			item.addPropertyOverride(ID, GETTER);
 		}
 	}

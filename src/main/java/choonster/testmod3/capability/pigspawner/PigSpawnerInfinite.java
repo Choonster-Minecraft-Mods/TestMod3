@@ -13,6 +13,7 @@ import java.util.List;
  * @author Choonster
  */
 public class PigSpawnerInfinite extends PigSpawnerBase {
+
 	/**
 	 * Can a pig be spawned at the specified position?
 	 *
@@ -23,7 +24,7 @@ public class PigSpawnerInfinite extends PigSpawnerBase {
 	 * @return Can a pig be spawned?
 	 */
 	@Override
-	public boolean canSpawnPig(World world, double x, double y, double z) {
+	public boolean canSpawnPig(final World world, final double x, final double y, final double z) {
 		return true;
 	}
 

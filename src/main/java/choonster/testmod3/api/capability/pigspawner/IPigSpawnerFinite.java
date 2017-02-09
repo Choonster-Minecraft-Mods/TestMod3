@@ -26,5 +26,5 @@ public interface IPigSpawnerFinite extends IPigSpawner {
 	 * @param numPigs The number of pigs that can be spawned
 	 * @throws IllegalArgumentException If {@code numPigs} is greater than {@link #getMaxNumPigs()}
 	 */
-	void setNumPigs(int numPigs);
+	void setNumPigs(final int numPigs);
 }

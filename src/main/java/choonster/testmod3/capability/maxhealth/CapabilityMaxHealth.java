@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
  *
  * @author Choonster
  */
-public class CapabilityMaxHealth {
+public final class CapabilityMaxHealth {
 
 	/**
 	 * The {@link Capability} instance.
@@ -54,12 +54,12 @@ public class CapabilityMaxHealth {
 	public static void register() {
 		CapabilityManager.INSTANCE.register(IMaxHealth.class, new Capability.IStorage<IMaxHealth>() {
 			@Override
-			public NBTBase writeNBT(Capability<IMaxHealth> capability, IMaxHealth instance, EnumFacing side) {
+			public NBTBase writeNBT(final Capability<IMaxHealth> capability, final IMaxHealth instance, final EnumFacing side) {
 				return new NBTTagFloat(instance.getBonusMaxHealth());
 			}
 
 			@Override
-			public void readNBT(Capability<IMaxHealth> capability, IMaxHealth instance, EnumFacing side, NBTBase nbt) {
+			public void readNBT(final Capability<IMaxHealth> capability, final IMaxHealth instance, final EnumFacing side, final NBTBase nbt) {
 				instance.setBonusMaxHealth(((NBTTagFloat) nbt).getFloat());
 			}
 		}, () -> new MaxHealth(null));
@@ -72,7 +72,7 @@ public class CapabilityMaxHealth {
 	 * @return The IMaxHealth
 	 */
 	@Nullable
-	public static IMaxHealth getMaxHealth(EntityLivingBase entity) {
+	public static IMaxHealth getMaxHealth(final EntityLivingBase entity) {
 		return CapabilityUtils.getCapability(entity, MAX_HEALTH_CAPABILITY, DEFAULT_FACING);
 	}
 
@@ -82,7 +82,7 @@ public class CapabilityMaxHealth {
 	 * @param maxHealth The IMaxHealth
 	 * @return The provider
 	 */
-	public static ICapabilityProvider createProvider(IMaxHealth maxHealth) {
+	public static ICapabilityProvider createProvider(final IMaxHealth maxHealth) {
 		return new CapabilityProviderSerializable<>(MAX_HEALTH_CAPABILITY, DEFAULT_FACING, maxHealth);
 	}
 
@@ -92,22 +92,24 @@ public class CapabilityMaxHealth {
 	 * @param maxHealth The max health value
 	 * @return The formatted text.
 	 */
-	public static String formatMaxHealth(float maxHealth) {
+	public static String formatMaxHealth(final float maxHealth) {
 		return ItemStack.DECIMALFORMAT.format(maxHealth);
 	}
 
 	/**
 	 * Event handler for the {@link IMaxHealth} capability.
 	 */
+	@SuppressWarnings("unused")
 	@Mod.EventBusSubscriber
-	public static class EventHandler {
+	private static class EventHandler {
+
 		/**
 		 * Attach the {@link IMaxHealth} capability to all living entities.
 		 *
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void attachCapabilities(AttachCapabilitiesEvent<Entity> event) {
+		public static void attachCapabilities(final AttachCapabilitiesEvent<Entity> event) {
 			if (event.getObject() instanceof EntityLivingBase) {
 				final MaxHealth maxHealth = new MaxHealth((EntityLivingBase) event.getObject());
 				event.addCapability(ID, createProvider(maxHealth));
@@ -120,7 +122,7 @@ public class CapabilityMaxHealth {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void playerClone(PlayerEvent.Clone event) {
+		public static void playerClone(final PlayerEvent.Clone event) {
 			final IMaxHealth oldMaxHealth = getMaxHealth(event.getOriginal());
 			final IMaxHealth newMaxHealth = getMaxHealth(event.getEntityPlayer());
 
@@ -135,7 +137,7 @@ public class CapabilityMaxHealth {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void playerChangeDimension(PlayerChangedDimensionEvent event) {
+		public static void playerChangeDimension(final PlayerChangedDimensionEvent event) {
 			final IMaxHealth maxHealth = getMaxHealth(event.player);
 
 			if (maxHealth != null) {

@@ -31,7 +31,7 @@ public class BlockPigSpawnerRefiller extends BlockTestMod3 implements IPigSpawne
 	 * @return {@code true} to prevent the default action of the IPigSpawner
 	 */
 	@Override
-	public boolean interact(IPigSpawner pigSpawner, World world, BlockPos pos, @Nullable ICommandSender iCommandSender) {
+	public boolean interact(final IPigSpawner pigSpawner, final World world, final BlockPos pos, @Nullable final ICommandSender iCommandSender) {
 		if (pigSpawner instanceof IPigSpawnerFinite) {
 			final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) pigSpawner;
 			pigSpawnerFinite.setNumPigs(pigSpawnerFinite.getMaxNumPigs());

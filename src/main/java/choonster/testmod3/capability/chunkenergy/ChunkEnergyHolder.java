@@ -25,7 +25,7 @@ public class ChunkEnergyHolder implements IChunkEnergyHolderModifiable {
 	 */
 	@Nullable
 	@Override
-	public IChunkEnergy getChunkEnergy(ChunkPos chunkPos) {
+	public IChunkEnergy getChunkEnergy(final ChunkPos chunkPos) {
 		return chunkEnergies.get(chunkPos);
 	}
 
@@ -36,7 +36,7 @@ public class ChunkEnergyHolder implements IChunkEnergyHolderModifiable {
 	 * @param chunkEnergy The IChunkEnergy
 	 */
 	@Override
-	public void setChunkEnergy(ChunkPos chunkPos, IChunkEnergy chunkEnergy) {
+	public void setChunkEnergy(final ChunkPos chunkPos, final IChunkEnergy chunkEnergy) {
 		chunkEnergies.put(chunkPos, chunkEnergy);
 	}
 
@@ -46,7 +46,7 @@ public class ChunkEnergyHolder implements IChunkEnergyHolderModifiable {
 	 * @param chunkPos The chunk position
 	 */
 	@Override
-	public void removeChunkEnergy(ChunkPos chunkPos) {
+	public void removeChunkEnergy(final ChunkPos chunkPos) {
 		chunkEnergies.remove(chunkPos);
 	}
 }

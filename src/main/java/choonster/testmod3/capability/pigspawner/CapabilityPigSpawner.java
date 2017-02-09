@@ -72,7 +72,7 @@ public final class CapabilityPigSpawner {
 	public static void register() {
 		CapabilityManager.INSTANCE.register(IPigSpawner.class, new Capability.IStorage<IPigSpawner>() {
 			@Override
-			public NBTBase writeNBT(Capability<IPigSpawner> capability, IPigSpawner instance, EnumFacing side) {
+			public NBTBase writeNBT(final Capability<IPigSpawner> capability, final IPigSpawner instance, final EnumFacing side) {
 				final NBTTagCompound tagCompound = new NBTTagCompound();
 				if (instance instanceof IPigSpawnerFinite) {
 					tagCompound.setInteger("NumPigs", ((IPigSpawnerFinite) instance).getNumPigs());
@@ -81,7 +81,7 @@ public final class CapabilityPigSpawner {
 			}
 
 			@Override
-			public void readNBT(Capability<IPigSpawner> capability, IPigSpawner instance, EnumFacing side, NBTBase nbt) {
+			public void readNBT(final Capability<IPigSpawner> capability, final IPigSpawner instance, final EnumFacing side, final NBTBase nbt) {
 				if (instance instanceof IPigSpawnerFinite) {
 					final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) instance;
 					final NBTTagCompound tagCompound = (NBTTagCompound) nbt;
@@ -103,7 +103,7 @@ public final class CapabilityPigSpawner {
 	 * @return The IPigSpawner, or null if there isn't one
 	 */
 	@Nullable
-	public static IPigSpawner getPigSpawner(ItemStack itemStack) {
+	public static IPigSpawner getPigSpawner(final ItemStack itemStack) {
 		return CapabilityUtils.getCapability(itemStack, PIG_SPAWNER_CAPABILITY, DEFAULT_FACING);
 	}
 
@@ -122,7 +122,7 @@ public final class CapabilityPigSpawner {
 	 * @param pigSpawner The IPigSpawner
 	 * @return The provider
 	 */
-	public static ICapabilityProvider createProvider(IPigSpawner pigSpawner) {
+	public static ICapabilityProvider createProvider(final IPigSpawner pigSpawner) {
 		return new CapabilityProviderSerializable<>(PIG_SPAWNER_CAPABILITY, DEFAULT_FACING, pigSpawner);
 	}
 
@@ -130,14 +130,15 @@ public final class CapabilityPigSpawner {
 	 * Event handler for the {@link IPigSpawner} capability.
 	 */
 	@Mod.EventBusSubscriber
-	public static class EventHandler {
+	private static class EventHandler {
+
 		/**
 		 * Attach the {@link IPigSpawner} capability to vanilla items.
 		 *
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void attachCapabilities(AttachCapabilitiesEvent<Item> event) {
+		public static void attachCapabilities(final AttachCapabilitiesEvent<Item> event) {
 			if (event.getObject() == Items.CLAY_BALL) {
 				event.addCapability(ID, createProvider());
 			}
@@ -158,7 +159,7 @@ public final class CapabilityPigSpawner {
 		 * @param iCommandSender  The ICommandSender, if any
 		 * @return Was any action taken?
 		 */
-		private static boolean trySpawnPig(IPigSpawner pigSpawner, World world, double x, double y, double z, @Nullable IPigSpawnerInteractable interactable, BlockPos interactablePos, @Nullable ICommandSender iCommandSender) {
+		private static boolean trySpawnPig(final IPigSpawner pigSpawner, final World world, final double x, final double y, final double z, @Nullable final IPigSpawnerInteractable interactable, final BlockPos interactablePos, @Nullable final ICommandSender iCommandSender) {
 			if (world.isRemote) return false;
 
 			boolean actionTaken = false;
@@ -185,7 +186,7 @@ public final class CapabilityPigSpawner {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void playerInteract(PlayerInteractEvent.RightClickBlock event) {
+		public static void playerInteract(final PlayerInteractEvent.RightClickBlock event) {
 			final EnumFacing facing = event.getFace();
 			assert facing != null;
 
@@ -212,7 +213,7 @@ public final class CapabilityPigSpawner {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void entityInteract(PlayerInteractEvent.EntityInteract event) {
+		public static void entityInteract(final PlayerInteractEvent.EntityInteract event) {
 			final World world = event.getEntityPlayer().getEntityWorld();
 
 			final Entity target = event.getTarget();
@@ -233,8 +234,8 @@ public final class CapabilityPigSpawner {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void itemTooltip(ItemTooltipEvent event) {
-			IPigSpawner pigSpawner = getPigSpawner(event.getItemStack());
+		public static void itemTooltip(final ItemTooltipEvent event) {
+			final IPigSpawner pigSpawner = getPigSpawner(event.getItemStack());
 			if (pigSpawner == null) return;
 
 			final Style style = new Style().setColor(TextFormatting.LIGHT_PURPLE);

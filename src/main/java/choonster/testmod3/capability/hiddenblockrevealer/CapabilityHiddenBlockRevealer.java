@@ -44,14 +44,14 @@ public final class CapabilityHiddenBlockRevealer {
 	public static void register() {
 		CapabilityManager.INSTANCE.register(IHiddenBlockRevealer.class, new Capability.IStorage<IHiddenBlockRevealer>() {
 					@Override
-					public NBTBase writeNBT(Capability<IHiddenBlockRevealer> capability, IHiddenBlockRevealer instance, EnumFacing side) {
+					public NBTBase writeNBT(final Capability<IHiddenBlockRevealer> capability, final IHiddenBlockRevealer instance, final EnumFacing side) {
 						final NBTTagCompound tagCompound = new NBTTagCompound();
 						tagCompound.setBoolean("RevealHiddenBlocks", instance.revealHiddenBlocks());
 						return tagCompound;
 					}
 
 					@Override
-					public void readNBT(Capability<IHiddenBlockRevealer> capability, IHiddenBlockRevealer instance, EnumFacing side, NBTBase nbt) {
+					public void readNBT(final Capability<IHiddenBlockRevealer> capability, final IHiddenBlockRevealer instance, final EnumFacing side, final NBTBase nbt) {
 						final NBTTagCompound tagCompound = (NBTTagCompound) nbt;
 						instance.setRevealHiddenBlocks(tagCompound.getBoolean("RevealHiddenBlocks"));
 					}
@@ -65,10 +65,10 @@ public final class CapabilityHiddenBlockRevealer {
 	 * Get the {@link IHiddenBlockRevealer} for the {@link ItemStack}, if any.
 	 *
 	 * @param stack The ItemStack
-	 * @return The {@link IHiddenBlockRevealer} for the {@link ItemStack}, if any
+	 * @return The IHiddenBlockRevealer for the {@link ItemStack}, if any
 	 */
 	@Nullable
-	public static IHiddenBlockRevealer getHiddenBlockRevealer(ItemStack stack) {
+	public static IHiddenBlockRevealer getHiddenBlockRevealer(final ItemStack stack) {
 		return CapabilityUtils.getCapability(stack, HIDDEN_BLOCK_REVEALER_CAPABILITY, DEFAULT_FACING);
 	}
 

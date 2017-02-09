@@ -18,14 +18,14 @@ public interface IMaxHealth {
 	 *
 	 * @param bonusMaxHealth The bonus max health
 	 */
-	void setBonusMaxHealth(float bonusMaxHealth);
+	void setBonusMaxHealth(final float bonusMaxHealth);
 
 	/**
 	 * Add an amount to the current bonus max health.
 	 *
 	 * @param healthToAdd The amount of health to add
 	 */
-	void addBonusMaxHealth(float healthToAdd);
+	void addBonusMaxHealth(final float healthToAdd);
 
 	/**
 	 * Synchronise the entity's max health to watching clients.

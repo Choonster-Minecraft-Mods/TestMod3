@@ -13,7 +13,7 @@ public class LastUseTime implements ILastUseTime {
 	private long lastUseTime;
 	private final boolean automaticUpdates;
 
-	public LastUseTime(boolean automaticUpdates) {
+	public LastUseTime(final boolean automaticUpdates) {
 		this.automaticUpdates = automaticUpdates;
 	}
 
@@ -33,7 +33,7 @@ public class LastUseTime implements ILastUseTime {
 	 * @param lastUseTime The last use time
 	 */
 	@Override
-	public void set(long lastUseTime) {
+	public void set(final long lastUseTime) {
 		this.lastUseTime = lastUseTime;
 	}
 

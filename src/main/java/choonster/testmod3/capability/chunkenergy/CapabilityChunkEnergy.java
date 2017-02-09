@@ -65,12 +65,12 @@ public class CapabilityChunkEnergy {
 	public static void register() {
 		CapabilityManager.INSTANCE.register(IChunkEnergyHolder.class, new Capability.IStorage<IChunkEnergyHolder>() {
 			@Override
-			public NBTBase writeNBT(Capability<IChunkEnergyHolder> capability, IChunkEnergyHolder instance, EnumFacing side) {
+			public NBTBase writeNBT(final Capability<IChunkEnergyHolder> capability, final IChunkEnergyHolder instance, final EnumFacing side) {
 				return new NBTTagCompound();
 			}
 
 			@Override
-			public void readNBT(Capability<IChunkEnergyHolder> capability, IChunkEnergyHolder instance, EnumFacing side, NBTBase nbt) {
+			public void readNBT(final Capability<IChunkEnergyHolder> capability, final IChunkEnergyHolder instance, final EnumFacing side, final NBTBase nbt) {
 
 			}
 		}, ChunkEnergyHolder::new);
@@ -83,7 +83,7 @@ public class CapabilityChunkEnergy {
 	 * @return The IChunkEnergyHolder, if any
 	 */
 	@Nullable
-	public static IChunkEnergyHolder getChunkEnergyHolder(World world) {
+	public static IChunkEnergyHolder getChunkEnergyHolder(final World world) {
 		return CapabilityUtils.getCapability(world, CHUNK_ENERGY_CAPABILITY, DEFAULT_FACING);
 	}
 
@@ -95,7 +95,7 @@ public class CapabilityChunkEnergy {
 	 * @return The IChunkEnergy, if any
 	 */
 	@Nullable
-	public static IChunkEnergy getChunkEnergy(World world, ChunkPos chunkPos) {
+	public static IChunkEnergy getChunkEnergy(final World world, final ChunkPos chunkPos) {
 		final IChunkEnergyHolder chunkEnergyHolder = getChunkEnergyHolder(world);
 		if (chunkEnergyHolder == null) return null;
 
@@ -109,12 +109,13 @@ public class CapabilityChunkEnergy {
 	 * @return The IChunkEnergy, if any
 	 */
 	@Nullable
-	public static IChunkEnergy getChunkEnergy(Chunk chunk) {
+	public static IChunkEnergy getChunkEnergy(final Chunk chunk) {
 		return getChunkEnergy(chunk.getWorld(), chunk.getPos());
 	}
 
 	@Mod.EventBusSubscriber
-	public static class EventHandler {
+	@SuppressWarnings("unused")
+	private static class EventHandler {
 
 		/**
 		 * Attach the {@link IChunkEnergyHolder} capability to all {@link World}s.
@@ -122,7 +123,7 @@ public class CapabilityChunkEnergy {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void attachCapabilities(AttachCapabilitiesEvent<World> event) {
+		public static void attachCapabilities(final AttachCapabilitiesEvent<World> event) {
 			final IChunkEnergyHolder chunkEnergyHolder = new ChunkEnergyHolder();
 			event.addCapability(ID, new CapabilityProviderSimple<>(chunkEnergyHolder, CHUNK_ENERGY_CAPABILITY, DEFAULT_FACING));
 		}
@@ -133,7 +134,7 @@ public class CapabilityChunkEnergy {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void chunkDataLoad(ChunkDataEvent.Load event) {
+		public static void chunkDataLoad(final ChunkDataEvent.Load event) {
 			final World world = event.getWorld();
 			final ChunkPos chunkPos = event.getChunk().getPos();
 
@@ -160,7 +161,7 @@ public class CapabilityChunkEnergy {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void chunkLoad(ChunkEvent.Load event) {
+		public static void chunkLoad(final ChunkEvent.Load event) {
 			final World world = event.getWorld();
 			final ChunkPos chunkPos = event.getChunk().getPos();
 
@@ -179,7 +180,7 @@ public class CapabilityChunkEnergy {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void chunkDataSave(ChunkDataEvent.Save event) {
+		public static void chunkDataSave(final ChunkDataEvent.Save event) {
 			final IChunkEnergy chunkEnergy = getChunkEnergy(event.getChunk());
 			if (!(chunkEnergy instanceof ChunkEnergy)) return;
 
@@ -192,7 +193,7 @@ public class CapabilityChunkEnergy {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void chunkUnload(ChunkEvent.Unload event) {
+		public static void chunkUnload(final ChunkEvent.Unload event) {
 			final IChunkEnergyHolder chunkEnergyHolder = getChunkEnergyHolder(event.getWorld());
 			if (!(chunkEnergyHolder instanceof IChunkEnergyHolderModifiable)) return;
 
@@ -205,7 +206,7 @@ public class CapabilityChunkEnergy {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void chunkWatch(ChunkWatchEvent.Watch event) {
+		public static void chunkWatch(final ChunkWatchEvent.Watch event) {
 			final EntityPlayerMP player = event.getPlayer();
 			final IChunkEnergy chunkEnergy = getChunkEnergy(player.getEntityWorld(), event.getChunk());
 			if (chunkEnergy == null) return;
