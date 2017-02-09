@@ -9,6 +9,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -99,5 +100,22 @@ public class PigSpawnerFinite extends PigSpawnerBase implements IPigSpawnerFinit
 	@Override
 	public List<ITextComponent> getTooltipLines() {
 		return ImmutableList.of(new TextComponentTranslation("testmod3:pig_spawner.finite.desc", getNumPigs(), getMaxNumPigs()));
+	}
+
+	@Override
+	public boolean equals(@Nullable final Object obj) {
+		if (this == obj) return true;
+		if (obj == null || getClass() != obj.getClass()) return false;
+
+		final PigSpawnerFinite that = (PigSpawnerFinite) obj;
+
+		return numPigs == that.numPigs && maxNumPigs == that.maxNumPigs;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = numPigs;
+		result = 31 * result + maxNumPigs;
+		return result;
 	}
 }

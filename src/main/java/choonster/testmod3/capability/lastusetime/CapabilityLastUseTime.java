@@ -2,19 +2,17 @@ package choonster.testmod3.capability.lastusetime;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.lastusetime.ILastUseTime;
+import choonster.testmod3.capability.CapabilityContainerListenerManager;
 import choonster.testmod3.capability.CapabilityProviderSerializable;
 import choonster.testmod3.item.IItemPropertyGetterFix;
-import choonster.testmod3.network.MessageUpdateHeldLastUseTime;
 import choonster.testmod3.util.CapabilityUtils;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -61,6 +59,8 @@ public class CapabilityLastUseTime {
 				instance.set(((NBTTagLong) nbt).getLong());
 			}
 		}, () -> new LastUseTime(true));
+
+		CapabilityContainerListenerManager.registerListenerFactory(ContainerListenerLastUseTime::new);
 	}
 
 	/**
@@ -79,29 +79,14 @@ public class CapabilityLastUseTime {
 	 *
 	 * @param player    The player
 	 * @param itemStack The held ItemStack
-	 * @param hand      The hand holding the item
 	 */
-	public static void updateLastUseTime(EntityPlayer player, ItemStack itemStack, EnumHand hand) {
+	public static void updateLastUseTime(final EntityPlayer player, final ItemStack itemStack) {
 		final ILastUseTime lastUseTime = getLastUseTime(itemStack);
 		if (lastUseTime == null) return;
 
 		final World world = player.getEntityWorld();
 
 		lastUseTime.set(world.getTotalWorldTime());
-		if (!world.isRemote) {
-			sendToPlayer(lastUseTime, (EntityPlayerMP) player, hand);
-		}
-	}
-
-	/**
-	 * Sync the {@link ILastUseTime} for the player's held item.
-	 *
-	 * @param lastUseTime The ILastUseTime
-	 * @param player      The player
-	 * @param hand        The hand holding the ILastUseTime item
-	 */
-	private static void sendToPlayer(ILastUseTime lastUseTime, EntityPlayerMP player, EnumHand hand) {
-		TestMod3.network.sendTo(new MessageUpdateHeldLastUseTime(lastUseTime, hand), player);
 	}
 
 	/**
@@ -138,7 +123,7 @@ public class CapabilityLastUseTime {
 			final ItemStack itemStack = event.getItemStack();
 			final ILastUseTime lastUseTime = getLastUseTime(itemStack);
 			if (lastUseTime != null && lastUseTime.automaticUpdates()) {
-				updateLastUseTime(event.getEntityPlayer(), itemStack, event.getHand());
+				updateLastUseTime(event.getEntityPlayer(), itemStack);
 			}
 		}
 	}

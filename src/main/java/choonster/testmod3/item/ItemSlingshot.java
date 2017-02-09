@@ -48,7 +48,7 @@ public class ItemSlingshot extends ItemSnowballLauncher {
 		final ActionResult<ItemStack> result = super.onItemRightClick(worldIn, playerIn, hand);
 
 		if (result.getType() == EnumActionResult.SUCCESS) {
-			CapabilityLastUseTime.updateLastUseTime(playerIn, playerIn.getHeldItem(hand), hand);
+			CapabilityLastUseTime.updateLastUseTime(playerIn, playerIn.getHeldItem(hand));
 		}
 
 		return result;

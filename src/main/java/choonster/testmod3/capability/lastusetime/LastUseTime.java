@@ -2,6 +2,8 @@ package choonster.testmod3.capability.lastusetime;
 
 import choonster.testmod3.api.capability.lastusetime.ILastUseTime;
 
+import javax.annotation.Nullable;
+
 /**
  * Default implementation of {@link ILastUseTime}.
  *
@@ -43,5 +45,20 @@ public class LastUseTime implements ILastUseTime {
 	@Override
 	public boolean automaticUpdates() {
 		return automaticUpdates;
+	}
+
+	@Override
+	public boolean equals(@Nullable final Object obj) {
+		if (this == obj) return true;
+		if (obj == null || getClass() != obj.getClass()) return false;
+
+		final LastUseTime that = (LastUseTime) obj;
+
+		return lastUseTime == that.lastUseTime;
+	}
+
+	@Override
+	public int hashCode() {
+		return (int) (lastUseTime ^ (lastUseTime >>> 32));
 	}
 }

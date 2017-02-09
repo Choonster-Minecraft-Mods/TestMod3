@@ -5,15 +5,14 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawner;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerInteractable;
+import choonster.testmod3.capability.CapabilityContainerListenerManager;
 import choonster.testmod3.capability.CapabilityProviderSerializable;
-import choonster.testmod3.network.MessageUpdateHeldPigSpawnerFinite;
 import choonster.testmod3.util.CapabilityUtils;
 import choonster.testmod3.util.DebugUtil;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -93,6 +92,8 @@ public final class CapabilityPigSpawner {
 				}
 			}
 		}, () -> new PigSpawnerFinite(20));
+
+		CapabilityContainerListenerManager.registerListenerFactory(ContainerListenerPigSpawnerFinite::new);
 	}
 
 	/**
@@ -177,21 +178,6 @@ public final class CapabilityPigSpawner {
 		}
 
 		/**
-		 * Sync the pig spawner for the player's held item.
-		 *
-		 * @param pigSpawner The pig spawner
-		 * @param player     The player
-		 * @param hand       The hand holding the pig spawner
-		 */
-		private static void sendToPlayer(IPigSpawner pigSpawner, EntityPlayerMP player, EnumHand hand) {
-			if (pigSpawner instanceof IPigSpawnerFinite) {
-				final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) pigSpawner;
-				Logger.debug(LOG_MARKER, DebugUtil.getStackTrace(10), "Sending finite pig spawner to client. Player: %s - NumPigs: %d", player.getDisplayNameString(), pigSpawnerFinite.getNumPigs());
-				TestMod3.network.sendTo(new MessageUpdateHeldPigSpawnerFinite(pigSpawnerFinite, hand), player);
-			}
-		}
-
-		/**
 		 * Spawn a pig when a player right clicks a block with an item that has the {@link IPigSpawner} capability.
 		 * <p>
 		 * If the block implements {@link IPigSpawnerInteractable}, call {@link IPigSpawnerInteractable#interact} on it.
@@ -213,8 +199,8 @@ public final class CapabilityPigSpawner {
 			final EntityPlayer player = event.getEntityPlayer();
 			final IPigSpawner pigSpawner = getPigSpawner(event.getItemStack());
 
-			if (pigSpawner != null && trySpawnPig(pigSpawner, world, x, y, z, interactable, event.getPos(), player)) {
-				sendToPlayer(pigSpawner, (EntityPlayerMP) player, event.getHand());
+			if (pigSpawner != null) {
+				trySpawnPig(pigSpawner, world, x, y, z, interactable, event.getPos(), player);
 			}
 		}
 
@@ -236,8 +222,8 @@ public final class CapabilityPigSpawner {
 			final EnumHand hand = event.getHand();
 
 			final IPigSpawner pigSpawner = getPigSpawner(event.getEntityPlayer().getHeldItem(hand));
-			if (pigSpawner != null && trySpawnPig(pigSpawner, world, x, y, z, interactable, target.getPosition(), event.getEntityPlayer())) {
-				sendToPlayer(pigSpawner, (EntityPlayerMP) event.getEntityPlayer(), hand);
+			if (pigSpawner != null) {
+				trySpawnPig(pigSpawner, world, x, y, z, interactable, target.getPosition(), event.getEntityPlayer());
 			}
 		}
 

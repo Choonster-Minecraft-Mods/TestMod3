@@ -8,6 +8,7 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 /**
  * An implementation of {@link IFluidHandlerItem} that stores its contents as a {@link FluidStack} in memory rather than
@@ -43,5 +44,20 @@ public class FluidTankItem extends FluidTank implements IFluidHandlerItem {
 	@Override
 	public ItemStack getContainer() {
 		return container;
+	}
+
+	@Override
+	public boolean equals(@Nullable final Object obj) {
+		if (this == obj) return true;
+		if (obj == null || getClass() != obj.getClass()) return false;
+
+		final FluidTank that = ((FluidTank) obj);
+
+		return Objects.equals(getFluid(), that.getFluid());
+	}
+
+	@Override
+	public int hashCode() {
+		return fluid != null ? fluid.hashCode() : 0;
 	}
 }

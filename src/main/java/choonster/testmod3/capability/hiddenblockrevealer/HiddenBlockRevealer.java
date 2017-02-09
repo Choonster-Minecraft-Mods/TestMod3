@@ -2,6 +2,8 @@ package choonster.testmod3.capability.hiddenblockrevealer;
 
 import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockRevealer;
 
+import javax.annotation.Nullable;
+
 /**
  * Default implementation of {@link IHiddenBlockRevealer}
  *
@@ -27,5 +29,21 @@ public class HiddenBlockRevealer implements IHiddenBlockRevealer {
 	@Override
 	public void setRevealHiddenBlocks(boolean revealHiddenBlocks) {
 		this.revealHiddenBlocks = revealHiddenBlocks;
+	}
+
+
+	@Override
+	public boolean equals(@Nullable Object obj) {
+		if (this == obj) return true;
+		if (obj == null || getClass() != obj.getClass()) return false;
+
+		final HiddenBlockRevealer that = (HiddenBlockRevealer) obj;
+
+		return revealHiddenBlocks == that.revealHiddenBlocks;
+	}
+
+	@Override
+	public int hashCode() {
+		return revealHiddenBlocks ? 1 : 0;
 	}
 }

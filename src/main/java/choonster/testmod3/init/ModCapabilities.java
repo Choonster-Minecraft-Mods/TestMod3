@@ -1,6 +1,7 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.capability.chunkenergy.CapabilityChunkEnergy;
+import choonster.testmod3.capability.fluidhandler.CapabilityFluidHandler;
 import choonster.testmod3.capability.hiddenblockrevealer.CapabilityHiddenBlockRevealer;
 import choonster.testmod3.capability.lastusetime.CapabilityLastUseTime;
 import choonster.testmod3.capability.lock.CapabilityLock;
@@ -24,5 +25,6 @@ public class ModCapabilities {
 		CapabilityHiddenBlockRevealer.register();
 		CapabilityLock.register();
 		CapabilityChunkEnergy.register();
+		CapabilityFluidHandler.register();
 	}
 }

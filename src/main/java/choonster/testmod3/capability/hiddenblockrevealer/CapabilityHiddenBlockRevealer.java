@@ -2,30 +2,29 @@ package choonster.testmod3.capability.hiddenblockrevealer;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockRevealer;
+import choonster.testmod3.capability.CapabilityContainerListenerManager;
 import choonster.testmod3.item.IItemPropertyGetterFix;
-import choonster.testmod3.network.MessageUpdateHeldHiddenBlockRevealer;
 import choonster.testmod3.util.CapabilityUtils;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * Items with this capability reveal hidden blocks.
  *
  * @author Choonster
  */
-public class CapabilityHiddenBlockRevealer {
+public final class CapabilityHiddenBlockRevealer {
 	/**
 	 * The {@link Capability} instance.
 	 */
@@ -58,6 +57,8 @@ public class CapabilityHiddenBlockRevealer {
 					}
 				}, HiddenBlockRevealer::new
 		);
+
+		CapabilityContainerListenerManager.registerListenerFactory(ContainerListenerHiddenBlockRevealer::new);
 	}
 
 	/**
@@ -74,34 +75,19 @@ public class CapabilityHiddenBlockRevealer {
 	/**
 	 * Toggle the reveal state of the player's held {@link IHiddenBlockRevealer}.
 	 *
-	 * @param playerIn The player
-	 * @param hand     The hand holding the hidden block revealer
-	 * @return The new reveal state, or null if there is no IHiddenBlockRevealer
+	 * @param stack The ItemStack
+	 * @return The new reveal state, or empty if there is no IHiddenBlockRevealer
 	 */
-	@Nullable
-	public static Boolean toggleRevealHiddenBlocks(EntityPlayerMP playerIn, EnumHand hand) {
-		final IHiddenBlockRevealer hiddenBlockRevealer = getHiddenBlockRevealer(playerIn.getHeldItem(hand));
+	public static Optional<Boolean> toggleRevealHiddenBlocks(final ItemStack stack) {
+		final IHiddenBlockRevealer hiddenBlockRevealer = getHiddenBlockRevealer(stack);
 		if (hiddenBlockRevealer != null) {
 			final boolean revealHiddenBlocks = !hiddenBlockRevealer.revealHiddenBlocks();
 			hiddenBlockRevealer.setRevealHiddenBlocks(revealHiddenBlocks);
 
-			sendToPlayer(hiddenBlockRevealer, playerIn, hand);
-
-			return revealHiddenBlocks;
+			return Optional.of(revealHiddenBlocks);
 		}
 
-		return null;
-	}
-
-	/**
-	 * Sync the {@link IHiddenBlockRevealer} for the player's held item.
-	 *
-	 * @param hiddenBlockRevealer The hidden block revealer
-	 * @param player              The player
-	 * @param hand                The hand holding the hidden block revealer
-	 */
-	private static void sendToPlayer(IHiddenBlockRevealer hiddenBlockRevealer, EntityPlayerMP player, EnumHand hand) {
-		TestMod3.network.sendTo(new MessageUpdateHeldHiddenBlockRevealer(hiddenBlockRevealer, hand), player);
+		return Optional.empty();
 	}
 
 	/**
