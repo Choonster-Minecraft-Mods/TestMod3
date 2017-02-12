@@ -145,6 +145,7 @@ public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> implem
 	 * Read a data instance from the buffer.
 	 *
 	 * @param buf The buffer
+	 * @return The data instance
 	 */
 	protected abstract DATA readCapabilityData(final ByteBuf buf);
 
