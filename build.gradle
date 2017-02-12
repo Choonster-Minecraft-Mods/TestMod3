@@ -8,21 +8,28 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+
+        // TODO: Remove this dependency once the Grgit plugin includes this version
+        classpath 'org.ajoberstar:grgit:1.7.2'
     }
 }
 
 plugins {
-    id 'org.ajoberstar.grgit' version '1.5.1'
+    id 'org.ajoberstar.grgit' version '1.6.0'
     id 'com.github.johnrengelman.shadow' version '1.2.3'
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-import org.ajoberstar.grgit.Grgit
+final commitId
 
-ext.repo = Grgit.open()
+if (hasProperty("grgit")) { // If there's a valid Git repository, get the latest commit ID
+    commitId = "${grgit.head().abbreviatedId}"
+} else { // Else fall back to NOGIT
+    commitId = "NOGIT"
+}
 
-version = "${mc_version}-${mod_version}-${repo.head().abbreviatedId}"
+version = "${mc_version}-${mod_version}-${commitId}"
 group = "${package_group}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${mod_name}"
 
