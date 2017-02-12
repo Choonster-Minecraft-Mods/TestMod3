@@ -1,6 +1,6 @@
 package choonster.testmod3.util;
 
-import java.util.function.Function;
+import java.util.function.IntFunction;
 
 public class StringUtils {
 
@@ -12,7 +12,7 @@ public class StringUtils {
 	 * @param number   The number
 	 * @return The built String
 	 */
-	private static String buildDigitString(Function<Integer, char[]> function, String minus, int number) {
+	private static String buildDigitString(IntFunction<char[]> function, String minus, int number) {
 		// 0 requires a special case
 		if (number == 0) return new String(function.apply(0));
 

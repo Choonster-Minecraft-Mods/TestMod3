@@ -8,7 +8,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
-import java.util.function.Function;
+import java.util.function.IntFunction;
 
 /**
  * An item that displays a number stored in NBT in its display name.
@@ -16,9 +16,9 @@ import java.util.function.Function;
  * @author Choonster
  */
 public abstract class ItemWithScripts extends ItemTestMod3 {
-	private final Function<Integer, String> scriptFunction;
+	private final IntFunction<String> scriptFunction;
 
-	public ItemWithScripts(Function<Integer, String> scriptFunction, String itemName) {
+	public ItemWithScripts(IntFunction<String> scriptFunction, String itemName) {
 		super(itemName);
 		this.scriptFunction = scriptFunction;
 		setHasSubtypes(true);
