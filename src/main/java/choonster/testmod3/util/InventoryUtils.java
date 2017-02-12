@@ -70,7 +70,7 @@ public class InventoryUtils {
 			Throwables.propagate(throwable);
 		}
 
-		for (ItemStack itemStack : items) {
+		for (final ItemStack itemStack : items) {
 			if (emptySlots.isEmpty()) {
 				Logger.warn("Tried to over-fill %s while generating loot.");
 				return;
