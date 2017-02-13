@@ -23,6 +23,9 @@ import java.util.Random;
 /**
  * A Command Block that's accessible outside of Creative Mode.
  * <p>
+ * Due to anti-cheat restrictions imposed by Minecraft, it's not possible to place or break this block outside of Creative Mode
+ * (without reimplementing it to not extend {@link BlockCommandBlock}).
+ * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2540671-command-block-replica-issue
  *
