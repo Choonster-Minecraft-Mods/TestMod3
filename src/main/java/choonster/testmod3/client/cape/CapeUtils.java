@@ -24,7 +24,7 @@ class CapeUtils {
 	// Copied from SkinManager
 	private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(0, 2, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
 
-	private static final MethodHandle GET_PLAYER_INFO = ReflectionUtil.findMethod(AbstractClientPlayer.class, new String[]{"getPlayerInfo", "func_175155_b"});
+	private static final MethodHandle GET_PLAYER_INFO = ReflectionUtil.findMethod(AbstractClientPlayer.class, "getPlayerInfo", "func_175155_b");
 	private static final MethodHandle GET_PLAYER_TEXTURES = ReflectionUtil.findFieldGetter(NetworkPlayerInfo.class, "playerTextures", "field_187107_a");
 
 	/**

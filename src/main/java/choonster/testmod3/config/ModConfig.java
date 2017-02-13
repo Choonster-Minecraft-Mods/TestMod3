@@ -51,7 +51,7 @@ public class ModConfig {
 		/**
 		 * The {@link ConfigManager#CONFIGS} getter.
 		 */
-		private static final MethodHandle CONFIGS_GETTER = ReflectionUtil.findFieldGetter(ConfigManager.class, "CONFIGS");
+		private static final MethodHandle CONFIGS_GETTER = ReflectionUtil.findFieldGetter(ConfigManager.class, "CONFIGS", null);
 
 		/**
 		 * The {@link Configuration} instance.

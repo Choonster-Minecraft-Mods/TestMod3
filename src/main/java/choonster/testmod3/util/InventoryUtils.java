@@ -48,7 +48,7 @@ public class InventoryUtils {
 	/**
 	 * A reference to {@link LootTable#shuffleItems}.
 	 */
-	private static final MethodHandle SHUFFLE_ITEMS = ReflectionUtil.findMethod(LootTable.class, new String[]{"shuffleItems", "func_186463_a"}, List.class, int.class, Random.class);
+	private static final MethodHandle SHUFFLE_ITEMS = ReflectionUtil.findMethod(LootTable.class, "shuffleItems", "func_186463_a", List.class, int.class, Random.class);
 
 	/**
 	 * Fill an {@link IItemHandler} with random loot from a {@link LootTable}.
