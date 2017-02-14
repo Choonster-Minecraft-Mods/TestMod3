@@ -8,9 +8,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 
 /**
  * A Block that prints the current state of the player's held {@link ItemStack}s on the client and server when left or right clicked.
@@ -27,6 +30,22 @@ public class BlockItemDebugger extends BlockTestMod3 {
 		if (!stack.isEmpty()) {
 			Logger.info("ItemStack: %s", stack.serializeNBT());
 			logCapability(stack, CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY, EnumFacing.NORTH);
+
+			final String modName;
+			final ResourceLocation registryName = stack.getItem().getRegistryName();
+			if (registryName != null) {
+				final ModContainer modContainer = Loader.instance().getIndexedModList().get(registryName.getResourceDomain());
+
+				if (modContainer != null) {
+					modName = modContainer.getName();
+				} else {
+					modName = "Unknown - No ModContainer";
+				}
+			} else {
+				modName = "Unknown - No Registry Name";
+			}
+
+			Logger.info("Mod Name: %s", modName);
 		}
 	}
 
