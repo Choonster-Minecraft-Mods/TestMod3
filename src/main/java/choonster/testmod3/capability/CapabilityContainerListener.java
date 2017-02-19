@@ -18,6 +18,7 @@ import javax.annotation.Nullable;
 /**
  * Syncs the capability handler instances for items in {@link Container}s.
  *
+ * @param <HANDLER> The capability handler type to sync
  * @author Choonster
  */
 public abstract class CapabilityContainerListener<HANDLER> implements IContainerListener {
