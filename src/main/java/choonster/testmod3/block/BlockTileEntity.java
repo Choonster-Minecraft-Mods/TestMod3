@@ -1,6 +1,5 @@
 package choonster.testmod3.block;
 
-import choonster.testmod3.util.BlockUtils;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -52,7 +51,7 @@ public abstract class BlockTileEntity<TE extends TileEntity> extends BlockTestMo
 	@SuppressWarnings("unchecked")
 	@Nullable
 	protected TE getTileEntity(IBlockAccess world, BlockPos pos) {
-		return (TE) BlockUtils.getTileEntitySafe(world, pos);
+		return (TE) world.getTileEntity(pos);
 	}
 
 	@Override

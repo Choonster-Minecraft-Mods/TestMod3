@@ -1,6 +1,5 @@
 package choonster.testmod3.block.pipe;
 
-import choonster.testmod3.util.BlockUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -39,7 +38,7 @@ public class BlockPipeFluid extends BlockPipeBasic {
 
 		// Connect if the neighbouring block has a TileEntity with an IFluidHandler for the adjacent face
 		if (neighbourBlock.hasTileEntity(neighbourState)) {
-			final TileEntity tileEntity = BlockUtils.getTileEntitySafe(world, neighbourPos);
+			final TileEntity tileEntity = world.getTileEntity(neighbourPos);
 			return tileEntity != null && tileEntity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, neighbourDirection.getOpposite());
 		}
 
