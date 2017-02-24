@@ -138,8 +138,8 @@ public final class CapabilityPigSpawner {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void attachCapabilities(final AttachCapabilitiesEvent<Item> event) {
-			if (event.getObject() == Items.CLAY_BALL) {
+		public static void attachCapabilities(final AttachCapabilitiesEvent<ItemStack> event) {
+			if (event.getObject().getItem() == Items.CLAY_BALL) {
 				event.addCapability(ID, createProvider());
 			}
 		}
