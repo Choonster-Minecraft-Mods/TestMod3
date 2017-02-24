@@ -42,7 +42,7 @@ public class ReflectionUtil {
 	 * {@link NullPointerException} as the cause instead of a {@link NoSuchFieldException}.
 	 *
 	 * @param fieldName    The name of the field
-	 * @param fieldObfName The obfuscated name of the field to find
+	 * @param fieldObfName The obfuscated name of the field
 	 * @return An array of field names
 	 */
 	private static String[] getFieldNameArray(final String fieldName, @Nullable final String fieldObfName) {
