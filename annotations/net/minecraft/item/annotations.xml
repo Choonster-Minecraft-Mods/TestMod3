@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.item.Item net.minecraft.util.math.RayTraceResult rayTrace(net.minecraft.world.World, net.minecraft.entity.player.EntityPlayer, boolean)'>
+        <annotation name='javax.annotation.Nullable'/>
+    </item>
+</root>
