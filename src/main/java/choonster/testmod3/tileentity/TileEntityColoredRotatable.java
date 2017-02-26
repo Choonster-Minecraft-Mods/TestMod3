@@ -41,6 +41,17 @@ public class TileEntityColoredRotatable extends TileEntity {
 		return compound;
 	}
 
+	private void notifyBlockUpdate(){
+		final IBlockState state = getWorld().getBlockState(getPos());
+		getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+	}
+
+	@Override
+	public void markDirty() {
+		super.markDirty();
+		notifyBlockUpdate();
+	}
+
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		return writeToNBT(new NBTTagCompound());
@@ -55,8 +66,7 @@ public class TileEntityColoredRotatable extends TileEntity {
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		readFromNBT(pkt.getNbtCompound());
-		final IBlockState state = getWorld().getBlockState(getPos());
-		getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+		notifyBlockUpdate();
 	}
 
 	@Override

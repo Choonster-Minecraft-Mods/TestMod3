@@ -82,11 +82,8 @@ public class BlockColoredRotatable extends BlockColored {
 
 	@Override
 	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
-		final IBlockState oldState = world.getBlockState(pos);
-
 		final EnumFacing facing = getFacing(world, pos);
 		setFacing(world, pos, facing.rotateAround(axis.getAxis()));
-		world.notifyBlockUpdate(pos, oldState, world.getBlockState(pos), 3);
 
 		return true;
 	}

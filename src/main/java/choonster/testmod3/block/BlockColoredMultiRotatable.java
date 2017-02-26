@@ -63,11 +63,8 @@ public class BlockColoredMultiRotatable extends BlockColoredRotatable {
 	}
 
 	public boolean rotateFace(World world, BlockPos pos) {
-		final IBlockState oldState = world.getBlockState(pos);
-
 		final EnumFaceRotation faceRotation = getFaceRotation(world, pos);
 		setFaceRotation(world, pos, faceRotation.rotateClockwise());
-		world.notifyBlockUpdate(pos, oldState, world.getBlockState(pos), 3);
 
 		return true;
 	}
