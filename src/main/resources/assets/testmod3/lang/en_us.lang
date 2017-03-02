@@ -154,6 +154,7 @@ item.testmod3:entity_killer.name=Entity Killer
 item.testmod3:chunk_energy_setter.name=Chunk Energy Setter
 item.testmod3:chunk_energy_getter.name=Chunk Energy Getter
 item.testmod3:chunk_energy_display.name=Chunk Energy Display
+item.testmod3:beacon_item.name=Beacon Item
 
 item.testmod3:replacement_helmet.name=Armour Replacement Helmet
 item.testmod3:replacement_chestplate.name=Armour Replacement Chestplate

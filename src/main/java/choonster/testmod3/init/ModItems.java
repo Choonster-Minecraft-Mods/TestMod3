@@ -124,6 +124,8 @@ public class ModItems {
 
 	public static final ItemTestMod3 CHUNK_ENERGY_DISPLAY = new ItemTestMod3("chunk_energy_display");
 
+	public static final ItemTestMod3 BEACON_ITEM = new ItemTestMod3("beacon_item");
+
 
 	public static final ItemArmourReplacement REPLACEMENT_HELMET = new ItemArmourReplacement(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD, "replacement");
 
@@ -214,6 +216,7 @@ public class ModItems {
 					CHUNK_ENERGY_SETTER,
 					CHUNK_ENERGY_GETTER,
 					CHUNK_ENERGY_DISPLAY,
+					BEACON_ITEM,
 			};
 
 			final IForgeRegistry<Item> registry = event.getRegistry();
