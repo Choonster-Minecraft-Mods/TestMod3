@@ -122,7 +122,9 @@ public class MaxHealth implements IMaxHealth {
 
 		// Copy the base value and modifiers except this class's from the entity's attribute to the dummy attribute
 		dummyMaxHealthAttribute.setBaseValue(entityMaxHealthAttribute.getBaseValue());
-		entityMaxHealthAttribute.getModifiers().stream().filter(modifier -> !modifier.getID().equals(MODIFIER_ID)).forEach(dummyMaxHealthAttribute::applyModifier);
+		entityMaxHealthAttribute.getModifiers().stream()
+				.filter(modifier -> !modifier.getID().equals(MODIFIER_ID))
+				.forEach(dummyMaxHealthAttribute::applyModifier);
 
 		AttributeModifier modifier = createModifier();
 		dummyMaxHealthAttribute.applyModifier(modifier);
