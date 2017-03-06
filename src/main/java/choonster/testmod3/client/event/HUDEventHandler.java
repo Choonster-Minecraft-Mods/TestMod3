@@ -20,7 +20,7 @@ public class HUDEventHandler {
 	private static final GuiChunkEnergyHUD chunkEnergyHUD = new GuiChunkEnergyHUD();
 
 	/**
-	 * Render the Chunk Energy HUD while the player is holding
+	 * Render the Chunk Energy HUD while the player is holding {@link ModItems#CHUNK_ENERGY_DISPLAY}.
 	 *
 	 * @param event The event
 	 */
