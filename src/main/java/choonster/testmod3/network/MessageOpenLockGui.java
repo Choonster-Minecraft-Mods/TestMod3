@@ -75,9 +75,7 @@ public class MessageOpenLockGui implements IMessage {
 		@Nullable
 		@Override
 		public IMessage onMessage(MessageOpenLockGui message, MessageContext ctx) {
-			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
-				TestMod3.proxy.displayLockGUI(message.pos, message.facing);
-			});
+			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> TestMod3.proxy.displayLockGUI(message.pos, message.facing));
 
 			return null;
 		}

@@ -41,7 +41,7 @@ public class TileEntityColoredRotatable extends TileEntity {
 		return compound;
 	}
 
-	private void notifyBlockUpdate(){
+	private void notifyBlockUpdate() {
 		final IBlockState state = getWorld().getBlockState(getPos());
 		getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 	}
