@@ -43,7 +43,7 @@ public class HUDHandlerEnumProperty<T extends Enum<T> & IStringSerializable> imp
 	 */
 	@Override
 	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	/**
