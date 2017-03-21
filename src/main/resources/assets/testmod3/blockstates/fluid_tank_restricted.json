@@ -1,0 +1,15 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "minecraft:cube_bottom_top",
+		"textures": {
+			"side": "minecraft:blocks/glass",
+			"top": "minecraft:blocks/glass",
+			"bottom": "minecraft:blocks/iron_block"
+		}
+	},
+	"variants": {
+		"normal": [ { } ],
+		"inventory": [ { } ]
+	}
+}

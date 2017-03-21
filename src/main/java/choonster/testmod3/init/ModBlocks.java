@@ -93,6 +93,8 @@ public class ModBlocks {
 
 	public static final BlockInvisible INVISIBLE = new BlockInvisible();
 
+	public static final BlockFluidTankRestricted FLUID_TANK_RESTRICTED = new BlockFluidTankRestricted();
+
 	public static class Slabs {
 		public static final BlockColouredSlab.ColouredSlabGroup STAINED_CLAY_SLABS = new BlockColouredSlab.ColouredSlabGroup("stained_clay_slab", Material.ROCK);
 	}
@@ -142,6 +144,7 @@ public class ModBlocks {
 					CHAIN_SURVIVAL_COMMAND_BLOCK,
 					SAPLING,
 					INVISIBLE,
+					FLUID_TANK_RESTRICTED,
 			};
 
 			registry.registerAll(blocks);
@@ -200,6 +203,7 @@ public class ModBlocks {
 					new ItemBlock(CHAIN_SURVIVAL_COMMAND_BLOCK),
 					new ItemMultiTexture(SAPLING, SAPLING, BlockSaplingTestMod3::getName),
 					new ItemBlock(INVISIBLE),
+					new ItemFluidTank(FLUID_TANK_RESTRICTED),
 					Slabs.STAINED_CLAY_SLABS.low.item,
 					Slabs.STAINED_CLAY_SLABS.high.item,
 			};
@@ -223,6 +227,7 @@ public class ModBlocks {
 		registerTileEntity(TileEntityPotionEffect.class, "potion_effect", "PotionEffect");
 		registerTileEntity(TileEntityModChest.class, "mod_chest", "ModChest");
 		registerTileEntity(TileEntityHidden.class, "hidden");
+		registerTileEntity(TileEntityFluidTankRestricted.class, "fluid_tank_restricted");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> tileEntityClass, String name) {

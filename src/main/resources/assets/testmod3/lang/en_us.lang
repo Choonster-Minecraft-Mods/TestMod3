@@ -35,6 +35,7 @@ tile.testmod3:repeating_survival_command_block.name=Repeating Survival Command B
 tile.testmod3:chain_survival_command_block.name=Chain Survival Command Block
 tile.testmod3:hidden.name=Hidden Block
 tile.testmod3:invisible.name=Invisible Block
+tile.testmod3:fluid_tank_restricted.name=Restricted Fluid Tank
 
 tile.testmod3:basic_pipe.name=Basic Pipe
 tile.testmod3:fluid_pipe.name=Fluid Pipe
@@ -187,6 +188,7 @@ testmod3:rotatable.facing.desc=Facing: %s
 testmod3:multi_rotatable.face_rotation.desc=Face Rotation: %s
 tile.testmod3:plane.horizontal_rotation.desc=Horizontal Rotation: %s
 tile.testmod3:plane.vertical_rotation.desc=Vertical Rotation: %s
+tile.testmod3:fluid_tank_restricted.enabled_facings=Enabled facings: %s
 
 # Chat messages
 message.testmod3:entity_interact_count=Interact count: %s
@@ -224,6 +226,9 @@ message.testmod3:print_potions.no_potions=No active potions on %s
 message.testmod3:print_potions.potions=Active potions on %s:
 message.testmod3:print_potions.not_living=%s isn't a living entity
 message.testmod3:print_potions.no_entity=You must look at an entity
+message.testmod3:fluid_tank_restricted.facing_enabled=Enabled access from facing %s
+message.testmod3:fluid_tank_restricted.facing_disabled=Disabled access from facing %s
+message.testmod3:fluid_tank_restricted.enabled_facings=Enabled facings: %s
 
 # Config GUI strings
 testmod3.config.title=TestMod3 Config
