@@ -7,6 +7,7 @@ import choonster.testmod3.block.pipe.BlockPipeFluid;
 import choonster.testmod3.item.block.ItemFluidTank;
 import choonster.testmod3.tileentity.*;
 import choonster.testmod3.util.Constants;
+import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
@@ -206,7 +207,9 @@ public class ModBlocks {
 			final IForgeRegistry<Item> registry = event.getRegistry();
 
 			for (final ItemBlock item : items) {
-				registry.register(item.setRegistryName(item.getBlock().getRegistryName()));
+				final Block block = item.getBlock();
+				final ResourceLocation registryName = Preconditions.checkNotNull(block.getRegistryName(), "Block %s has null registry name", block);
+				registry.register(item.setRegistryName(registryName));
 				ITEM_BLOCKS.add(item);
 			}
 		}
