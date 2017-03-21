@@ -15,6 +15,7 @@ import net.minecraft.item.ItemCloth;
 import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityCommandBlock;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -41,7 +42,7 @@ public class ModBlocks {
 
 	public static final BlockItemCollisionTest ITEM_COLLISION_TEST = new BlockItemCollisionTest();
 
-	public static final BlockFluidTank FLUID_TANK = new BlockFluidTank();
+	public static final BlockFluidTank<TileEntityFluidTank> FLUID_TANK = new BlockFluidTank<>("fluid_tank");
 
 	public static final BlockItemDebugger ITEM_DEBUGGER = new BlockItemDebugger();
 

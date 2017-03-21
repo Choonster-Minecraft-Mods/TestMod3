@@ -38,9 +38,9 @@ import java.util.List;
  *
  * @author Choonster
  */
-public class BlockFluidTank extends BlockTileEntity<TileEntityFluidTank> {
-	public BlockFluidTank() {
-		super(Material.GLASS, "fluid_tank", true);
+public class BlockFluidTank<TE extends TileEntityFluidTank> extends BlockTileEntity<TE> {
+	public BlockFluidTank(final String blockName) {
+		super(Material.GLASS, blockName, true);
 		setSoundType(SoundType.GLASS);
 	}
 
