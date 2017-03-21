@@ -42,6 +42,7 @@ public class BlockFluidTank<TE extends TileEntityFluidTank> extends BlockTileEnt
 	public BlockFluidTank(final String blockName) {
 		super(Material.GLASS, blockName, true);
 		setSoundType(SoundType.GLASS);
+		setHardness(0.3f);
 	}
 
 	@Override
