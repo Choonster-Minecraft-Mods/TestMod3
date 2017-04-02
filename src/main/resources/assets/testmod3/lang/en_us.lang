@@ -233,10 +233,10 @@ message.testmod3:fluid_tank_restricted.enabled_facings=Enabled facings: %s
 # Config GUI strings
 testmod3.config.title=TestMod3 Config
 
-testmod3.category.client=Client
-testmod3.category.client.tooltip=Settings that only affect the local client.
-testmod3.category.chunkenergyhudpos=Chunk Energy HUD Position
-testmod3.category.chunkenergyhudpos.tooltip=The position of the Chunk Energy HUD
+testmod3.general.client=Client
+testmod3.general.client.tooltip=Settings that only affect the local client.
+testmod3.general.client.chunkenergyhudpos=Chunk Energy HUD Position
+testmod3.general.client.chunkenergyhudpos.tooltip=The position of the Chunk Energy HUD
 
 testmod3.general.foobar=Foo Bar
 testmod3.general.foobar.tooltip=This is an example boolean property.
