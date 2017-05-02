@@ -115,19 +115,15 @@ public class BlockFluidTank<TE extends TileEntityFluidTank> extends BlockTileEnt
 
 		if (fluidHandler != null) {
 			// Try fill/empty the held fluid container from the tank
-			final FluidActionResult fluidActionResult = FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, playerIn);
+			final boolean success = FluidUtil.interactWithFluidHandler(playerIn, hand, worldIn, pos, side);
 
 			// If the contents changed or this is the off hand, send a chat message to the player
-			if (!worldIn.isRemote && (fluidActionResult.isSuccess() || hand == EnumHand.OFF_HAND)) {
+			if (!worldIn.isRemote && (success || hand == EnumHand.OFF_HAND)) {
 				TestMod3.network.sendTo(new MessageFluidTankContents(fluidHandler.getTankProperties()), (EntityPlayerMP) playerIn);
 			}
 
-			if (fluidActionResult.isSuccess()) {
-				playerIn.setHeldItem(hand, fluidActionResult.getResult());
-			}
-
 			// If the held item is a fluid container, stop processing here so it doesn't try to place its contents
-			return FluidUtil.getFluidHandler(heldItem) != null;
+			return heldItem.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 		}
 
 		return false;
