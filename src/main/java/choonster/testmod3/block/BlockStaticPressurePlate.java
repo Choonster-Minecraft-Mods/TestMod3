@@ -44,7 +44,7 @@ public abstract class BlockStaticPressurePlate extends BlockTestMod3 {
 	}
 
 	@Override
-	public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
+	public boolean blocksMovement(final IBlockAccess worldIn, final BlockPos pos) {
 		return true;
 	}
 
