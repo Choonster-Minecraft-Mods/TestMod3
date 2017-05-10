@@ -9,11 +9,13 @@ import choonster.testmod3.item.*;
 import choonster.testmod3.util.Constants;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
@@ -126,6 +128,8 @@ public class ModItems {
 
 	public static final ItemTestMod3 BEACON_ITEM = new ItemTestMod3("beacon_item");
 
+	public static final ItemArmourPotionEffect SATURATION_HELMET = new ItemArmourPotionEffect(ItemArmor.ArmorMaterial.CHAIN, EntityEquipmentSlot.HEAD, "saturation", new PotionEffect(MobEffects.SATURATION, 1, 0, true, false));
+
 
 	public static final ItemArmourReplacement REPLACEMENT_HELMET = new ItemArmourReplacement(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD, "replacement");
 
@@ -217,6 +221,7 @@ public class ModItems {
 					CHUNK_ENERGY_GETTER,
 					CHUNK_ENERGY_DISPLAY,
 					BEACON_ITEM,
+					SATURATION_HELMET
 			};
 
 			final IForgeRegistry<Item> registry = event.getRegistry();
