@@ -143,7 +143,7 @@ public class BlockFluidTank<TE extends TileEntityFluidTank> extends BlockTileEnt
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isFullyOpaque(IBlockState state) {
+	public boolean isTopSolid(IBlockState state) {
 		return false;
 	}
 

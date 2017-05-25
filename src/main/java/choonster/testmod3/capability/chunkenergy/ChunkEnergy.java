@@ -95,7 +95,7 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 		final ChunkPos chunkPos = getChunkPos();
 		if (world.isRemote) return;
 
-		final PlayerChunkMapEntry playerChunkMapEntry = ((WorldServer) world).getPlayerChunkMap().getEntry(chunkPos.chunkXPos, chunkPos.chunkZPos);
+		final PlayerChunkMapEntry playerChunkMapEntry = ((WorldServer) world).getPlayerChunkMap().getEntry(chunkPos.x, chunkPos.z);
 		if (playerChunkMapEntry == null) return;
 
 		final IMessage message = new MessageUpdateChunkEnergyValue(this);

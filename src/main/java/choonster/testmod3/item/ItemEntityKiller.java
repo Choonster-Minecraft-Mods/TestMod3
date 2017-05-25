@@ -24,7 +24,7 @@ public class ItemEntityKiller extends ItemTestMod3 {
 		if (!player.world.isRemote) {
 			final Entity entityToKill;
 			if (entity instanceof EntityDragonPart) { // If it's a multipart entity, kill the main entity
-				entityToKill = (Entity) ((EntityDragonPart) entity).entityDragonObj;
+				entityToKill = (Entity) ((EntityDragonPart) entity).parent;
 			} else {
 				entityToKill = entity;
 			}
