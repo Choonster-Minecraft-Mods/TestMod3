@@ -55,10 +55,9 @@ public class ItemSlowSword extends ItemSword {
 		// Find the modifier with the specified ID, if any
 		final Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
 
-		if (modifierOptional.isPresent()) { // If it exists,
-			final AttributeModifier modifier = modifierOptional.get();
+		modifierOptional.ifPresent(modifier -> { // If it exists,
 			modifiers.remove(modifier); // Remove it
 			modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), modifier.getAmount() * multiplier, modifier.getOperation())); // Add the new modifier
-		}
+		});
 	}
 }

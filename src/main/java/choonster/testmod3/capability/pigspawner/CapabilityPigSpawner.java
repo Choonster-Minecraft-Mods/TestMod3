@@ -156,25 +156,19 @@ public final class CapabilityPigSpawner {
 		 * @param interactable    The IPigSpawnerInteractable, if any
 		 * @param interactablePos The position of the IPigSpawnerInteractable
 		 * @param iCommandSender  The ICommandSender, if any
-		 * @return Was any action taken?
 		 */
-		private static boolean trySpawnPig(final IPigSpawner pigSpawner, final World world, final double x, final double y, final double z, @Nullable final IPigSpawnerInteractable interactable, final BlockPos interactablePos, @Nullable final ICommandSender iCommandSender) {
-			if (world.isRemote) return false;
+		private static void trySpawnPig(final IPigSpawner pigSpawner, final World world, final double x, final double y, final double z, @Nullable final IPigSpawnerInteractable interactable, final BlockPos interactablePos, @Nullable final ICommandSender iCommandSender) {
+			if (world.isRemote) return;
 
-			boolean actionTaken = false;
 			boolean shouldSpawnPig = true;
 
 			if (interactable != null) {
 				shouldSpawnPig = !interactable.interact(pigSpawner, world, interactablePos, iCommandSender);
-				actionTaken = true;
 			}
 
 			if (shouldSpawnPig && pigSpawner.canSpawnPig(world, x, y, z)) {
 				pigSpawner.spawnPig(world, x, y, z);
-				actionTaken = true;
 			}
-
-			return actionTaken;
 		}
 
 		/**

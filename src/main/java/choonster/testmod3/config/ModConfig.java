@@ -14,14 +14,14 @@ public class ModConfig {
 	@Config.Comment("This is an example boolean property.")
 	public static boolean fooBar = false;
 
-	public static Client client = new Client();
+	public static final Client client = new Client();
 
 	public static class Client {
 
 		@Config.Comment("This is an example int property.")
 		public int baz = -100;
 
-		public HUDPos chunkEnergyHUDPos = new HUDPos(0, 0);
+		public final HUDPos chunkEnergyHUDPos = new HUDPos(0, 0);
 
 		public static class HUDPos {
 			public HUDPos(int x, int y) {

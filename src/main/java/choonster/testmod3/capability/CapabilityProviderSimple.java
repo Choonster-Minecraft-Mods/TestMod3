@@ -28,7 +28,7 @@ public class CapabilityProviderSimple<HANDLER> implements ICapabilityProvider {
 	 */
 	protected final HANDLER instance;
 
-	public CapabilityProviderSimple(final HANDLER instance, final Capability<HANDLER> capability, @Nullable final EnumFacing facing) {
+	public CapabilityProviderSimple(@Nullable final HANDLER instance, final Capability<HANDLER> capability, @Nullable final EnumFacing facing) {
 		this.instance = instance;
 		this.capability = capability;
 		this.facing = facing;

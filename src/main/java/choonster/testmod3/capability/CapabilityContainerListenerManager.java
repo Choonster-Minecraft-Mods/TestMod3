@@ -24,14 +24,14 @@ public class CapabilityContainerListenerManager {
 	/**
 	 * The {@link CapabilityContainerListener} factories.
 	 */
-	private static final Set<Function<EntityPlayerMP, CapabilityContainerListener>> containerListenerFactories = new HashSet<>();
+	private static final Set<Function<EntityPlayerMP, CapabilityContainerListener<?>>> containerListenerFactories = new HashSet<>();
 
 	/**
 	 * Register a factory for a {@link CapabilityContainerListener}.
 	 *
 	 * @param factory The factory
 	 */
-	public static void registerListenerFactory(Function<EntityPlayerMP, CapabilityContainerListener> factory) {
+	public static void registerListenerFactory(Function<EntityPlayerMP, CapabilityContainerListener<?>> factory) {
 		containerListenerFactories.add(factory);
 	}
 

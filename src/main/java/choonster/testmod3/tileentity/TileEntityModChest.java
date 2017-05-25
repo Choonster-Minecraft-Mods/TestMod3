@@ -120,8 +120,8 @@ public class TileEntityModChest extends TileEntityItemHandlerLoot implements ICo
 	 * @param displayName The display name
 	 */
 	public void setDisplayName(String displayName) {
-		final TextComponentString diplayNameComponent = new TextComponentString(displayName);
-		inventory.setDisplayName(diplayNameComponent);
-		lock.setDisplayName(diplayNameComponent);
+		final TextComponentString displayNameComponent = new TextComponentString(displayName);
+		inventory.setDisplayName(displayNameComponent);
+		lock.setDisplayName(displayNameComponent);
 	}
 }

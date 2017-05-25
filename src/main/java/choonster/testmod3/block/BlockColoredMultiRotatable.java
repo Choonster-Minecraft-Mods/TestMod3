@@ -62,17 +62,16 @@ public class BlockColoredMultiRotatable extends BlockColoredRotatable {
 		return super.getActualState(state, worldIn, pos).withProperty(FACE_ROTATION, getFaceRotation(worldIn, pos));
 	}
 
-	public boolean rotateFace(World world, BlockPos pos) {
+	public void rotateFace(World world, BlockPos pos) {
 		final EnumFaceRotation faceRotation = getFaceRotation(world, pos);
 		setFaceRotation(world, pos, faceRotation.rotateClockwise());
-
-		return true;
 	}
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (playerIn.isSneaking()) { // If the player is sneaking, rotate the face
-			return rotateFace(worldIn, pos);
+			rotateFace(worldIn, pos);
+			return true;
 		} else { // Else rotate or recolour the block
 			return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
 		}

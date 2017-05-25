@@ -102,8 +102,7 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 							.filter(replacementStack -> replacementStack.getItem().isValidArmor(replacementStack, equipmentSlot, entity))
 							.findFirst();
 
-					if (optionalReplacement.isPresent()) { // If there's a replacement for this armour type,
-						final ItemStack replacement = optionalReplacement.get(); // Get it
+					optionalReplacement.ifPresent(replacement -> { // If there's a replacement for this armour type,
 						replacements.remove(replacement); // Don't use it for any other armour type
 
 						// Create a compound tag to store the original and add it to the list of replaced armour
@@ -119,7 +118,7 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 
 						entity.setItemStackToSlot(equipmentSlot, replacement.copy()); // Equip a copy of the replacement
 						Logger.info("Equipped replacement %s to %s, replacing %s", replacement, equipmentSlot, original);
-					}
+					});
 				});
 
 		stackTagCompound.setTag(KEY_REPLACED_ARMOUR, replacedArmour); // Save the replaced armour to the ItemStack

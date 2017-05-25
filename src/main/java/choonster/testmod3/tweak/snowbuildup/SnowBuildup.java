@@ -24,8 +24,6 @@ import java.util.Random;
 @Mod.EventBusSubscriber
 public class SnowBuildup {
 
-	public static final SnowBuildup INSTANCE = new SnowBuildup();
-
 	/**
 	 * The number of ticks between each buildup.
 	 */
@@ -40,10 +38,6 @@ public class SnowBuildup {
 	 * The random number generator
 	 */
 	private static final Random random = new Random();
-
-
-	private SnowBuildup() {
-	}
 
 	@SubscribeEvent
 	public static void onWorldTick(TickEvent.WorldTickEvent event) {

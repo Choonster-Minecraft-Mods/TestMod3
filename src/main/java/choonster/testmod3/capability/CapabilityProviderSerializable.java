@@ -35,10 +35,11 @@ public class CapabilityProviderSerializable<HANDLER> extends CapabilityProviderS
 	 * @param facing     The EnumFacing to provide the handler for
 	 * @param instance   The handler instance to provide
 	 */
-	public CapabilityProviderSerializable(final Capability<HANDLER> capability, @Nullable final EnumFacing facing, final HANDLER instance) {
+	public CapabilityProviderSerializable(final Capability<HANDLER> capability, @Nullable final EnumFacing facing, @Nullable final HANDLER instance) {
 		super(instance, capability, facing);
 	}
 
+	@Nullable
 	@Override
 	public NBTBase serializeNBT() {
 		return getCapability().writeNBT(getInstance(), getFacing());

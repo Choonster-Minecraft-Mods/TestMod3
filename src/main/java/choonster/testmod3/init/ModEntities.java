@@ -34,7 +34,7 @@ public class ModEntities {
 	 * @return An array of Biomes
 	 */
 	private static Biome[] getBiomes(BiomeDictionary.Type type) {
-		return BiomeDictionary.getBiomes(type).stream().toArray(Biome[]::new);
+		return BiomeDictionary.getBiomes(type).toArray(new Biome[0]);
 	}
 
 

@@ -42,8 +42,7 @@ public class LockableContainerWrapper implements ILock {
 	 */
 	@Override
 	public LockCode getLockCode() {
-		final LockCode lockCode = lockableContainer.getLockCode();
-		return lockCode != null ? lockCode : LockCode.EMPTY_CODE;
+		return lockableContainer.getLockCode();
 	}
 
 	/**
