@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.entity.player.EntityPlayer void addStat(net.minecraft.stats.StatBase) 0'>
+        <annotation name='javax.annotation.Nullable'/>
+    </item>
+</root>

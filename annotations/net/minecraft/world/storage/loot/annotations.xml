@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.world.storage.loot.ILootContainer net.minecraft.util.ResourceLocation getLootTable()'>
+        <annotation name='javax.annotation.Nullable'/>
+    </item>
+</root>
