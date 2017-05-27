@@ -157,6 +157,7 @@ item.testmod3:chunk_energy_getter.name=Chunk Energy Getter
 item.testmod3:chunk_energy_display.name=Chunk Energy Display
 item.testmod3:beacon_item.name=Beacon Item
 item.testmod3:saturation_helmet.name=Saturation Helmet
+item.testmod3:entity_checker.name=Entity Checker
 
 item.testmod3:replacement_helmet.name=Armour Replacement Helmet
 item.testmod3:replacement_chestplate.name=Armour Replacement Chestplate
@@ -190,6 +191,9 @@ testmod3:multi_rotatable.face_rotation.desc=Face Rotation: %s
 tile.testmod3:plane.horizontal_rotation.desc=Horizontal Rotation: %s
 tile.testmod3:plane.vertical_rotation.desc=Vertical Rotation: %s
 tile.testmod3:fluid_tank_restricted.enabled_facings=Enabled facings: %s
+item.testmod3:entity_checker.radius.desc=Radius: %d
+item.testmod3:entity_checker.mode.corner.desc=Mode: Corner
+item.testmod3:entity_checker.mode.edge.desc=Mode: Edge
 
 # Chat messages
 message.testmod3:entity_interact_count=Interact count: %s
@@ -230,6 +234,10 @@ message.testmod3:print_potions.no_entity=You must look at an entity
 message.testmod3:fluid_tank_restricted.facing_enabled=Enabled access from facing %s
 message.testmod3:fluid_tank_restricted.facing_disabled=Disabled access from facing %s
 message.testmod3:fluid_tank_restricted.enabled_facings=Enabled facings: %s
+message.testmod3:entity_checker.results=%d entities found
+message.testmod3:entity_checker.radius=Radius set to %d
+message.testmod3:entity_checker.mode.corner=Mode set to Corner
+message.testmod3:entity_checker.mode.edge=Mode set to Edge
 
 # Config GUI strings
 testmod3.config.title=TestMod3 Config

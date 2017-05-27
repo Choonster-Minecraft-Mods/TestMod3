@@ -130,6 +130,8 @@ public class ModItems {
 
 	public static final ItemArmourPotionEffect SATURATION_HELMET = new ItemArmourPotionEffect(ItemArmor.ArmorMaterial.CHAIN, EntityEquipmentSlot.HEAD, "saturation", new PotionEffect(MobEffects.SATURATION, 1, 0, true, false));
 
+	public static final ItemEntityChecker ENTITY_CHECKER = new ItemEntityChecker();
+
 
 	public static final ItemArmourReplacement REPLACEMENT_HELMET = new ItemArmourReplacement(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD, "replacement");
 
@@ -221,7 +223,8 @@ public class ModItems {
 					CHUNK_ENERGY_GETTER,
 					CHUNK_ENERGY_DISPLAY,
 					BEACON_ITEM,
-					SATURATION_HELMET
+					SATURATION_HELMET,
+					ENTITY_CHECKER,
 			};
 
 			final IForgeRegistry<Item> registry = event.getRegistry();

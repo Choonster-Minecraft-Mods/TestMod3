@@ -282,6 +282,7 @@ public class ModModelManager {
 		registerItemModel(ModItems.DIAMOND_SLOW_SWORD, "minecraft:diamond_sword");
 		registerItemModel(ModItems.NO_MOD_NAME, "minecraft:bread");
 		registerItemModel(ModItems.SATURATION_HELMET, "minecraft:chainmail_helmet");
+		registerItemModel(ModItems.ENTITY_CHECKER, "minecraft:bone");
 
 		registerVariantItemModels(ModItems.VARIANTS_ITEM, "variant", ItemVariants.EnumType.values());
 
