@@ -77,17 +77,17 @@ public class ItemCombinationHandler {
 		final Set<Item> remainingInputs = new HashSet<>(INPUTS); // Create a mutable copy of the input set to track which items have been found
 		final List<EntityItem> matchingEntityItems = new ArrayList<>(); // Create a list to track the item entities containing the input items
 
-		remainingInputs.remove(entityItem.getEntityItem().getItem());
+		remainingInputs.remove(entityItem.getItem().getItem());
 		matchingEntityItems.add(entityItem);
 
 		// Find all other item entities with input items within 3 blocks
-		final AxisAlignedBB axisAlignedBB = entityItem.getEntityBoundingBox().expandXyz(3);
+		final AxisAlignedBB axisAlignedBB = entityItem.getEntityBoundingBox().grow(3);
 		final List<Entity> nearbyEntityItems = world.getEntitiesInAABBexcluding(entityItem, axisAlignedBB, isMatchingItemEntity(remainingInputs)::test);
 
 		// For each nearby item entity
 		nearbyEntityItems.forEach(nearbyEntity -> {
 			final EntityItem nearbyEntityItem = (EntityItem) nearbyEntity;
-			if (remainingInputs.remove(nearbyEntityItem.getEntityItem().getItem())) { // If the entity's item is a remaining input,
+			if (remainingInputs.remove(nearbyEntityItem.getItem().getItem())) { // If the entity's item is a remaining input,
 				matchingEntityItems.add(nearbyEntityItem); // Add it to the list of matching item entities
 
 				if (remainingInputs.isEmpty()) { // If all inputs have been found,
@@ -100,7 +100,7 @@ public class ItemCombinationHandler {
 
 					// Consume one item from each matching entity
 					matchingEntityItems.forEach(matchingEntityItem -> {
-						final ItemStack itemStack = matchingEntityItem.getEntityItem();
+						final ItemStack itemStack = matchingEntityItem.getItem();
 						itemStack.shrink(1);
 						if (itemStack.isEmpty()) {
 							matchingEntityItem.setDead();
@@ -119,6 +119,6 @@ public class ItemCombinationHandler {
 	 * @return The predicate
 	 */
 	private static Predicate<Entity> isMatchingItemEntity(Set<Item> items) {
-		return entity -> entity.isEntityAlive() && entity instanceof EntityItem && items.contains(((EntityItem) entity).getEntityItem().getItem());
+		return entity -> entity.isEntityAlive() && entity instanceof EntityItem && items.contains(((EntityItem) entity).getItem().getItem());
 	}
 }

@@ -53,14 +53,14 @@ public class ItemEntityTest extends ItemTestMod3 {
 		if (rayTraceResult == null) return new ActionResult<>(EnumActionResult.PASS, heldItem);
 
 		final Vec3d lookVector = player.getLook(1.0F);
-		final List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().addCoord(lookVector.xCoord * multiplier, lookVector.yCoord * multiplier, lookVector.zCoord * multiplier).expand(1.0, 1.0, 1.0)); // Use entity.getEntityBoundingBox() instead of entity.boundingBox
+		final List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().expand(lookVector.x * multiplier, lookVector.y * multiplier, lookVector.z * multiplier).expand(1.0, 1.0, 1.0)); // Use entity.getEntityBoundingBox() instead of entity.boundingBox
 
 		for (final Entity entity : entities) {
 			if (entity.canBeCollidedWith()) {
 				final double collisionBorderSize = entity.getCollisionBorderSize();
 				final AxisAlignedBB axisAlignedBB = entity.getEntityBoundingBox().expand(collisionBorderSize, collisionBorderSize, collisionBorderSize);
 
-				if (axisAlignedBB.isVecInside(startVector)) {
+				if (axisAlignedBB.contains(startVector)) {
 					return new ActionResult<>(EnumActionResult.PASS, heldItem);
 				}
 			}

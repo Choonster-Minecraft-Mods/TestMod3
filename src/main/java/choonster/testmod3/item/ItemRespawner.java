@@ -37,7 +37,7 @@ public class ItemRespawner extends ItemTestMod3 {
 			}
 
 			final BlockPos bedLocation = playerMP.getBedLocation(dimension);
-			final WorldServer worldServer = worldIn.getMinecraftServer() != null ? worldIn.getMinecraftServer().worldServerForDimension(dimension) : null;
+			final WorldServer worldServer = worldIn.getMinecraftServer() != null ? worldIn.getMinecraftServer().getWorld(dimension) : null;
 
 			if (worldServer == null) {
 				return new ActionResult<>(EnumActionResult.FAIL, heldItem);

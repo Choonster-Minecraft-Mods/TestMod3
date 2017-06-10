@@ -45,7 +45,7 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 	}
 
 	@Override
-	public final void updateCraftingInventory(final Container containerToSend, final NonNullList<ItemStack> itemsList) {
+	public final void sendAllContents(final Container containerToSend, final NonNullList<ItemStack> itemsList) {
 		// Filter out any items from the list that shouldn't be synced
 		final NonNullList<ItemStack> syncableItemsList = NonNullList.withSize(itemsList.size(), ItemStack.EMPTY);
 		for (int index = 0; index < syncableItemsList.size(); index++) {
@@ -77,7 +77,7 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 	}
 
 	@Override
-	public final void sendProgressBarUpdate(final Container containerIn, final int varToUpdate, final int newValue) {
+	public final void sendWindowProperty(final Container containerIn, final int varToUpdate, final int newValue) {
 		// No-op
 	}
 
