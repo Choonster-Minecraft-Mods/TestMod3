@@ -8,15 +8,12 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
-
-        // TODO: Remove this dependency once the Grgit plugin includes this version
-        classpath 'org.ajoberstar:grgit:1.7.2'
     }
 }
 
 plugins {
-    id 'org.ajoberstar.grgit' version '1.6.0'
-    id 'com.github.johnrengelman.shadow' version '1.2.3'
+    id 'org.ajoberstar.grgit' version '1.7.2'
+    id 'com.github.johnrengelman.shadow' version '1.2.4'
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
