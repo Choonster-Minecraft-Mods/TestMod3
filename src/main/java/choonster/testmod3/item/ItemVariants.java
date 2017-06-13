@@ -2,7 +2,6 @@ package choonster.testmod3.item;
 
 import choonster.testmod3.util.IVariant;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
@@ -33,9 +32,9 @@ public class ItemVariants extends ItemTestMod3 {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(final Item itemIn, final CreativeTabs tab, final NonNullList<ItemStack> subItems) {
+	public void getSubItems(final CreativeTabs tab, final NonNullList<ItemStack> subItems) {
 		final List<ItemStack> items = Stream.of(EnumType.values())
-				.map(enumType -> new ItemStack(itemIn, 1, enumType.getMeta()))
+				.map(enumType -> new ItemStack(this, 1, enumType.getMeta()))
 				.collect(Collectors.toList());
 
 		subItems.addAll(items);

@@ -5,14 +5,14 @@ import choonster.testmod3.capability.CapabilityProviderSerializable;
 import choonster.testmod3.fluids.FluidTankItem;
 import choonster.testmod3.tileentity.TileEntityFluidTank;
 import net.minecraft.block.Block;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -53,7 +53,7 @@ public class ItemFluidTank extends ItemBlock {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(final ItemStack stack, final EntityPlayer playerIn, final List<String> tooltip, final boolean advanced) {
+	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag advanced) {
 		final IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stack);
 		if (fluidHandler != null) {
 			final IFluidTankProperties[] properties = fluidHandler.getTankProperties();
@@ -65,8 +65,8 @@ public class ItemFluidTank extends ItemBlock {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(final Item itemIn, final CreativeTabs tab, final NonNullList<ItemStack> subItems) {
-		super.getSubItems(itemIn, tab, subItems);
+	public void getSubItems(final CreativeTabs tab, final NonNullList<ItemStack> subItems) {
+		super.getSubItems(tab, subItems);
 		subItems.addAll(tankItems);
 	}
 

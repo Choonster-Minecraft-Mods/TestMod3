@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 import java.util.UUID;
 
-@Mod(modid = TestMod3.MODID, name = TestMod3.NAME, acceptedMinecraftVersions = "[1.11.2]")
+@Mod(modid = TestMod3.MODID, name = TestMod3.NAME, acceptedMinecraftVersions = "[1.12]")
 public class TestMod3 {
 	public static final String MODID = "testmod3";
 	public static final String NAME = "Test Mod 3";

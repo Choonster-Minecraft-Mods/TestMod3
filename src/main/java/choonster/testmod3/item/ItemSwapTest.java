@@ -1,6 +1,7 @@
 package choonster.testmod3.item;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -8,6 +9,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -34,8 +36,8 @@ public class ItemSwapTest extends ItemTestMod3 {
 	}
 
 	@Override
-	public void addInformation(final ItemStack stack, final EntityPlayer playerIn, final List<String> tooltip, final boolean advanced) {
-		super.addInformation(stack, playerIn, tooltip, advanced);
+	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag advanced) {
+		super.addInformation(stack, world, tooltip, advanced);
 
 		if (hasOtherItem()) {
 			tooltip.add(I18n.format("item.testmod3:swap_test.with_item.desc", otherItem.getDisplayName()));

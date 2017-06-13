@@ -67,7 +67,8 @@ public class InventoryUtils {
 		try {
 			SHUFFLE_ITEMS.invokeExact(lootTable, items, emptySlots.size(), random);
 		} catch (final Throwable throwable) {
-			Throwables.propagate(throwable);
+			Throwables.throwIfUnchecked(throwable);
+			throw new RuntimeException(throwable);
 		}
 
 		for (final ItemStack itemStack : items) {

@@ -1,14 +1,16 @@
 package choonster.testmod3.recipe;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
 
-import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -19,13 +21,14 @@ import java.util.Random;
 public class ShapelessCuttingRecipe extends ShapelessRecipes {
 	private final Random random = new Random();
 
-	public ShapelessCuttingRecipe(final ItemStack output, final ItemStack... input) {
-		super(output, Arrays.asList(input));
+	public ShapelessCuttingRecipe(final String group, final ItemStack result, final NonNullList<Ingredient> ingredients) {
+		super(group, result, ingredients);
 	}
 
 	private ItemStack damageAxe(final ItemStack stack) {
-		if (stack.attemptDamageItem(1, random)) {
-			ForgeEventFactory.onPlayerDestroyItem(ForgeHooks.getCraftingPlayer(), stack, null);
+		final EntityPlayer craftingPlayer = ForgeHooks.getCraftingPlayer();
+		if (stack.attemptDamageItem(1, random, craftingPlayer instanceof EntityPlayerMP ? (EntityPlayerMP) craftingPlayer : null)) {
+			ForgeEventFactory.onPlayerDestroyItem(craftingPlayer, stack, null);
 			return ItemStack.EMPTY;
 		}
 

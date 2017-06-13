@@ -112,9 +112,9 @@ public abstract class BlockSlabTestMod3<
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(final Item item, final CreativeTabs tab, final NonNullList<ItemStack> list) {
+	public void getSubBlocks(final CreativeTabs tab, final NonNullList<ItemStack> list) {
 		list.addAll(getVariantProperty().getAllowedValues().stream()
-				.map(variant -> new ItemStack(item, 1, getMetadata(variant)))
+				.map(variant -> new ItemStack(this, 1, getMetadata(variant)))
 				.collect(Collectors.toList()));
 	}
 

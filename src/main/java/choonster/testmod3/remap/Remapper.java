@@ -23,7 +23,7 @@ import java.util.function.Predicate;
  * @author Choonster
  */
 public final class Remapper {
-	private static final Marker MARKER = MarkerManager.getMarker("Remapper", Logger.MOD_MARKER);
+	private static final Marker MARKER = MarkerManager.getMarker("Remapper").addParents(Logger.MOD_MARKER);
 
 	/**
 	 * A list of remapping functions that return {@code true} if they took an action for the {@link MissingMapping}.

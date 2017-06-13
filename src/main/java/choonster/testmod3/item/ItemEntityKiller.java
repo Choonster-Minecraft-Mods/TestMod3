@@ -1,7 +1,7 @@
 package choonster.testmod3.item;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.boss.EntityDragonPart;
+import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -23,8 +23,8 @@ public class ItemEntityKiller extends ItemTestMod3 {
 	public boolean onLeftClickEntity(final ItemStack stack, final EntityPlayer player, final Entity entity) {
 		if (!player.world.isRemote) {
 			final Entity entityToKill;
-			if (entity instanceof EntityDragonPart) { // If it's a multipart entity, kill the main entity
-				entityToKill = (Entity) ((EntityDragonPart) entity).parent;
+			if (entity instanceof MultiPartEntityPart) { // If it's a multipart entity, kill the main entity
+				entityToKill = (Entity) ((MultiPartEntityPart) entity).parent;
 			} else {
 				entityToKill = entity;
 			}

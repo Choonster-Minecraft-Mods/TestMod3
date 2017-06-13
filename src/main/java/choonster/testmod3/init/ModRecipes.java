@@ -49,15 +49,18 @@ public class ModRecipes {
 	 * Register this mod's recipe classes.
 	 */
 	private static void registerRecipeClasses() {
+		/* FIXME: Register the recipe classes with the new recipe registry
 		RecipeSorter.register("testmod3:shapelesscutting", ShapelessCuttingRecipe.class, SHAPELESS, "after:minecraft:shapeless");
 		RecipeSorter.register("testmod3:shapedarmourupgrade", ShapedArmourUpgradeRecipe.class, SHAPED, "after:forge:shapedore before:minecraft:shapeless");
 		RecipeSorter.register("testmod3:shapelessnbt", ShapelessNBTRecipe.class, SHAPELESS, "after:forge:shapelessore");
+		*/
 	}
 
 	/**
 	 * Add this mod's crafting recipes.
 	 */
 	private static void addCraftingRecipes() {
+		/* FIXME: Convert recipes to JSON
 		GameRegistry.addRecipe(new ShapelessCuttingRecipe(new ItemStack(Blocks.PLANKS, 2, BlockPlanks.EnumType.OAK.getMetadata()), new ItemStack(Items.WOODEN_AXE, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.LOG, 1, BlockPlanks.EnumType.OAK.getMetadata())));
 		GameRegistry.addShapelessRecipe(new ItemStack(Blocks.PLANKS, 2, BlockPlanks.EnumType.OAK.getMetadata()), new ItemStack(ModItems.WOODEN_AXE, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.LOG, 1, BlockPlanks.EnumType.OAK.getMetadata()));
 
@@ -81,6 +84,7 @@ public class ModRecipes {
 
 		// Recipe that uses a non-existent ore name - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2751505-ore-dictionary-dependant-item-registration
 		GameRegistry.addRecipe(new ShapedOreRecipe(Items.ACACIA_BOAT, "F", 'F', "fooBar"));
+		*/
 	}
 
 	/**
@@ -104,9 +108,9 @@ public class ModRecipes {
 	 * @param ingredient         The ingredient
 	 */
 	private static void addStandardConversionRecipes(final PotionType standardPotionType, final PotionType longPotionType, final PotionType strongPotionType, final Item ingredient) {
-		PotionHelper.registerPotionTypeConversion(PotionTypes.AWKWARD, new PotionHelper.ItemPredicateInstance(ingredient), standardPotionType);
-		PotionHelper.registerPotionTypeConversion(standardPotionType, new PotionHelper.ItemPredicateInstance(Items.REDSTONE), longPotionType);
-		PotionHelper.registerPotionTypeConversion(standardPotionType, new PotionHelper.ItemPredicateInstance(Items.GLOWSTONE_DUST), strongPotionType);
+		PotionHelper.func_193357_a(PotionTypes.AWKWARD, ingredient, standardPotionType);
+		PotionHelper.func_193357_a(standardPotionType, Items.REDSTONE, longPotionType);
+		PotionHelper.func_193357_a(standardPotionType, Items.GLOWSTONE_DUST, strongPotionType);
 	}
 
 	/**
@@ -139,6 +143,7 @@ public class ModRecipes {
 	 * @param output The output Item
 	 */
 	private static void removeRecipe(final Item output) {
+		/* FIXME: Can recipes still be removed?
 		int recipesRemoved = 0;
 
 		final List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
@@ -156,6 +161,7 @@ public class ModRecipes {
 		}
 
 		Logger.info("Removed %d recipes for %s", recipesRemoved, output.getRegistryName());
+		*/
 	}
 
 	/**
@@ -167,6 +173,7 @@ public class ModRecipes {
 	 * @param recipeClass The recipe class
 	 */
 	private static void removeRecipeClass(final Class<? extends IRecipe> recipeClass) {
+		/* FIXME: Can recipes still be removed?
 		int recipesRemoved = 0;
 
 		final List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
@@ -182,5 +189,6 @@ public class ModRecipes {
 		}
 
 		Logger.info("Removed %d recipes for %s", recipesRemoved, recipeClass);
+		*/
 	}
 }

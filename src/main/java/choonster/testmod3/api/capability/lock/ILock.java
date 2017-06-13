@@ -6,6 +6,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.LockCode;
@@ -51,7 +52,7 @@ public interface ILock extends IWorldNameable {
 		if (isLocked() && !player.canOpen(lockCode) && !player.isSpectator()) {
 			if (player instanceof EntityPlayerMP) {
 				final EntityPlayerMP playerMP = (EntityPlayerMP) player;
-				playerMP.connection.sendPacket(new SPacketChat(new TextComponentTranslation("container.isLocked", getDisplayName()), (byte) 2));
+				playerMP.connection.sendPacket(new SPacketChat(new TextComponentTranslation("container.isLocked", getDisplayName()), ChatType.GAME_INFO));
 				playerMP.connection.sendPacket(new SPacketSoundEffect(SoundEvents.BLOCK_CHEST_LOCKED, SoundCategory.BLOCKS, playerMP.posX, playerMP.posY, playerMP.posZ, 1.0F, 1.0F));
 			}
 

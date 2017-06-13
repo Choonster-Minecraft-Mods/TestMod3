@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -21,16 +22,16 @@ import java.util.List;
  * @author Choonster
  */
 public class ShapelessNBTRecipe extends ShapelessOreRecipe {
-	public ShapelessNBTRecipe(final Block result, final Object... recipe) {
-		super(result, recipe);
+	public ShapelessNBTRecipe(final ResourceLocation group, final Block result, final Object... recipe) {
+		super(group, result, recipe);
 	}
 
-	public ShapelessNBTRecipe(final Item result, final Object... recipe) {
-		super(result, recipe);
+	public ShapelessNBTRecipe(final ResourceLocation group, final Item result, final Object... recipe) {
+		super(group, result, recipe);
 	}
 
-	public ShapelessNBTRecipe(final ItemStack result, final Object... recipe) {
-		super(result, recipe);
+	public ShapelessNBTRecipe(final ResourceLocation group, final ItemStack result, final Object... recipe) {
+		super(group, result, recipe);
 	}
 
 	@Override

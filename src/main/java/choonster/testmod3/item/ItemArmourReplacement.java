@@ -7,6 +7,7 @@ import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import choonster.testmod3.util.ItemStackUtils;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -232,7 +234,7 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(final ItemStack stack, final EntityPlayer playerIn, final List<String> tooltip, final boolean advanced) {
+	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag advanced) {
 		tooltip.add(I18n.format("item.testmod3:armour_replacement.equip.desc"));
 		tooltip.add(I18n.format("item.testmod3:armour_replacement.unequip.desc"));
 	}

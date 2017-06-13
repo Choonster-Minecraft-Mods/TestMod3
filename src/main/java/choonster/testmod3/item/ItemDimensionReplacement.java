@@ -5,8 +5,8 @@ import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import choonster.testmod3.util.ItemStackUtils;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.DimensionType;
@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,8 +61,8 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 	 * @param world The World
 	 * @return Does the World have a replacement?
 	 */
-	private boolean hasReplacement(final World world) {
-		return replacements.containsKey(world.provider.getDimensionType());
+	private boolean hasReplacement(@Nullable final World world) {
+		return world != null && replacements.containsKey(world.provider.getDimensionType());
 	}
 
 	/**
@@ -120,9 +121,7 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(final ItemStack stack, final EntityPlayer playerIn, final List<String> tooltip, final boolean advanced) {
-		final World world = playerIn.getEntityWorld();
-
+	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag advanced) {
 		if (hasReplacement(world)) {
 			tooltip.add(I18n.format("item.testmod3:dimension_replacement.replacement.desc", getReplacement(world).getDisplayName()));
 		} else {

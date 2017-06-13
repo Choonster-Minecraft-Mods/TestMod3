@@ -8,7 +8,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -56,12 +55,12 @@ public class BlockVariants extends BlockTestMod3 {
 	}
 
 	@Override
-	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
+	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing facing, final float hitX, final float hitY, final float hitZ) {
 		return worldIn.setBlockState(pos, state.cycleProperty(VARIANT));
 	}
 
 	@Override
-	public void getSubBlocks(final Item itemIn, final CreativeTabs tab, final NonNullList<ItemStack> list) {
+	public void getSubBlocks(final CreativeTabs tab, final NonNullList<ItemStack> list) {
 		for (final EnumType enumType : EnumType.values()) {
 			list.add(new ItemStack(this, 1, enumType.getMeta()));
 		}

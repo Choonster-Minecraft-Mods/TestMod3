@@ -5,6 +5,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
@@ -17,16 +18,16 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
  * @author Choonster
  */
 public class ShapedArmourUpgradeRecipe extends ShapedOreRecipe {
-	public ShapedArmourUpgradeRecipe(final Block result, final Object... recipe) {
-		super(result, recipe);
+	public ShapedArmourUpgradeRecipe(final ResourceLocation group, final Block result, final Object... recipe) {
+		super(group, result, recipe);
 	}
 
-	public ShapedArmourUpgradeRecipe(final Item result, final Object... recipe) {
-		super(result, recipe);
+	public ShapedArmourUpgradeRecipe(final ResourceLocation group, final Item result, final Object... recipe) {
+		super(group, result, recipe);
 	}
 
-	public ShapedArmourUpgradeRecipe(final ItemStack result, final Object... recipe) {
-		super(result, recipe);
+	public ShapedArmourUpgradeRecipe(final ResourceLocation group, final ItemStack result, final Object... recipe) {
+		super(group, result, recipe);
 	}
 
 	@Override

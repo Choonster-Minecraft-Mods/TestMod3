@@ -3,6 +3,7 @@ package choonster.testmod3.item;
 import choonster.testmod3.Logger;
 import choonster.testmod3.util.ItemStackUtils;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -146,7 +148,7 @@ public class ItemEntityChecker extends ItemTestMod3 {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(final ItemStack stack, final EntityPlayer playerIn, final List<String> tooltip, final boolean advanced) {
+	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag advanced) {
 		tooltip.add(I18n.format("item.testmod3:entity_checker.radius.desc", getRadius(stack)));
 
 		final String cornerModeTranslationKey = isCornerModeEnabled(stack) ? "item.testmod3:entity_checker.mode.corner.desc" : "item.testmod3:entity_checker.mode.edge.desc";

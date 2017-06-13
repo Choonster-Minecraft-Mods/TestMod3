@@ -49,7 +49,7 @@ public final class CapabilityMaxHealth {
 	 */
 	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "MaxHealth");
 
-	public static final Marker LOG_MARKER = MarkerManager.getMarker("MaxHealth", Logger.MOD_MARKER);
+	public static final Marker LOG_MARKER = MarkerManager.getMarker("MaxHealth").addParents(Logger.MOD_MARKER);
 
 	public static void register() {
 		CapabilityManager.INSTANCE.register(IMaxHealth.class, new Capability.IStorage<IMaxHealth>() {
