@@ -16,6 +16,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -142,6 +144,7 @@ public class ItemEntityChecker extends ItemTestMod3 {
 		return EnumActionResult.SUCCESS;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(final ItemStack stack, final EntityPlayer playerIn, final List<String> tooltip, final boolean advanced) {
 		tooltip.add(I18n.format("item.testmod3:entity_checker.radius.desc", getRadius(stack)));
