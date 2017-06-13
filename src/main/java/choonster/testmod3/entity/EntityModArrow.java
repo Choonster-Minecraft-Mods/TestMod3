@@ -18,20 +18,20 @@ import net.minecraftforge.fml.common.registry.IThrowableEntity;
  * @author Choonster
  */
 public class EntityModArrow extends EntityTippedArrow implements IThrowableEntity {
-	public EntityModArrow(World worldIn) {
+	public EntityModArrow(final World worldIn) {
 		super(worldIn);
 	}
 
-	public EntityModArrow(World worldIn, double x, double y, double z) {
+	public EntityModArrow(final World worldIn, final double x, final double y, final double z) {
 		super(worldIn, x, y, z);
 	}
 
-	public EntityModArrow(World worldIn, EntityLivingBase shooter) {
+	public EntityModArrow(final World worldIn, final EntityLivingBase shooter) {
 		super(worldIn, shooter);
 	}
 
 	@Override
-	public void setPotionEffect(ItemStack stack) {
+	public void setPotionEffect(final ItemStack stack) {
 		super.setPotionEffect(new ItemStack(Items.ARROW)); // Mod arrows can't have potion effects
 	}
 
@@ -56,7 +56,7 @@ public class EntityModArrow extends EntityTippedArrow implements IThrowableEntit
 	 * @param entity The new thrower/creator.
 	 */
 	@Override
-	public void setThrower(Entity entity) {
+	public void setThrower(final Entity entity) {
 		shootingEntity = entity;
 	}
 }

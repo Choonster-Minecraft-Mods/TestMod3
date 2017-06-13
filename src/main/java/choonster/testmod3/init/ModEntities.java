@@ -33,7 +33,7 @@ public class ModEntities {
 	 * @param type The Type
 	 * @return An array of Biomes
 	 */
-	private static Biome[] getBiomes(BiomeDictionary.Type type) {
+	private static Biome[] getBiomes(final BiomeDictionary.Type type) {
 		return BiomeDictionary.getBiomes(type).toArray(new Biome[0]);
 	}
 
@@ -46,7 +46,7 @@ public class ModEntities {
 	 * @param classToCopy        The class to copy spawn entries from
 	 * @param creatureTypeToCopy The EnumCreatureType to copy spawn entries from
 	 */
-	private static void copySpawns(Class<? extends EntityLiving> classToAdd, EnumCreatureType creatureTypeToAdd, Class<? extends EntityLiving> classToCopy, EnumCreatureType creatureTypeToCopy) {
+	private static void copySpawns(final Class<? extends EntityLiving> classToAdd, final EnumCreatureType creatureTypeToAdd, final Class<? extends EntityLiving> classToCopy, final EnumCreatureType creatureTypeToCopy) {
 		for (final Biome biome : ForgeRegistries.BIOMES) {
 			biome.getSpawnableList(creatureTypeToCopy).stream()
 					.filter(entry -> entry.entityClass == classToCopy)
@@ -68,7 +68,7 @@ public class ModEntities {
 	 * @param updateFrequency      The frequency of tracking updates
 	 * @param sendsVelocityUpdates Whether to send velocity information packets as well
 	 */
-	private static void registerEntity(Class<? extends Entity> entityClass, String entityName, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates) {
+	private static void registerEntity(final Class<? extends Entity> entityClass, final String entityName, final int trackingRange, final int updateFrequency, final boolean sendsVelocityUpdates) {
 		final ResourceLocation registryName = new ResourceLocation(TestMod3.MODID, entityName);
 		EntityRegistry.registerModEntity(registryName, entityClass, registryName.toString(), entityID++, TestMod3.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
 	}
@@ -84,7 +84,7 @@ public class ModEntities {
 	 * @param eggPrimary           The spawn egg's primary (background) colour
 	 * @param eggSecondary         The spawn egg's secondary (foreground) colour
 	 */
-	private static void registerEntity(Class<? extends Entity> entityClass, String entityName, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, int eggPrimary, int eggSecondary) {
+	private static void registerEntity(final Class<? extends Entity> entityClass, final String entityName, final int trackingRange, final int updateFrequency, final boolean sendsVelocityUpdates, final int eggPrimary, final int eggSecondary) {
 		final ResourceLocation registryName = new ResourceLocation(TestMod3.MODID, entityName);
 		EntityRegistry.registerModEntity(registryName, entityClass, registryName.toString(), entityID++, TestMod3.instance, trackingRange, updateFrequency, sendsVelocityUpdates, eggPrimary, eggSecondary);
 	}

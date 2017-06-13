@@ -34,7 +34,7 @@ import java.util.Random;
 public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 	private final TileEntityCommandBlock.Mode commandBlockMode;
 
-	public BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode commandBlockMode, String name) {
+	public BlockSurvivalCommandBlock(final TileEntityCommandBlock.Mode commandBlockMode, final String name) {
 		super(MapColor.BROWN);
 		this.commandBlockMode = commandBlockMode;
 		setCreativeTab(TestMod3.creativeTab);
@@ -43,20 +43,20 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
+	public TileEntity createNewTileEntity(final World worldIn, final int meta) {
 		final TileEntitySurvivalCommandBlock tileEntity = new TileEntitySurvivalCommandBlock();
 		tileEntity.setAuto(getCommandBlockMode() == TileEntityCommandBlock.Mode.SEQUENCE);
 		return tileEntity;
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
 		final TileEntity tileEntity = worldIn.getTileEntity(pos);
 		return tileEntity instanceof TileEntitySurvivalCommandBlock && ((TileEntitySurvivalCommandBlock) tileEntity).getCommandBlockLogic().tryOpenEditCommandBlock(playerIn);
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(final World worldIn, final BlockPos pos, final IBlockState state, final EntityLivingBase placer, final ItemStack stack) {
 		final TileEntity tileEntity = worldIn.getTileEntity(pos);
 		if (tileEntity instanceof TileEntitySurvivalCommandBlock && !worldIn.isRemote) {
 			final TileEntitySurvivalCommandBlock tileEntitySurvivalCommandBlock = (TileEntitySurvivalCommandBlock) tileEntity;
@@ -71,7 +71,7 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 	}
 
 	@Override
-	public int quantityDropped(Random random) {
+	public int quantityDropped(final Random random) {
 		return 1;
 	}
 
@@ -84,7 +84,7 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 	 * @param pos     The Command Block's position
 	 */
 	@Override
-	public void propagateUpdate(World worldIn, BlockPos pos) {
+	public void propagateUpdate(final World worldIn, final BlockPos pos) {
 		final IBlockState iblockstate = worldIn.getBlockState(pos);
 
 		final TileEntity tileEntity = worldIn.getTileEntity(pos);

@@ -43,7 +43,7 @@ public class ContainerModChest extends Container {
 	 */
 	private final int numRows;
 
-	public ContainerModChest(IItemHandlerNameable playerInventory, IItemHandlerNameable chestInventory, EntityPlayer player, IContainerCallbacks containerCallbacks) {
+	public ContainerModChest(final IItemHandlerNameable playerInventory, final IItemHandlerNameable chestInventory, final EntityPlayer player, final IContainerCallbacks containerCallbacks) {
 		this.playerInventory = playerInventory;
 		this.chestInventory = chestInventory;
 
@@ -73,7 +73,7 @@ public class ContainerModChest extends Container {
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int index) {
+	public ItemStack transferStackInSlot(final EntityPlayer player, final int index) {
 		final Slot slot = this.inventorySlots.get(index);
 
 		if (slot != null && !slot.getStack().isEmpty()) {
@@ -101,12 +101,12 @@ public class ContainerModChest extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer playerIn) {
+	public boolean canInteractWith(final EntityPlayer playerIn) {
 		return callbacks.isUsableByPlayer(playerIn);
 	}
 
 	@Override
-	public void onContainerClosed(EntityPlayer playerIn) {
+	public void onContainerClosed(final EntityPlayer playerIn) {
 		super.onContainerClosed(playerIn);
 
 		callbacks.onContainerClosed(playerIn);

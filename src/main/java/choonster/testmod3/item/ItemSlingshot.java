@@ -34,17 +34,17 @@ public class ItemSlingshot extends ItemSnowballLauncher {
 	 * @return The cooldown of the launcher (in ticks), or 0 if there is none
 	 */
 	@Override
-	protected int getCooldown(ItemStack launcher) {
+	protected int getCooldown(final ItemStack launcher) {
 		return 0;
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final NBTTagCompound nbt) {
 		return CapabilityLastUseTime.createProvider(new LastUseTime(false));
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
 		final ActionResult<ItemStack> result = super.onItemRightClick(worldIn, playerIn, hand);
 
 		if (result.getType() == EnumActionResult.SUCCESS) {

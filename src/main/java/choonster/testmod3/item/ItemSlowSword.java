@@ -22,14 +22,14 @@ import java.util.UUID;
  * @author Choonster
  */
 public class ItemSlowSword extends ItemSword {
-	public ItemSlowSword(ToolMaterial material, String itemName) {
+	public ItemSlowSword(final ToolMaterial material, final String itemName) {
 		super(material);
 		ItemTestMod3.setItemName(this, itemName);
 		setCreativeTab(TestMod3.creativeTab);
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+	public Multimap<String, AttributeModifier> getAttributeModifiers(final EntityEquipmentSlot slot, final ItemStack stack) {
 		final Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
 
 		if (slot == EntityEquipmentSlot.MAINHAND) {
@@ -48,7 +48,7 @@ public class ItemSlowSword extends ItemSword {
 	 * @param id               The ID of the modifier
 	 * @param multiplier       The multiplier to apply
 	 */
-	private void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id, double multiplier) {
+	private void replaceModifier(final Multimap<String, AttributeModifier> modifierMultimap, final IAttribute attribute, final UUID id, final double multiplier) {
 		// Get the modifiers for the specified attribute
 		final Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
 

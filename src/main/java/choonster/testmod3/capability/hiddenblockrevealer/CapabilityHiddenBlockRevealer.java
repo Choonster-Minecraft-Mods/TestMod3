@@ -112,7 +112,7 @@ public final class CapabilityHiddenBlockRevealer {
 		 *
 		 * @param item The item
 		 */
-		public static void addToItem(Item item) {
+		public static void addToItem(final Item item) {
 			item.addPropertyOverride(ID, GETTER);
 		}
 	}

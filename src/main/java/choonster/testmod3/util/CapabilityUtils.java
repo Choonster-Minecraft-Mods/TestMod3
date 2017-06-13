@@ -22,7 +22,7 @@ public class CapabilityUtils {
 	 * @return The handler, if any.
 	 */
 	@Nullable
-	public static <T> T getCapability(@Nullable ICapabilityProvider provider, Capability<T> capability, @Nullable EnumFacing facing) {
+	public static <T> T getCapability(@Nullable final ICapabilityProvider provider, final Capability<T> capability, @Nullable final EnumFacing facing) {
 		return provider != null && provider.hasCapability(capability, facing) ? provider.getCapability(capability, facing) : null;
 	}
 }

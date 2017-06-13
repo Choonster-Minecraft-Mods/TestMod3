@@ -18,13 +18,13 @@ import java.util.function.IntFunction;
 public abstract class ItemWithScripts extends ItemTestMod3 {
 	private final IntFunction<String> scriptFunction;
 
-	public ItemWithScripts(IntFunction<String> scriptFunction, String itemName) {
+	public ItemWithScripts(final IntFunction<String> scriptFunction, final String itemName) {
 		super(itemName);
 		this.scriptFunction = scriptFunction;
 		setHasSubtypes(true);
 	}
 
-	private int getNumber(ItemStack stack) {
+	private int getNumber(final ItemStack stack) {
 		if (stack.hasTagCompound()) {
 			return stack.getTagCompound().getInteger("Number");
 		} else {
@@ -33,12 +33,12 @@ public abstract class ItemWithScripts extends ItemTestMod3 {
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack stack) {
+	public String getItemStackDisplayName(final ItemStack stack) {
 		return super.getItemStackDisplayName(stack) + scriptFunction.apply(stack.getItemDamage());
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);
 
 		if (!worldIn.isRemote) {

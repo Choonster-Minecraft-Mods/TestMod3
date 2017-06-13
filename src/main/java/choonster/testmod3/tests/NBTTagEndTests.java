@@ -29,7 +29,7 @@ public class NBTTagEndTests extends Test {
 
 		try {
 			CompressedStreamTools.write(originalCompound, file);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			exceptionThrown(e, "Failed to write to NBT file");
 			return;
 		}
@@ -37,7 +37,7 @@ public class NBTTagEndTests extends Test {
 		final NBTTagCompound readCompound;
 		try {
 			readCompound = CompressedStreamTools.read(file);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			exceptionThrown(e, "Failed to read from NBT file");
 			return;
 		}

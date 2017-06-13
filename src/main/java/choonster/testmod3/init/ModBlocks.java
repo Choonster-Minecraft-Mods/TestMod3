@@ -109,7 +109,7 @@ public class ModBlocks {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void registerBlocks(RegistryEvent.Register<Block> event) {
+		public static void registerBlocks(final RegistryEvent.Register<Block> event) {
 			final IForgeRegistry<Block> registry = event.getRegistry();
 
 			final Block[] blocks = {
@@ -159,7 +159,7 @@ public class ModBlocks {
 		 * @param registry  The registry
 		 * @param slabGroup The slab group
 		 */
-		private static void registerSlabGroup(IForgeRegistry<Block> registry, BlockSlabTestMod3.SlabGroup<?, ?, ?> slabGroup) {
+		private static void registerSlabGroup(final IForgeRegistry<Block> registry, final BlockSlabTestMod3.SlabGroup<?, ?, ?> slabGroup) {
 			registry.register(slabGroup.singleSlab);
 			registry.register(slabGroup.doubleSlab);
 		}
@@ -170,7 +170,7 @@ public class ModBlocks {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void registerItemBlocks(RegistryEvent.Register<Item> event) {
+		public static void registerItemBlocks(final RegistryEvent.Register<Item> event) {
 			final ItemBlock[] items = {
 					new ItemBlock(WATER_GRASS),
 					new ItemBlock(LARGE_COLLISION_TEST),
@@ -230,11 +230,11 @@ public class ModBlocks {
 		registerTileEntity(TileEntityFluidTankRestricted.class, "fluid_tank_restricted");
 	}
 
-	private static void registerTileEntity(Class<? extends TileEntity> tileEntityClass, String name) {
+	private static void registerTileEntity(final Class<? extends TileEntity> tileEntityClass, final String name) {
 		GameRegistry.registerTileEntity(tileEntityClass, Constants.RESOURCE_PREFIX + name);
 	}
 
-	private static void registerTileEntity(Class<? extends TileEntity> tileEntityClass, String name, String legacyName) {
+	private static void registerTileEntity(final Class<? extends TileEntity> tileEntityClass, final String name, final String legacyName) {
 		GameRegistry.registerTileEntityWithAlternatives(tileEntityClass, Constants.RESOURCE_PREFIX + name, Constants.RESOURCE_PREFIX + legacyName);
 	}
 }

@@ -172,7 +172,7 @@ public class ModItems {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void registerItems(RegistryEvent.Register<Item> event) {
+		public static void registerItems(final RegistryEvent.Register<Item> event) {
 			final Item[] items = {
 					WOODEN_AXE,
 					ENTITY_TEST,

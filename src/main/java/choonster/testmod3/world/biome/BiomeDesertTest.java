@@ -17,14 +17,14 @@ import java.util.Random;
 public class BiomeDesertTest extends BiomeDesert {
 	private boolean logged = false;
 
-	public BiomeDesertTest(BiomeProperties properties) {
+	public BiomeDesertTest(final BiomeProperties properties) {
 		super(properties);
 		topBlock = Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
 		fillerBlock = Blocks.BRICK_BLOCK.getDefaultState();
 	}
 
 	@Override
-	public void genTerrainBlocks(World worldIn, Random random, ChunkPrimer chunkPrimer, int x, int z, double stoneNoise) {
+	public void genTerrainBlocks(final World worldIn, final Random random, final ChunkPrimer chunkPrimer, final int x, final int z, final double stoneNoise) {
 		super.genTerrainBlocks(worldIn, random, chunkPrimer, x, z, stoneNoise);
 
 		if (!logged) {

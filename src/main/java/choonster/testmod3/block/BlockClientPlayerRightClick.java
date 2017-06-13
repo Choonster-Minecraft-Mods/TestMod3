@@ -22,7 +22,7 @@ public class BlockClientPlayerRightClick extends BlockStaticPressurePlate {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+	public void onEntityCollidedWithBlock(final World worldIn, final BlockPos pos, final IBlockState state, final Entity entityIn) {
 		// If on the client side, the colliding Entity is the client player and the total world time is a multiple of 10
 		if (worldIn.isRemote && entityIn == TestMod3.proxy.getClientPlayer() && worldIn.getTotalWorldTime() % 10 == 0) {
 			// Make the player right click

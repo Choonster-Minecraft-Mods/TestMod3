@@ -56,7 +56,7 @@ public class WorldGenBanner implements IWorldGenerator {
 	 * @param color   The colour
 	 * @return The compound tag
 	 */
-	protected NBTTagCompound createPatternTag(BannerPattern pattern, EnumDyeColor color) {
+	protected NBTTagCompound createPatternTag(final BannerPattern pattern, final EnumDyeColor color) {
 		final NBTTagCompound tag = new NBTTagCompound();
 		tag.setString("Pattern", pattern.getHashname());
 		tag.setInteger("Color", color.getDyeDamage());
@@ -69,7 +69,7 @@ public class WorldGenBanner implements IWorldGenerator {
 	 * @param world The world
 	 * @param pos   The position
 	 */
-	private void generateBanner(World world, BlockPos pos) {
+	private void generateBanner(final World world, final BlockPos pos) {
 		final BlockPos newPos = world.getTopSolidOrLiquidBlock(pos);
 
 		world.setBlockState(newPos, Blocks.STANDING_BANNER.getDefaultState());
@@ -81,7 +81,7 @@ public class WorldGenBanner implements IWorldGenerator {
 	}
 
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
+	public void generate(final Random random, final int chunkX, final int chunkZ, final World world, final IChunkGenerator chunkGenerator, final IChunkProvider chunkProvider) {
 		if (world.provider.isSurfaceWorld() && chunkX % 16 == 0 && chunkZ % 16 == 0) {
 			final BlockPos basePos = new BlockPos(chunkX * 16, 0, chunkZ * 16);
 

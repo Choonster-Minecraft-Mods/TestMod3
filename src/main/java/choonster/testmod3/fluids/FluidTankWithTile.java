@@ -13,17 +13,17 @@ import net.minecraftforge.fluids.FluidTank;
  * @author Choonster
  */
 public class FluidTankWithTile extends FluidTank {
-	public FluidTankWithTile(TileEntity tileEntity, int capacity) {
+	public FluidTankWithTile(final TileEntity tileEntity, final int capacity) {
 		super(capacity);
 		tile = tileEntity;
 	}
 
-	public FluidTankWithTile(TileEntity tileEntity, FluidStack stack, int capacity) {
+	public FluidTankWithTile(final TileEntity tileEntity, final FluidStack stack, final int capacity) {
 		super(stack, capacity);
 		tile = tileEntity;
 	}
 
-	public FluidTankWithTile(TileEntity tileEntity, Fluid fluid, int amount, int capacity) {
+	public FluidTankWithTile(final TileEntity tileEntity, final Fluid fluid, final int amount, final int capacity) {
 		super(fluid, amount, capacity);
 		tile = tileEntity;
 	}

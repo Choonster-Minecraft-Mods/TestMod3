@@ -10,11 +10,11 @@ import net.minecraft.util.EnumFacing;
  */
 public class HUDHandlerRotatable extends HUDHandlerEnumProperty<EnumFacing> {
 
-	public HUDHandlerRotatable(IProperty<EnumFacing> property) {
+	public HUDHandlerRotatable(final IProperty<EnumFacing> property) {
 		this(property, "testmod3:rotatable.facing.desc");
 	}
 
-	public HUDHandlerRotatable(IProperty<EnumFacing> property, String tooltipTranslationKey) {
+	public HUDHandlerRotatable(final IProperty<EnumFacing> property, final String tooltipTranslationKey) {
 		super(property, tooltipTranslationKey, "testmod3:facing");
 	}
 }

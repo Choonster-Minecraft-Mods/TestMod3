@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class SurvivalCommandBlockLogic extends CommandBlockBaseLogic {
 	private final Type type;
 
-	public SurvivalCommandBlockLogic(Type type) {
+	public SurvivalCommandBlockLogic(final Type type) {
 		this.type = type;
 		setName("Server");
 	}

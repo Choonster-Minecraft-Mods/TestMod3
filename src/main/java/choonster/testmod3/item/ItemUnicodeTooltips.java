@@ -24,7 +24,7 @@ public class ItemUnicodeTooltips extends ItemTestMod3 {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+	public void addInformation(final ItemStack stack, final EntityPlayer playerIn, final List<String> tooltip, final boolean advanced) {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 
 		tooltip.add(I18n.format("item.testmod3:unicode_tooltips.1.desc"));

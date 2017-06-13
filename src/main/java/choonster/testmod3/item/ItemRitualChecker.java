@@ -37,7 +37,7 @@ public class ItemRitualChecker extends ItemTestMod3 {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
 		if (!worldIn.isRemote) {
 			final ITextComponent textComponent;
 
@@ -63,7 +63,7 @@ public class ItemRitualChecker extends ItemTestMod3 {
 	 * @param player The command player
 	 * @return The first invalid position, if any.
 	 */
-	private Optional<BlockPos> checkRitual(EntityPlayer player) {
+	private Optional<BlockPos> checkRitual(final EntityPlayer player) {
 		final World world = player.getEntityWorld();
 		final BlockPos playerPos = new BlockPos(player);
 

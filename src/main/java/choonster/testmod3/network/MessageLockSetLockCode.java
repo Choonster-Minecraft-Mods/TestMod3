@@ -33,7 +33,7 @@ public class MessageLockSetLockCode implements IMessage {
 	public MessageLockSetLockCode() {
 	}
 
-	public MessageLockSetLockCode(BlockPos pos, @Nullable EnumFacing facing, String lockCode) {
+	public MessageLockSetLockCode(final BlockPos pos, @Nullable final EnumFacing facing, final String lockCode) {
 		this.pos = pos;
 		this.facing = facing;
 		this.lockCode = lockCode;
@@ -46,7 +46,7 @@ public class MessageLockSetLockCode implements IMessage {
 	 * @param buf The buffer
 	 */
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBytes(final ByteBuf buf) {
 		pos = BlockPos.fromLong(buf.readLong());
 		hasFacing = buf.readBoolean();
 
@@ -63,7 +63,7 @@ public class MessageLockSetLockCode implements IMessage {
 	 * @param buf The buffer
 	 */
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBytes(final ByteBuf buf) {
 		buf.writeLong(pos.toLong());
 		buf.writeBoolean(hasFacing);
 
@@ -86,7 +86,7 @@ public class MessageLockSetLockCode implements IMessage {
 		 */
 		@Nullable
 		@Override
-		public IMessage onMessage(MessageLockSetLockCode message, MessageContext ctx) {
+		public IMessage onMessage(final MessageLockSetLockCode message, final MessageContext ctx) {
 			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
 				final EntityPlayerMP player = (EntityPlayerMP) TestMod3.proxy.getPlayer(ctx);
 				final World world = player.world;

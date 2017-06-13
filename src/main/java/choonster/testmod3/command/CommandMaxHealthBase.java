@@ -46,7 +46,7 @@ public abstract class CommandMaxHealthBase extends CommandBase {
 	 * @param args   The arguments that were passed
 	 */
 	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+	public void execute(final MinecraftServer server, final ICommandSender sender, final String[] args) throws CommandException {
 		if (args.length < 2) {
 			throw new WrongUsageException(getUsage(sender));
 		}
@@ -63,7 +63,7 @@ public abstract class CommandMaxHealthBase extends CommandBase {
 	}
 
 	@Override
-	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+	public List<String> getTabCompletions(final MinecraftServer server, final ICommandSender sender, final String[] args, @Nullable final BlockPos pos) {
 		return args.length == 1 ? getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames()) : Collections.emptyList();
 	}
 }

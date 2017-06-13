@@ -15,7 +15,7 @@ public class DebugUtil {
 	 * @param depth The number of elements
 	 * @return The Throwable
 	 */
-	public static Throwable getStackTrace(int depth) {
+	public static Throwable getStackTrace(final int depth) {
 		final Throwable throwable = new Throwable("StackTrace Helper - NOT AN ERROR");
 
 		final StackTraceElement[] stackTraceElements = Stream.of(throwable.getStackTrace())

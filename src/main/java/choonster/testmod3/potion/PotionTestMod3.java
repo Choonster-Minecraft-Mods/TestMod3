@@ -23,13 +23,13 @@ public class PotionTestMod3 extends Potion {
 	 */
 	private final ResourceLocation iconTexture;
 
-	public PotionTestMod3(boolean isBadEffect, int liquidColor, String name) {
+	public PotionTestMod3(final boolean isBadEffect, final int liquidColor, final String name) {
 		super(isBadEffect, liquidColor);
 		setPotionName(this, name);
 		iconTexture = new ResourceLocation(TestMod3.MODID, "textures/potions/" + name + ".png");
 	}
 
-	public PotionTestMod3(boolean isBadEffect, int liquidR, int liquidG, int liquidB, String name) {
+	public PotionTestMod3(final boolean isBadEffect, final int liquidR, final int liquidG, final int liquidB, final String name) {
 		this(isBadEffect, new Color(liquidR, liquidG, liquidB).getRGB(), name);
 	}
 
@@ -39,7 +39,7 @@ public class PotionTestMod3 extends Potion {
 	 * @param potion     The potion
 	 * @param potionName The potion's name
 	 */
-	public static void setPotionName(Potion potion, String potionName) {
+	public static void setPotionName(final Potion potion, final String potionName) {
 		potion.setRegistryName(TestMod3.MODID, potionName);
 		potion.setPotionName("effect." + potion.getRegistryName().toString());
 	}
@@ -60,7 +60,7 @@ public class PotionTestMod3 extends Potion {
 	 */
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void renderInventoryEffect(int x, int y, PotionEffect effect, Minecraft mc) {
+	public void renderInventoryEffect(final int x, final int y, final PotionEffect effect, final Minecraft mc) {
 		if (mc.currentScreen != null) {
 			mc.getTextureManager().bindTexture(iconTexture);
 			Gui.drawModalRectWithCustomSizedTexture(x + 6, y + 7, 0, 0, 18, 18, 18, 18);
@@ -79,7 +79,7 @@ public class PotionTestMod3 extends Potion {
 	 */
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void renderHUDEffect(int x, int y, PotionEffect effect, Minecraft mc, float alpha) {
+	public void renderHUDEffect(final int x, final int y, final PotionEffect effect, final Minecraft mc, final float alpha) {
 		mc.getTextureManager().bindTexture(iconTexture);
 		Gui.drawModalRectWithCustomSizedTexture(x + 3, y + 3, 0, 0, 18, 18, 18, 18);
 	}

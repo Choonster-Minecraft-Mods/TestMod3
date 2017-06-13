@@ -47,27 +47,27 @@ public abstract class BlockPipeBase extends BlockTestMod3 {
 					.collect(Collectors.toList())
 	);
 
-	private static float getMinBound(int dir) {
+	private static float getMinBound(final int dir) {
 		return dir == -1 ? 0 : PIPE_MIN_POS;
 	}
 
-	private static float getMaxBound(int dir) {
+	private static float getMaxBound(final int dir) {
 		return dir == 1 ? 1 : PIPE_MAX_POS;
 	}
 
-	public BlockPipeBase(Material material, String blockName) {
+	public BlockPipeBase(final Material material, final String blockName) {
 		super(material, blockName);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(final IBlockState state) {
 		return false;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(final IBlockState state) {
 		return false;
 	}
 
@@ -81,7 +81,7 @@ public abstract class BlockPipeBase extends BlockTestMod3 {
 	 * @param neighbourDirection The direction of the neighbouring block
 	 * @return Is the neighbouring block a valid connection?
 	 */
-	protected boolean isValidConnection(IBlockState ownState, IBlockState neighbourState, IBlockAccess world, BlockPos ownPos, EnumFacing neighbourDirection) {
+	protected boolean isValidConnection(final IBlockState ownState, final IBlockState neighbourState, final IBlockAccess world, final BlockPos ownPos, final EnumFacing neighbourDirection) {
 		return neighbourState.getBlock() instanceof BlockPipeBase;
 	}
 
@@ -94,7 +94,7 @@ public abstract class BlockPipeBase extends BlockTestMod3 {
 	 * @param neighbourDirection The direction of the neighbouring block
 	 * @return Can this pipe connect?
 	 */
-	private boolean canConnectTo(IBlockState ownState, IBlockAccess worldIn, BlockPos ownPos, EnumFacing neighbourDirection) {
+	private boolean canConnectTo(final IBlockState ownState, final IBlockAccess worldIn, final BlockPos ownPos, final EnumFacing neighbourDirection) {
 		final BlockPos neighbourPos = ownPos.offset(neighbourDirection);
 		final IBlockState neighbourState = worldIn.getBlockState(neighbourPos);
 		final Block neighbourBlock = neighbourState.getBlock();
@@ -107,7 +107,7 @@ public abstract class BlockPipeBase extends BlockTestMod3 {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public IBlockState getActualState(IBlockState state, final IBlockAccess world, final BlockPos pos) {
 		for (final EnumFacing facing : EnumFacing.VALUES) {
 			state = state.withProperty(CONNECTED_PROPERTIES.get(facing.getIndex()), canConnectTo(state, world, pos, facing));
 		}
@@ -115,13 +115,13 @@ public abstract class BlockPipeBase extends BlockTestMod3 {
 		return state;
 	}
 
-	public final boolean isConnected(IBlockState state, EnumFacing facing) {
+	public final boolean isConnected(final IBlockState state, final EnumFacing facing) {
 		return state.getValue(CONNECTED_PROPERTIES.get(facing.getIndex()));
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
+	public void addCollisionBoxToList(IBlockState state, final World worldIn, final BlockPos pos, final AxisAlignedBB entityBox, final List<AxisAlignedBB> collidingBoxes, @Nullable final Entity entityIn, final boolean p_185477_7_) {
 		final AxisAlignedBB bb = new AxisAlignedBB(PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MAX_POS, PIPE_MAX_POS, PIPE_MAX_POS);
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, bb);
 

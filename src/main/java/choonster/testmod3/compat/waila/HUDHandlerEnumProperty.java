@@ -27,7 +27,7 @@ public class HUDHandlerEnumProperty<T extends Enum<T> & IStringSerializable> imp
 	protected final String tooltipTranslationKey;
 	protected final String valueTranslationKeyPrefix;
 
-	public HUDHandlerEnumProperty(IProperty<T> property, String tooltipTranslationKey, String valueTranslationKeyPrefix) {
+	public HUDHandlerEnumProperty(final IProperty<T> property, final String tooltipTranslationKey, final String valueTranslationKeyPrefix) {
 		this.property = property;
 		this.tooltipTranslationKey = tooltipTranslationKey;
 		this.valueTranslationKeyPrefix = valueTranslationKeyPrefix;
@@ -42,7 +42,7 @@ public class HUDHandlerEnumProperty<T extends Enum<T> & IStringSerializable> imp
 	 * @return null if override is not required, an ItemStack otherwise.
 	 */
 	@Override
-	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
+	public ItemStack getWailaStack(final IWailaDataAccessor accessor, final IWailaConfigHandler config) {
 		return ItemStack.EMPTY;
 	}
 
@@ -58,7 +58,7 @@ public class HUDHandlerEnumProperty<T extends Enum<T> & IStringSerializable> imp
 	 * @return Modified input currenttip
 	 */
 	@Override
-	public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
+	public List<String> getWailaHead(final ItemStack itemStack, final List<String> currenttip, final IWailaDataAccessor accessor, final IWailaConfigHandler config) {
 		return currenttip;
 	}
 
@@ -74,7 +74,7 @@ public class HUDHandlerEnumProperty<T extends Enum<T> & IStringSerializable> imp
 	 * @return Modified input currenttip
 	 */
 	@Override
-	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
+	public List<String> getWailaBody(final ItemStack itemStack, final List<String> currenttip, final IWailaDataAccessor accessor, final IWailaConfigHandler config) {
 		final IBlockState state = accessor.getBlockState().getActualState(accessor.getWorld(), accessor.getPosition());
 
 		final T value = state.getValue(property);
@@ -97,7 +97,7 @@ public class HUDHandlerEnumProperty<T extends Enum<T> & IStringSerializable> imp
 	 * @return Modified input currenttip
 	 */
 	@Override
-	public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
+	public List<String> getWailaTail(final ItemStack itemStack, final List<String> currenttip, final IWailaDataAccessor accessor, final IWailaConfigHandler config) {
 		return currenttip;
 	}
 
@@ -114,7 +114,7 @@ public class HUDHandlerEnumProperty<T extends Enum<T> & IStringSerializable> imp
 	 * @return Modified input NBTTagCompound tag.
 	 */
 	@Override
-	public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, BlockPos pos) {
+	public NBTTagCompound getNBTData(final EntityPlayerMP player, final TileEntity te, final NBTTagCompound tag, final World world, final BlockPos pos) {
 		return tag;
 	}
 }

@@ -38,7 +38,7 @@ public class MessageFluidTankContents implements IMessage {
 	public MessageFluidTankContents() {
 	}
 
-	public MessageFluidTankContents(IFluidTankProperties[] fluidTankProperties) {
+	public MessageFluidTankContents(final IFluidTankProperties[] fluidTankProperties) {
 		this.fluidTankProperties = fluidTankProperties;
 	}
 
@@ -49,7 +49,7 @@ public class MessageFluidTankContents implements IMessage {
 	 * @param buf The buffer
 	 */
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBytes(final ByteBuf buf) {
 		final int numProperties = buf.readInt();
 		fluidTankProperties = new IFluidTankProperties[numProperties];
 
@@ -69,10 +69,10 @@ public class MessageFluidTankContents implements IMessage {
 	 * @param buf The buffer
 	 */
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBytes(final ByteBuf buf) {
 		buf.writeInt(fluidTankProperties.length);
 
-		for (IFluidTankProperties properties : fluidTankProperties) {
+		for (final IFluidTankProperties properties : fluidTankProperties) {
 			final FluidStack contents = properties.getContents();
 			final NBTTagCompound tagCompound = new NBTTagCompound();
 
@@ -98,7 +98,7 @@ public class MessageFluidTankContents implements IMessage {
 		 */
 		@Nullable
 		@Override
-		public IMessage onMessage(MessageFluidTankContents message, MessageContext ctx) {
+		public IMessage onMessage(final MessageFluidTankContents message, final MessageContext ctx) {
 			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
 				final EntityPlayer player = TestMod3.proxy.getPlayer(ctx);
 

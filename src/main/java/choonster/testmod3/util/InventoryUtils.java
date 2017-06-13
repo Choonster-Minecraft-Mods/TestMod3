@@ -35,7 +35,7 @@ public class InventoryUtils {
 	 * @param index The index
 	 * @return The equipment slot
 	 */
-	public static EntityEquipmentSlot getEquipmentSlotFromIndex(int index) {
+	public static EntityEquipmentSlot getEquipmentSlotFromIndex(final int index) {
 		for (final EntityEquipmentSlot equipmentSlot : EntityEquipmentSlot.values()) {
 			if (equipmentSlot.getSlotIndex() == index) {
 				return equipmentSlot;
@@ -60,13 +60,13 @@ public class InventoryUtils {
 	 * @param random      The Random object to use in the loot generation
 	 * @param context     The LootContext to use in the loot generation
 	 */
-	public static void fillItemHandlerWithLoot(IItemHandler itemHandler, LootTable lootTable, Random random, LootContext context) {
+	public static void fillItemHandlerWithLoot(final IItemHandler itemHandler, final LootTable lootTable, final Random random, final LootContext context) {
 		final List<ItemStack> items = lootTable.generateLootForPools(random, context);
 		final List<Integer> emptySlots = getEmptySlotsRandomized(itemHandler, random);
 
 		try {
 			SHUFFLE_ITEMS.invokeExact(lootTable, items, emptySlots.size(), random);
-		} catch (Throwable throwable) {
+		} catch (final Throwable throwable) {
 			Throwables.propagate(throwable);
 		}
 
@@ -93,7 +93,7 @@ public class InventoryUtils {
 	 * @param random      The Random object
 	 * @return The slot indices
 	 */
-	private static List<Integer> getEmptySlotsRandomized(IItemHandler itemHandler, Random random) {
+	private static List<Integer> getEmptySlotsRandomized(final IItemHandler itemHandler, final Random random) {
 		final List<Integer> emptySlots = new ArrayList<>();
 
 		for (int slot = 0; slot < itemHandler.getSlots(); ++slot) {
@@ -116,7 +116,7 @@ public class InventoryUtils {
 	 * @param random      The Random object
 	 * @return The drops list
 	 */
-	public static List<ItemStack> dropItemHandlerContents(IItemHandler itemHandler, Random random) {
+	public static List<ItemStack> dropItemHandlerContents(final IItemHandler itemHandler, final Random random) {
 		final List<ItemStack> drops = new ArrayList<>();
 
 		for (int slot = 0; slot < itemHandler.getSlots(); ++slot) {
@@ -156,7 +156,7 @@ public class InventoryUtils {
 	 * @return The inventory, if any
 	 */
 	@Nullable
-	public static IItemHandler getMainInventory(Entity entity) {
+	public static IItemHandler getMainInventory(final Entity entity) {
 		if (entity instanceof EntityPlayer) {
 			return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
 		}
@@ -173,7 +173,7 @@ public class InventoryUtils {
 	 * @return The hand inventory, if any
 	 */
 	@Nullable
-	public static IItemHandler getHandInventory(Entity entity) {
+	public static IItemHandler getHandInventory(final Entity entity) {
 		if (entity instanceof EntityPlayer) {
 			return new PlayerOffhandInvWrapper(((EntityPlayer) entity).inventory);
 		}
@@ -190,7 +190,7 @@ public class InventoryUtils {
 	 * @return The inventory, if any
 	 */
 	@Nullable
-	public static IItemHandler getArmourInventory(Entity entity) {
+	public static IItemHandler getArmourInventory(final Entity entity) {
 		if (entity instanceof EntityPlayer) {
 			return new PlayerArmorInvWrapper(((EntityPlayer) entity).inventory);
 		}

@@ -15,19 +15,19 @@ import java.util.Random;
  * @author Choonster
  */
 public class BlockFluidNoFlow extends BlockFluidFinite {
-	public BlockFluidNoFlow(Fluid fluid, Material material) {
+	public BlockFluidNoFlow(final Fluid fluid, final Material material) {
 		super(fluid, material);
 		setDefaultState(blockState.getBaseState().withProperty(LEVEL, 7));
 	}
 
 	// Adapted from BlockFluidFinite#updateTick. Only flows vertically, not horizontally.
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+	public void updateTick(final World world, final BlockPos pos, final IBlockState state, final Random rand) {
 		boolean changed = false;
 		int quantaRemaining = state.getValue(LEVEL) + 1;
 
 		// Flow vertically if possible
-		int prevRemaining = quantaRemaining;
+		final int prevRemaining = quantaRemaining;
 		quantaRemaining = tryToFlowVerticallyInto(world, pos, quantaRemaining);
 
 		if (quantaRemaining < 1) {

@@ -32,7 +32,7 @@ public class PlayerEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void playerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+	public static void playerLoggedIn(final PlayerEvent.PlayerLoggedInEvent event) {
 		final EntityPlayer player = event.player;
 
 		final NBTTagCompound entityData = player.getEntityData();
@@ -63,7 +63,7 @@ public class PlayerEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void livingDeath(LivingDeathEvent event) {
+	public static void livingDeath(final LivingDeathEvent event) {
 		if (event.getEntity() instanceof EntityPlayer && !event.getEntity().getEntityWorld().isRemote) {
 			final EntityPlayer player = (EntityPlayer) event.getEntity();
 			final BlockPos pos = player.getPosition();

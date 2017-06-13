@@ -68,7 +68,7 @@ public class ModFluids {
 	 * @param blockFactory         A function that creates the {@link IFluidBlock}
 	 * @return The fluid and block
 	 */
-	private static <T extends Block & IFluidBlock> Fluid createFluid(String name, boolean hasFlowIcon, Consumer<Fluid> fluidPropertyApplier, Function<Fluid, T> blockFactory) {
+	private static <T extends Block & IFluidBlock> Fluid createFluid(final String name, final boolean hasFlowIcon, final Consumer<Fluid> fluidPropertyApplier, final Function<Fluid, T> blockFactory) {
 		final String texturePrefix = Constants.RESOURCE_PREFIX + "blocks/fluid_";
 
 		final ResourceLocation still = new ResourceLocation(texturePrefix + name + "_still");
@@ -98,7 +98,7 @@ public class ModFluids {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void registerBlocks(RegistryEvent.Register<Block> event) {
+		public static void registerBlocks(final RegistryEvent.Register<Block> event) {
 			final IForgeRegistry<Block> registry = event.getRegistry();
 
 			for (final IFluidBlock fluidBlock : MOD_FLUID_BLOCKS) {
@@ -116,7 +116,7 @@ public class ModFluids {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void registerItems(RegistryEvent.Register<Item> event) {
+		public static void registerItems(final RegistryEvent.Register<Item> event) {
 			final IForgeRegistry<Item> registry = event.getRegistry();
 
 			for (final IFluidBlock fluidBlock : MOD_FLUID_BLOCKS) {
@@ -138,11 +138,11 @@ public class ModFluids {
 		}
 	}
 
-	private static void registerBucket(Fluid fluid) {
+	private static void registerBucket(final Fluid fluid) {
 		FluidRegistry.addBucketForFluid(fluid);
 	}
 
-	private static void registerTank(Fluid fluid) {
+	private static void registerTank(final Fluid fluid) {
 		final FluidStack fluidStack = new FluidStack(fluid, TileEntityFluidTank.CAPACITY);
 
 		final Item item = Item.getItemFromBlock(ModBlocks.FLUID_TANK);

@@ -34,7 +34,7 @@ public class ModDispenseBehaviors {
 		register(Items.DYE, new BehaviorDispenseDelegate(REGISTRY.getObject(Items.DYE)) {
 
 			@Override
-			protected ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+			protected ItemStack dispenseStack(final IBlockSource source, final ItemStack stack) {
 				doSoundsParticles = true;
 				successful = true;
 
@@ -59,7 +59,7 @@ public class ModDispenseBehaviors {
 		});
 	}
 
-	private static void register(Item item, IBehaviorDispenseItem behaviorDispenseItem) {
+	private static void register(final Item item, final IBehaviorDispenseItem behaviorDispenseItem) {
 		REGISTRY.putObject(item, behaviorDispenseItem);
 	}
 }

@@ -11,7 +11,7 @@ import net.minecraft.block.state.IBlockState;
  * @author Choonster
  */
 public class BlockPipeBasic extends BlockPipeBase {
-	public BlockPipeBasic(String blockName) {
+	public BlockPipeBasic(final String blockName) {
 		super(Material.IRON, blockName);
 	}
 
@@ -22,12 +22,12 @@ public class BlockPipeBasic extends BlockPipeBase {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public IBlockState getStateFromMeta(final int meta) {
 		return getDefaultState();
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(final IBlockState state) {
 		return 0;
 	}
 }

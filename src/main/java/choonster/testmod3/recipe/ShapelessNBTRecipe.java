@@ -21,20 +21,20 @@ import java.util.List;
  * @author Choonster
  */
 public class ShapelessNBTRecipe extends ShapelessOreRecipe {
-	public ShapelessNBTRecipe(Block result, Object... recipe) {
+	public ShapelessNBTRecipe(final Block result, final Object... recipe) {
 		super(result, recipe);
 	}
 
-	public ShapelessNBTRecipe(Item result, Object... recipe) {
+	public ShapelessNBTRecipe(final Item result, final Object... recipe) {
 		super(result, recipe);
 	}
 
-	public ShapelessNBTRecipe(ItemStack result, Object... recipe) {
+	public ShapelessNBTRecipe(final ItemStack result, final Object... recipe) {
 		super(result, recipe);
 	}
 
 	@Override
-	public boolean matches(InventoryCrafting var1, World world) {
+	public boolean matches(final InventoryCrafting var1, final World world) {
 		final ArrayList<Object> required = new ArrayList<>(input);
 
 		for (int x = 0; x < var1.getSizeInventory(); x++) {
@@ -76,7 +76,7 @@ public class ShapelessNBTRecipe extends ShapelessOreRecipe {
 	}
 
 
-	protected boolean itemMatches(ItemStack required, ItemStack present) {
+	protected boolean itemMatches(final ItemStack required, final ItemStack present) {
 		return OreDictionary.itemMatches(required, present, false) && ItemStack.areItemStackTagsEqual(required, present);
 	}
 }

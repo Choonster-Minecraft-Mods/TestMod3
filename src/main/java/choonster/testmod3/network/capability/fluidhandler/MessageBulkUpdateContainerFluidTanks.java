@@ -74,7 +74,7 @@ public class MessageBulkUpdateContainerFluidTanks extends MessageBulkUpdateConta
 		 * @param fluidTankInfo    The data instance
 		 */
 		@Override
-		protected void applyCapabilityData(IFluidHandlerItem fluidHandlerItem, FluidTankInfo fluidTankInfo) {
+		protected void applyCapabilityData(final IFluidHandlerItem fluidHandlerItem, final FluidTankInfo fluidTankInfo) {
 			if (fluidHandlerItem instanceof FluidTank) {
 				((FluidTank) fluidHandlerItem).setFluid(fluidTankInfo.fluid);
 			}

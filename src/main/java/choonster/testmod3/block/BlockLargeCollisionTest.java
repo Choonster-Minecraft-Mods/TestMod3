@@ -27,7 +27,7 @@ public class BlockLargeCollisionTest extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(final IBlockState state, final IBlockAccess source, final BlockPos pos) {
 		return BOUNDING_BOX;
 	}
 }

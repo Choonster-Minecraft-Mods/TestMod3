@@ -40,7 +40,7 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 	 */
 	private final Map<DimensionType, ItemStack> replacements = new HashMap<>();
 
-	public ItemDimensionReplacement(String itemName) {
+	public ItemDimensionReplacement(final String itemName) {
 		super(itemName);
 	}
 
@@ -50,7 +50,7 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 	 * @param dimensionType The dimension type
 	 * @param itemStack     The replacement
 	 */
-	public void addReplacement(DimensionType dimensionType, ItemStack itemStack) {
+	public void addReplacement(final DimensionType dimensionType, final ItemStack itemStack) {
 		replacements.put(dimensionType, itemStack);
 	}
 
@@ -60,7 +60,7 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 	 * @param world The World
 	 * @return Does the World have a replacement?
 	 */
-	private boolean hasReplacement(World world) {
+	private boolean hasReplacement(final World world) {
 		return replacements.containsKey(world.provider.getDimensionType());
 	}
 
@@ -70,12 +70,12 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 	 * @param world The World
 	 * @return The replacement
 	 */
-	private ItemStack getReplacement(World world) {
+	private ItemStack getReplacement(final World world) {
 		return replacements.get(world.provider.getDimensionType());
 	}
 
 	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+	public void onUpdate(final ItemStack stack, final World worldIn, final Entity entityIn, final int itemSlot, final boolean isSelected) {
 		final NBTTagCompound stackTagCompound = ItemStackUtils.getOrCreateTagCompound(stack);
 
 		if (!stackTagCompound.getBoolean(KEY_REPLACED)) { // If the replacement logic hasn't been run,
@@ -120,7 +120,7 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+	public void addInformation(final ItemStack stack, final EntityPlayer playerIn, final List<String> tooltip, final boolean advanced) {
 		final World world = playerIn.getEntityWorld();
 
 		if (hasReplacement(world)) {

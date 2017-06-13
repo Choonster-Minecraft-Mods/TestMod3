@@ -30,7 +30,7 @@ import java.util.stream.Stream;
 public class BlockVariants extends BlockTestMod3 {
 	public static final IProperty<EnumType> VARIANT = PropertyEnum.create("variant", EnumType.class);
 
-	public BlockVariants(Material materialIn) {
+	public BlockVariants(final Material materialIn) {
 		super(materialIn, "variants");
 	}
 
@@ -41,27 +41,27 @@ public class BlockVariants extends BlockTestMod3 {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public IBlockState getStateFromMeta(final int meta) {
 		return getDefaultState().withProperty(VARIANT, EnumType.byMetadata(meta));
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(final IBlockState state) {
 		return state.getValue(VARIANT).getMeta();
 	}
 
 	@Override
-	public int damageDropped(IBlockState state) {
+	public int damageDropped(final IBlockState state) {
 		return getMetaFromState(state);
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
 		return worldIn.setBlockState(pos, state.cycleProperty(VARIANT));
 	}
 
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(final Item itemIn, final CreativeTabs tab, final NonNullList<ItemStack> list) {
 		for (final EnumType enumType : EnumType.values()) {
 			list.add(new ItemStack(this, 1, enumType.getMeta()));
 		}
@@ -73,7 +73,7 @@ public class BlockVariants extends BlockTestMod3 {
 	 * @param stack The ItemStack
 	 * @return The unlocalised name suffix
 	 */
-	public String getName(ItemStack stack) {
+	public String getName(final ItemStack stack) {
 		final int metadata = stack.getMetadata();
 
 		return EnumType.byMetadata(metadata).getName();
@@ -88,7 +88,7 @@ public class BlockVariants extends BlockTestMod3 {
 		private final int meta;
 		private final String name;
 
-		EnumType(int meta, String name) {
+		EnumType(final int meta, final String name) {
 			this.meta = meta;
 			this.name = name;
 		}

@@ -31,7 +31,7 @@ public class BlockDumper {
 							writer.printf("%s - %s\n", item.getUnlocalizedName(), item.toString());
 						}
 					});
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			Logger.fatal(e, "Exception dumping blocks");
 
 		}

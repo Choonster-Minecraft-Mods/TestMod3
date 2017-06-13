@@ -42,7 +42,7 @@ public class BlockClientPlayerRotation extends BlockStaticPressurePlate {
 	private boolean isPitchingUp;
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+	public void onEntityCollidedWithBlock(final World worldIn, final BlockPos pos, final IBlockState state, final Entity entityIn) {
 		if (worldIn.isRemote && entityIn == TestMod3.proxy.getClientPlayer()) {
 			if (MathHelper.epsilonEquals(Math.abs(entityIn.rotationPitch), 90.0f)) {
 				isPitchingUp = !isPitchingUp;

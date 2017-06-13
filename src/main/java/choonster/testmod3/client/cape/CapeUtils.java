@@ -34,7 +34,7 @@ class CapeUtils {
 	 *
 	 * @param player The player
 	 */
-	static void queuePlayerCapeReplacement(AbstractClientPlayer player) {
+	static void queuePlayerCapeReplacement(final AbstractClientPlayer player) {
 		final String displayName = player.getDisplayNameString();
 
 		Logger.info("Queueing cape replacement for %s", displayName);
@@ -42,7 +42,7 @@ class CapeUtils {
 		THREAD_POOL.submit(() -> {
 			try {
 				Thread.sleep(100);
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 				Logger.fatal(e, "Cape delay thread for %s interrupted", displayName);
 				return;
 			}
@@ -57,14 +57,14 @@ class CapeUtils {
 	 * @param player The player
 	 */
 	@SuppressWarnings("unchecked")
-	private static void replacePlayerCape(AbstractClientPlayer player) {
+	private static void replacePlayerCape(final AbstractClientPlayer player) {
 		final String displayName = player.getDisplayNameString();
 
 		final NetworkPlayerInfo playerInfo;
 
 		try {
 			playerInfo = (NetworkPlayerInfo) GET_PLAYER_INFO.invokeExact(player);
-		} catch (Throwable throwable) {
+		} catch (final Throwable throwable) {
 			Logger.fatal(throwable, "Failed to get NetworkPlayerInfo of %s", displayName);
 			return;
 		}
@@ -78,7 +78,7 @@ class CapeUtils {
 		final Map<MinecraftProfileTexture.Type, ResourceLocation> playerTextures;
 		try {
 			playerTextures = (Map<MinecraftProfileTexture.Type, ResourceLocation>) GET_PLAYER_TEXTURES.invokeExact(playerInfo);
-		} catch (Throwable throwable) {
+		} catch (final Throwable throwable) {
 			Logger.fatal(throwable, "Failed to get player textures of %s", displayName);
 			return;
 		}
@@ -96,7 +96,7 @@ class CapeUtils {
 	 * @param player The player
 	 * @return True if the player has a TestMod3 cape
 	 */
-	static boolean doesPlayerHaveCape(AbstractClientPlayer player) {
+	static boolean doesPlayerHaveCape(final AbstractClientPlayer player) {
 		return player.getUniqueID().equals(UUID_CHOONSTER);
 	}
 }

@@ -21,7 +21,7 @@ import net.minecraft.world.storage.loot.LootTable;
 public abstract class TileEntityItemHandlerLoot extends TileEntityItemHandlerLockable<ItemHandlerLoot, Lock> implements IWorldContainer {
 
 	@Override
-	public void openGUI(World world, EntityPlayer player) {
+	public void openGUI(final World world, final EntityPlayer player) {
 		if (inventory.getLootTable() != null && player.isSpectator()) {
 			player.sendMessage(new TextComponentTranslation("container.spectatorCantOpen").setStyle(new Style().setColor(TextFormatting.RED)));
 		} else {

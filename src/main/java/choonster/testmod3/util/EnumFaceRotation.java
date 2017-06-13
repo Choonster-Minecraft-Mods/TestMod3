@@ -17,7 +17,7 @@ public enum EnumFaceRotation implements IStringSerializable {
 
 	private final String name;
 
-	EnumFaceRotation(String name) {
+	EnumFaceRotation(final String name) {
 		this.name = name;
 	}
 

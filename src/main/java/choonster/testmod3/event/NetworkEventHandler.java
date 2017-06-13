@@ -29,7 +29,7 @@ public class NetworkEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void clientConnectedToServer(FMLNetworkEvent.ClientConnectedToServerEvent event) {
+	public static void clientConnectedToServer(final FMLNetworkEvent.ClientConnectedToServerEvent event) {
 		final IThreadListener mainThread = Minecraft.getMinecraft();
 		mainThread.addScheduledTask(() -> {
 			final ServerData serverData = Minecraft.getMinecraft().getCurrentServerData();

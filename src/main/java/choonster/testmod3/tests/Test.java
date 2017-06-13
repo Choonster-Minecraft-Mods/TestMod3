@@ -16,26 +16,26 @@ public abstract class Test {
 
 	private boolean allAssertionsPassed = true;
 
-	protected void assertTrue(boolean value, String message) {
+	protected void assertTrue(final boolean value, final String message) {
 		if (!value) {
 			allAssertionsPassed = false;
 			logger.warn(String.format("Assertion failed: %s", message));
 		}
 	}
 
-	protected void assertFalse(boolean value, String message) {
+	protected void assertFalse(final boolean value, final String message) {
 		if (value) {
 			allAssertionsPassed = false;
 			logger.warn(String.format("Assertion failed: %s", message));
 		}
 	}
 
-	protected void exceptionThrown(Exception e, String message) {
+	protected void exceptionThrown(final Exception e, final String message) {
 		allAssertionsPassed = false;
 		logger.warn(message, e);
 	}
 
-	protected void assertEqual(Object expected, Object actual) {
+	protected void assertEqual(final Object expected, final Object actual) {
 		if (!expected.equals(actual)) {
 			allAssertionsPassed = false;
 			logger.warn(String.format("Objects not equal. Expected: %s, Actual: %s", expected, actual));

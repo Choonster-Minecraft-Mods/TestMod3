@@ -12,7 +12,7 @@ public class StringUtils {
 	 * @param number   The number
 	 * @return The built String
 	 */
-	private static String buildDigitString(IntFunction<char[]> function, String minus, int number) {
+	private static String buildDigitString(final IntFunction<char[]> function, final String minus, int number) {
 		// 0 requires a special case
 		if (number == 0) return new String(function.apply(0));
 
@@ -43,7 +43,7 @@ public class StringUtils {
 	 * @param digit The digit (must be in range 0-9)
 	 * @return A char array representing the subscript character
 	 */
-	private static char[] subscriptForDigit(int digit) {
+	private static char[] subscriptForDigit(final int digit) {
 		return Character.toChars(0x2080 + digit);
 	}
 
@@ -53,7 +53,7 @@ public class StringUtils {
 	 * @param number The number
 	 * @return The subscript String
 	 */
-	public static String subscript(int number) {
+	public static String subscript(final int number) {
 		return buildDigitString(StringUtils::subscriptForDigit, "₋", number);
 	}
 
@@ -65,7 +65,7 @@ public class StringUtils {
 	 * @param digit The digit (must be in range 0-9)
 	 * @return A char array representing the superscript character
 	 */
-	private static char[] superscriptForDigit(int digit) {
+	private static char[] superscriptForDigit(final int digit) {
 		// Superscript 1, 2 and 3 require a special case since they're outside the U+207x range
 		switch (digit) {
 			case 1:
@@ -85,7 +85,7 @@ public class StringUtils {
 	 * @param number The number
 	 * @return The subscript String
 	 */
-	public static String superscript(int number) {
+	public static String superscript(final int number) {
 		return buildDigitString(StringUtils::superscriptForDigit, "⁻", number);
 	}
 }

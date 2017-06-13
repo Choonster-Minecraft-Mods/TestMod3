@@ -19,13 +19,13 @@ import javax.annotation.Nullable;
 public interface IItemPropertyGetterFix extends IItemPropertyGetter {
 	float applyPropertyGetter(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn);
 
-	static IItemPropertyGetterFix create(IItemPropertyGetterFix lambda) {
+	static IItemPropertyGetterFix create(final IItemPropertyGetterFix lambda) {
 		return lambda;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	default float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+	default float apply(final ItemStack stack, @Nullable final World worldIn, @Nullable final EntityLivingBase entityIn) {
 		return applyPropertyGetter(stack, worldIn, entityIn);
 	}
 }

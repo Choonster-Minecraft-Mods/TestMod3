@@ -19,22 +19,22 @@ public class CommandTestMod3Help extends CommandHelp {
 	 */
 	private final CommandTestMod3 commandTestMod3;
 
-	public CommandTestMod3Help(CommandTestMod3 commandTestMod3) {
+	public CommandTestMod3Help(final CommandTestMod3 commandTestMod3) {
 		this.commandTestMod3 = commandTestMod3;
 	}
 
 	@Override
-	public String getUsage(ICommandSender sender) {
+	public String getUsage(final ICommandSender sender) {
 		return "commands.testmod3:help.usage";
 	}
 
 	@Override
-	protected Map<String, ICommand> getCommandMap(MinecraftServer server) {
+	protected Map<String, ICommand> getCommandMap(final MinecraftServer server) {
 		return commandTestMod3.getCommandMap();
 	}
 
 	@Override
-	protected List<ICommand> getSortedPossibleCommands(ICommandSender sender, MinecraftServer server) {
+	protected List<ICommand> getSortedPossibleCommands(final ICommandSender sender, final MinecraftServer server) {
 		return commandTestMod3.getSortedPossibleCommands(sender, server);
 	}
 }

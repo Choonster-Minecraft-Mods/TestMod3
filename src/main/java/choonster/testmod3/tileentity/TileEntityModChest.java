@@ -74,7 +74,7 @@ public class TileEntityModChest extends TileEntityItemHandlerLoot implements ICo
 	 * @return The Container
 	 */
 	@Override
-	public ContainerModChest createContainer(EntityPlayer player) {
+	public ContainerModChest createContainer(final EntityPlayer player) {
 		inventory.fillWithLoot(player);
 
 		final IItemHandlerModifiable playerInventory = (IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
@@ -89,7 +89,7 @@ public class TileEntityModChest extends TileEntityItemHandlerLoot implements ICo
 	 * @param player The player
 	 */
 	@Override
-	public void onContainerOpened(EntityPlayer player) {
+	public void onContainerOpened(final EntityPlayer player) {
 
 	}
 
@@ -99,7 +99,7 @@ public class TileEntityModChest extends TileEntityItemHandlerLoot implements ICo
 	 * @param player The player
 	 */
 	@Override
-	public void onContainerClosed(EntityPlayer player) {
+	public void onContainerClosed(final EntityPlayer player) {
 
 	}
 
@@ -110,7 +110,7 @@ public class TileEntityModChest extends TileEntityItemHandlerLoot implements ICo
 	 * @return Is this usable by the specified player?
 	 */
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(final EntityPlayer player) {
 		return this.world.getTileEntity(this.pos) == this && player.getDistanceSq(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5) <= 64;
 	}
 
@@ -119,7 +119,7 @@ public class TileEntityModChest extends TileEntityItemHandlerLoot implements ICo
 	 *
 	 * @param displayName The display name
 	 */
-	public void setDisplayName(String displayName) {
+	public void setDisplayName(final String displayName) {
 		final TextComponentString displayNameComponent = new TextComponentString(displayName);
 		inventory.setDisplayName(displayNameComponent);
 		lock.setDisplayName(displayNameComponent);

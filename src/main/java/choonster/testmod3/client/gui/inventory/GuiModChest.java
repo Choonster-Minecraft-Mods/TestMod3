@@ -41,7 +41,7 @@ public class GuiModChest extends GuiContainer {
 	 */
 	private final int numRows;
 
-	public GuiModChest(ContainerModChest container) {
+	public GuiModChest(final ContainerModChest container) {
 		super(container);
 		playerInventory = container.getPlayerInventory();
 		chestInventory = container.getChestInventory();
@@ -58,7 +58,7 @@ public class GuiModChest extends GuiContainer {
 	 * @param mouseY Mouse y coordinate
 	 */
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+	protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY) {
 		this.fontRenderer.drawString(this.chestInventory.getDisplayName().getUnformattedText(), 8, 6, TEXT_COLOUR);
 		this.fontRenderer.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, TEXT_COLOUR);
 	}
@@ -71,7 +71,7 @@ public class GuiModChest extends GuiContainer {
 	 * @param mouseY       Mouse y coordinate
 	 */
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+	protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY) {
 		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 
 		this.mc.getTextureManager().bindTexture(CHEST_GUI_TEXTURE);

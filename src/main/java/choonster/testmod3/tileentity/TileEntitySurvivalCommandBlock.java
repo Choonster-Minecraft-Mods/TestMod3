@@ -61,7 +61,7 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 		 * Sets the command.
 		 */
 		@Override
-		public void setCommand(String command) {
+		public void setCommand(final String command) {
 			super.setCommand(command);
 			TileEntitySurvivalCommandBlock.this.markDirty();
 		}
@@ -75,7 +75,7 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 
 		@Override
 		@SideOnly(Side.CLIENT)
-		public void fillInInfo(ByteBuf byteBuf) {
+		public void fillInInfo(final ByteBuf byteBuf) {
 			byteBuf.writeInt(TileEntitySurvivalCommandBlock.this.getPos().getX());
 			byteBuf.writeInt(TileEntitySurvivalCommandBlock.this.getPos().getY());
 			byteBuf.writeInt(TileEntitySurvivalCommandBlock.this.getPos().getZ());
@@ -88,7 +88,7 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 		 * @return Did the player open the edit GUI?
 		 */
 		@Override
-		public boolean tryOpenEditCommandBlock(EntityPlayer player) {
+		public boolean tryOpenEditCommandBlock(final EntityPlayer player) {
 			if (player.getEntityWorld().isRemote) {
 				final BlockPos pos = getPosition();
 				player.openGui(TestMod3.instance, GuiIDs.SURVIVAL_COMMAND_BLOCK, player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());
@@ -127,14 +127,14 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound) {
+	public void readFromNBT(final NBTTagCompound compound) {
 		super.readFromNBT(compound);
 
 		getCommandBlockLogic().readDataFromNBT(compound.getCompoundTag("SurvivalCommandBlockLogic"));
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(final NBTTagCompound compound) {
 		super.writeToNBT(compound);
 
 		compound.setTag("SurvivalCommandBlockLogic", getCommandBlockLogic().writeToNBT(new NBTTagCompound()));
@@ -143,7 +143,7 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 	}
 
 	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+	public boolean shouldRefresh(final World world, final BlockPos pos, final IBlockState oldState, final IBlockState newSate) {
 		return oldState.getBlock() != newSate.getBlock();
 	}
 
@@ -152,7 +152,7 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 	 *
 	 * @param player The player.
 	 */
-	private void sendToClient(EntityPlayerMP player) {
+	private void sendToClient(final EntityPlayerMP player) {
 		setSendToClient(true);
 
 		final SPacketUpdateTileEntity updatePacket = getUpdatePacket();

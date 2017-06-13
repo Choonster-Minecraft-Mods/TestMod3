@@ -20,7 +20,7 @@ public class ItemSoundEffect extends ItemTestMod3 {
 	 */
 	private final SoundEvent soundEvent;
 
-	public ItemSoundEffect(String itemName, SoundEvent soundEvent) {
+	public ItemSoundEffect(final String itemName, final SoundEvent soundEvent) {
 		super(itemName);
 		this.soundEvent = soundEvent;
 	}
@@ -33,7 +33,7 @@ public class ItemSoundEffect extends ItemTestMod3 {
 	 * @return True to cancel any further processing by EntityLiving
 	 */
 	@Override
-	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
+	public boolean onEntitySwing(final EntityLivingBase entityLiving, final ItemStack stack) {
 		final EntityPlayer player = entityLiving instanceof EntityPlayer ? ((EntityPlayer) entityLiving) : null;
 		entityLiving.world.playSound(player, entityLiving.posX, entityLiving.posY, entityLiving.posZ, soundEvent, SoundCategory.PLAYERS, 0.5F, 1.0f);
 

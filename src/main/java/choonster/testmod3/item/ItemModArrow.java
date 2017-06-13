@@ -21,20 +21,20 @@ public class ItemModArrow extends ItemArrow {
 	 */
 	private final BiFunction<World, EntityLivingBase, EntityTippedArrow> entityFactory;
 
-	public ItemModArrow(String itemName, BiFunction<World, EntityLivingBase, EntityTippedArrow> entityFactory) {
+	public ItemModArrow(final String itemName, final BiFunction<World, EntityLivingBase, EntityTippedArrow> entityFactory) {
 		ItemTestMod3.setItemName(this, itemName);
 		this.entityFactory = entityFactory;
 	}
 
 	@Override
-	public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
+	public EntityArrow createArrow(final World worldIn, final ItemStack stack, final EntityLivingBase shooter) {
 		final EntityTippedArrow entityModArrow = entityFactory.apply(worldIn, shooter);
 		entityModArrow.setPotionEffect(stack);
 		return entityModArrow;
 	}
 
 	@Override
-	public boolean isInfinite(ItemStack stack, ItemStack bow, EntityPlayer player) {
+	public boolean isInfinite(final ItemStack stack, final ItemStack bow, final EntityPlayer player) {
 		return true;
 	}
 }

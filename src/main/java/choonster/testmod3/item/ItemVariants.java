@@ -27,13 +27,13 @@ public class ItemVariants extends ItemTestMod3 {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
+	public String getUnlocalizedName(final ItemStack stack) {
 		return super.getUnlocalizedName(stack) + "." + EnumType.byMetadata(stack.getMetadata()).getName();
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+	public void getSubItems(final Item itemIn, final CreativeTabs tab, final NonNullList<ItemStack> subItems) {
 		final List<ItemStack> items = Stream.of(EnumType.values())
 				.map(enumType -> new ItemStack(itemIn, 1, enumType.getMeta()))
 				.collect(Collectors.toList());
@@ -51,7 +51,7 @@ public class ItemVariants extends ItemTestMod3 {
 		private final int meta;
 		private final String name;
 
-		EnumType(int meta, String name) {
+		EnumType(final int meta, final String name) {
 			this.meta = meta;
 			this.name = name;
 		}

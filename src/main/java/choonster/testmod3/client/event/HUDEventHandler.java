@@ -25,7 +25,7 @@ public class HUDEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void renderChunkEnergyHUD(RenderGameOverlayEvent.Post event) {
+	public static void renderChunkEnergyHUD(final RenderGameOverlayEvent.Post event) {
 		if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
 
 		final EntityPlayer player = minecraft.player;

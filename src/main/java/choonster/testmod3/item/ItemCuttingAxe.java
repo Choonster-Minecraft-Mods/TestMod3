@@ -11,14 +11,14 @@ import net.minecraft.item.ItemStack;
  */
 public class ItemCuttingAxe extends ItemAxe {
 
-	public ItemCuttingAxe(ToolMaterial material, String itemName) {
+	public ItemCuttingAxe(final ToolMaterial material, final String itemName) {
 		super(material);
 		ItemTestMod3.setItemName(this, itemName);
 		setCreativeTab(TestMod3.creativeTab);
 	}
 
 	@Override
-	public boolean hasContainerItem(ItemStack stack) {
+	public boolean hasContainerItem(final ItemStack stack) {
 		return true;
 	}
 

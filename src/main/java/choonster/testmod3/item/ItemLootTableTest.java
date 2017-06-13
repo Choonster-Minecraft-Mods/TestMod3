@@ -32,14 +32,14 @@ public class ItemLootTableTest extends ItemTestMod3 {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
 		if (!worldIn.isRemote) {
 			final LootTable lootTable = worldIn.getLootTableManager().getLootTableFromLocation(ModLootTables.LOOT_TABLE_TEST);
 
 			final LootContext lootContext = new LootContext.Builder((WorldServer) worldIn).withPlayer(playerIn).build();
 
 			final List<ItemStack> itemStacks = lootTable.generateLootForPools(itemRand, lootContext);
-			for (ItemStack itemStack : itemStacks) {
+			for (final ItemStack itemStack : itemStacks) {
 				ItemHandlerHelper.giveItemToPlayer(playerIn, itemStack);
 			}
 

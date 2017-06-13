@@ -23,19 +23,19 @@ public class TileEntityColoredRotatable extends TileEntity {
 		return facing;
 	}
 
-	public void setFacing(EnumFacing facing) {
+	public void setFacing(final EnumFacing facing) {
 		this.facing = facing;
 		markDirty();
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound) {
+	public void readFromNBT(final NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		facing = EnumFacing.getFront(compound.getInteger("facing"));
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(final NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setInteger("facing", facing.getIndex());
 		return compound;
@@ -64,13 +64,13 @@ public class TileEntityColoredRotatable extends TileEntity {
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+	public void onDataPacket(final NetworkManager net, final SPacketUpdateTileEntity pkt) {
 		readFromNBT(pkt.getNbtCompound());
 		notifyBlockUpdate();
 	}
 
 	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+	public boolean shouldRefresh(final World world, final BlockPos pos, final IBlockState oldState, final IBlockState newSate) {
 		return oldState.getBlock() != newSate.getBlock();
 	}
 }

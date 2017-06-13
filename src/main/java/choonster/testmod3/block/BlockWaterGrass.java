@@ -38,7 +38,7 @@ public class BlockWaterGrass extends BlockBush {
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(final IBlockState state, final IBlockAccess source, final BlockPos pos) {
 		return BOUNDING_BOX;
 	}
 
@@ -48,27 +48,27 @@ public class BlockWaterGrass extends BlockBush {
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(final IBlockState state) {
 		return 0;
 	}
 
 	@Override
-	public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
+	public boolean canBlockStay(final World worldIn, final BlockPos pos, final IBlockState state) {
 		return worldIn.getBlockState(pos.up()).getBlock() == Blocks.WATER && super.canBlockStay(worldIn, pos, state);
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side) {
+	public boolean canPlaceBlockOnSide(final World worldIn, final BlockPos pos, final EnumFacing side) {
 		return canBlockStay(worldIn, pos, this.getDefaultState());
 	}
 
 	@Override
-	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
+	public void onBlockDestroyedByPlayer(final World worldIn, final BlockPos pos, final IBlockState state) {
 		worldIn.setBlockState(pos, Blocks.WATER.getDefaultState());
 	}
 
 	@Override
-	protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
+	protected void checkAndDropBlock(final World worldIn, final BlockPos pos, final IBlockState state) {
 		if (!this.canBlockStay(worldIn, pos, state)) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
 			worldIn.setBlockState(pos, Blocks.WATER.getDefaultState());

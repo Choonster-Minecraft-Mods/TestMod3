@@ -27,13 +27,13 @@ public class HiddenBlockRevealer implements IHiddenBlockRevealer {
 	 * @param revealHiddenBlocks Should hidden blocks be revealed?
 	 */
 	@Override
-	public void setRevealHiddenBlocks(boolean revealHiddenBlocks) {
+	public void setRevealHiddenBlocks(final boolean revealHiddenBlocks) {
 		this.revealHiddenBlocks = revealHiddenBlocks;
 	}
 
 
 	@Override
-	public boolean equals(@Nullable Object obj) {
+	public boolean equals(@Nullable final Object obj) {
 		if (this == obj) return true;
 		if (obj == null || getClass() != obj.getClass()) return false;
 

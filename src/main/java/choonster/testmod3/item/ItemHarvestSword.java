@@ -52,7 +52,7 @@ public class ItemHarvestSword extends ItemTool {
 	 */
 	private static final float ATTACK_SPEED = -2.4f;
 
-	public ItemHarvestSword(ToolMaterial toolMaterial, String itemName) {
+	public ItemHarvestSword(final ToolMaterial toolMaterial, final String itemName) {
 		super(BASE_DAMAGE, ATTACK_SPEED, toolMaterial, Collections.emptySet());
 
 		ItemTestMod3.setItemName(this, itemName);
@@ -99,17 +99,17 @@ public class ItemHarvestSword extends ItemTool {
 	 * @return Is this tool effective on the {@link IBlockState}'s {@link Material}?
 	 */
 	@Override
-	public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
+	public boolean canHarvestBlock(final IBlockState state, final ItemStack stack) {
 		return EFFECTIVE_MATERIALS.contains(state.getMaterial()) || state.getBlock() == Blocks.WEB;
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack stack, IBlockState state) {
+	public float getStrVsBlock(final ItemStack stack, final IBlockState state) {
 		if (state.getBlock() == Blocks.WEB) {
 			return DIG_SPEED_WEB;
 		}
 
-		for (String type : getToolClasses(stack)) {
+		for (final String type : getToolClasses(stack)) {
 			if (state.getBlock().isToolEffective(type, state))
 				return efficiencyOnProperMaterial;
 		}
@@ -127,7 +127,7 @@ public class ItemHarvestSword extends ItemTool {
 	}
 
 	@Override
-	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker) {
+	public boolean hitEntity(final ItemStack itemStack, final EntityLivingBase target, final EntityLivingBase attacker) {
 		itemStack.damageItem(1, attacker); // Only reduce the durability by 1 point (like swords do) instead of 2 (like tools do)
 		return true;
 	}

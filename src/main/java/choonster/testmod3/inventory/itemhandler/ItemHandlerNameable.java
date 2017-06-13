@@ -22,16 +22,16 @@ public class ItemHandlerNameable extends ItemStackHandler implements IItemHandle
 	 */
 	private ITextComponent displayName;
 
-	public ItemHandlerNameable(ITextComponent defaultName) {
+	public ItemHandlerNameable(final ITextComponent defaultName) {
 		this.defaultName = defaultName.createCopy();
 	}
 
-	public ItemHandlerNameable(int size, ITextComponent defaultName) {
+	public ItemHandlerNameable(final int size, final ITextComponent defaultName) {
 		super(size);
 		this.defaultName = defaultName.createCopy();
 	}
 
-	public ItemHandlerNameable(NonNullList<ItemStack> stacks, ITextComponent defaultName) {
+	public ItemHandlerNameable(final NonNullList<ItemStack> stacks, final ITextComponent defaultName) {
 		super(stacks);
 		this.defaultName = defaultName.createCopy();
 	}
@@ -65,7 +65,7 @@ public class ItemHandlerNameable extends ItemStackHandler implements IItemHandle
 	 *
 	 * @param displayName The display name
 	 */
-	public void setDisplayName(ITextComponent displayName) {
+	public void setDisplayName(final ITextComponent displayName) {
 		this.displayName = displayName.createCopy();
 	}
 
@@ -81,7 +81,7 @@ public class ItemHandlerNameable extends ItemStackHandler implements IItemHandle
 	}
 
 	@Override
-	public void deserializeNBT(NBTTagCompound nbt) {
+	public void deserializeNBT(final NBTTagCompound nbt) {
 		super.deserializeNBT(nbt);
 
 		if (nbt.hasKey("DisplayName")) {

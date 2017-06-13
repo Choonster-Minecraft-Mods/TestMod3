@@ -38,7 +38,7 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 	@Nullable
 	private final EnumFacing facing;
 
-	public CapabilityContainerListener(final EntityPlayerMP player, Capability<HANDLER> capability, @Nullable EnumFacing facing) {
+	public CapabilityContainerListener(final EntityPlayerMP player, final Capability<HANDLER> capability, @Nullable final EnumFacing facing) {
 		this.player = player;
 		this.capability = capability;
 		this.facing = facing;

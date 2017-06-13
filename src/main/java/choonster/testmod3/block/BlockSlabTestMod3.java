@@ -51,7 +51,7 @@ public abstract class BlockSlabTestMod3<
 	 * @param slabGroup The group this slab belongs to
 	 * @param variants  The variants of this slab
 	 */
-	public BlockSlabTestMod3(Material material, SlabGroup<VARIANT, VARIANTS, SLAB> slabGroup, VARIANTS variants) {
+	public BlockSlabTestMod3(final Material material, final SlabGroup<VARIANT, VARIANTS, SLAB> slabGroup, final VARIANTS variants) {
 		super(material);
 		this.slabGroup = slabGroup;
 		this.variants = variants;
@@ -103,7 +103,7 @@ public abstract class BlockSlabTestMod3<
 	protected abstract VARIANT getVariant(int meta);
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+	public Item getItemDropped(final IBlockState state, final Random rand, final int fortune) {
 		return slabGroup.item;
 	}
 
@@ -112,7 +112,7 @@ public abstract class BlockSlabTestMod3<
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(final Item item, final CreativeTabs tab, final NonNullList<ItemStack> list) {
 		list.addAll(getVariantProperty().getAllowedValues().stream()
 				.map(variant -> new ItemStack(item, 1, getMetadata(variant)))
 				.collect(Collectors.toList()));
@@ -120,7 +120,7 @@ public abstract class BlockSlabTestMod3<
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public IBlockState getStateFromMeta(final int meta) {
 		final VARIANT variant = getVariant(meta & 7);
 		IBlockState state = this.getDefaultState().withProperty(getVariantProperty(), variant);
 
@@ -132,7 +132,7 @@ public abstract class BlockSlabTestMod3<
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(final IBlockState state) {
 		int meta = getMetadata(state.getValue(getVariantProperty()));
 
 		if (!this.isDouble() && state.getValue(HALF) == EnumBlockHalf.TOP) {
@@ -148,7 +148,7 @@ public abstract class BlockSlabTestMod3<
 	}
 
 	@Override
-	public int damageDropped(IBlockState state) {
+	public int damageDropped(final IBlockState state) {
 		return getMetadata(state.getValue(getVariantProperty()));
 	}
 
@@ -177,7 +177,7 @@ public abstract class BlockSlabTestMod3<
 		 * @param material  The Material of the slabs
 		 * @param variants  The variants of the slabs
 		 */
-		public SlabGroup(String groupName, Material material, VARIANTS variants) {
+		public SlabGroup(final String groupName, final Material material, final VARIANTS variants) {
 			this.groupName = groupName;
 			this.singleSlab = createSlab(material, false, variants);
 			this.doubleSlab = createSlab(material, true, variants);

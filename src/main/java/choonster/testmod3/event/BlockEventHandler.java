@@ -26,7 +26,7 @@ public class BlockEventHandler {
 	 * @param player The player harvesting the block
 	 * @return True if the tool can harvest the block
 	 */
-	private static boolean canToolHarvestBlock(IBlockState state, ItemStack stack, EntityPlayer player) {
+	private static boolean canToolHarvestBlock(final IBlockState state, final ItemStack stack, final EntityPlayer player) {
 		final String tool = state.getBlock().getHarvestTool(state);
 		return !stack.isEmpty() && tool != null
 				&& stack.getItem().getHarvestLevel(stack, tool, player, state) >= state.getBlock().getHarvestLevel(state);
@@ -41,7 +41,7 @@ public class BlockEventHandler {
 	 * @param player      The player harvesting the block
 	 * @return True if the block is a log, the player isn't in creative mode and the player doesn't have the correct tool equipped
 	 */
-	private static boolean isPlayerHarvestingLogWithoutCorrectTool(IBlockState state, IBlockAccess blockAccess, BlockPos pos, EntityPlayer player) {
+	private static boolean isPlayerHarvestingLogWithoutCorrectTool(final IBlockState state, final IBlockAccess blockAccess, final BlockPos pos, final EntityPlayer player) {
 		return !player.capabilities.isCreativeMode
 				&& state.getBlock().isWood(blockAccess, pos)
 				&& !canToolHarvestBlock(state, player.getHeldItemMainhand(), player);
@@ -53,7 +53,7 @@ public class BlockEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void harvestDrops(BlockEvent.HarvestDropsEvent event) {
+	public static void harvestDrops(final BlockEvent.HarvestDropsEvent event) {
 		if (event.getState().getBlock().isLeaves(event.getState(), event.getWorld(), event.getPos())) {
 			event.getDrops().add(new ItemStack(Items.STICK, 2));
 		}
@@ -65,7 +65,7 @@ public class BlockEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void breakSpeed(PlayerEvent.BreakSpeed event) {
+	public static void breakSpeed(final PlayerEvent.BreakSpeed event) {
 		if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getEntityPlayer().getEntityWorld(), event.getPos(), event.getEntityPlayer())) {
 			event.setCanceled(true);
 		}
@@ -77,7 +77,7 @@ public class BlockEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void breakBlock(BlockEvent.BreakEvent event) {
+	public static void breakBlock(final BlockEvent.BreakEvent event) {
 		if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getWorld(), event.getPos(), event.getPlayer())) {
 			event.setCanceled(true);
 		}

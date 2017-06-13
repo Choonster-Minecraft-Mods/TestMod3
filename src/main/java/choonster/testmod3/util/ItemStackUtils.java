@@ -16,7 +16,7 @@ public class ItemStackUtils {
 	 * @param itemStack The ItemStack
 	 * @return The compound tag
 	 */
-	public static NBTTagCompound getOrCreateTagCompound(ItemStack itemStack) {
+	public static NBTTagCompound getOrCreateTagCompound(final ItemStack itemStack) {
 		if (!itemStack.hasTagCompound()) {
 			itemStack.setTagCompound(new NBTTagCompound());
 		}

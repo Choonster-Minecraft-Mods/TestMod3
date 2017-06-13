@@ -21,7 +21,7 @@ import java.util.List;
 public class ItemSwapTest extends ItemTestMod3 {
 	private ItemStack otherItem;
 
-	public ItemSwapTest(String name) {
+	public ItemSwapTest(final String name) {
 		super("swap_test_" + name);
 	}
 
@@ -29,12 +29,12 @@ public class ItemSwapTest extends ItemTestMod3 {
 		return otherItem != null;
 	}
 
-	public void setOtherItem(ItemStack otherItem) {
+	public void setOtherItem(final ItemStack otherItem) {
 		this.otherItem = otherItem;
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+	public void addInformation(final ItemStack stack, final EntityPlayer playerIn, final List<String> tooltip, final boolean advanced) {
 		super.addInformation(stack, playerIn, tooltip, advanced);
 
 		if (hasOtherItem()) {
@@ -45,7 +45,7 @@ public class ItemSwapTest extends ItemTestMod3 {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
 		if (hasOtherItem() && playerIn.isSneaking()) {
 			return new ActionResult<>(EnumActionResult.SUCCESS, otherItem.copy());
 		}

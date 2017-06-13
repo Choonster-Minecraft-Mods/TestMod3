@@ -8,13 +8,13 @@ import net.minecraft.util.ResourceLocation;
 public class RenderModArrow extends RenderTippedArrow {
 	private final ResourceLocation entityTexture;
 
-	public RenderModArrow(RenderManager renderManager, ResourceLocation entityTexture) {
+	public RenderModArrow(final RenderManager renderManager, final ResourceLocation entityTexture) {
 		super(renderManager);
 		this.entityTexture = entityTexture;
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityTippedArrow entity) {
+	protected ResourceLocation getEntityTexture(final EntityTippedArrow entity) {
 		return entityTexture;
 	}
 }

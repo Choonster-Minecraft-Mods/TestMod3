@@ -35,13 +35,13 @@ import java.util.stream.Collectors;
 public class ItemFluidTank extends ItemBlock {
 	private final List<ItemStack> tankItems = new ArrayList<>();
 
-	public ItemFluidTank(Block block) {
+	public ItemFluidTank(final Block block) {
 		super(block);
 		setHasSubtypes(true);
 		setMaxStackSize(1);
 	}
 
-	public void addFluid(FluidStack fluidStack) {
+	public void addFluid(final FluidStack fluidStack) {
 		final ItemStack filledTank = new ItemStack(this);
 		final IFluidHandler fluidHandler = FluidUtil.getFluidHandler(filledTank);
 		if (fluidHandler != null) {
@@ -53,7 +53,7 @@ public class ItemFluidTank extends ItemBlock {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+	public void addInformation(final ItemStack stack, final EntityPlayer playerIn, final List<String> tooltip, final boolean advanced) {
 		final IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stack);
 		if (fluidHandler != null) {
 			final IFluidTankProperties[] properties = fluidHandler.getTankProperties();
@@ -65,13 +65,13 @@ public class ItemFluidTank extends ItemBlock {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+	public void getSubItems(final Item itemIn, final CreativeTabs tab, final NonNullList<ItemStack> subItems) {
 		super.getSubItems(itemIn, tab, subItems);
 		subItems.addAll(tankItems);
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final NBTTagCompound nbt) {
 		return new CapabilityProviderSerializable<>(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null, new FluidTankItem(stack, TileEntityFluidTank.CAPACITY));
 	}
 }

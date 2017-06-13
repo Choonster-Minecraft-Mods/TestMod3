@@ -30,7 +30,7 @@ public class ReflectionUtil {
 		final Method method = ReflectionHelper.findMethod(clazz, methodName, methodObfName, parameterTypes);
 		try {
 			return MethodHandles.lookup().unreflect(method);
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			throw new ReflectionHelper.UnableToFindMethodException(e);
 		}
 	}
@@ -67,7 +67,7 @@ public class ReflectionUtil {
 
 		try {
 			return MethodHandles.lookup().unreflectGetter(field);
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			throw new ReflectionHelper.UnableToAccessFieldException(new String[0], e);
 		}
 	}
@@ -81,12 +81,12 @@ public class ReflectionUtil {
 	 *                     If the name you are looking for is on a class that is never obfuscated, this should be null.
 	 * @return The MethodHandle
 	 */
-	public static MethodHandle findFieldSetter(Class<?> clazz, final String fieldName, @Nullable final String fieldObfName) {
+	public static MethodHandle findFieldSetter(final Class<?> clazz, final String fieldName, @Nullable final String fieldObfName) {
 		final Field field = ReflectionHelper.findField(clazz, getFieldNameArray(fieldName, fieldObfName));
 
 		try {
 			return MethodHandles.lookup().unreflectSetter(field);
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			throw new ReflectionHelper.UnableToAccessFieldException(new String[0], e);
 		}
 	}

@@ -30,7 +30,7 @@ public class SwordUpgrades {
 	 * @param item The item
 	 * @return An ItemStack of the Item with the attack damage modifier added to it
 	 */
-	public static ItemStack upgradeSword(Item item) {
+	public static ItemStack upgradeSword(final Item item) {
 		// Create an ItemStack of the Item
 		final ItemStack originalStack = new ItemStack(item);
 		final ItemStack outputStack = originalStack.copy();

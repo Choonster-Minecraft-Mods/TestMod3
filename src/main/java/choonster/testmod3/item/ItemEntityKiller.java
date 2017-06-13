@@ -20,7 +20,7 @@ public class ItemEntityKiller extends ItemTestMod3 {
 	}
 
 	@Override
-	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+	public boolean onLeftClickEntity(final ItemStack stack, final EntityPlayer player, final Entity entity) {
 		if (!player.world.isRemote) {
 			final Entity entityToKill;
 			if (entity instanceof EntityDragonPart) { // If it's a multipart entity, kill the main entity

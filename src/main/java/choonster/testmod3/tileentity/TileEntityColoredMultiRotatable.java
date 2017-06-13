@@ -16,19 +16,19 @@ public class TileEntityColoredMultiRotatable extends TileEntityColoredRotatable 
 		return faceRotation;
 	}
 
-	public void setFaceRotation(EnumFaceRotation faceRotation) {
+	public void setFaceRotation(final EnumFaceRotation faceRotation) {
 		this.faceRotation = faceRotation;
 		markDirty();
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound) {
+	public void readFromNBT(final NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		faceRotation = EnumFaceRotation.values()[compound.getInteger("faceRotation")];
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(final NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setInteger("faceRotation", faceRotation.ordinal());
 		return compound;

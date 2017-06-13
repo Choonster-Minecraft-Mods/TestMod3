@@ -65,7 +65,7 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 	}
 
 
-	public MessageSurvivalCommandBlockSaveChanges(SurvivalCommandBlockLogic survivalCommandBlockLogic, String command, TileEntityCommandBlock.Mode commandBlockMode, boolean conditional, boolean automatic) {
+	public MessageSurvivalCommandBlockSaveChanges(final SurvivalCommandBlockLogic survivalCommandBlockLogic, final String command, final TileEntityCommandBlock.Mode commandBlockMode, final boolean conditional, final boolean automatic) {
 		this.survivalCommandBlockLogic = survivalCommandBlockLogic;
 		this.type = survivalCommandBlockLogic.getType();
 		this.command = command;
@@ -76,7 +76,7 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBytes(final ByteBuf buf) {
 		type = SurvivalCommandBlockLogic.Type.values()[buf.readByte()];
 		command = ByteBufUtils.readUTF8String(buf);
 		shouldTrackOutput = buf.readBoolean();
@@ -96,7 +96,7 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBytes(final ByteBuf buf) {
 		buf.writeByte(type.ordinal());
 		ByteBufUtils.writeUTF8String(buf, command);
 		buf.writeBoolean(shouldTrackOutput);
@@ -111,7 +111,7 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 
 		@Nullable
 		@Override
-		public IMessage onMessage(MessageSurvivalCommandBlockSaveChanges message, MessageContext ctx) {
+		public IMessage onMessage(final MessageSurvivalCommandBlockSaveChanges message, final MessageContext ctx) {
 			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
 				final EntityPlayer player = TestMod3.proxy.getPlayer(ctx);
 				final World world = player.world;
@@ -172,7 +172,7 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 								player.sendMessage(new TextComponentTranslation("advMode.setCommand.success", message.command));
 							}
 						}
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						Logger.error(e, "Couldn't set survival command block");
 					}
 				}

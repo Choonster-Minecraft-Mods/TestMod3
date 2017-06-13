@@ -35,7 +35,7 @@ import java.util.function.Predicate;
  * @author Choonster
  */
 public class ItemModBow extends ItemBow {
-	public ItemModBow(String itemName) {
+	public ItemModBow(final String itemName) {
 		ItemTestMod3.setItemName(this, itemName);
 		setCreativeTab(TestMod3.creativeTab);
 
@@ -66,7 +66,7 @@ public class ItemModBow extends ItemBow {
 	 * @return The ammunition slot's IItemHandler, or null if there isn't any ammunition
 	 */
 	@Nullable
-	public static IItemHandler findAmmoSlot(EntityPlayer player, Predicate<ItemStack> isAmmo) {
+	public static IItemHandler findAmmoSlot(final EntityPlayer player, final Predicate<ItemStack> isAmmo) {
 		if (isAmmo.test(player.getHeldItemOffhand())) {
 			return new PlayerOffhandInvWrapper(player.inventory);
 		}
@@ -99,7 +99,7 @@ public class ItemModBow extends ItemBow {
 	 * @param shooter The shooter
 	 * @return Is ammunition required?
 	 */
-	protected boolean isAmmoRequired(ItemStack bow, EntityPlayer shooter) {
+	protected boolean isAmmoRequired(final ItemStack bow, final EntityPlayer shooter) {
 		return !shooter.capabilities.isCreativeMode && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bow) == 0;
 	}
 
@@ -112,8 +112,8 @@ public class ItemModBow extends ItemBow {
 	 * @param hand    The hand holding the bow
 	 * @return The result
 	 */
-	protected ActionResult<ItemStack> nockArrow(ItemStack bow, World world, EntityPlayer shooter, EnumHand hand) {
-		boolean hasAmmo = findAmmoSlot(shooter, this::isArrow) != null;
+	protected ActionResult<ItemStack> nockArrow(final ItemStack bow, final World world, final EntityPlayer shooter, final EnumHand hand) {
+		final boolean hasAmmo = findAmmoSlot(shooter, this::isArrow) != null;
 
 		final ActionResult<ItemStack> ret = ForgeEventFactory.onArrowNock(bow, world, shooter, hand, hasAmmo);
 		if (ret != null) return ret;
@@ -134,7 +134,7 @@ public class ItemModBow extends ItemBow {
 	 * @param shooter The player firing the bow
 	 * @param charge  The charge of the arrow
 	 */
-	protected void fireArrow(ItemStack bow, World world, EntityLivingBase shooter, int charge) {
+	protected void fireArrow(final ItemStack bow, final World world, final EntityLivingBase shooter, int charge) {
 		if (!(shooter instanceof EntityPlayer)) return;
 
 		final EntityPlayer player = (EntityPlayer) shooter;
@@ -200,13 +200,13 @@ public class ItemModBow extends ItemBow {
 	}
 
 	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+	public void onPlayerStoppedUsing(final ItemStack stack, final World worldIn, final EntityLivingBase entityLiving, final int timeLeft) {
 		final int charge = this.getMaxItemUseDuration(stack) - timeLeft;
 		fireArrow(stack, worldIn, entityLiving, charge);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
 		return nockArrow(playerIn.getHeldItem(hand), worldIn, playerIn, hand);
 	}
 }

@@ -25,7 +25,7 @@ public class LootTableEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void lootTableLoad(LootTableLoadEvent event) {
+	public static void lootTableLoad(final LootTableLoadEvent event) {
 		if (event.getName().equals(LootTableList.CHESTS_SIMPLE_DUNGEON)) {
 			final String name = ModLootTables.LOOT_TABLE_TEST.toString();
 

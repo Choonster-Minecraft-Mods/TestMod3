@@ -49,11 +49,11 @@ public class BlockPlane extends BlockTestMod3 {
 	 */
 	public static final IProperty<EnumVerticalRotation> VERTICAL_ROTATION = PropertyEnum.create("vertical_rotation", EnumVerticalRotation.class);
 
-	public BlockPlane(Material material, MapColor mapColor, String blockName) {
+	public BlockPlane(final Material material, final MapColor mapColor, final String blockName) {
 		super(material, mapColor, blockName);
 	}
 
-	public BlockPlane(Material materialIn, String blockName) {
+	public BlockPlane(final Material materialIn, final String blockName) {
 		super(materialIn, blockName);
 	}
 
@@ -116,7 +116,7 @@ public class BlockPlane extends BlockTestMod3 {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public IBlockState getStateFromMeta(final int meta) {
 		final EnumFacing horizontalRotation = EnumFacing.getHorizontal(meta & 3);
 		final EnumVerticalRotation verticalRotation = EnumVerticalRotation.fromIndex(meta >> 2);
 
@@ -124,7 +124,7 @@ public class BlockPlane extends BlockTestMod3 {
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(final IBlockState state) {
 		final int horizontalIndex = state.getValue(HORIZONTAL_ROTATION).getHorizontalIndex();
 		final int verticalIndex = state.getValue(VERTICAL_ROTATION).getIndex();
 
@@ -132,7 +132,7 @@ public class BlockPlane extends BlockTestMod3 {
 	}
 
 	@Override
-	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
+	public boolean rotateBlock(final World world, final BlockPos pos, final EnumFacing axis) {
 		final EnumFacing.Axis axisToRotate = axis.getAxis();
 
 		IBlockState state = world.getBlockState(pos);
@@ -153,12 +153,12 @@ public class BlockPlane extends BlockTestMod3 {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
 		return rotateBlock(worldIn, pos, side);
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+	public IBlockState getStateForPlacement(final World world, final BlockPos pos, final EnumFacing facing, final float hitX, final float hitY, final float hitZ, final int meta, final EntityLivingBase placer, final EnumHand hand) {
 		final EnumFacing horizontalRotation = placer.getHorizontalFacing();
 		final EnumVerticalRotation verticalRotation = EnumVerticalRotation.fromFacing(facing);
 
@@ -175,20 +175,20 @@ public class BlockPlane extends BlockTestMod3 {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(final IBlockState state) {
 		return false;
 	}
 
 	@SuppressWarnings("deprecation")
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+	public boolean shouldSideBeRendered(final IBlockState blockState, final IBlockAccess blockAccess, final BlockPos pos, final EnumFacing side) {
 		return true;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
+	public void addCollisionBoxToList(final IBlockState state, final World worldIn, final BlockPos pos, final AxisAlignedBB entityBox, final List<AxisAlignedBB> collidingBoxes, @Nullable final Entity entityIn, final boolean p_185477_7_) {
 		final Pair<EnumFacing, EnumVerticalRotation> key = Pair.of(state.getValue(HORIZONTAL_ROTATION), state.getValue(VERTICAL_ROTATION));
 		final Pair<AxisAlignedBB, AxisAlignedBB> boundingBoxes = ROTATED_BOUNDING_BOXES.get(key);
 
@@ -224,7 +224,7 @@ public class BlockPlane extends BlockTestMod3 {
 		 * @param index The index
 		 * @return The value
 		 */
-		public static EnumVerticalRotation fromIndex(int index) {
+		public static EnumVerticalRotation fromIndex(final int index) {
 			return VALUES[MathHelper.abs(index % VALUES.length)];
 		}
 
@@ -234,7 +234,7 @@ public class BlockPlane extends BlockTestMod3 {
 		 * @param facing The facing
 		 * @return The value
 		 */
-		public static EnumVerticalRotation fromFacing(EnumFacing facing) {
+		public static EnumVerticalRotation fromFacing(final EnumFacing facing) {
 			switch (facing) {
 				case DOWN:
 					return DOWN;
@@ -273,7 +273,7 @@ public class BlockPlane extends BlockTestMod3 {
 		 * @param facing       The corresponding facing
 		 * @param numRotations The number of 90-degree rotations relative to {@link #SIDE}
 		 */
-		EnumVerticalRotation(int index, String name, EnumFacing facing, int numRotations) {
+		EnumVerticalRotation(final int index, final String name, final EnumFacing facing, final int numRotations) {
 			this.index = index;
 			this.name = name;
 			this.facing = facing;

@@ -81,7 +81,7 @@ public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> implem
 	 * @param buf The buffer
 	 */
 	@Override
-	public final void fromBytes(ByteBuf buf) {
+	public final void fromBytes(final ByteBuf buf) {
 		windowID = buf.readInt();
 
 		final int facingIndex = buf.readByte();
@@ -105,7 +105,7 @@ public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> implem
 	 * @param buf The buffer
 	 */
 	@Override
-	public final void toBytes(ByteBuf buf) {
+	public final void toBytes(final ByteBuf buf) {
 		buf.writeInt(windowID);
 
 		if (facing != null) {
@@ -169,7 +169,7 @@ public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> implem
 		 */
 		@Nullable
 		@Override
-		public final IMessage onMessage(MESSAGE message, MessageContext ctx) {
+		public final IMessage onMessage(final MESSAGE message, final MessageContext ctx) {
 			if (!message.hasData()) return null; // Don't do anything if no data was sent
 
 			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {

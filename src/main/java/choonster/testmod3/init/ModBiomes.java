@@ -33,13 +33,13 @@ public class ModBiomes {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void registerBiomes(RegistryEvent.Register<Biome> event) {
+		public static void registerBiomes(final RegistryEvent.Register<Biome> event) {
 			final IForgeRegistry<Biome> registry = event.getRegistry();
 
 			registerBiome(registry, DESERT_TEST, "desert_test", BiomeManager.BiomeType.DESERT, 1000, HOT, DRY, SANDY, JUNGLE, SWAMP);
 		}
 
-		private static <T extends Biome> void registerBiome(IForgeRegistry<Biome> registry, T biome, String biomeName, BiomeManager.BiomeType biomeType, int weight, BiomeDictionary.Type... types) {
+		private static <T extends Biome> void registerBiome(final IForgeRegistry<Biome> registry, final T biome, final String biomeName, final BiomeManager.BiomeType biomeType, final int weight, final BiomeDictionary.Type... types) {
 			registry.register(biome.setRegistryName(TestMod3.MODID, biomeName));
 			BiomeDictionary.addTypes(biome, types);
 			BiomeManager.addBiome(biomeType, new BiomeManager.BiomeEntry(biome, weight));

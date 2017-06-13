@@ -15,12 +15,12 @@ import net.minecraft.item.ItemStack;
 public class OreDictUtilTests extends Test {
 	public static final OreDictUtilTests INSTANCE = new OreDictUtilTests();
 
-	private void assertRegistered(ItemStack itemStack, String oreName) {
+	private void assertRegistered(final ItemStack itemStack, final String oreName) {
 		final boolean isRegistered = OreDictUtils.INSTANCE.isItemStackRegisteredForName(itemStack, oreName);
 		assertTrue(isRegistered, String.format("%s should be registered as %s", itemStack.getDisplayName(), oreName));
 	}
 
-	private void assertNotRegistered(ItemStack itemStack, String oreName) {
+	private void assertNotRegistered(final ItemStack itemStack, final String oreName) {
 		final boolean isRegistered = OreDictUtils.INSTANCE.isItemStackRegisteredForName(itemStack, oreName);
 		assertFalse(isRegistered, String.format("%s should not be registered as %s", itemStack.getDisplayName(), oreName));
 	}

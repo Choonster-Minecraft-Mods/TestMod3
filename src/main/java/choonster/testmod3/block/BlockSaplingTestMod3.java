@@ -40,7 +40,7 @@ public class BlockSaplingTestMod3 extends BlockSapling {
 	 * @param stack The ItemStack
 	 * @return The unlocalised name suffix
 	 */
-	public static String getName(ItemStack stack) {
+	public static String getName(final ItemStack stack) {
 		final int metadata = stack.getMetadata();
 
 		return BlockPlanks.EnumType.byMetadata(metadata).getUnlocalizedName();

@@ -46,7 +46,7 @@ public class BlockFluidTank<TE extends TileEntityFluidTank> extends BlockTileEnt
 	}
 
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	public List<ItemStack> getDrops(final IBlockAccess world, final BlockPos pos, final IBlockState state, final int fortune) {
 		final List<ItemStack> drops = new ArrayList<>();
 
 		final IFluidHandler fluidHandler = getFluidHandler(world, pos);
@@ -70,12 +70,12 @@ public class BlockFluidTank<TE extends TileEntityFluidTank> extends BlockTileEnt
 	 * @return The IFluidHandler
 	 */
 	@Nullable
-	private IFluidHandler getFluidHandler(IBlockAccess world, BlockPos pos) {
+	private IFluidHandler getFluidHandler(final IBlockAccess world, final BlockPos pos) {
 		return CapabilityUtils.getCapability(getTileEntity(world, pos), CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(final World worldIn, final BlockPos pos, final IBlockState state, final EntityLivingBase placer, final ItemStack stack) {
 		final IFluidHandler fluidHandler = getFluidHandler(worldIn, pos);
 		if (fluidHandler != null) {
 			FluidUtil.tryEmptyContainer(stack, fluidHandler, Integer.MAX_VALUE, null, true);
@@ -83,11 +83,11 @@ public class BlockFluidTank<TE extends TileEntityFluidTank> extends BlockTileEnt
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
+	public TileEntity createTileEntity(final World world, final IBlockState state) {
 		return new TileEntityFluidTank();
 	}
 
-	public static List<ITextComponent> getFluidDataForDisplay(IFluidTankProperties[] fluidTankProperties) {
+	public static List<ITextComponent> getFluidDataForDisplay(final IFluidTankProperties[] fluidTankProperties) {
 		final List<ITextComponent> data = new ArrayList<>();
 
 		boolean hasFluid = false;
@@ -109,7 +109,7 @@ public class BlockFluidTank<TE extends TileEntityFluidTank> extends BlockTileEnt
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);
 		final IFluidHandler fluidHandler = getFluidHandler(worldIn, pos);
 
@@ -131,26 +131,26 @@ public class BlockFluidTank<TE extends TileEntityFluidTank> extends BlockTileEnt
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(final IBlockState state) {
 		return false;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(final IBlockState state) {
 		return false;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isTopSolid(IBlockState state) {
+	public boolean isTopSolid(final IBlockState state) {
 		return false;
 	}
 
 	@SuppressWarnings("deprecation")
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+	public boolean shouldSideBeRendered(final IBlockState blockState, final IBlockAccess blockAccess, final BlockPos pos, final EnumFacing side) {
 		return true;
 	}
 

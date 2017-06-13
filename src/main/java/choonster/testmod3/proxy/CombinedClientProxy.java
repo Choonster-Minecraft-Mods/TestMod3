@@ -59,7 +59,7 @@ public class CombinedClientProxy implements IProxy {
 	}
 
 	@Override
-	public IThreadListener getThreadListener(MessageContext context) {
+	public IThreadListener getThreadListener(final MessageContext context) {
 		if (context.side.isClient()) {
 			return MINECRAFT;
 		} else {
@@ -68,7 +68,7 @@ public class CombinedClientProxy implements IProxy {
 	}
 
 	@Override
-	public EntityPlayer getPlayer(MessageContext context) {
+	public EntityPlayer getPlayer(final MessageContext context) {
 		if (context.side.isClient()) {
 			return MINECRAFT.player;
 		} else {
@@ -77,7 +77,7 @@ public class CombinedClientProxy implements IProxy {
 	}
 
 	@Override
-	public void displayLockGUI(BlockPos pos, EnumFacing facing) {
+	public void displayLockGUI(final BlockPos pos, final EnumFacing facing) {
 		final ILock lock = CapabilityLock.getLock(MINECRAFT.world, pos, facing);
 		if (lock != null) {
 			MINECRAFT.displayGuiScreen(new GuiLock(lock, pos, facing));

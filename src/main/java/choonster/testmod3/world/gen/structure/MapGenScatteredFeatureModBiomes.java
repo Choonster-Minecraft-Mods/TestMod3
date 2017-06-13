@@ -64,14 +64,14 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 	}
 
 	@Override
-	protected StructureStart getStructureStart(int chunkX, int chunkZ) {
+	protected StructureStart getStructureStart(final int chunkX, final int chunkZ) {
 		return new Start(world, rand, chunkX, chunkZ);
 	}
 
 	public static class WeightedRandomScatteredFeature extends WeightedRandom.Item {
 		public final StructureComponent feature;
 
-		public WeightedRandomScatteredFeature(StructureComponent feature, int itemWeightIn) {
+		public WeightedRandomScatteredFeature(final StructureComponent feature, final int itemWeightIn) {
 			super(itemWeightIn);
 			this.feature = feature;
 		}
@@ -82,7 +82,7 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 		public Start() {
 		}
 
-		public Start(World worldIn, Random random, int chunkX, int chunkZ) {
+		public Start(final World worldIn, final Random random, final int chunkX, final int chunkZ) {
 			super(worldIn, random, chunkX, chunkZ);
 
 			this.components.clear();

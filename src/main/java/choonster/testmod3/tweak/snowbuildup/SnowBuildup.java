@@ -40,7 +40,7 @@ public class SnowBuildup {
 	private static final Random random = new Random();
 
 	@SubscribeEvent
-	public static void onWorldTick(TickEvent.WorldTickEvent event) {
+	public static void onWorldTick(final TickEvent.WorldTickEvent event) {
 		if (event.world.isRemote) return;
 
 		final WorldServer world = (WorldServer) event.world;
@@ -50,7 +50,7 @@ public class SnowBuildup {
 			return;
 
 		// For each loaded chunk
-		for (Iterator<Chunk> iterator = world.getPersistentChunkIterable(world.getPlayerChunkMap().getChunkIterator()); iterator.hasNext(); ) {
+		for (final Iterator<Chunk> iterator = world.getPersistentChunkIterable(world.getPlayerChunkMap().getChunkIterator()); iterator.hasNext(); ) {
 			final Chunk chunk = iterator.next();
 
 			for (int x = 0; x < 16; x++) {

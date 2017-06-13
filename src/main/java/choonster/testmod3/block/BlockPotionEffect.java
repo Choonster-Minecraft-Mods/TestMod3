@@ -20,7 +20,7 @@ public class BlockPotionEffect extends BlockTileEntity<TileEntityPotionEffect> {
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
+	public TileEntity createTileEntity(final World world, final IBlockState state) {
 		return new TileEntityPotionEffect();
 	}
 }

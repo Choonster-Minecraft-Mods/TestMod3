@@ -25,7 +25,7 @@ public class ItemKey extends ItemTestMod3 {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(final EntityPlayer playerIn, final World worldIn, final BlockPos pos, final EnumHand hand, final EnumFacing facing, final float hitX, final float hitY, final float hitZ) {
 		final ILock lock = CapabilityLock.getLock(worldIn, pos, facing);
 		if (lock != null) {
 			if (!worldIn.isRemote) {

@@ -103,7 +103,7 @@ public class ModRecipes {
 	 * @param strongPotionType   The strong PotionType
 	 * @param ingredient         The ingredient
 	 */
-	private static void addStandardConversionRecipes(PotionType standardPotionType, PotionType longPotionType, PotionType strongPotionType, Item ingredient) {
+	private static void addStandardConversionRecipes(final PotionType standardPotionType, final PotionType longPotionType, final PotionType strongPotionType, final Item ingredient) {
 		PotionHelper.registerPotionTypeConversion(PotionTypes.AWKWARD, new PotionHelper.ItemPredicateInstance(ingredient), standardPotionType);
 		PotionHelper.registerPotionTypeConversion(standardPotionType, new PotionHelper.ItemPredicateInstance(Items.REDSTONE), longPotionType);
 		PotionHelper.registerPotionTypeConversion(standardPotionType, new PotionHelper.ItemPredicateInstance(Items.GLOWSTONE_DUST), strongPotionType);
@@ -123,7 +123,7 @@ public class ModRecipes {
 	 *
 	 * @param output The output Block
 	 */
-	private static void removeRecipe(Block output) {
+	private static void removeRecipe(final Block output) {
 		final Item item = Item.getItemFromBlock(output);
 		assert item != Items.AIR;
 
@@ -138,7 +138,7 @@ public class ModRecipes {
 	 *
 	 * @param output The output Item
 	 */
-	private static void removeRecipe(Item output) {
+	private static void removeRecipe(final Item output) {
 		int recipesRemoved = 0;
 
 		final List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
@@ -166,7 +166,7 @@ public class ModRecipes {
 	 *
 	 * @param recipeClass The recipe class
 	 */
-	private static void removeRecipeClass(Class<? extends IRecipe> recipeClass) {
+	private static void removeRecipeClass(final Class<? extends IRecipe> recipeClass) {
 		int recipesRemoved = 0;
 
 		final List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();

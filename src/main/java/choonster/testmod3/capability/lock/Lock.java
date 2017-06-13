@@ -30,7 +30,7 @@ public class Lock implements ILock, INBTSerializable<NBTTagCompound> {
 	 */
 	private ITextComponent displayName;
 
-	public Lock(ITextComponent defaultName) {
+	public Lock(final ITextComponent defaultName) {
 		this.defaultName = defaultName;
 	}
 
@@ -45,7 +45,7 @@ public class Lock implements ILock, INBTSerializable<NBTTagCompound> {
 	}
 
 	@Override
-	public void setLockCode(LockCode code) {
+	public void setLockCode(final LockCode code) {
 		this.code = code;
 	}
 
@@ -63,7 +63,7 @@ public class Lock implements ILock, INBTSerializable<NBTTagCompound> {
 	}
 
 	@Override
-	public void deserializeNBT(NBTTagCompound nbt) {
+	public void deserializeNBT(final NBTTagCompound nbt) {
 		code = LockCode.fromNBT(nbt);
 
 		if (nbt.hasKey("DisplayName")) {
@@ -100,7 +100,7 @@ public class Lock implements ILock, INBTSerializable<NBTTagCompound> {
 	 *
 	 * @param displayName The display name
 	 */
-	public void setDisplayName(ITextComponent displayName) {
+	public void setDisplayName(final ITextComponent displayName) {
 		this.displayName = displayName.createCopy();
 	}
 }

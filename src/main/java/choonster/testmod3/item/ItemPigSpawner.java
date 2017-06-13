@@ -21,13 +21,13 @@ public class ItemPigSpawner extends ItemTestMod3 {
 	 */
 	private Supplier<IPigSpawner> spawnerFactory;
 
-	public ItemPigSpawner(String name) {
+	public ItemPigSpawner(final String name) {
 		super("pig_spawner_" + name);
 		setHasSubtypes(true);
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final NBTTagCompound nbt) {
 		return CapabilityPigSpawner.createProvider(spawnerFactory.get());
 	}
 
@@ -37,7 +37,7 @@ public class ItemPigSpawner extends ItemTestMod3 {
 	}
 
 	@Override
-	public int getMaxDamage(ItemStack stack) {
+	public int getMaxDamage(final ItemStack stack) {
 		final IPigSpawner pigSpawner = CapabilityPigSpawner.getPigSpawner(stack);
 
 		if (pigSpawner instanceof IPigSpawnerFinite) {
@@ -49,7 +49,7 @@ public class ItemPigSpawner extends ItemTestMod3 {
 	}
 
 	@Override
-	public boolean isDamaged(ItemStack stack) {
+	public boolean isDamaged(final ItemStack stack) {
 		final IPigSpawner pigSpawner = CapabilityPigSpawner.getPigSpawner(stack);
 
 		if (pigSpawner instanceof IPigSpawnerFinite) {
@@ -61,7 +61,7 @@ public class ItemPigSpawner extends ItemTestMod3 {
 	}
 
 	@Override
-	public double getDurabilityForDisplay(ItemStack stack) {
+	public double getDurabilityForDisplay(final ItemStack stack) {
 		final IPigSpawner pigSpawner = CapabilityPigSpawner.getPigSpawner(stack);
 
 		if (pigSpawner instanceof IPigSpawnerFinite) {
@@ -73,7 +73,7 @@ public class ItemPigSpawner extends ItemTestMod3 {
 		return super.getDurabilityForDisplay(stack);
 	}
 
-	public void setSpawnerFactory(Supplier<IPigSpawner> spawnerFactory) {
+	public void setSpawnerFactory(final Supplier<IPigSpawner> spawnerFactory) {
 		if (this.spawnerFactory != null)
 			throw new IllegalStateException("Attempt to replace the spawner factory of " + getRegistryName().toString());
 

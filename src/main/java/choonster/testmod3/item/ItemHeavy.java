@@ -21,7 +21,7 @@ public class ItemHeavy extends ItemTestMod3 {
 	}
 
 	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+	public void onUpdate(final ItemStack stack, final World worldIn, final Entity entityIn, final int itemSlot, final boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 
 		if (entityIn instanceof EntityLivingBase) { // If the Entity is an instance of EntityLivingBase,

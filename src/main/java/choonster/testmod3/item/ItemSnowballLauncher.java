@@ -29,7 +29,7 @@ public class ItemSnowballLauncher extends ItemTestMod3 {
 	 */
 	private static final int COOLDOWN = 20;
 
-	public ItemSnowballLauncher(String itemName) {
+	public ItemSnowballLauncher(final String itemName) {
 		super(itemName);
 	}
 
@@ -39,7 +39,7 @@ public class ItemSnowballLauncher extends ItemTestMod3 {
 	 * @param launcher The launcher
 	 * @return The cooldown of the launcher (in ticks), or 0 if there is none
 	 */
-	protected int getCooldown(ItemStack launcher) {
+	protected int getCooldown(final ItemStack launcher) {
 		return COOLDOWN;
 	}
 
@@ -50,7 +50,7 @@ public class ItemSnowballLauncher extends ItemTestMod3 {
 	 * @param player The player to check
 	 * @return True if the player is not in creative mode and the launcher doesn't have the Infinity enchantment
 	 */
-	private boolean isAmmoRequired(ItemStack stack, EntityPlayer player) {
+	private boolean isAmmoRequired(final ItemStack stack, final EntityPlayer player) {
 		return !player.capabilities.isCreativeMode && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) == 0;
 	}
 
@@ -60,12 +60,12 @@ public class ItemSnowballLauncher extends ItemTestMod3 {
 	 * @param stack The ItemStack
 	 * @return Is the ItemStack valid ammunition?
 	 */
-	protected boolean isAmmo(ItemStack stack) {
+	protected boolean isAmmo(final ItemStack stack) {
 		return !stack.isEmpty() && stack.getItem() == Items.SNOWBALL;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);
 
 		final boolean ammoRequired = isAmmoRequired(heldItem, playerIn);

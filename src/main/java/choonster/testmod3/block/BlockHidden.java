@@ -36,11 +36,11 @@ public class BlockHidden extends BlockTileEntity<TileEntityHidden> {
 		setDefaultState(getBlockState().getBaseState().withProperty(HIDDEN, true));
 	}
 
-	public BlockHidden(Material material, MapColor mapColor, String blockName) {
+	public BlockHidden(final Material material, final MapColor mapColor, final String blockName) {
 		super(material, mapColor, blockName, false);
 	}
 
-	public BlockHidden(Material materialIn, String blockName) {
+	public BlockHidden(final Material materialIn, final String blockName) {
 		super(materialIn, blockName, false);
 	}
 
@@ -50,30 +50,30 @@ public class BlockHidden extends BlockTileEntity<TileEntityHidden> {
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
+	public TileEntity createTileEntity(final World world, final IBlockState state) {
 		return new TileEntityHidden();
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(final IBlockState state) {
 		return 0;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(final IBlockState state) {
 		return false;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(final IBlockState state) {
 		return !state.getValue(HIDDEN);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public IBlockState getActualState(IBlockState state, final IBlockAccess worldIn, final BlockPos pos) {
 		// We can't easily get the logical side here, so only set the HIDDEN property on the physical client (client thread and integrated server thread)
 		if (FMLCommonHandler.instance().getSide().isClient()) {
 			state = state.withProperty(HIDDEN, !HiddenBlockManager.shouldHeldItemRevealHiddenBlocksClient());

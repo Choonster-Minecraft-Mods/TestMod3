@@ -14,14 +14,14 @@ import net.minecraft.item.ItemStack;
  * @author diesieben07
  */
 interface MeshDefinitionFix extends ItemMeshDefinition {
-	ModelResourceLocation getLocation(ItemStack stack);
+	ModelResourceLocation getLocation(final ItemStack stack);
 
 	// Helper method to easily create lambda instances of this class
-	static ItemMeshDefinition create(MeshDefinitionFix lambda) {
+	static ItemMeshDefinition create(final MeshDefinitionFix lambda) {
 		return lambda;
 	}
 
-	default ModelResourceLocation getModelLocation(ItemStack stack) {
+	default ModelResourceLocation getModelLocation(final ItemStack stack) {
 		return getLocation(stack);
 	}
 }

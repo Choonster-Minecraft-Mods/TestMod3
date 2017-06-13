@@ -20,7 +20,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class ItemTooltipModNameRemover {
 	@SubscribeEvent(priority = EventPriority.LOW)
-	public static void itemTooltip(ItemTooltipEvent event) {
+	public static void itemTooltip(final ItemTooltipEvent event) {
 		if (event.getItemStack().getItem() == ModItems.NO_MOD_NAME) {
 			event.getToolTip().remove(TextFormatting.BLUE + "" + TextFormatting.ITALIC + TestMod3.NAME);
 		}

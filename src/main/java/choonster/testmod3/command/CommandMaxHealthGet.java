@@ -22,7 +22,7 @@ public class CommandMaxHealthGet extends CommandMaxHealthBase {
 	 * @param amount    The amount to add/set
 	 */
 	@Override
-	protected void processEntity(EntityLivingBase entity, IMaxHealth maxHealth, float amount) {
+	protected void processEntity(final EntityLivingBase entity, final IMaxHealth maxHealth, final float amount) {
 		// No-op, this command doesn't make any changes and needs to display a custom message.
 	}
 
@@ -34,7 +34,7 @@ public class CommandMaxHealthGet extends CommandMaxHealthBase {
 	 * @param args   The arguments that were passed
 	 */
 	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+	public void execute(final MinecraftServer server, final ICommandSender sender, final String[] args) throws CommandException {
 		if (args.length < 1) {
 			throw new WrongUsageException(getUsage(sender));
 		}
@@ -73,7 +73,7 @@ public class CommandMaxHealthGet extends CommandMaxHealthBase {
 	 * @param sender The command sender
 	 */
 	@Override
-	public String getUsage(ICommandSender sender) {
+	public String getUsage(final ICommandSender sender) {
 		return "commands.testmod3.get_max_health.usage";
 	}
 }

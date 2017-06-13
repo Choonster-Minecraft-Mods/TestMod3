@@ -32,7 +32,7 @@ public class ModSoundEvents {
 	 * @param soundName The SoundEvent's name without the testmod3 prefix
 	 * @return The SoundEvent
 	 */
-	private static SoundEvent createSoundEvent(String soundName) {
+	private static SoundEvent createSoundEvent(final String soundName) {
 		final ResourceLocation soundID = new ResourceLocation(TestMod3.MODID, soundName);
 		return new SoundEvent(soundID).setRegistryName(soundID);
 	}
@@ -40,7 +40,7 @@ public class ModSoundEvents {
 	@Mod.EventBusSubscriber
 	public static class RegistrationHandler {
 		@SubscribeEvent
-		public static void registerSoundEvents(RegistryEvent.Register<SoundEvent> event) {
+		public static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {
 			event.getRegistry().registerAll(
 					RECORD_SOLARIS,
 					NINE_MM_FIRE,

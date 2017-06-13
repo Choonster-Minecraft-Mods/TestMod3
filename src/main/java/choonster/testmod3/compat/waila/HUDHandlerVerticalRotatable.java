@@ -9,7 +9,7 @@ import net.minecraft.block.properties.IProperty;
  * @author Choonster
  */
 public class HUDHandlerVerticalRotatable extends HUDHandlerEnumProperty<BlockPlane.EnumVerticalRotation> {
-	public HUDHandlerVerticalRotatable(IProperty<BlockPlane.EnumVerticalRotation> property) {
+	public HUDHandlerVerticalRotatable(final IProperty<BlockPlane.EnumVerticalRotation> property) {
 		super(property, "tile.testmod3:plane.vertical_rotation.desc", "testmod3:vertical_rotation");
 	}
 }

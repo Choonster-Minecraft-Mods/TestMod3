@@ -19,17 +19,17 @@ import java.util.Objects;
 public class FluidTankItem extends FluidTank implements IFluidHandlerItem {
 	private final ItemStack container;
 
-	public FluidTankItem(ItemStack container, int capacity) {
+	public FluidTankItem(final ItemStack container, final int capacity) {
 		super(capacity);
 		this.container = container;
 	}
 
-	public FluidTankItem(ItemStack container, @Nullable FluidStack fluidStack, int capacity) {
+	public FluidTankItem(final ItemStack container, @Nullable final FluidStack fluidStack, final int capacity) {
 		super(fluidStack, capacity);
 		this.container = container;
 	}
 
-	public FluidTankItem(ItemStack container, Fluid fluid, int amount, int capacity) {
+	public FluidTankItem(final ItemStack container, final Fluid fluid, final int amount, final int capacity) {
 		super(fluid, amount, capacity);
 		this.container = container;
 	}

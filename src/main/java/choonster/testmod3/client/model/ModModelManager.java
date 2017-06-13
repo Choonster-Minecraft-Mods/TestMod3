@@ -51,7 +51,7 @@ public class ModModelManager {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void registerAllModels(ModelRegistryEvent event) {
+	public static void registerAllModels(final ModelRegistryEvent event) {
 		INSTANCE.registerFluidModels();
 		INSTANCE.registerBlockModels();
 		INSTANCE.registerItemModels();
@@ -69,7 +69,7 @@ public class ModModelManager {
 	 *
 	 * @param fluidBlock The Fluid's Block
 	 */
-	private void registerFluidModel(IFluidBlock fluidBlock) {
+	private void registerFluidModel(final IFluidBlock fluidBlock) {
 		final Item item = Item.getItemFromBlock((Block) fluidBlock);
 		assert item != Items.AIR;
 
@@ -81,7 +81,7 @@ public class ModModelManager {
 
 		ModelLoader.setCustomStateMapper((Block) fluidBlock, new StateMapperBase() {
 			@Override
-			protected ModelResourceLocation getModelResourceLocation(IBlockState p_178132_1_) {
+			protected ModelResourceLocation getModelResourceLocation(final IBlockState p_178132_1_) {
 				return modelResourceLocation;
 			}
 		});
@@ -92,7 +92,7 @@ public class ModModelManager {
 	 */
 	private final StateMapperBase propertyStringMapper = new StateMapperBase() {
 		@Override
-		protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+		protected ModelResourceLocation getModelResourceLocation(final IBlockState state) {
 			return new ModelResourceLocation("minecraft:air");
 		}
 	};
@@ -157,7 +157,7 @@ public class ModModelManager {
 	 *
 	 * @param state The state to use as the variant
 	 */
-	private void registerBlockItemModel(IBlockState state) {
+	private void registerBlockItemModel(final IBlockState state) {
 		final Block block = state.getBlock();
 		final Item item = Item.getItemFromBlock(block);
 
@@ -174,7 +174,7 @@ public class ModModelManager {
 	 * @param state    The state to use as the variant
 	 * @param metadata The item metadata to register the model for
 	 */
-	private void registerBlockItemModelForMeta(IBlockState state, int metadata) {
+	private void registerBlockItemModelForMeta(final IBlockState state, final int metadata) {
 		final Item item = Item.getItemFromBlock(state.getBlock());
 
 		if (item != Items.AIR) {
@@ -196,7 +196,7 @@ public class ModModelManager {
 	 * @param getMeta   A function to get the metadata of each value
 	 * @param <T>       The value type
 	 */
-	private <T extends Comparable<T>> void registerVariantBlockItemModels(IBlockState baseState, IProperty<T> property, ToIntFunction<T> getMeta) {
+	private <T extends Comparable<T>> void registerVariantBlockItemModels(final IBlockState baseState, final IProperty<T> property, final ToIntFunction<T> getMeta) {
 		property.getAllowedValues().forEach(value -> registerBlockItemModelForMeta(baseState.withProperty(property, value), getMeta.applyAsInt(value)));
 	}
 
@@ -213,7 +213,7 @@ public class ModModelManager {
 	 * @param property  The property whose values should be used
 	 * @param <T>       The value type
 	 */
-	private <T extends IVariant & Comparable<T>> void registerVariantBlockItemModels(IBlockState baseState, IProperty<T> property) {
+	private <T extends IVariant & Comparable<T>> void registerVariantBlockItemModels(final IBlockState baseState, final IProperty<T> property) {
 		registerVariantBlockItemModels(baseState, property, IVariant::getMeta);
 	}
 
@@ -238,7 +238,7 @@ public class ModModelManager {
 			VARIANTS extends Iterable<VARIANT> & IStringSerializable,
 			SLAB extends BlockSlabTestMod3<VARIANT, VARIANTS, SLAB>
 			>
-	void registerSlabGroupItemModels(BlockSlabTestMod3.SlabGroup<VARIANT, VARIANTS, SLAB> slabGroup) {
+	void registerSlabGroupItemModels(final BlockSlabTestMod3.SlabGroup<VARIANT, VARIANTS, SLAB> slabGroup) {
 		final SLAB singleSlab = slabGroup.singleSlab;
 		registerVariantBlockItemModels(
 				singleSlab.getDefaultState()
@@ -297,7 +297,7 @@ public class ModModelManager {
 	 *
 	 * @param item The Item
 	 */
-	private void registerItemModel(Item item) {
+	private void registerItemModel(final Item item) {
 		registerItemModel(item, item.getRegistryName().toString());
 	}
 
@@ -309,7 +309,7 @@ public class ModModelManager {
 	 * @param item          The Item
 	 * @param modelLocation The model location
 	 */
-	private void registerItemModel(Item item, String modelLocation) {
+	private void registerItemModel(final Item item, final String modelLocation) {
 		final ModelResourceLocation fullModelLocation = new ModelResourceLocation(modelLocation, "inventory");
 		registerItemModel(item, fullModelLocation);
 	}
@@ -322,7 +322,7 @@ public class ModModelManager {
 	 * @param item              The Item
 	 * @param fullModelLocation The full model location
 	 */
-	private void registerItemModel(Item item, ModelResourceLocation fullModelLocation) {
+	private void registerItemModel(final Item item, final ModelResourceLocation fullModelLocation) {
 		ModelBakery.registerItemVariants(item, fullModelLocation); // Ensure the custom model is loaded and prevent the default model from being loaded
 		registerItemModel(item, MeshDefinitionFix.create(stack -> fullModelLocation));
 	}
@@ -333,7 +333,7 @@ public class ModModelManager {
 	 * @param item           The Item
 	 * @param meshDefinition The ItemMeshDefinition
 	 */
-	private void registerItemModel(Item item, ItemMeshDefinition meshDefinition) {
+	private void registerItemModel(final Item item, final ItemMeshDefinition meshDefinition) {
 		itemsRegistered.add(item);
 		ModelLoader.setCustomMeshDefinition(item, meshDefinition);
 	}
@@ -350,8 +350,8 @@ public class ModModelManager {
 	 * @param values      The values
 	 * @param <T>         The value type
 	 */
-	private <T extends IVariant> void registerVariantItemModels(Item item, String variantName, T[] values) {
-		for (T value : values) {
+	private <T extends IVariant> void registerVariantItemModels(final Item item, final String variantName, final T[] values) {
+		for (final T value : values) {
 			registerItemModelForMeta(item, value.getMeta(), variantName + "=" + value.getName());
 		}
 	}
@@ -365,7 +365,7 @@ public class ModModelManager {
 	 * @param metadata The metadata
 	 * @param variant  The variant
 	 */
-	private void registerItemModelForMeta(Item item, int metadata, String variant) {
+	private void registerItemModelForMeta(final Item item, final int metadata, final String variant) {
 		registerItemModelForMeta(item, metadata, new ModelResourceLocation(item.getRegistryName(), variant));
 	}
 
@@ -378,7 +378,7 @@ public class ModModelManager {
 	 * @param metadata              The metadata
 	 * @param modelResourceLocation The full model location
 	 */
-	private void registerItemModelForMeta(Item item, int metadata, ModelResourceLocation modelResourceLocation) {
+	private void registerItemModelForMeta(final Item item, final int metadata, final ModelResourceLocation modelResourceLocation) {
 		itemsRegistered.add(item);
 		ModelLoader.setCustomModelResourceLocation(item, metadata, modelResourceLocation);
 	}

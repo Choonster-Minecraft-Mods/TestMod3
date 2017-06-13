@@ -24,7 +24,7 @@ public class CreativeTabTestMod3 extends CreativeTabs {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void displayAllRelevantItems(NonNullList<ItemStack> items) {
+	public void displayAllRelevantItems(final NonNullList<ItemStack> items) {
 		items.add(sword.copy());
 		super.displayAllRelevantItems(items);
 	}

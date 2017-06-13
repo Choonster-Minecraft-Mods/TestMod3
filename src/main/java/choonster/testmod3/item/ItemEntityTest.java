@@ -26,7 +26,7 @@ public class ItemEntityTest extends ItemTestMod3 {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer player, final EnumHand hand) {
 		final ItemStack heldItem = player.getHeldItem(hand);
 
 		final float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch);

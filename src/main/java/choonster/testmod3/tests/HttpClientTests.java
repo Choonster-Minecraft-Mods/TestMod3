@@ -31,7 +31,7 @@ public class HttpClientTests extends Test {
 			final Content content = Request.Get(GIST_URL).execute().returnContent();
 			assertEqual(Consts.UTF_8, content.getType().getCharset());
 			assertEqual(GIST_CONTENT, content.asString());
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			exceptionThrown(e, "Failed to download Gist");
 		}
 	}

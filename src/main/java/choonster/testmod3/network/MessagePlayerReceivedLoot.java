@@ -33,7 +33,7 @@ public class MessagePlayerReceivedLoot implements IMessage {
 	public MessagePlayerReceivedLoot() {
 	}
 
-	public MessagePlayerReceivedLoot(Collection<ItemStack> itemStacks) {
+	public MessagePlayerReceivedLoot(final Collection<ItemStack> itemStacks) {
 		this.itemStacks = itemStacks.toArray(new ItemStack[itemStacks.size()]);
 	}
 
@@ -43,7 +43,7 @@ public class MessagePlayerReceivedLoot implements IMessage {
 	 * @param buf The buffer
 	 */
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBytes(final ByteBuf buf) {
 		final int numStacks = buf.readInt();
 
 		itemStacks = new ItemStack[numStacks];
@@ -59,10 +59,10 @@ public class MessagePlayerReceivedLoot implements IMessage {
 	 * @param buf The buffer
 	 */
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBytes(final ByteBuf buf) {
 		buf.writeInt(itemStacks.length);
 
-		for (ItemStack itemStack : itemStacks) {
+		for (final ItemStack itemStack : itemStacks) {
 			ByteBufUtils.writeItemStack(buf, itemStack);
 		}
 	}
@@ -75,7 +75,7 @@ public class MessagePlayerReceivedLoot implements IMessage {
 		 * @param itemStack The ItemStack
 		 * @return The ITextComponent
 		 */
-		private ITextComponent getItemStackTextComponent(ItemStack itemStack) {
+		private ITextComponent getItemStackTextComponent(final ItemStack itemStack) {
 			return new TextComponentTranslation("message.testmod3:player_received_loot.item", itemStack.getCount(), itemStack.getTextComponent());
 		}
 

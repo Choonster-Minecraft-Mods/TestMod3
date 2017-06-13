@@ -31,7 +31,7 @@ public class ItemChunkEnergySetter extends ItemTestMod3 {
 	 * @param player The player
 	 * @param amount The amount to add/remove
 	 */
-	private void addRemoveChunkEnergy(World world, EntityPlayer player, int amount) {
+	private void addRemoveChunkEnergy(final World world, final EntityPlayer player, final int amount) {
 		final Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(player));
 		final ChunkPos chunkPos = chunk.getPos();
 		final IChunkEnergy chunkEnergy = CapabilityChunkEnergy.getChunkEnergy(world, chunkPos);
@@ -51,7 +51,7 @@ public class ItemChunkEnergySetter extends ItemTestMod3 {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand handIn) {
 		if (!worldIn.isRemote) {
 			addRemoveChunkEnergy(worldIn, playerIn, 1);
 		}
@@ -60,7 +60,7 @@ public class ItemChunkEnergySetter extends ItemTestMod3 {
 	}
 
 	@Override
-	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
+	public boolean onEntitySwing(final EntityLivingBase entityLiving, final ItemStack stack) {
 		final World world = entityLiving.getEntityWorld();
 		if (!world.isRemote && entityLiving instanceof EntityPlayer) {
 			addRemoveChunkEnergy(world, (EntityPlayer) entityLiving, 100);

@@ -39,7 +39,7 @@ public class ModMessages {
 		registerMessage(MessageUpdateContainerPigSpawnerFinite.Handler.class, MessageUpdateContainerPigSpawnerFinite.class, Side.CLIENT);
 	}
 
-	private static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(Class<? extends IMessageHandler<REQ, REPLY>> messageHandler, Class<REQ> requestMessageType, Side receivingSide) {
+	private static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(final Class<? extends IMessageHandler<REQ, REPLY>> messageHandler, final Class<REQ> requestMessageType, final Side receivingSide) {
 		TestMod3.network.registerMessage(messageHandler, requestMessageType, messageID++, receivingSide);
 	}
 }

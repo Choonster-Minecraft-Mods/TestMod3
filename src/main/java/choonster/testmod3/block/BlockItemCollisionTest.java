@@ -35,7 +35,7 @@ public class BlockItemCollisionTest extends BlockTestMod3 {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+	public void onEntityCollidedWithBlock(final World worldIn, final BlockPos pos, final IBlockState state, final Entity entityIn) {
 		super.onEntityCollidedWithBlock(worldIn, pos, state, entityIn);
 
 		if (!worldIn.isRemote && entityIn instanceof EntityItem) {
@@ -45,7 +45,7 @@ public class BlockItemCollisionTest extends BlockTestMod3 {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(final IBlockState state, final IBlockAccess source, final BlockPos pos) {
 		return BOUNDING_BOX;
 	}
 }

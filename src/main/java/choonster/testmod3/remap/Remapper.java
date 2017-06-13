@@ -38,11 +38,11 @@ public final class Remapper {
 	 *
 	 * @param missingMappings This mod's missing mappings
 	 */
-	public static void remap(List<MissingMapping> missingMappings) {
-		for (MissingMapping missingMapping : missingMappings) { // For each missing mapping,
+	public static void remap(final List<MissingMapping> missingMappings) {
+		for (final MissingMapping missingMapping : missingMappings) { // For each missing mapping,
 			Logger.info(MARKER, "Trying to remap %s", missingMapping.resourceLocation);
 
-			for (Predicate<MissingMapping> remappingFunction : remappingFunctions) { // For each remapping function
+			for (final Predicate<MissingMapping> remappingFunction : remappingFunctions) { // For each remapping function
 				if (remappingFunction.test(missingMapping)) { // If the function took an action,
 					break; // Break from the inner loop
 				}
@@ -61,7 +61,7 @@ public final class Remapper {
 	 * @param registryName   The registry name to remap to
 	 * @return True if the remapping was successful
 	 */
-	private static boolean tryRemap(MissingMapping missingMapping, ResourceLocation registryName) {
+	private static boolean tryRemap(final MissingMapping missingMapping, final ResourceLocation registryName) {
 		switch (missingMapping.type) {
 			case BLOCK:
 				final IForgeRegistry<Block> blockRegistry = ForgeRegistries.BLOCKS;
@@ -115,7 +115,7 @@ public final class Remapper {
 	 * @param missingMapping The missing mapping
 	 * @return True if the missing mapping was remapped
 	 */
-	private static boolean remapCustomName(MissingMapping missingMapping) {
+	private static boolean remapCustomName(final MissingMapping missingMapping) {
 		final String missingPath = missingMapping.resourceLocation.getResourcePath();
 
 		if (!customNames.containsKey(missingPath)) return false;

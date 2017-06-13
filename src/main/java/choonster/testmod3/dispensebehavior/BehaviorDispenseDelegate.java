@@ -23,7 +23,7 @@ public class BehaviorDispenseDelegate extends Bootstrap.BehaviorDispenseOptional
 	 */
 	protected boolean doSoundsParticles;
 
-	public BehaviorDispenseDelegate(IBehaviorDispenseItem delegate) {
+	public BehaviorDispenseDelegate(final IBehaviorDispenseItem delegate) {
 		this.delegate = delegate;
 	}
 
@@ -35,20 +35,20 @@ public class BehaviorDispenseDelegate extends Bootstrap.BehaviorDispenseOptional
 	 * @param stack  The item
 	 * @return The replacement item
 	 */
-	protected ItemStack callDelegate(IBlockSource source, ItemStack stack) {
+	protected ItemStack callDelegate(final IBlockSource source, final ItemStack stack) {
 		doSoundsParticles = false;
 		return delegate.dispense(source, stack);
 	}
 
 	@Override
-	protected void spawnDispenseParticles(IBlockSource source, EnumFacing facingIn) {
+	protected void spawnDispenseParticles(final IBlockSource source, final EnumFacing facingIn) {
 		if (doSoundsParticles) {
 			super.spawnDispenseParticles(source, facingIn);
 		}
 	}
 
 	@Override
-	protected void playDispenseSound(IBlockSource source) {
+	protected void playDispenseSound(final IBlockSource source) {
 		if (doSoundsParticles) {
 			super.playDispenseSound(source);
 		}

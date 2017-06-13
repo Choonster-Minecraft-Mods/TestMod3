@@ -37,7 +37,7 @@ public class BlockRotatableLamp extends BlockTestMod3 {
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(final IBlockState state) {
 		final int facingIndex = state.getValue(FACING).getIndex(); // Convert the EnumFacing to its index
 		final int lit = state.getValue(LIT) ? 1 : 0; // Convert the lit state boolean to 1 or 0
 
@@ -47,7 +47,7 @@ public class BlockRotatableLamp extends BlockTestMod3 {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public IBlockState getStateFromMeta(final int meta) {
 		final int facingIndex = meta & 7; // Extract the facing index (lowest three bits)
 		final EnumFacing facing = EnumFacing.getFront(facingIndex); // Convert it to the corresponding EnumFacing
 
@@ -57,14 +57,14 @@ public class BlockRotatableLamp extends BlockTestMod3 {
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+	public IBlockState getStateForPlacement(final World world, final BlockPos pos, final EnumFacing facing, final float hitX, final float hitY, final float hitZ, final int meta, final EntityLivingBase placer, final EnumHand hand) {
 		final EnumFacing newFacing = EnumFacing.getDirectionFromEntityLiving(pos, placer);
 
 		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(FACING, newFacing);
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
 		final IBlockState newState;
 
 		if (playerIn.isSneaking()) {
@@ -79,7 +79,7 @@ public class BlockRotatableLamp extends BlockTestMod3 {
 	}
 
 	@Override
-	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public int getLightValue(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
 		return state.getValue(LIT) ? 15 : 0;
 	}
 }

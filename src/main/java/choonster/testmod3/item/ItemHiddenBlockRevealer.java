@@ -27,7 +27,7 @@ public class ItemHiddenBlockRevealer extends ItemTestMod3 {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);
 		final Optional<Boolean> revealHiddenBlocks = CapabilityHiddenBlockRevealer.toggleRevealHiddenBlocks(heldItem);
 
@@ -42,7 +42,7 @@ public class ItemHiddenBlockRevealer extends ItemTestMod3 {
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final NBTTagCompound nbt) {
 		return new CapabilityProviderSerializable<>(CapabilityHiddenBlockRevealer.HIDDEN_BLOCK_REVEALER_CAPABILITY, CapabilityHiddenBlockRevealer.DEFAULT_FACING);
 	}
 }

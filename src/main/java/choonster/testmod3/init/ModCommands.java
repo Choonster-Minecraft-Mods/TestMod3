@@ -15,7 +15,7 @@ public class ModCommands {
 	 *
 	 * @param event The server starting event
 	 */
-	public static void registerCommands(FMLServerStartingEvent event) {
+	public static void registerCommands(final FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandTestMod3());
 	}
 
@@ -24,7 +24,7 @@ public class ModCommands {
 	 *
 	 * @param commandTestMod3 The /testmod3 command
 	 */
-	public static void registerSubCommands(CommandTestMod3 commandTestMod3) {
+	public static void registerSubCommands(final CommandTestMod3 commandTestMod3) {
 		commandTestMod3.addSubcommand(new CommandTestMod3Help(commandTestMod3));
 		commandTestMod3.addSubcommand(new CommandRotateVector());
 		commandTestMod3.addSubcommand(new CommandRunTests());

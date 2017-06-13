@@ -40,7 +40,7 @@ public class CommandListPlayers extends CommandBase {
 	 * @param sender The command sender
 	 */
 	@Override
-	public String getUsage(ICommandSender sender) {
+	public String getUsage(final ICommandSender sender) {
 		return "commands.testmod3:listplayers.usage";
 	}
 
@@ -52,7 +52,7 @@ public class CommandListPlayers extends CommandBase {
 	 * @param args   The arguments that were passed
 	 */
 	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+	public void execute(final MinecraftServer server, final ICommandSender sender, final String[] args) throws CommandException {
 		final NetHandlerPlayClient netHandlerPlayClient = minecraft.getConnection();
 
 		if (netHandlerPlayClient != null) {

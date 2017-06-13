@@ -18,7 +18,7 @@ public class CommandMaxHealthAdd extends CommandMaxHealthBase {
 	 * @param amount    The amount to add/set
 	 */
 	@Override
-	protected void processEntity(EntityLivingBase entity, IMaxHealth maxHealth, float amount) {
+	protected void processEntity(final EntityLivingBase entity, final IMaxHealth maxHealth, final float amount) {
 		maxHealth.addBonusMaxHealth(amount);
 	}
 
@@ -48,7 +48,7 @@ public class CommandMaxHealthAdd extends CommandMaxHealthBase {
 	 * @param sender The command sender
 	 */
 	@Override
-	public String getUsage(ICommandSender sender) {
+	public String getUsage(final ICommandSender sender) {
 		return "commands.testmod3.add_max_health.usage";
 	}
 }

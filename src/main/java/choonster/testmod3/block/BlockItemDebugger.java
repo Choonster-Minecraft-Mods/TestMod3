@@ -26,7 +26,7 @@ public class BlockItemDebugger extends BlockTestMod3 {
 		setBlockUnbreakable();
 	}
 
-	private void logItem(ItemStack stack) {
+	private void logItem(final ItemStack stack) {
 		if (!stack.isEmpty()) {
 			Logger.info("ItemStack: %s", stack.serializeNBT());
 			logCapability(stack, CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY, EnumFacing.NORTH);
@@ -49,7 +49,7 @@ public class BlockItemDebugger extends BlockTestMod3 {
 		}
 	}
 
-	private <T> void logCapability(ItemStack stack, Capability<T> capability, EnumFacing facing) {
+	private <T> void logCapability(final ItemStack stack, final Capability<T> capability, final EnumFacing facing) {
 		if (stack.hasCapability(capability, facing)) {
 			final T instance = stack.getCapability(capability, facing);
 			Logger.info("Capability: %s - %s", capability.getName(), instance);
@@ -57,14 +57,14 @@ public class BlockItemDebugger extends BlockTestMod3 {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
 		logItem(playerIn.getHeldItem(hand));
 
 		return true;
 	}
 
 	@Override
-	public void onBlockClicked(World worldIn, BlockPos pos, EntityPlayer playerIn) {
+	public void onBlockClicked(final World worldIn, final BlockPos pos, final EntityPlayer playerIn) {
 		for (final EnumHand hand : EnumHand.values()) {
 			logItem(playerIn.getHeldItem(hand));
 		}

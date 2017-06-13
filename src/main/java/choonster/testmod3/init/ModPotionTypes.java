@@ -52,7 +52,7 @@ public class ModPotionTypes {
 	 * @param potionEffect The PotionEffect
 	 * @return The PotionType
 	 */
-	private static PotionType createPotionType(PotionEffect potionEffect) {
+	private static PotionType createPotionType(final PotionEffect potionEffect) {
 		return createPotionType(potionEffect, null);
 	}
 
@@ -65,7 +65,7 @@ public class ModPotionTypes {
 	 * @param namePrefix   The name prefix, if any
 	 * @return The PotionType
 	 */
-	private static PotionType createPotionType(PotionEffect potionEffect, @Nullable String namePrefix) {
+	private static PotionType createPotionType(final PotionEffect potionEffect, @Nullable final String namePrefix) {
 		final ResourceLocation potionName = potionEffect.getPotion().getRegistryName();
 
 		final ResourceLocation potionTypeName;
@@ -86,7 +86,7 @@ public class ModPotionTypes {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void registerPotionTypes(RegistryEvent.Register<PotionType> event) {
+		public static void registerPotionTypes(final RegistryEvent.Register<PotionType> event) {
 			event.getRegistry().registerAll(
 					TEST,
 					LONG_TEST,

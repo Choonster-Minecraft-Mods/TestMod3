@@ -25,18 +25,18 @@ import javax.annotation.Nullable;
  */
 public class ItemLastUseTimeModel extends ItemTestMod3 {
 
-	public ItemLastUseTimeModel(String itemName) {
+	public ItemLastUseTimeModel(final String itemName) {
 		super(itemName);
 		CapabilityLastUseTime.TicksSinceLastUseGetter.addToItem(this);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
 		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final NBTTagCompound nbt) {
 		return CapabilityLastUseTime.createProvider();
 	}
 }

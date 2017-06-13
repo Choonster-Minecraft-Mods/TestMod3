@@ -38,18 +38,18 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 	 * @param colourGroup This slab's colour group
 	 * @param slabGroup   The group this slab belongs to
 	 */
-	public BlockColouredSlab(Material material, EnumColourGroup colourGroup, SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> slabGroup) {
+	public BlockColouredSlab(final Material material, final EnumColourGroup colourGroup, final SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> slabGroup) {
 		super(material, slabGroup, colourGroup);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public MapColor getMapColor(IBlockState state) {
+	public MapColor getMapColor(final IBlockState state) {
 		return state.getValue(getVariantProperty()).getMapColor();
 	}
 
 	@Override
-	public String getUnlocalizedName(int meta) {
+	public String getUnlocalizedName(final int meta) {
 		return getUnlocalizedName() + "." + getVariant(meta).getUnlocalizedName();
 	}
 
@@ -60,7 +60,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 	 * @return The metadata value
 	 */
 	@Override
-	public int getMetadata(EnumDyeColor colour) {
+	public int getMetadata(final EnumDyeColor colour) {
 		return variants.getOffsetMetadata(colour);
 	}
 
@@ -71,12 +71,12 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 	 * @return The colour
 	 */
 	@Override
-	protected EnumDyeColor getVariant(int meta) {
+	protected EnumDyeColor getVariant(final int meta) {
 		return variants.byOffsetMetadata(meta);
 	}
 
 	@Override
-	public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor colour) {
+	public boolean recolorBlock(final World world, final BlockPos pos, final EnumFacing side, final EnumDyeColor colour) {
 		final IBlockState currentState = world.getBlockState(pos);
 		return variants.isColourInGroup(colour) &&
 				currentState.getValue(getVariantProperty()) != colour &&
@@ -84,7 +84,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);
 
 		if (!heldItem.isEmpty()) {
@@ -102,7 +102,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 	}
 
 	@Override
-	public Comparable<?> getTypeForItem(ItemStack stack) {
+	public Comparable<?> getTypeForItem(final ItemStack stack) {
 		return variants.byOffsetMetadata(stack.getMetadata());
 	}
 
@@ -140,7 +140,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		 * @param colourFilter A filter to obtain the colours in this group
 		 * @param metaOffset   The offset to subtract from each colour's metadata value
 		 */
-		EnumColourGroup(String name, Predicate<EnumDyeColor> colourFilter, int metaOffset) {
+		EnumColourGroup(final String name, final Predicate<EnumDyeColor> colourFilter, final int metaOffset) {
 			this.name = name;
 			this.property = PropertyEnum.create("colour", EnumDyeColor.class, colourFilter::test);
 			this.metaOffset = metaOffset;
@@ -153,7 +153,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		 * @param colour The colour
 		 * @return The offset metadata value
 		 */
-		public int getOffsetMetadata(EnumDyeColor colour) {
+		public int getOffsetMetadata(final EnumDyeColor colour) {
 			return colour.getMetadata() - metaOffset;
 		}
 
@@ -163,7 +163,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		 * @param meta The offset metadata value
 		 * @return The colour
 		 */
-		public EnumDyeColor byOffsetMetadata(int meta) {
+		public EnumDyeColor byOffsetMetadata(final int meta) {
 			return EnumDyeColor.byMetadata(meta + metaOffset);
 		}
 
@@ -188,7 +188,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		 * @param colour The colour
 		 * @return True if the colour is in this group
 		 */
-		public boolean isColourInGroup(EnumDyeColor colour) {
+		public boolean isColourInGroup(final EnumDyeColor colour) {
 			return values.contains(colour);
 		}
 
@@ -199,7 +199,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		 * @return A group containing the colour, or null if there isn't one
 		 */
 		@Nullable
-		public static EnumColourGroup getGroupForColour(EnumDyeColor colour) {
+		public static EnumColourGroup getGroupForColour(final EnumDyeColor colour) {
 			for (final EnumColourGroup colourGroup : values()) {
 				if (colourGroup.isColourInGroup(colour)) {
 					return colourGroup;
@@ -220,7 +220,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		 * @param groupName The group's name
 		 * @param material  The Material of the slabs
 		 */
-		public ColouredSlabGroup(String groupName, Material material) {
+		public ColouredSlabGroup(final String groupName, final Material material) {
 			low = createGroup(groupName, material, EnumColourGroup.LOW);
 			high = createGroup(groupName, material, EnumColourGroup.HIGH);
 		}
@@ -233,7 +233,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		 * @param colourGroup The colour group
 		 * @return The slab group
 		 */
-		private SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> createGroup(String groupName, Material material, EnumColourGroup colourGroup) {
+		private SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> createGroup(final String groupName, final Material material, final EnumColourGroup colourGroup) {
 			return new SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab>(groupName, material, colourGroup) {
 				@Override
 				public BlockColouredSlab createSlab(final Material material, final boolean isDouble, final EnumColourGroup colourGroup) {
@@ -258,7 +258,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		 * @param colourGroup The colour group
 		 * @return The slab group
 		 */
-		public SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> getSlabGroupByColourGroup(EnumColourGroup colourGroup) {
+		public SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> getSlabGroupByColourGroup(final EnumColourGroup colourGroup) {
 			return colourGroup == EnumColourGroup.LOW ? low : high;
 		}
 	}

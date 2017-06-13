@@ -29,7 +29,7 @@ public class TileEntityFluidTankRestricted extends TileEntityFluidTank {
 	 * @param facing The facing
 	 * @return Is the facing now enabled?
 	 */
-	public boolean toggleFacing(EnumFacing facing) {
+	public boolean toggleFacing(final EnumFacing facing) {
 		if (enabledFacings.contains(facing)) {
 			enabledFacings.remove(facing);
 			return false;

@@ -41,7 +41,7 @@ public abstract class TileEntityItemHandler<INVENTORY extends IItemHandler & INB
 	 * @param world  The world
 	 * @param player The player
 	 */
-	public void openGUI(World world, EntityPlayer player) {
+	public void openGUI(final World world, final EntityPlayer player) {
 		if (!world.isRemote) {
 			player.openGui(TestMod3.MODID, getGuiId(), world, pos.getX(), pos.getY(), pos.getZ());
 		}
@@ -72,25 +72,25 @@ public abstract class TileEntityItemHandler<INVENTORY extends IItemHandler & INB
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound) {
+	public void readFromNBT(final NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		inventory.deserializeNBT(compound.getCompoundTag("ItemHandler"));
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(final NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setTag("ItemHandler", inventory.serializeNBT());
 		return compound;
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(final Capability<?> capability, @Nullable final EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
 	@Override
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> T getCapability(final Capability<T> capability, @Nullable final EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
 		}

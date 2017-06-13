@@ -11,13 +11,13 @@ import net.minecraft.block.material.Material;
  * @author Choonster
  */
 public class BlockTestMod3 extends Block {
-	public BlockTestMod3(Material material, MapColor mapColor, String blockName) {
+	public BlockTestMod3(final Material material, final MapColor mapColor, final String blockName) {
 		super(material, mapColor);
 		setBlockName(this, blockName);
 		setCreativeTab(TestMod3.creativeTab);
 	}
 
-	public BlockTestMod3(Material materialIn, String blockName) {
+	public BlockTestMod3(final Material materialIn, final String blockName) {
 		this(materialIn, materialIn.getMaterialMapColor(), blockName);
 	}
 
@@ -27,7 +27,7 @@ public class BlockTestMod3 extends Block {
 	 * @param block     The block
 	 * @param blockName The block's name
 	 */
-	public static void setBlockName(Block block, String blockName) {
+	public static void setBlockName(final Block block, final String blockName) {
 		block.setRegistryName(TestMod3.MODID, blockName);
 		block.setUnlocalizedName(block.getRegistryName().toString());
 	}

@@ -17,7 +17,7 @@ public class NameableCombinedInvWrapper extends CombinedInvWrapper implements II
 	 */
 	private final IWorldNameable worldNameable;
 
-	public NameableCombinedInvWrapper(IWorldNameable worldNameable, IItemHandlerModifiable... itemHandler) {
+	public NameableCombinedInvWrapper(final IWorldNameable worldNameable, final IItemHandlerModifiable... itemHandler) {
 		super(itemHandler);
 		this.worldNameable = worldNameable;
 	}

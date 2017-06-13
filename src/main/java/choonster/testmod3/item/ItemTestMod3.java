@@ -9,7 +9,7 @@ import net.minecraft.item.Item;
  * @author Choonster
  */
 public class ItemTestMod3 extends Item {
-	public ItemTestMod3(String itemName) {
+	public ItemTestMod3(final String itemName) {
 		setItemName(this, itemName);
 		setCreativeTab(TestMod3.creativeTab);
 	}
@@ -20,7 +20,7 @@ public class ItemTestMod3 extends Item {
 	 * @param item     The item
 	 * @param itemName The item's name
 	 */
-	public static void setItemName(Item item, String itemName) {
+	public static void setItemName(final Item item, final String itemName) {
 		item.setRegistryName(TestMod3.MODID, itemName);
 		item.setUnlocalizedName(item.getRegistryName().toString());
 	}

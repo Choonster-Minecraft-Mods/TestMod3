@@ -50,17 +50,17 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(final IBlockState state, final IBlockAccess source, final BlockPos pos) {
 		return BOUNDING_BOX;
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
+	public TileEntity createTileEntity(final World world, final IBlockState state) {
 		return new TileEntityModChest();
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(final World worldIn, final BlockPos pos, final IBlockState state, final EntityLivingBase placer, final ItemStack stack) {
 		if (stack.hasDisplayName()) {
 			final TileEntityModChest tileEntity = getTileEntity(worldIn, pos);
 			if (tileEntity != null) {
@@ -70,12 +70,12 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+	public IBlockState getStateForPlacement(final World world, final BlockPos pos, final EnumFacing facing, final float hitX, final float hitY, final float hitZ, final int meta, final EntityLivingBase placer, final EnumHand hand) {
 		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
 		if (!worldIn.isRemote && !isBlocked(worldIn, pos)) {
 			final TileEntityModChest tileEntity = getTileEntity(worldIn, pos);
 			if (tileEntity != null) {
@@ -88,24 +88,24 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(final IBlockState state) {
 		return false;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(final IBlockState state) {
 		return false;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public IBlockState getStateFromMeta(final int meta) {
 		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(final IBlockState state) {
 		return state.getValue(FACING).getHorizontalIndex();
 	}
 
@@ -116,7 +116,7 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 	 * @param pos     The position
 	 * @return Is the chest blocked?
 	 */
-	private boolean isBlocked(World worldIn, BlockPos pos) {
+	private boolean isBlocked(final World worldIn, final BlockPos pos) {
 		return this.isBelowSolidBlock(worldIn, pos) || this.isOcelotSittingOnChest(worldIn, pos);
 	}
 
@@ -127,7 +127,7 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 	 * @param pos     The position
 	 * @return Is the chest below a solid block?
 	 */
-	private boolean isBelowSolidBlock(World worldIn, BlockPos pos) {
+	private boolean isBelowSolidBlock(final World worldIn, final BlockPos pos) {
 		return worldIn.getBlockState(pos.up()).isSideSolid(worldIn, pos.up(), EnumFacing.DOWN);
 	}
 
@@ -138,7 +138,7 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 	 * @param pos     The position
 	 * @return Is an Ocelot sitting on the chest?
 	 */
-	private boolean isOcelotSittingOnChest(World worldIn, BlockPos pos) {
+	private boolean isOcelotSittingOnChest(final World worldIn, final BlockPos pos) {
 		for (final EntityOcelot entityOcelot : worldIn.getEntitiesWithinAABB(EntityOcelot.class, new AxisAlignedBB(pos.getX(), pos.getY() + 1, pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1))) {
 			if (entityOcelot.isSitting()) {
 				return true;
@@ -154,7 +154,7 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 	 */
 	@SuppressWarnings("deprecation")
 	@Override
-	public IBlockState withRotation(IBlockState state, Rotation rotation) {
+	public IBlockState withRotation(final IBlockState state, final Rotation rotation) {
 		return state.withProperty(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
@@ -164,24 +164,24 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 	 */
 	@SuppressWarnings("deprecation")
 	@Override
-	public IBlockState withMirror(IBlockState state, Mirror mirror) {
+	public IBlockState withMirror(final IBlockState state, final Mirror mirror) {
 		return state.withRotation(mirror.toRotation(state.getValue(FACING)));
 	}
 
 	@Override
-	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+	public boolean removedByPlayer(final IBlockState state, final World world, final BlockPos pos, final EntityPlayer player, final boolean willHarvest) {
 		//If it will harvest, delay deletion of the block until after getDrops
 		return willHarvest || super.removedByPlayer(state, world, pos, player, false);
 	}
 
 	@Override
-	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack tool) {
+	public void harvestBlock(final World world, final EntityPlayer player, final BlockPos pos, final IBlockState state, @Nullable final TileEntity te, final ItemStack tool) {
 		super.harvestBlock(world, player, pos, state, te, tool);
 		world.setBlockToAir(pos);
 	}
 
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	public List<ItemStack> getDrops(final IBlockAccess world, final BlockPos pos, final IBlockState state, final int fortune) {
 		final List<ItemStack> drops = super.getDrops(world, pos, state, fortune);
 
 		final TileEntityModChest tileEntity = getTileEntity(world, pos);

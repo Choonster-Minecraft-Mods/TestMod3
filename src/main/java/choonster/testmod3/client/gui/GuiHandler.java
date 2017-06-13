@@ -16,7 +16,7 @@ import static choonster.testmod3.client.gui.GuiIDs.*;
 public class GuiHandler implements IGuiHandler {
 	@Override
 	@Nullable
-	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+	public Object getServerGuiElement(final int ID, final EntityPlayer player, final World world, final int x, final int y, final int z) {
 		final TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 
 		switch (ID) {
@@ -36,7 +36,7 @@ public class GuiHandler implements IGuiHandler {
 
 	@Override
 	@Nullable
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+	public Object getClientGuiElement(final int ID, final EntityPlayer player, final World world, final int x, final int y, final int z) {
 		final TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 
 		switch (ID) {

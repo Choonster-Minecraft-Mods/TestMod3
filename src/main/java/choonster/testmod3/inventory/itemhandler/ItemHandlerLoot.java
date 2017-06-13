@@ -44,17 +44,17 @@ public class ItemHandlerLoot extends ItemHandlerNameable implements ILootContain
 	 */
 	protected long lootTableSeed;
 
-	public ItemHandlerLoot(ITextComponent defaultName, IWorldContainer worldContainer) {
+	public ItemHandlerLoot(final ITextComponent defaultName, final IWorldContainer worldContainer) {
 		super(defaultName);
 		this.worldContainer = worldContainer;
 	}
 
-	public ItemHandlerLoot(int size, ITextComponent defaultName, IWorldContainer worldContainer) {
+	public ItemHandlerLoot(final int size, final ITextComponent defaultName, final IWorldContainer worldContainer) {
 		super(size, defaultName);
 		this.worldContainer = worldContainer;
 	}
 
-	public ItemHandlerLoot(NonNullList<ItemStack> stacks, ITextComponent defaultName, IWorldContainer worldContainer) {
+	public ItemHandlerLoot(final NonNullList<ItemStack> stacks, final ITextComponent defaultName, final IWorldContainer worldContainer) {
 		super(stacks, defaultName);
 		this.worldContainer = worldContainer;
 	}
@@ -65,7 +65,7 @@ public class ItemHandlerLoot extends ItemHandlerNameable implements ILootContain
 	 * @param compound The compound tag
 	 * @return Was the location written to NBT?
 	 */
-	protected boolean checkLootAndWrite(NBTTagCompound compound) {
+	protected boolean checkLootAndWrite(final NBTTagCompound compound) {
 		if (lootTableLocation != null) {
 			compound.setString("LootTable", lootTableLocation.toString());
 
@@ -85,7 +85,7 @@ public class ItemHandlerLoot extends ItemHandlerNameable implements ILootContain
 	 * @param compound The compound tag
 	 * @return Was the location read from NBT?
 	 */
-	protected boolean checkLootAndRead(NBTTagCompound compound) {
+	protected boolean checkLootAndRead(final NBTTagCompound compound) {
 		if (compound.hasKey("LootTable", Constants.NBT.TAG_STRING)) {
 			lootTableLocation = new ResourceLocation(compound.getString("LootTable"));
 			lootTableSeed = compound.getLong("LootTableSeed");
@@ -107,7 +107,7 @@ public class ItemHandlerLoot extends ItemHandlerNameable implements ILootContain
 	}
 
 	@Override
-	public void deserializeNBT(NBTTagCompound nbt) {
+	public void deserializeNBT(final NBTTagCompound nbt) {
 		if (checkLootAndRead(nbt)) { // If the LootTable location exists, don't read the inventory contents from NBT
 			setSize(nbt.hasKey("Size", Constants.NBT.TAG_INT) ? nbt.getInteger("Size") : stacks.size());
 			onLoad();
@@ -123,7 +123,7 @@ public class ItemHandlerLoot extends ItemHandlerNameable implements ILootContain
 	 *
 	 * @param player The player whose Luck to use when generating loot
 	 */
-	public void fillWithLoot(@Nullable EntityPlayer player) {
+	public void fillWithLoot(@Nullable final EntityPlayer player) {
 		final World world = worldContainer.getContainedWorld();
 		if (lootTableLocation != null && !world.isRemote) {
 			final LootTable lootTable = world.getLootTableManager().getLootTableFromLocation(lootTableLocation);
@@ -142,25 +142,25 @@ public class ItemHandlerLoot extends ItemHandlerNameable implements ILootContain
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int slot) {
+	public ItemStack getStackInSlot(final int slot) {
 		fillWithLoot(null);
 		return super.getStackInSlot(slot);
 	}
 
 	@Override
-	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+	public ItemStack insertItem(final int slot, final ItemStack stack, final boolean simulate) {
 		fillWithLoot(null);
 		return super.insertItem(slot, stack, simulate);
 	}
 
 	@Override
-	public ItemStack extractItem(int slot, int amount, boolean simulate) {
+	public ItemStack extractItem(final int slot, final int amount, final boolean simulate) {
 		fillWithLoot(null);
 		return super.extractItem(slot, amount, simulate);
 	}
 
 	@Override
-	public void setStackInSlot(int slot, ItemStack stack) {
+	public void setStackInSlot(final int slot, final ItemStack stack) {
 		fillWithLoot(null);
 		super.setStackInSlot(slot, stack);
 	}

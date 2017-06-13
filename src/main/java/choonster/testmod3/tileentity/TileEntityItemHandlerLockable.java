@@ -34,20 +34,20 @@ public abstract class TileEntityItemHandlerLockable<INVENTORY extends IItemHandl
 	protected abstract LOCK createLock();
 
 	@Override
-	public void openGUI(World world, EntityPlayer player) {
+	public void openGUI(final World world, final EntityPlayer player) {
 		if (lock.tryOpen(player)) {
 			super.openGUI(world, player);
 		}
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound) {
+	public void readFromNBT(final NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		lock.deserializeNBT(compound.getCompoundTag("Lock"));
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(final NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setTag("Lock", lock.serializeNBT());
 		return compound;
@@ -67,12 +67,12 @@ public abstract class TileEntityItemHandlerLockable<INVENTORY extends IItemHandl
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(final Capability<?> capability, @Nullable final EnumFacing facing) {
 		return capability == CapabilityLock.LOCK_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
 	@Override
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> T getCapability(final Capability<T> capability, @Nullable final EnumFacing facing) {
 		if (capability == CapabilityLock.LOCK_CAPABILITY) {
 			return CapabilityLock.LOCK_CAPABILITY.cast(lock);
 		}

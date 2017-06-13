@@ -48,7 +48,7 @@ public class SpawnerDrops {
 	 * @param player The player who broke the block
 	 * @return Is the event valid?
 	 */
-	private static boolean isValid(World world, IBlockState state, @Nullable EntityPlayer player) {
+	private static boolean isValid(final World world, final IBlockState state, @Nullable final EntityPlayer player) {
 		if (player == null) return false;
 
 		final ItemStack heldItem = player.getHeldItemMainhand();
@@ -60,7 +60,7 @@ public class SpawnerDrops {
 	}
 
 	@SubscribeEvent
-	public static void blockBroken(BlockEvent.BreakEvent event) {
+	public static void blockBroken(final BlockEvent.BreakEvent event) {
 		final World world = event.getWorld();
 		final BlockPos pos = event.getPos();
 
@@ -84,7 +84,7 @@ public class SpawnerDrops {
 	}
 
 	@SubscribeEvent
-	public static void blockHarvested(BlockEvent.HarvestDropsEvent event) {
+	public static void blockHarvested(final BlockEvent.HarvestDropsEvent event) {
 		final World world = event.getWorld();
 		final BlockPos pos = event.getPos();
 		final IBlockState state = event.getState();

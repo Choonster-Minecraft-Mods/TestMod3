@@ -19,23 +19,23 @@ public class ItemContinuousBow extends ItemModBow {
 	 */
 	private final int CHARGE_MULTIPLIER = 5;
 
-	public ItemContinuousBow(String itemName) {
+	public ItemContinuousBow(final String itemName) {
 		super(itemName);
 	}
 
 	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
+	public int getMaxItemUseDuration(final ItemStack stack) {
 		return 10;
 	}
 
 	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+	public void onPlayerStoppedUsing(final ItemStack stack, final World worldIn, final EntityLivingBase entityLiving, final int timeLeft) {
 		final int charge = (getMaxItemUseDuration(stack) - timeLeft) * CHARGE_MULTIPLIER;
 		fireArrow(stack, worldIn, entityLiving, charge);
 	}
 
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
+	public ItemStack onItemUseFinish(final ItemStack stack, final World worldIn, final EntityLivingBase entityLiving) {
 		final int charge = getMaxItemUseDuration(stack) * CHARGE_MULTIPLIER;
 		fireArrow(stack, worldIn, entityLiving, charge);
 

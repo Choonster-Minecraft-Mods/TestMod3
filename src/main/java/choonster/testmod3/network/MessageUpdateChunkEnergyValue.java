@@ -33,7 +33,7 @@ public class MessageUpdateChunkEnergyValue implements IMessage {
 	public MessageUpdateChunkEnergyValue() {
 	}
 
-	public MessageUpdateChunkEnergyValue(IChunkEnergy chunkEnergy) {
+	public MessageUpdateChunkEnergyValue(final IChunkEnergy chunkEnergy) {
 		this.chunkPos = chunkEnergy.getChunkPos();
 		this.energy = chunkEnergy.getEnergyStored();
 	}
@@ -44,7 +44,7 @@ public class MessageUpdateChunkEnergyValue implements IMessage {
 	 * @param buf The buffer
 	 */
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBytes(final ByteBuf buf) {
 		final int chunkX = buf.readInt();
 		final int chunkZ = buf.readInt();
 		chunkPos = new ChunkPos(chunkX, chunkZ);
@@ -57,7 +57,7 @@ public class MessageUpdateChunkEnergyValue implements IMessage {
 	 * @param buf The buffer
 	 */
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBytes(final ByteBuf buf) {
 		buf.writeInt(chunkPos.x);
 		buf.writeInt(chunkPos.z);
 		buf.writeInt(energy);
@@ -75,7 +75,7 @@ public class MessageUpdateChunkEnergyValue implements IMessage {
 		 */
 		@Nullable
 		@Override
-		public IMessage onMessage(MessageUpdateChunkEnergyValue message, MessageContext ctx) {
+		public IMessage onMessage(final MessageUpdateChunkEnergyValue message, final MessageContext ctx) {
 			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
 				final World world = TestMod3.proxy.getClientWorld();
 				assert world != null;

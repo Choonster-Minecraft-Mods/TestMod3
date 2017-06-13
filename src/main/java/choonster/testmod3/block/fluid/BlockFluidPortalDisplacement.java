@@ -14,7 +14,7 @@ import net.minecraftforge.fluids.Fluid;
  * @author Choonster
  */
 public class BlockFluidPortalDisplacement extends BlockFluidClassic {
-	public BlockFluidPortalDisplacement(Fluid fluid, Material material) {
+	public BlockFluidPortalDisplacement(final Fluid fluid, final Material material) {
 		super(fluid, material);
 		displacements.put(Blocks.PORTAL, true);
 		displacements.put(Blocks.END_PORTAL, true);

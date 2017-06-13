@@ -27,7 +27,7 @@ public class BlockPipeFluid extends BlockPipeBasic {
 	}
 
 	@Override
-	protected boolean isValidConnection(IBlockState ownState, IBlockState neighbourState, IBlockAccess world, BlockPos ownPos, EnumFacing neighbourDirection) {
+	protected boolean isValidConnection(final IBlockState ownState, final IBlockState neighbourState, final IBlockAccess world, final BlockPos ownPos, final EnumFacing neighbourDirection) {
 		// Connect if the neighbouring block is another pipe
 		if (super.isValidConnection(ownState, neighbourState, world, ownPos, neighbourDirection)) {
 			return true;

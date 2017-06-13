@@ -25,7 +25,7 @@ public class ClientEventHandler {
 	private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
 	@SubscribeEvent
-	public static void onFOVUpdate(FOVUpdateEvent event) {
+	public static void onFOVUpdate(final FOVUpdateEvent event) {
 		if (event.getEntity().isHandActive() && event.getEntity().getActiveItemStack().getItem() instanceof ItemModBow) {
 			float fovModifier = event.getEntity().getItemInUseMaxCount() / 20.0f;
 
@@ -48,7 +48,7 @@ public class ClientEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void onClientTick(TickEvent.ClientTickEvent event) {
+	public static void onClientTick(final TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.END && MINECRAFT.player != null) {
 			final EntityPlayer player = MINECRAFT.player;
 			if (MINECRAFT.world.getBlockState(new BlockPos(player).down()).getBlock() == Blocks.IRON_BLOCK) {
@@ -66,7 +66,7 @@ public class ClientEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void entityJoinWorld(EntityJoinWorldEvent event) {
+	public static void entityJoinWorld(final EntityJoinWorldEvent event) {
 		final World world = event.getWorld();
 		final Entity entity = event.getEntity();
 

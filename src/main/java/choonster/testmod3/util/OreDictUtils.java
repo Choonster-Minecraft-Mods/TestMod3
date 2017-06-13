@@ -22,7 +22,7 @@ public class OreDictUtils {
 	 * @param oreName The ore name
 	 * @return Is the ItemStack registered?
 	 */
-	public boolean isItemStackRegisteredForName(ItemStack stack, String oreName) {
+	public boolean isItemStackRegisteredForName(final ItemStack stack, final String oreName) {
 		final int[] oreIDs = OreDictionary.getOreIDs(stack);
 
 		for (final int oreID : oreIDs) {
@@ -65,7 +65,7 @@ public class OreDictUtils {
 	 * @param stack The item
 	 * @return The dye colour, if any
 	 */
-	public Optional<EnumDyeColor> getDyeColour(ItemStack stack) {
+	public Optional<EnumDyeColor> getDyeColour(final ItemStack stack) {
 		return dyeOreNames.entrySet().stream()
 				.filter(entry -> isItemStackRegisteredForName(stack, entry.getValue()))
 				.map(Map.Entry::getKey)

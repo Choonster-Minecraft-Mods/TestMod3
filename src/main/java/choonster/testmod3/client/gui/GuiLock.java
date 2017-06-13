@@ -42,7 +42,7 @@ public class GuiLock extends GuiScreen {
 	private GuiButton doneButton;
 	private GuiButton cancelButton;
 
-	public GuiLock(ILock lock, BlockPos pos, @Nullable EnumFacing facing) {
+	public GuiLock(final ILock lock, final BlockPos pos, @Nullable final EnumFacing facing) {
 		this.lock = lock;
 		this.pos = pos;
 		this.facing = facing;
@@ -71,7 +71,7 @@ public class GuiLock extends GuiScreen {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
+	protected void actionPerformed(final GuiButton button) throws IOException {
 		if (button.enabled) {
 			if (button.id == 0) {
 				TestMod3.network.sendToServer(new MessageLockSetLockCode(pos, facing, lockCodeTextField.getText()));
@@ -83,7 +83,7 @@ public class GuiLock extends GuiScreen {
 	}
 
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException {
+	protected void keyTyped(final char typedChar, final int keyCode) throws IOException {
 		lockCodeTextField.textboxKeyTyped(typedChar, keyCode);
 
 		if (keyCode == Keyboard.KEY_ESCAPE) {
@@ -94,14 +94,14 @@ public class GuiLock extends GuiScreen {
 	}
 
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+	protected void mouseClicked(final int mouseX, final int mouseY, final int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 
 		lockCodeTextField.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+	public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
 		drawDefaultBackground();
 		drawCenteredString(fontRenderer, I18n.format("testmod3:lock.set_lock_code"), width / 2, 20, 0xffffff);
 		drawString(fontRenderer, I18n.format("testmod3:lock.lock_code"), width / 2 - 150, 37, 0xa0a0a0);

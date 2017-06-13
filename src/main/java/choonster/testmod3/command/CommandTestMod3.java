@@ -45,7 +45,7 @@ public class CommandTestMod3 extends CommandTreeBase {
 	 * @param sender The command sender
 	 */
 	@Override
-	public String getUsage(ICommandSender sender) {
+	public String getUsage(final ICommandSender sender) {
 		return "commands.testmod3.usage";
 	}
 
@@ -56,7 +56,7 @@ public class CommandTestMod3 extends CommandTreeBase {
 	 * @param server The server
 	 * @return The possible commands
 	 */
-	public List<ICommand> getSortedPossibleCommands(ICommandSender sender, MinecraftServer server) {
+	public List<ICommand> getSortedPossibleCommands(final ICommandSender sender, final MinecraftServer server) {
 		final List<ICommand> commands = getSubCommands().stream()
 				.filter(command -> command.checkPermission(server, sender))
 				.collect(Collectors.toList());

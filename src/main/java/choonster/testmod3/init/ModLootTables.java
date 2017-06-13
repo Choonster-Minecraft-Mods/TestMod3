@@ -39,7 +39,7 @@ public class ModLootTables {
 		 * @param id The ID of the LootTable without the testmod3: prefix
 		 * @return The ID of the LootTable
 		 */
-		protected static ResourceLocation create(String id) {
+		protected static ResourceLocation create(final String id) {
 			final ResourceLocation lootTable = new ResourceLocation(TestMod3.MODID, id);
 			RegistrationHandler.LOOT_TABLES.add(lootTable);
 			return lootTable;

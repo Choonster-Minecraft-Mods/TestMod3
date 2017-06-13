@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class CapeEventHandler {
 	@SubscribeEvent
-	public static void entityJoinWorld(EntityJoinWorldEvent event) {
+	public static void entityJoinWorld(final EntityJoinWorldEvent event) {
 		if (event.getEntity() instanceof AbstractClientPlayer && CapeUtils.doesPlayerHaveCape((AbstractClientPlayer) event.getEntity())) {
 			// EntityJoinWorldEvent fires before the player's NetworkPlayerInfo is populated,
 			// so we delay replacing the cape by at least 100 milliseconds.

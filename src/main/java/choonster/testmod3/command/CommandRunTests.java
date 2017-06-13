@@ -35,7 +35,7 @@ public class CommandRunTests extends CommandBase {
 	 * @param sender The command sender that executed the command
 	 */
 	@Override
-	public String getUsage(ICommandSender sender) {
+	public String getUsage(final ICommandSender sender) {
 		return "commands.testmod3.runtests.usage";
 	}
 
@@ -47,7 +47,7 @@ public class CommandRunTests extends CommandBase {
 	 * @param args   The arguments that were passed
 	 */
 	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+	public void execute(final MinecraftServer server, final ICommandSender sender, final String[] args) throws CommandException {
 		if (Tests.runTests()) {
 			sender.sendMessage(new TextComponentTranslation("commands.testmod3.runtests.tests_passed"));
 		} else {

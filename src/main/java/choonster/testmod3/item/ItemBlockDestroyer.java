@@ -20,7 +20,7 @@ public class ItemBlockDestroyer extends ItemTestMod3 {
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState blockIn, BlockPos pos, EntityLivingBase entityLiving) {
+	public boolean onBlockDestroyed(final ItemStack stack, final World worldIn, final IBlockState blockIn, final BlockPos pos, final EntityLivingBase entityLiving) {
 		if (!worldIn.isRemote) {
 			final IBlockState state = worldIn.getBlockState(pos);
 			if (state.getBlock() == Blocks.WHEAT && state.getValue(BlockCrops.AGE) >= 6) {

@@ -22,13 +22,13 @@ public class GuiSurvivalCommandBlock extends GuiCommandBlock {
 
 	private final SurvivalCommandBlockLogic survivalCommandBlockLogic;
 
-	public GuiSurvivalCommandBlock(TileEntitySurvivalCommandBlock tileEntitySurvivalCommandBlock) {
+	public GuiSurvivalCommandBlock(final TileEntitySurvivalCommandBlock tileEntitySurvivalCommandBlock) {
 		super(tileEntitySurvivalCommandBlock);
 		this.survivalCommandBlockLogic = tileEntitySurvivalCommandBlock.getCommandBlockLogic();
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
+	protected void actionPerformed(final GuiButton button) throws IOException {
 		if (button.enabled && button.id == 0) {
 			try {
 				final GuiTextField commandTextField = (GuiTextField) COMMAND_TEXT_GETTER.invokeExact((GuiCommandBlock) this);
@@ -37,7 +37,7 @@ public class GuiSurvivalCommandBlock extends GuiCommandBlock {
 				final boolean automatic = (boolean) AUTOMATIC_GETTER.invokeExact((GuiCommandBlock) this);
 
 				TestMod3.network.sendToServer(new MessageSurvivalCommandBlockSaveChanges(survivalCommandBlockLogic, commandTextField.getText(), commandBlockMode, conditional, automatic));
-			} catch (Throwable throwable) {
+			} catch (final Throwable throwable) {
 				Logger.error(throwable, "Couldn't set survival command block");
 			}
 

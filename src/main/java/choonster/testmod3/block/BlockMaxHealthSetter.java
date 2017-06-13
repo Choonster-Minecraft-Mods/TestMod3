@@ -22,7 +22,7 @@ public class BlockMaxHealthSetter extends BlockTestMod3 {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
 		if (!worldIn.isRemote) {
 			final IMaxHealth maxHealth = CapabilityMaxHealth.getMaxHealth(playerIn);
 

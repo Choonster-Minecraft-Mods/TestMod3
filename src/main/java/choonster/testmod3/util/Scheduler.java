@@ -22,7 +22,7 @@ public class Scheduler {
 	 *
 	 * @param task The task
 	 */
-	public static void scheduleTask(Runnable task) {
+	public static void scheduleTask(final Runnable task) {
 		tasks.add(task);
 	}
 
@@ -32,13 +32,13 @@ public class Scheduler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void serverTick(TickEvent.ServerTickEvent event) {
+	public static void serverTick(final TickEvent.ServerTickEvent event) {
 		if (event.phase != TickEvent.Phase.START) return;
 
 		while (!tasks.isEmpty()) {
 			try {
 				tasks.poll().run();
-			} catch (Throwable throwable) {
+			} catch (final Throwable throwable) {
 				Logger.error(throwable, "Error running scheduled task");
 			}
 		}

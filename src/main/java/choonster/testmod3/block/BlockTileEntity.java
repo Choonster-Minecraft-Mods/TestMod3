@@ -23,18 +23,18 @@ public abstract class BlockTileEntity<TE extends TileEntity> extends BlockTestMo
 	 */
 	private final boolean preserveTileEntity;
 
-	public BlockTileEntity(Material material, MapColor mapColor, String blockName, boolean preserveTileEntity) {
+	public BlockTileEntity(final Material material, final MapColor mapColor, final String blockName, final boolean preserveTileEntity) {
 		super(material, mapColor, blockName);
 		this.preserveTileEntity = preserveTileEntity;
 	}
 
-	public BlockTileEntity(Material materialIn, String blockName, boolean preserveTileEntity) {
+	public BlockTileEntity(final Material materialIn, final String blockName, final boolean preserveTileEntity) {
 		super(materialIn, blockName);
 		this.preserveTileEntity = preserveTileEntity;
 	}
 
 	@Override
-	public boolean hasTileEntity(IBlockState state) {
+	public boolean hasTileEntity(final IBlockState state) {
 		return true;
 	}
 
@@ -50,18 +50,18 @@ public abstract class BlockTileEntity<TE extends TileEntity> extends BlockTestMo
 	 */
 	@SuppressWarnings("unchecked")
 	@Nullable
-	protected TE getTileEntity(IBlockAccess world, BlockPos pos) {
+	protected TE getTileEntity(final IBlockAccess world, final BlockPos pos) {
 		return (TE) world.getTileEntity(pos);
 	}
 
 	@Override
-	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+	public boolean removedByPlayer(final IBlockState state, final World world, final BlockPos pos, final EntityPlayer player, final boolean willHarvest) {
 		// If it will harvest, delay deletion of the block until after getDrops
 		return preserveTileEntity && willHarvest || super.removedByPlayer(state, world, pos, player, false);
 	}
 
 	@Override
-	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack) {
+	public void harvestBlock(final World world, final EntityPlayer player, final BlockPos pos, final IBlockState state, @Nullable final TileEntity te, final ItemStack stack) {
 		super.harvestBlock(world, player, pos, state, te, stack);
 
 		if (preserveTileEntity) {

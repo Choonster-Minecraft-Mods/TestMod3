@@ -31,7 +31,7 @@ public class CapabilityContainerListenerManager {
 	 *
 	 * @param factory The factory
 	 */
-	public static void registerListenerFactory(Function<EntityPlayerMP, CapabilityContainerListener<?>> factory) {
+	public static void registerListenerFactory(final Function<EntityPlayerMP, CapabilityContainerListener<?>> factory) {
 		containerListenerFactories.add(factory);
 	}
 
@@ -45,7 +45,7 @@ public class CapabilityContainerListenerManager {
 		 * @param player    The player
 		 * @param container The Container
 		 */
-		private static void addListeners(EntityPlayerMP player, Container container) {
+		private static void addListeners(final EntityPlayerMP player, final Container container) {
 			containerListenerFactories.forEach(
 					factory -> container.addListener(factory.apply(player))
 			);

@@ -71,11 +71,11 @@ public interface IProxy {
 	 * Thrown when a proxy method is called from the wrong side.
 	 */
 	class WrongSideException extends RuntimeException {
-		public WrongSideException(String message) {
+		public WrongSideException(final String message) {
 			super(message);
 		}
 
-		public WrongSideException(String message, Throwable cause) {
+		public WrongSideException(final String message, final Throwable cause) {
 			super(message, cause);
 		}
 	}

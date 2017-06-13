@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
  * @author Choonster
  */
 public class EntityPlayerAvoidingCreeper extends EntityCreeper {
-	public EntityPlayerAvoidingCreeper(World worldIn) {
+	public EntityPlayerAvoidingCreeper(final World worldIn) {
 		super(worldIn);
 	}
 
@@ -44,7 +44,7 @@ public class EntityPlayerAvoidingCreeper extends EntityCreeper {
 	 * @param player The player
 	 * @return True if the player has an item in their off hand
 	 */
-	private boolean shouldAvoidPlayer(@Nullable EntityPlayer player) {
+	private boolean shouldAvoidPlayer(@Nullable final EntityPlayer player) {
 		return player != null && !player.getHeldItemOffhand().isEmpty();
 	}
 }

@@ -14,7 +14,7 @@ import net.minecraft.util.SoundEvent;
  * @author Choonster
  */
 public class ItemRecordMod extends ItemRecord {
-	public ItemRecordMod(String recordName, SoundEvent soundEvent) {
+	public ItemRecordMod(final String recordName, final SoundEvent soundEvent) {
 		super(Constants.RESOURCE_PREFIX + recordName, soundEvent);
 		setRegistryName(TestMod3.MODID, "record_" + recordName);
 		setUnlocalizedName("record");

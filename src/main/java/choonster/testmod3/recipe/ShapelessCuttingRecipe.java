@@ -19,11 +19,11 @@ import java.util.Random;
 public class ShapelessCuttingRecipe extends ShapelessRecipes {
 	private final Random random = new Random();
 
-	public ShapelessCuttingRecipe(ItemStack output, ItemStack... input) {
+	public ShapelessCuttingRecipe(final ItemStack output, final ItemStack... input) {
 		super(output, Arrays.asList(input));
 	}
 
-	private ItemStack damageAxe(ItemStack stack) {
+	private ItemStack damageAxe(final ItemStack stack) {
 		if (stack.attemptDamageItem(1, random)) {
 			ForgeEventFactory.onPlayerDestroyItem(ForgeHooks.getCraftingPlayer(), stack, null);
 			return ItemStack.EMPTY;
@@ -33,7 +33,7 @@ public class ShapelessCuttingRecipe extends ShapelessRecipes {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inventoryCrafting) {
+	public NonNullList<ItemStack> getRemainingItems(final InventoryCrafting inventoryCrafting) {
 		final NonNullList<ItemStack> remainingItems = NonNullList.withSize(inventoryCrafting.getSizeInventory(), ItemStack.EMPTY);
 
 		for (int i = 0; i < remainingItems.size(); ++i) {

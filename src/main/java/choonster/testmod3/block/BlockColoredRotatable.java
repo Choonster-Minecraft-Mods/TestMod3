@@ -31,7 +31,7 @@ import java.util.Optional;
 public class BlockColoredRotatable extends BlockColored {
 	public static final IProperty<EnumFacing> FACING = PropertyDirection.create("facing");
 
-	public BlockColoredRotatable(Material materialIn, String blockName) {
+	public BlockColoredRotatable(final Material materialIn, final String blockName) {
 		super(materialIn);
 		BlockTestMod3.setBlockName(this, blockName);
 		setCreativeTab(TestMod3.creativeTab);
@@ -43,26 +43,26 @@ public class BlockColoredRotatable extends BlockColored {
 	}
 
 	@Override
-	public boolean hasTileEntity(IBlockState state) {
+	public boolean hasTileEntity(final IBlockState state) {
 		return true;
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
+	public TileEntity createTileEntity(final World world, final IBlockState state) {
 		return new TileEntityColoredRotatable();
 	}
 
 	@Nullable
-	public TileEntityColoredRotatable getTileEntity(IBlockAccess world, BlockPos pos) {
+	public TileEntityColoredRotatable getTileEntity(final IBlockAccess world, final BlockPos pos) {
 		return (TileEntityColoredRotatable) world.getTileEntity(pos);
 	}
 
-	public EnumFacing getFacing(IBlockAccess world, BlockPos pos) {
+	public EnumFacing getFacing(final IBlockAccess world, final BlockPos pos) {
 		final TileEntityColoredRotatable tileEntity = getTileEntity(world, pos);
 		return tileEntity != null ? tileEntity.getFacing() : EnumFacing.NORTH;
 	}
 
-	public void setFacing(IBlockAccess world, BlockPos pos, EnumFacing facing) {
+	public void setFacing(final IBlockAccess world, final BlockPos pos, final EnumFacing facing) {
 		final TileEntityColoredRotatable tileEntity = getTileEntity(world, pos);
 		if (tileEntity != null) {
 			tileEntity.setFacing(facing);
@@ -70,18 +70,18 @@ public class BlockColoredRotatable extends BlockColored {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(final World worldIn, final BlockPos pos, final IBlockState state, final EntityLivingBase placer, final ItemStack stack) {
 		setFacing(worldIn, pos, EnumFacing.getDirectionFromEntityLiving(pos, placer));
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public IBlockState getActualState(final IBlockState state, final IBlockAccess worldIn, final BlockPos pos) {
 		return state.withProperty(FACING, getFacing(worldIn, pos));
 	}
 
 	@Override
-	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
+	public boolean rotateBlock(final World world, final BlockPos pos, final EnumFacing axis) {
 		final EnumFacing facing = getFacing(world, pos);
 		setFacing(world, pos, facing.rotateAround(axis.getAxis()));
 
@@ -89,7 +89,7 @@ public class BlockColoredRotatable extends BlockColored {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);
 
 		if (!heldItem.isEmpty()) { // If the player is holding dye, change the colour

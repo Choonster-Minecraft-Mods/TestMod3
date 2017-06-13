@@ -59,7 +59,7 @@ public class VectorUtils {
 	 * @param radians The angle in radians
 	 * @return The rotation matrix
 	 */
-	public static Matrix3d getRotationMatrix(EnumFacing.Axis axis, double radians) {
+	public static Matrix3d getRotationMatrix(final EnumFacing.Axis axis, final double radians) {
 		final Vec3i axisDirectionVector = AXIS_DIRECTION_VECTORS.get(axis);
 		final AxisAngle4d axisAngle = new AxisAngle4d(axisDirectionVector.getX(), axisDirectionVector.getY(), axisDirectionVector.getZ(), radians);
 
@@ -77,7 +77,7 @@ public class VectorUtils {
 	 * @param forcePositive  If true, set each coordinate of the rotated AABB to it absolute value
 	 * @return The rotated AABB
 	 */
-	public static AxisAlignedBB rotateAABB(AxisAlignedBB axisAlignedBB, Matrix3d rotationMatrix, boolean forcePositive) {
+	public static AxisAlignedBB rotateAABB(final AxisAlignedBB axisAlignedBB, final Matrix3d rotationMatrix, final boolean forcePositive) {
 		// Extract the minimum and maximum coordinates of the AABB into vectors
 		final Vector3d minCoords = new Vector3d(axisAlignedBB.minX, axisAlignedBB.minY, axisAlignedBB.minZ);
 		final Vector3d maxCoords = new Vector3d(axisAlignedBB.maxX, axisAlignedBB.maxY, axisAlignedBB.maxZ);
@@ -102,7 +102,7 @@ public class VectorUtils {
 	 * @param facing The facing
 	 * @return The angle in radians
 	 */
-	public static double getHorizontalRotation(EnumFacing facing) {
+	public static double getHorizontalRotation(final EnumFacing facing) {
 		return HORIZONTAL_ROTATIONS.get(facing);
 	}
 }

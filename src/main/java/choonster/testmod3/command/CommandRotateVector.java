@@ -42,7 +42,7 @@ public class CommandRotateVector extends CommandBase {
 	 * @param sender The command sender that executed the command
 	 */
 	@Override
-	public String getUsage(ICommandSender sender) {
+	public String getUsage(final ICommandSender sender) {
 		return "commands.testmod3.rotatevector.usage";
 	}
 
@@ -54,7 +54,7 @@ public class CommandRotateVector extends CommandBase {
 	 * @param args   The arguments that were passed
 	 */
 	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+	public void execute(final MinecraftServer server, final ICommandSender sender, final String[] args) throws CommandException {
 		if (args.length < 5) throw new WrongUsageException("commands.testmod3.rotatevector.usage");
 
 		final double x = parseDouble(args[0]), y = parseDouble(args[1]), z = parseDouble(args[2]);

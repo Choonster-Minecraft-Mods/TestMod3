@@ -37,7 +37,7 @@ public class KeyBindingHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void clientTick(TickEvent.ClientTickEvent event) {
+	public static void clientTick(final TickEvent.ClientTickEvent event) {
 		if (event.phase != TickEvent.Phase.END) return;
 
 		if (ModKeyBindings.PLACE_HELD_BLOCK.isKeyDown()) {

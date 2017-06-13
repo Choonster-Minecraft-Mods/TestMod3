@@ -26,7 +26,7 @@ public class MessageOpenLockGui implements IMessage {
 	public MessageOpenLockGui() {
 	}
 
-	public MessageOpenLockGui(BlockPos pos, @Nullable EnumFacing facing) {
+	public MessageOpenLockGui(final BlockPos pos, @Nullable final EnumFacing facing) {
 		this.pos = pos;
 		this.facing = facing;
 		this.hasFacing = facing != null;
@@ -38,7 +38,7 @@ public class MessageOpenLockGui implements IMessage {
 	 * @param buf The buffer
 	 */
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBytes(final ByteBuf buf) {
 		pos = BlockPos.fromLong(buf.readLong());
 		hasFacing = buf.readBoolean();
 
@@ -53,7 +53,7 @@ public class MessageOpenLockGui implements IMessage {
 	 * @param buf The buffer
 	 */
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBytes(final ByteBuf buf) {
 		buf.writeLong(pos.toLong());
 		buf.writeBoolean(hasFacing);
 
@@ -74,7 +74,7 @@ public class MessageOpenLockGui implements IMessage {
 		 */
 		@Nullable
 		@Override
-		public IMessage onMessage(MessageOpenLockGui message, MessageContext ctx) {
+		public IMessage onMessage(final MessageOpenLockGui message, final MessageContext ctx) {
 			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> TestMod3.proxy.displayLockGUI(message.pos, message.facing));
 
 			return null;

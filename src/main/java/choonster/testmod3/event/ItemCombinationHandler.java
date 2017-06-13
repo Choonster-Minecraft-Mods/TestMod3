@@ -118,7 +118,7 @@ public class ItemCombinationHandler {
 	 * @param items The set of items to match
 	 * @return The predicate
 	 */
-	private static Predicate<Entity> isMatchingItemEntity(Set<Item> items) {
+	private static Predicate<Entity> isMatchingItemEntity(final Set<Item> items) {
 		return entity -> entity.isEntityAlive() && entity instanceof EntityItem && items.contains(((EntityItem) entity).getItem().getItem());
 	}
 }

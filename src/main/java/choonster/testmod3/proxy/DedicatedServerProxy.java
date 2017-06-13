@@ -43,7 +43,7 @@ public class DedicatedServerProxy implements IProxy {
 	}
 
 	@Override
-	public IThreadListener getThreadListener(MessageContext context) {
+	public IThreadListener getThreadListener(final MessageContext context) {
 		if (context.side.isServer()) {
 			return context.getServerHandler().player.mcServer;
 		} else {
@@ -52,7 +52,7 @@ public class DedicatedServerProxy implements IProxy {
 	}
 
 	@Override
-	public EntityPlayer getPlayer(MessageContext context) {
+	public EntityPlayer getPlayer(final MessageContext context) {
 		if (context.side.isServer()) {
 			return context.getServerHandler().player;
 		} else {
@@ -61,7 +61,7 @@ public class DedicatedServerProxy implements IProxy {
 	}
 
 	@Override
-	public void displayLockGUI(BlockPos pos, EnumFacing facing) {
+	public void displayLockGUI(final BlockPos pos, final EnumFacing facing) {
 		throw new WrongSideException("Tried to open the Lock GUI on the dedicated server");
 	}
 }

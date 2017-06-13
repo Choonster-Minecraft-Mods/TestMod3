@@ -27,7 +27,7 @@ public class ModPotions {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void registerPotions(RegistryEvent.Register<Potion> event) {
+		public static void registerPotions(final RegistryEvent.Register<Potion> event) {
 			event.getRegistry().registerAll(
 					TEST
 			);

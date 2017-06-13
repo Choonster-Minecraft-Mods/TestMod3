@@ -39,7 +39,7 @@ public class TestMod3 {
 	}
 
 	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
+	public void preInit(final FMLPreInitializationEvent event) {
 		Logger.setLogger(event.getModLog());
 
 		FMLLog.bigWarning("Random UUID: %s", UUID.randomUUID().toString());
@@ -61,7 +61,7 @@ public class TestMod3 {
 	}
 
 	@EventHandler
-	public void init(FMLInitializationEvent event) {
+	public void init(final FMLInitializationEvent event) {
 		ModRecipes.registerRecipes();
 		ModRecipes.removeCraftingRecipes();
 		ModMapGen.registerWorldGenerators();
@@ -73,7 +73,7 @@ public class TestMod3 {
 	}
 
 	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
+	public void postInit(final FMLPostInitializationEvent event) {
 		BlockDumper.dump();
 
 		proxy.postInit();
@@ -82,17 +82,17 @@ public class TestMod3 {
 	}
 
 	@EventHandler
-	public void serverStarting(FMLServerStartingEvent event) {
+	public void serverStarting(final FMLServerStartingEvent event) {
 		ModCommands.registerCommands(event);
 	}
 
 	@EventHandler
-	public void serverStopped(FMLServerStoppedEvent event) {
+	public void serverStopped(final FMLServerStoppedEvent event) {
 		SpawnerDrops.serverStopped();
 	}
 
 	@EventHandler
-	public void missingMappings(FMLMissingMappingsEvent event) {
+	public void missingMappings(final FMLMissingMappingsEvent event) {
 		Remapper.remap(event.get());
 	}
 }

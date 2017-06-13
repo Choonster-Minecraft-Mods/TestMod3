@@ -23,12 +23,12 @@ public class ItemEntityInteractionTest extends ItemTestMod3 {
 		super("entity_interaction_test");
 	}
 
-	private int getInteractCount(ItemStack stack) {
+	private int getInteractCount(final ItemStack stack) {
 		return ItemStackUtils.getOrCreateTagCompound(stack).getInteger("Count");
 	}
 
 	@Override
-	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
+	public boolean itemInteractionForEntity(final ItemStack stack, final EntityPlayer playerIn, final EntityLivingBase target, final EnumHand hand) {
 		if (!playerIn.world.isRemote) {
 			final int count = getInteractCount(stack) + 1;
 			stack.getTagCompound().setInteger("Count", count);
@@ -40,7 +40,7 @@ public class ItemEntityInteractionTest extends ItemTestMod3 {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);
 
 		if (!playerIn.world.isRemote) {

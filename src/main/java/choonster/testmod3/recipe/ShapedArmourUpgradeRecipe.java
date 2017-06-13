@@ -17,20 +17,20 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
  * @author Choonster
  */
 public class ShapedArmourUpgradeRecipe extends ShapedOreRecipe {
-	public ShapedArmourUpgradeRecipe(Block result, Object... recipe) {
+	public ShapedArmourUpgradeRecipe(final Block result, final Object... recipe) {
 		super(result, recipe);
 	}
 
-	public ShapedArmourUpgradeRecipe(Item result, Object... recipe) {
+	public ShapedArmourUpgradeRecipe(final Item result, final Object... recipe) {
 		super(result, recipe);
 	}
 
-	public ShapedArmourUpgradeRecipe(ItemStack result, Object... recipe) {
+	public ShapedArmourUpgradeRecipe(final ItemStack result, final Object... recipe) {
 		super(result, recipe);
 	}
 
 	@Override
-	public ItemStack getCraftingResult(InventoryCrafting inv) {
+	public ItemStack getCraftingResult(final InventoryCrafting inv) {
 		final ItemStack output = super.getCraftingResult(inv); // Get the default output
 
 		if (!output.isEmpty()) {

@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 public class BlockColoredMultiRotatable extends BlockColoredRotatable {
 	public static final IProperty<EnumFaceRotation> FACE_ROTATION = PropertyEnum.create("face_rotation", EnumFaceRotation.class);
 
-	public BlockColoredMultiRotatable(Material materialIn, String blockName) {
+	public BlockColoredMultiRotatable(final Material materialIn, final String blockName) {
 		super(materialIn, blockName);
 	}
 
@@ -36,21 +36,21 @@ public class BlockColoredMultiRotatable extends BlockColoredRotatable {
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
+	public TileEntity createTileEntity(final World world, final IBlockState state) {
 		return new TileEntityColoredMultiRotatable();
 	}
 
 	@Override
-	public TileEntityColoredMultiRotatable getTileEntity(IBlockAccess world, BlockPos pos) {
+	public TileEntityColoredMultiRotatable getTileEntity(final IBlockAccess world, final BlockPos pos) {
 		return (TileEntityColoredMultiRotatable) super.getTileEntity(world, pos);
 	}
 
-	public EnumFaceRotation getFaceRotation(IBlockAccess world, BlockPos pos) {
+	public EnumFaceRotation getFaceRotation(final IBlockAccess world, final BlockPos pos) {
 		final TileEntityColoredMultiRotatable tileEntity = getTileEntity(world, pos);
 		return tileEntity != null ? tileEntity.getFaceRotation() : EnumFaceRotation.UP;
 	}
 
-	public void setFaceRotation(IBlockAccess world, BlockPos pos, EnumFaceRotation faceRotation) {
+	public void setFaceRotation(final IBlockAccess world, final BlockPos pos, final EnumFaceRotation faceRotation) {
 		final TileEntityColoredMultiRotatable tileEntity = getTileEntity(world, pos);
 		if (tileEntity != null) {
 			tileEntity.setFaceRotation(faceRotation);
@@ -58,17 +58,17 @@ public class BlockColoredMultiRotatable extends BlockColoredRotatable {
 	}
 
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public IBlockState getActualState(final IBlockState state, final IBlockAccess worldIn, final BlockPos pos) {
 		return super.getActualState(state, worldIn, pos).withProperty(FACE_ROTATION, getFaceRotation(worldIn, pos));
 	}
 
-	public void rotateFace(World world, BlockPos pos) {
+	public void rotateFace(final World world, final BlockPos pos) {
 		final EnumFaceRotation faceRotation = getFaceRotation(world, pos);
 		setFaceRotation(world, pos, faceRotation.rotateClockwise());
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
 		if (playerIn.isSneaking()) { // If the player is sneaking, rotate the face
 			rotateFace(worldIn, pos);
 			return true;

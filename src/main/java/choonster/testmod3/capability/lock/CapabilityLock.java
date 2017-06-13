@@ -80,7 +80,7 @@ public final class CapabilityLock {
 	 * @return The ILock, or null if there isn't one.
 	 */
 	@Nullable
-	public static ILock getLock(IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
+	public static ILock getLock(final IBlockAccess world, final BlockPos pos, @Nullable final EnumFacing side) {
 		final IBlockState state = world.getBlockState(pos);
 
 		if (state.getBlock().hasTileEntity(state)) {

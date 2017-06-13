@@ -18,15 +18,15 @@ import net.minecraft.world.World;
  * @author Choonster
  */
 public class EntityBlockDetectionArrow extends EntityModArrow {
-	public EntityBlockDetectionArrow(World worldIn) {
+	public EntityBlockDetectionArrow(final World worldIn) {
 		super(worldIn);
 	}
 
-	public EntityBlockDetectionArrow(World worldIn, double x, double y, double z) {
+	public EntityBlockDetectionArrow(final World worldIn, final double x, final double y, final double z) {
 		super(worldIn, x, y, z);
 	}
 
-	public EntityBlockDetectionArrow(World worldIn, EntityLivingBase shooter) {
+	public EntityBlockDetectionArrow(final World worldIn, final EntityLivingBase shooter) {
 		super(worldIn, shooter);
 	}
 
@@ -36,7 +36,7 @@ public class EntityBlockDetectionArrow extends EntityModArrow {
 	}
 
 	@Override
-	protected void onHit(RayTraceResult raytraceResultIn) {
+	protected void onHit(final RayTraceResult raytraceResultIn) {
 		super.onHit(raytraceResultIn);
 
 		if (raytraceResultIn.typeOfHit == RayTraceResult.Type.BLOCK && shootingEntity != null) {

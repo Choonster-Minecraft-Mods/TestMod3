@@ -32,7 +32,7 @@ public class ItemClearer extends ItemTestMod3 {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer player, final EnumHand hand) {
 		final ItemStack heldItem = player.getHeldItem(hand);
 
 		if (!world.isRemote) {
@@ -73,7 +73,7 @@ public class ItemClearer extends ItemTestMod3 {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean hasEffect(ItemStack stack) {
+	public boolean hasEffect(final ItemStack stack) {
 		return stack.getMetadata() == MODE_ALL;
 	}
 }

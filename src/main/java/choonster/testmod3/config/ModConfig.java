@@ -24,7 +24,7 @@ public class ModConfig {
 		public final HUDPos chunkEnergyHUDPos = new HUDPos(0, 0);
 
 		public static class HUDPos {
-			public HUDPos(int x, int y) {
+			public HUDPos(final int x, final int y) {
 				this.x = x;
 				this.y = y;
 			}
@@ -46,7 +46,7 @@ public class ModConfig {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
+		public static void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent event) {
 			if (event.getModID().equals(TestMod3.MODID)) {
 				ConfigManager.sync(TestMod3.MODID, Config.Type.INSTANCE);
 			}
