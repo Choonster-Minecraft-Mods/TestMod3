@@ -6,7 +6,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Set;
@@ -82,7 +81,7 @@ public class TileEntityFluidTankRestricted extends TileEntityFluidTank {
 	}
 
 	@Override
-	public boolean hasCapability(@Nonnull final Capability<?> capability, @Nullable final EnumFacing facing) {
+	public boolean hasCapability(final Capability<?> capability, @Nullable final EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			return isFacingEnabled(facing);
 		}
@@ -92,7 +91,7 @@ public class TileEntityFluidTankRestricted extends TileEntityFluidTank {
 
 	@Nullable
 	@Override
-	public <T> T getCapability(@Nonnull final Capability<T> capability, @Nullable final EnumFacing facing) {
+	public <T> T getCapability(final Capability<T> capability, @Nullable final EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			if (isFacingEnabled(facing)) {
 				return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tank);

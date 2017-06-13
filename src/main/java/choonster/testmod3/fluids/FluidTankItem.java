@@ -6,7 +6,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
@@ -40,7 +39,6 @@ public class FluidTankItem extends FluidTank implements IFluidHandlerItem {
 	 * for their filled and empty states.
 	 * May be an empty item if the container was drained and is consumable.
 	 */
-	@Nonnull
 	@Override
 	public ItemStack getContainer() {
 		return container;
