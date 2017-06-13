@@ -93,6 +93,7 @@ public class BlockVariants extends BlockTestMod3 {
 			this.name = name;
 		}
 
+		@Override
 		public int getMeta() {
 			return meta;
 		}

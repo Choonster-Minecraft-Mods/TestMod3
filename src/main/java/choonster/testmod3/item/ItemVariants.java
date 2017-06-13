@@ -56,6 +56,7 @@ public class ItemVariants extends ItemTestMod3 {
 			this.name = name;
 		}
 
+		@Override
 		public int getMeta() {
 			return meta;
 		}

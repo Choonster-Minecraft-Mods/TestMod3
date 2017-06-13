@@ -13,6 +13,7 @@ import mcp.mobius.waila.api.WailaPlugin;
 @WailaPlugin
 public class WailaCompat implements IWailaPlugin {
 
+	@Override
 	public void register(final IWailaRegistrar registrar) {
 		registrar.registerBodyProvider(new HUDHandlerRotatable(BlockColoredRotatable.FACING), BlockColoredRotatable.class);
 		registrar.registerBodyProvider(new HUDHandlerMultiRotatable(BlockColoredMultiRotatable.FACE_ROTATION), BlockColoredMultiRotatable.class);
