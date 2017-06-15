@@ -1,0 +1,16 @@
+[
+	{
+		"name": "OAK_LOG",
+		"ingredient": {
+			"item": "minecraft:log",
+			"data": 0
+		}
+	},
+	{
+		"name": "BUCKET_OF_STATIC_GAS",
+		"ingredient": {
+			"type": "testmod3:filled_universal_bucket",
+			"fluid": "static_gas"
+		}
+	}
+]

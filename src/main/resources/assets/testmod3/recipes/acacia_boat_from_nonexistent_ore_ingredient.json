@@ -1,0 +1,19 @@
+{
+	"_comment": [
+		"Craft an Acacia Boat from a non-existent Ore Ingredient",
+		"http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2751505-ore-dictionary-dependant-item-registration"
+	],
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"F"
+	],
+	"key": {
+		"F": {
+			"type": "forge:ore_dict",
+			"ore": "fooBar"
+		}
+	},
+	"result": {
+		"item": "minecraft:acacia_boat"
+	}
+}

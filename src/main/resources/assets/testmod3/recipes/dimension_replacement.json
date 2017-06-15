@@ -1,0 +1,19 @@
+{
+	"_comment": [
+		"Craft a Dimension Replacement item from a Subscripts item and a Superscripts item"
+	],
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "testmod3:subscripts",
+			"data": 0
+		},
+		{
+			"item": "testmod3:superscripts",
+			"data": 0
+		}
+	],
+	"result": {
+		"item": "testmod3:dimension_replacement"
+	}
+}

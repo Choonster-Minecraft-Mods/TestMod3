@@ -1,0 +1,21 @@
+{
+	"_comment": [
+		"Cut an Oak Log into two Oak Planks with a Cutting Axe, damaging the axe."
+	],
+	"type": "minecraft:crafting_shapeless",
+	"group": "minecraft:planks",
+	"ingredients": [
+		{
+			"item": "testmod3:wooden_axe",
+			"data": 32767
+		},
+		{
+			"item": "#OAK_LOG"
+		}
+	],
+	"result": {
+		"item": "minecraft:planks",
+		"data": 0,
+		"count": 2
+	}
+}

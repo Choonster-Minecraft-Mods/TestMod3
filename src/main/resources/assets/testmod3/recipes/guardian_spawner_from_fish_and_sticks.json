@@ -1,0 +1,33 @@
+{
+	"_comment": [
+		"Craft a Guardian Spawner from a Fish surrounded by Sticks",
+		"http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2424619-help-needed-creating-non-pig-mob-spawners"
+	],
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"SSS",
+		"SFS",
+		"SSS"
+	],
+	"key": {
+		"S": {
+			"type": "forge:ore_dict",
+			"ore": "stickWood"
+		},
+		"F": {
+			"item": "minecraft:fish",
+			"data": 0
+		}
+	},
+	"result": {
+		"item": "minecraft:mob_spawner",
+		"nbt": {
+			"BlockEntityTag": {
+				"SpawnData": {
+					"id": "minecraft:guardian"
+				},
+				"SpawnPotentials": [ ]
+			}
+		}
+	}
+}

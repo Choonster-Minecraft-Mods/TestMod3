@@ -1,0 +1,20 @@
+{
+	"_comment": [
+		"Craft Cobblestone from three Buckets of Static Gas"
+	],
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "#BUCKET_OF_STATIC_GAS"
+		},
+		{
+			"item": "#BUCKET_OF_STATIC_GAS"
+		},
+		{
+			"item": "#BUCKET_OF_STATIC_GAS"
+		}
+	],
+	"result": {
+		"item": "minecraft:cobblestone"
+	}
+}

@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package choonster.testmod3.recipe;
+package choonster.testmod3.crafting.ingredient;
 
 import mcp.MethodsReturnNonnullByDefault;
 

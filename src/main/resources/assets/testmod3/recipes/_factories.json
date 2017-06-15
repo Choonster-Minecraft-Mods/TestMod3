@@ -1,0 +1,11 @@
+{
+	"ingredients": {
+		"mob_spawner": "choonster.testmod3.crafting.ingredient.MobSpawnerIngredientFactory",
+		"filled_universal_bucket": "choonster.testmod3.crafting.ingredient.FilledUniversalBucketIngredientFactory",
+		"item_nbt": "choonster.testmod3.crafting.ingredient.NBTIngredient$Factory"
+	},
+	"recipes": {
+		"armour_upgrade_shaped": "choonster.testmod3.crafting.recipe.ShapedArmourUpgradeRecipe$Factory",
+		"cutting_shapeless": "choonster.testmod3.crafting.recipe.ShapelessCuttingRecipe$Factory"
+	}
+}

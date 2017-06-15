@@ -1,36 +1,16 @@
 package choonster.testmod3.init;
 
-import choonster.testmod3.Logger;
-import choonster.testmod3.recipe.ShapedArmourUpgradeRecipe;
-import choonster.testmod3.recipe.ShapelessCuttingRecipe;
-import choonster.testmod3.recipe.ShapelessNBTRecipe;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockPlanks;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.RecipeFireworks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.potion.PotionType;
-import net.minecraftforge.common.ForgeModContainer;
-import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.RecipeSorter;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
-
-import java.util.Iterator;
-import java.util.List;
-
-import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
-import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPELESS;
 
 /**
  * Adds and removes recipes.
@@ -40,51 +20,15 @@ public class ModRecipes {
 	 * Add this mod's recipes.
 	 */
 	public static void registerRecipes() {
-		registerRecipeClasses();
-		addCraftingRecipes();
+		addSmeltingRecipes();
 		addBrewingRecipes();
 	}
 
 	/**
-	 * Register this mod's recipe classes.
+	 * Add this mod's smelting recipes.
 	 */
-	private static void registerRecipeClasses() {
-		/* FIXME: Register the recipe classes with the new recipe registry
-		RecipeSorter.register("testmod3:shapelesscutting", ShapelessCuttingRecipe.class, SHAPELESS, "after:minecraft:shapeless");
-		RecipeSorter.register("testmod3:shapedarmourupgrade", ShapedArmourUpgradeRecipe.class, SHAPED, "after:forge:shapedore before:minecraft:shapeless");
-		RecipeSorter.register("testmod3:shapelessnbt", ShapelessNBTRecipe.class, SHAPELESS, "after:forge:shapelessore");
-		*/
-	}
-
-	/**
-	 * Add this mod's crafting recipes.
-	 */
-	private static void addCraftingRecipes() {
-		/* FIXME: Convert recipes to JSON
-		GameRegistry.addRecipe(new ShapelessCuttingRecipe(new ItemStack(Blocks.PLANKS, 2, BlockPlanks.EnumType.OAK.getMetadata()), new ItemStack(Items.WOODEN_AXE, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.LOG, 1, BlockPlanks.EnumType.OAK.getMetadata())));
-		GameRegistry.addShapelessRecipe(new ItemStack(Blocks.PLANKS, 2, BlockPlanks.EnumType.OAK.getMetadata()), new ItemStack(ModItems.WOODEN_AXE, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.LOG, 1, BlockPlanks.EnumType.OAK.getMetadata()));
-
-		// Upgrade an Iron Helment to a Golden Helmet while preserving its damage - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2513998-help-needed-creating-crafting-recipe-with-damaged
-		GameRegistry.addRecipe(new ShapedArmourUpgradeRecipe(Items.GOLDEN_HELMET, "AAA", "ABA", "AAA", 'A', Blocks.GOLD_BLOCK, 'B', new ItemStack(Items.IRON_HELMET, 1, OreDictionary.WILDCARD_VALUE)));
-
-		// Recipe for Guardian Spawner - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2424619-help-needed-creating-non-pig-mob-spawners
-		final ItemStack guardianSpawner = new ItemStack(Blocks.MOB_SPAWNER);
-		final NBTTagCompound tileEntityData = guardianSpawner.getOrCreateSubCompound("BlockEntityTag");
-		final NBTTagCompound spawnData = new NBTTagCompound();
-		spawnData.setString("id", "Guardian");
-		tileEntityData.setTag("SpawnData", spawnData);
-		tileEntityData.setTag("SpawnPotentials", new NBTTagList());
-		GameRegistry.addRecipe(guardianSpawner, "SSS", "SFS", "SSS", 'S', Items.STICK, 'F', Items.FISH);
-
-		final ItemStack bucketOfStaticGas = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ModFluids.STATIC_GAS);
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.COBBLESTONE), bucketOfStaticGas, bucketOfStaticGas, bucketOfStaticGas));
-
-		GameRegistry.addShapelessRecipe(new ItemStack(ModItems.DIMENSION_REPLACEMENT), ModItems.SUBSCRIPTS, ModItems.SUPERSCRIPTS);
+	private static void addSmeltingRecipes() {
 		GameRegistry.addSmelting(ModItems.SUBSCRIPTS, new ItemStack(ModItems.DIMENSION_REPLACEMENT), 0.35f);
-
-		// Recipe that uses a non-existent ore name - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2751505-ore-dictionary-dependant-item-registration
-		GameRegistry.addRecipe(new ShapedOreRecipe(Items.ACACIA_BOAT, "F", 'F', "fooBar"));
-		*/
 	}
 
 	/**

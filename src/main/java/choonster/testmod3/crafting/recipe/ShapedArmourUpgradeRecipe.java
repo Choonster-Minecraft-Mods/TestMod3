@@ -1,13 +1,19 @@
-package choonster.testmod3.recipe;
+package choonster.testmod3.crafting.recipe;
 
-import net.minecraft.block.Block;
+import com.google.gson.JsonObject;
 import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.IRecipeFactory;
+import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+
+import javax.annotation.Nullable;
 
 /**
  * A shaped recipe class that copies the item damage of the first armour ingredient to the output. The damage is clamped to the output item's damage range.
@@ -17,17 +23,10 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
  *
  * @author Choonster
  */
+@SuppressWarnings("unused")
 public class ShapedArmourUpgradeRecipe extends ShapedOreRecipe {
-	public ShapedArmourUpgradeRecipe(final ResourceLocation group, final Block result, final Object... recipe) {
-		super(group, result, recipe);
-	}
-
-	public ShapedArmourUpgradeRecipe(final ResourceLocation group, final Item result, final Object... recipe) {
-		super(group, result, recipe);
-	}
-
-	public ShapedArmourUpgradeRecipe(final ResourceLocation group, final ItemStack result, final Object... recipe) {
-		super(group, result, recipe);
+	public ShapedArmourUpgradeRecipe(@Nullable final ResourceLocation group, final ItemStack result, final CraftingHelper.ShapedPrimer primer) {
+		super(group, result, primer);
 	}
 
 	@Override
@@ -48,5 +47,22 @@ public class ShapedArmourUpgradeRecipe extends ShapedOreRecipe {
 		}
 
 		return output; // Return the modified output
+	}
+
+	@Override
+	public String getGroup() {
+		return group == null ? "" : group.toString();
+	}
+
+	public static class Factory implements IRecipeFactory {
+
+		@Override
+		public IRecipe parse(final JsonContext context, final JsonObject json) {
+			final String group = JsonUtils.getString(json, "group", "");
+			final CraftingHelper.ShapedPrimer primer = RecipeUtil.parseShaped(context, json);
+			final ItemStack result = CraftingHelper.getItemStack(JsonUtils.getJsonObject(json, "result"), context);
+
+			return new ShapedArmourUpgradeRecipe(group.isEmpty() ? null : new ResourceLocation(group), result, primer);
+		}
 	}
 }
