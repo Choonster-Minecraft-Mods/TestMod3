@@ -46,7 +46,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 	@SuppressWarnings("deprecation")
 	@Override
 	public MapColor getMapColor(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
-		return MapColor.func_193558_a(state.getValue(getVariantProperty()));
+		return MapColor.getBlockColor(state.getValue(getVariantProperty()));
 	}
 
 	@Override
