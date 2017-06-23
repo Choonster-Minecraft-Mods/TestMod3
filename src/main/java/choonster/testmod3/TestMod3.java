@@ -49,7 +49,6 @@ public class TestMod3 {
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 
 		ModMessages.registerMessages();
-		ModBlocks.registerTileEntities();
 		ModItems.initialiseItems();
 		ModFluids.registerFluidContainers();
 		ModMapGen.registerMapGen();

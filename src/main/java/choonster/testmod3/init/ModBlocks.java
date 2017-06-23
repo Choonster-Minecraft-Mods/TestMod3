@@ -216,6 +216,8 @@ public class ModBlocks {
 				registry.register(item.setRegistryName(registryName));
 				ITEM_BLOCKS.add(item);
 			}
+
+			registerTileEntities();
 		}
 	}
 
