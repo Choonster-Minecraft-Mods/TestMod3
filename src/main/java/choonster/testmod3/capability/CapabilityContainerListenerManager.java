@@ -19,7 +19,6 @@ import java.util.function.Function;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber
 public class CapabilityContainerListenerManager {
 	/**
 	 * The {@link CapabilityContainerListener} factories.
