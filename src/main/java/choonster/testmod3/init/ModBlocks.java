@@ -221,7 +221,7 @@ public class ModBlocks {
 		}
 	}
 
-	public static void registerTileEntities() {
+	private static void registerTileEntities() {
 		registerTileEntity(TileEntitySurvivalCommandBlock.class, "survival_command_block", "SurvivalCommandBlock");
 		registerTileEntity(TileEntityFluidTank.class, "fluid_tank", "FluidTank");
 		registerTileEntity(TileEntityColoredRotatable.class, "colored_rotatable", "ColoredRotatable");
