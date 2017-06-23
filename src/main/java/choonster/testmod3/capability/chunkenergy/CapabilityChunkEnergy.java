@@ -113,7 +113,7 @@ public class CapabilityChunkEnergy {
 		return getChunkEnergy(chunk.getWorld(), chunk.getPos());
 	}
 
-	@Mod.EventBusSubscriber
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	@SuppressWarnings("unused")
 	private static class EventHandler {
 

@@ -1,5 +1,6 @@
 package choonster.testmod3.event;
 
+import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModLootTables;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
@@ -12,7 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 public class LootTableEventHandler {
 
 	/**

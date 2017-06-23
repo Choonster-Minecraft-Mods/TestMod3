@@ -128,7 +128,7 @@ public final class CapabilityPigSpawner {
 	/**
 	 * Event handler for the {@link IPigSpawner} capability.
 	 */
-	@Mod.EventBusSubscriber
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	private static class EventHandler {
 
 		/**

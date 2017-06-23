@@ -25,7 +25,7 @@ public class ModBiomes {
 			.setRainDisabled()
 	);
 
-	@Mod.EventBusSubscriber
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	public static class RegistrationHandler {
 		/**
 		 * Register this mod's {@link Biome}s.

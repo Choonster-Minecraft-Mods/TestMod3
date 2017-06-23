@@ -19,7 +19,7 @@ public class ModPotions {
 
 	public static final PotionTestMod3 TEST = new PotionTestMod3(false, 2, 2, 2, "test");
 
-	@Mod.EventBusSubscriber
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	public static class RegistrationHandler {
 		/**
 		 * Register this mod's {@link Potion}s.

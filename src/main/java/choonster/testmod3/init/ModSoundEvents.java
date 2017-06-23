@@ -37,7 +37,7 @@ public class ModSoundEvents {
 		return new SoundEvent(soundID).setRegistryName(soundID);
 	}
 
-	@Mod.EventBusSubscriber
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	public static class RegistrationHandler {
 		@SubscribeEvent
 		public static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {

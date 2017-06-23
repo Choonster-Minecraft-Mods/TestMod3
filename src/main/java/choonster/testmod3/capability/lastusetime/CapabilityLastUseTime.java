@@ -111,7 +111,7 @@ public final class CapabilityLastUseTime {
 	/**
 	 * Event handler for the {@link ILastUseTime} capability.
 	 */
-	@Mod.EventBusSubscriber
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	public static class EventHandler {
 		/**
 		 * Update the {@link ILastUseTime} of the player's held item when they right click.

@@ -1,5 +1,6 @@
 package choonster.testmod3.client.event;
 
+import choonster.testmod3.TestMod3;
 import choonster.testmod3.client.gui.GuiChunkEnergyHUD;
 import choonster.testmod3.init.ModItems;
 import net.minecraft.client.Minecraft;
@@ -14,7 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber(Side.CLIENT)
+@Mod.EventBusSubscriber(value = Side.CLIENT, modid = TestMod3.MODID)
 public class HUDEventHandler {
 	private static final Minecraft minecraft = Minecraft.getMinecraft();
 	private static final GuiChunkEnergyHUD chunkEnergyHUD = new GuiChunkEnergyHUD();

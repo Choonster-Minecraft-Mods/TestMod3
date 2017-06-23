@@ -100,7 +100,7 @@ public final class CapabilityMaxHealth {
 	 * Event handler for the {@link IMaxHealth} capability.
 	 */
 	@SuppressWarnings("unused")
-	@Mod.EventBusSubscriber
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	private static class EventHandler {
 
 		/**

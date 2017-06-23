@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber(Side.CLIENT)
+@Mod.EventBusSubscriber(value = Side.CLIENT, modid = TestMod3.MODID)
 public class HiddenBlockManager {
 	private static volatile boolean lastCheckResult = false;
 	private static boolean toggled = false;

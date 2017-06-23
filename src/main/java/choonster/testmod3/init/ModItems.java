@@ -162,7 +162,7 @@ public class ModItems {
 		DIMENSION_REPLACEMENT.addReplacement(DimensionType.THE_END, new ItemStack(Items.ENDER_PEARL));
 	}
 
-	@Mod.EventBusSubscriber
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	public static class RegistrationHandler {
 		public static final Set<Item> ITEMS = new HashSet<>();
 

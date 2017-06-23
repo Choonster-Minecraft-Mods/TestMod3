@@ -1,5 +1,6 @@
 package choonster.testmod3.client.model;
 
+import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.*;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.init.ModFluids;
@@ -36,7 +37,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.ToIntFunction;
 
-@Mod.EventBusSubscriber(Side.CLIENT)
+@Mod.EventBusSubscriber(value = Side.CLIENT, modid = TestMod3.MODID)
 public class ModModelManager {
 	public static final ModModelManager INSTANCE = new ModModelManager();
 

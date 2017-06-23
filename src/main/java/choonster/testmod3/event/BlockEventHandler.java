@@ -1,5 +1,6 @@
 package choonster.testmod3.event;
 
+import choonster.testmod3.TestMod3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -12,7 +13,7 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 public class BlockEventHandler {
 
 	/**

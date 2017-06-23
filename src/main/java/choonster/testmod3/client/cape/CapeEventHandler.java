@@ -1,12 +1,13 @@
 package choonster.testmod3.client.cape;
 
+import choonster.testmod3.TestMod3;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod.EventBusSubscriber(Side.CLIENT)
+@Mod.EventBusSubscriber(value = Side.CLIENT, modid = TestMod3.MODID)
 public class CapeEventHandler {
 	@SubscribeEvent
 	public static void entityJoinWorld(final EntityJoinWorldEvent event) {

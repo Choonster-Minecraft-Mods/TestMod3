@@ -37,7 +37,7 @@ public class ModConfig {
 		}
 	}
 
-	@Mod.EventBusSubscriber
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	private static class EventHandler {
 
 		/**

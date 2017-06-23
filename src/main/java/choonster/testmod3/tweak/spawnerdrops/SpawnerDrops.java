@@ -1,5 +1,6 @@
 package choonster.testmod3.tweak.spawnerdrops;
 
+import choonster.testmod3.TestMod3;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.block.state.IBlockState;
@@ -29,7 +30,7 @@ import java.util.Map;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 public class SpawnerDrops {
 
 	/**

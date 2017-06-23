@@ -78,7 +78,7 @@ public class ModPotionTypes {
 		return new PotionType(potionName.toString(), potionEffect).setRegistryName(potionTypeName);
 	}
 
-	@Mod.EventBusSubscriber
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	public static class RegistrationHandler {
 		/**
 		 * Register this mod's {@link PotionType}s.

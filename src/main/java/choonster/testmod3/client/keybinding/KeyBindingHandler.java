@@ -1,5 +1,6 @@
 package choonster.testmod3.client.keybinding;
 
+import choonster.testmod3.TestMod3;
 import choonster.testmod3.client.init.ModKeyBindings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -27,7 +28,7 @@ import java.util.Collection;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber(Side.CLIENT)
+@Mod.EventBusSubscriber(value = Side.CLIENT, modid = TestMod3.MODID)
 public class KeyBindingHandler {
 	private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 

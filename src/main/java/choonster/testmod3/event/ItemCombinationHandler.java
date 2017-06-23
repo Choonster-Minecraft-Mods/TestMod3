@@ -1,5 +1,6 @@
 package choonster.testmod3.event;
 
+import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModItems;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.entity.Entity;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 public class ItemCombinationHandler {
 	/**
 	 * The input items.

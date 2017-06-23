@@ -1,6 +1,7 @@
 package choonster.testmod3.event;
 
 import choonster.testmod3.Logger;
+import choonster.testmod3.TestMod3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.util.IThreadListener;
@@ -18,7 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber(Side.CLIENT)
+@Mod.EventBusSubscriber(value = Side.CLIENT, modid = TestMod3.MODID)
 public class NetworkEventHandler {
 	/**
 	 * Prints server connection info when the client connects to a server.

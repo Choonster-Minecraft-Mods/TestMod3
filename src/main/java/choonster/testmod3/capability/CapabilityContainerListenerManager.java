@@ -1,5 +1,6 @@
 package choonster.testmod3.capability;
 
+import choonster.testmod3.TestMod3;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
@@ -34,7 +35,7 @@ public class CapabilityContainerListenerManager {
 		containerListenerFactories.add(factory);
 	}
 
-	@Mod.EventBusSubscriber
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	@SuppressWarnings("unused")
 	private static class EventHandler {
 

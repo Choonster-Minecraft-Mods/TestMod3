@@ -1,5 +1,6 @@
 package choonster.testmod3.event;
 
+import choonster.testmod3.TestMod3;
 import choonster.testmod3.util.Constants;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -20,7 +21,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 public class PlayerEventHandler {
 
 	/**

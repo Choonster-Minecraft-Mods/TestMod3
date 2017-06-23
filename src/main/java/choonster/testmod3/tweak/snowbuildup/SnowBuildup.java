@@ -1,5 +1,6 @@
 package choonster.testmod3.tweak.snowbuildup;
 
+import choonster.testmod3.TestMod3;
 import net.minecraft.block.BlockSnow;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -21,7 +22,7 @@ import java.util.Random;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 public class SnowBuildup {
 
 	/**
