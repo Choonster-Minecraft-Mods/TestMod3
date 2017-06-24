@@ -83,9 +83,9 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 	}
 
 	/**
-	 * Copy of {@link BlockCommandBlock#updateTick} that calls {@link BlockSurvivalCommandBlock#trigger} and
-	 * {@link BlockSurvivalCommandBlock#propagateUpdate} rather than {@link BlockCommandBlock#func_193387_a} and
-	 * {@link BlockCommandBlock#func_193386_c}, removing the checks for the vanilla Command Block instances.
+	 * Copy of {@link BlockCommandBlock#updateTick} that calls {@link BlockSurvivalCommandBlock#execute} and
+	 * {@link BlockSurvivalCommandBlock#executeChain} rather than {@link BlockCommandBlock#execute} and
+	 * {@link BlockCommandBlock#executeChain}, removing the checks for the vanilla Command Block instances.
 	 *
 	 * @param world The World
 	 * @param pos   The position
@@ -108,7 +108,7 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 					tileEntityCommandBlock.setConditionMet();
 
 					if (conditionMet) {
-						this.trigger(state, world, pos, commandBlockLogic, hasCommand);
+						this.execute(state, world, pos, commandBlockLogic, hasCommand);
 					} else if (tileEntityCommandBlock.isConditional()) {
 						commandBlockLogic.setSuccessCount(0);
 					}
@@ -118,7 +118,7 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 					}
 				} else if (mode == TileEntityCommandBlock.Mode.REDSTONE) {
 					if (conditionMet) {
-						this.trigger(state, world, pos, commandBlockLogic, hasCommand);
+						this.execute(state, world, pos, commandBlockLogic, hasCommand);
 					} else if (tileEntityCommandBlock.isConditional()) {
 						commandBlockLogic.setSuccessCount(0);
 					}
@@ -132,8 +132,8 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 	/**
 	 * Trigger the Command Block and propagate the update to neighbouring Command Blocks.
 	 * <p>
-	 * Copy of {@link BlockCommandBlock#func_193387_a} that calls {@link BlockSurvivalCommandBlock#propagateUpdate}
-	 * instead of {@link BlockCommandBlock#func_193386_c}.
+	 * Copy of {@link BlockCommandBlock#execute} that calls {@link BlockSurvivalCommandBlock#executeChain}
+	 * instead of {@link BlockCommandBlock#executeChain}.
 	 *
 	 * @param state             The block state
 	 * @param world             The World
@@ -141,14 +141,14 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 	 * @param commandBlockLogic The Command Block Logic
 	 * @param hasCommand        Does the Command Block have a command?
 	 */
-	private void trigger(final IBlockState state, final World world, final BlockPos pos, final CommandBlockBaseLogic commandBlockLogic, final boolean hasCommand) {
+	private void execute(final IBlockState state, final World world, final BlockPos pos, final CommandBlockBaseLogic commandBlockLogic, final boolean hasCommand) {
 		if (hasCommand) {
 			commandBlockLogic.trigger(world);
 		} else {
 			commandBlockLogic.setSuccessCount(0);
 		}
 
-		propagateUpdate(world, pos, state.getValue(FACING));
+		executeChain(world, pos, state.getValue(FACING));
 	}
 
 	/**
@@ -158,7 +158,7 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 	 * @param pos    This block's position
 	 * @param facing The direction of the neighbour to update
 	 */
-	private static void propagateUpdate(final World world, final BlockPos pos, EnumFacing facing) {
+	private static void executeChain(final World world, final BlockPos pos, EnumFacing facing) {
 		final BlockPos.MutableBlockPos neighbourPos = new BlockPos.MutableBlockPos(pos);
 		final GameRules gameRules = world.getGameRules();
 
