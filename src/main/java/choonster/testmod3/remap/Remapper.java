@@ -1,15 +1,18 @@
 package choonster.testmod3.remap;
 
 import choonster.testmod3.Logger;
+import choonster.testmod3.TestMod3;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
-import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.IForgeRegistry;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.RegistryEvent.MissingMappings.Mapping;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 
@@ -22,13 +25,13 @@ import java.util.function.Predicate;
  *
  * @author Choonster
  */
-public final class Remapper {
+final class Remapper<T extends IForgeRegistryEntry<T>> {
 	private static final Marker MARKER = MarkerManager.getMarker("Remapper").addParents(Logger.MOD_MARKER);
 
 	/**
-	 * A list of remapping functions that return {@code true} if they took an action for the {@link MissingMapping}.
+	 * A list of remapping functions that return {@code true} if they took an action for the {@link Mapping<T>}.
 	 */
-	private static final List<Predicate<MissingMapping>> remappingFunctions = ImmutableList.of(Remapper::remapCustomName);
+	private final List<Predicate<Mapping<T>>> remappingFunctions = ImmutableList.of(this::remapCustomName);
 
 	private Remapper() {
 	}
@@ -38,18 +41,15 @@ public final class Remapper {
 	 *
 	 * @param missingMappings This mod's missing mappings
 	 */
-	public static void remap(final List<MissingMapping> missingMappings) {
-		for (final MissingMapping missingMapping : missingMappings) { // For each missing mapping,
-			Logger.info(MARKER, "Trying to remap %s", missingMapping.resourceLocation);
+	private void remapAll(final List<Mapping<T>> missingMappings) {
+		for (final Mapping<T> missingMapping : missingMappings) { // For each missing mapping,
+			Logger.info(MARKER, "Trying to remap %s", missingMapping.key);
 
-			for (final Predicate<MissingMapping> remappingFunction : remappingFunctions) { // For each remapping function
-				if (remappingFunction.test(missingMapping)) { // If the function took an action,
-					break; // Break from the inner loop
-				}
-			}
+			// Try to apply all remapping functions until one performs an action.
+			final boolean remapped = remappingFunctions.stream().anyMatch(mappingPredicate -> mappingPredicate.test(missingMapping));
 
-			if (missingMapping.getAction() == FMLMissingMappingsEvent.Action.DEFAULT) {
-				Logger.info(MARKER, "Couldn't remap %s", missingMapping.resourceLocation);
+			if (!remapped) {
+				Logger.info(MARKER, "Couldn't remap %s", missingMapping.key);
 			}
 		}
 	}
@@ -61,28 +61,13 @@ public final class Remapper {
 	 * @param registryName   The registry name to remap to
 	 * @return True if the remapping was successful
 	 */
-	private static boolean tryRemap(final MissingMapping missingMapping, final ResourceLocation registryName) {
-		switch (missingMapping.type) {
-			case BLOCK:
-				final IForgeRegistry<Block> blockRegistry = ForgeRegistries.BLOCKS;
-
-				if (blockRegistry.containsKey(registryName)) {
-					Logger.info(MARKER, "Remapped block %s to %s", missingMapping.resourceLocation, registryName);
-					missingMapping.remap(blockRegistry.getValue(registryName));
-					return true;
-				}
-
-				break;
-			case ITEM:
-				final IForgeRegistry<Item> itemRegistry = ForgeRegistries.ITEMS;
-
-				if (itemRegistry.containsKey(registryName)) {
-					Logger.info(MARKER, "Remapped item %s to %s", missingMapping.resourceLocation, registryName);
-					missingMapping.remap(itemRegistry.getValue(registryName));
-					return true;
-				}
-
-				break;
+	private boolean tryRemap(final Mapping<T> missingMapping, final ResourceLocation registryName) {
+		final IForgeRegistry<T> registry = missingMapping.registry;
+		final T value = registry.getValue(registryName);
+		if (registry.containsKey(registryName) && value != null) {
+			Logger.info(MARKER, "Remapped %s %s to %s", registry.getRegistrySuperType().getSimpleName(), missingMapping.key, registryName);
+			missingMapping.remap(value);
+			return true;
 		}
 
 		return false;
@@ -115,14 +100,31 @@ public final class Remapper {
 	 * @param missingMapping The missing mapping
 	 * @return True if the missing mapping was remapped
 	 */
-	private static boolean remapCustomName(final MissingMapping missingMapping) {
-		final String missingPath = missingMapping.resourceLocation.getResourcePath();
+	private boolean remapCustomName(final Mapping<T> missingMapping) {
+		final String missingPath = missingMapping.key.getResourcePath();
 
 		if (!customNames.containsKey(missingPath)) return false;
 
 		final String newPath = customNames.get(missingPath);
-		final ResourceLocation newRegistryName = new ResourceLocation(missingMapping.resourceLocation.getResourceDomain(), newPath);
+		final ResourceLocation newRegistryName = new ResourceLocation(missingMapping.key.getResourceDomain(), newPath);
 
 		return tryRemap(missingMapping, newRegistryName);
+	}
+
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
+	@SuppressWarnings("unused")
+	private static class EventHandler {
+		private static final Remapper<Block> blockRemapper = new Remapper<>();
+		private static final Remapper<Item> itemRemapper = new Remapper<>();
+
+		@SubscribeEvent
+		public static void missingBlockMappings(final RegistryEvent.MissingMappings<Block> event) {
+			blockRemapper.remapAll(event.getMappings());
+		}
+
+		@SubscribeEvent
+		public static void missingItemMappings(final RegistryEvent.MissingMappings<Item> event) {
+			itemRemapper.remapAll(event.getMappings());
+		}
 	}
 }

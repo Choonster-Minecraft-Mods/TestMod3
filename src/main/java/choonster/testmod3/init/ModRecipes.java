@@ -52,9 +52,9 @@ public class ModRecipes {
 	 * @param ingredient         The ingredient
 	 */
 	private static void addStandardConversionRecipes(final PotionType standardPotionType, final PotionType longPotionType, final PotionType strongPotionType, final Item ingredient) {
-		PotionHelper.func_193357_a(PotionTypes.AWKWARD, ingredient, standardPotionType);
-		PotionHelper.func_193357_a(standardPotionType, Items.REDSTONE, longPotionType);
-		PotionHelper.func_193357_a(standardPotionType, Items.GLOWSTONE_DUST, strongPotionType);
+		PotionHelper.addMix(PotionTypes.AWKWARD, ingredient, standardPotionType);
+		PotionHelper.addMix(standardPotionType, Items.REDSTONE, longPotionType);
+		PotionHelper.addMix(standardPotionType, Items.GLOWSTONE_DUST, strongPotionType);
 	}
 
 	/**

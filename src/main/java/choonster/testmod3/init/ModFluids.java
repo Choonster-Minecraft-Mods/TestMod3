@@ -16,7 +16,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -125,10 +125,12 @@ public class ModFluids {
 				itemBlock.setRegistryName(block.getRegistryName());
 				registry.register(itemBlock);
 			}
+
+			registerFluidContainers();
 		}
 	}
 
-	public static void registerFluidContainers() {
+	private static void registerFluidContainers() {
 		registerTank(FluidRegistry.WATER);
 		registerTank(FluidRegistry.LAVA);
 

@@ -52,7 +52,7 @@ dependencies {
     runtime "mezz.jei:jei_${mc_version}:${jei_version}"
     compile "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
     deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}_${mc_version}"
-    deobfCompile "com.github.PrinceOfAmber:Baubles:${baubles_version}" // Unofficial 1.12 fork
+    deobfCompile "com.github.maruohon:Baubles:${baubles_version}" // Unofficial 1.12 fork
 }
 
 shadowJar {

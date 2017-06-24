@@ -22,7 +22,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
-import net.minecraftforge.fml.common.registry.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -144,7 +144,7 @@ public class ModItems {
 	/**
 	 * Initialise this mod's {@link Item}s with any post-registration data.
 	 */
-	public static void initialiseItems() {
+	private static void initialiseItems() {
 		ToolMaterials.TOOL_MATERIAL_GLOWSTONE.setRepairItem(new ItemStack(Items.GLOWSTONE_DUST));
 		ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT.setRepairItem(new ItemStack(ARROW));
 
@@ -233,6 +233,8 @@ public class ModItems {
 				registry.register(item);
 				ITEMS.add(item);
 			}
+
+			initialiseItems();
 		}
 	}
 }

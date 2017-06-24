@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
-import net.minecraftforge.fml.common.registry.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -222,21 +222,17 @@ public class ModBlocks {
 	}
 
 	private static void registerTileEntities() {
-		registerTileEntity(TileEntitySurvivalCommandBlock.class, "survival_command_block", "SurvivalCommandBlock");
-		registerTileEntity(TileEntityFluidTank.class, "fluid_tank", "FluidTank");
-		registerTileEntity(TileEntityColoredRotatable.class, "colored_rotatable", "ColoredRotatable");
-		registerTileEntity(TileEntityColoredMultiRotatable.class, "colored_multi_rotatable", "ColoredMultiRotatable");
-		registerTileEntity(TileEntityPotionEffect.class, "potion_effect", "PotionEffect");
-		registerTileEntity(TileEntityModChest.class, "mod_chest", "ModChest");
+		registerTileEntity(TileEntitySurvivalCommandBlock.class, "survival_command_block");
+		registerTileEntity(TileEntityFluidTank.class, "fluid_tank");
+		registerTileEntity(TileEntityColoredRotatable.class, "colored_rotatable");
+		registerTileEntity(TileEntityColoredMultiRotatable.class, "colored_multi_rotatable");
+		registerTileEntity(TileEntityPotionEffect.class, "potion_effect");
+		registerTileEntity(TileEntityModChest.class, "mod_chest");
 		registerTileEntity(TileEntityHidden.class, "hidden");
 		registerTileEntity(TileEntityFluidTankRestricted.class, "fluid_tank_restricted");
 	}
 
 	private static void registerTileEntity(final Class<? extends TileEntity> tileEntityClass, final String name) {
 		GameRegistry.registerTileEntity(tileEntityClass, Constants.RESOURCE_PREFIX + name);
-	}
-
-	private static void registerTileEntity(final Class<? extends TileEntity> tileEntityClass, final String name, final String legacyName) {
-		GameRegistry.registerTileEntityWithAlternatives(tileEntityClass, Constants.RESOURCE_PREFIX + name, Constants.RESOURCE_PREFIX + legacyName);
 	}
 }

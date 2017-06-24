@@ -3,7 +3,6 @@ package choonster.testmod3;
 import choonster.testmod3.client.gui.GuiHandler;
 import choonster.testmod3.init.*;
 import choonster.testmod3.proxy.IProxy;
-import choonster.testmod3.remap.Remapper;
 import choonster.testmod3.tests.Tests;
 import choonster.testmod3.tweak.spawnerdrops.SpawnerDrops;
 import choonster.testmod3.util.BlockDumper;
@@ -49,8 +48,6 @@ public class TestMod3 {
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 
 		ModMessages.registerMessages();
-		ModItems.initialiseItems();
-		ModFluids.registerFluidContainers();
 		ModMapGen.registerMapGen();
 		ModEntities.registerEntities();
 		ModDispenseBehaviors.registerDispenseBehaviors();
@@ -88,10 +85,5 @@ public class TestMod3 {
 	@EventHandler
 	public void serverStopped(final FMLServerStoppedEvent event) {
 		SpawnerDrops.serverStopped();
-	}
-
-	@EventHandler
-	public void missingMappings(final FMLMissingMappingsEvent event) {
-		Remapper.remap(event.get());
 	}
 }
