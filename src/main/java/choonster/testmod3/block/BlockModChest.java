@@ -12,17 +12,13 @@ import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * A chest block.
@@ -181,14 +177,12 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 	}
 
 	@Override
-	public List<ItemStack> getDrops(final IBlockAccess world, final BlockPos pos, final IBlockState state, final int fortune) {
-		final List<ItemStack> drops = super.getDrops(world, pos, state, fortune);
+	public void getDrops(final NonNullList<ItemStack> drops, final IBlockAccess world, final BlockPos pos, final IBlockState state, final int fortune) {
+		super.getDrops(drops, world, pos, state, fortune);
 
 		final TileEntityModChest tileEntity = getTileEntity(world, pos);
 		if (tileEntity != null) {
 			drops.addAll(tileEntity.getDrops());
 		}
-
-		return drops;
 	}
 }

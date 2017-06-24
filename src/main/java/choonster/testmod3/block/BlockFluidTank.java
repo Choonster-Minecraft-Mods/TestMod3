@@ -15,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -46,9 +47,7 @@ public class BlockFluidTank<TE extends TileEntityFluidTank> extends BlockTileEnt
 	}
 
 	@Override
-	public List<ItemStack> getDrops(final IBlockAccess world, final BlockPos pos, final IBlockState state, final int fortune) {
-		final List<ItemStack> drops = new ArrayList<>();
-
+	public void getDrops(final NonNullList<ItemStack> drops, final IBlockAccess world, final BlockPos pos, final IBlockState state, final int fortune) {
 		final IFluidHandler fluidHandler = getFluidHandler(world, pos);
 
 		if (fluidHandler != null) {
@@ -58,8 +57,6 @@ public class BlockFluidTank<TE extends TileEntityFluidTank> extends BlockTileEnt
 				drops.add(fluidActionResult.getResult());
 			}
 		}
-
-		return drops;
 	}
 
 	/**

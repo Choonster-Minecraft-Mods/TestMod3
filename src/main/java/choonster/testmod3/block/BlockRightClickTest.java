@@ -12,11 +12,11 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -80,13 +80,11 @@ public class BlockRightClickTest extends BlockGlass {
 	}
 
 	@Override
-	public List<ItemStack> getDrops(final IBlockAccess world, final BlockPos pos, final IBlockState state, final int fortune) {
-		final List<ItemStack> drops = super.getDrops(world, pos, state, fortune);
+	public void getDrops(final NonNullList<ItemStack> drops, final IBlockAccess world, final BlockPos pos, final IBlockState state, final int fortune) {
+		super.getDrops(drops, world, pos, state, fortune);
 
 		if (state.getValue(HAS_ENDER_EYE)) {
 			drops.add(new ItemStack(Items.ENDER_EYE));
 		}
-
-		return drops;
 	}
 }
