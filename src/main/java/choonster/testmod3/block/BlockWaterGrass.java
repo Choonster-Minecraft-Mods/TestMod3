@@ -32,7 +32,7 @@ public class BlockWaterGrass extends BlockBush {
 	public BlockWaterGrass() {
 		super(Material.WATER);
 		setCreativeTab(TestMod3.creativeTab);
-		BlockTestMod3.setBlockName(this, "watergrass");
+		BlockTestMod3.setBlockName(this, "water_grass");
 
 		setDefaultState(blockState.getBaseState().withProperty(BlockLiquid.LEVEL, 0));
 	}

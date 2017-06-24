@@ -10,7 +10,7 @@ fluid.finite=Finite Fluid
 fluid.portal_displacement=Portal Displacement Fluid
 
 # Blocks
-tile.testmod3:watergrass.name=Water Grass
+tile.testmod3:water_grass.name=Water Grass
 tile.testmod3:large_collision_test.name=Large Collision Test
 tile.testmod3:right_click_test.name=Right Click Test
 tile.testmod3:client_player_right_click.name=Client Player Right Click Block

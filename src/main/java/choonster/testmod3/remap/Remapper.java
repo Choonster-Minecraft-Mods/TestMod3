@@ -92,6 +92,7 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 			.put("modeltest", "model_test")
 			.put("pig_spawner.finite", "pig_spawner_finite")
 			.put("pig_spawner.infinite", "pig_spawner_infinite")
+			.put("watergrass", "water_grass")
 			.build();
 
 	/**
