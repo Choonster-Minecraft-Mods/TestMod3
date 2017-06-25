@@ -77,21 +77,6 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 	 * Custom names to remap. Keys are the old names, values are the new names.
 	 */
 	private static final Map<String, String> customNames = ImmutableMap.<String, String>builder()
-			.put("harvestswordwood", "wooden_harvest_sword")
-			.put("harvestsworddiamond", "diamond_harvest_sword")
-			.put("slowswordwood", "wooden_slow_sword")
-			.put("slowsworddiamond", "diamond_slow_sword")
-			.put("fluid.staticgas", "fluid.static_gas")
-			.put("fluid.normalgas", "fluid.normal_gas")
-			.put("stainedclayslablowdouble", "double_stained_clay_slab_low")
-			.put("stainedclayslabhighdouble", "double_stained_clay_slab_high")
-			.put("headreplacement", "replacement_helmet")
-			.put("chestreplacement", "replacement_chestplate")
-			.put("legsreplacement", "replacement_leggings")
-			.put("feetreplacement", "replacement_boots")
-			.put("modeltest", "model_test")
-			.put("pig_spawner.finite", "pig_spawner_finite")
-			.put("pig_spawner.infinite", "pig_spawner_infinite")
 			.put("watergrass", "water_grass")
 			.build();
 

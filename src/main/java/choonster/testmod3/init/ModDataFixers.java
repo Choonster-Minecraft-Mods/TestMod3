@@ -1,8 +1,6 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.util.datafix.fixes.TileEntityId;
-import net.minecraft.util.datafix.FixTypes;
 import net.minecraftforge.common.util.ModFixs;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -23,6 +21,6 @@ public class ModDataFixers {
 	 * Register this mod's data fixers.
 	 */
 	public static void registerDataFixers() {
-		MOD_FIXES.registerFix(FixTypes.BLOCK_ENTITY, new TileEntityId());
+
 	}
 }
