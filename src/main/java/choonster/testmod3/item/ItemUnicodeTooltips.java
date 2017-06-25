@@ -26,8 +26,8 @@ public class ItemUnicodeTooltips extends ItemTestMod3 {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag advanced) {
-		super.addInformation(stack, world, tooltip, advanced);
+	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag flag) {
+		super.addInformation(stack, world, tooltip, flag);
 
 		tooltip.add(I18n.format("item.testmod3:unicode_tooltips.1.desc"));
 		tooltip.add("§a§o" + I18n.format("item.testmod3:unicode_tooltips.2.desc") + "§r");

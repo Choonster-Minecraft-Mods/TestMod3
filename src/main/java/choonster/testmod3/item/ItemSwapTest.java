@@ -36,8 +36,8 @@ public class ItemSwapTest extends ItemTestMod3 {
 	}
 
 	@Override
-	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag advanced) {
-		super.addInformation(stack, world, tooltip, advanced);
+	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag flag) {
+		super.addInformation(stack, world, tooltip, flag);
 
 		if (hasOtherItem()) {
 			tooltip.add(I18n.format("item.testmod3:swap_test.with_item.desc", otherItem.getDisplayName()));

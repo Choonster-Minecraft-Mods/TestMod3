@@ -234,7 +234,7 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag advanced) {
+	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag flag) {
 		tooltip.add(I18n.format("item.testmod3:armour_replacement.equip.desc"));
 		tooltip.add(I18n.format("item.testmod3:armour_replacement.unequip.desc"));
 	}

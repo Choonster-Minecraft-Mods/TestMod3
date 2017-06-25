@@ -148,7 +148,7 @@ public class ItemEntityChecker extends ItemTestMod3 {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag advanced) {
+	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag flag) {
 		tooltip.add(I18n.format("item.testmod3:entity_checker.radius.desc", getRadius(stack)));
 
 		final String cornerModeTranslationKey = isCornerModeEnabled(stack) ? "item.testmod3:entity_checker.mode.corner.desc" : "item.testmod3:entity_checker.mode.edge.desc";

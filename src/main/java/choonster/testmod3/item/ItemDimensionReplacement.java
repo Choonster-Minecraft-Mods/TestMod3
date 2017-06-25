@@ -121,7 +121,7 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag advanced) {
+	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag flag) {
 		if (hasReplacement(world)) {
 			tooltip.add(I18n.format("item.testmod3:dimension_replacement.replacement.desc", getReplacement(world).getDisplayName()));
 		} else {
