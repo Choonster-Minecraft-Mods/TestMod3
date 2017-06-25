@@ -44,6 +44,6 @@ public class MobSpawnerIngredientFactory implements IIngredientFactory {
 
 		tileEntityData.setTag("SpawnPotentials", tileEntityData.getTagList("SpawnPotentials", Constants.NBT.TAG_COMPOUND));
 
-		return NBTIngredient.fromStacks(stack);
+		return new IngredientNBTTestMod3(stack);
 	}
 }

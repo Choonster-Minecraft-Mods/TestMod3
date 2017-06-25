@@ -33,6 +33,6 @@ public class FilledUniversalBucketIngredientFactory implements IIngredientFactor
 
 		final ItemStack filledBucket = FluidUtil.getFilledBucket(new FluidStack(fluid, 0));
 
-		return new NBTIngredient(filledBucket);
+		return new IngredientNBTTestMod3(filledBucket);
 	}
 }
