@@ -33,6 +33,10 @@ public class FilledUniversalBucketIngredientFactory implements IIngredientFactor
 
 		final ItemStack filledBucket = FluidUtil.getFilledBucket(new FluidStack(fluid, 0));
 
+		if (filledBucket.isEmpty()) {
+			throw new JsonSyntaxException("No bucket registered for fluid '" + fluidName + "'");
+		}
+
 		return new IngredientNBTTestMod3(filledBucket);
 	}
 }
