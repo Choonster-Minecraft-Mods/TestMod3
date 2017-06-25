@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -115,7 +116,9 @@ public class ModFluids {
 		 *
 		 * @param event The event
 		 */
-		@SubscribeEvent
+		// Use EventPriority.LOWEST so this is called after the RegistryEvent.Register<Item> handler in ModBlocks where
+		// the ItemBlock for ModBlocks.FLUID_TANK is registered.
+		@SubscribeEvent(priority = EventPriority.LOWEST)
 		public static void registerItems(final RegistryEvent.Register<Item> event) {
 			final IForgeRegistry<Item> registry = event.getRegistry();
 
@@ -130,6 +133,9 @@ public class ModFluids {
 		}
 	}
 
+	/**
+	 * Register this mod's tanks and buckets.
+	 */
 	private static void registerFluidContainers() {
 		registerTank(FluidRegistry.WATER);
 		registerTank(FluidRegistry.LAVA);
