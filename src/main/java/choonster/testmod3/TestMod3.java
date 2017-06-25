@@ -41,7 +41,7 @@ public class TestMod3 {
 	public void preInit(final FMLPreInitializationEvent event) {
 		Logger.setLogger(event.getModLog());
 
-		FMLLog.bigWarning("Random UUID: %s", UUID.randomUUID().toString());
+		FMLLog.bigWarning("Random UUID: {}", UUID.randomUUID().toString());
 
 		ModCapabilities.registerCapabilities();
 
