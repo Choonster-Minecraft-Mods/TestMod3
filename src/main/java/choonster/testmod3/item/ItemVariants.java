@@ -4,8 +4,6 @@ import choonster.testmod3.util.IVariant;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Comparator;
 import java.util.List;
@@ -30,7 +28,6 @@ public class ItemVariants extends ItemTestMod3 {
 		return super.getUnlocalizedName(stack) + "." + EnumType.byMetadata(stack.getMetadata()).getName();
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubItems(final CreativeTabs tab, final NonNullList<ItemStack> subItems) {
 		final List<ItemStack> items = Stream.of(EnumType.values())

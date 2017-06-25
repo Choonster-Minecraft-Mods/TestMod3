@@ -63,7 +63,6 @@ public class ItemFluidTank extends ItemBlock {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubItems(final CreativeTabs tab, final NonNullList<ItemStack> subItems) {
 		super.getSubItems(tab, subItems);
