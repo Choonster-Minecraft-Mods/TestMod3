@@ -59,7 +59,6 @@ public class TestMod3 {
 	@EventHandler
 	public void init(final FMLInitializationEvent event) {
 		ModRecipes.registerRecipes();
-		ModRecipes.removeCraftingRecipes();
 		ModMapGen.registerWorldGenerators();
 		ModEntities.addSpawns();
 

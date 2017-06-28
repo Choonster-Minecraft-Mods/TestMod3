@@ -1,5 +1,7 @@
 package choonster.testmod3.init;
 
+import choonster.testmod3.Logger;
+import choonster.testmod3.TestMod3;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -10,7 +12,17 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.RecipeFireworks;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.potion.PotionType;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.IForgeRegistryModifiable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Adds and removes recipes.
@@ -57,82 +69,81 @@ public class ModRecipes {
 		PotionHelper.addMix(standardPotionType, Items.GLOWSTONE_DUST, strongPotionType);
 	}
 
-	/**
-	 * Remove crafting recipes.
-	 */
-	public static void removeCraftingRecipes() {
-		removeRecipeClass(RecipeFireworks.class);
-		removeRecipe(Items.DYE);
-		removeRecipe(Blocks.STAINED_HARDENED_CLAY);
-	}
-
-	/**
-	 * Remove all crafting recipes with the specified {@link Block} as their output.
-	 *
-	 * @param output The output Block
-	 */
-	private static void removeRecipe(final Block output) {
-		final Item item = Item.getItemFromBlock(output);
-		assert item != Items.AIR;
-
-		removeRecipe(item);
-	}
-
-	/**
-	 * Remove all crafting recipes with the specified {@link Item} as their output.
-	 * <p>
-	 * Adapted from Rohzek's code in this post:
-	 * http://www.minecraftforge.net/forum/index.php/topic,33631.0.html
-	 *
-	 * @param output The output Item
-	 */
-	private static void removeRecipe(final Item output) {
-		/* FIXME: Can recipes still be removed?
-		int recipesRemoved = 0;
-
-		final List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
-		final Iterator<IRecipe> remover = recipes.iterator();
-
-		while (remover.hasNext()) {
-			final ItemStack itemstack = remover.next().getRecipeOutput();
-
-			// If the recipe's output Item is the specified Item,
-			if (!itemstack.isEmpty() && itemstack.getItem() == output) {
-				// Remove the recipe
-				remover.remove();
-				recipesRemoved++;
-			}
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
+	public static class RegistrationHandler {
+		@SubscribeEvent(priority = EventPriority.LOWEST)
+		public static void registerRecipes(final RegistryEvent.Register<IRecipe> event) {
+			removeRecipes();
 		}
 
-		Logger.info("Removed %d recipes for %s", recipesRemoved, output.getRegistryName());
-		*/
-	}
-
-	/**
-	 * Remove all crafting recipes that are instances of the specified class.
-	 * <p>
-	 * Test for this thread:
-	 * http://www.minecraftforge.net/forum/index.php/topic,33631.0.html
-	 *
-	 * @param recipeClass The recipe class
-	 */
-	private static void removeRecipeClass(final Class<? extends IRecipe> recipeClass) {
-		/* FIXME: Can recipes still be removed?
-		int recipesRemoved = 0;
-
-		final List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
-		final Iterator<IRecipe> remover = recipes.iterator();
-
-		while (remover.hasNext()) {
-			// If the recipe is an instance of the specified class,
-			if (recipeClass.isInstance(remover.next())) {
-				// Remove the recipe
-				remover.remove();
-				recipesRemoved++;
-			}
+		/**
+		 * Remove crafting recipes.
+		 */
+		private static void removeRecipes() {
+			removeRecipes(RecipeFireworks.class);
+			removeRecipes(Items.DYE);
+			removeRecipes(Blocks.STAINED_HARDENED_CLAY);
 		}
 
-		Logger.info("Removed %d recipes for %s", recipesRemoved, recipeClass);
-		*/
+		/**
+		 * Remove all crafting recipes with the specified {@link Block} as their output.
+		 *
+		 * @param output The output Block
+		 */
+		private static void removeRecipes(final Block output) {
+			removeRecipes(Item.getItemFromBlock(output));
+		}
+
+		/**
+		 * Remove all crafting recipes with the specified {@link Item} as their output.
+		 *
+		 * @param output The output Item
+		 */
+		private static void removeRecipes(final Item output) {
+			final int recipesRemoved = removeRecipes(recipe -> {
+				final ItemStack recipeOutput = recipe.getRecipeOutput();
+				return !recipeOutput.isEmpty() && recipeOutput.getItem() == output;
+			});
+
+			Logger.info("Removed %d recipe(s) for %s", recipesRemoved, output.getRegistryName());
+		}
+
+		/**
+		 * Remove all crafting recipes that are instances of the specified class.
+		 * <p>
+		 * Test for this thread:
+		 * http://www.minecraftforge.net/forum/index.php/topic,33631.0.html
+		 *
+		 * @param recipeClass The recipe class
+		 */
+		private static void removeRecipes(final Class<? extends IRecipe> recipeClass) {
+			final int recipesRemoved = removeRecipes(recipeClass::isInstance);
+
+			Logger.info("Removed %d recipe(s) for %s", recipesRemoved, recipeClass);
+		}
+
+		/**
+		 * Remove all crafting recipes that match the specified predicate.
+		 *
+		 * @param predicate The predicate
+		 * @return The number of recipes removed
+		 */
+		private static int removeRecipes(final Predicate<IRecipe> predicate) {
+			int recipesRemoved = 0;
+
+			final IForgeRegistryModifiable<IRecipe> registry = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
+			final List<IRecipe> toRemove = new ArrayList<>();
+
+			for (final IRecipe recipe : registry) {
+				if (predicate.test(recipe)) {
+					toRemove.add(recipe);
+					recipesRemoved++;
+				}
+			}
+
+			toRemove.forEach(recipe -> registry.remove(recipe.getRegistryName()));
+
+			return recipesRemoved;
+		}
 	}
 }
