@@ -30,11 +30,13 @@ public class ItemVariants extends ItemTestMod3 {
 
 	@Override
 	public void getSubItems(final CreativeTabs tab, final NonNullList<ItemStack> subItems) {
-		final List<ItemStack> items = Stream.of(EnumType.values())
-				.map(enumType -> new ItemStack(this, 1, enumType.getMeta()))
-				.collect(Collectors.toList());
+		if (isInCreativeTab(tab)) {
+			final List<ItemStack> items = Stream.of(EnumType.values())
+					.map(enumType -> new ItemStack(this, 1, enumType.getMeta()))
+					.collect(Collectors.toList());
 
-		subItems.addAll(items);
+			subItems.addAll(items);
+		}
 	}
 
 	public enum EnumType implements IVariant {

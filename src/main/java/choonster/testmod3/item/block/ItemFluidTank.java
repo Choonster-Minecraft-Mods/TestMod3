@@ -66,7 +66,10 @@ public class ItemFluidTank extends ItemBlock {
 	@Override
 	public void getSubItems(final CreativeTabs tab, final NonNullList<ItemStack> subItems) {
 		super.getSubItems(tab, subItems);
-		subItems.addAll(tankItems);
+
+		if (isInCreativeTab(tab)) {
+			subItems.addAll(tankItems);
+		}
 	}
 
 	@Override
