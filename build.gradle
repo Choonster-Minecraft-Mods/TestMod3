@@ -30,9 +30,6 @@ version = "${mc_version}-${mod_version}-${commitId}"
 group = "${package_group}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${mod_name}"
 
-srcCompat = JavaVersion.VERSION_1_8
-targetCompat = JavaVersion.VERSION_1_8
-
 minecraft {
     version = "${mc_version}-${forge_version}"
     runDir = "run"
