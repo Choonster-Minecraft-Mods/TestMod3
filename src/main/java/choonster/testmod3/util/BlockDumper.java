@@ -33,7 +33,6 @@ public class BlockDumper {
 					});
 		} catch (final Exception e) {
 			Logger.fatal(e, "Exception dumping blocks");
-
 		}
 	}
 }
