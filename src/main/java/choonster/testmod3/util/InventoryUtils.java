@@ -71,7 +71,7 @@ public class InventoryUtils {
 
 		for (final ItemStack itemStack : items) {
 			if (emptySlots.isEmpty()) {
-				Logger.warn("Tried to over-fill %s while generating loot.");
+				Logger.warn("Tried to over-fill %s while generating loot.", itemHandler);
 				return;
 			}
 
