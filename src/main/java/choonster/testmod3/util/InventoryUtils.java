@@ -1,7 +1,6 @@
 package choonster.testmod3.util;
 
 import choonster.testmod3.Logger;
-import com.google.common.base.Throwables;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -67,8 +66,7 @@ public class InventoryUtils {
 		try {
 			SHUFFLE_ITEMS.invokeExact(lootTable, items, emptySlots.size(), random);
 		} catch (final Throwable throwable) {
-			Throwables.throwIfUnchecked(throwable);
-			throw new RuntimeException(throwable);
+			throw new RuntimeException("Failed to shuffle items while generating loot", throwable);
 		}
 
 		for (final ItemStack itemStack : items) {
