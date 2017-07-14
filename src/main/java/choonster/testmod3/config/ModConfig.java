@@ -31,7 +31,21 @@ public class ModConfig {
 		@Config.Comment("This is an example int property.")
 		public int baz = -100;
 
+		@Config.Comment("This is an example enum property in a subcategory of the main category.")
+		public EnumExample exampleSubcategoryEnumProperty = EnumExample.VALUE_3;
+
+		@Config.Comment("This is an example enum property that uses an enum defined in a nested class.")
+		public EnumExampleNested exampleNestedEnumProperty = EnumExampleNested.NESTED_2;
+
 		public final HUDPos chunkEnergyHUDPos = new HUDPos(0, 0);
+
+		public enum EnumExampleNested {
+			NESTED_1,
+			NESTED_2,
+			NESTED_3,
+			NESTED_4,
+			NESTED_5
+		}
 
 		public static class HUDPos {
 			public HUDPos(final int x, final int y) {

@@ -254,6 +254,10 @@ testmod3.general.client.baz.tooltip=This is an example int property.
 
 testmod3.general.exampleenumproperty=Example Enum Property
 testmod3.general.exampleenumproperty.tooltip=This is an example enum property.\nIt will use a GuiConfigEntries.CycleValueEntry in the config GUI.
+testmod3.general.client.examplesubcategoryenumproperty=Example Subcategory Enum Property
+testmod3.general.client.examplesubcategoryenumproperty.tooltip=This is an example enum property in a subcategory of the main category.
+testmod3.general.client.examplenestedenumproperty=Example Nested Enum Property
+testmod3.general.client.examplenestedenumproperty.tooltip=This is an example enum property that uses an enum defined in a nested class.
 
 # Entities
 entity.testmod3:mod_arrow.name=Mod Arrow
