@@ -14,7 +14,17 @@ public class ModConfig {
 	@Config.Comment("This is an example boolean property.")
 	public static boolean fooBar = false;
 
+	@Config.Comment({"This is an example enum property.", "It will use a GuiConfigEntries.CycleValueEntry in the config GUI."})
+	public static EnumExample exampleEnumProperty = EnumExample.VALUE_1;
+
 	public static final Client client = new Client();
+
+	public enum EnumExample {
+		VALUE_1,
+		VALUE_2,
+		VALUE_3,
+		VALUE_4
+	}
 
 	public static class Client {
 

@@ -252,6 +252,9 @@ testmod3.general.foobar.tooltip=This is an example boolean property.
 testmod3.general.client.baz=Baz
 testmod3.general.client.baz.tooltip=This is an example int property.
 
+testmod3.general.exampleenumproperty=Example Enum Property
+testmod3.general.exampleenumproperty.tooltip=This is an example enum property.\nIt will use a GuiConfigEntries.CycleValueEntry in the config GUI.
+
 # Entities
 entity.testmod3:mod_arrow.name=Mod Arrow
 entity.testmod3:block_detection_arrow.name=Block Detection Arrow
