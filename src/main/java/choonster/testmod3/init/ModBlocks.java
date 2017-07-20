@@ -95,6 +95,8 @@ public class ModBlocks {
 
 	public static final BlockFluidTankRestricted FLUID_TANK_RESTRICTED = new BlockFluidTankRestricted();
 
+	public static final BlockTestMod3 PLANKS = new BlockTestMod3(Material.WOOD, "planks");
+
 	public static class Slabs {
 		public static final BlockColouredSlab.ColouredSlabGroup STAINED_CLAY_SLABS = new BlockColouredSlab.ColouredSlabGroup("stained_clay_slab", Material.ROCK);
 	}
@@ -145,6 +147,7 @@ public class ModBlocks {
 					SAPLING,
 					INVISIBLE,
 					FLUID_TANK_RESTRICTED,
+					PLANKS,
 			};
 
 			registry.registerAll(blocks);
@@ -204,6 +207,7 @@ public class ModBlocks {
 					new ItemMultiTexture(SAPLING, SAPLING, BlockSaplingTestMod3::getName),
 					new ItemBlock(INVISIBLE),
 					new ItemFluidTank(FLUID_TANK_RESTRICTED),
+					new ItemBlock(PLANKS),
 					Slabs.STAINED_CLAY_SLABS.low.item,
 					Slabs.STAINED_CLAY_SLABS.high.item,
 			};

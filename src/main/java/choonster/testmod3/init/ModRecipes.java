@@ -18,6 +18,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistryModifiable;
 
 import java.util.ArrayList;
@@ -34,6 +35,15 @@ public class ModRecipes {
 	public static void registerRecipes() {
 		addSmeltingRecipes();
 		addBrewingRecipes();
+		addOreDictEntries();
+	}
+
+	/**
+	 * Add this mod's Ore Dictionary entries.
+	 */
+	private static void addOreDictEntries() {
+		// Test for this thread: http://www.minecraftforge.net/forum/topic/59462-112-custom-crafting-with-oredictionary/
+		OreDictionary.registerOre("plankWood", ModBlocks.PLANKS);
 	}
 
 	/**
