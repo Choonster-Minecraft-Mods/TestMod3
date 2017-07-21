@@ -1,6 +1,6 @@
 {
 	"_comment": [
-		"Upgrade an Iron Helment to a Golden Helmet while preserving its damage",
+		"Upgrade an Iron Helmet to a Golden Helmet while preserving its damage",
 		"http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2513998-help-needed-creating-crafting-recipe-with-damaged"
 	],
 	"type": "testmod3:armour_upgrade_shaped",
