@@ -5,7 +5,6 @@ import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.util.Constants;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeMap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.network.play.server.SPacketEntityProperties;
@@ -32,11 +31,6 @@ public class MaxHealth implements IMaxHealth {
 	protected static final String MODIFIER_NAME = "Bonus Max Health";
 
 	/**
-	 * The minimum max health a player can have.
-	 */
-	protected static final float MIN_AMOUNT = 2.0f;
-
-	/**
 	 * The entity this is attached to.
 	 */
 	private final EntityLivingBase entity;
@@ -45,12 +39,6 @@ public class MaxHealth implements IMaxHealth {
 	 * The bonus max health.
 	 */
 	private float bonusMaxHealth;
-
-	/**
-	 * The dummy max health attribute. Used to avoid setting the entity's actual attribute to an invalid value.
-	 */
-	private final IAttributeInstance dummyMaxHealthAttribute = new AttributeMap().registerAttribute(SharedMonsterAttributes.MAX_HEALTH);
-
 
 	public MaxHealth(@Nullable final EntityLivingBase entity) {
 		this.entity = entity;
@@ -117,27 +105,7 @@ public class MaxHealth implements IMaxHealth {
 
 		final IAttributeInstance entityMaxHealthAttribute = entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
 
-		// Remove all modifiers from the dummy attribute
-		dummyMaxHealthAttribute.getModifiers().forEach(dummyMaxHealthAttribute::removeModifier);
-
-		// Copy the base value and modifiers except this class's from the entity's attribute to the dummy attribute
-		dummyMaxHealthAttribute.setBaseValue(entityMaxHealthAttribute.getBaseValue());
-		entityMaxHealthAttribute.getModifiers().stream()
-				.filter(modifier -> !modifier.getID().equals(MODIFIER_ID))
-				.forEach(dummyMaxHealthAttribute::applyModifier);
-
-		AttributeModifier modifier = createModifier();
-		dummyMaxHealthAttribute.applyModifier(modifier);
-
-		// Increment bonus max health by 0.5 until the max health is at least 2.0 (1 heart).
-		// We do this to avoid setting the entity's max health to 0, which would kill it (and prevent it from respawning if it's a player).
-		// The attribute itself will prevent its value from exceeding the maximum, so adding more than the maximum max health is harmless.
-		while (dummyMaxHealthAttribute.getAttributeValue() < MIN_AMOUNT) {
-			dummyMaxHealthAttribute.removeModifier(modifier);
-			bonusMaxHealth += 0.5f;
-			modifier = createModifier();
-			dummyMaxHealthAttribute.applyModifier(modifier);
-		}
+		final AttributeModifier modifier = createModifier();
 
 		final float newAmount = getBonusMaxHealth();
 		final float oldAmount;
