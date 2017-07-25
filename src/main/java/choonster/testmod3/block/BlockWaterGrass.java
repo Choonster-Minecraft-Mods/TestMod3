@@ -17,7 +17,7 @@ import net.minecraft.world.World;
  * Tall grass that renders with water around it while in water.
  * <p>
  * Test for this thread:
- * http://www.minecraftforge.net/forum/index.php/topic,32280.0.html
+ * http://www.minecraftforge.net/forum/topic/32069-18-solved-water-and-coral-in-one-block/
  *
  * @author Choonster
  */
