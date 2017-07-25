@@ -2,6 +2,7 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.Logger;
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.crafting.recipe.DummyRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -19,7 +20,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.registries.IForgeRegistryModifiable;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,7 +142,7 @@ public class ModRecipes {
 		private static int removeRecipes(final Predicate<IRecipe> predicate) {
 			int recipesRemoved = 0;
 
-			final IForgeRegistryModifiable<IRecipe> registry = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
+			final IForgeRegistry<IRecipe> registry = ForgeRegistries.RECIPES;
 			final List<IRecipe> toRemove = new ArrayList<>();
 
 			for (final IRecipe recipe : registry) {
@@ -151,7 +152,11 @@ public class ModRecipes {
 				}
 			}
 
-			toRemove.forEach(recipe -> registry.remove(recipe.getRegistryName()));
+			Logger.info("Overriding recipes with dummy recipes, please ignore the following \"Dangerous alternative prefix\" warnings.");
+			toRemove.forEach(recipe -> {
+				final IRecipe replacement = new DummyRecipe().setRegistryName(recipe.getRegistryName());
+				registry.register(replacement);
+			});
 
 			return recipesRemoved;
 		}
