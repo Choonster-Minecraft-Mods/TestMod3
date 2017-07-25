@@ -98,6 +98,7 @@ public class CapabilityProviderSimple<HANDLER> implements ICapabilityProvider {
 	 *
 	 * @return The handler instance
 	 */
+	@Nullable
 	public final HANDLER getInstance() {
 		return instance;
 	}
