@@ -1,0 +1,32 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" C ",
+		"C C",
+		"CCC"
+	],
+	"key": {
+		"C": [
+			{
+				"type": "forge:ore_dict",
+				"ore": "itemRubber"
+			},
+			{
+				"type": "testmod3:conditional",
+				"conditions": [
+					{
+						"type": "forge:mod_loaded",
+						"modid": "thermalfoundation"
+					}
+				],
+				"ingredient": {
+					"item": "thermalfoundation:material",
+					"data": 832
+				}
+			}
+		]
+	},
+	"result": {
+		"item": "testmod3:slingshot"
+	}
+}
