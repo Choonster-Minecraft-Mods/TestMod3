@@ -159,6 +159,7 @@ item.testmod3:chunk_energy_display.name=Chunk Energy Display
 item.testmod3:beacon_item.name=Beacon Item
 item.testmod3:saturation_helmet.name=Saturation Helmet
 item.testmod3:entity_checker.name=Entity Checker
+item.testmod3:rubber.name=Rubber
 
 item.testmod3:replacement_helmet.name=Armour Replacement Helmet
 item.testmod3:replacement_chestplate.name=Armour Replacement Chestplate

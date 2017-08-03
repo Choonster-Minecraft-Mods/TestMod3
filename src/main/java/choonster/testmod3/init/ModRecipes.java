@@ -45,6 +45,9 @@ public class ModRecipes {
 	private static void addOreDictEntries() {
 		// Test for this thread: http://www.minecraftforge.net/forum/topic/59462-112-custom-crafting-with-oredictionary/
 		OreDictionary.registerOre("plankWood", ModBlocks.PLANKS);
+
+		// Test for this thread: http://www.minecraftforge.net/forum/topic/59744-112-how-to-disable-some-mod-recipe-files-via-config-file/
+		OreDictionary.registerOre("itemRubber", ModItems.RUBBER);
 	}
 
 	/**

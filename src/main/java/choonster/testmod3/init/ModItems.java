@@ -132,6 +132,8 @@ public class ModItems {
 
 	public static final ItemEntityChecker ENTITY_CHECKER = new ItemEntityChecker();
 
+	public static final ItemTestMod3 RUBBER = new ItemTestMod3("rubber");
+
 
 	public static final ItemArmourReplacement REPLACEMENT_HELMET = new ItemArmourReplacement(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD, "replacement");
 
@@ -225,6 +227,7 @@ public class ModItems {
 					BEACON_ITEM,
 					SATURATION_HELMET,
 					ENTITY_CHECKER,
+					RUBBER,
 			};
 
 			final IForgeRegistry<Item> registry = event.getRegistry();
