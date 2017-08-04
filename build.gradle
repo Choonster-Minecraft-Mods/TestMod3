@@ -45,10 +45,10 @@ repositories {
 }
 
 dependencies {
-    deobfProvided "mezz.jei:jei_${mc_version}:${jei_version}:api"
-    runtime "mezz.jei:jei_${mc_version}:${jei_version}"
+    deobfProvided "mezz.jei:jei_1.12:${jei_version}:api"
+    runtime "mezz.jei:jei_1.12:${jei_version}"
     compile "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
-    deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}_${mc_version}"
+    deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}_1.12"
     deobfCompile "com.github.azanor:Baubles:${baubles_version}"
 }
 
