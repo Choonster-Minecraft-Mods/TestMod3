@@ -143,6 +143,11 @@ public class ModItems {
 
 	public static final ItemArmourRestricted REPLACEMENT_BOOTS = new ItemArmourRestricted(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.FEET, "replacement");
 
+
+	public static final ItemBucketTestMod3 WOODEN_BUCKET = new ItemBucketTestMod3("wooden_bucket");
+
+	public static final ItemBucketTestMod3 STONE_BUCKET = new ItemBucketTestMod3("stone_bucket");
+
 	/**
 	 * Initialise this mod's {@link Item}s with any post-registration data.
 	 */
@@ -228,6 +233,8 @@ public class ModItems {
 					SATURATION_HELMET,
 					ENTITY_CHECKER,
 					RUBBER,
+					WOODEN_BUCKET,
+					STONE_BUCKET,
 			};
 
 			final IForgeRegistry<Item> registry = event.getRegistry();

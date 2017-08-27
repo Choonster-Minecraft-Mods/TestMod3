@@ -171,6 +171,12 @@ item.testmod3:variants_item.a.name=Variants Item - A
 item.testmod3:variants_item.b.name=Variants Item - B
 item.testmod3:variants_item.c.name=Variants Item - C
 
+item.testmod3:wooden_bucket.name=Wooden Bucket
+item.testmod3:wooden_bucket.filled.name=%s Wooden Bucket
+
+item.testmod3:stone_bucket.name=Stone Bucket
+item.testmod3:stone_bucket.filled.name=%s Stone Bucket
+
 # Tooltips
 item.record.testmod3:solaris.desc=Solaris (Path of Exile)
 item.testmod3:unicode_tooltips.1.desc=§a§oLine 1 (Section Characters in Lang File)§r
