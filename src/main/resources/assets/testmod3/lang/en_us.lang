@@ -261,6 +261,9 @@ testmod3.general.client.examplesubcategoryenumproperty.tooltip=This is an exampl
 testmod3.general.client.examplenestedenumproperty=Example Nested Enum Property
 testmod3.general.client.examplenestedenumproperty.tooltip=This is an example enum property that uses an enum defined in a nested class.
 
+testmod3.general.examplemapfield=Example Map Field
+testmod3.general.examplemapfield.tooltip=This an example Map field.\nIt will be converted to a category containing a property for each key-value pair.
+
 # Entities
 entity.testmod3:mod_arrow.name=Mod Arrow
 entity.testmod3:block_detection_arrow.name=Block Detection Arrow

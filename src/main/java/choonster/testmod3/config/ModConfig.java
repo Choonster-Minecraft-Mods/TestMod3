@@ -7,6 +7,9 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Config(modid = TestMod3.MODID)
 @Config.LangKey("testmod3.config.title")
 public class ModConfig {
@@ -16,6 +19,15 @@ public class ModConfig {
 
 	@Config.Comment({"This is an example enum property.", "It will use a GuiConfigEntries.CycleValueEntry in the config GUI."})
 	public static EnumExample exampleEnumProperty = EnumExample.VALUE_1;
+
+	@Config.Comment({"This an example Map field.", "It will be converted to a category containing a property for each key-value pair."})
+	public static final Map<String, Double> exampleMapField = new HashMap<>();
+
+	static {
+		exampleMapField.put("foobar", 2.0);
+		exampleMapField.put("foobaz", 100.5);
+		exampleMapField.put("barbaz", Double.MAX_VALUE);
+	}
 
 	public static final Client client = new Client();
 
