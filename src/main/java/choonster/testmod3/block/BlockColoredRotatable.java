@@ -2,7 +2,6 @@ package choonster.testmod3.block;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.tileentity.TileEntityColoredRotatable;
-import choonster.testmod3.util.OreDictUtils;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -19,6 +18,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.DyeUtils;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -93,7 +93,7 @@ public class BlockColoredRotatable extends BlockColored {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);
 
 		if (!heldItem.isEmpty()) { // If the player is holding dye, change the colour
-			final Optional<EnumDyeColor> dyeColour = OreDictUtils.INSTANCE.getDyeColour(heldItem);
+			final Optional<EnumDyeColor> dyeColour = DyeUtils.colorFromStack(heldItem);
 			if (dyeColour.isPresent()) {
 				final boolean success = recolorBlock(worldIn, pos, side, dyeColour.get());
 				if (success) {

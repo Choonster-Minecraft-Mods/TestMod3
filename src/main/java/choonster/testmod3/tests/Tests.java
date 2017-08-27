@@ -9,9 +9,8 @@ public class Tests {
 	public static boolean runTests() {
 		boolean allTestsPassed;
 
-		allTestsPassed = OreDictUtilTests.INSTANCE.test();
 		//		NBTTagEndTests.INSTANCE.test();
-		allTestsPassed &= HttpClientTests.INSTANCE.test();
+		allTestsPassed = HttpClientTests.INSTANCE.test();
 
 		return allTestsPassed;
 	}
