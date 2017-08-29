@@ -36,18 +36,6 @@ public class ModRecipes {
 	public static void registerRecipes() {
 		addSmeltingRecipes();
 		addBrewingRecipes();
-		addOreDictEntries();
-	}
-
-	/**
-	 * Add this mod's Ore Dictionary entries.
-	 */
-	private static void addOreDictEntries() {
-		// Test for this thread: http://www.minecraftforge.net/forum/topic/59462-112-custom-crafting-with-oredictionary/
-		OreDictionary.registerOre("plankWood", ModBlocks.PLANKS);
-
-		// Test for this thread: http://www.minecraftforge.net/forum/topic/59744-112-how-to-disable-some-mod-recipe-files-via-config-file/
-		OreDictionary.registerOre("itemRubber", ModItems.RUBBER);
 	}
 
 	/**
@@ -85,6 +73,19 @@ public class ModRecipes {
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	public static class RegistrationHandler {
+		/**
+		 * Register this mod's Ore Dictionary entries.
+		 *
+		 * @param event The event
+		 */
+		@SubscribeEvent(priority = EventPriority.LOWEST)
+		public static void registerOreDictEntries(final RegistryEvent.Register<Item> event) {
+			OreDictionary.registerOre("plankWood", ModBlocks.PLANKS);
+
+			// Test for this thread: http://www.minecraftforge.net/forum/topic/59744-112-how-to-disable-some-mod-recipe-files-via-config-file/
+			OreDictionary.registerOre("itemRubber", ModItems.RUBBER);
+		}
+		
 		/**
 		 * Remove crafting recipes.
 		 *
