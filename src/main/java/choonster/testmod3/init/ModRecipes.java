@@ -85,15 +85,13 @@ public class ModRecipes {
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	public static class RegistrationHandler {
-		@SubscribeEvent(priority = EventPriority.LOWEST)
-		public static void registerRecipes(final RegistryEvent.Register<IRecipe> event) {
-			removeRecipes();
-		}
-
 		/**
 		 * Remove crafting recipes.
+		 *
+		 * @param event The event
 		 */
-		private static void removeRecipes() {
+		@SubscribeEvent(priority = EventPriority.LOWEST)
+		public static void removeRecipes(final RegistryEvent.Register<IRecipe> event) {
 			removeRecipes(RecipeFireworks.class);
 			removeRecipes(Items.DYE);
 			removeRecipes(Blocks.STAINED_HARDENED_CLAY);
