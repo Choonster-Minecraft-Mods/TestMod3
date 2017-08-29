@@ -1,0 +1,29 @@
+{
+	"_comment": [
+		"A recipe with a conditional ingredient whose conditions are never met.",
+		"https://github.com/MinecraftForge/MinecraftForge/issues/4359"
+	],
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"Cc"
+	],
+	"key": {
+		"C": {
+			"type": "testmod3:conditional",
+			"conditions": [
+				{
+					"type": "forge:false"
+				}
+			],
+			"ingredient": {
+				"item": "minecraft:cobblestone"
+			}
+		},
+		"c": {
+			"item": "minecraft:cobblestone"
+		}
+	},
+	"result": {
+		"item": "minecraft:cobblestone"
+	}
+}
