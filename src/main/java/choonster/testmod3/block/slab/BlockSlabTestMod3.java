@@ -151,4 +151,6 @@ public abstract class BlockSlabTestMod3<
 		return getMetadata(state.getValue(getVariantProperty()));
 	}
 
+	@Override
+	public abstract VARIANT getTypeForItem(final ItemStack stack);
 }

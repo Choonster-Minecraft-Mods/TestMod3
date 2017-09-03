@@ -103,7 +103,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 	}
 
 	@Override
-	public Comparable<?> getTypeForItem(final ItemStack stack) {
+	public EnumDyeColor getTypeForItem(final ItemStack stack) {
 		return variants.byOffsetMetadata(stack.getMetadata());
 	}
 
