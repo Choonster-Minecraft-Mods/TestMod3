@@ -100,7 +100,7 @@ public class ModBlocks {
 	public static final BlockTestMod3 PLANKS = new BlockTestMod3(Material.WOOD, "planks");
 
 	public static class Slabs {
-		public static final BlockColouredSlab.ColouredSlabGroup STAINED_CLAY_SLABS = new BlockColouredSlab.ColouredSlabGroup("stained_clay_slab", Material.ROCK);
+		public static final BlockColouredSlab.ColouredSlabGroupContainer STAINED_CLAY_SLABS = new BlockColouredSlab.ColouredSlabGroupContainer("stained_clay_slab", Material.ROCK);
 	}
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)

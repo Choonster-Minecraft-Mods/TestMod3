@@ -21,19 +21,22 @@ public abstract class SlabGroup<
 	public final SLAB doubleSlab;
 	public final String groupName;
 	public final ItemSlab item;
+	public final ISlabGroupContainer<VARIANT, VARIANTS, SLAB> parentContainer;
 
 	/**
 	 * Create a slab group.
 	 *
-	 * @param groupName The group's name
-	 * @param material  The Material of the slabs
-	 * @param variants  The variants of the slabs
+	 * @param groupName       The group's name
+	 * @param material        The Material of the slabs
+	 * @param variants        The variants of the slabs
+	 * @param parentContainer The parent slab group container
 	 */
-	public SlabGroup(final String groupName, final Material material, final VARIANTS variants) {
+	public SlabGroup(final String groupName, final Material material, final VARIANTS variants, final ISlabGroupContainer<VARIANT, VARIANTS, SLAB> parentContainer) {
 		this.groupName = groupName;
 		this.singleSlab = createSlab(material, false, variants);
 		this.doubleSlab = createSlab(material, true, variants);
 		this.item = new ItemSlab(singleSlab, singleSlab, doubleSlab);
+		this.parentContainer = parentContainer;
 	}
 
 	/**

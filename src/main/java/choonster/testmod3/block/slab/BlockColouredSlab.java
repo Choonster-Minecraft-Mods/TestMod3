@@ -211,17 +211,17 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		}
 	}
 
-	public static class ColouredSlabGroup {
+	public static class ColouredSlabGroupContainer implements ISlabGroupContainer<EnumDyeColor, EnumColourGroup, BlockColouredSlab> {
 		public final SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> low;
 		public final SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> high;
 
 		/**
-		 * Create a coloured slab group.
+		 * Create a coloured slab group container.
 		 *
 		 * @param groupName The group's name
 		 * @param material  The Material of the slabs
 		 */
-		public ColouredSlabGroup(final String groupName, final Material material) {
+		public ColouredSlabGroupContainer(final String groupName, final Material material) {
 			low = createGroup(groupName, material, EnumColourGroup.LOW);
 			high = createGroup(groupName, material, EnumColourGroup.HIGH);
 		}
@@ -235,7 +235,7 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		 * @return The slab group
 		 */
 		private SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> createGroup(final String groupName, final Material material, final EnumColourGroup colourGroup) {
-			return new SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab>(groupName, material, colourGroup) {
+			return new SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab>(groupName, material, colourGroup, this) {
 				@Override
 				public BlockColouredSlab createSlab(final Material material, final boolean isDouble, final EnumColourGroup colourGroup) {
 					return new BlockColouredSlab(material, colourGroup, this) {
@@ -254,13 +254,14 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		}
 
 		/**
-		 * Get the slab group for the specified colour group.
+		 * Get the slab group containing the specified variant.
 		 *
-		 * @param colourGroup The colour group
+		 * @param enumDyeColor The variant
 		 * @return The slab group
 		 */
-		public SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> getSlabGroupByColourGroup(final EnumColourGroup colourGroup) {
-			return colourGroup == EnumColourGroup.LOW ? low : high;
+		@Override
+		public SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> getSlabGroupForVariant(final EnumDyeColor enumDyeColor) {
+			return EnumColourGroup.LOW.isColourInGroup(enumDyeColor) ? low : high;
 		}
 	}
 }
