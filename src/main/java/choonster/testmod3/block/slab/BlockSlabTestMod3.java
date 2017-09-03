@@ -1,4 +1,4 @@
-package choonster.testmod3.block;
+package choonster.testmod3.block.slab;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.util.Constants;
@@ -9,7 +9,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSlab;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
@@ -152,46 +151,4 @@ public abstract class BlockSlabTestMod3<
 		return getMetadata(state.getValue(getVariantProperty()));
 	}
 
-	/**
-	 * A group consisting of a single and a double slab.
-	 *
-	 * @param <VARIANT>  The variant type
-	 * @param <VARIANTS> The variant collection type
-	 * @param <SLAB>     The slab type
-	 */
-	public static abstract class SlabGroup<
-			VARIANT extends Enum<VARIANT> & IStringSerializable,
-			VARIANTS extends Iterable<VARIANT> & IStringSerializable,
-			SLAB extends BlockSlabTestMod3<VARIANT, VARIANTS, SLAB>
-			> {
-
-		public final SLAB singleSlab;
-		public final SLAB doubleSlab;
-		public final String groupName;
-		public final ItemSlab item;
-
-		/**
-		 * Create a slab group.
-		 *
-		 * @param groupName The group's name
-		 * @param material  The Material of the slabs
-		 * @param variants  The variants of the slabs
-		 */
-		public SlabGroup(final String groupName, final Material material, final VARIANTS variants) {
-			this.groupName = groupName;
-			this.singleSlab = createSlab(material, false, variants);
-			this.doubleSlab = createSlab(material, true, variants);
-			this.item = new ItemSlab(singleSlab, singleSlab, doubleSlab);
-		}
-
-		/**
-		 * Create a slab block.
-		 *
-		 * @param material The Material
-		 * @param isDouble Is this a double slab?
-		 * @param variants The variants
-		 * @return The slab block
-		 */
-		public abstract SLAB createSlab(Material material, boolean isDouble, VARIANTS variants);
-	}
 }

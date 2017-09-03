@@ -2,6 +2,8 @@ package choonster.testmod3.client.model;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.*;
+import choonster.testmod3.block.slab.BlockSlabTestMod3;
+import choonster.testmod3.block.slab.SlabGroup;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
@@ -219,7 +221,7 @@ public class ModModelManager {
 	}
 
 	/**
-	 * Register a model for each metadata value of a {@link BlockSlabTestMod3.SlabGroup}'s {@link Item} corresponding to
+	 * Register a model for each metadata value of a {@link SlabGroup}'s {@link Item} corresponding to
 	 * the values of the slab's variant property ({@link BlockSlab#getVariantProperty()}).
 	 * <p>
 	 * For each value:
@@ -239,7 +241,7 @@ public class ModModelManager {
 			VARIANTS extends Iterable<VARIANT> & IStringSerializable,
 			SLAB extends BlockSlabTestMod3<VARIANT, VARIANTS, SLAB>
 			>
-	void registerSlabGroupItemModels(final BlockSlabTestMod3.SlabGroup<VARIANT, VARIANTS, SLAB> slabGroup) {
+	void registerSlabGroupItemModels(final SlabGroup<VARIANT, VARIANTS, SLAB> slabGroup) {
 		final SLAB singleSlab = slabGroup.singleSlab;
 		registerVariantBlockItemModels(
 				singleSlab.getDefaultState()

@@ -4,6 +4,8 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.*;
 import choonster.testmod3.block.pipe.BlockPipeBasic;
 import choonster.testmod3.block.pipe.BlockPipeFluid;
+import choonster.testmod3.block.slab.BlockColouredSlab;
+import choonster.testmod3.block.slab.SlabGroup;
 import choonster.testmod3.item.block.ItemFluidTank;
 import choonster.testmod3.tileentity.*;
 import choonster.testmod3.util.Constants;
@@ -157,12 +159,12 @@ public class ModBlocks {
 		}
 
 		/**
-		 * Register the {@link Block}s of a {@link BlockSlabTestMod3.SlabGroup}.
+		 * Register the {@link Block}s of a {@link SlabGroup}.
 		 *
 		 * @param registry  The registry
 		 * @param slabGroup The slab group
 		 */
-		private static void registerSlabGroup(final IForgeRegistry<Block> registry, final BlockSlabTestMod3.SlabGroup<?, ?, ?> slabGroup) {
+		private static void registerSlabGroup(final IForgeRegistry<Block> registry, final SlabGroup<?, ?, ?> slabGroup) {
 			registry.register(slabGroup.singleSlab);
 			registry.register(slabGroup.doubleSlab);
 		}

@@ -1,4 +1,4 @@
-package choonster.testmod3.block;
+package choonster.testmod3.block.slab;
 
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
