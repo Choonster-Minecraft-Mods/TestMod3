@@ -104,19 +104,19 @@ public class ItemHarvestSword extends ItemTool {
 	}
 
 	@Override
-	public float getStrVsBlock(final ItemStack stack, final IBlockState state) {
+	public float getDestroySpeed(final ItemStack stack, final IBlockState state) {
 		if (state.getBlock() == Blocks.WEB) {
 			return DIG_SPEED_WEB;
 		}
 
 		for (final String type : getToolClasses(stack)) {
 			if (state.getBlock().isToolEffective(type, state))
-				return efficiencyOnProperMaterial;
+				return efficiency;
 		}
 
 		// Not all blocks have a harvest tool/level set, so we need to fall back to checking the Material like the vanilla tools do
 		if (EFFECTIVE_MATERIALS.contains(state.getMaterial())) {
-			return efficiencyOnProperMaterial;
+			return efficiency;
 		}
 
 		if (SWORD_MATERIALS.contains(state.getMaterial())) {

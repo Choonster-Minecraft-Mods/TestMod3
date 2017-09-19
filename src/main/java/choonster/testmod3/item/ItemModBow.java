@@ -159,7 +159,7 @@ public class ItemModBow extends ItemBow {
 				if (!world.isRemote) {
 					final ItemArrow itemArrow = (ItemArrow) (ammo.getItem() instanceof ItemArrow ? ammo.getItem() : Items.ARROW);
 					final EntityArrow entityArrow = itemArrow.createArrow(world, ammo, player);
-					entityArrow.setAim(player, player.rotationPitch, player.rotationYaw, 0.0F, arrowVelocity * 3.0F, 1.0F);
+					entityArrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, arrowVelocity * 3.0F, 1.0F);
 
 					if (arrowVelocity == 1.0f) {
 						entityArrow.setIsCritical(true);
