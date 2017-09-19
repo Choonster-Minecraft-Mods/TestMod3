@@ -80,7 +80,7 @@ public class ModModelManager {
 
 		final ModelResourceLocation modelResourceLocation = new ModelResourceLocation(FLUID_MODEL_PATH, fluidBlock.getFluid().getName());
 
-		ModelLoader.setCustomMeshDefinition(item, MeshDefinitionFix.create(stack -> modelResourceLocation));
+		ModelLoader.setCustomMeshDefinition(item, stack -> modelResourceLocation);
 
 		ModelLoader.setCustomStateMapper((Block) fluidBlock, new StateMapperBase() {
 			@Override
@@ -327,7 +327,7 @@ public class ModModelManager {
 	 */
 	private void registerItemModel(final Item item, final ModelResourceLocation fullModelLocation) {
 		ModelBakery.registerItemVariants(item, fullModelLocation); // Ensure the custom model is loaded and prevent the default model from being loaded
-		registerItemModel(item, MeshDefinitionFix.create(stack -> fullModelLocation));
+		registerItemModel(item, stack -> fullModelLocation);
 	}
 
 	/**
