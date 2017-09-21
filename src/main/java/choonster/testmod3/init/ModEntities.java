@@ -12,80 +12,107 @@ import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 
+@ObjectHolder(TestMod3.MODID)
 public class ModEntities {
-	public static void registerEntities() {
-		registerEntity(EntityModArrow.class, "mod_arrow", 64, 20, false);
-		registerEntity(EntityBlockDetectionArrow.class, "block_detection_arrow", 64, 20, false);
-		registerEntity(EntityPlayerAvoidingCreeper.class, "player_avoiding_creeper", 80, 3, true, 0x0DA70B, 0x101010);
-	}
+	public static final EntityEntry MOD_ARROW = null;
 
-	public static void addSpawns() {
-		EntityRegistry.addSpawn(EntityGuardian.class, 100, 5, 20, EnumCreatureType.WATER_CREATURE, getBiomes(BiomeDictionary.Type.OCEAN));
-		copySpawns(EntityPlayerAvoidingCreeper.class, EnumCreatureType.MONSTER, EntityCreeper.class, EnumCreatureType.MONSTER);
-	}
+	public static final EntityEntry BLOCK_DETECTION_ARROW = null;
 
-	/**
-	 * Get an array of {@link Biome}s with the specified {@link BiomeDictionary.Type}.
-	 *
-	 * @param type The Type
-	 * @return An array of Biomes
-	 */
-	private static Biome[] getBiomes(final BiomeDictionary.Type type) {
-		return BiomeDictionary.getBiomes(type).toArray(new Biome[0]);
-	}
+	public static final EntityEntry PLAYER_AVOIDING_CREEPER = null;
 
 
-	/**
-	 * Add a spawn list entry for {@code classToAdd} in each {@link Biome} with an entry for {@code classToCopy} using the same weight and group count.
-	 *
-	 * @param classToAdd         The class to add spawn entries for
-	 * @param creatureTypeToAdd  The EnumCreatureType to add spawn entries for
-	 * @param classToCopy        The class to copy spawn entries from
-	 * @param creatureTypeToCopy The EnumCreatureType to copy spawn entries from
-	 */
-	private static void copySpawns(final Class<? extends EntityLiving> classToAdd, final EnumCreatureType creatureTypeToAdd, final Class<? extends EntityLiving> classToCopy, final EnumCreatureType creatureTypeToCopy) {
-		for (final Biome biome : ForgeRegistries.BIOMES) {
-			biome.getSpawnableList(creatureTypeToCopy).stream()
-					.filter(entry -> entry.entityClass == classToCopy)
-					.findFirst()
-					.ifPresent(spawnListEntry ->
-							biome.getSpawnableList(creatureTypeToAdd).add(new Biome.SpawnListEntry(classToAdd, spawnListEntry.itemWeight, spawnListEntry.minGroupCount, spawnListEntry.maxGroupCount))
-					);
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
+	public static class RegistrationHandler {
+
+		/**
+		 * Register this mod's {@link Entity} types.
+		 *
+		 * @param event The event
+		 */
+		@SubscribeEvent
+		public static void registerEntities(final RegistryEvent.Register<EntityEntry> event) {
+			final EntityEntry[] entries = {
+					createBuilder("mod_arrow")
+							.entity(EntityModArrow.class)
+							.tracker(64, 20, false)
+							.build(),
+
+					createBuilder("block_detection_arrow")
+							.entity(EntityBlockDetectionArrow.class)
+							.tracker(64, 20, false)
+							.build(),
+
+					createBuilder("player_avoiding_creeper")
+							.entity(EntityPlayerAvoidingCreeper.class)
+							.tracker(80, 3, true)
+							.egg(0x0DA70B, 0x101010)
+							.build(),
+			};
+
+			event.getRegistry().registerAll(entries);
+
+			addSpawns();
 		}
-	}
 
-	private static int entityID = 0;
+		/**
+		 * Add this mod's entity spawns.
+		 */
+		private static void addSpawns() {
+			EntityRegistry.addSpawn(EntityGuardian.class, 100, 5, 20, EnumCreatureType.WATER_CREATURE, getBiomes(BiomeDictionary.Type.OCEAN));
+			copySpawns(EntityPlayerAvoidingCreeper.class, EnumCreatureType.MONSTER, EntityCreeper.class, EnumCreatureType.MONSTER);
+		}
 
-	/**
-	 * Register an entity with the specified tracking values.
-	 *
-	 * @param entityClass          The entity's class
-	 * @param entityName           The entity's unique name
-	 * @param trackingRange        The range at which MC will send tracking updates
-	 * @param updateFrequency      The frequency of tracking updates
-	 * @param sendsVelocityUpdates Whether to send velocity information packets as well
-	 */
-	private static void registerEntity(final Class<? extends Entity> entityClass, final String entityName, final int trackingRange, final int updateFrequency, final boolean sendsVelocityUpdates) {
-		final ResourceLocation registryName = new ResourceLocation(TestMod3.MODID, entityName);
-		EntityRegistry.registerModEntity(registryName, entityClass, registryName.toString(), entityID++, TestMod3.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
-	}
+		private static int entityID = 0;
 
-	/**
-	 * Register an entity with the specified tracking values and spawn egg colours.
-	 *
-	 * @param entityClass          The entity's class
-	 * @param entityName           The entity's unique name
-	 * @param trackingRange        The range at which MC will send tracking updates
-	 * @param updateFrequency      The frequency of tracking updates
-	 * @param sendsVelocityUpdates Whether to send velocity information packets as well
-	 * @param eggPrimary           The spawn egg's primary (background) colour
-	 * @param eggSecondary         The spawn egg's secondary (foreground) colour
-	 */
-	private static void registerEntity(final Class<? extends Entity> entityClass, final String entityName, final int trackingRange, final int updateFrequency, final boolean sendsVelocityUpdates, final int eggPrimary, final int eggSecondary) {
-		final ResourceLocation registryName = new ResourceLocation(TestMod3.MODID, entityName);
-		EntityRegistry.registerModEntity(registryName, entityClass, registryName.toString(), entityID++, TestMod3.instance, trackingRange, updateFrequency, sendsVelocityUpdates, eggPrimary, eggSecondary);
+		/**
+		 * Create an {@link EntityEntryBuilder} with the specified unlocalised/registry name and an automatically-assigned network ID.
+		 *
+		 * @param name The name
+		 * @param <E>  The entity type
+		 * @return The builder
+		 */
+		private static <E extends Entity> EntityEntryBuilder<E> createBuilder(final String name) {
+			final EntityEntryBuilder<E> builder = EntityEntryBuilder.create();
+			final ResourceLocation registryName = new ResourceLocation(TestMod3.MODID, name);
+			return builder.id(registryName, entityID++).name(registryName.toString());
+		}
+
+		/**
+		 * Get an array of {@link Biome}s with the specified {@link BiomeDictionary.Type}.
+		 *
+		 * @param type The Type
+		 * @return An array of Biomes
+		 */
+		private static Biome[] getBiomes(final BiomeDictionary.Type type) {
+			return BiomeDictionary.getBiomes(type).toArray(new Biome[0]);
+		}
+
+		/**
+		 * Add a spawn list entry for {@code classToAdd} in each {@link Biome} with an entry for {@code classToCopy} using the same weight and group count.
+		 *
+		 * @param classToAdd         The class to add spawn entries for
+		 * @param creatureTypeToAdd  The EnumCreatureType to add spawn entries for
+		 * @param classToCopy        The class to copy spawn entries from
+		 * @param creatureTypeToCopy The EnumCreatureType to copy spawn entries from
+		 */
+		private static void copySpawns(final Class<? extends EntityLiving> classToAdd, final EnumCreatureType creatureTypeToAdd, final Class<? extends EntityLiving> classToCopy, final EnumCreatureType creatureTypeToCopy) {
+			for (final Biome biome : ForgeRegistries.BIOMES) {
+				biome.getSpawnableList(creatureTypeToCopy).stream()
+						.filter(entry -> entry.entityClass == classToCopy)
+						.findFirst()
+						.ifPresent(spawnListEntry ->
+								biome.getSpawnableList(creatureTypeToAdd).add(new Biome.SpawnListEntry(classToAdd, spawnListEntry.itemWeight, spawnListEntry.minGroupCount, spawnListEntry.maxGroupCount))
+						);
+			}
+		}
 	}
 }

@@ -49,7 +49,6 @@ public class TestMod3 {
 
 		ModMessages.registerMessages();
 		ModMapGen.registerMapGen();
-		ModEntities.registerEntities();
 		ModDispenseBehaviors.registerDispenseBehaviors();
 		ModLootTables.registerLootTables();
 
@@ -60,7 +59,6 @@ public class TestMod3 {
 	public void init(final FMLInitializationEvent event) {
 		ModRecipes.registerRecipes();
 		ModMapGen.registerWorldGenerators();
-		ModEntities.addSpawns();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
