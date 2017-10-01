@@ -21,6 +21,8 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 
 import javax.annotation.Nullable;
 
+import static choonster.testmod3.util.InjectionUtil.Null;
+
 /**
  * Capability for {@link ILock}.
  *
@@ -31,7 +33,7 @@ public final class CapabilityLock {
 	 * The {@link Capability} instance.
 	 */
 	@CapabilityInject(ILock.class)
-	public static final Capability<ILock> LOCK_CAPABILITY = null;
+	public static final Capability<ILock> LOCK_CAPABILITY = Null();
 
 	/**
 	 * The ID of this capability.

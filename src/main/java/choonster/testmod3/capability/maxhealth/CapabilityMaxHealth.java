@@ -26,6 +26,8 @@ import org.apache.logging.log4j.MarkerManager;
 
 import javax.annotation.Nullable;
 
+import static choonster.testmod3.util.InjectionUtil.Null;
+
 /**
  * Capability for {@link IMaxHealth}.
  *
@@ -37,7 +39,7 @@ public final class CapabilityMaxHealth {
 	 * The {@link Capability} instance.
 	 */
 	@CapabilityInject(IMaxHealth.class)
-	public static final Capability<IMaxHealth> MAX_HEALTH_CAPABILITY = null;
+	public static final Capability<IMaxHealth> MAX_HEALTH_CAPABILITY = Null();
 
 	/**
 	 * The default {@link EnumFacing} to use for this capability.

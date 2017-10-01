@@ -19,6 +19,8 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
+import static choonster.testmod3.util.InjectionUtil.Null;
+
 /**
  * Items with this capability reveal hidden blocks.
  *
@@ -29,7 +31,7 @@ public final class CapabilityHiddenBlockRevealer {
 	 * The {@link Capability} instance.
 	 */
 	@CapabilityInject(IHiddenBlockRevealer.class)
-	public static final Capability<IHiddenBlockRevealer> HIDDEN_BLOCK_REVEALER_CAPABILITY = null;
+	public static final Capability<IHiddenBlockRevealer> HIDDEN_BLOCK_REVEALER_CAPABILITY = Null();
 
 	/**
 	 * The default {@link EnumFacing} to use for this capability.

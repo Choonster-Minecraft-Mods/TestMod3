@@ -29,6 +29,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nullable;
 
+import static choonster.testmod3.util.InjectionUtil.Null;
+
 /**
  * Capability to store per-chunk energy values.
  *
@@ -40,7 +42,7 @@ public class CapabilityChunkEnergy {
 	 * The {@link Capability} instance
 	 */
 	@CapabilityInject(IChunkEnergyHolder.class)
-	public static final Capability<IChunkEnergyHolder> CHUNK_ENERGY_CAPABILITY = null;
+	public static final Capability<IChunkEnergyHolder> CHUNK_ENERGY_CAPABILITY = Null();
 
 	/**
 	 * The default {@link EnumFacing} to use for this capability.

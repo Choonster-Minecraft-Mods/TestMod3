@@ -25,6 +25,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nullable;
 
+import static choonster.testmod3.util.InjectionUtil.Null;
+
 /**
  * Capability for {@link ILastUseTime}.
  *
@@ -35,7 +37,7 @@ public final class CapabilityLastUseTime {
 	 * The {@link Capability} instance.
 	 */
 	@CapabilityInject(ILastUseTime.class)
-	public static final Capability<ILastUseTime> LAST_USE_TIME_CAPABILITY = null;
+	public static final Capability<ILastUseTime> LAST_USE_TIME_CAPABILITY = Null();
 
 	/**
 	 * The default {@link EnumFacing} to use for this capability.

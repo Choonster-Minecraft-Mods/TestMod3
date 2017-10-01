@@ -43,6 +43,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static choonster.testmod3.util.InjectionUtil.Null;
+
 /**
  * Capability for {@link IPigSpawner}.
  *
@@ -53,7 +55,7 @@ public final class CapabilityPigSpawner {
 	 * The {@link Capability} instance.
 	 */
 	@CapabilityInject(IPigSpawner.class)
-	public static final Capability<IPigSpawner> PIG_SPAWNER_CAPABILITY = null;
+	public static final Capability<IPigSpawner> PIG_SPAWNER_CAPABILITY = Null();
 
 	/**
 	 * The default {@link EnumFacing} to use for this capability.
