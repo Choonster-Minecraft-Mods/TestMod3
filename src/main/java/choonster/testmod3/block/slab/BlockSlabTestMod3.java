@@ -61,13 +61,15 @@ public abstract class BlockSlabTestMod3<
 		// http://www.minecraftforge.net/forum/index.php/topic,36125.msg190252.html#msg190252
 		this.useNeighborBrightness = true;
 
-		String name = slabGroup.groupName + "_" + variants.getName();
+		final String groupName = slabGroup.getGroupName();
+
+		String name = groupName + "_" + variants.getName();
 		if (isDouble()) {
 			name = "double_" + name;
 		}
 
 		setRegistryName(TestMod3.MODID, name);
-		setUnlocalizedName(Constants.RESOURCE_PREFIX + slabGroup.groupName);
+		setUnlocalizedName(Constants.RESOURCE_PREFIX + groupName);
 
 		IBlockState iblockstate = this.blockState.getBaseState();
 
@@ -103,7 +105,7 @@ public abstract class BlockSlabTestMod3<
 
 	@Override
 	public Item getItemDropped(final IBlockState state, final Random rand, final int fortune) {
-		return slabGroup.item;
+		return slabGroup.getItem();
 	}
 
 	@Override

@@ -5,7 +5,7 @@ import choonster.testmod3.block.*;
 import choonster.testmod3.block.pipe.BlockPipeBasic;
 import choonster.testmod3.block.pipe.BlockPipeFluid;
 import choonster.testmod3.block.slab.BlockColouredSlab;
-import choonster.testmod3.block.slab.SlabGroup;
+import choonster.testmod3.block.slab.ISlabGroupContainer;
 import choonster.testmod3.item.block.ItemFluidTank;
 import choonster.testmod3.tileentity.*;
 import choonster.testmod3.util.Constants;
@@ -27,77 +27,80 @@ import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import static choonster.testmod3.util.InjectionUtil.Null;
 
 @SuppressWarnings("WeakerAccess")
 @ObjectHolder(TestMod3.MODID)
 public class ModBlocks {
 
-	public static final BlockWaterGrass WATER_GRASS = new BlockWaterGrass();
+	public static final BlockWaterGrass WATER_GRASS = Null();
 
-	public static final BlockLargeCollisionTest LARGE_COLLISION_TEST = new BlockLargeCollisionTest();
+	public static final BlockLargeCollisionTest LARGE_COLLISION_TEST = Null();
 
-	public static final BlockRightClickTest RIGHT_CLICK_TEST = new BlockRightClickTest();
+	public static final BlockRightClickTest RIGHT_CLICK_TEST = Null();
 
-	public static final BlockClientPlayerRightClick CLIENT_PLAYER_RIGHT_CLICK = new BlockClientPlayerRightClick();
+	public static final BlockClientPlayerRightClick CLIENT_PLAYER_RIGHT_CLICK = Null();
 
-	public static final BlockRotatableLamp ROTATABLE_LAMP = new BlockRotatableLamp();
+	public static final BlockRotatableLamp ROTATABLE_LAMP = Null();
 
-	public static final BlockItemCollisionTest ITEM_COLLISION_TEST = new BlockItemCollisionTest();
+	public static final BlockItemCollisionTest ITEM_COLLISION_TEST = Null();
 
-	public static final BlockFluidTank<TileEntityFluidTank> FLUID_TANK = new BlockFluidTank<>("fluid_tank");
+	public static final BlockFluidTank<TileEntityFluidTank> FLUID_TANK = Null();
 
-	public static final BlockItemDebugger ITEM_DEBUGGER = new BlockItemDebugger();
+	public static final BlockItemDebugger ITEM_DEBUGGER = Null();
 
-	public static final Block END_PORTAL_FRAME_FULL = new BlockTestMod3(Material.ROCK, "end_portal_frame_full");
+	public static final Block END_PORTAL_FRAME_FULL = Null();
 
-	public static final BlockColoredRotatable COLORED_ROTATABLE = new BlockColoredRotatable(Material.CLOTH, "colored_rotatable");
+	public static final BlockColoredRotatable COLORED_ROTATABLE = Null();
 
-	public static final BlockColoredMultiRotatable COLORED_MULTI_ROTATABLE = new BlockColoredMultiRotatable(Material.CLOTH, "colored_multi_rotatable");
+	public static final BlockColoredMultiRotatable COLORED_MULTI_ROTATABLE = Null();
 
-	public static final BlockPotionEffect POTION_EFFECT = new BlockPotionEffect();
+	public static final BlockPotionEffect POTION_EFFECT = Null();
 
-	public static final BlockVariants VARIANTS = new BlockVariants(Material.IRON);
+	public static final BlockVariants VARIANTS = Null();
 
-	public static final BlockClientPlayerRotation CLIENT_PLAYER_ROTATION = new BlockClientPlayerRotation();
+	public static final BlockClientPlayerRotation CLIENT_PLAYER_ROTATION = Null();
 
-	public static final BlockPigSpawnerRefiller PIG_SPAWNER_REFILLER = new BlockPigSpawnerRefiller();
+	public static final BlockPigSpawnerRefiller PIG_SPAWNER_REFILLER = Null();
 
-	public static final BlockPlane MIRROR_PLANE = new BlockPlane(Material.IRON, "mirror_plane");
+	public static final BlockPlane MIRROR_PLANE = Null();
 
-	public static final BlockTestMod3 VANILLA_MODEL_TEST = new BlockTestMod3(Material.IRON, "vanilla_model_test");
+	public static final BlockTestMod3 VANILLA_MODEL_TEST = Null();
 
-	public static final BlockTestMod3 FULLBRIGHT = (BlockTestMod3) new BlockTestMod3(Material.ROCK, "fullbright").setLightLevel(1);
+	public static final BlockTestMod3 FULLBRIGHT = Null();
 
-	public static final BlockTestMod3 NORMAL_BRIGHTNESS = new BlockTestMod3(Material.ROCK, "normal_brightness");
+	public static final BlockTestMod3 NORMAL_BRIGHTNESS = Null();
 
-	public static final BlockMaxHealthSetter MAX_HEALTH_SETTER = new BlockMaxHealthSetter();
+	public static final BlockMaxHealthSetter MAX_HEALTH_SETTER = Null();
 
-	public static final BlockMaxHealthGetter MAX_HEALTH_GETTER = new BlockMaxHealthGetter();
+	public static final BlockMaxHealthGetter MAX_HEALTH_GETTER = Null();
 
-	public static final BlockSmallCollisionTest SMALL_COLLISION_TEST = new BlockSmallCollisionTest();
+	public static final BlockSmallCollisionTest SMALL_COLLISION_TEST = Null();
 
-	public static final BlockModChest CHEST = new BlockModChest();
+	public static final BlockModChest CHEST = Null();
 
-	public static final BlockHidden HIDDEN = new BlockHidden(Material.ROCK, "hidden");
+	public static final BlockHidden HIDDEN = Null();
 
-	public static final BlockPipeBasic BASIC_PIPE = new BlockPipeBasic("basic_pipe");
+	public static final BlockPipeBasic BASIC_PIPE = Null();
 
-	public static final BlockPipeFluid FLUID_PIPE = new BlockPipeFluid();
+	public static final BlockPipeFluid FLUID_PIPE = Null();
 
-	public static final BlockSurvivalCommandBlock SURVIVAL_COMMAND_BLOCK = new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.REDSTONE, "survival_command_block");
+	public static final BlockSurvivalCommandBlock SURVIVAL_COMMAND_BLOCK = Null();
 
-	public static final BlockSurvivalCommandBlock REPEATING_SURVIVAL_COMMAND_BLOCK = new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.AUTO, "repeating_survival_command_block");
+	public static final BlockSurvivalCommandBlock REPEATING_SURVIVAL_COMMAND_BLOCK = Null();
 
-	public static final BlockSurvivalCommandBlock CHAIN_SURVIVAL_COMMAND_BLOCK = new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.SEQUENCE, "chain_survival_command_block");
+	public static final BlockSurvivalCommandBlock CHAIN_SURVIVAL_COMMAND_BLOCK = Null();
 
-	public static final BlockSaplingTestMod3 SAPLING = new BlockSaplingTestMod3();
+	public static final BlockSaplingTestMod3 SAPLING = Null();
 
-	public static final BlockInvisible INVISIBLE = new BlockInvisible();
+	public static final BlockInvisible INVISIBLE = Null();
 
-	public static final BlockFluidTankRestricted FLUID_TANK_RESTRICTED = new BlockFluidTankRestricted();
+	public static final BlockFluidTankRestricted FLUID_TANK_RESTRICTED = Null();
 
-	public static final BlockTestMod3 PLANKS = new BlockTestMod3(Material.WOOD, "planks");
+	public static final BlockTestMod3 PLANKS = Null();
 
 	public static class Slabs {
 		public static final BlockColouredSlab.ColouredSlabGroupContainer STAINED_CLAY_SLABS = new BlockColouredSlab.ColouredSlabGroupContainer("stained_clay_slab", Material.ROCK);
@@ -117,56 +120,45 @@ public class ModBlocks {
 			final IForgeRegistry<Block> registry = event.getRegistry();
 
 			final Block[] blocks = {
-					WATER_GRASS,
-					LARGE_COLLISION_TEST,
-					RIGHT_CLICK_TEST,
-					CLIENT_PLAYER_RIGHT_CLICK,
-					ROTATABLE_LAMP,
-					ITEM_COLLISION_TEST,
-					FLUID_TANK,
-					ITEM_DEBUGGER,
-					END_PORTAL_FRAME_FULL,
-					COLORED_ROTATABLE,
-					COLORED_MULTI_ROTATABLE,
-					POTION_EFFECT,
-					VARIANTS,
-					CLIENT_PLAYER_ROTATION,
-					PIG_SPAWNER_REFILLER,
-					MIRROR_PLANE,
-					VANILLA_MODEL_TEST,
-					FULLBRIGHT,
-					NORMAL_BRIGHTNESS,
-					MAX_HEALTH_SETTER,
-					MAX_HEALTH_GETTER,
-					SMALL_COLLISION_TEST,
-					CHEST,
-					HIDDEN,
-					BASIC_PIPE,
-					FLUID_PIPE,
-					SURVIVAL_COMMAND_BLOCK,
-					REPEATING_SURVIVAL_COMMAND_BLOCK,
-					CHAIN_SURVIVAL_COMMAND_BLOCK,
-					SAPLING,
-					INVISIBLE,
-					FLUID_TANK_RESTRICTED,
-					PLANKS,
+					new BlockWaterGrass(),
+					new BlockLargeCollisionTest(),
+					new BlockRightClickTest(),
+					new BlockClientPlayerRightClick(),
+					new BlockRotatableLamp(),
+					new BlockItemCollisionTest(),
+					new BlockFluidTank<>("fluid_tank"),
+					new BlockItemDebugger(),
+					new BlockTestMod3(Material.ROCK, "end_portal_frame_full"),
+					new BlockColoredRotatable(Material.CLOTH, "colored_rotatable"),
+					new BlockColoredMultiRotatable(Material.CLOTH, "colored_multi_rotatable"),
+					new BlockPotionEffect(),
+					new BlockVariants(Material.IRON),
+					new BlockClientPlayerRotation(),
+					new BlockPigSpawnerRefiller(),
+					new BlockPlane(Material.IRON, "mirror_plane"),
+					new BlockTestMod3(Material.IRON, "vanilla_model_test"),
+					new BlockTestMod3(Material.ROCK, "fullbright").setLightLevel(1),
+					new BlockTestMod3(Material.ROCK, "normal_brightness"),
+					new BlockMaxHealthSetter(),
+					new BlockMaxHealthGetter(),
+					new BlockSmallCollisionTest(),
+					new BlockModChest(),
+					new BlockHidden(Material.ROCK, "hidden"),
+					new BlockPipeBasic("basic_pipe"),
+					new BlockPipeFluid(),
+					new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.REDSTONE, "survival_command_block"),
+					new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.AUTO, "repeating_survival_command_block"),
+					new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.SEQUENCE, "chain_survival_command_block"),
+					new BlockSaplingTestMod3(),
+					new BlockInvisible(),
+					new BlockFluidTankRestricted(),
+					new BlockTestMod3(Material.WOOD, "planks"),
 			};
 
 			registry.registerAll(blocks);
 
-			registerSlabGroup(registry, Slabs.STAINED_CLAY_SLABS.high);
-			registerSlabGroup(registry, Slabs.STAINED_CLAY_SLABS.low);
-		}
+			Slabs.STAINED_CLAY_SLABS.registerBlocks(registry);
 
-		/**
-		 * Register the {@link Block}s of a {@link SlabGroup}.
-		 *
-		 * @param registry  The registry
-		 * @param slabGroup The slab group
-		 */
-		private static void registerSlabGroup(final IForgeRegistry<Block> registry, final SlabGroup<?, ?, ?> slabGroup) {
-			registry.register(slabGroup.singleSlab);
-			registry.register(slabGroup.doubleSlab);
 		}
 
 		/**
@@ -210,8 +202,6 @@ public class ModBlocks {
 					new ItemBlock(INVISIBLE),
 					new ItemFluidTank(FLUID_TANK_RESTRICTED),
 					new ItemBlock(PLANKS),
-					Slabs.STAINED_CLAY_SLABS.low.item,
-					Slabs.STAINED_CLAY_SLABS.high.item,
 			};
 
 			final IForgeRegistry<Item> registry = event.getRegistry();
@@ -223,7 +213,20 @@ public class ModBlocks {
 				ITEM_BLOCKS.add(item);
 			}
 
+			registerSlabGroupContainerItems(registry, Slabs.STAINED_CLAY_SLABS);
+
 			registerTileEntities();
+		}
+
+		/**
+		 * Register a {@link ISlabGroupContainer}'s {@link Item}s and add them to {@link #ITEM_BLOCKS}.
+		 *
+		 * @param registry  The Item registry
+		 * @param container The container
+		 */
+		private static void registerSlabGroupContainerItems(final IForgeRegistry<Item> registry, final ISlabGroupContainer<?, ?, ?> container) {
+			final List<ItemBlock> items = container.registerItems(registry);
+			ITEM_BLOCKS.addAll(items);
 		}
 	}
 

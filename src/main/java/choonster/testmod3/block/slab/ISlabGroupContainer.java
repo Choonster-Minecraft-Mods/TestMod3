@@ -1,6 +1,12 @@
 package choonster.testmod3.block.slab;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.IStringSerializable;
+import net.minecraftforge.registries.IForgeRegistry;
+
+import java.util.List;
 
 /**
  * A container that holds one ore more {@link SlabGroup}s.
@@ -23,4 +29,21 @@ public interface ISlabGroupContainer<
 	 * @return The slab group
 	 */
 	SlabGroup<VARIANT, VARIANTS, SLAB> getSlabGroupForVariant(VARIANT variant);
+
+	/**
+	 * Register this container's {@link Block}s.
+	 *
+	 * @param registry The Block registry
+	 * @throws IllegalStateException If the Blocks have already been registered
+	 */
+	void registerBlocks(IForgeRegistry<Block> registry);
+
+	/**
+	 * Register and return this container's {@link Item}s.
+	 *
+	 * @param registry The Item registry
+	 * @return The registered Items
+	 * @throws IllegalStateException If the Items have already been registered
+	 */
+	List<ItemBlock> registerItems(IForgeRegistry<Item> registry);
 }

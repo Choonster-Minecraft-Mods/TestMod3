@@ -3,6 +3,7 @@ package choonster.testmod3.init;
 import choonster.testmod3.Logger;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.crafting.recipe.DummyRecipe;
+import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -82,8 +83,11 @@ public class ModRecipes {
 		public static void registerOreDictEntries(final RegistryEvent.Register<Item> event) {
 			OreDictionary.registerOre("plankWood", ModBlocks.PLANKS);
 
+			final IForgeRegistry<Item> itemRegistry = ForgeRegistries.ITEMS;
+
 			// Test for this thread: http://www.minecraftforge.net/forum/topic/59744-112-how-to-disable-some-mod-recipe-files-via-config-file/
-			OreDictionary.registerOre("itemRubber", ModItems.RUBBER);
+			// Can't use the fields from ModItems because object holders haven't been applied for Items yet
+			OreDictionary.registerOre("itemRubber", RegistryUtil.getRegistryEntry(itemRegistry, "rubber"));
 		}
 		
 		/**

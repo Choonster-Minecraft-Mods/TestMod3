@@ -21,13 +21,15 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 
+import static choonster.testmod3.util.InjectionUtil.Null;
+
 @ObjectHolder(TestMod3.MODID)
 public class ModEntities {
-	public static final EntityEntry MOD_ARROW = null;
+	public static final EntityEntry MOD_ARROW = Null();
 
-	public static final EntityEntry BLOCK_DETECTION_ARROW = null;
+	public static final EntityEntry BLOCK_DETECTION_ARROW = Null();
 
-	public static final EntityEntry PLAYER_AVOIDING_CREEPER = null;
+	public static final EntityEntry PLAYER_AVOIDING_CREEPER = Null();
 
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)

@@ -8,6 +8,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 
+import static choonster.testmod3.util.InjectionUtil.Null;
+
 /**
  * Registers this mod's {@link Potion}s.
  *
@@ -17,7 +19,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 @ObjectHolder(TestMod3.MODID)
 public class ModPotions {
 
-	public static final PotionTestMod3 TEST = new PotionTestMod3(false, 2, 2, 2, "test");
+	public static final PotionTestMod3 TEST = Null();
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	public static class RegistrationHandler {
@@ -28,9 +30,11 @@ public class ModPotions {
 		 */
 		@SubscribeEvent
 		public static void registerPotions(final RegistryEvent.Register<Potion> event) {
-			event.getRegistry().registerAll(
-					TEST
-			);
+			final Potion[] potions = {
+					new PotionTestMod3(false, 2, 2, 2, "test"),
+			};
+
+			event.getRegistry().registerAll(potions);
 		}
 	}
 

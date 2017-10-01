@@ -1,6 +1,8 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.util.RegistryUtil;
+import com.google.common.base.Preconditions;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionType;
@@ -8,9 +10,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import javax.annotation.Nullable;
+
+import static choonster.testmod3.util.InjectionUtil.Null;
 
 /**
  * Registers this mod's {@link PotionType}s.
@@ -21,62 +27,11 @@ import javax.annotation.Nullable;
 @ObjectHolder(TestMod3.MODID)
 public class ModPotionTypes {
 
-	public static final PotionType TEST;
+	public static final PotionType TEST = Null();
 
-	public static final PotionType LONG_TEST;
+	public static final PotionType LONG_TEST = Null();
 
-	public static final PotionType STRONG_TEST;
-
-	static {
-		final String LONG_PREFIX = "long_";
-		final String STRONG_PREFIX = "strong_";
-
-		final int HELPFUL_DURATION_STANDARD = 3600;
-		final int HELPFUL_DURATION_LONG = 9600;
-		final int HELPFUL_DURATION_STRONG = 1800;
-
-		final int HARMFUL_DURATION_STANDARD = 1800;
-		final int HARMFUL_DURATION_LONG = 4800;
-		final int HARMFUL_DURATION_STRONG = 900;
-
-		TEST = createPotionType(new PotionEffect(ModPotions.TEST, HELPFUL_DURATION_STANDARD));
-		LONG_TEST = createPotionType(new PotionEffect(ModPotions.TEST, HELPFUL_DURATION_LONG), LONG_PREFIX);
-		STRONG_TEST = createPotionType(new PotionEffect(ModPotions.TEST, HELPFUL_DURATION_STRONG, 1), STRONG_PREFIX);
-	}
-
-	/**
-	 * Create a {@link PotionType} from the specified {@link PotionEffect}.
-	 * <p>
-	 * Uses the {@link Potion}'s registry name as the {@link PotionType}'s registry name and name.
-	 *
-	 * @param potionEffect The PotionEffect
-	 * @return The PotionType
-	 */
-	private static PotionType createPotionType(final PotionEffect potionEffect) {
-		return createPotionType(potionEffect, null);
-	}
-
-	/**
-	 * Create a {@link PotionType} from the specified {@link PotionEffect}
-	 * <p>
-	 * Uses the {@link Potion}'s registry name as the {@link PotionType}'s registry name (with an optional prefix) and name (with no prefix).
-	 *
-	 * @param potionEffect The PotionEffect
-	 * @param namePrefix   The name prefix, if any
-	 * @return The PotionType
-	 */
-	private static PotionType createPotionType(final PotionEffect potionEffect, @Nullable final String namePrefix) {
-		final ResourceLocation potionName = potionEffect.getPotion().getRegistryName();
-
-		final ResourceLocation potionTypeName;
-		if (namePrefix != null) {
-			potionTypeName = new ResourceLocation(potionName.getResourceDomain(), namePrefix + potionName.getResourcePath());
-		} else {
-			potionTypeName = potionName;
-		}
-
-		return new PotionType(potionName.toString(), potionEffect).setRegistryName(potionTypeName);
-	}
+	public static final PotionType STRONG_TEST = Null();
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	public static class RegistrationHandler {
@@ -87,11 +42,62 @@ public class ModPotionTypes {
 		 */
 		@SubscribeEvent
 		public static void registerPotionTypes(final RegistryEvent.Register<PotionType> event) {
-			event.getRegistry().registerAll(
-					TEST,
-					LONG_TEST,
-					STRONG_TEST
-			);
+			final String LONG_PREFIX = "long_";
+			final String STRONG_PREFIX = "strong_";
+
+			final int HELPFUL_DURATION_STANDARD = 3600;
+			final int HELPFUL_DURATION_LONG = 9600;
+			final int HELPFUL_DURATION_STRONG = 1800;
+
+			final int HARMFUL_DURATION_STANDARD = 1800;
+			final int HARMFUL_DURATION_LONG = 4800;
+			final int HARMFUL_DURATION_STRONG = 900;
+
+			// Can't use the fields from ModPotions because object holders haven't been applied between RegistryEvent.Register<Potion> and now
+			final IForgeRegistry<Potion> potionRegistry = ForgeRegistries.POTIONS;
+			final Potion test = RegistryUtil.getRegistryEntry(potionRegistry, "test");
+
+			final PotionType[] potionTypes = new PotionType[]{
+					createPotionType(new PotionEffect(test, HELPFUL_DURATION_STANDARD)),
+					createPotionType(new PotionEffect(test, HELPFUL_DURATION_LONG), LONG_PREFIX),
+					createPotionType(new PotionEffect(test, HELPFUL_DURATION_STRONG, 1), STRONG_PREFIX),
+			};
+
+			event.getRegistry().registerAll(potionTypes);
+		}
+
+		/**
+		 * Create a {@link PotionType} from the specified {@link PotionEffect}.
+		 * <p>
+		 * Uses the {@link Potion}'s registry name as the {@link PotionType}'s registry name and name.
+		 *
+		 * @param potionEffect The PotionEffect
+		 * @return The PotionType
+		 */
+		private static PotionType createPotionType(final PotionEffect potionEffect) {
+			return createPotionType(potionEffect, null);
+		}
+
+		/**
+		 * Create a {@link PotionType} from the specified {@link PotionEffect}
+		 * <p>
+		 * Uses the {@link Potion}'s registry name as the {@link PotionType}'s registry name (with an optional prefix) and name (with no prefix).
+		 *
+		 * @param potionEffect The PotionEffect
+		 * @param namePrefix   The name prefix, if any
+		 * @return The PotionType
+		 */
+		private static PotionType createPotionType(final PotionEffect potionEffect, @Nullable final String namePrefix) {
+			final ResourceLocation potionName = Preconditions.checkNotNull(potionEffect.getPotion().getRegistryName());
+
+			final ResourceLocation potionTypeName;
+			if (namePrefix != null) {
+				potionTypeName = new ResourceLocation(potionName.getResourceDomain(), namePrefix + potionName.getResourcePath());
+			} else {
+				potionTypeName = potionName;
+			}
+
+			return new PotionType(potionName.toString(), potionEffect).setRegistryName(potionTypeName);
 		}
 	}
 }

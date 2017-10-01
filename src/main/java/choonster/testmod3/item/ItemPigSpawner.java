@@ -19,10 +19,13 @@ public class ItemPigSpawner extends ItemTestMod3 {
 	/**
 	 * A factory to create the {@link IPigSpawner}
 	 */
-	private Supplier<IPigSpawner> spawnerFactory;
+	private final Supplier<IPigSpawner> spawnerFactory;
 
-	public ItemPigSpawner(final String name) {
+	public ItemPigSpawner(final String name, final Supplier<IPigSpawner> spawnerFactory) {
 		super("pig_spawner_" + name);
+
+		this.spawnerFactory = spawnerFactory;
+
 		setHasSubtypes(true);
 	}
 
@@ -71,12 +74,5 @@ public class ItemPigSpawner extends ItemTestMod3 {
 		}
 
 		return super.getDurabilityForDisplay(stack);
-	}
-
-	public void setSpawnerFactory(final Supplier<IPigSpawner> spawnerFactory) {
-		if (this.spawnerFactory != null)
-			throw new IllegalStateException("Attempt to replace the spawner factory of " + getRegistryName().toString());
-
-		this.spawnerFactory = spawnerFactory;
 	}
 }

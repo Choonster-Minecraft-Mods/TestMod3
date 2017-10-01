@@ -242,7 +242,7 @@ public class ModModelManager {
 			SLAB extends BlockSlabTestMod3<VARIANT, VARIANTS, SLAB>
 			>
 	void registerSlabGroupItemModels(final SlabGroup<VARIANT, VARIANTS, SLAB> slabGroup) {
-		final SLAB singleSlab = slabGroup.singleSlab;
+		final SLAB singleSlab = slabGroup.getSingleSlab();
 		registerVariantBlockItemModels(
 				singleSlab.getDefaultState()
 						.withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM),
