@@ -18,6 +18,7 @@ public class RegistryUtil {
 	 *
 	 * @param registry The registry
 	 * @param name     The name of the entry
+	 * @param <T>      The registry type
 	 * @return The registry entry
 	 * @throws NullPointerException When the entry doesn't exist
 	 */
