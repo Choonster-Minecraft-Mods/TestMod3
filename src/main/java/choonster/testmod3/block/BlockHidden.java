@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
  * A block that only renders when the player is holding an item with the {@link IHiddenBlockRevealer} capability.
  * <p>
  * Test for this thread:
- * http://www.minecraftforge.net/forum/index.php/topic,41940.0.html
+ * http://www.minecraftforge.net/forum/topic/41720-1102-only-render-block-if-player-holds-a-specified-item/
  *
  * @author Choonster
  */

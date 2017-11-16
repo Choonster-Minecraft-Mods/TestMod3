@@ -27,7 +27,7 @@ import java.util.Optional;
  * Where A is air, R is redstone and P is the player.
  * <p>
  * Test for this thread:
- * http://www.minecraftforge.net/forum/index.php/topic,41308.0.html
+ * http://www.minecraftforge.net/forum/topic/41088-1102-checking-blocks-around-player/
  *
  * @author Choonster
  */

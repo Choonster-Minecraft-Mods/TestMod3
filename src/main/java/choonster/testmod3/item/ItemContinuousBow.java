@@ -8,7 +8,7 @@ import net.minecraft.world.World;
  * A bow that fires continuously while right click is held.
  * <p>
  * Test for this thread:
- * http://www.minecraftforge.net/forum/index.php/topic,36707.0.html
+ * http://www.minecraftforge.net/forum/topic/36494-189-changing-the-values-of-bow-damage/
  *
  * @author Choonster
  */

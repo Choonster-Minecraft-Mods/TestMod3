@@ -14,7 +14,7 @@ import java.util.List;
  * A TileEntity that applies a potion effect to all entities within a certain distance of it.
  * <p>
  * Test for this thread:
- * http://www.minecraftforge.net/forum/index.php/topic,35818.0.html
+ * http://www.minecraftforge.net/forum/topic/35606-189-applying-a-potion-effect-via-a-te/
  *
  * @author Choonster
  */

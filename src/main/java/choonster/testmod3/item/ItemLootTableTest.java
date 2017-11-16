@@ -22,7 +22,7 @@ import java.util.List;
  * Gives the player random loot from a {@link LootTable} when they right click.
  * <p>
  * Test for this thread:
- * http://www.minecraftforge.net/forum/index.php/topic,37969.0.html
+ * http://www.minecraftforge.net/forum/topic/37754-19-custom-loot-table-for-my-own-structures/
  *
  * @author Choonster
  */
