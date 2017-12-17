@@ -6,7 +6,9 @@ import net.minecraft.util.math.ChunkPos;
  * Allows {@link IChunkEnergy} instances to be added and removed.
  *
  * @author Choonster
+ * @deprecated Use {@link IChunkEnergy} directly instead; TODO: Remove in 1.13
  */
+@Deprecated
 public interface IChunkEnergyHolderModifiable extends IChunkEnergyHolder {
 
 	/**

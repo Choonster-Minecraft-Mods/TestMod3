@@ -13,7 +13,9 @@ import java.util.Map;
  * Default implementation of {@link IChunkEnergyHolder}.
  *
  * @author Choonster
+ * @deprecated Use {@link IChunkEnergy} directly instead; TODO: Remove in 1.13
  */
+@Deprecated
 public class ChunkEnergyHolder implements IChunkEnergyHolderModifiable {
 	private final Map<ChunkPos, IChunkEnergy> chunkEnergies = new HashMap<>();
 

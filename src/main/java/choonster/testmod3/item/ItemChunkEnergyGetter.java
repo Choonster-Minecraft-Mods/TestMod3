@@ -28,7 +28,7 @@ public class ItemChunkEnergyGetter extends ItemTestMod3 {
 		if (!worldIn.isRemote) {
 			final Chunk chunk = worldIn.getChunkFromBlockCoords(new BlockPos(playerIn));
 			final ChunkPos chunkPos = chunk.getPos();
-			final IChunkEnergy chunkEnergy = CapabilityChunkEnergy.getChunkEnergy(worldIn, chunkPos);
+			final IChunkEnergy chunkEnergy = CapabilityChunkEnergy.getChunkEnergy(chunk);
 
 			if (chunkEnergy != null) {
 				playerIn.sendMessage(new TextComponentTranslation("message.testmod3:chunk_energy.get", chunkPos, chunkEnergy.getEnergyStored()));

@@ -28,10 +28,15 @@ public class CapabilityProviderSimple<HANDLER> implements ICapabilityProvider {
 	 */
 	protected final HANDLER instance;
 
-	public CapabilityProviderSimple(@Nullable final HANDLER instance, final Capability<HANDLER> capability, @Nullable final EnumFacing facing) {
-		this.instance = instance;
+	public CapabilityProviderSimple(final Capability<HANDLER> capability, @Nullable final EnumFacing facing, @Nullable final HANDLER instance) {
 		this.capability = capability;
 		this.facing = facing;
+		this.instance = instance;
+	}
+
+	@Deprecated
+	public CapabilityProviderSimple(@Nullable final HANDLER instance, final Capability<HANDLER> capability, @Nullable final EnumFacing facing) {
+		this(capability, facing, instance);
 	}
 
 	/**

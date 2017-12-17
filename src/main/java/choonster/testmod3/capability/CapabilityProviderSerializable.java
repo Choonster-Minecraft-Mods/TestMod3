@@ -36,7 +36,7 @@ public class CapabilityProviderSerializable<HANDLER> extends CapabilityProviderS
 	 * @param instance   The handler instance to provide
 	 */
 	public CapabilityProviderSerializable(final Capability<HANDLER> capability, @Nullable final EnumFacing facing, @Nullable final HANDLER instance) {
-		super(instance, capability, facing);
+		super(capability, facing, instance);
 	}
 
 	@Nullable

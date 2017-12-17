@@ -34,7 +34,7 @@ public class ItemChunkEnergySetter extends ItemTestMod3 {
 	private void addRemoveChunkEnergy(final World world, final EntityPlayer player, final int amount) {
 		final Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(player));
 		final ChunkPos chunkPos = chunk.getPos();
-		final IChunkEnergy chunkEnergy = CapabilityChunkEnergy.getChunkEnergy(world, chunkPos);
+		final IChunkEnergy chunkEnergy = CapabilityChunkEnergy.getChunkEnergy(chunk);
 
 		if (chunkEnergy != null) {
 			if (player.isSneaking()) {

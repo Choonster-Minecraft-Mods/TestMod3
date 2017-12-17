@@ -4,6 +4,7 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergyHolder;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergyHolderModifiable;
+import choonster.testmod3.capability.CapabilityProviderSerializable;
 import choonster.testmod3.capability.CapabilityProviderSimple;
 import choonster.testmod3.network.MessageUpdateChunkEnergyValue;
 import choonster.testmod3.util.CapabilityUtils;
@@ -39,10 +40,19 @@ import static choonster.testmod3.util.InjectionUtil.Null;
 public class CapabilityChunkEnergy {
 
 	/**
-	 * The {@link Capability} instance
+	 * The {@link IChunkEnergyHolder} {@link Capability} instance.
+	 *
+	 * @deprecated Use {@link IChunkEnergy} directly instead; TODO: Remove in 1.13
 	 */
+	@Deprecated
 	@CapabilityInject(IChunkEnergyHolder.class)
 	public static final Capability<IChunkEnergyHolder> CHUNK_ENERGY_CAPABILITY = Null();
+
+	/**
+	 * The {@link IChunkEnergy} {@link Capability} instance.
+	 */
+	@CapabilityInject(IChunkEnergy.class)
+	public static final Capability<IChunkEnergy> CHUNK_ENERGY_CHUNK_CAPABILITY = Null();
 
 	/**
 	 * The default {@link EnumFacing} to use for this capability.
@@ -65,6 +75,8 @@ public class CapabilityChunkEnergy {
 	private static final String ID_STRING = ID.toString();
 
 	public static void register() {
+		// TODO: Remove in 1.13
+		//noinspection deprecation
 		CapabilityManager.INSTANCE.register(IChunkEnergyHolder.class, new Capability.IStorage<IChunkEnergyHolder>() {
 			@Override
 			public NBTBase writeNBT(final Capability<IChunkEnergyHolder> capability, final IChunkEnergyHolder instance, final EnumFacing side) {
@@ -76,6 +88,21 @@ public class CapabilityChunkEnergy {
 
 			}
 		}, ChunkEnergyHolder::new);
+
+		CapabilityManager.INSTANCE.register(IChunkEnergy.class, new Capability.IStorage<IChunkEnergy>() {
+			@Override
+			public NBTBase writeNBT(final Capability<IChunkEnergy> capability, final IChunkEnergy instance, final EnumFacing side) {
+				return new NBTTagInt(instance.getEnergyStored());
+			}
+
+			@Override
+			public void readNBT(final Capability<IChunkEnergy> capability, final IChunkEnergy instance, final EnumFacing side, final NBTBase nbt) {
+				if (!(instance instanceof ChunkEnergy))
+					throw new IllegalArgumentException("Can not deserialize to an instance that isn't the default implementation");
+
+				((ChunkEnergy) instance).setEnergy(((NBTTagInt) nbt).getInt());
+			}
+		}, () -> null);
 	}
 
 	/**
@@ -83,7 +110,9 @@ public class CapabilityChunkEnergy {
 	 *
 	 * @param world The World
 	 * @return The IChunkEnergyHolder, if any
+	 * @deprecated Use {@link IChunkEnergy} directly instead; TODO: Remove in 1.13
 	 */
+	@Deprecated
 	@Nullable
 	public static IChunkEnergyHolder getChunkEnergyHolder(final World world) {
 		return CapabilityUtils.getCapability(world, CHUNK_ENERGY_CAPABILITY, DEFAULT_FACING);
@@ -98,10 +127,7 @@ public class CapabilityChunkEnergy {
 	 */
 	@Nullable
 	public static IChunkEnergy getChunkEnergy(final World world, final ChunkPos chunkPos) {
-		final IChunkEnergyHolder chunkEnergyHolder = getChunkEnergyHolder(world);
-		if (chunkEnergyHolder == null) return null;
-
-		return chunkEnergyHolder.getChunkEnergy(chunkPos);
+		return getChunkEnergy(world.getChunkFromChunkCoords(chunkPos.x, chunkPos.z));
 	}
 
 	/**
@@ -112,7 +138,7 @@ public class CapabilityChunkEnergy {
 	 */
 	@Nullable
 	public static IChunkEnergy getChunkEnergy(final Chunk chunk) {
-		return getChunkEnergy(chunk.getWorld(), chunk.getPos());
+		return CapabilityUtils.getCapability(chunk, CHUNK_ENERGY_CHUNK_CAPABILITY, DEFAULT_FACING);
 	}
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
@@ -124,26 +150,40 @@ public class CapabilityChunkEnergy {
 		 *
 		 * @param event The event
 		 */
+		@Deprecated
 		@SubscribeEvent
 		public static void attachCapabilities(final AttachCapabilitiesEvent<World> event) {
 			final IChunkEnergyHolder chunkEnergyHolder = new ChunkEnergyHolder();
-			event.addCapability(ID, new CapabilityProviderSimple<>(chunkEnergyHolder, CHUNK_ENERGY_CAPABILITY, DEFAULT_FACING));
+			event.addCapability(ID, new CapabilityProviderSimple<>(CHUNK_ENERGY_CAPABILITY, DEFAULT_FACING, chunkEnergyHolder));
+		}
+
+		@SubscribeEvent
+		public static void attachChunkCapabilities(final AttachCapabilitiesEvent<Chunk> event) {
+			final Chunk chunk = event.getObject();
+			final IChunkEnergy chunkEnergy = new ChunkEnergy(DEFAULT_CAPACITY, chunk.getWorld(), chunk.getPos());
+			event.addCapability(ID, new CapabilityProviderSerializable<>(CHUNK_ENERGY_CHUNK_CAPABILITY, DEFAULT_FACING, chunkEnergy));
 		}
 
 		/**
-		 * Load the {@link IChunkEnergy} for a chunk when the chunk is loaded.
+		 * Load the legacy {@link IChunkEnergy} data for a chunk when the chunk is loaded.
 		 *
 		 * @param event The event
+		 * @deprecated {@link IChunkEnergy} is now a {@link Chunk} capability; TODO: Remove in 1.13
 		 */
+		@Deprecated
 		@SubscribeEvent
 		public static void chunkDataLoad(final ChunkDataEvent.Load event) {
 			final World world = event.getWorld();
-			final ChunkPos chunkPos = event.getChunk().getPos();
+			final Chunk chunk = event.getChunk();
+			final ChunkPos chunkPos = chunk.getPos();
 
 			final IChunkEnergyHolder chunkEnergyHolder = getChunkEnergyHolder(world);
 			if (!(chunkEnergyHolder instanceof IChunkEnergyHolderModifiable)) return;
 
-			final ChunkEnergy chunkEnergy = new ChunkEnergy(DEFAULT_CAPACITY, world, chunkPos);
+			final IChunkEnergy iChunkEnergy = getChunkEnergy(chunk);
+			if (!(iChunkEnergy instanceof ChunkEnergy)) return;
+
+			final ChunkEnergy chunkEnergy = (ChunkEnergy) iChunkEnergy;
 
 			final NBTTagCompound chunkData = event.getData();
 			if (chunkData.hasKey(ID_STRING, Constants.NBT.TAG_INT)) {
@@ -155,45 +195,39 @@ public class CapabilityChunkEnergy {
 		}
 
 		/**
-		 * Create a default {@link IChunkEnergy} for a chunk when it's loaded, if it doesn't already have one.
+		 * Add the {@link IChunkEnergy} for a chunk to the {@link IChunkEnergyHolder} if it doesn't already have one.
 		 * <p>
 		 * {@link ChunkDataEvent.Load} is never fired for client-side chunks, so this allows them to have a default
-		 * {@link IChunkEnergy} created when they load.
+		 * {@link IChunkEnergy} added to the {@link IChunkEnergyHolder} when they load.
 		 *
 		 * @param event The event
+		 * @deprecated {@link IChunkEnergy} is now a {@link Chunk} capability; TODO: Remove in 1.13
 		 */
+		@Deprecated
 		@SubscribeEvent
 		public static void chunkLoad(final ChunkEvent.Load event) {
 			final World world = event.getWorld();
-			final ChunkPos chunkPos = event.getChunk().getPos();
+			final Chunk chunk = event.getChunk();
+			final ChunkPos chunkPos = chunk.getPos();
 
 			final IChunkEnergyHolder chunkEnergyHolder = getChunkEnergyHolder(world);
 			if (!(chunkEnergyHolder instanceof IChunkEnergyHolderModifiable)) return;
 
 			if (chunkEnergyHolder.getChunkEnergy(chunkPos) != null) return;
 
-			final IChunkEnergy chunkEnergy = new ChunkEnergy(DEFAULT_CAPACITY, world, chunkPos);
-			((IChunkEnergyHolderModifiable) chunkEnergyHolder).setChunkEnergy(chunkPos, chunkEnergy);
+			final IChunkEnergy chunkEnergy = getChunkEnergy(chunk);
+			if (chunkEnergy != null) {
+				((IChunkEnergyHolderModifiable) chunkEnergyHolder).setChunkEnergy(chunkPos, chunkEnergy);
+			}
 		}
 
 		/**
-		 * Save the {@link IChunkEnergy} for a chunk when a chunk is saved.
+		 * Remove the {@link IChunkEnergy} for a chunk from the {@link IChunkEnergyHolder} when a chunk is unloaded.
 		 *
 		 * @param event The event
+		 * @deprecated {@link IChunkEnergy} is now a {@link Chunk} capability; TODO: Remove in 1.13
 		 */
-		@SubscribeEvent
-		public static void chunkDataSave(final ChunkDataEvent.Save event) {
-			final IChunkEnergy chunkEnergy = getChunkEnergy(event.getChunk());
-			if (!(chunkEnergy instanceof ChunkEnergy)) return;
-
-			event.getData().setTag(ID_STRING, ((ChunkEnergy) chunkEnergy).serializeNBT());
-		}
-
-		/**
-		 * Remove the {@link IChunkEnergy} for a chunk when a chunk is unloaded.
-		 *
-		 * @param event The event
-		 */
+		@Deprecated
 		@SubscribeEvent
 		public static void chunkUnload(final ChunkEvent.Unload event) {
 			final IChunkEnergyHolder chunkEnergyHolder = getChunkEnergyHolder(event.getWorld());

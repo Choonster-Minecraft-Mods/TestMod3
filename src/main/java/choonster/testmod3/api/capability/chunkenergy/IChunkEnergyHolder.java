@@ -8,7 +8,9 @@ import javax.annotation.Nullable;
  * A capability to hold per-chunk {@link IChunkEnergy} instances.
  *
  * @author Choonster
+ * @deprecated Use {@link IChunkEnergy} directly instead; TODO: Remove in 1.13
  */
+@Deprecated
 public interface IChunkEnergyHolder {
 
 	/**
