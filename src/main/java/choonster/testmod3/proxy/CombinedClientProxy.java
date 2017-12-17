@@ -6,7 +6,6 @@ import choonster.testmod3.capability.lock.CapabilityLock;
 import choonster.testmod3.client.command.ModCommandsClient;
 import choonster.testmod3.client.gui.GuiLock;
 import choonster.testmod3.client.init.ModKeyBindings;
-import choonster.testmod3.client.model.ModColourManager;
 import choonster.testmod3.client.renderer.entity.ModRenderers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -32,7 +31,7 @@ public class CombinedClientProxy implements IProxy {
 
 	@Override
 	public void init() {
-		ModColourManager.registerColourHandlers();
+
 	}
 
 	@Override
