@@ -6,6 +6,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.items.ItemStackHandler;
 
+import java.util.Objects;
+
 /**
  * An inventory that can be named.
  *
@@ -85,7 +87,8 @@ public class ItemHandlerNameable extends ItemStackHandler implements IItemHandle
 		super.deserializeNBT(nbt);
 
 		if (nbt.hasKey("DisplayName")) {
-			setDisplayName(ITextComponent.Serializer.jsonToComponent(nbt.getString("DisplayName")));
+			final ITextComponent displayName = Objects.requireNonNull(ITextComponent.Serializer.jsonToComponent(nbt.getString("DisplayName")));
+			setDisplayName(displayName);
 		}
 	}
 }

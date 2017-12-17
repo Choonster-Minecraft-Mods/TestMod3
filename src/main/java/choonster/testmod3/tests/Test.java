@@ -4,6 +4,8 @@ package choonster.testmod3.tests;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
+
 /**
  * A class that runs various tests from {@link #runTest()}.
  * <p>
@@ -35,7 +37,7 @@ public abstract class Test {
 		logger.warn(message, e);
 	}
 
-	protected void assertEqual(final Object expected, final Object actual) {
+	protected void assertEqual(final Object expected, @Nullable final Object actual) {
 		if (!expected.equals(actual)) {
 			allAssertionsPassed = false;
 			logger.warn(String.format("Objects not equal. Expected: %s, Actual: %s", expected, actual));

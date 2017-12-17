@@ -10,6 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
+import java.util.Objects;
 
 
 /**
@@ -41,7 +42,8 @@ public class PotionTestMod3 extends Potion {
 	 */
 	public static void setPotionName(final Potion potion, final String potionName) {
 		potion.setRegistryName(TestMod3.MODID, potionName);
-		potion.setPotionName("effect." + potion.getRegistryName().toString());
+		final ResourceLocation registryName = Objects.requireNonNull(potion.getRegistryName());
+		potion.setPotionName("effect." + registryName.toString());
 	}
 
 	@Override

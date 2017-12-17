@@ -27,6 +27,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.Fluid;
@@ -36,6 +37,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.ToIntFunction;
 
@@ -165,7 +167,8 @@ public class ModModelManager {
 		final Item item = Item.getItemFromBlock(block);
 
 		if (item != Items.AIR) {
-			registerItemModel(item, new ModelResourceLocation(block.getRegistryName(), propertyStringMapper.getPropertyString(state.getProperties())));
+			final ResourceLocation registryName = Objects.requireNonNull(block.getRegistryName());
+			registerItemModel(item, new ModelResourceLocation(registryName, propertyStringMapper.getPropertyString(state.getProperties())));
 		}
 	}
 
@@ -301,7 +304,8 @@ public class ModModelManager {
 	 * @param item The Item
 	 */
 	private void registerItemModel(final Item item) {
-		registerItemModel(item, item.getRegistryName().toString());
+		final ResourceLocation registryName = Objects.requireNonNull(item.getRegistryName());
+		registerItemModel(item, registryName.toString());
 	}
 
 	/**

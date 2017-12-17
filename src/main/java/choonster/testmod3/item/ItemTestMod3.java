@@ -2,6 +2,9 @@ package choonster.testmod3.item;
 
 import choonster.testmod3.TestMod3;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+
+import java.util.Objects;
 
 /**
  * A base class for this mod's items.
@@ -22,6 +25,7 @@ public class ItemTestMod3 extends Item {
 	 */
 	public static void setItemName(final Item item, final String itemName) {
 		item.setRegistryName(TestMod3.MODID, itemName);
-		item.setUnlocalizedName(item.getRegistryName().toString());
+		final ResourceLocation registryName = Objects.requireNonNull(item.getRegistryName());
+		item.setUnlocalizedName(registryName.toString());
 	}
 }

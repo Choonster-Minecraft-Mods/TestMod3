@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
  */
 @SuppressWarnings("unused")
 public class IngredientNever extends Ingredient {
-	public static IngredientNever INSTANCE = new IngredientNever();
+	public static final IngredientNever INSTANCE = new IngredientNever();
 
 	private IngredientNever() {
 		super(0);

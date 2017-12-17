@@ -7,6 +7,7 @@ import net.minecraft.world.LockCode;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 /**
  * Default implementation of {@link ILock}.
@@ -67,7 +68,8 @@ public class Lock implements ILock, INBTSerializable<NBTTagCompound> {
 		code = LockCode.fromNBT(nbt);
 
 		if (nbt.hasKey("DisplayName")) {
-			setDisplayName(ITextComponent.Serializer.jsonToComponent(nbt.getString("DisplayName")));
+			final ITextComponent displayName = Objects.requireNonNull(ITextComponent.Serializer.jsonToComponent(nbt.getString("DisplayName")));
+			setDisplayName(displayName);
 		}
 	}
 

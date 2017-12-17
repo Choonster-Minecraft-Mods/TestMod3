@@ -71,7 +71,7 @@ public class GuiLock extends GuiScreen {
 	}
 
 	@Override
-	protected void actionPerformed(final GuiButton button) throws IOException {
+	protected void actionPerformed(final GuiButton button) {
 		if (button.enabled) {
 			if (button.id == 0) {
 				TestMod3.network.sendToServer(new MessageLockSetLockCode(pos, facing, lockCodeTextField.getText()));
@@ -83,7 +83,7 @@ public class GuiLock extends GuiScreen {
 	}
 
 	@Override
-	protected void keyTyped(final char typedChar, final int keyCode) throws IOException {
+	protected void keyTyped(final char typedChar, final int keyCode) {
 		lockCodeTextField.textboxKeyTyped(typedChar, keyCode);
 
 		if (keyCode == Keyboard.KEY_ESCAPE) {

@@ -4,6 +4,9 @@ import choonster.testmod3.TestMod3;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.ResourceLocation;
+
+import java.util.Objects;
 
 /**
  * A base class for this mod's blocks.
@@ -29,6 +32,7 @@ public class BlockTestMod3 extends Block {
 	 */
 	public static void setBlockName(final Block block, final String blockName) {
 		block.setRegistryName(TestMod3.MODID, blockName);
-		block.setUnlocalizedName(block.getRegistryName().toString());
+		final ResourceLocation registryName = Objects.requireNonNull(block.getRegistryName());
+		block.setUnlocalizedName(registryName.toString());
 	}
 }

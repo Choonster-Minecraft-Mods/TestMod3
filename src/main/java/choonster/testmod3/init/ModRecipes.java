@@ -14,6 +14,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.RecipeFireworks;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.potion.PotionType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -25,6 +26,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
@@ -160,7 +162,8 @@ public class ModRecipes {
 
 			Logger.info("Overriding recipes with dummy recipes, please ignore the following \"Dangerous alternative prefix\" warnings.");
 			toRemove.forEach(recipe -> {
-				final IRecipe replacement = new DummyRecipe().setRegistryName(recipe.getRegistryName());
+				final ResourceLocation registryName = Objects.requireNonNull(recipe.getRegistryName());
+				final IRecipe replacement = new DummyRecipe().setRegistryName(registryName);
 				registry.register(replacement);
 			});
 

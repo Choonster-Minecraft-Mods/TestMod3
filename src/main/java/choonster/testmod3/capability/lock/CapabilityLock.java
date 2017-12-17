@@ -20,6 +20,7 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 import static choonster.testmod3.util.InjectionUtil.Null;
 
@@ -67,7 +68,8 @@ public final class CapabilityLock {
 				lock.setLockCode(LockCode.fromNBT(tagCompound));
 
 				if (tagCompound.hasKey("DisplayName")) {
-					lock.setDisplayName(ITextComponent.Serializer.jsonToComponent(tagCompound.getString("DisplayName")));
+					final ITextComponent displayName = Objects.requireNonNull(ITextComponent.Serializer.jsonToComponent(tagCompound.getString("DisplayName")));
+					lock.setDisplayName(displayName);
 				}
 			}
 		}, () -> new Lock(new TextComponentTranslation("container.inventory")));

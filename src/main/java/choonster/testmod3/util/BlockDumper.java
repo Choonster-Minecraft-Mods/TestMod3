@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.io.PrintWriter;
+import java.util.Objects;
 import java.util.stream.StreamSupport;
 
 /**
@@ -24,7 +25,7 @@ public class BlockDumper {
 			writer.println("Name - toString");
 
 			StreamSupport.stream(ForgeRegistries.BLOCKS.spliterator(), false)
-					.filter(block -> block.getRegistryName().getResourceDomain().equals(TestMod3.MODID))
+					.filter(block -> Objects.requireNonNull(block.getRegistryName()).getResourceDomain().equals(TestMod3.MODID))
 					.forEach(block -> {
 						final Item item = Item.getItemFromBlock(block);
 						if (item != Items.AIR) {

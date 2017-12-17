@@ -6,7 +6,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.server.command.CommandTreeBase;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,12 +56,9 @@ public class CommandTestMod3 extends CommandTreeBase {
 	 * @return The possible commands
 	 */
 	public List<ICommand> getSortedPossibleCommands(final ICommandSender sender, final MinecraftServer server) {
-		final List<ICommand> commands = getSubCommands().stream()
+		return getSubCommands().stream()
 				.filter(command -> command.checkPermission(server, sender))
+				.sorted()
 				.collect(Collectors.toList());
-
-		Collections.sort(commands);
-
-		return commands;
 	}
 }
