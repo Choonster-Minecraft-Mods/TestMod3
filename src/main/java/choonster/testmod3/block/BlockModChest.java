@@ -124,7 +124,7 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 	 * @return Is the chest below a solid block?
 	 */
 	private boolean isBelowSolidBlock(final World worldIn, final BlockPos pos) {
-		return worldIn.getBlockState(pos.up()).isSideSolid(worldIn, pos.up(), EnumFacing.DOWN);
+		return worldIn.getBlockState(pos.up()).doesSideBlockChestOpening(worldIn, pos.up(), EnumFacing.DOWN);
 	}
 
 	/**
