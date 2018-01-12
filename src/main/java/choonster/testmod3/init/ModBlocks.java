@@ -159,6 +159,7 @@ public class ModBlocks {
 
 			Slabs.STAINED_CLAY_SLABS.registerBlocks(registry);
 
+			registerTileEntities();
 		}
 
 		/**
@@ -214,8 +215,6 @@ public class ModBlocks {
 			}
 
 			registerSlabGroupContainerItems(registry, Slabs.STAINED_CLAY_SLABS);
-
-			registerTileEntities();
 		}
 
 		/**
