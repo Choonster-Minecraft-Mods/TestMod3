@@ -32,5 +32,6 @@ public class ModCommands {
 		commandTestMod3.addSubcommand(new CommandMaxHealthSet());
 		commandTestMod3.addSubcommand(new CommandMaxHealthGet());
 		commandTestMod3.addSubcommand(new CommandTreeHelp(commandTestMod3));
+		commandTestMod3.addSubcommand(new CommandDebugConfig());
 	}
 }
