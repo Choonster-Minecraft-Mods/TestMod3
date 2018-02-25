@@ -58,7 +58,7 @@ public abstract class BlockSlabTestMod3<
 		// Vanilla sets this for anything that extends BlockSlab in Block.registerBlocks,
 		// but this is run before mods are loaded; so we need to set it manually.
 		// Thanks to HappyKiller1O1 for pointing out this field to me:
-		// http://www.minecraftforge.net/forum/index.php/topic,36125.msg190252.html#msg190252
+		// http://www.minecraftforge.net/forum/topic/35912-solved-189-custom-slabs-have-incorrect-lighting-in-world/?do=findComment&comment=191051
 		this.useNeighborBrightness = true;
 
 		final String groupName = slabGroup.getGroupName();
