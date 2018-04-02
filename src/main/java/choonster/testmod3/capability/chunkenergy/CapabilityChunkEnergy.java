@@ -244,7 +244,10 @@ public class CapabilityChunkEnergy {
 		@SubscribeEvent
 		public static void chunkWatch(final ChunkWatchEvent.Watch event) {
 			final EntityPlayerMP player = event.getPlayer();
-			final IChunkEnergy chunkEnergy = getChunkEnergy(player.getEntityWorld(), event.getChunk());
+			final Chunk chunk = event.getChunkInstance();
+			if (chunk == null) return;
+
+			final IChunkEnergy chunkEnergy = getChunkEnergy(chunk);
 			if (chunkEnergy == null) return;
 
 			TestMod3.network.sendTo(new MessageUpdateChunkEnergyValue(chunkEnergy), player);
