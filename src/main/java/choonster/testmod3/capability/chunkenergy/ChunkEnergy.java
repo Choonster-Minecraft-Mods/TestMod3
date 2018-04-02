@@ -5,11 +5,13 @@ import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.network.MessageUpdateChunkEnergyValue;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.server.management.PlayerChunkMapEntry;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 /**
@@ -96,7 +98,9 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 
 		if (world.isRemote) return;
 
-		if (world.isBlockLoaded(chunkPos.getBlock(0, 0, 0))) {
+		BlockPos chunkOrigin = chunkPos.getBlock(0, 0, 0);
+
+		if (world.isBlockLoaded(chunkOrigin)) {
 			world.getChunkFromChunkCoords(chunkPos.x, chunkPos.z).markDirty();
 		}
 
@@ -104,6 +108,6 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 		if (playerChunkMapEntry == null) return;
 
 		final IMessage message = new MessageUpdateChunkEnergyValue(this);
-		playerChunkMapEntry.sendPacket(TestMod3.network.getPacketFrom(message));
+		TestMod3.network.sendToAllTracking(message, new NetworkRegistry.TargetPoint(world.provider.getDimension(), chunkOrigin.getX(), chunkOrigin.getY(), chunkOrigin.getZ(), 0));
 	}
 }
