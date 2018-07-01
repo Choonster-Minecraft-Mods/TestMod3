@@ -49,11 +49,9 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 		// Filter out any items from the list that shouldn't be synced
 		final NonNullList<ItemStack> syncableItemsList = NonNullList.withSize(itemsList.size(), ItemStack.EMPTY);
 		for (int index = 0; index < syncableItemsList.size(); index++) {
-			final ItemStack stack = syncableItemsList.get(index);
+			final ItemStack stack = itemsList.get(index);
 			if (shouldSyncItem(stack)) {
 				syncableItemsList.set(index, stack);
-			} else {
-				syncableItemsList.set(index, ItemStack.EMPTY);
 			}
 		}
 
