@@ -153,7 +153,7 @@ public class BlockFluidTank<TE extends TileEntityFluidTank> extends BlockTileEnt
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 }

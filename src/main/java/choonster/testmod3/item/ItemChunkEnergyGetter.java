@@ -26,7 +26,7 @@ public class ItemChunkEnergyGetter extends ItemTestMod3 {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand handIn) {
 		if (!worldIn.isRemote) {
-			final Chunk chunk = worldIn.getChunkFromBlockCoords(new BlockPos(playerIn));
+			final Chunk chunk = worldIn.getChunk(new BlockPos(playerIn));
 			final ChunkPos chunkPos = chunk.getPos();
 			final IChunkEnergy chunkEnergy = CapabilityChunkEnergy.getChunkEnergy(chunk);
 

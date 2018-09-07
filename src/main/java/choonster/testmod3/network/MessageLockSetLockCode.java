@@ -51,7 +51,7 @@ public class MessageLockSetLockCode implements IMessage {
 		hasFacing = buf.readBoolean();
 
 		if (hasFacing) {
-			facing = EnumFacing.getFront(buf.readUnsignedByte());
+			facing = EnumFacing.byIndex(buf.readUnsignedByte());
 		}
 
 		lockCode = ByteBufUtils.readUTF8String(buf);

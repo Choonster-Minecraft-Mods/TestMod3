@@ -56,8 +56,8 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 	}
 
 	@Override
-	public String getUnlocalizedName(final int meta) {
-		return getUnlocalizedName() + "." + getVariant(meta).getUnlocalizedName();
+	public String getTranslationKey(final int meta) {
+		return getTranslationKey() + "." + getVariant(meta).getTranslationKey();
 	}
 
 	/**

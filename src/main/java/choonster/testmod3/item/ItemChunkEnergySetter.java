@@ -32,7 +32,7 @@ public class ItemChunkEnergySetter extends ItemTestMod3 {
 	 * @param amount The amount to add/remove
 	 */
 	private void addRemoveChunkEnergy(final World world, final EntityPlayer player, final int amount) {
-		final Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(player));
+		final Chunk chunk = world.getChunk(new BlockPos(player));
 		final ChunkPos chunkPos = chunk.getPos();
 		final IChunkEnergy chunkEnergy = CapabilityChunkEnergy.getChunkEnergy(chunk);
 

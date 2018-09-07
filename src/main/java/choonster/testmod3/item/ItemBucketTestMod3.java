@@ -66,21 +66,21 @@ public class ItemBucketTestMod3 extends UniversalBucket {
 	@Override
 	public String getItemStackDisplayName(final ItemStack stack) {
 		final FluidStack fluidStack = getFluid(stack);
-		final String unlocalisedName = this.getUnlocalizedNameInefficiently(stack);
+		final String translationKey = this.getUnlocalizedNameInefficiently(stack);
 
-		// If the bucket is empty, translate the unlocalised name directly
+		// If the bucket is empty, translate the translation key directly
 		if (fluidStack == null) {
-			return I18n.translateToLocal(unlocalisedName + ".name").trim();
+			return I18n.translateToLocal(translationKey + ".name").trim();
 		}
 
 		// If there's a fluid-specific translation, use it
-		final String fluidUnlocalisedName = unlocalisedName + ".filled." + fluidStack.getFluid().getName() + ".name";
+		final String fluidUnlocalisedName = translationKey + ".filled." + fluidStack.getFluid().getName() + ".name";
 		if (I18n.canTranslate(fluidUnlocalisedName)) {
 			return I18n.translateToLocal(fluidUnlocalisedName);
 		}
 
 		// Else translate the filled name directly, formatting it with the fluid name
-		return I18n.translateToLocalFormatted(unlocalisedName + ".filled.name", fluidStack.getLocalizedName());
+		return I18n.translateToLocalFormatted(translationKey + ".filled.name", fluidStack.getLocalizedName());
 	}
 
 	@Override

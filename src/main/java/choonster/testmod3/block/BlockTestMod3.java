@@ -25,7 +25,7 @@ public class BlockTestMod3 extends Block {
 	}
 
 	/**
-	 * Set the registry name of {@code block} to {@code blockName} and the unlocalised name to the full registry name.
+	 * Set the registry name of {@code block} to {@code blockName} and the translation key to the full registry name.
 	 *
 	 * @param block     The block
 	 * @param blockName The block's name
@@ -33,6 +33,6 @@ public class BlockTestMod3 extends Block {
 	public static void setBlockName(final Block block, final String blockName) {
 		block.setRegistryName(TestMod3.MODID, blockName);
 		final ResourceLocation registryName = Objects.requireNonNull(block.getRegistryName());
-		block.setUnlocalizedName(registryName.toString());
+		block.setTranslationKey(registryName.toString());
 	}
 }

@@ -87,12 +87,12 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 	 * @return True if the missing mapping was remapped
 	 */
 	private boolean remapCustomName(final Mapping<T> missingMapping) {
-		final String missingPath = missingMapping.key.getResourcePath();
+		final String missingPath = missingMapping.key.getPath();
 
 		if (!customNames.containsKey(missingPath)) return false;
 
 		final String newPath = customNames.get(missingPath);
-		final ResourceLocation newRegistryName = new ResourceLocation(missingMapping.key.getResourceDomain(), newPath);
+		final ResourceLocation newRegistryName = new ResourceLocation(missingMapping.key.getNamespace(), newPath);
 
 		return tryRemap(missingMapping, newRegistryName);
 	}

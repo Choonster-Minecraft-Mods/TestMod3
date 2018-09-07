@@ -67,10 +67,10 @@ public class BlockVariants extends BlockTestMod3 {
 	}
 
 	/**
-	 * Get the unlocalised name suffix for the specified {@link ItemStack}.
+	 * Get the translation key suffix for the specified {@link ItemStack}.
 	 *
 	 * @param stack The ItemStack
-	 * @return The unlocalised name suffix
+	 * @return The translation key suffix
 	 */
 	public String getName(final ItemStack stack) {
 		final int metadata = stack.getMetadata();

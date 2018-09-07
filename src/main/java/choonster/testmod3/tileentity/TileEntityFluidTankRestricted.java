@@ -65,7 +65,7 @@ public class TileEntityFluidTankRestricted extends TileEntityFluidTank {
 
 		final int[] enabledFacingIndices = tag.getIntArray("EnabledFacings");
 		for (final int index : enabledFacingIndices) {
-			enabledFacings.add(EnumFacing.getFront(index));
+			enabledFacings.add(EnumFacing.byIndex(index));
 		}
 	}
 

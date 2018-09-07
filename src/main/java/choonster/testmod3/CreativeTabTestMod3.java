@@ -18,7 +18,7 @@ public class CreativeTabTestMod3 extends CreativeTabs {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public ItemStack getTabIconItem() {
+	public ItemStack createIcon() {
 		return sword;
 	}
 

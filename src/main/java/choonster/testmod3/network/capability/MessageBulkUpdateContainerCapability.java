@@ -86,7 +86,7 @@ public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> implem
 
 		final int facingIndex = buf.readByte();
 		if (facingIndex >= 0) {
-			facing = EnumFacing.getFront(facingIndex);
+			facing = EnumFacing.byIndex(facingIndex);
 		} else {
 			facing = null;
 		}

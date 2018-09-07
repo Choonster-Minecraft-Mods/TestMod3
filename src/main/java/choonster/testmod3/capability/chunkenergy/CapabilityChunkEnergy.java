@@ -127,7 +127,7 @@ public class CapabilityChunkEnergy {
 	 */
 	@Nullable
 	public static IChunkEnergy getChunkEnergy(final World world, final ChunkPos chunkPos) {
-		return getChunkEnergy(world.getChunkFromChunkCoords(chunkPos.x, chunkPos.z));
+		return getChunkEnergy(world.getChunk(chunkPos.x, chunkPos.z));
 	}
 
 	/**

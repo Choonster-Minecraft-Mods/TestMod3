@@ -18,7 +18,7 @@ public class ItemTestMod3 extends Item {
 	}
 
 	/**
-	 * Set the registry name of {@code item} to {@code itemName} and the unlocalised name to the full registry name.
+	 * Set the registry name of {@code item} to {@code itemName} and the translation key to the full registry name.
 	 *
 	 * @param item     The item
 	 * @param itemName The item's name
@@ -26,6 +26,6 @@ public class ItemTestMod3 extends Item {
 	public static void setItemName(final Item item, final String itemName) {
 		item.setRegistryName(TestMod3.MODID, itemName);
 		final ResourceLocation registryName = Objects.requireNonNull(item.getRegistryName());
-		item.setUnlocalizedName(registryName.toString());
+		item.setTranslationKey(registryName.toString());
 	}
 }

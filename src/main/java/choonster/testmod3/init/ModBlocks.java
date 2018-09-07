@@ -8,7 +8,6 @@ import choonster.testmod3.block.slab.BlockColouredSlab;
 import choonster.testmod3.block.slab.ISlabGroupContainer;
 import choonster.testmod3.item.block.ItemFluidTank;
 import choonster.testmod3.tileentity.*;
-import choonster.testmod3.util.Constants;
 import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -241,6 +240,6 @@ public class ModBlocks {
 	}
 
 	private static void registerTileEntity(final Class<? extends TileEntity> tileEntityClass, final String name) {
-		GameRegistry.registerTileEntity(tileEntityClass, Constants.RESOURCE_PREFIX + name);
+		GameRegistry.registerTileEntity(tileEntityClass, new ResourceLocation(TestMod3.MODID, name));
 	}
 }

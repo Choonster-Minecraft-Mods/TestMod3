@@ -31,7 +31,7 @@ public class TileEntityColoredRotatable extends TileEntity {
 	@Override
 	public void readFromNBT(final NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		facing = EnumFacing.getFront(compound.getInteger("facing"));
+		facing = EnumFacing.byIndex(compound.getInteger("facing"));
 	}
 
 	@Override

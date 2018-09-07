@@ -37,6 +37,7 @@ public class BlockWaterGrass extends BlockBush {
 		setDefaultState(blockState.getBaseState().withProperty(BlockLiquid.LEVEL, 0));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public AxisAlignedBB getBoundingBox(final IBlockState state, final IBlockAccess source, final BlockPos pos) {
 		return BOUNDING_BOX;
@@ -63,7 +64,7 @@ public class BlockWaterGrass extends BlockBush {
 	}
 
 	@Override
-	public void onBlockDestroyedByPlayer(final World worldIn, final BlockPos pos, final IBlockState state) {
+	public void onPlayerDestroy(final World worldIn, final BlockPos pos, final IBlockState state) {
 		worldIn.setBlockState(pos, Blocks.WATER.getDefaultState());
 	}
 

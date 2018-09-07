@@ -69,12 +69,12 @@ public abstract class BlockSlabTestMod3<
 		}
 
 		setRegistryName(TestMod3.MODID, name);
-		setUnlocalizedName(Constants.RESOURCE_PREFIX + groupName);
+		setTranslationKey(Constants.RESOURCE_PREFIX + groupName);
 
 		IBlockState iblockstate = this.blockState.getBaseState();
 
 		if (!isDouble()) {
-			iblockstate = iblockstate.withProperty(HALF, BlockSlab.EnumBlockHalf.BOTTOM);
+			iblockstate = iblockstate.withProperty(HALF, EnumBlockHalf.BOTTOM);
 		}
 
 		final Optional<VARIANT> defaultVariant = getVariantProperty().getAllowedValues().stream().findFirst();

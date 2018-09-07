@@ -27,7 +27,7 @@ public class ItemHeightTester extends ItemTestMod3 {
 			final BlockPos pos = playerIn.getPosition();
 
 			if (playerIn.isSneaking()) {
-				final Chunk chunk = worldIn.getChunkFromBlockCoords(pos);
+				final Chunk chunk = worldIn.getChunk(pos);
 				chunk.generateSkylightMap();
 				playerIn.sendMessage(new TextComponentTranslation("message.testmod3:height_tester.generate", chunk.x, chunk.z, pos.getX(), pos.getY(), pos.getZ()));
 			} else {

@@ -117,7 +117,7 @@ public class BlockPlane extends BlockTestMod3 {
 	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getStateFromMeta(final int meta) {
-		final EnumFacing horizontalRotation = EnumFacing.getHorizontal(meta & 3);
+		final EnumFacing horizontalRotation = EnumFacing.byHorizontalIndex(meta & 3);
 		final EnumVerticalRotation verticalRotation = EnumVerticalRotation.fromIndex(meta >> 2);
 
 		return getDefaultState().withProperty(HORIZONTAL_ROTATION, horizontalRotation).withProperty(VERTICAL_ROTATION, verticalRotation);
@@ -169,7 +169,7 @@ public class BlockPlane extends BlockTestMod3 {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 

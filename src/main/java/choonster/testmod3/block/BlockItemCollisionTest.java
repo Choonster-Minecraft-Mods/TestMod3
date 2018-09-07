@@ -35,8 +35,8 @@ public class BlockItemCollisionTest extends BlockTestMod3 {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(final World worldIn, final BlockPos pos, final IBlockState state, final Entity entityIn) {
-		super.onEntityCollidedWithBlock(worldIn, pos, state, entityIn);
+	public void onEntityCollision(final World worldIn, final BlockPos pos, final IBlockState state, final Entity entityIn) {
+		super.onEntityCollision(worldIn, pos, state, entityIn);
 
 		if (!worldIn.isRemote && entityIn instanceof EntityItem) {
 			Logger.info("Collision at %s: %s", pos, entityIn);

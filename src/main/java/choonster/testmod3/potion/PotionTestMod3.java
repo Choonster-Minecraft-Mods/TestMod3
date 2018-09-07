@@ -35,7 +35,7 @@ public class PotionTestMod3 extends Potion {
 	}
 
 	/**
-	 * Set the registry name of {@code potion} to {@code potionName} and the unlocalised name to the full registry name.
+	 * Set the registry name of {@code potion} to {@code potionName} and the translation key to the full registry name.
 	 *
 	 * @param potion     The potion
 	 * @param potionName The potion's name

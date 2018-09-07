@@ -43,7 +43,7 @@ public class MessageOpenLockGui implements IMessage {
 		hasFacing = buf.readBoolean();
 
 		if (hasFacing) {
-			facing = EnumFacing.getFront(buf.readUnsignedByte());
+			facing = EnumFacing.byIndex(buf.readUnsignedByte());
 		}
 	}
 

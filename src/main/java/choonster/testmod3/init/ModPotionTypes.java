@@ -92,7 +92,7 @@ public class ModPotionTypes {
 
 			final ResourceLocation potionTypeName;
 			if (namePrefix != null) {
-				potionTypeName = new ResourceLocation(potionName.getResourceDomain(), namePrefix + potionName.getResourcePath());
+				potionTypeName = new ResourceLocation(potionName.getNamespace(), namePrefix + potionName.getPath());
 			} else {
 				potionTypeName = potionName;
 			}

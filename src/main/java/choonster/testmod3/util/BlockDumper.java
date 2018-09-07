@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.stream.StreamSupport;
 
 /**
- * Dumps the unlocalised names and the output of the {@link net.minecraft.item.ItemBlock}'s {@link Object#toString()} method for all of this mod's blocks.
+ * Dumps the translation keys and the output of the {@link net.minecraft.item.ItemBlock}'s {@link Object#toString()} method for all of this mod's blocks.
  * <p>
  * I wrote this because I was getting an {@link AbstractMethodError} from a lambda implementing {@link net.minecraft.client.renderer.ItemMeshDefinition} and the only the toString output was included in the crash report.
  *
@@ -25,11 +25,11 @@ public class BlockDumper {
 			writer.println("Name - toString");
 
 			StreamSupport.stream(ForgeRegistries.BLOCKS.spliterator(), false)
-					.filter(block -> Objects.requireNonNull(block.getRegistryName()).getResourceDomain().equals(TestMod3.MODID))
+					.filter(block -> Objects.requireNonNull(block.getRegistryName()).getNamespace().equals(TestMod3.MODID))
 					.forEach(block -> {
 						final Item item = Item.getItemFromBlock(block);
 						if (item != Items.AIR) {
-							writer.printf("%s - %s\n", item.getUnlocalizedName(), item.toString());
+							writer.printf("%s - %s\n", item.getTranslationKey(), item.toString());
 						}
 					});
 		} catch (final Exception e) {

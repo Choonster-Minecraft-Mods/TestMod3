@@ -76,7 +76,7 @@ public class ModEntities {
 		private static int entityID = 0;
 
 		/**
-		 * Create an {@link EntityEntryBuilder} with the specified unlocalised/registry name and an automatically-assigned network ID.
+		 * Create an {@link EntityEntryBuilder} with the specified registry name/translation key and an automatically-assigned network ID.
 		 *
 		 * @param name The name
 		 * @param <E>  The entity type

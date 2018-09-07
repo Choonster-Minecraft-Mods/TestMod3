@@ -45,7 +45,7 @@ public class DedicatedServerProxy implements IProxy {
 	@Override
 	public IThreadListener getThreadListener(final MessageContext context) {
 		if (context.side.isServer()) {
-			return context.getServerHandler().player.mcServer;
+			return context.getServerHandler().player.server;
 		} else {
 			throw new WrongSideException("Tried to get the IThreadListener from a client-side MessageContext on the dedicated server");
 		}

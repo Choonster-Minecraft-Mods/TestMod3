@@ -106,7 +106,7 @@ public class ModFluids {
 			for (final IFluidBlock fluidBlock : MOD_FLUID_BLOCKS) {
 				final Block block = (Block) fluidBlock;
 				block.setRegistryName(TestMod3.MODID, "fluid." + fluidBlock.getFluid().getName());
-				block.setUnlocalizedName(Constants.RESOURCE_PREFIX + fluidBlock.getFluid().getUnlocalizedName());
+				block.setTranslationKey(Constants.RESOURCE_PREFIX + fluidBlock.getFluid().getUnlocalizedName());
 				block.setCreativeTab(TestMod3.creativeTab);
 				registry.register(block);
 			}

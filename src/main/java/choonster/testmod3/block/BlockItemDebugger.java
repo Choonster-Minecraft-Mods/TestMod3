@@ -34,7 +34,7 @@ public class BlockItemDebugger extends BlockTestMod3 {
 			final String modName;
 			final ResourceLocation registryName = stack.getItem().getRegistryName();
 			if (registryName != null) {
-				final ModContainer modContainer = Loader.instance().getIndexedModList().get(registryName.getResourceDomain());
+				final ModContainer modContainer = Loader.instance().getIndexedModList().get(registryName.getNamespace());
 
 				if (modContainer != null) {
 					modName = modContainer.getName();

@@ -75,7 +75,7 @@ public abstract class BlockStaticPressurePlate extends BlockTestMod3 {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public EnumPushReaction getMobilityFlag(final IBlockState state) {
+	public EnumPushReaction getPushReaction(final IBlockState state) {
 		return EnumPushReaction.DESTROY;
 	}
 }

@@ -49,7 +49,7 @@ public class BlockRotatableLamp extends BlockTestMod3 {
 	@Override
 	public IBlockState getStateFromMeta(final int meta) {
 		final int facingIndex = meta & 7; // Extract the facing index (lowest three bits)
-		final EnumFacing facing = EnumFacing.getFront(facingIndex); // Convert it to the corresponding EnumFacing
+		final EnumFacing facing = EnumFacing.byIndex(facingIndex); // Convert it to the corresponding EnumFacing
 
 		final boolean lit = (meta & 8) != 0; // Extract the lit state (highest bit)
 

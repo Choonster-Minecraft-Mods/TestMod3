@@ -24,8 +24,8 @@ public class ItemVariants extends ItemTestMod3 {
 	}
 
 	@Override
-	public String getUnlocalizedName(final ItemStack stack) {
-		return super.getUnlocalizedName(stack) + "." + EnumType.byMetadata(stack.getMetadata()).getName();
+	public String getTranslationKey(final ItemStack stack) {
+		return super.getTranslationKey(stack) + "." + EnumType.byMetadata(stack.getMetadata()).getName();
 	}
 
 	@Override

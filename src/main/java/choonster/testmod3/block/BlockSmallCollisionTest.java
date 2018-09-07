@@ -43,7 +43,7 @@ public class BlockSmallCollisionTest extends BlockTestMod3 {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(final World worldIn, final BlockPos pos, final IBlockState state, final Entity entityIn) {
+	public void onEntityCollision(final World worldIn, final BlockPos pos, final IBlockState state, final Entity entityIn) {
 		if (entityIn instanceof EntityLivingBase) {
 			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 10, 0));
 		}

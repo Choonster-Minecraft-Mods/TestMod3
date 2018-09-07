@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
  * <p>
  * This is required because the Forge-provided {@link Fluid}s for Water and Lava only override {@link Fluid#getLocalizedName}
  * and not {@link Fluid#getUnlocalizedName}, so sending a {@link TextComponentTranslation} with
- * the unlocalised name doesn't display the correct translation.
+ * the translation key doesn't display the correct translation.
  * <p>
  * Can be replaced by an {@link ITextComponent} once this PR is merged:
  * https://github.com/MinecraftForge/MinecraftForge/pull/2948

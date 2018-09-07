@@ -47,7 +47,7 @@ public class ItemEntityTest extends ItemTestMod3 {
 		final float f7 = f4 * f5;
 		final float f8 = f3 * f5;
 		final double multiplier = 5.0;
-		final Vec3d endVector = startVector.addVector((double) f7 * multiplier, (double) f6 * multiplier, (double) f8 * multiplier);
+		final Vec3d endVector = startVector.add((double) f7 * multiplier, (double) f6 * multiplier, (double) f8 * multiplier);
 		final RayTraceResult rayTraceResult = world.rayTraceBlocks(startVector, endVector, true);
 
 		if (rayTraceResult == null) return new ActionResult<>(EnumActionResult.PASS, heldItem);

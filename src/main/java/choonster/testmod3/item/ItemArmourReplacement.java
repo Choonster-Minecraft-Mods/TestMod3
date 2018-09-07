@@ -167,7 +167,7 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 
 		stackTagCompound.removeTag(KEY_REPLACED_ARMOUR);
 
-		if (stackTagCompound.hasNoTags()) {
+		if (stackTagCompound.isEmpty()) {
 			stack.setTagCompound(null);
 		}
 	}

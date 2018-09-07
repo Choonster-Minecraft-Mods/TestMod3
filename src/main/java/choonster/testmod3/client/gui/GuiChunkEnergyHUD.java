@@ -17,7 +17,7 @@ public class GuiChunkEnergyHUD extends Gui {
 	private static final Minecraft minecraft = Minecraft.getMinecraft();
 
 	public void drawHUD() {
-		final IChunkEnergy chunkEnergy = CapabilityChunkEnergy.getChunkEnergy(minecraft.world.getChunkFromBlockCoords(new BlockPos(minecraft.player)));
+		final IChunkEnergy chunkEnergy = CapabilityChunkEnergy.getChunkEnergy(minecraft.world.getChunk(new BlockPos(minecraft.player)));
 		if (chunkEnergy == null) return;
 
 		final String text = I18n.format("testmod3:chunk_energy.hud", chunkEnergy.getEnergyStored(), chunkEnergy.getMaxEnergyStored());
