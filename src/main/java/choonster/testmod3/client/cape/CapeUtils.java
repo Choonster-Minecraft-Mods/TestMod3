@@ -24,8 +24,8 @@ class CapeUtils {
 	// Copied from SkinManager
 	private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor(0, 2, 1L, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
 
-	private static final MethodHandle GET_PLAYER_INFO = ReflectionUtil.findMethod(AbstractClientPlayer.class, "getPlayerInfo", "func_175155_b");
-	private static final MethodHandle GET_PLAYER_TEXTURES = ReflectionUtil.findFieldGetter(NetworkPlayerInfo.class, "playerTextures", "field_187107_a");
+	private static final MethodHandle GET_PLAYER_INFO = ReflectionUtil.findMethod(AbstractClientPlayer.class, "func_175155_b" /* getPlayerInfo */, NetworkPlayerInfo.class);
+	private static final MethodHandle GET_PLAYER_TEXTURES = ReflectionUtil.findFieldGetter(NetworkPlayerInfo.class, "field_187107_a" /* playerTextures*/);
 
 	/**
 	 * Queue the replacement of a player's cape with the TestMod3 cape.

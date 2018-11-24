@@ -55,34 +55,34 @@ public class PotionTestMod3 extends Potion {
 	 * Called to draw the this Potion onto the player's inventory when it's active.
 	 * This can be used to e.g. render Potion icons from your own texture.
 	 *
+	 * @param effect the active PotionEffect
+	 * @param gui    the gui instance
 	 * @param x      the x coordinate
 	 * @param y      the y coordinate
-	 * @param effect the active PotionEffect
-	 * @param mc     the Minecraft instance, for convenience
+	 * @param z      the z level
 	 */
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void renderInventoryEffect(final int x, final int y, final PotionEffect effect, final Minecraft mc) {
-		if (mc.currentScreen != null) {
-			mc.getTextureManager().bindTexture(iconTexture);
-			Gui.drawModalRectWithCustomSizedTexture(x + 6, y + 7, 0, 0, 18, 18, 18, 18);
-		}
+	public void renderInventoryEffect(final PotionEffect effect, final Gui gui, final int x, final int y, final float z) {
+		Minecraft.getMinecraft().getTextureManager().bindTexture(iconTexture);
+		Gui.drawModalRectWithCustomSizedTexture(x + 6, y + 7, 0, 0, 18, 18, 18, 18);
 	}
 
 	/**
 	 * Called to draw the this Potion onto the player's ingame HUD when it's active.
 	 * This can be used to e.g. render Potion icons from your own texture.
 	 *
+	 * @param effect the active PotionEffect
+	 * @param gui    the gui instance
 	 * @param x      the x coordinate
 	 * @param y      the y coordinate
-	 * @param effect the active PotionEffect
-	 * @param mc     the Minecraft instance, for convenience
+	 * @param z      the z level
 	 * @param alpha  the alpha value, blinks when the potion is about to run out
 	 */
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void renderHUDEffect(final int x, final int y, final PotionEffect effect, final Minecraft mc, final float alpha) {
-		mc.getTextureManager().bindTexture(iconTexture);
+	public void renderHUDEffect(final PotionEffect effect, final Gui gui, final int x, final int y, final float z, final float alpha) {
+		Minecraft.getMinecraft().getTextureManager().bindTexture(iconTexture);
 		Gui.drawModalRectWithCustomSizedTexture(x + 3, y + 3, 0, 0, 18, 18, 18, 18);
 	}
 }

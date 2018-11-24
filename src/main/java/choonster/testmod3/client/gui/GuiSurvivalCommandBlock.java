@@ -15,10 +15,10 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandle;
 
 public class GuiSurvivalCommandBlock extends GuiCommandBlock {
-	private static final MethodHandle COMMAND_TEXT_GETTER = ReflectionUtil.findFieldGetter(GuiCommandBlock.class, "commandTextField", "field_146485_f");
-	private static final MethodHandle COMMAND_BLOCK_MODE_GETTER = ReflectionUtil.findFieldGetter(GuiCommandBlock.class, "commandBlockMode", "field_184082_w");
-	private static final MethodHandle CONDITIONAL_GETTER = ReflectionUtil.findFieldGetter(GuiCommandBlock.class, "conditional", "field_184084_y");
-	private static final MethodHandle AUTOMATIC_GETTER = ReflectionUtil.findFieldGetter(GuiCommandBlock.class, "automatic", "field_184085_z");
+	private static final MethodHandle COMMAND_TEXT_GETTER = ReflectionUtil.findFieldGetter(GuiCommandBlock.class, "field_146485_f" /* commandTextField */);
+	private static final MethodHandle COMMAND_BLOCK_MODE_GETTER = ReflectionUtil.findFieldGetter(GuiCommandBlock.class, "field_184082_w" /* commandBlockMode */);
+	private static final MethodHandle CONDITIONAL_GETTER = ReflectionUtil.findFieldGetter(GuiCommandBlock.class, "field_184084_y" /* conditional */);
+	private static final MethodHandle AUTOMATIC_GETTER = ReflectionUtil.findFieldGetter(GuiCommandBlock.class, "field_184085_z" /* automatic */);
 
 	private final SurvivalCommandBlockLogic survivalCommandBlockLogic;
 
