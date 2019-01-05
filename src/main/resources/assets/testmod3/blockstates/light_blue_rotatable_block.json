@@ -1,0 +1,31 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "testmod3:orientable_single",
+		"uvlock": true,
+		"textures": {
+			"front": "testmod3:blocks/colored_rotatable/light_blue_front",
+			"side": "testmod3:blocks/colored_rotatable/light_blue"
+		}
+	},
+	"variants": {
+		"facing": {
+			"down": {
+				"x": 90
+			},
+			"up": {
+				"x": 270
+			},
+			"north": { },
+			"south": {
+				"y": 180
+			},
+			"east": {
+				"y": 90
+			},
+			"west": {
+				"y": 270
+			}
+		}
+	}
+}

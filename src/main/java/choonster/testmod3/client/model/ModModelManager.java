@@ -4,6 +4,7 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.*;
 import choonster.testmod3.block.slab.BlockSlabTestMod3;
 import choonster.testmod3.block.slab.SlabGroup;
+import choonster.testmod3.block.variantgroup.BlockVariantGroup;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
@@ -23,7 +24,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.init.Items;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
@@ -39,6 +39,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = TestMod3.MODID)
@@ -113,17 +114,17 @@ public class ModModelManager {
 						.withProperty(BlockRightClickTest.HAS_ENDER_EYE, false)
 		);
 
-		registerVariantBlockItemModels(
-				ModBlocks.COLORED_ROTATABLE.getDefaultState()
-						.withProperty(BlockColoredRotatable.FACING, EnumFacing.NORTH),
-				BlockColoredRotatable.COLOR, EnumDyeColor::getMetadata
+		registerBlockVariantGroupItemModels(
+				ModBlocks.VariantGroups.COLORED_ROTATABLE_BLOCKS,
+				block -> block.getDefaultState()
+						.withProperty(BlockColoredRotatable.FACING, EnumFacing.NORTH)
 		);
 
-		registerVariantBlockItemModels(
-				ModBlocks.COLORED_MULTI_ROTATABLE.getDefaultState()
+		registerBlockVariantGroupItemModels(
+				ModBlocks.VariantGroups.COLORED_MULTI_ROTATABLE_BLOCKS,
+				block -> block.getDefaultState()
 						.withProperty(BlockColoredMultiRotatable.FACING, EnumFacing.NORTH)
-						.withProperty(BlockColoredMultiRotatable.FACE_ROTATION, EnumFaceRotation.UP),
-				BlockColoredMultiRotatable.COLOR, EnumDyeColor::getMetadata
+						.withProperty(BlockColoredMultiRotatable.FACE_ROTATION, EnumFaceRotation.UP)
 		);
 
 		registerSlabGroupItemModels(ModBlocks.Slabs.STAINED_CLAY_SLABS.high);
@@ -186,6 +187,19 @@ public class ModModelManager {
 		if (item != Items.AIR) {
 			registerItemModelForMeta(item, metadata, propertyStringMapper.getPropertyString(state.getProperties()));
 		}
+	}
+
+	/**
+	 * Register a model for each of the variant group's items.
+	 * <p>
+	 * For each item:
+	 * <li>The domain/path is the registry name</li>
+	 * <li>The variant is the result of calling {@code stateFactory} with the block</li>
+	 */
+	private void registerBlockVariantGroupItemModels(final BlockVariantGroup<?, ?> variantGroup, final Function<Block, IBlockState> stateFactory) {
+		variantGroup.getBlocks().values().stream()
+				.map(stateFactory)
+				.forEach(this::registerBlockItemModel);
 	}
 
 	/**

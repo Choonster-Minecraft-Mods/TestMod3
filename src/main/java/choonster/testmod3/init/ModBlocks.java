@@ -6,14 +6,15 @@ import choonster.testmod3.block.pipe.BlockPipeBasic;
 import choonster.testmod3.block.pipe.BlockPipeFluid;
 import choonster.testmod3.block.slab.BlockColouredSlab;
 import choonster.testmod3.block.slab.ISlabGroupContainer;
+import choonster.testmod3.block.variantgroup.BlockVariantGroup;
 import choonster.testmod3.item.block.ItemFluidTank;
 import choonster.testmod3.tileentity.*;
 import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemCloth;
 import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityCommandBlock;
@@ -52,10 +53,6 @@ public class ModBlocks {
 	public static final BlockItemDebugger ITEM_DEBUGGER = Null();
 
 	public static final Block END_PORTAL_FRAME_FULL = Null();
-
-	public static final BlockColoredRotatable COLORED_ROTATABLE = Null();
-
-	public static final BlockColoredMultiRotatable COLORED_MULTI_ROTATABLE = Null();
 
 	public static final BlockPotionEffect POTION_EFFECT = Null();
 
@@ -101,6 +98,22 @@ public class ModBlocks {
 
 	public static final BlockTestMod3 PLANKS = Null();
 
+	public static class VariantGroups {
+		public static final BlockVariantGroup<EnumDyeColor, BlockColoredRotatable> COLORED_ROTATABLE_BLOCKS = BlockVariantGroup.Builder.<EnumDyeColor, BlockColoredRotatable>create()
+				.groupName("rotatable_block")
+				.variants(EnumDyeColor.values())
+				.material(Material.CLOTH)
+				.blockFactory(BlockColoredRotatable::new)
+				.build();
+
+		public static final BlockVariantGroup<EnumDyeColor, BlockColoredMultiRotatable> COLORED_MULTI_ROTATABLE_BLOCKS = BlockVariantGroup.Builder.<EnumDyeColor, BlockColoredMultiRotatable>create()
+				.groupName("multi_rotatable_block")
+				.variants(EnumDyeColor.values())
+				.material(Material.CLOTH)
+				.blockFactory(BlockColoredMultiRotatable::new)
+				.build();
+	}
+
 	public static class Slabs {
 		public static final BlockColouredSlab.ColouredSlabGroupContainer STAINED_CLAY_SLABS = new BlockColouredSlab.ColouredSlabGroupContainer("stained_clay_slab", Material.ROCK);
 	}
@@ -128,8 +141,6 @@ public class ModBlocks {
 					new BlockFluidTank<>("fluid_tank"),
 					new BlockItemDebugger(),
 					new BlockTestMod3(Material.ROCK, "end_portal_frame_full"),
-					new BlockColoredRotatable(Material.CLOTH, "colored_rotatable"),
-					new BlockColoredMultiRotatable(Material.CLOTH, "colored_multi_rotatable"),
 					new BlockPotionEffect(),
 					new BlockVariants(Material.IRON),
 					new BlockClientPlayerRotation(),
@@ -156,6 +167,8 @@ public class ModBlocks {
 
 			registry.registerAll(blocks);
 
+			VariantGroups.COLORED_ROTATABLE_BLOCKS.registerBlocks(registry);
+			VariantGroups.COLORED_MULTI_ROTATABLE_BLOCKS.registerBlocks(registry);
 			Slabs.STAINED_CLAY_SLABS.registerBlocks(registry);
 
 			registerTileEntities();
@@ -178,8 +191,6 @@ public class ModBlocks {
 					new ItemFluidTank(FLUID_TANK),
 					new ItemBlock(ITEM_DEBUGGER),
 					new ItemBlock(END_PORTAL_FRAME_FULL),
-					new ItemCloth(COLORED_ROTATABLE),
-					new ItemCloth(COLORED_MULTI_ROTATABLE),
 					new ItemBlock(POTION_EFFECT),
 					new ItemMultiTexture(VARIANTS, VARIANTS, VARIANTS::getName),
 					new ItemBlock(CLIENT_PLAYER_ROTATION),
@@ -213,7 +224,21 @@ public class ModBlocks {
 				ITEM_BLOCKS.add(item);
 			}
 
+			registerVariantGroupItems(registry, VariantGroups.COLORED_ROTATABLE_BLOCKS);
+			registerVariantGroupItems(registry, VariantGroups.COLORED_MULTI_ROTATABLE_BLOCKS);
 			registerSlabGroupContainerItems(registry, Slabs.STAINED_CLAY_SLABS);
+		}
+
+
+		/**
+		 * Register a {@link BlockVariantGroup}'s {@link Item}s and add them to {@link #ITEM_BLOCKS}.
+		 *
+		 * @param registry The Item registry
+		 * @param group    The variant group
+		 */
+		private static void registerVariantGroupItems(final IForgeRegistry<Item> registry, final BlockVariantGroup<?, ?> group) {
+			final List<ItemBlock> items = group.registerItems(registry);
+			ITEM_BLOCKS.addAll(items);
 		}
 
 		/**
@@ -231,7 +256,6 @@ public class ModBlocks {
 	private static void registerTileEntities() {
 		registerTileEntity(TileEntitySurvivalCommandBlock.class, "survival_command_block");
 		registerTileEntity(TileEntityFluidTank.class, "fluid_tank");
-		registerTileEntity(TileEntityColoredRotatable.class, "colored_rotatable");
 		registerTileEntity(TileEntityColoredMultiRotatable.class, "colored_multi_rotatable");
 		registerTileEntity(TileEntityPotionEffect.class, "potion_effect");
 		registerTileEntity(TileEntityModChest.class, "mod_chest");

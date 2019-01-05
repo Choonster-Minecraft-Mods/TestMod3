@@ -1,8 +1,9 @@
 package choonster.testmod3.block;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.tileentity.TileEntityColoredRotatable;
-import net.minecraft.block.BlockColored;
+import choonster.testmod3.block.variantgroup.BlockVariantGroup;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
@@ -12,15 +13,15 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.DyeUtils;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**
@@ -28,45 +29,49 @@ import java.util.Optional;
  *
  * @author Choonster
  */
-public class BlockColoredRotatable extends BlockColored {
+public class BlockColoredRotatable extends Block {
 	public static final IProperty<EnumFacing> FACING = PropertyDirection.create("facing");
 
-	public BlockColoredRotatable(final Material materialIn, final String blockName) {
-		super(materialIn);
-		BlockTestMod3.setBlockName(this, blockName);
+	private final BlockVariantGroup<EnumDyeColor, ? extends BlockColoredRotatable> variantGroup;
+	private final EnumDyeColor color;
+
+	public BlockColoredRotatable(final EnumDyeColor color, final Material materialIn, final BlockVariantGroup<EnumDyeColor, ? extends BlockColoredRotatable> variantGroup) {
+		super(materialIn, MapColor.getBlockColor(color));
+		this.color = color;
+		this.variantGroup = variantGroup;
 		setCreativeTab(TestMod3.creativeTab);
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, COLOR, FACING);
+		return new BlockStateContainer(this, FACING);
 	}
 
-	@Override
-	public boolean hasTileEntity(final IBlockState state) {
-		return true;
+	public EnumDyeColor getColor() {
+		return color;
 	}
 
-	@Override
-	public TileEntity createTileEntity(final World world, final IBlockState state) {
-		return new TileEntityColoredRotatable();
-	}
-
-	@Nullable
-	public TileEntityColoredRotatable getTileEntity(final IBlockAccess world, final BlockPos pos) {
-		return (TileEntityColoredRotatable) world.getTileEntity(pos);
+	public BlockVariantGroup<EnumDyeColor, ? extends BlockColoredRotatable> getVariantGroup() {
+		return variantGroup;
 	}
 
 	public EnumFacing getFacing(final IBlockAccess world, final BlockPos pos) {
-		final TileEntityColoredRotatable tileEntity = getTileEntity(world, pos);
-		return tileEntity != null ? tileEntity.getFacing() : EnumFacing.NORTH;
+		return world.getBlockState(pos).getValue(FACING);
 	}
 
-	public void setFacing(final IBlockAccess world, final BlockPos pos, final EnumFacing facing) {
-		final TileEntityColoredRotatable tileEntity = getTileEntity(world, pos);
-		if (tileEntity != null) {
-			tileEntity.setFacing(facing);
-		}
+	public void setFacing(final World world, final BlockPos pos, final EnumFacing facing) {
+		world.setBlockState(pos, getDefaultState().withProperty(FACING, facing));
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public IBlockState getStateFromMeta(final int meta) {
+		return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
+	}
+
+	@Override
+	public int getMetaFromState(final IBlockState state) {
+		return state.getValue(FACING).getIndex();
 	}
 
 	@Override
@@ -74,10 +79,14 @@ public class BlockColoredRotatable extends BlockColored {
 		setFacing(worldIn, pos, EnumFacing.getDirectionFromEntityLiving(pos, placer));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public IBlockState getActualState(final IBlockState state, final IBlockAccess worldIn, final BlockPos pos) {
-		return state.withProperty(FACING, getFacing(worldIn, pos));
+	public boolean recolorBlock(final World world, final BlockPos pos, final EnumFacing side, final EnumDyeColor color) {
+		final IBlockState currentState = world.getBlockState(pos);
+		final Block newBlock = getVariantGroup().getBlock(color);
+
+		world.setBlockState(pos, newBlock.getDefaultState().withProperty(FACING, currentState.getValue(FACING)));
+
+		return true;
 	}
 
 	@Override
@@ -86,6 +95,18 @@ public class BlockColoredRotatable extends BlockColored {
 		setFacing(world, pos, facing.rotateAround(axis.getAxis()));
 
 		return true;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public IBlockState withRotation(final IBlockState state, final Rotation rot) {
+		return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public IBlockState withMirror(final IBlockState state, final Mirror mirrorIn) {
+		return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
 	}
 
 	@Override

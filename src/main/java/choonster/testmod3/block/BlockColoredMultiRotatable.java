@@ -1,5 +1,6 @@
 package choonster.testmod3.block;
 
+import choonster.testmod3.block.variantgroup.BlockVariantGroup;
 import choonster.testmod3.tileentity.TileEntityColoredMultiRotatable;
 import choonster.testmod3.util.EnumFaceRotation;
 import net.minecraft.block.material.Material;
@@ -8,12 +9,15 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 /**
  * A block with 16 colours (stored in the metadata), 6 facings and 4 face rotations (stored in the TileEntity).
@@ -26,13 +30,18 @@ import net.minecraft.world.World;
 public class BlockColoredMultiRotatable extends BlockColoredRotatable {
 	public static final IProperty<EnumFaceRotation> FACE_ROTATION = PropertyEnum.create("face_rotation", EnumFaceRotation.class);
 
-	public BlockColoredMultiRotatable(final Material materialIn, final String blockName) {
-		super(materialIn, blockName);
+	public BlockColoredMultiRotatable(final EnumDyeColor color, final Material materialIn, final BlockVariantGroup<EnumDyeColor, ? extends BlockColoredMultiRotatable> variantGroup) {
+		super(color, materialIn, variantGroup);
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, COLOR, FACING, FACE_ROTATION);
+		return new BlockStateContainer(this, FACING, FACE_ROTATION);
+	}
+
+	@Override
+	public boolean hasTileEntity(final IBlockState state) {
+		return true;
 	}
 
 	@Override
@@ -40,9 +49,9 @@ public class BlockColoredMultiRotatable extends BlockColoredRotatable {
 		return new TileEntityColoredMultiRotatable();
 	}
 
-	@Override
+	@Nullable
 	public TileEntityColoredMultiRotatable getTileEntity(final IBlockAccess world, final BlockPos pos) {
-		return (TileEntityColoredMultiRotatable) super.getTileEntity(world, pos);
+		return (TileEntityColoredMultiRotatable) world.getTileEntity(pos);
 	}
 
 	public EnumFaceRotation getFaceRotation(final IBlockAccess world, final BlockPos pos) {
@@ -57,9 +66,22 @@ public class BlockColoredMultiRotatable extends BlockColoredRotatable {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getActualState(final IBlockState state, final IBlockAccess worldIn, final BlockPos pos) {
-		return super.getActualState(state, worldIn, pos).withProperty(FACE_ROTATION, getFaceRotation(worldIn, pos));
+		return state.withProperty(FACE_ROTATION, getFaceRotation(worldIn, pos));
+	}
+
+	@Override
+	public boolean recolorBlock(final World world, final BlockPos pos, final EnumFacing side, final EnumDyeColor color) {
+		final EnumFaceRotation currentFaceRotation = getFaceRotation(world, pos);
+
+		final boolean success = super.recolorBlock(world, pos, side, color);
+		if (success) {
+			setFaceRotation(world, pos, currentFaceRotation);
+		}
+
+		return success;
 	}
 
 	public void rotateFace(final World world, final BlockPos pos) {
