@@ -31,7 +31,7 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 	/**
 	 * A list of remapping functions that return {@code true} if they took an action for the {@link Mapping<T>}.
 	 */
-	private final List<Predicate<Mapping<T>>> remappingFunctions = ImmutableList.of(this::remapCustomName);
+	private final List<Predicate<Mapping<T>>> remappingFunctions = ImmutableList.of(this::remapCustomName, this::ignoreName);
 
 	private Remapper() {
 	}
@@ -95,6 +95,26 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 		final ResourceLocation newRegistryName = new ResourceLocation(missingMapping.key.getNamespace(), newPath);
 
 		return tryRemap(missingMapping, newRegistryName);
+	}
+
+	/**
+	 * Names to ignore and leave in the save.
+	 */
+	private static final List<String> namesToIgnore = ImmutableList.<String>builder()
+			.add("colored_rotatable")
+			.add("colored_multi_rotatable")
+			.build();
+
+	private boolean ignoreName(final Mapping<T> missingMapping) {
+		final String missingPath = missingMapping.key.getPath();
+
+		if (!namesToIgnore.contains(missingPath)) return false;
+
+		missingMapping.ignore();
+
+		Logger.info(MARKER, "Ignored missing %s %s", missingMapping.registry.getRegistrySuperType().getSimpleName(), missingMapping.key);
+
+		return true;
 	}
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)

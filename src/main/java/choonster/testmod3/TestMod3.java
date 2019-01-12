@@ -59,6 +59,7 @@ public class TestMod3 {
 	public void init(final FMLInitializationEvent event) {
 		ModRecipes.registerRecipes();
 		ModMapGen.registerWorldGenerators();
+		ModDataFixers.registerDataFixers();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
