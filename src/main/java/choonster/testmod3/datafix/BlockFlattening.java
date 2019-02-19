@@ -77,6 +77,17 @@ public class BlockFlattening implements IFixableData {
 			));
 		});
 
+		ModBlocks.VariantGroups.VARIANTS_BLOCKS.getBlocks().forEach((type, blockVariants) -> {
+			//noinspection deprecation
+			flatteningDefinitions.add(new FlatteningDefinition(
+					"variants",
+					type.getMeta(),
+					blockVariants,
+					(block, tileEntityNBT) -> block.getDefaultState(),
+					null
+			));
+		});
+
 		return new BlockFlattening(flatteningDefinitions.build());
 	}
 

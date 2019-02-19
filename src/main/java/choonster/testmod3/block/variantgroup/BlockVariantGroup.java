@@ -11,10 +11,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -25,6 +22,7 @@ import java.util.function.Function;
 public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializable, BLOCK extends Block> {
 
 	private final String groupName;
+	private final boolean isSuffix;
 	private final Iterable<VARIANT> variants;
 	private final Material material;
 
@@ -34,8 +32,9 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	private Map<VARIANT, BLOCK> blocks;
 	private boolean registeredItems = false;
 
-	private BlockVariantGroup(final String groupName, final Iterable<VARIANT> variants, final Material material, final BlockFactory<VARIANT, BLOCK> blockFactory, final Function<BLOCK, ItemBlock> itemFactory) {
+	private BlockVariantGroup(final String groupName, final boolean isSuffix, final Iterable<VARIANT> variants, final Material material, final BlockFactory<VARIANT, BLOCK> blockFactory, final Function<BLOCK, ItemBlock> itemFactory) {
 		this.groupName = groupName;
+		this.isSuffix = isSuffix;
 		this.material = material;
 		this.variants = variants;
 		this.blockFactory = blockFactory;
@@ -62,6 +61,32 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	}
 
 	/**
+	 * Gets the next variant in the variants collection.
+	 * <p>
+	 * If the specified variant is the last in the collection, the first variant is returned.
+	 * <p>
+	 * This is similar to (and adapted from) {@code BlockStateBase.cyclePropertyValue}.
+	 *
+	 * @param currentVariant The current variant
+	 * @return The next variant in the variants collection.
+	 */
+	public VARIANT cycleVariant(final VARIANT currentVariant) {
+		final Iterator<VARIANT> iterator = variants.iterator();
+
+		while (iterator.hasNext()) {
+			if (iterator.next().equals(currentVariant)) {
+				if (iterator.hasNext()) {
+					return iterator.next();
+				}
+
+				return variants.iterator().next();
+			}
+		}
+
+		return iterator.next();
+	}
+
+	/**
 	 * Registers this group's blocks.
 	 *
 	 * @param registry The block registry
@@ -73,7 +98,13 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 		final ImmutableMap.Builder<VARIANT, BLOCK> builder = ImmutableMap.builder();
 
 		variants.forEach(variant -> {
-			final String registryName = variant.getName() + "_" + groupName;
+			final String registryName;
+			if (isSuffix) {
+				registryName = groupName + "_" + variant.getName();
+			} else {
+				registryName = variant.getName() + "_" + groupName;
+			}
+
 			final BLOCK block = blockFactory.createBlock(variant, material, this);
 
 			BlockTestMod3.setBlockName(block, registryName);
@@ -127,6 +158,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 
 	public static class Builder<VARIANT extends Enum<VARIANT> & IStringSerializable, BLOCK extends Block> {
 		private String groupName;
+		private boolean isSuffix;
 		private Iterable<VARIANT> variants;
 		private Material material;
 
@@ -157,6 +189,16 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 		public Builder<VARIANT, BLOCK> groupName(final String groupName) {
 			Preconditions.checkNotNull(groupName, "groupName");
 			this.groupName = groupName;
+			return this;
+		}
+
+		/**
+		 * Configures the variant group to append the variant name as a suffix rather than a prefix.
+		 *
+		 * @return This builder
+		 */
+		public Builder<VARIANT, BLOCK> suffix() {
+			isSuffix = true;
 			return this;
 		}
 
@@ -239,7 +281,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 			Preconditions.checkState(material != null, "Material not provided");
 			Preconditions.checkState(blockFactory != null, "Block Factory not provided");
 
-			return new BlockVariantGroup<>(groupName, variants, material, blockFactory, itemFactory);
+			return new BlockVariantGroup<>(groupName, isSuffix, variants, material, blockFactory, itemFactory);
 		}
 	}
 

@@ -56,8 +56,6 @@ public class ModBlocks {
 
 	public static final BlockPotionEffect POTION_EFFECT = Null();
 
-	public static final BlockVariants VARIANTS = Null();
-
 	public static final BlockClientPlayerRotation CLIENT_PLAYER_ROTATION = Null();
 
 	public static final BlockPigSpawnerRefiller PIG_SPAWNER_REFILLER = Null();
@@ -112,6 +110,14 @@ public class ModBlocks {
 				.material(Material.CLOTH)
 				.blockFactory(BlockColoredMultiRotatable::new)
 				.build();
+
+		public static final BlockVariantGroup<BlockVariants.EnumType, BlockVariants> VARIANTS_BLOCKS = BlockVariantGroup.Builder.<BlockVariants.EnumType, BlockVariants>create()
+				.groupName("variants_block")
+				.suffix()
+				.variants(BlockVariants.EnumType.values())
+				.material(Material.IRON)
+				.blockFactory(BlockVariants::new)
+				.build();
 	}
 
 	public static class Slabs {
@@ -142,7 +148,6 @@ public class ModBlocks {
 					new BlockItemDebugger(),
 					new BlockTestMod3(Material.ROCK, "end_portal_frame_full"),
 					new BlockPotionEffect(),
-					new BlockVariants(Material.IRON),
 					new BlockClientPlayerRotation(),
 					new BlockPigSpawnerRefiller(),
 					new BlockPlane(Material.IRON, "mirror_plane"),
@@ -170,6 +175,7 @@ public class ModBlocks {
 			VariantGroups.COLORED_ROTATABLE_BLOCKS.registerBlocks(registry);
 			VariantGroups.COLORED_MULTI_ROTATABLE_BLOCKS.registerBlocks(registry);
 			Slabs.STAINED_CLAY_SLABS.registerBlocks(registry);
+			VariantGroups.VARIANTS_BLOCKS.registerBlocks(registry);
 
 			registerTileEntities();
 		}
@@ -192,7 +198,6 @@ public class ModBlocks {
 					new ItemBlock(ITEM_DEBUGGER),
 					new ItemBlock(END_PORTAL_FRAME_FULL),
 					new ItemBlock(POTION_EFFECT),
-					new ItemMultiTexture(VARIANTS, VARIANTS, VARIANTS::getName),
 					new ItemBlock(CLIENT_PLAYER_ROTATION),
 					new ItemBlock(PIG_SPAWNER_REFILLER),
 					new ItemBlock(MIRROR_PLANE),
@@ -227,6 +232,7 @@ public class ModBlocks {
 			registerVariantGroupItems(registry, VariantGroups.COLORED_ROTATABLE_BLOCKS);
 			registerVariantGroupItems(registry, VariantGroups.COLORED_MULTI_ROTATABLE_BLOCKS);
 			registerSlabGroupContainerItems(registry, Slabs.STAINED_CLAY_SLABS);
+			registerVariantGroupItems(registry, VariantGroups.VARIANTS_BLOCKS);
 		}
 
 

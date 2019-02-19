@@ -82,9 +82,8 @@ tile.testmod3:green_multi_rotatable_block.name=Green Multi Rotatable Block
 tile.testmod3:red_multi_rotatable_block.name=Red Multi Rotatable Block
 tile.testmod3:black_multi_rotatable_block.name=Black Multi Rotatable Block
 
-tile.testmod3:variants.name=Variants Block
-tile.testmod3:variants.a.name=Variants Block - A
-tile.testmod3:variants.b.name=Variants Block - B
+tile.testmod3:variants_block_a.name=Variants Block - A
+tile.testmod3:variants_block_b.name=Variants Block - B
 
 tile.testmod3:stained_clay_slab.name=Stained Clay Slab
 tile.testmod3:stained_clay_slab.white.name=White Stained Clay Slab

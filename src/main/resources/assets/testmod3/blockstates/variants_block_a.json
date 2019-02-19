@@ -1,0 +1,12 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "minecraft:cube_all",
+		"textures": {
+			"all": "testmod3:blocks/variants.a"
+		}
+	},
+	"variants": {
+		"normal": [ { } ]
+	}
+}

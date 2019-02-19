@@ -130,9 +130,9 @@ public class ModModelManager {
 		registerSlabGroupItemModels(ModBlocks.Slabs.STAINED_CLAY_SLABS.high);
 		registerSlabGroupItemModels(ModBlocks.Slabs.STAINED_CLAY_SLABS.low);
 
-		registerVariantBlockItemModels(
-				ModBlocks.VARIANTS.getDefaultState(),
-				BlockVariants.VARIANT
+		registerBlockVariantGroupItemModels(
+				ModBlocks.VariantGroups.VARIANTS_BLOCKS,
+				Block::getDefaultState
 		);
 
 		registerBlockItemModel(
