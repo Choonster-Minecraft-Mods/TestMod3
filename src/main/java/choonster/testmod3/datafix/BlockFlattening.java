@@ -93,7 +93,7 @@ public class BlockFlattening implements IFixableData {
 
 	@Override
 	public int getFixVersion() {
-		return 1;
+		return 101;
 	}
 
 	@Override

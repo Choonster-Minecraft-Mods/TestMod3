@@ -15,7 +15,7 @@ public class ModDataFixers {
 	/**
 	 * The current data version.
 	 */
-	private static final int DATA_VERSION = 100;
+	private static final int DATA_VERSION = 101;
 
 	/**
 	 * Register this mod's data fixers.
