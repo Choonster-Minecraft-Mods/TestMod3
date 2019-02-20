@@ -103,6 +103,7 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 	private static final List<String> namesToIgnore = ImmutableList.<String>builder()
 			.add("colored_rotatable")
 			.add("colored_multi_rotatable")
+			.add("variants")
 			.build();
 
 	private boolean ignoreName(final Mapping<T> missingMapping) {
