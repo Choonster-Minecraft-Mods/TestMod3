@@ -5,13 +5,16 @@ import choonster.testmod3.block.*;
 import choonster.testmod3.block.pipe.BlockPipeBasic;
 import choonster.testmod3.block.pipe.BlockPipeFluid;
 import choonster.testmod3.block.slab.BlockColouredSlab;
-import choonster.testmod3.block.slab.ISlabGroupContainer;
+import choonster.testmod3.block.slab.BlockSlabTestMod3;
 import choonster.testmod3.block.variantgroup.BlockVariantGroup;
+import choonster.testmod3.block.variantgroup.IBlockVariantGroup;
+import choonster.testmod3.block.variantgroup.SlabVariantGroup;
 import choonster.testmod3.item.block.ItemFluidTank;
 import choonster.testmod3.tileentity.*;
 import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -118,10 +121,27 @@ public class ModBlocks {
 				.material(Material.IRON)
 				.blockFactory(BlockVariants::new)
 				.build();
-	}
 
-	public static class Slabs {
-		public static final BlockColouredSlab.ColouredSlabGroupContainer STAINED_CLAY_SLABS = new BlockColouredSlab.ColouredSlabGroupContainer("stained_clay_slab", Material.ROCK);
+		public static final SlabVariantGroup<EnumDyeColor, BlockColouredSlab> TERRACOTTA_SLABS = SlabVariantGroup.Builder.<EnumDyeColor, BlockColouredSlab>create()
+				.groupName("terracotta_slab")
+				.variants(EnumDyeColor.values())
+				.material(Material.ROCK)
+				.blockFactory((colour, material, isDouble, slabGroup) -> {
+					final IProperty<EnumDyeColor> variantProperty = BlockSlabTestMod3.createVariantProperty(EnumDyeColor.class, colour);
+
+					return new BlockColouredSlab(colour, material, slabGroup) {
+						@Override
+						public boolean isDouble() {
+							return isDouble;
+						}
+
+						@Override
+						public IProperty<EnumDyeColor> getVariantProperty() {
+							return variantProperty;
+						}
+					};
+				})
+				.build();
 	}
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
@@ -174,7 +194,7 @@ public class ModBlocks {
 
 			VariantGroups.COLORED_ROTATABLE_BLOCKS.registerBlocks(registry);
 			VariantGroups.COLORED_MULTI_ROTATABLE_BLOCKS.registerBlocks(registry);
-			Slabs.STAINED_CLAY_SLABS.registerBlocks(registry);
+			VariantGroups.TERRACOTTA_SLABS.registerBlocks(registry);
 			VariantGroups.VARIANTS_BLOCKS.registerBlocks(registry);
 
 			registerTileEntities();
@@ -231,30 +251,19 @@ public class ModBlocks {
 
 			registerVariantGroupItems(registry, VariantGroups.COLORED_ROTATABLE_BLOCKS);
 			registerVariantGroupItems(registry, VariantGroups.COLORED_MULTI_ROTATABLE_BLOCKS);
-			registerSlabGroupContainerItems(registry, Slabs.STAINED_CLAY_SLABS);
+			registerVariantGroupItems(registry, VariantGroups.TERRACOTTA_SLABS);
 			registerVariantGroupItems(registry, VariantGroups.VARIANTS_BLOCKS);
 		}
 
 
 		/**
-		 * Register a {@link BlockVariantGroup}'s {@link Item}s and add them to {@link #ITEM_BLOCKS}.
+		 * Register an {@link IBlockVariantGroup}'s {@link Item}s and add them to {@link #ITEM_BLOCKS}.
 		 *
 		 * @param registry The Item registry
 		 * @param group    The variant group
 		 */
-		private static void registerVariantGroupItems(final IForgeRegistry<Item> registry, final BlockVariantGroup<?, ?> group) {
-			final List<ItemBlock> items = group.registerItems(registry);
-			ITEM_BLOCKS.addAll(items);
-		}
-
-		/**
-		 * Register a {@link ISlabGroupContainer}'s {@link Item}s and add them to {@link #ITEM_BLOCKS}.
-		 *
-		 * @param registry  The Item registry
-		 * @param container The container
-		 */
-		private static void registerSlabGroupContainerItems(final IForgeRegistry<Item> registry, final ISlabGroupContainer<?, ?, ?> container) {
-			final List<ItemBlock> items = container.registerItems(registry);
+		private static void registerVariantGroupItems(final IForgeRegistry<Item> registry, final IBlockVariantGroup<?, ?> group) {
+			final List<? extends ItemBlock> items = group.registerItems(registry);
 			ITEM_BLOCKS.addAll(items);
 		}
 	}

@@ -2,9 +2,8 @@ package choonster.testmod3.client.model;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.*;
-import choonster.testmod3.block.slab.BlockSlabTestMod3;
-import choonster.testmod3.block.slab.SlabGroup;
-import choonster.testmod3.block.variantgroup.BlockVariantGroup;
+import choonster.testmod3.block.slab.BlockColouredSlab;
+import choonster.testmod3.block.variantgroup.IBlockVariantGroup;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
@@ -15,7 +14,6 @@ import choonster.testmod3.util.IVariant;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockSlab;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
@@ -127,8 +125,17 @@ public class ModModelManager {
 						.withProperty(BlockColoredMultiRotatable.FACE_ROTATION, EnumFaceRotation.UP)
 		);
 
-		registerSlabGroupItemModels(ModBlocks.Slabs.STAINED_CLAY_SLABS.high);
-		registerSlabGroupItemModels(ModBlocks.Slabs.STAINED_CLAY_SLABS.low);
+		registerBlockVariantGroupItemModels(
+				ModBlocks.VariantGroups.TERRACOTTA_SLABS,
+				block -> {
+					if (block.isDouble()) {
+						return block.getDefaultState();
+					} else {
+						return block.getDefaultState()
+								.withProperty(BlockColouredSlab.HALF, BlockColouredSlab.EnumBlockHalf.BOTTOM);
+					}
+				}
+		);
 
 		registerBlockVariantGroupItemModels(
 				ModBlocks.VariantGroups.VARIANTS_BLOCKS,
@@ -196,8 +203,9 @@ public class ModModelManager {
 	 * <li>The domain/path is the registry name</li>
 	 * <li>The variant is the result of calling {@code stateFactory} with the block</li>
 	 */
-	private void registerBlockVariantGroupItemModels(final BlockVariantGroup<?, ?> variantGroup, final Function<Block, IBlockState> stateFactory) {
-		variantGroup.getBlocks().values().stream()
+	private <VARIANT extends Enum<VARIANT> & IStringSerializable, BLOCK extends Block>
+	void registerBlockVariantGroupItemModels(final IBlockVariantGroup<VARIANT, BLOCK> variantGroup, final Function<BLOCK, IBlockState> stateFactory) {
+		variantGroup.getBlocks().stream()
 				.map(stateFactory)
 				.forEach(this::registerBlockItemModel);
 	}
@@ -218,53 +226,6 @@ public class ModModelManager {
 	 */
 	private <T extends Comparable<T>> void registerVariantBlockItemModels(final IBlockState baseState, final IProperty<T> property, final ToIntFunction<T> getMeta) {
 		property.getAllowedValues().forEach(value -> registerBlockItemModelForMeta(baseState.withProperty(property, value), getMeta.applyAsInt(value)));
-	}
-
-	/**
-	 * Register a model for each metadata value of the {@link Block}'s {@link Item} corresponding to the values of an {@link IProperty}.
-	 * <p>
-	 * For each value:
-	 * <li>The domain/path is the registry name</li>
-	 * <li>The variant is {@code baseState} with the {@link IProperty} set to the value</li>
-	 * <p>
-	 * {@link IVariant#getMeta()} is used to get the metadata of each value.
-	 *
-	 * @param baseState The base state to use for the variant
-	 * @param property  The property whose values should be used
-	 * @param <T>       The value type
-	 */
-	private <T extends IVariant & Comparable<T>> void registerVariantBlockItemModels(final IBlockState baseState, final IProperty<T> property) {
-		registerVariantBlockItemModels(baseState, property, IVariant::getMeta);
-	}
-
-	/**
-	 * Register a model for each metadata value of a {@link SlabGroup}'s {@link Item} corresponding to
-	 * the values of the slab's variant property ({@link BlockSlab#getVariantProperty()}).
-	 * <p>
-	 * For each value:
-	 * <li>The domain/path is the registry name</li>
-	 * <li>The variant is the default state with {@link BlockSlab#HALF} set to {@link BlockSlab.EnumBlockHalf#BOTTOM}
-	 * and the variant property set to the value as the variant.</li>
-	 * <p>
-	 * {@link BlockSlabTestMod3#getMetadata} is used to get the metadata of each value.
-	 *
-	 * @param slabGroup  The SlabGroup
-	 * @param <VARIANT>  The variant type
-	 * @param <VARIANTS> The variant collection type
-	 * @param <SLAB>     The slab type
-	 */
-	private <
-			VARIANT extends Enum<VARIANT> & IStringSerializable,
-			VARIANTS extends Iterable<VARIANT> & IStringSerializable,
-			SLAB extends BlockSlabTestMod3<VARIANT, VARIANTS, SLAB>
-			>
-	void registerSlabGroupItemModels(final SlabGroup<VARIANT, VARIANTS, SLAB> slabGroup) {
-		final SLAB singleSlab = slabGroup.getSingleSlab();
-		registerVariantBlockItemModels(
-				singleSlab.getDefaultState()
-						.withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM),
-				singleSlab.getVariantProperty(), singleSlab::getMetadata
-		);
 	}
 
 	/**

@@ -104,6 +104,10 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 			.add("colored_rotatable")
 			.add("colored_multi_rotatable")
 			.add("variants")
+			.add("stained_clay_slab_low")
+			.add("stained_clay_slab_high")
+			.add("double_stained_clay_slab_low")
+			.add("double_stained_clay_slab_high")
 			.build();
 
 	private boolean ignoreName(final Mapping<T> missingMapping) {

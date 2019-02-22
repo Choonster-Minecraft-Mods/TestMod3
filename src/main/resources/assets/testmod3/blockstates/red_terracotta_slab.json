@@ -1,0 +1,24 @@
+{
+"forge_marker": 1,
+"defaults": {
+"textures": {
+"all": "minecraft:blocks/hardened_clay_stained_red",
+"top": "#all",
+"bottom": "#all",
+"side": "#all"
+}
+},
+"variants": {
+"half": {
+"bottom": {
+"model": "minecraft:half_slab"
+},
+"top": {
+"model": "minecraft:upper_slab"
+}
+},
+"variant": {
+"red": { }
+}
+}
+}

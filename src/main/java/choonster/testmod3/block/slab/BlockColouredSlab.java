@@ -1,7 +1,6 @@
 package choonster.testmod3.block.slab;
 
-import com.google.common.collect.ImmutableList;
-import net.minecraft.block.Block;
+import choonster.testmod3.block.variantgroup.SlabVariantGroup;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -9,22 +8,17 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.DyeUtils;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -36,71 +30,34 @@ import java.util.function.Predicate;
  *
  * @author Choonster
  */
-public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, BlockColouredSlab.EnumColourGroup, BlockColouredSlab> {
+public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, BlockColouredSlab> {
 
 	/**
 	 * Create a coloured slab block.
 	 *
-	 * @param material    The Material of this slab
-	 * @param colourGroup This slab's colour group
-	 * @param slabGroup   The group this slab belongs to
+	 * @param variant   The variant of this slab
+	 * @param material  The Material of this slab
+	 * @param slabGroup The group this slab belongs to
 	 */
-	public BlockColouredSlab(final Material material, final EnumColourGroup colourGroup, final SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> slabGroup) {
-		super(material, slabGroup, colourGroup);
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public MapColor getMapColor(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
-		return MapColor.getBlockColor(state.getValue(getVariantProperty()));
-	}
-
-	@Override
-	public String getTranslationKey(final int meta) {
-		return getTranslationKey() + "." + getVariant(meta).getTranslationKey();
-	}
-
-	/**
-	 * Get the metadata value for the specified colour
-	 *
-	 * @param colour The colour
-	 * @return The metadata value
-	 */
-	@Override
-	public int getMetadata(final EnumDyeColor colour) {
-		return variants.getOffsetMetadata(colour);
-	}
-
-	/**
-	 * Get the colour for the specified metadata value
-	 *
-	 * @param meta The metadata value
-	 * @return The colour
-	 */
-	@Override
-	protected EnumDyeColor getVariant(final int meta) {
-		return variants.byOffsetMetadata(meta);
+	public BlockColouredSlab(final EnumDyeColor variant, final Material material, final SlabVariantGroup<EnumDyeColor, BlockColouredSlab>.SlabGroup slabGroup) {
+		super(variant, material, MapColor.getBlockColor(variant), slabGroup);
 	}
 
 	@Override
 	public boolean recolorBlock(final World world, final BlockPos pos, final EnumFacing side, final EnumDyeColor colour) {
-		final BlockSlabTestMod3<EnumDyeColor, EnumColourGroup, BlockColouredSlab> slabBlock;
-		final IBlockState baseState;
+		final IBlockState newState;
 
-		if (variants.isColourInGroup(colour)) { // If the new colour is in this Block's colour group, use the current state as the base state
-			slabBlock = this;
-			baseState = world.getBlockState(pos);
+		final SlabVariantGroup<EnumDyeColor, BlockColouredSlab>.SlabGroup newSlabGroup = slabGroup.getVariantGroup().getSlabGroup(colour);
 
-			if (baseState.getValue(getVariantProperty()) == colour) { // If the new colour is the same as the current colour, do nothing
-				return false;
-			}
-		} else { // If the new colour isn't in this Block's colour group, get the appropriate Block from the slab group container
-			final SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> slabGroup = this.slabGroup.getParentContainer().getSlabGroupForVariant(colour);
-			slabBlock = isDouble() ? slabGroup.getDoubleSlab() : slabGroup.getSingleSlab();
-			baseState = slabBlock.getDefaultState();
+		if (isDouble()) {
+			newState = newSlabGroup.getDoubleSlab().getDefaultState();
+		} else {
+			final IBlockState currentState = world.getBlockState(pos);
+
+			newState = newSlabGroup.getSingleSlab().getDefaultState().withProperty(HALF, currentState.getValue(HALF));
 		}
 
-		return world.setBlockState(pos, baseState.withProperty(slabBlock.getVariantProperty(), colour));
+		return world.setBlockState(pos, newState);
 	}
 
 	@Override
@@ -121,14 +78,11 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 		return false;
 	}
 
-	@Override
-	public EnumDyeColor getTypeForItem(final ItemStack stack) {
-		return variants.byOffsetMetadata(stack.getMetadata());
-	}
-
 	/**
 	 * A group of {@link EnumDyeColor} values.
 	 */
+	// TODO: Remove in 1.13
+	@Deprecated
 	public enum EnumColourGroup implements Iterable<EnumDyeColor>, IStringSerializable {
 		LOW("low", colour -> colour.getMetadata() < 8, 0),
 		HIGH("high", colour -> colour.getMetadata() >= 8, 8);
@@ -227,86 +181,6 @@ public abstract class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, 
 			}
 
 			return null;
-		}
-	}
-
-	public static class ColouredSlabGroupContainer implements ISlabGroupContainer<EnumDyeColor, EnumColourGroup, BlockColouredSlab> {
-		public final SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> low;
-		public final SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> high;
-
-		/**
-		 * Create a coloured slab group container.
-		 *
-		 * @param groupName The group's name
-		 * @param material  The Material of the slabs
-		 */
-		public ColouredSlabGroupContainer(final String groupName, final Material material) {
-			low = createGroup(groupName, material, EnumColourGroup.LOW);
-			high = createGroup(groupName, material, EnumColourGroup.HIGH);
-		}
-
-		/**
-		 * Create a slab group.
-		 *
-		 * @param groupName   The group's name
-		 * @param material    The Material of the slabs
-		 * @param colourGroup The colour group
-		 * @return The slab group
-		 */
-		private SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> createGroup(final String groupName, final Material material, final EnumColourGroup colourGroup) {
-			return new SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab>(groupName, material, colourGroup, this) {
-				@Override
-				public BlockColouredSlab createSlab(final Material material, final boolean isDouble, final EnumColourGroup colourGroup) {
-					return new BlockColouredSlab(material, colourGroup, this) {
-						@Override
-						public boolean isDouble() {
-							return isDouble;
-						}
-
-						@Override
-						public IProperty<EnumDyeColor> getVariantProperty() {
-							return colourGroup.property;
-						}
-					};
-				}
-			};
-		}
-
-		/**
-		 * Get the slab group containing the specified variant.
-		 *
-		 * @param enumDyeColor The variant
-		 * @return The slab group
-		 */
-		@Override
-		public SlabGroup<EnumDyeColor, EnumColourGroup, BlockColouredSlab> getSlabGroupForVariant(final EnumDyeColor enumDyeColor) {
-			return EnumColourGroup.LOW.isColourInGroup(enumDyeColor) ? low : high;
-		}
-
-		/**
-		 * Register this container's {@link Block}s.
-		 *
-		 * @param registry The Block registry
-		 * @throws IllegalStateException If the Blocks have already been registered
-		 */
-		@Override
-		public void registerBlocks(final IForgeRegistry<Block> registry) {
-			low.registerBlocks(registry);
-			high.registerBlocks(registry);
-		}
-
-		/**
-		 * Register this container's {@link Item}s.
-		 *
-		 * @param registry The Item registry
-		 * @return The registered Items
-		 * @throws IllegalStateException If the Items have already been registered
-		 */
-		@Override
-		public List<ItemBlock> registerItems(final IForgeRegistry<Item> registry) {
-			low.registerItem(registry);
-			high.registerItem(registry);
-			return ImmutableList.of(low.getItem(), high.getItem());
 		}
 	}
 }

@@ -19,7 +19,7 @@ import java.util.function.Function;
  *
  * @author Choonster
  */
-public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializable, BLOCK extends Block> {
+public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializable, BLOCK extends Block> implements IBlockVariantGroup<VARIANT, BLOCK> {
 
 	private final String groupName;
 	private final boolean isSuffix;
@@ -42,11 +42,41 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	}
 
 	/**
+	 * Gets the name of this group.
+	 *
+	 * @return The group name
+	 */
+	@Override
+	public String getGroupName() {
+		return groupName;
+	}
+
+	/**
+	 * Gets this group's variants.
+	 *
+	 * @return The variants
+	 */
+	@Override
+	public Iterable<VARIANT> getVariants() {
+		return variants;
+	}
+
+	/**
+	 * Gets this group's blocks.
+	 *
+	 * @return The blocks
+	 */
+	@Override
+	public Collection<BLOCK> getBlocks() {
+		return getBlocksMap().values();
+	}
+
+	/**
 	 * Gets this group's blocks and their corresponding variants.
 	 *
 	 * @return The blocks map
 	 */
-	public Map<VARIANT, BLOCK> getBlocks() {
+	public Map<VARIANT, BLOCK> getBlocksMap() {
 		return blocks;
 	}
 
@@ -61,43 +91,18 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	}
 
 	/**
-	 * Gets the next variant in the variants collection.
-	 * <p>
-	 * If the specified variant is the last in the collection, the first variant is returned.
-	 * <p>
-	 * This is similar to (and adapted from) {@code BlockStateBase.cyclePropertyValue}.
-	 *
-	 * @param currentVariant The current variant
-	 * @return The next variant in the variants collection.
-	 */
-	public VARIANT cycleVariant(final VARIANT currentVariant) {
-		final Iterator<VARIANT> iterator = variants.iterator();
-
-		while (iterator.hasNext()) {
-			if (iterator.next().equals(currentVariant)) {
-				if (iterator.hasNext()) {
-					return iterator.next();
-				}
-
-				return variants.iterator().next();
-			}
-		}
-
-		return iterator.next();
-	}
-
-	/**
 	 * Registers this group's blocks.
 	 *
 	 * @param registry The block registry
 	 * @throws IllegalStateException If the blocks have already been registered
 	 */
+	@Override
 	public void registerBlocks(final IForgeRegistry<Block> registry) {
 		Preconditions.checkState(blocks == null, "Attempt to re-register Blocks for Variant Group %s", groupName);
 
 		final ImmutableMap.Builder<VARIANT, BLOCK> builder = ImmutableMap.builder();
 
-		variants.forEach(variant -> {
+		getVariants().forEach(variant -> {
 			final String registryName;
 			if (isSuffix) {
 				registryName = groupName + "_" + variant.getName();
@@ -123,6 +128,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	 * @return The registered items
 	 * @throws IllegalStateException If the items have already been registered
 	 */
+	@Override
 	public List<ItemBlock> registerItems(final IForgeRegistry<Item> registry) {
 		Preconditions.checkState(blocks != null, "Attempt to register Items before Blocks for Variant Group %s", groupName);
 		Preconditions.checkState(!registeredItems, "Attempt to re-register Items for Variant Group %s", groupName);
