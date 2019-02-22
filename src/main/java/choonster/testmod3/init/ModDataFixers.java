@@ -1,7 +1,7 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.datafix.BlockFlattening;
+import choonster.testmod3.datafix.BlockFlatteningDefinitions;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraftforge.common.util.ModFixs;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -23,6 +23,6 @@ public class ModDataFixers {
 	public static void registerDataFixers() {
 		final ModFixs modFixs = FMLCommonHandler.instance().getDataFixer().init(TestMod3.MODID, DATA_VERSION);
 
-		modFixs.registerFix(FixTypes.CHUNK, BlockFlattening.create());
+		modFixs.registerFix(FixTypes.CHUNK, BlockFlatteningDefinitions.createBlockFlattening());
 	}
 }

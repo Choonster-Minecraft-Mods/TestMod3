@@ -2,18 +2,12 @@ package choonster.testmod3.datafix;
 
 import choonster.testmod3.Logger;
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.block.BlockColoredRotatable;
-import choonster.testmod3.block.slab.BlockColouredSlab;
-import choonster.testmod3.init.ModBlocks;
-import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ObjectIntIdentityMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.datafix.IFixableData;
@@ -41,93 +35,8 @@ public class BlockFlattening implements IFixableData {
 
 	private final List<FlatteningDefinition> flatteningDefinitions;
 
-	private BlockFlattening(final List<FlatteningDefinition> flatteningDefinitions) {
+	public BlockFlattening(final List<FlatteningDefinition> flatteningDefinitions) {
 		this.flatteningDefinitions = flatteningDefinitions;
-	}
-
-	public static BlockFlattening create() {
-		final ImmutableList.Builder<FlatteningDefinition> flatteningDefinitions = new ImmutableList.Builder<>();
-
-		ModBlocks.VariantGroups.COLORED_ROTATABLE_BLOCKS.getBlocksMap().forEach((color, blockColoredRotatable) -> {
-			flatteningDefinitions.add(new FlatteningDefinition(
-					"colored_rotatable",
-					color.getMetadata(),
-					blockColoredRotatable,
-					(block, tileEntityNBT) -> {
-						final int facingIndex = Objects.requireNonNull(tileEntityNBT).getInteger("facing");
-						final EnumFacing facing = EnumFacing.byIndex(facingIndex);
-						return block.getDefaultState().withProperty(BlockColoredRotatable.FACING, facing);
-					},
-					tileEntityNBT -> TileEntityAction.REMOVE
-			));
-		});
-
-		ModBlocks.VariantGroups.COLORED_MULTI_ROTATABLE_BLOCKS.getBlocksMap().forEach((color, blockColoredMultiRotatable) -> {
-			flatteningDefinitions.add(new FlatteningDefinition(
-					"colored_multi_rotatable",
-					color.getMetadata(),
-					blockColoredMultiRotatable,
-					(block, tileEntityNBT) -> {
-						final int facingIndex = Objects.requireNonNull(tileEntityNBT).getInteger("facing");
-						final EnumFacing facing = EnumFacing.byIndex(facingIndex);
-						return block.getDefaultState().withProperty(BlockColoredRotatable.FACING, facing);
-					},
-					tileEntityNBT -> {
-						tileEntityNBT.removeTag("Facing");
-						return TileEntityAction.KEEP;
-					}
-			));
-		});
-
-		ModBlocks.VariantGroups.VARIANTS_BLOCKS.getBlocksMap().forEach((type, blockVariants) -> {
-			//noinspection deprecation
-			flatteningDefinitions.add(new FlatteningDefinition(
-					"variants",
-					type.getMeta(),
-					blockVariants,
-					(block, tileEntityNBT) -> block.getDefaultState(),
-					null
-			));
-		});
-
-		ModBlocks.VariantGroups.TERRACOTTA_SLABS.getSlabGroupsMap().forEach((color, slabGroup) -> {
-			//noinspection deprecation
-			final BlockColouredSlab.EnumColourGroup colourGroup = Objects.requireNonNull(BlockColouredSlab.EnumColourGroup.getGroupForColour(color));
-
-			final String oldSingleName = colourGroup == BlockColouredSlab.EnumColourGroup.LOW ? "stained_clay_slab_low" : "stained_clay_slab_high";
-			final String oldDoubleName = "double_" + oldSingleName;
-
-			final int metadata = colourGroup.getOffsetMetadata(color);
-
-			// Single slab, bottom half
-			flatteningDefinitions.add(new FlatteningDefinition(
-					oldSingleName,
-					metadata,
-					slabGroup.getSingleSlab(),
-					(block, tileEntityNBT) -> block.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM),
-					null
-			));
-
-			// Single slab, top half
-			flatteningDefinitions.add(new FlatteningDefinition(
-					oldSingleName,
-					metadata | 8,
-					slabGroup.getSingleSlab(),
-					(block, tileEntityNBT) -> block.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP),
-					null
-			));
-
-			// Double slab
-			flatteningDefinitions.add(new FlatteningDefinition(
-					oldDoubleName,
-					metadata,
-					slabGroup.getDoubleSlab(),
-					(block, tileEntityNBT) -> block.getDefaultState(),
-					null
-			));
-		});
-
-		return new BlockFlattening(flatteningDefinitions.build());
 	}
 
 	@Override
