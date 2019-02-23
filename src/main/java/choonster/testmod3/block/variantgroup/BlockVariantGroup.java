@@ -1,6 +1,6 @@
 package choonster.testmod3.block.variantgroup;
 
-import choonster.testmod3.block.BlockTestMod3;
+import choonster.testmod3.util.RegistryUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
@@ -112,7 +112,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 
 			final BLOCK block = blockFactory.createBlock(variant, material, this);
 
-			BlockTestMod3.setBlockName(block, registryName);
+			RegistryUtil.setBlockName(block, registryName);
 
 			registry.register(block);
 			builder.put(variant, block);

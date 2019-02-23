@@ -2,6 +2,7 @@ package choonster.testmod3.item;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.fluids.FluidHandlerUniversalBucket;
+import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -40,7 +41,7 @@ public class ItemBucketTestMod3 extends UniversalBucket {
 
 	public ItemBucketTestMod3(final String name, final int capacity) {
 		super(capacity, ItemStack.EMPTY, true);
-		ItemTestMod3.setItemName(this, name);
+		RegistryUtil.setItemName(this, name);
 		setCreativeTab(TestMod3.creativeTab);
 	}
 

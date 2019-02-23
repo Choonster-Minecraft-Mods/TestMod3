@@ -1,6 +1,7 @@
 package choonster.testmod3.item;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.util.RegistryUtil;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -55,7 +56,7 @@ public class ItemHarvestSword extends ItemTool {
 	public ItemHarvestSword(final ToolMaterial toolMaterial, final String itemName) {
 		super(BASE_DAMAGE, ATTACK_SPEED, toolMaterial, Collections.emptySet());
 
-		ItemTestMod3.setItemName(this, itemName);
+		RegistryUtil.setItemName(this, itemName);
 
 		setHarvestLevel("pickaxe", toolMaterial.getHarvestLevel());
 		setHarvestLevel("axe", toolMaterial.getHarvestLevel());

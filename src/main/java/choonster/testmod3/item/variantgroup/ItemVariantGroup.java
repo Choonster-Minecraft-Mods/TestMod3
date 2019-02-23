@@ -1,6 +1,6 @@
 package choonster.testmod3.item.variantgroup;
 
-import choonster.testmod3.item.ItemTestMod3;
+import choonster.testmod3.util.RegistryUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.item.Item;
@@ -103,7 +103,7 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 
 			final ITEM item = itemFactory.createItem(variant, this);
 
-			ItemTestMod3.setItemName(item, registryName);
+			RegistryUtil.setItemName(item, registryName);
 
 			registry.register(item);
 			builder.put(variant, item);

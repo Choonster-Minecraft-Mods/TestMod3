@@ -1,6 +1,7 @@
 package choonster.testmod3.block;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.block.BlockGlass;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -33,7 +34,7 @@ public class BlockRightClickTest extends BlockGlass {
 	public BlockRightClickTest() {
 		super(Material.GLASS, false);
 		setDefaultState(blockState.getBaseState().withProperty(HAS_ENDER_EYE, false));
-		BlockTestMod3.setBlockName(this, "right_click_test");
+		RegistryUtil.setBlockName(this, "right_click_test");
 		setCreativeTab(TestMod3.creativeTab);
 	}
 

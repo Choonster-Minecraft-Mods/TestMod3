@@ -1,8 +1,8 @@
 package choonster.testmod3.block.variantgroup;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.block.BlockTestMod3;
 import choonster.testmod3.util.Constants;
+import choonster.testmod3.util.RegistryUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
@@ -122,8 +122,8 @@ public class SlabVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 			final SLAB singleSlab = slabFactory.createSlab(variant, material, false, slabGroup);
 			final SLAB doubleSlab = slabFactory.createSlab(variant, material, true, slabGroup);
 
-			BlockTestMod3.setBlockName(singleSlab, registryName);
-			BlockTestMod3.setBlockName(doubleSlab, "double_" + registryName);
+			RegistryUtil.setBlockName(singleSlab, registryName);
+			RegistryUtil.setBlockName(doubleSlab, "double_" + registryName);
 			doubleSlab.setTranslationKey(Constants.RESOURCE_PREFIX + registryName);
 
 			registry.registerAll(singleSlab, doubleSlab);

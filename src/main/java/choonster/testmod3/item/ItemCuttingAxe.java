@@ -1,6 +1,7 @@
 package choonster.testmod3.item;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 
@@ -13,7 +14,7 @@ public class ItemCuttingAxe extends ItemAxe {
 
 	public ItemCuttingAxe(final ToolMaterial material, final String itemName) {
 		super(material);
-		ItemTestMod3.setItemName(this, itemName);
+		RegistryUtil.setItemName(this, itemName);
 		setCreativeTab(TestMod3.creativeTab);
 	}
 

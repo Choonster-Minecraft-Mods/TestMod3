@@ -1,6 +1,7 @@
 package choonster.testmod3.item;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.util.RegistryUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -33,7 +34,7 @@ public class ItemArmourTestMod3 extends ItemArmor {
 
 		Preconditions.checkArgument(SLOT_NAMES.containsKey(equipmentSlot), "Invalid slot %s", equipmentSlot);
 
-		ItemTestMod3.setItemName(this, armourName + "_" + SLOT_NAMES.get(equipmentSlot));
+		RegistryUtil.setItemName(this, armourName + "_" + SLOT_NAMES.get(equipmentSlot));
 		setCreativeTab(TestMod3.creativeTab);
 	}
 }
