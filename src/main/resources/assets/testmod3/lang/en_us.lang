@@ -162,10 +162,9 @@ item.testmod3:replacement_chestplate.name=Armour Replacement Chestplate
 item.testmod3:replacement_leggings.name=Armour Replacement Leggings
 item.testmod3:replacement_boots.name=Armour Replacement Boots
 
-item.testmod3:variants_item.name=Variants Item
-item.testmod3:variants_item.a.name=Variants Item - A
-item.testmod3:variants_item.b.name=Variants Item - B
-item.testmod3:variants_item.c.name=Variants Item - C
+item.testmod3:variants_item_a.name=Variants Item - A
+item.testmod3:variants_item_b.name=Variants Item - B
+item.testmod3:variants_item_c.name=Variants Item - C
 
 item.testmod3:wooden_bucket.name=Wooden Bucket
 item.testmod3:wooden_bucket.filled.name=%s Wooden Bucket
