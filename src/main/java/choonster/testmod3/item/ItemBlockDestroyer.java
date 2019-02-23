@@ -4,6 +4,7 @@ import net.minecraft.block.BlockCrops;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -14,11 +15,7 @@ import net.minecraft.world.World;
  *
  * @author Choonster
  */
-public class ItemBlockDestroyer extends ItemTestMod3 {
-	public ItemBlockDestroyer() {
-		super("block_destroyer");
-	}
-
+public class ItemBlockDestroyer extends Item {
 	@Override
 	public boolean onBlockDestroyed(final ItemStack stack, final World worldIn, final IBlockState blockIn, final BlockPos pos, final EntityLivingBase entityLiving) {
 		if (!worldIn.isRemote) {

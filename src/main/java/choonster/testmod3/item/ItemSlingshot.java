@@ -23,7 +23,6 @@ import javax.annotation.Nullable;
  */
 public class ItemSlingshot extends ItemSnowballLauncher {
 	public ItemSlingshot() {
-		super("slingshot");
 		CapabilityLastUseTime.TicksSinceLastUseGetter.addToItem(this);
 	}
 

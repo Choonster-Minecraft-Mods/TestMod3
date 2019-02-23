@@ -19,10 +19,6 @@ public class ItemContinuousBow extends ItemModBow {
 	 */
 	private final int CHARGE_MULTIPLIER = 5;
 
-	public ItemContinuousBow(final String itemName) {
-		super(itemName);
-	}
-
 	@Override
 	public int getMaxItemUseDuration(final ItemStack stack) {
 		return 10;

@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBoat;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
@@ -20,11 +21,7 @@ import java.util.List;
  *
  * @author Choonster
  */
-public class ItemEntityTest extends ItemTestMod3 {
-	public ItemEntityTest() {
-		super("entity_test");
-	}
-
+public class ItemEntityTest extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer player, final EnumHand hand) {
 		final ItemStack heldItem = player.getHeldItem(hand);

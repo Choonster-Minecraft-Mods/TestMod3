@@ -2,7 +2,6 @@ package choonster.testmod3.item;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.util.CapabilityUtils;
-import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,10 +35,7 @@ import java.util.function.Predicate;
  * @author Choonster
  */
 public class ItemModBow extends ItemBow {
-	public ItemModBow(final String itemName) {
-		RegistryUtil.setItemName(this, itemName);
-		setCreativeTab(TestMod3.creativeTab);
-
+	public ItemModBow() {
 		// ItemBow's "pull" getter only works for Items.bow, so register a custom getter that works for any instance of this class.
 		addPropertyOverride(new ResourceLocation(TestMod3.MODID, "pull"),
 				IItemPropertyGetterFix.create((stack, worldIn, entityIn) -> {

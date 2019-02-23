@@ -3,6 +3,7 @@ package choonster.testmod3.item;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -20,12 +21,8 @@ import java.util.List;
  *
  * @author Choonster
  */
-public class ItemSwapTest extends ItemTestMod3 {
+public class ItemSwapTest extends Item {
 	private ItemStack otherItem;
-
-	public ItemSwapTest(final String name) {
-		super("swap_test_" + name);
-	}
 
 	public boolean hasOtherItem() {
 		return otherItem != null;

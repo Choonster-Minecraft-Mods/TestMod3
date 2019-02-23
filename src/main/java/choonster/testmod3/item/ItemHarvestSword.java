@@ -1,7 +1,5 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.TestMod3;
-import choonster.testmod3.util.RegistryUtil;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -53,10 +51,8 @@ public class ItemHarvestSword extends ItemTool {
 	 */
 	private static final float ATTACK_SPEED = -2.4f;
 
-	public ItemHarvestSword(final ToolMaterial toolMaterial, final String itemName) {
+	public ItemHarvestSword(final ToolMaterial toolMaterial) {
 		super(BASE_DAMAGE, ATTACK_SPEED, toolMaterial, Collections.emptySet());
-
-		RegistryUtil.setItemName(this, itemName);
 
 		setHarvestLevel("pickaxe", toolMaterial.getHarvestLevel());
 		setHarvestLevel("axe", toolMaterial.getHarvestLevel());
@@ -64,8 +60,6 @@ public class ItemHarvestSword extends ItemTool {
 
 		// Waila Harvestability sets the harvest tool of Cobwebs to "sword"
 		setHarvestLevel("sword", toolMaterial.getHarvestLevel());
-
-		setCreativeTab(TestMod3.creativeTab);
 	}
 
 	/**

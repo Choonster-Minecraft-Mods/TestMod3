@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -21,15 +22,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *
  * @author Choonster
  */
-public class ItemClearer extends ItemTestMod3 {
+public class ItemClearer extends Item {
 	private static final ImmutableList<Block> whitelist = ImmutableList.of(Blocks.STONE, Blocks.DIRT, Blocks.GRASS, Blocks.GRAVEL, Blocks.SAND, Blocks.WATER, Blocks.FLOWING_WATER, Blocks.LAVA, Blocks.FLOWING_LAVA, Blocks.ICE);
 
 	private static final int MODE_WHITELIST = 0;
 	private static final int MODE_ALL = 1;
-
-	public ItemClearer() {
-		super("clearer");
-	}
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer player, final EnumHand hand) {

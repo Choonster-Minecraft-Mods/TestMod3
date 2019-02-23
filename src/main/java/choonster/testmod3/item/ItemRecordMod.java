@@ -16,7 +16,6 @@ import net.minecraft.util.SoundEvent;
 public class ItemRecordMod extends ItemRecord {
 	public ItemRecordMod(final String recordName, final SoundEvent soundEvent) {
 		super(Constants.RESOURCE_PREFIX + recordName, soundEvent);
-		setRegistryName(TestMod3.MODID, "record_" + recordName);
 		setTranslationKey("record");
 		setCreativeTab(TestMod3.creativeTab);
 	}

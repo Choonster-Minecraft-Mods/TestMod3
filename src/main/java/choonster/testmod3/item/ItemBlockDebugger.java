@@ -2,6 +2,7 @@ package choonster.testmod3.item;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -16,12 +17,8 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Choonster
  */
-public class ItemBlockDebugger extends ItemTestMod3 {
+public class ItemBlockDebugger extends Item {
 	private static final Logger LOGGER = LogManager.getLogger();
-
-	public ItemBlockDebugger() {
-		super("block_debugger");
-	}
 
 	@Override
 	public EnumActionResult onItemUse(final EntityPlayer playerIn, final World worldIn, final BlockPos pos, final EnumHand hand, final EnumFacing facing, final float hitX, final float hitY, final float hitZ) {

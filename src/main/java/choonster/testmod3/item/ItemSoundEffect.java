@@ -2,6 +2,7 @@ package choonster.testmod3.item;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -14,14 +15,13 @@ import net.minecraft.util.SoundEvent;
  *
  * @author Choonster
  */
-public class ItemSoundEffect extends ItemTestMod3 {
+public class ItemSoundEffect extends Item {
 	/**
 	 * The {@link SoundEvent} to play when left clicked.
 	 */
 	private final SoundEvent soundEvent;
 
-	public ItemSoundEffect(final String itemName, final SoundEvent soundEvent) {
-		super(itemName);
+	public ItemSoundEffect(final SoundEvent soundEvent) {
 		this.soundEvent = soundEvent;
 	}
 

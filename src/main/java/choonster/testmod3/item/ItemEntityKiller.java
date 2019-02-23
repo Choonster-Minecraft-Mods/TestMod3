@@ -3,6 +3,7 @@ package choonster.testmod3.item;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
 
@@ -14,11 +15,7 @@ import net.minecraft.util.text.TextComponentTranslation;
  *
  * @author Choonster
  */
-public class ItemEntityKiller extends ItemTestMod3 {
-	public ItemEntityKiller() {
-		super("entity_killer");
-	}
-
+public class ItemEntityKiller extends Item {
 	@Override
 	public boolean onLeftClickEntity(final ItemStack stack, final EntityPlayer player, final Entity entity) {
 		if (!player.world.isRemote) {

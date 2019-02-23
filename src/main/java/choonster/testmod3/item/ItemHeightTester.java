@@ -1,6 +1,7 @@
 package choonster.testmod3.item;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -16,11 +17,7 @@ import net.minecraft.world.chunk.Chunk;
  *
  * @author Choonster
  */
-public class ItemHeightTester extends ItemTestMod3 {
-	public ItemHeightTester() {
-		super("height_tester");
-	}
-
+public class ItemHeightTester extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
 		if (!worldIn.isRemote) {

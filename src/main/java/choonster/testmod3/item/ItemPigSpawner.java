@@ -3,6 +3,7 @@ package choonster.testmod3.item;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawner;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
 import choonster.testmod3.capability.pigspawner.CapabilityPigSpawner;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -15,15 +16,13 @@ import java.util.function.Supplier;
  *
  * @author Choonster
  */
-public class ItemPigSpawner extends ItemTestMod3 {
+public class ItemPigSpawner extends Item {
 	/**
 	 * A factory to create the {@link IPigSpawner}
 	 */
 	private final Supplier<IPigSpawner> spawnerFactory;
 
-	public ItemPigSpawner(final String name, final Supplier<IPigSpawner> spawnerFactory) {
-		super("pig_spawner_" + name);
-
+	public ItemPigSpawner(final Supplier<IPigSpawner> spawnerFactory) {
 		this.spawnerFactory = spawnerFactory;
 
 		setHasSubtypes(true);

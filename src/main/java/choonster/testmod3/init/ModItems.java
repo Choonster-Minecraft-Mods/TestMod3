@@ -9,6 +9,7 @@ import choonster.testmod3.item.*;
 import choonster.testmod3.item.variantgroup.IItemVariantGroup;
 import choonster.testmod3.item.variantgroup.ItemVariantGroup;
 import choonster.testmod3.util.Constants;
+import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -31,6 +32,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static choonster.testmod3.util.InjectionUtil.Null;
+import static choonster.testmod3.util.RegistryUtil.setItemName;
 
 @SuppressWarnings("WeakerAccess")
 @ObjectHolder(TestMod3.MODID)
@@ -115,13 +117,13 @@ public class ModItems {
 
 	public static final ItemHiddenBlockRevealer HIDDEN_BLOCK_REVEALER = Null();
 
-	public static final ItemTestMod3 NO_MOD_NAME = Null();
+	public static final Item NO_MOD_NAME = Null();
 
 	public static final ItemKey KEY = Null();
 
 	public static final ItemModArrow BLOCK_DETECTION_ARROW = Null();
 
-	public static final ItemTestMod3 TRANSLUCENT_ITEM = Null();
+	public static final Item TRANSLUCENT_ITEM = Null();
 
 	public static final ItemEntityKiller ENTITY_KILLER = Null();
 
@@ -129,15 +131,15 @@ public class ModItems {
 
 	public static final ItemChunkEnergyGetter CHUNK_ENERGY_GETTER = Null();
 
-	public static final ItemTestMod3 CHUNK_ENERGY_DISPLAY = Null();
+	public static final Item CHUNK_ENERGY_DISPLAY = Null();
 
-	public static final ItemTestMod3 BEACON_ITEM = Null();
+	public static final Item BEACON_ITEM = Null();
 
 	public static final ItemArmourPotionEffect SATURATION_HELMET = Null();
 
 	public static final ItemEntityChecker ENTITY_CHECKER = Null();
 
-	public static final ItemTestMod3 RUBBER = Null();
+	public static final Item RUBBER = Null();
 
 
 	public static final ItemArmourReplacement REPLACEMENT_HELMET = Null();
@@ -173,77 +175,78 @@ public class ModItems {
 		 */
 		@SubscribeEvent
 		public static void registerItems(final RegistryEvent.Register<Item> event) {
-			final ItemSwapTest swapTestA = new ItemSwapTest("a");
-			final ItemSwapTest swapTestB = new ItemSwapTest("b");
+			final ItemSwapTest swapTestA = setItemName(new ItemSwapTest(), "swap_test_a");
+			final ItemSwapTest swapTestB = setItemName(new ItemSwapTest(), "swap_test_b");
 
-			final ItemDimensionReplacement dimensionReplacement = new ItemDimensionReplacement("dimension_replacement");
+			final ItemDimensionReplacement dimensionReplacement = setItemName(new ItemDimensionReplacement(), "dimension_replacement");
 
-			final ItemArmourReplacement replacementHelmet = new ItemArmourReplacement(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD, "replacement");
-			final ItemArmourRestricted replacementChestplate = new ItemArmourRestricted(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.CHEST, "replacement");
-			final ItemArmourRestricted replacementLeggings = new ItemArmourRestricted(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.LEGS, "replacement");
-			final ItemArmourRestricted replacementBoots = new ItemArmourRestricted(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.FEET, "replacement");
+			final ItemArmourReplacement replacementHelmet = setItemName(new ItemArmourReplacement(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.HEAD), "replacement_helmet");
+			final ItemArmourRestricted replacementChestplate = setItemName(new ItemArmourRestricted(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.CHEST), "replacement_chestplate");
+			final ItemArmourRestricted replacementLeggings = setItemName(new ItemArmourRestricted(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.LEGS), "replacement_leggings");
+			final ItemArmourRestricted replacementBoots = setItemName(new ItemArmourRestricted(ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT, EntityEquipmentSlot.FEET), "replacement_boots");
 
 			final Item[] items = {
-					new ItemCuttingAxe(Item.ToolMaterial.WOOD, "wooden_axe"),
-					new ItemEntityTest(),
-					new ItemRecordMod("solaris", ModSoundEvents.RegistrationHandler.getSoundEvent(new ResourceLocation(TestMod3.MODID, "record.solaris"))),
-					new ItemHeavy(),
-					new ItemEntityInteractionTest(),
-					new ItemBlockDestroyer(),
-					new ItemWithSubscripts(),
-					new ItemWithSuperscripts(),
-					new ItemLastUseTimeModel("model_test"),
-					new ItemSnowballLauncher("snowball_launcher"),
-					new ItemSlingshot(),
-					new ItemUnicodeTooltips(),
+					setItemName(new ItemCuttingAxe(Item.ToolMaterial.WOOD), "wooden_axe"),
+					setItemName(new ItemEntityTest(), "entity_test"),
+					new ItemRecordMod("solaris", ModSoundEvents.RegistrationHandler.getSoundEvent(new ResourceLocation(TestMod3.MODID, "record.solaris"))).setRegistryName(TestMod3.MODID, "record_solaris"),
+					setItemName(new ItemHeavy(), "heavy"),
+					setItemName(new ItemEntityInteractionTest(), "entity_interaction_test"),
+					setItemName(new ItemBlockDestroyer(), "block_destroyer"),
+					setItemName(new ItemWithSubscripts(), "subscripts"),
+					setItemName(new ItemWithSuperscripts(), "superscripts"),
+					setItemName(new ItemLastUseTimeModel(), "model_test"),
+					setItemName(new ItemSnowballLauncher(), "snowball_launcher"),
+					setItemName(new ItemSlingshot(), "slingshot"),
+					setItemName(new ItemUnicodeTooltips(), "unicode_tooltips"),
 					swapTestA,
 					swapTestB,
-					new ItemBlockDebugger(),
-					new ItemHarvestSword(Item.ToolMaterial.WOOD, "wooden_harvest_sword"),
-					new ItemHarvestSword(Item.ToolMaterial.DIAMOND, "diamond_harvest_sword"),
-					new ItemClearer(),
-					new ItemModBow("bow"),
-					new ItemModArrow("arrow", EntityModArrow::new),
-					new ItemHeightTester(),
-					new ItemPigSpawner("finite", CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY::getDefaultInstance),
-					new ItemPigSpawner("infinite", PigSpawnerInfinite::new),
-					new ItemContinuousBow("continuous_bow"),
-					new ItemRespawner(),
-					new ItemLootTableTest(),
-					new ItemMaxHealthSetter(),
-					new ItemMaxHealthGetter(),
-					new ItemSoundEffect("gun", ModSoundEvents.NINE_MM_FIRE),
+					setItemName(new ItemBlockDebugger(), "block_debugger"),
+					setItemName(new ItemHarvestSword(Item.ToolMaterial.WOOD), "wooden_harvest_sword"),
+					setItemName(new ItemHarvestSword(Item.ToolMaterial.DIAMOND), "diamond_harvest_sword"),
+					setItemName(new ItemClearer(), "clearer"),
+					setItemName(new ItemModBow(), "bow"),
+					setItemName(new ItemModArrow(EntityModArrow::new), "arrow"),
+					setItemName(new ItemHeightTester(), "height_tester"),
+					setItemName(new ItemPigSpawner(CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY::getDefaultInstance), "pig_spawner_finite"),
+					setItemName(new ItemPigSpawner(PigSpawnerInfinite::new), "pig_spawner_infinite"),
+					setItemName(new ItemContinuousBow(), "continuous_bow"),
+					setItemName(new ItemRespawner(), "respawner"),
+					setItemName(new ItemLootTableTest(), "loot_table_test"),
+					setItemName(new ItemMaxHealthSetter(), "max_health_setter_item"),
+					setItemName(new ItemMaxHealthGetter(), "max_health_getter_item"),
+					setItemName(new ItemSoundEffect(ModSoundEvents.NINE_MM_FIRE), "gun"),
 					dimensionReplacement,
-					new ItemSoundEffect("saddle", ModSoundEvents.ACTION_SADDLE),
-					new ItemSlowSword(Item.ToolMaterial.WOOD, "wooden_slow_sword"),
-					new ItemSlowSword(Item.ToolMaterial.DIAMOND, "diamond_slow_sword"),
-					new ItemRitualChecker(),
-					new ItemHiddenBlockRevealer(),
-					new ItemTestMod3("no_mod_name"),
-					new ItemKey(),
-					new ItemModArrow("block_detection_arrow", EntityBlockDetectionArrow::new),
-					new ItemTestMod3("translucent_item"),
-					new ItemEntityKiller(),
-					new ItemChunkEnergySetter(),
-					new ItemChunkEnergyGetter(),
-					new ItemTestMod3("chunk_energy_display"),
-					new ItemTestMod3("beacon_item"),
-					new ItemArmourPotionEffect(ItemArmor.ArmorMaterial.CHAIN, EntityEquipmentSlot.HEAD, "saturation", new PotionEffect(MobEffects.SATURATION, 1, 0, true, false)),
-					new ItemEntityChecker(),
-					new ItemTestMod3("rubber"),
+					setItemName(new ItemSoundEffect(ModSoundEvents.ACTION_SADDLE), "saddle"),
+					setItemName(new ItemSlowSword(Item.ToolMaterial.WOOD), "wooden_slow_sword"),
+					setItemName(new ItemSlowSword(Item.ToolMaterial.DIAMOND), "diamond_slow_sword"),
+					setItemName(new ItemRitualChecker(), "ritual_checker"),
+					setItemName(new ItemHiddenBlockRevealer(), "hidden_block_revealer"),
+					setItemName(new Item(), "no_mod_name"),
+					setItemName(new ItemKey(), "key"),
+					setItemName(new ItemModArrow(EntityBlockDetectionArrow::new), "block_detection_arrow"),
+					setItemName(new Item(), "translucent_item"),
+					setItemName(new ItemEntityKiller(), "entity_killer"),
+					setItemName(new ItemChunkEnergySetter(), "chunk_energy_setter"),
+					setItemName(new ItemChunkEnergyGetter(), "chunk_energy_getter"),
+					setItemName(new Item(), "chunk_energy_display"),
+					setItemName(new Item(), "beacon_item"),
+					setItemName(new ItemArmourPotionEffect(ItemArmor.ArmorMaterial.CHAIN, EntityEquipmentSlot.HEAD, new PotionEffect(MobEffects.SATURATION, 1, 0, true, false)), "saturation_helmet"),
+					setItemName(new ItemEntityChecker(), "entity_checker"),
+					setItemName(new Item(), "rubber"),
 
 					replacementHelmet,
 					replacementChestplate,
 					replacementLeggings,
 					replacementBoots,
 
-					new ItemBucketTestMod3("wooden_bucket"),
-					new ItemBucketTestMod3("stone_bucket"),
+					setItemName(new ItemBucketTestMod3(), "wooden_bucket"),
+					setItemName(new ItemBucketTestMod3(), "stone_bucket"),
 			};
 
 			final IForgeRegistry<Item> registry = event.getRegistry();
 
 			for (final Item item : items) {
+				RegistryUtil.setDefaultCreativeTab(item);
 				registry.register(item);
 				ITEMS.add(item);
 			}

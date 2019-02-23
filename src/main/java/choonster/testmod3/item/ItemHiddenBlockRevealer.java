@@ -3,6 +3,7 @@ package choonster.testmod3.item;
 import choonster.testmod3.capability.CapabilityProviderSerializable;
 import choonster.testmod3.capability.hiddenblockrevealer.CapabilityHiddenBlockRevealer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -20,9 +21,8 @@ import java.util.Optional;
  *
  * @author Choonster
  */
-public class ItemHiddenBlockRevealer extends ItemTestMod3 {
+public class ItemHiddenBlockRevealer extends Item {
 	public ItemHiddenBlockRevealer() {
-		super("hidden_block_revealer");
 		CapabilityHiddenBlockRevealer.RevealHiddenBlocksGetter.addToItem(this);
 	}
 

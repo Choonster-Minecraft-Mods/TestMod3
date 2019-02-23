@@ -6,6 +6,7 @@ import choonster.testmod3.util.ItemStackUtils;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.DimensionType;
@@ -29,7 +30,7 @@ import java.util.Map;
  *
  * @author Choonster
  */
-public class ItemDimensionReplacement extends ItemTestMod3 {
+public class ItemDimensionReplacement extends Item {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	/**
@@ -43,10 +44,6 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 	 * The replacement {@link ItemStack} for each {@link DimensionType}.
 	 */
 	private final Map<DimensionType, ItemStack> replacements = new HashMap<>();
-
-	public ItemDimensionReplacement(final String itemName) {
-		super(itemName);
-	}
 
 	/**
 	 * Add a replacement for this item.

@@ -104,6 +104,7 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 			final ITEM item = itemFactory.createItem(variant, this);
 
 			RegistryUtil.setItemName(item, registryName);
+			RegistryUtil.setDefaultCreativeTab(item);
 
 			registry.register(item);
 			builder.put(variant, item);

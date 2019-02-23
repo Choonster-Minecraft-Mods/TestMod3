@@ -5,6 +5,7 @@ import choonster.testmod3.init.ModLootTables;
 import choonster.testmod3.network.MessagePlayerReceivedLoot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -26,11 +27,7 @@ import java.util.List;
  *
  * @author Choonster
  */
-public class ItemLootTableTest extends ItemTestMod3 {
-	public ItemLootTableTest() {
-		super("loot_table_test");
-	}
-
+public class ItemLootTableTest extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
 		if (!worldIn.isRemote) {

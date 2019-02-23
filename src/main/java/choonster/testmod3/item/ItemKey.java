@@ -6,6 +6,7 @@ import choonster.testmod3.capability.lock.CapabilityLock;
 import choonster.testmod3.network.MessageOpenLockGui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -18,9 +19,8 @@ import net.minecraft.world.World;
  *
  * @author Choonster
  */
-public class ItemKey extends ItemTestMod3 {
+public class ItemKey extends Item {
 	public ItemKey() {
-		super("key");
 		setMaxStackSize(1);
 	}
 

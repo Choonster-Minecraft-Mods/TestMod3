@@ -3,6 +3,7 @@ package choonster.testmod3.item;
 import choonster.testmod3.util.ItemStackUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -18,11 +19,7 @@ import net.minecraft.world.World;
  *
  * @author Choonster
  */
-public class ItemEntityInteractionTest extends ItemTestMod3 {
-	public ItemEntityInteractionTest() {
-		super("entity_interaction_test");
-	}
-
+public class ItemEntityInteractionTest extends Item {
 	private int getInteractCount(final ItemStack stack) {
 		return ItemStackUtils.getOrCreateTagCompound(stack).getInteger("Count");
 	}

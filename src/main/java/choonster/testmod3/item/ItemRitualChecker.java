@@ -3,6 +3,7 @@ package choonster.testmod3.item;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -31,11 +32,7 @@ import java.util.Optional;
  *
  * @author Choonster
  */
-public class ItemRitualChecker extends ItemTestMod3 {
-	public ItemRitualChecker() {
-		super("ritual_checker");
-	}
-
+public class ItemRitualChecker extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
 		if (!worldIn.isRemote) {

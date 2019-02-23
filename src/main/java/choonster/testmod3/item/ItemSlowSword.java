@@ -1,7 +1,5 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.TestMod3;
-import choonster.testmod3.util.RegistryUtil;
 import com.google.common.collect.Multimap;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -23,10 +21,8 @@ import java.util.UUID;
  * @author Choonster
  */
 public class ItemSlowSword extends ItemSword {
-	public ItemSlowSword(final ToolMaterial material, final String itemName) {
+	public ItemSlowSword(final ToolMaterial material) {
 		super(material);
-		RegistryUtil.setItemName(this, itemName);
-		setCreativeTab(TestMod3.creativeTab);
 	}
 
 	@Override

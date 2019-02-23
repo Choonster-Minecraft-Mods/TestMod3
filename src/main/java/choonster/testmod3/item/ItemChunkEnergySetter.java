@@ -4,6 +4,7 @@ import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.capability.chunkenergy.CapabilityChunkEnergy;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -19,11 +20,7 @@ import net.minecraft.world.chunk.Chunk;
  *
  * @author Choonster
  */
-public class ItemChunkEnergySetter extends ItemTestMod3 {
-	public ItemChunkEnergySetter() {
-		super("chunk_energy_setter");
-	}
-
+public class ItemChunkEnergySetter extends Item {
 	/**
 	 * Add or remove chunk energy from the player's current chunk.
 	 *

@@ -4,6 +4,7 @@ import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.maxhealth.CapabilityMaxHealth;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -13,11 +14,7 @@ import net.minecraft.util.text.TextComponentTranslation;
  *
  * @author Choonster
  */
-public class ItemMaxHealthGetter extends ItemTestMod3 {
-	public ItemMaxHealthGetter() {
-		super("max_health_getter_item");
-	}
-
+public class ItemMaxHealthGetter extends Item {
 	@Override
 	public boolean itemInteractionForEntity(final ItemStack stack, final EntityPlayer playerIn, final EntityLivingBase target, final EnumHand hand) {
 		if (!playerIn.world.isRemote) {

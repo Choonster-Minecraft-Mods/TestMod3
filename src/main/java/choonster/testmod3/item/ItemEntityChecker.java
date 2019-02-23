@@ -5,6 +5,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -37,12 +38,8 @@ import java.util.List;
  *
  * @author Choonster
  */
-public class ItemEntityChecker extends ItemTestMod3 {
+public class ItemEntityChecker extends Item {
 	private static final Logger LOGGER = LogManager.getLogger();
-
-	public ItemEntityChecker() {
-		super("entity_checker");
-	}
 
 	/**
 	 * Get the search radius from the {@link ItemStack}.

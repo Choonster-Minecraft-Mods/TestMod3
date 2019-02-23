@@ -11,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -38,7 +39,7 @@ import static net.minecraftforge.common.util.Constants.NBT;
  *
  * @author Choonster
  */
-public class ItemArmourReplacement extends ItemArmourTestMod3 {
+public class ItemArmourReplacement extends ItemArmor {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	// NBT keys
@@ -51,8 +52,8 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 	 */
 	private Set<ItemStack> replacementItems;
 
-	public ItemArmourReplacement(final ArmorMaterial material, final EntityEquipmentSlot equipmentSlot, final String armourName) {
-		super(material, equipmentSlot, armourName);
+	public ItemArmourReplacement(final ArmorMaterial material, final EntityEquipmentSlot equipmentSlot) {
+		super(material, -1, equipmentSlot);
 	}
 
 	/**

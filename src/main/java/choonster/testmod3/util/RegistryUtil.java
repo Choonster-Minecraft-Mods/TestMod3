@@ -80,9 +80,25 @@ public class RegistryUtil {
 	 * @param item     The item
 	 * @param itemName The item's name
 	 */
-	public static void setItemName(final Item item, final String itemName) {
+	public static <ITEM extends Item> ITEM setItemName(final ITEM item, final String itemName) {
 		item.setRegistryName(TestMod3.MODID, itemName);
 		final ResourceLocation registryName = Preconditions.checkNotNull(item.getRegistryName());
 		item.setTranslationKey(registryName.toString());
+		return item;
+	}
+
+	/**
+	 * Sets the item's creative tab to the TestMod3 creative tab if it hasn't already been set.
+	 *
+	 * @param item   The item
+	 * @param <ITEM> The item type
+	 * @return The item
+	 */
+	public static <ITEM extends Item> ITEM setDefaultCreativeTab(final ITEM item) {
+		if (item.getCreativeTab() == null) {
+			item.setCreativeTab(TestMod3.creativeTab);
+		}
+
+		return item;
 	}
 }

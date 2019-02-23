@@ -1,6 +1,7 @@
 package choonster.testmod3.item;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -15,11 +16,10 @@ import java.util.function.IntFunction;
  *
  * @author Choonster
  */
-public abstract class ItemWithScripts extends ItemTestMod3 {
+public abstract class ItemWithScripts extends Item {
 	private final IntFunction<String> scriptFunction;
 
-	public ItemWithScripts(final IntFunction<String> scriptFunction, final String itemName) {
-		super(itemName);
+	public ItemWithScripts(final IntFunction<String> scriptFunction) {
 		this.scriptFunction = scriptFunction;
 		setHasSubtypes(true);
 	}

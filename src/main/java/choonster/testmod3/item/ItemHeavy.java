@@ -3,6 +3,7 @@ package choonster.testmod3.item;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
@@ -15,11 +16,7 @@ import net.minecraft.world.World;
  *
  * @author Choonster
  */
-public class ItemHeavy extends ItemTestMod3 {
-	public ItemHeavy() {
-		super("heavy");
-	}
-
+public class ItemHeavy extends Item {
 	@Override
 	public void onUpdate(final ItemStack stack, final World worldIn, final Entity entityIn, final int itemSlot, final boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);

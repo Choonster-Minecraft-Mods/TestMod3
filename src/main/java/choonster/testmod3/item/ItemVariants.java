@@ -1,6 +1,5 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.item.variantgroup.ItemVariantGroup;
 import net.minecraft.item.Item;
 import net.minecraft.util.IStringSerializable;
@@ -20,7 +19,6 @@ public class ItemVariants extends Item {
 	public ItemVariants(final EnumType type, final ItemVariantGroup<EnumType, ItemVariants> variantGroup) {
 		this.type = type;
 		this.variantGroup = variantGroup;
-		setCreativeTab(TestMod3.creativeTab);
 	}
 
 	public enum EnumType implements IStringSerializable {

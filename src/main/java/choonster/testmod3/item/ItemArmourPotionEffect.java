@@ -2,6 +2,7 @@ package choonster.testmod3.item;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
@@ -14,11 +15,11 @@ import net.minecraft.world.World;
  *
  * @author Choonster
  */
-public class ItemArmourPotionEffect extends ItemArmourTestMod3 {
+public class ItemArmourPotionEffect extends ItemArmor {
 	private final PotionEffect potionEffect;
 
-	public ItemArmourPotionEffect(final ArmorMaterial material, final EntityEquipmentSlot equipmentSlot, final String armourName, final PotionEffect potionEffect) {
-		super(material, equipmentSlot, armourName);
+	public ItemArmourPotionEffect(final ArmorMaterial material, final EntityEquipmentSlot equipmentSlot, final PotionEffect potionEffect) {
+		super(material, -1, equipmentSlot);
 		this.potionEffect = potionEffect;
 	}
 

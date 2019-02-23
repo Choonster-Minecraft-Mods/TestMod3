@@ -1,6 +1,5 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -22,8 +21,7 @@ public class ItemModArrow extends ItemArrow {
 	 */
 	private final BiFunction<World, EntityLivingBase, EntityTippedArrow> entityFactory;
 
-	public ItemModArrow(final String itemName, final BiFunction<World, EntityLivingBase, EntityTippedArrow> entityFactory) {
-		RegistryUtil.setItemName(this, itemName);
+	public ItemModArrow(final BiFunction<World, EntityLivingBase, EntityTippedArrow> entityFactory) {
 		this.entityFactory = entityFactory;
 	}
 

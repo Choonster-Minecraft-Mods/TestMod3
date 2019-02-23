@@ -7,6 +7,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -26,11 +27,11 @@ import java.util.List;
  *
  * @author Choonster
  */
-public class ItemArmourRestricted extends ItemArmourTestMod3 {
+public class ItemArmourRestricted extends ItemArmor {
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	public ItemArmourRestricted(final ArmorMaterial material, final EntityEquipmentSlot equipmentSlot, final String armourName) {
-		super(material, equipmentSlot, armourName);
+	public ItemArmourRestricted(final ArmorMaterial material, final EntityEquipmentSlot equipmentSlot) {
+		super(material, -1, equipmentSlot);
 	}
 
 	/**

@@ -2,6 +2,7 @@ package choonster.testmod3.item;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -16,11 +17,7 @@ import net.minecraft.world.WorldServer;
  *
  * @author Choonster
  */
-public class ItemRespawner extends ItemTestMod3 {
-	public ItemRespawner() {
-		super("respawner");
-	}
-
+public class ItemRespawner extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);

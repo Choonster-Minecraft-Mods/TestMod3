@@ -3,6 +3,7 @@ package choonster.testmod3.item;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.capability.chunkenergy.CapabilityChunkEnergy;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -18,11 +19,7 @@ import net.minecraft.world.chunk.Chunk;
  *
  * @author Choonster
  */
-public class ItemChunkEnergyGetter extends ItemTestMod3 {
-	public ItemChunkEnergyGetter() {
-		super("chunk_energy_getter");
-	}
-
+public class ItemChunkEnergyGetter extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand handIn) {
 		if (!worldIn.isRemote) {

@@ -6,6 +6,7 @@ import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -22,16 +23,12 @@ import net.minecraftforge.items.IItemHandler;
  *
  * @author Choonster
  */
-public class ItemSnowballLauncher extends ItemTestMod3 {
+public class ItemSnowballLauncher extends Item {
 
 	/**
 	 * The cooldown of the launcher (in ticks)
 	 */
 	private static final int COOLDOWN = 20;
-
-	public ItemSnowballLauncher(final String itemName) {
-		super(itemName);
-	}
 
 	/**
 	 * Get the cooldown of the launcher (in ticks).

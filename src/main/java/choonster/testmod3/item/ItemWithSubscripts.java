@@ -9,6 +9,6 @@ import choonster.testmod3.util.StringUtils;
  */
 public class ItemWithSubscripts extends ItemWithScripts {
 	public ItemWithSubscripts() {
-		super(StringUtils::subscript, "subscripts");
+		super(StringUtils::subscript);
 	}
 }

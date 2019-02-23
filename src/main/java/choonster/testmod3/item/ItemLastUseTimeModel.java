@@ -2,6 +2,7 @@ package choonster.testmod3.item;
 
 import choonster.testmod3.capability.lastusetime.CapabilityLastUseTime;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -23,10 +24,9 @@ import javax.annotation.Nullable;
  *
  * @author Choonster
  */
-public class ItemLastUseTimeModel extends ItemTestMod3 {
+public class ItemLastUseTimeModel extends Item {
 
-	public ItemLastUseTimeModel(final String itemName) {
-		super(itemName);
+	public ItemLastUseTimeModel() {
 		CapabilityLastUseTime.TicksSinceLastUseGetter.addToItem(this);
 	}
 
