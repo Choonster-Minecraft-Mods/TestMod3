@@ -1,6 +1,5 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.Logger;
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import choonster.testmod3.util.ItemStackUtils;
@@ -14,6 +13,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -29,6 +30,8 @@ import java.util.Map;
  * @author Choonster
  */
 public class ItemDimensionReplacement extends ItemTestMod3 {
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	/**
 	 * The NBT key used to indicate that the replacement logic has been run.
 	 * <p>
@@ -94,7 +97,7 @@ public class ItemDimensionReplacement extends ItemTestMod3 {
 				);
 
 				if (successfulInventoryType != null) {
-					Logger.info("Replaced item in slot %d of %s's %s inventory with %s", itemSlot, entityIn.getName(), successfulInventoryType, replacement.getDisplayName());
+					LOGGER.info("Replaced item in slot {} of {}'s {} inventory with {}", itemSlot, entityIn.getName(), successfulInventoryType, replacement.getDisplayName());
 				}
 			}
 		}

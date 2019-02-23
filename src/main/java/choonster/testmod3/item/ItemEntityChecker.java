@@ -1,6 +1,5 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.Logger;
 import choonster.testmod3.util.ItemStackUtils;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -19,6 +18,8 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -37,6 +38,8 @@ import java.util.List;
  * @author Choonster
  */
 public class ItemEntityChecker extends ItemTestMod3 {
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	public ItemEntityChecker() {
 		super("entity_checker");
 	}
@@ -138,7 +141,7 @@ public class ItemEntityChecker extends ItemTestMod3 {
 
 			final List<Entity> entities = worldIn.getEntitiesWithinAABBExcludingEntity(player, boundingBox);
 
-			Logger.info("Bounding box: %s", boundingBox);
+			LOGGER.info("Bounding box: {}", boundingBox);
 			player.sendMessage(new TextComponentTranslation("message.testmod3:entity_checker.results", entities.size()));
 			entities.forEach(entity -> player.sendMessage(new TextComponentString(entity.toString())));
 		}

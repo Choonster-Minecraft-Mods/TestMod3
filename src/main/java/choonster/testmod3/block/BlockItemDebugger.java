@@ -1,6 +1,5 @@
 package choonster.testmod3.block;
 
-import choonster.testmod3.Logger;
 import choonster.testmod3.capability.pigspawner.CapabilityPigSpawner;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -14,6 +13,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A Block that prints the current state of the player's held {@link ItemStack}s on the client and server when left or right clicked.
@@ -21,6 +22,8 @@ import net.minecraftforge.fml.common.ModContainer;
  * @author Choonster
  */
 public class BlockItemDebugger extends BlockTestMod3 {
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	public BlockItemDebugger() {
 		super(Material.IRON, "item_debugger");
 		setBlockUnbreakable();
@@ -28,7 +31,7 @@ public class BlockItemDebugger extends BlockTestMod3 {
 
 	private void logItem(final ItemStack stack) {
 		if (!stack.isEmpty()) {
-			Logger.info("ItemStack: %s", stack.serializeNBT());
+			LOGGER.info("ItemStack: {}", stack.serializeNBT());
 			logCapability(stack, CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY, EnumFacing.NORTH);
 
 			final String modName;
@@ -45,14 +48,14 @@ public class BlockItemDebugger extends BlockTestMod3 {
 				modName = "Unknown - No Registry Name";
 			}
 
-			Logger.info("Mod Name: %s", modName);
+			LOGGER.info("Mod Name: {}", modName);
 		}
 	}
 
 	private <T> void logCapability(final ItemStack stack, final Capability<T> capability, final EnumFacing facing) {
 		if (stack.hasCapability(capability, facing)) {
 			final T instance = stack.getCapability(capability, facing);
-			Logger.info("Capability: %s - %s", capability.getName(), instance);
+			LOGGER.info("Capability: {} - {}", capability.getName(), instance);
 		}
 	}
 

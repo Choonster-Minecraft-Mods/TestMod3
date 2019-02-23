@@ -1,6 +1,5 @@
 package choonster.testmod3.capability.pigspawner;
 
-import choonster.testmod3.Logger;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawner;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
@@ -9,6 +8,7 @@ import choonster.testmod3.capability.CapabilityContainerListenerManager;
 import choonster.testmod3.capability.CapabilityProviderSerializable;
 import choonster.testmod3.util.CapabilityUtils;
 import choonster.testmod3.util.DebugUtil;
+import choonster.testmod3.util.LogUtil;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
@@ -36,6 +36,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 
@@ -51,6 +52,8 @@ import static choonster.testmod3.util.InjectionUtil.Null;
  * @author Choonster
  */
 public final class CapabilityPigSpawner {
+	private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger();
+
 	/**
 	 * The {@link Capability} instance.
 	 */
@@ -67,7 +70,7 @@ public final class CapabilityPigSpawner {
 	 */
 	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "PigPower");
 
-	public static final Marker LOG_MARKER = MarkerManager.getMarker("PIG_SPAWNER").addParents(Logger.MOD_MARKER);
+	public static final Marker LOG_MARKER = MarkerManager.getMarker("PIG_SPAWNER").addParents(LogUtil.MOD_MARKER);
 
 	/**
 	 * Register the capability.
@@ -89,7 +92,7 @@ public final class CapabilityPigSpawner {
 					final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) instance;
 					final NBTTagCompound tagCompound = (NBTTagCompound) nbt;
 
-					Logger.debug(LOG_MARKER, DebugUtil.getStackTrace(10), "Reading finite pig spawner from NBT: %s (Current: %d, New: %d)", instance, pigSpawnerFinite.getNumPigs(), tagCompound.getInteger("NumPigs"));
+					LogUtil.debug(LOGGER, LOG_MARKER, DebugUtil.getStackTrace(10), "Reading finite pig spawner from NBT: %s (Current: %d, New: %d)", instance, pigSpawnerFinite.getNumPigs(), tagCompound.getInteger("NumPigs"));
 
 					pigSpawnerFinite.setNumPigs(tagCompound.getInteger("NumPigs"));
 				}

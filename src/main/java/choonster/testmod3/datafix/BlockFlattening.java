@@ -1,6 +1,5 @@
 package choonster.testmod3.datafix;
 
-import choonster.testmod3.Logger;
 import choonster.testmod3.TestMod3;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -19,8 +18,8 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.GameData;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.Marker;
-import org.apache.logging.log4j.MarkerManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -31,7 +30,7 @@ import java.util.*;
  * @author Choonster
  */
 public class BlockFlattening implements IFixableData {
-	private static final Marker LOG_MARKER = MarkerManager.getMarker("BlockFlattening").addParents(Logger.MOD_MARKER);
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	private final List<FlatteningDefinition> flatteningDefinitions;
 
@@ -178,7 +177,7 @@ public class BlockFlattening implements IFixableData {
 				tileEntities.removeTag(tileEntityIndex);
 			}
 		} catch (final Exception e) {
-			Logger.error(LOG_MARKER, e, "Unable to flatten blocks, level format may be missing tags.");
+			LOGGER.error("Unable to flatten blocks, level format may be missing tags.", e);
 		}
 
 		return compound;

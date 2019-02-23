@@ -1,13 +1,15 @@
 package choonster.testmod3.capability.pigspawner;
 
-import choonster.testmod3.Logger;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
 import choonster.testmod3.util.DebugUtil;
+import choonster.testmod3.util.LogUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -18,6 +20,8 @@ import java.util.List;
  * @author Choonster
  */
 public class PigSpawnerFinite extends PigSpawnerBase implements IPigSpawnerFinite {
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	/**
 	 * The current number of pigs that can be spawned.
 	 */
@@ -30,7 +34,7 @@ public class PigSpawnerFinite extends PigSpawnerBase implements IPigSpawnerFinit
 
 	public PigSpawnerFinite(final int maxNumPigs) {
 		this.maxNumPigs = maxNumPigs;
-		Logger.debug(CapabilityPigSpawner.LOG_MARKER, DebugUtil.getStackTrace(10), "Creating finite pig spawner: %s", this);
+		LogUtil.debug(LOGGER, CapabilityPigSpawner.LOG_MARKER, DebugUtil.getStackTrace(10), "Creating finite pig spawner: %s", this);
 	}
 
 	/**

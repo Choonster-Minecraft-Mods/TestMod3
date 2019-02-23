@@ -1,6 +1,5 @@
 package choonster.testmod3.init;
 
-import choonster.testmod3.Logger;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.crafting.recipe.DummyRecipe;
 import choonster.testmod3.util.RegistryUtil;
@@ -23,6 +22,8 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,8 @@ import java.util.function.Predicate;
  * Adds and removes recipes.
  */
 public class ModRecipes {
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	/**
 	 * Add this mod's recipes.
 	 */
@@ -91,7 +94,7 @@ public class ModRecipes {
 			// Can't use the fields from ModItems because object holders haven't been applied for Items yet
 			OreDictionary.registerOre("itemRubber", RegistryUtil.getRegistryEntry(itemRegistry, "rubber"));
 		}
-		
+
 		/**
 		 * Remove crafting recipes.
 		 *
@@ -124,7 +127,7 @@ public class ModRecipes {
 				return !recipeOutput.isEmpty() && recipeOutput.getItem() == output;
 			});
 
-			Logger.info("Removed %d recipe(s) for %s", recipesRemoved, output.getRegistryName());
+			LOGGER.info("Removed {} recipe(s) for {}", recipesRemoved, output.getRegistryName());
 		}
 
 		/**
@@ -138,7 +141,7 @@ public class ModRecipes {
 		private static void removeRecipes(final Class<? extends IRecipe> recipeClass) {
 			final int recipesRemoved = removeRecipes(recipeClass::isInstance);
 
-			Logger.info("Removed %d recipe(s) for %s", recipesRemoved, recipeClass);
+			LOGGER.info("Removed {} recipe(s) for {}", recipesRemoved, recipeClass);
 		}
 
 		/**
@@ -160,7 +163,7 @@ public class ModRecipes {
 				}
 			}
 
-			Logger.info("Overriding recipes with dummy recipes, please ignore the following \"Dangerous alternative prefix\" warnings.");
+			LOGGER.info("Overriding recipes with dummy recipes, please ignore the following \"Dangerous alternative prefix\" warnings.");
 			toRemove.forEach(recipe -> {
 				final ResourceLocation registryName = Objects.requireNonNull(recipe.getRegistryName());
 				final IRecipe replacement = new DummyRecipe().setRegistryName(registryName);

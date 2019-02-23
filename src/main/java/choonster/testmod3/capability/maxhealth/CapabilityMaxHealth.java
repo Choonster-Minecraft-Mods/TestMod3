@@ -1,10 +1,10 @@
 package choonster.testmod3.capability.maxhealth;
 
-import choonster.testmod3.Logger;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.CapabilityProviderSerializable;
 import choonster.testmod3.util.CapabilityUtils;
+import choonster.testmod3.util.LogUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -51,7 +51,7 @@ public final class CapabilityMaxHealth {
 	 */
 	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "MaxHealth");
 
-	public static final Marker LOG_MARKER = MarkerManager.getMarker("MaxHealth").addParents(Logger.MOD_MARKER);
+	public static final Marker LOG_MARKER = MarkerManager.getMarker("MaxHealth").addParents(LogUtil.MOD_MARKER);
 
 	public static void register() {
 		CapabilityManager.INSTANCE.register(IMaxHealth.class, new Capability.IStorage<IMaxHealth>() {

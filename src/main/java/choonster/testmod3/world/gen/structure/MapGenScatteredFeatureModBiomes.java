@@ -1,6 +1,5 @@
 package choonster.testmod3.world.gen.structure;
 
-import choonster.testmod3.Logger;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
@@ -11,6 +10,8 @@ import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
 import net.minecraftforge.common.BiomeDictionary;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,8 @@ import java.util.Random;
  * @author Choonster
  */
 public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	private final List<BiomeDictionary.Type> biomeTypes = ImmutableList.of(BiomeDictionary.Type.JUNGLE, BiomeDictionary.Type.SANDY, BiomeDictionary.Type.SWAMP);
 
 	@Override
@@ -109,7 +112,7 @@ public class MapGenScatteredFeatureModBiomes extends MapGenScatteredFeature {
 			if (!possibleFeatures.isEmpty()) {
 				final WeightedRandomScatteredFeature featureToGenerate = WeightedRandom.getRandomItem(random, possibleFeatures);
 				this.components.add(featureToGenerate.feature);
-				Logger.info("Scattered feature %s at %d, %d", featureToGenerate.feature.toString(), chunkX * 16, chunkZ * 16);
+				LOGGER.info("Scattered feature {} at {}, {}", featureToGenerate.feature.toString(), chunkX * 16, chunkZ * 16);
 			}
 
 			this.updateBoundingBox();

@@ -1,6 +1,5 @@
 package choonster.testmod3.block;
 
-import choonster.testmod3.Logger;
 import choonster.testmod3.TestMod3;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -8,6 +7,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A block that forces a player to rotate (from the client side) while standing on it.
@@ -20,6 +21,8 @@ import net.minecraft.world.World;
  * @author Choonster
  */
 public class BlockClientPlayerRotation extends BlockStaticPressurePlate {
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	/**
 	 * The yaw rotation in degrees to add to the player each tick. Positive values rotate clockwise, negative values rotate anticlockwise.
 	 */
@@ -46,7 +49,7 @@ public class BlockClientPlayerRotation extends BlockStaticPressurePlate {
 		if (worldIn.isRemote && entityIn == TestMod3.proxy.getClientPlayer()) {
 			if (MathHelper.epsilonEquals(Math.abs(entityIn.rotationPitch), 90.0f)) {
 				isPitchingUp = !isPitchingUp;
-				Logger.info("Switching pitch direction! Now pitching %s.", isPitchingUp ? "up" : "down");
+				LOGGER.info("Switching pitch direction! Now pitching {}.", isPitchingUp ? "up" : "down");
 			}
 
 			entityIn.turn(ROTATION_YAW, isPitchingUp ? ROTATION_PITCH : -ROTATION_PITCH);

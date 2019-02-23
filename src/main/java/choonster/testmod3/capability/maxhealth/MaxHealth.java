@@ -1,6 +1,5 @@
 package choonster.testmod3.capability.maxhealth;
 
-import choonster.testmod3.Logger;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.util.Constants;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,6 +8,8 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.network.play.server.SPacketEntityProperties;
 import net.minecraft.world.WorldServer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -20,6 +21,8 @@ import java.util.UUID;
  * @author Choonster
  */
 public class MaxHealth implements IMaxHealth {
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	/**
 	 * The ID of the {@link AttributeModifier}.
 	 */
@@ -116,11 +119,11 @@ public class MaxHealth implements IMaxHealth {
 
 			oldAmount = (float) oldModifier.getAmount();
 
-			Logger.debug(CapabilityMaxHealth.LOG_MARKER, "Max Health Changed! Entity: %s - Old: %s - New: %s", entity, CapabilityMaxHealth.formatMaxHealth(oldAmount), CapabilityMaxHealth.formatMaxHealth(newAmount));
+			LOGGER.debug(CapabilityMaxHealth.LOG_MARKER, "Max Health Changed! Entity: {} - Old: {} - New: {}", entity, CapabilityMaxHealth.formatMaxHealth(oldAmount), CapabilityMaxHealth.formatMaxHealth(newAmount));
 		} else {
 			oldAmount = 0.0f;
 
-			Logger.debug(CapabilityMaxHealth.LOG_MARKER, "Max Health Added! Entity: %s - New: %s", entity, CapabilityMaxHealth.formatMaxHealth(newAmount));
+			LOGGER.debug(CapabilityMaxHealth.LOG_MARKER, "Max Health Added! Entity: {} - New: {}", entity, CapabilityMaxHealth.formatMaxHealth(newAmount));
 		}
 
 		entityMaxHealthAttribute.applyModifier(modifier);

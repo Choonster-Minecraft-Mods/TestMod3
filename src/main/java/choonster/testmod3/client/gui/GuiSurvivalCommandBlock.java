@@ -1,6 +1,5 @@
 package choonster.testmod3.client.gui;
 
-import choonster.testmod3.Logger;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.network.MessageSurvivalCommandBlockSaveChanges;
 import choonster.testmod3.tileentity.SurvivalCommandBlockLogic;
@@ -10,11 +9,15 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiCommandBlock;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.tileentity.TileEntityCommandBlock;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;
 
 public class GuiSurvivalCommandBlock extends GuiCommandBlock {
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	private static final MethodHandle COMMAND_TEXT_GETTER = ReflectionUtil.findFieldGetter(GuiCommandBlock.class, "field_146485_f" /* commandTextField */);
 	private static final MethodHandle COMMAND_BLOCK_MODE_GETTER = ReflectionUtil.findFieldGetter(GuiCommandBlock.class, "field_184082_w" /* commandBlockMode */);
 	private static final MethodHandle CONDITIONAL_GETTER = ReflectionUtil.findFieldGetter(GuiCommandBlock.class, "field_184084_y" /* conditional */);
@@ -38,7 +41,7 @@ public class GuiSurvivalCommandBlock extends GuiCommandBlock {
 
 				TestMod3.network.sendToServer(new MessageSurvivalCommandBlockSaveChanges(survivalCommandBlockLogic, commandTextField.getText(), commandBlockMode, conditional, automatic));
 			} catch (final Throwable throwable) {
-				Logger.error(throwable, "Couldn't set survival command block");
+				LOGGER.error("Couldn't set survival command block", throwable);
 			}
 
 			if (!this.survivalCommandBlockLogic.shouldTrackOutput()) {

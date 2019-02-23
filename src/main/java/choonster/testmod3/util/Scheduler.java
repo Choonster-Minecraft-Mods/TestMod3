@@ -1,10 +1,11 @@
 package choonster.testmod3.util;
 
-import choonster.testmod3.Logger;
 import choonster.testmod3.TestMod3;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -16,6 +17,8 @@ import java.util.Queue;
  */
 @Mod.EventBusSubscriber(modid = TestMod3.MODID)
 public class Scheduler {
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	private static final Queue<Runnable> tasks = new ArrayDeque<>();
 
 	/**
@@ -40,7 +43,7 @@ public class Scheduler {
 			try {
 				tasks.poll().run();
 			} catch (final Throwable throwable) {
-				Logger.error(throwable, "Error running scheduled task");
+				LOGGER.error("Error running scheduled task", throwable);
 			}
 		}
 	}

@@ -1,6 +1,5 @@
 package choonster.testmod3.block;
 
-import choonster.testmod3.Logger;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -9,6 +8,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A block that writes a message to the log when an item collides with it.
@@ -19,6 +20,8 @@ import net.minecraft.world.World;
  * @author Choonster
  */
 public class BlockItemCollisionTest extends BlockTestMod3 {
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	private static final AxisAlignedBB BOUNDING_BOX;
 
 	static {
@@ -39,7 +42,7 @@ public class BlockItemCollisionTest extends BlockTestMod3 {
 		super.onEntityCollision(worldIn, pos, state, entityIn);
 
 		if (!worldIn.isRemote && entityIn instanceof EntityItem) {
-			Logger.info("Collision at %s: %s", pos, entityIn);
+			LOGGER.info("Collision at {}: {}", pos, entityIn);
 		}
 	}
 

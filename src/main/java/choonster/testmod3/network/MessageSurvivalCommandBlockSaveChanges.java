@@ -1,6 +1,5 @@
 package choonster.testmod3.network;
 
-import choonster.testmod3.Logger;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.client.gui.GuiSurvivalCommandBlock;
 import choonster.testmod3.init.ModBlocks;
@@ -23,6 +22,8 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 
@@ -108,6 +109,7 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 	}
 
 	public static class Handler implements IMessageHandler<MessageSurvivalCommandBlockSaveChanges, IMessage> {
+		private static final Logger LOGGER = LogManager.getLogger();
 
 		@Nullable
 		@Override
@@ -173,7 +175,7 @@ public class MessageSurvivalCommandBlockSaveChanges implements IMessage {
 							}
 						}
 					} catch (final Exception e) {
-						Logger.error(e, "Couldn't set survival command block");
+						LOGGER.error("Couldn't set survival command block", e);
 					}
 				}
 

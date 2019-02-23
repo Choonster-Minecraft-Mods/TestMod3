@@ -1,6 +1,5 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.Logger;
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import net.minecraft.client.resources.I18n;
@@ -13,6 +12,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -26,6 +27,8 @@ import java.util.List;
  * @author Choonster
  */
 public class ItemArmourRestricted extends ItemArmourTestMod3 {
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	public ItemArmourRestricted(final ArmorMaterial material, final EntityEquipmentSlot equipmentSlot, final String armourName) {
 		super(material, equipmentSlot, armourName);
 	}
@@ -50,7 +53,7 @@ public class ItemArmourRestricted extends ItemArmourTestMod3 {
 			);
 
 			if (successfulInventoryType != null) {
-				Logger.info("Restricted armour deleted from slot %d of %s's %s inventory", itemSlot, entity.getName(), successfulInventoryType);
+				LOGGER.info("Restricted armour deleted from slot {} of {}'s {} inventory", itemSlot, entity.getName(), successfulInventoryType);
 			}
 		}
 	}
@@ -82,7 +85,7 @@ public class ItemArmourRestricted extends ItemArmourTestMod3 {
 	@Override
 	public boolean onEntityItemUpdate(final EntityItem entityItem) {
 		entityItem.setDead(); // Kill the item entity
-		Logger.info("Restricted armour deleted from world at %s", entityItem.getPosition());
+		LOGGER.info("Restricted armour deleted from world at {}", entityItem.getPosition());
 		return true; // Skip the rest of the update
 	}
 

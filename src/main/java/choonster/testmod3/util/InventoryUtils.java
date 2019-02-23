@@ -1,6 +1,5 @@
 package choonster.testmod3.util;
 
-import choonster.testmod3.Logger;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -15,6 +14,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.PlayerArmorInvWrapper;
 import net.minecraftforge.items.wrapper.PlayerOffhandInvWrapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandle;
@@ -27,6 +28,7 @@ import java.util.function.Predicate;
  * @author Choonster
  */
 public class InventoryUtils {
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	/**
 	 * Get the {@link EntityEquipmentSlot} with the specified index (as returned by {@link EntityEquipmentSlot#getSlotIndex()}.
@@ -71,14 +73,14 @@ public class InventoryUtils {
 
 		for (final ItemStack itemStack : items) {
 			if (emptySlots.isEmpty()) {
-				Logger.warn("Tried to over-fill %s while generating loot.", itemHandler);
+				LOGGER.warn("Tried to over-fill {} while generating loot.", itemHandler);
 				return;
 			}
 
 			final int slot = emptySlots.remove(emptySlots.size() - 1);
 			final ItemStack remainder = itemHandler.insertItem(slot, itemStack, false);
 			if (!remainder.isEmpty()) {
-				Logger.warn("Couldn't fully insert %s into slot %d of %s, %d items remain.", itemStack, slot, itemHandler, remainder.getCount());
+				LOGGER.warn("Couldn't fully insert {} into slot {} of {}, {} items remain.", itemStack, slot, itemHandler, remainder.getCount());
 			}
 		}
 	}

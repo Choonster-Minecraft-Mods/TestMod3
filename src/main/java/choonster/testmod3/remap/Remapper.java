@@ -1,6 +1,5 @@
 package choonster.testmod3.remap;
 
-import choonster.testmod3.Logger;
 import choonster.testmod3.TestMod3;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -13,8 +12,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-import org.apache.logging.log4j.Marker;
-import org.apache.logging.log4j.MarkerManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,7 @@ import java.util.function.Predicate;
  * @author Choonster
  */
 final class Remapper<T extends IForgeRegistryEntry<T>> {
-	private static final Marker MARKER = MarkerManager.getMarker("Remapper").addParents(Logger.MOD_MARKER);
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	/**
 	 * A list of remapping functions that return {@code true} if they took an action for the {@link Mapping<T>}.
@@ -43,13 +42,13 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 	 */
 	private void remapAll(final List<Mapping<T>> missingMappings) {
 		for (final Mapping<T> missingMapping : missingMappings) { // For each missing mapping,
-			Logger.info(MARKER, "Trying to remap %s", missingMapping.key);
+			LOGGER.info("Trying to remap {}", missingMapping.key);
 
 			// Try to apply all remapping functions until one performs an action.
 			final boolean remapped = remappingFunctions.stream().anyMatch(mappingPredicate -> mappingPredicate.test(missingMapping));
 
 			if (!remapped) {
-				Logger.info(MARKER, "Couldn't remap %s", missingMapping.key);
+				LOGGER.info("Couldn't remap {}", missingMapping.key);
 			}
 		}
 	}
@@ -65,7 +64,7 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 		final IForgeRegistry<T> registry = missingMapping.registry;
 		final T value = registry.getValue(registryName);
 		if (registry.containsKey(registryName) && value != null) {
-			Logger.info(MARKER, "Remapped %s %s to %s", registry.getRegistrySuperType().getSimpleName(), missingMapping.key, registryName);
+			LOGGER.info("Remapped {} {} to {}", registry.getRegistrySuperType().getSimpleName(), missingMapping.key, registryName);
 			missingMapping.remap(value);
 			return true;
 		}
@@ -118,7 +117,7 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 
 		missingMapping.ignore();
 
-		Logger.info(MARKER, "Ignored missing %s %s", missingMapping.registry.getRegistrySuperType().getSimpleName(), missingMapping.key);
+		LOGGER.info("Ignored missing {} {}", missingMapping.registry.getRegistrySuperType().getSimpleName(), missingMapping.key);
 
 		return true;
 	}

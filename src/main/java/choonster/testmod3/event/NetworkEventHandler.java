@@ -1,6 +1,5 @@
 package choonster.testmod3.event;
 
-import choonster.testmod3.Logger;
 import choonster.testmod3.TestMod3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
@@ -9,6 +8,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Handler for {@link FMLNetworkEvent} subclasses.
@@ -21,6 +22,8 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = TestMod3.MODID)
 public class NetworkEventHandler {
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	/**
 	 * Prints server connection info when the client connects to a server.
 	 * <p>
@@ -34,7 +37,7 @@ public class NetworkEventHandler {
 		final IThreadListener mainThread = Minecraft.getMinecraft();
 		mainThread.addScheduledTask(() -> {
 			final ServerData serverData = Minecraft.getMinecraft().getCurrentServerData();
-			Logger.info("Server Connected! Local? %s - Address: %s", event.isLocal(), serverData != null ? serverData.serverIP : "<No ServerData>");
+			LOGGER.info("Server Connected! Local? {} - Address: {}", event.isLocal(), serverData != null ? serverData.serverIP : "<No ServerData>");
 		});
 	}
 }

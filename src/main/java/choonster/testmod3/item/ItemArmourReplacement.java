@@ -1,6 +1,5 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.Logger;
 import choonster.testmod3.util.Constants;
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
@@ -20,6 +19,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
@@ -38,6 +39,8 @@ import static net.minecraftforge.common.util.Constants.NBT;
  * @author Choonster
  */
 public class ItemArmourReplacement extends ItemArmourTestMod3 {
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	// NBT keys
 	private static final String KEY_REPLACED_ARMOUR = "ReplacedArmour";
 	private static final String KEY_SLOT = "Slot";
@@ -119,7 +122,7 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 						}
 
 						entity.setItemStackToSlot(equipmentSlot, replacement.copy()); // Equip a copy of the replacement
-						Logger.info("Equipped replacement %s to %s, replacing %s", replacement, equipmentSlot, original);
+						LOGGER.info("Equipped replacement {} to {}, replacing {}", replacement, equipmentSlot, original);
 					});
 				});
 
@@ -148,13 +151,13 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 
 			if (original.isEmpty()) { // If the original item is empty,
 				if (isReplacement) { // If the current item is a replacement,
-					Logger.info("Original item for %s is null, clearing replacement", equipmentSlot);
+					LOGGER.info("Original item for {} is null, clearing replacement", equipmentSlot);
 					entity.setItemStackToSlot(equipmentSlot, ItemStack.EMPTY); // Delete it
 				} else { // Else do nothing
-					Logger.info("Original item for %s is null, leaving current item", equipmentSlot);
+					LOGGER.info("Original item for {} is null, leaving current item", equipmentSlot);
 				}
 			} else {
-				Logger.info("Restoring original %s to %s, replacing %s", original, equipmentSlot, current);
+				LOGGER.info("Restoring original {} to {}, replacing {}", original, equipmentSlot, current);
 
 				// If the current item isn't a replacement and the entity is a player, try to add it to their inventory or drop it on the ground
 				if (!isReplacement && entity instanceof EntityPlayer) {
@@ -227,7 +230,7 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 			);
 
 			if (successfulInventoryType != null) {
-				Logger.info("Restored saved armour for slot %d of %s's %s inventory", itemSlot, entity.getName(), successfulInventoryType);
+				LOGGER.info("Restored saved armour for slot {} of {}'s {} inventory", itemSlot, entity.getName(), successfulInventoryType);
 			}
 		}
 	}

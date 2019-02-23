@@ -1,11 +1,12 @@
 package choonster.testmod3.world.biome;
 
-import choonster.testmod3.Logger;
 import net.minecraft.block.BlockSand;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeDesert;
 import net.minecraft.world.chunk.ChunkPrimer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Random;
 
@@ -15,6 +16,8 @@ import java.util.Random;
  * @author Choonster
  */
 public class BiomeDesertTest extends BiomeDesert {
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	private boolean logged = false;
 
 	public BiomeDesertTest(final BiomeProperties properties) {
@@ -29,7 +32,7 @@ public class BiomeDesertTest extends BiomeDesert {
 
 		if (!logged) {
 			logged = true;
-			Logger.info("Generating desert test at %d,%d", x, z);
+			LOGGER.info("Generating desert test at {},{}", x, z);
 		}
 	}
 }
