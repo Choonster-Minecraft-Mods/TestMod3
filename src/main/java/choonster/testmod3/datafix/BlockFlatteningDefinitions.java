@@ -10,13 +10,13 @@ import net.minecraft.util.EnumFacing;
 import java.util.Objects;
 
 /**
- * Manages the flattening definitions for the {@link BlockFlattening} DataFixer.
+ * Manages the flattening definitions for the {@link BlockFlattening} data fixer.
  *
  * @author Choonster
  */
 public class BlockFlatteningDefinitions {
 	/**
-	 * Create an instance of the BlockFlattening DataFixer with the definitions of the blocks to flatten.
+	 * Creates an instance of the BlockFlattening data fixer with the definitions of the blocks to flatten.
 	 *
 	 * @return The BlockFlattening instance
 	 */
