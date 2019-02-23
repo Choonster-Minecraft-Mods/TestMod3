@@ -42,7 +42,6 @@ public class ItemFlatteningDefinitions {
 		});
 
 		ModBlocks.VariantGroups.VARIANTS_BLOCKS.getBlocksMap().forEach((type, blockVariants) -> {
-			//noinspection deprecation
 			flatteningDefinitions.add(new ItemFlattening.FlatteningDefinition(
 					"variants",
 					type.getMeta(),
@@ -52,7 +51,6 @@ public class ItemFlatteningDefinitions {
 		});
 
 		ModBlocks.VariantGroups.TERRACOTTA_SLABS.getSlabGroupsMap().forEach((color, slabGroup) -> {
-			//noinspection deprecation
 			final BlockColouredSlab.EnumColourGroup colourGroup = Objects.requireNonNull(BlockColouredSlab.EnumColourGroup.getGroupForColour(color));
 			final String oldName = colourGroup == BlockColouredSlab.EnumColourGroup.LOW ? "stained_clay_slab_low" : "stained_clay_slab_high";
 
