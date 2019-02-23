@@ -151,10 +151,10 @@ public class ItemArmourReplacement extends ItemArmourTestMod3 {
 
 			if (original.isEmpty()) { // If the original item is empty,
 				if (isReplacement) { // If the current item is a replacement,
-					LOGGER.info("Original item for {} is null, clearing replacement", equipmentSlot);
+					LOGGER.info("Original item for {} is empty, clearing replacement", equipmentSlot);
 					entity.setItemStackToSlot(equipmentSlot, ItemStack.EMPTY); // Delete it
 				} else { // Else do nothing
-					LOGGER.info("Original item for {} is null, leaving current item", equipmentSlot);
+					LOGGER.info("Original item for {} is empty, leaving current item", equipmentSlot);
 				}
 			} else {
 				LOGGER.info("Restoring original {} to {}, replacing {}", original, equipmentSlot, current);
