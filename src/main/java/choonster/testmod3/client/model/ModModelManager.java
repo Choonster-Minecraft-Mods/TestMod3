@@ -174,7 +174,9 @@ public class ModModelManager {
 
 		if (item != Items.AIR) {
 			final ResourceLocation registryName = Objects.requireNonNull(block.getRegistryName());
-			registerItemModel(item, new ModelResourceLocation(registryName, propertyStringMapper.getPropertyString(state.getProperties())));
+			final ModelResourceLocation fullModelLocation = new ModelResourceLocation(registryName, propertyStringMapper.getPropertyString(state.getProperties()));
+			ModelBakery.registerItemVariants(item, fullModelLocation); // Ensure the custom model is loaded and prevent the default model from being loaded
+			registerItemModel(item, stack -> fullModelLocation);
 		}
 	}
 
@@ -289,18 +291,6 @@ public class ModModelManager {
 	 */
 	private void registerItemModel(final Item item, final String modelLocation) {
 		final ModelResourceLocation fullModelLocation = new ModelResourceLocation(modelLocation, "inventory");
-		registerItemModel(item, fullModelLocation);
-	}
-
-	/**
-	 * Register a single model for an {@link Item}.
-	 * <p>
-	 * Uses {@code fullModelLocation} as the domain, path and variant.
-	 *
-	 * @param item              The Item
-	 * @param fullModelLocation The full model location
-	 */
-	private void registerItemModel(final Item item, final ModelResourceLocation fullModelLocation) {
 		ModelBakery.registerItemVariants(item, fullModelLocation); // Ensure the custom model is loaded and prevent the default model from being loaded
 		registerItemModel(item, stack -> fullModelLocation);
 	}
@@ -326,20 +316,7 @@ public class ModModelManager {
 	 * @param variant  The variant
 	 */
 	private void registerItemModelForMeta(final Item item, final int metadata, final String variant) {
-		registerItemModelForMeta(item, metadata, new ModelResourceLocation(item.getRegistryName(), variant));
-	}
-
-	/**
-	 * Register a model for a metadata value of an {@link Item}.
-	 * <p>
-	 * Uses {@code modelResourceLocation} as the domain, path and variant.
-	 *
-	 * @param item                  The Item
-	 * @param metadata              The metadata
-	 * @param modelResourceLocation The full model location
-	 */
-	private void registerItemModelForMeta(final Item item, final int metadata, final ModelResourceLocation modelResourceLocation) {
 		itemsRegistered.add(item);
-		ModelLoader.setCustomModelResourceLocation(item, metadata, modelResourceLocation);
+		ModelLoader.setCustomModelResourceLocation(item, metadata, new ModelResourceLocation(item.getRegistryName(), variant));
 	}
 }
