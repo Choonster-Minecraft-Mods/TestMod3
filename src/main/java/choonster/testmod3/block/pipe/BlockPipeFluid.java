@@ -22,10 +22,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author Choonster
  */
 public class BlockPipeFluid extends BlockPipeBasic {
-	public BlockPipeFluid() {
-		super("fluid_pipe");
-	}
-
 	@Override
 	protected boolean isValidConnection(final IBlockState ownState, final IBlockState neighbourState, final IBlockAccess world, final BlockPos ownPos, final EnumFacing neighbourDirection) {
 		// Connect if the neighbouring block is another pipe

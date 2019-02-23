@@ -1,7 +1,5 @@
 package choonster.testmod3.block;
 
-import choonster.testmod3.TestMod3;
-import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -32,9 +30,6 @@ public class BlockWaterGrass extends BlockBush {
 
 	public BlockWaterGrass() {
 		super(Material.WATER);
-		setCreativeTab(TestMod3.creativeTab);
-		RegistryUtil.setBlockName(this, "water_grass");
-
 		setDefaultState(blockState.getBaseState().withProperty(BlockLiquid.LEVEL, 0));
 	}
 

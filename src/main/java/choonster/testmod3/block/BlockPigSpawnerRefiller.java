@@ -3,6 +3,7 @@ package choonster.testmod3.block;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawner;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerInteractable;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.math.BlockPos;
@@ -16,9 +17,9 @@ import javax.annotation.Nullable;
  *
  * @author Choonster
  */
-public class BlockPigSpawnerRefiller extends BlockTestMod3 implements IPigSpawnerInteractable {
+public class BlockPigSpawnerRefiller extends Block implements IPigSpawnerInteractable {
 	public BlockPigSpawnerRefiller() {
-		super(Material.IRON, "pig_spawner_refiller");
+		super(Material.IRON);
 	}
 
 	/**

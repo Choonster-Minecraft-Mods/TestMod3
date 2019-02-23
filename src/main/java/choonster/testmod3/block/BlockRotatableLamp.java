@@ -1,5 +1,6 @@
 package choonster.testmod3.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -22,12 +23,12 @@ import net.minecraft.world.World;
  *
  * @author Choonster
  */
-public class BlockRotatableLamp extends BlockTestMod3 {
+public class BlockRotatableLamp extends Block {
 	public static final IProperty<EnumFacing> FACING = PropertyDirection.create("facing");
 	public static final IProperty<Boolean> LIT = PropertyBool.create("lit");
 
 	public BlockRotatableLamp() {
-		super(Material.REDSTONE_LIGHT, "rotatable_lamp");
+		super(Material.REDSTONE_LIGHT);
 		setDefaultState(getBlockState().getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(LIT, false));
 	}
 

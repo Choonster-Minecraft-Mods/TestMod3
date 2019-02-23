@@ -49,11 +49,29 @@ public class RegistryUtil {
 	 *
 	 * @param block     The block
 	 * @param blockName The block's name
+	 * @param <BLOCK>   The block type
+	 * @return The block
 	 */
-	public static void setBlockName(final Block block, final String blockName) {
+	public static <BLOCK extends Block> BLOCK setBlockName(final BLOCK block, final String blockName) {
 		block.setRegistryName(TestMod3.MODID, blockName);
 		final ResourceLocation registryName = Preconditions.checkNotNull(block.getRegistryName());
 		block.setTranslationKey(registryName.toString());
+		return block;
+	}
+
+	/**
+	 * Sets the block's creative tab to the TestMod3 creative tab if it hasn't already been set.
+	 *
+	 * @param block   The block
+	 * @param <BLOCK> The block type
+	 * @return The block
+	 */
+	public static <BLOCK extends Block> BLOCK setDefaultCreativeTab(final BLOCK block) {
+		if (block.getCreativeTab() == null) {
+			block.setCreativeTab(TestMod3.creativeTab);
+		}
+
+		return block;
 	}
 
 	/**

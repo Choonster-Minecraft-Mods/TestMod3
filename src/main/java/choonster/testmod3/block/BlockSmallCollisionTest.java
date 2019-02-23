@@ -1,5 +1,6 @@
 package choonster.testmod3.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -19,7 +20,7 @@ import net.minecraft.world.World;
  *
  * @author Choonster
  */
-public class BlockSmallCollisionTest extends BlockTestMod3 {
+public class BlockSmallCollisionTest extends Block {
 	/**
 	 * The block's collision bounding box.
 	 */
@@ -33,7 +34,7 @@ public class BlockSmallCollisionTest extends BlockTestMod3 {
 	}
 
 	public BlockSmallCollisionTest() {
-		super(Material.IRON, "small_collision_test");
+		super(Material.IRON);
 	}
 
 	@SuppressWarnings("deprecation")

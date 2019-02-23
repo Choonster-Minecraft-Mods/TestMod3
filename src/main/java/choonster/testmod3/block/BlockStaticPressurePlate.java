@@ -18,11 +18,11 @@ import javax.annotation.Nullable;
  *
  * @author Choonster
  */
-public abstract class BlockStaticPressurePlate extends BlockTestMod3 {
+public abstract class BlockStaticPressurePlate extends Block {
 	protected final AxisAlignedBB BB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.03125D, 0.9375D);
 
-	public BlockStaticPressurePlate(final Material materialIn, final String blockName) {
-		super(materialIn, blockName);
+	public BlockStaticPressurePlate(final Material materialIn) {
+		super(materialIn);
 	}
 
 	@SuppressWarnings("deprecation")

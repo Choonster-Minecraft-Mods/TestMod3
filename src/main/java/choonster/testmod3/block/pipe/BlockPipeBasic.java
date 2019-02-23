@@ -11,8 +11,8 @@ import net.minecraft.block.state.IBlockState;
  * @author Choonster
  */
 public class BlockPipeBasic extends BlockPipeBase {
-	public BlockPipeBasic(final String blockName) {
-		super(Material.IRON, blockName);
+	public BlockPipeBasic() {
+		super(Material.IRON);
 	}
 
 	@Override

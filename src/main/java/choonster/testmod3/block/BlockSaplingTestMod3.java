@@ -1,6 +1,5 @@
 package choonster.testmod3.block;
 
-import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.block.SoundType;
@@ -24,7 +23,6 @@ public class BlockSaplingTestMod3 extends BlockSapling {
 	public static final IProperty<Boolean> ITEM = PropertyBool.create("item");
 
 	public BlockSaplingTestMod3() {
-		RegistryUtil.setBlockName(this, "sapling");
 		setHardness(0);
 		setSoundType(SoundType.PLANT);
 		setDefaultState(getDefaultState().withProperty(ITEM, false));

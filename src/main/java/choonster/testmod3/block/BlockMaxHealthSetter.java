@@ -2,6 +2,7 @@ package choonster.testmod3.block;
 
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.maxhealth.CapabilityMaxHealth;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,9 +17,9 @@ import net.minecraft.world.World;
  *
  * @author Choonster
  */
-public class BlockMaxHealthSetter extends BlockTestMod3 {
+public class BlockMaxHealthSetter extends Block {
 	public BlockMaxHealthSetter() {
-		super(Material.IRON, "max_health_setter");
+		super(Material.IRON);
 	}
 
 	@Override

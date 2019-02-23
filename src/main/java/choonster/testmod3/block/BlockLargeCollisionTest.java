@@ -1,7 +1,5 @@
 package choonster.testmod3.block;
 
-import choonster.testmod3.TestMod3;
-import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -22,8 +20,6 @@ public class BlockLargeCollisionTest extends Block {
 
 	public BlockLargeCollisionTest() {
 		super(Material.CLOTH);
-		setCreativeTab(TestMod3.creativeTab);
-		RegistryUtil.setBlockName(this, "large_collision_test");
 	}
 
 	@SuppressWarnings("deprecation")

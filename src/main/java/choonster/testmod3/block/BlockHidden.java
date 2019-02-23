@@ -36,12 +36,12 @@ public class BlockHidden extends BlockTileEntity<TileEntityHidden> {
 		setDefaultState(getBlockState().getBaseState().withProperty(HIDDEN, true));
 	}
 
-	public BlockHidden(final Material material, final MapColor mapColor, final String blockName) {
-		super(material, mapColor, blockName, false);
+	public BlockHidden(final Material material, final MapColor mapColor) {
+		super(material, mapColor, false);
 	}
 
-	public BlockHidden(final Material materialIn, final String blockName) {
-		super(materialIn, blockName, false);
+	public BlockHidden(final Material materialIn) {
+		super(materialIn, false);
 	}
 
 	@Override

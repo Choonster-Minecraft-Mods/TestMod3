@@ -34,7 +34,7 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 	public static final IProperty<EnumFacing> FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
 	public BlockModChest() {
-		super(Material.WOOD, "chest", true);
+		super(Material.WOOD, true);
 		setHardness(2.5F);
 		setSoundType(SoundType.WOOD);
 	}

@@ -18,7 +18,7 @@ import net.minecraft.world.World;
  */
 public class BlockClientPlayerRightClick extends BlockStaticPressurePlate {
 	public BlockClientPlayerRightClick() {
-		super(Material.ROCK, "client_player_right_click");
+		super(Material.ROCK);
 	}
 
 	@Override

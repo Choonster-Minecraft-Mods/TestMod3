@@ -34,7 +34,7 @@ public class BlockClientPlayerRotation extends BlockStaticPressurePlate {
 	private static final float ROTATION_PITCH = 2.0f;
 
 	public BlockClientPlayerRotation() {
-		super(Material.ROCK, "client_player_rotation");
+		super(Material.ROCK);
 	}
 
 	/**

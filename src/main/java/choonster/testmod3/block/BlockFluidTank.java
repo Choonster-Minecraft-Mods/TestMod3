@@ -40,8 +40,8 @@ import java.util.List;
  * @author Choonster
  */
 public class BlockFluidTank<TE extends TileEntityFluidTank> extends BlockTileEntity<TE> {
-	public BlockFluidTank(final String blockName) {
-		super(Material.GLASS, blockName, true);
+	public BlockFluidTank() {
+		super(Material.GLASS, true);
 		setSoundType(SoundType.GLASS);
 		setHardness(0.3f);
 	}

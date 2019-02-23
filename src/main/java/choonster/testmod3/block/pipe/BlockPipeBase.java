@@ -1,6 +1,5 @@
 package choonster.testmod3.block.pipe;
 
-import choonster.testmod3.block.BlockTestMod3;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -25,7 +24,7 @@ import java.util.stream.Stream;
  *
  * @author Choonster
  */
-public abstract class BlockPipeBase extends BlockTestMod3 {
+public abstract class BlockPipeBase extends Block {
 	public static final float PIPE_MIN_POS = 0.25f;
 	public static final float PIPE_MAX_POS = 0.75f;
 
@@ -55,8 +54,8 @@ public abstract class BlockPipeBase extends BlockTestMod3 {
 		return dir == 1 ? 1 : PIPE_MAX_POS;
 	}
 
-	public BlockPipeBase(final Material material, final String blockName) {
-		super(material, blockName);
+	public BlockPipeBase(final Material material) {
+		super(material);
 	}
 
 	@SuppressWarnings("deprecation")

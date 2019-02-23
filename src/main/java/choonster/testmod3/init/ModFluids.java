@@ -6,6 +6,7 @@ import choonster.testmod3.block.fluid.BlockFluidPortalDisplacement;
 import choonster.testmod3.item.block.ItemFluidTank;
 import choonster.testmod3.tileentity.TileEntityFluidTank;
 import choonster.testmod3.util.Constants;
+import choonster.testmod3.util.RegistryUtil;
 import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -107,7 +108,7 @@ public class ModFluids {
 				final Block block = (Block) fluidBlock;
 				block.setRegistryName(TestMod3.MODID, "fluid." + fluidBlock.getFluid().getName());
 				block.setTranslationKey(Constants.RESOURCE_PREFIX + fluidBlock.getFluid().getUnlocalizedName());
-				block.setCreativeTab(TestMod3.creativeTab);
+				RegistryUtil.setDefaultCreativeTab(block);
 				registry.register(block);
 			}
 		}

@@ -2,6 +2,7 @@ package choonster.testmod3.block;
 
 import choonster.testmod3.util.VectorUtils;
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -38,7 +39,7 @@ import java.util.Map;
  *
  * @author Choonster
  */
-public class BlockPlane extends BlockTestMod3 {
+public class BlockPlane extends Block {
 	/**
 	 * The block's rotation around the y-axis.
 	 */
@@ -49,16 +50,13 @@ public class BlockPlane extends BlockTestMod3 {
 	 */
 	public static final IProperty<EnumVerticalRotation> VERTICAL_ROTATION = PropertyEnum.create("vertical_rotation", EnumVerticalRotation.class);
 
-	public BlockPlane(final Material material, final MapColor mapColor, final String blockName) {
-		super(material, mapColor, blockName);
-	}
-
-	public BlockPlane(final Material materialIn, final String blockName) {
-		super(materialIn, blockName);
-	}
-
-	{
+	public BlockPlane(final Material material, final MapColor mapColor) {
+		super(material, mapColor);
 		setDefaultState(getBlockState().getBaseState().withProperty(HORIZONTAL_ROTATION, EnumFacing.NORTH).withProperty(VERTICAL_ROTATION, EnumVerticalRotation.UP));
+	}
+
+	public BlockPlane(final Material materialIn) {
+		this(materialIn, materialIn.getMaterialMapColor());
 	}
 
 	/**

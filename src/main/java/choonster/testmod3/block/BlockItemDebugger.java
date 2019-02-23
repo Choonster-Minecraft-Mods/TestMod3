@@ -1,6 +1,7 @@
 package choonster.testmod3.block;
 
 import choonster.testmod3.capability.pigspawner.CapabilityPigSpawner;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,11 +22,11 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Choonster
  */
-public class BlockItemDebugger extends BlockTestMod3 {
+public class BlockItemDebugger extends Block {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	public BlockItemDebugger() {
-		super(Material.IRON, "item_debugger");
+		super(Material.IRON);
 		setBlockUnbreakable();
 	}
 

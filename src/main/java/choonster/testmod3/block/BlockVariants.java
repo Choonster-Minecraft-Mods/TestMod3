@@ -1,6 +1,5 @@
 package choonster.testmod3.block;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.variantgroup.BlockVariantGroup;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -28,7 +27,6 @@ public class BlockVariants extends Block {
 		super(material);
 		this.type = type;
 		this.variantGroup = variantGroup;
-		setCreativeTab(TestMod3.creativeTab);
 	}
 
 	@Override

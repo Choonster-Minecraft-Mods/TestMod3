@@ -1,5 +1,6 @@
 package choonster.testmod3.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -17,20 +18,19 @@ import javax.annotation.Nullable;
  *
  * @author Choonster
  */
-public abstract class BlockTileEntity<TE extends TileEntity> extends BlockTestMod3 {
+public abstract class BlockTileEntity<TE extends TileEntity> extends Block {
 	/**
 	 * Should the {@link TileEntity} be preserved until after {@link #getDrops} has been called?
 	 */
 	private final boolean preserveTileEntity;
 
-	public BlockTileEntity(final Material material, final MapColor mapColor, final String blockName, final boolean preserveTileEntity) {
-		super(material, mapColor, blockName);
+	public BlockTileEntity(final Material material, final MapColor mapColor, final boolean preserveTileEntity) {
+		super(material, mapColor);
 		this.preserveTileEntity = preserveTileEntity;
 	}
 
-	public BlockTileEntity(final Material materialIn, final String blockName, final boolean preserveTileEntity) {
-		super(materialIn, blockName);
-		this.preserveTileEntity = preserveTileEntity;
+	public BlockTileEntity(final Material materialIn, final boolean preserveTileEntity) {
+		this(materialIn, materialIn.getMaterialMapColor(), preserveTileEntity);
 	}
 
 	@Override

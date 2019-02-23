@@ -1,8 +1,6 @@
 package choonster.testmod3.block;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.tileentity.TileEntitySurvivalCommandBlock;
-import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCommandBlock;
 import net.minecraft.block.material.MapColor;
@@ -42,11 +40,9 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 
 	private final TileEntityCommandBlock.Mode commandBlockMode;
 
-	public BlockSurvivalCommandBlock(final TileEntityCommandBlock.Mode commandBlockMode, final String name) {
+	public BlockSurvivalCommandBlock(final TileEntityCommandBlock.Mode commandBlockMode) {
 		super(MapColor.BROWN);
 		this.commandBlockMode = commandBlockMode;
-		setCreativeTab(TestMod3.creativeTab);
-		RegistryUtil.setBlockName(this, name);
 		setHardness(5);
 	}
 

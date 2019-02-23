@@ -1,6 +1,5 @@
 package choonster.testmod3.block.slab;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.variantgroup.SlabVariantGroup;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.MapColor;
@@ -68,8 +67,6 @@ public abstract class BlockSlabTestMod3<
 		}
 
 		setDefaultState(defaultState);
-
-		setCreativeTab(TestMod3.creativeTab);
 	}
 
 	/**

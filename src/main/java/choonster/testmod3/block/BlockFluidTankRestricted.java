@@ -24,10 +24,6 @@ import java.util.stream.Collectors;
  * @author Choonster
  */
 public class BlockFluidTankRestricted extends BlockFluidTank<TileEntityFluidTankRestricted> {
-	public BlockFluidTankRestricted() {
-		super("fluid_tank_restricted");
-	}
-
 	@Override
 	public TileEntity createTileEntity(final World world, final IBlockState state) {
 		return new TileEntityFluidTankRestricted();

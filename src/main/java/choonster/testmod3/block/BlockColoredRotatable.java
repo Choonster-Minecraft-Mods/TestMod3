@@ -1,6 +1,5 @@
 package choonster.testmod3.block;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.variantgroup.BlockVariantGroup;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -39,7 +38,6 @@ public class BlockColoredRotatable extends Block {
 		super(materialIn, MapColor.getBlockColor(color));
 		this.color = color;
 		this.variantGroup = variantGroup;
-		setCreativeTab(TestMod3.creativeTab);
 	}
 
 	@Override

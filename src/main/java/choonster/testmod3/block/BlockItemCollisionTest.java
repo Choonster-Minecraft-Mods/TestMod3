@@ -1,5 +1,6 @@
 package choonster.testmod3.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -19,7 +20,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Choonster
  */
-public class BlockItemCollisionTest extends BlockTestMod3 {
+public class BlockItemCollisionTest extends Block {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	private static final AxisAlignedBB BOUNDING_BOX;
@@ -34,7 +35,7 @@ public class BlockItemCollisionTest extends BlockTestMod3 {
 	}
 
 	public BlockItemCollisionTest() {
-		super(Material.CLOTH, "item_collision_test");
+		super(Material.CLOTH);
 	}
 
 	@Override

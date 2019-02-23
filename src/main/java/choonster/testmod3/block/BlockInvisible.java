@@ -1,5 +1,6 @@
 package choonster.testmod3.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -14,9 +15,9 @@ import net.minecraft.world.IBlockAccess;
  *
  * @author Choonster
  */
-public class BlockInvisible extends BlockTestMod3 {
+public class BlockInvisible extends Block {
 	public BlockInvisible() {
-		super(Material.ROCK, "invisible");
+		super(Material.ROCK);
 	}
 
 	@SuppressWarnings("deprecation")

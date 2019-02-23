@@ -11,6 +11,7 @@ import choonster.testmod3.block.variantgroup.IBlockVariantGroup;
 import choonster.testmod3.block.variantgroup.SlabVariantGroup;
 import choonster.testmod3.item.block.ItemFluidTank;
 import choonster.testmod3.tileentity.*;
+import choonster.testmod3.util.RegistryUtil;
 import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Set;
 
 import static choonster.testmod3.util.InjectionUtil.Null;
+import static choonster.testmod3.util.RegistryUtil.setBlockName;
 
 @SuppressWarnings("WeakerAccess")
 @ObjectHolder(TestMod3.MODID)
@@ -65,11 +67,11 @@ public class ModBlocks {
 
 	public static final BlockPlane MIRROR_PLANE = Null();
 
-	public static final BlockTestMod3 VANILLA_MODEL_TEST = Null();
+	public static final Block VANILLA_MODEL_TEST = Null();
 
-	public static final BlockTestMod3 FULLBRIGHT = Null();
+	public static final Block FULLBRIGHT = Null();
 
-	public static final BlockTestMod3 NORMAL_BRIGHTNESS = Null();
+	public static final Block NORMAL_BRIGHTNESS = Null();
 
 	public static final BlockMaxHealthSetter MAX_HEALTH_SETTER = Null();
 
@@ -97,7 +99,7 @@ public class ModBlocks {
 
 	public static final BlockFluidTankRestricted FLUID_TANK_RESTRICTED = Null();
 
-	public static final BlockTestMod3 PLANKS = Null();
+	public static final Block PLANKS = Null();
 
 	public static class VariantGroups {
 		public static final BlockVariantGroup<EnumDyeColor, BlockColoredRotatable> COLORED_ROTATABLE_BLOCKS = BlockVariantGroup.Builder.<EnumDyeColor, BlockColoredRotatable>create()
@@ -158,39 +160,43 @@ public class ModBlocks {
 			final IForgeRegistry<Block> registry = event.getRegistry();
 
 			final Block[] blocks = {
-					new BlockWaterGrass(),
-					new BlockLargeCollisionTest(),
-					new BlockRightClickTest(),
-					new BlockClientPlayerRightClick(),
-					new BlockRotatableLamp(),
-					new BlockItemCollisionTest(),
-					new BlockFluidTank<>("fluid_tank"),
-					new BlockItemDebugger(),
-					new BlockTestMod3(Material.ROCK, "end_portal_frame_full"),
-					new BlockPotionEffect(),
-					new BlockClientPlayerRotation(),
-					new BlockPigSpawnerRefiller(),
-					new BlockPlane(Material.IRON, "mirror_plane"),
-					new BlockTestMod3(Material.IRON, "vanilla_model_test"),
-					new BlockTestMod3(Material.ROCK, "fullbright").setLightLevel(1),
-					new BlockTestMod3(Material.ROCK, "normal_brightness"),
-					new BlockMaxHealthSetter(),
-					new BlockMaxHealthGetter(),
-					new BlockSmallCollisionTest(),
-					new BlockModChest(),
-					new BlockHidden(Material.ROCK, "hidden"),
-					new BlockPipeBasic("basic_pipe"),
-					new BlockPipeFluid(),
-					new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.REDSTONE, "survival_command_block"),
-					new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.AUTO, "repeating_survival_command_block"),
-					new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.SEQUENCE, "chain_survival_command_block"),
-					new BlockSaplingTestMod3(),
-					new BlockInvisible(),
-					new BlockFluidTankRestricted(),
-					new BlockTestMod3(Material.WOOD, "planks"),
+					setBlockName(new BlockWaterGrass(), "water_grass"),
+					setBlockName(new BlockLargeCollisionTest(), "large_collision_test"),
+					setBlockName(new BlockRightClickTest(), "right_click_test"),
+					setBlockName(new BlockClientPlayerRightClick(), "client_player_right_click"),
+					setBlockName(new BlockRotatableLamp(), "rotatable_lamp"),
+					setBlockName(new BlockItemCollisionTest(), "item_collision_test"),
+					setBlockName(new BlockFluidTank<>(), "fluid_tank"),
+					setBlockName(new BlockItemDebugger(), "item_debugger"),
+					setBlockName(new Block(Material.ROCK), "end_portal_frame_full"),
+					setBlockName(new BlockPotionEffect(), "potion_effect"),
+					setBlockName(new BlockClientPlayerRotation(), "client_player_rotation"),
+					setBlockName(new BlockPigSpawnerRefiller(), "pig_spawner_refiller"),
+					setBlockName(new BlockPlane(Material.IRON), "mirror_plane"),
+					setBlockName(new Block(Material.IRON), "vanilla_model_test"),
+					setBlockName(new Block(Material.ROCK), "fullbright").setLightLevel(1),
+					setBlockName(new Block(Material.ROCK), "normal_brightness"),
+					setBlockName(new BlockMaxHealthSetter(), "max_health_setter"),
+					setBlockName(new BlockMaxHealthGetter(), "max_health_getter"),
+					setBlockName(new BlockSmallCollisionTest(), "small_collision_test"),
+					setBlockName(new BlockModChest(), "chest"),
+					setBlockName(new BlockHidden(Material.ROCK), "hidden"),
+					setBlockName(new BlockPipeBasic(), "basic_pipe"),
+					setBlockName(new BlockPipeFluid(), "fluid_pipe"),
+					setBlockName(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.REDSTONE), "survival_command_block"),
+					setBlockName(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.AUTO), "repeating_survival_command_block"),
+					setBlockName(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.SEQUENCE), "chain_survival_command_block"),
+					setBlockName(new BlockSaplingTestMod3(), "sapling"),
+					setBlockName(new BlockInvisible(), "invisible"),
+					setBlockName(new BlockFluidTankRestricted(), "fluid_tank_restricted"),
+					setBlockName(new Block(Material.WOOD), "planks"),
 			};
 
-			registry.registerAll(blocks);
+			for (final Block block : blocks) {
+				RegistryUtil.setDefaultCreativeTab(block);
+
+				registry.register(block);
+			}
 
 			VariantGroups.COLORED_ROTATABLE_BLOCKS.registerBlocks(registry);
 			VariantGroups.COLORED_MULTI_ROTATABLE_BLOCKS.registerBlocks(registry);
