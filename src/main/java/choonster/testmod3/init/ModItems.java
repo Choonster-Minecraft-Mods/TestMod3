@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
@@ -185,7 +186,7 @@ public class ModItems {
 			final Item[] items = {
 					new ItemCuttingAxe(Item.ToolMaterial.WOOD, "wooden_axe"),
 					new ItemEntityTest(),
-					new ItemRecordMod("solaris", ModSoundEvents.RECORD_SOLARIS),
+					new ItemRecordMod("solaris", ModSoundEvents.RegistrationHandler.getSoundEvent(new ResourceLocation(TestMod3.MODID, "record.solaris"))),
 					new ItemHeavy(),
 					new ItemEntityInteractionTest(),
 					new ItemBlockDestroyer(),

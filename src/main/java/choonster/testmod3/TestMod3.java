@@ -50,6 +50,8 @@ public class TestMod3 {
 		ModDispenseBehaviors.registerDispenseBehaviors();
 		ModLootTables.registerLootTables();
 
+		ModSoundEvents.RegistrationHandler.initialiseSoundEvents();
+
 		proxy.preInit();
 	}
 
