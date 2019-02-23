@@ -41,7 +41,6 @@ public class BlockVariants extends Block {
 		return true;
 	}
 
-
 	public enum EnumType implements IStringSerializable {
 		VARIANT_A(0, "a"),
 		VARIANT_B(1, "b");

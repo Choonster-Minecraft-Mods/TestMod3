@@ -290,6 +290,4 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 			return new BlockVariantGroup<>(groupName, isSuffix, variants, material, blockFactory, itemFactory);
 		}
 	}
-
-
 }
