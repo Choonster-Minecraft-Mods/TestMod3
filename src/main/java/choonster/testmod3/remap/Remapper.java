@@ -108,6 +108,7 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 			.add("stained_clay_slab_high")
 			.add("double_stained_clay_slab_low")
 			.add("double_stained_clay_slab_high")
+			.add("variants_item")
 			.build();
 
 	private boolean ignoreName(final Mapping<T> missingMapping) {

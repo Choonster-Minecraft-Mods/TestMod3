@@ -1,14 +1,9 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.util.IVariant;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import choonster.testmod3.TestMod3;
+import choonster.testmod3.item.variantgroup.ItemVariantGroup;
+import net.minecraft.item.Item;
+import net.minecraft.util.IStringSerializable;
 
 /**
  * An item with multiple variants.
@@ -18,34 +13,22 @@ import java.util.stream.Stream;
  *
  * @author Choonster
  */
-public class ItemVariants extends ItemTestMod3 {
-	public ItemVariants() {
-		super("variants_item");
+public class ItemVariants extends Item {
+	private final EnumType type;
+	private final ItemVariantGroup<EnumType, ItemVariants> variantGroup;
+
+	public ItemVariants(final EnumType type, final ItemVariantGroup<EnumType, ItemVariants> variantGroup) {
+		this.type = type;
+		this.variantGroup = variantGroup;
+		setCreativeTab(TestMod3.creativeTab);
 	}
 
-	@Override
-	public String getTranslationKey(final ItemStack stack) {
-		return super.getTranslationKey(stack) + "." + EnumType.byMetadata(stack.getMetadata()).getName();
-	}
-
-	@Override
-	public void getSubItems(final CreativeTabs tab, final NonNullList<ItemStack> subItems) {
-		if (isInCreativeTab(tab)) {
-			final List<ItemStack> items = Stream.of(EnumType.values())
-					.map(enumType -> new ItemStack(this, 1, enumType.getMeta()))
-					.collect(Collectors.toList());
-
-			subItems.addAll(items);
-		}
-	}
-
-	public enum EnumType implements IVariant {
+	public enum EnumType implements IStringSerializable {
 		VARIANT_A(0, "a"),
 		VARIANT_B(1, "b"),
 		VARIANT_C(2, "c");
 
-		private static final EnumType[] META_LOOKUP = Stream.of(values()).sorted(Comparator.comparing(EnumType::getMeta)).toArray(EnumType[]::new);
-
+		// TODO: Remove in 1.13
 		private final int meta;
 		private final String name;
 
@@ -54,7 +37,8 @@ public class ItemVariants extends ItemTestMod3 {
 			this.name = name;
 		}
 
-		@Override
+		// TODO: Remove in 1.13
+		@Deprecated
 		public int getMeta() {
 			return meta;
 		}
@@ -62,14 +46,6 @@ public class ItemVariants extends ItemTestMod3 {
 		@Override
 		public String getName() {
 			return name;
-		}
-
-		public static EnumType byMetadata(int meta) {
-			if (meta < 0 || meta >= META_LOOKUP.length) {
-				meta = 0;
-			}
-
-			return META_LOOKUP[meta];
 		}
 	}
 }

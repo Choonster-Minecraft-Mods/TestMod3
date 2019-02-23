@@ -7,10 +7,8 @@ import choonster.testmod3.block.variantgroup.IBlockVariantGroup;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
-import choonster.testmod3.item.ItemVariants;
 import choonster.testmod3.util.Constants;
 import choonster.testmod3.util.EnumFaceRotation;
-import choonster.testmod3.util.IVariant;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockPlanks;
@@ -265,8 +263,6 @@ public class ModModelManager {
 		registerItemModel(ModItems.SATURATION_HELMET, "minecraft:chainmail_helmet");
 		registerItemModel(ModItems.ENTITY_CHECKER, "minecraft:bone");
 
-		registerVariantItemModels(ModItems.VARIANTS_ITEM, "variant", ItemVariants.EnumType.values());
-
 		// Then register items with default model names
 		ModItems.RegistrationHandler.ITEMS.stream().filter(item -> !itemsRegistered.contains(item)).forEach(this::registerItemModel);
 	}
@@ -318,24 +314,6 @@ public class ModModelManager {
 	private void registerItemModel(final Item item, final ItemMeshDefinition meshDefinition) {
 		itemsRegistered.add(item);
 		ModelLoader.setCustomMeshDefinition(item, meshDefinition);
-	}
-
-	/**
-	 * Register a model for each metadata value of an {@link Item} corresponding to the values in {@code values}.
-	 * <p>
-	 * Uses the registry name as the domain/path and {@code "[variantName]=[valueName]"} as the variant.
-	 * <p>
-	 * Uses {@link IVariant#getMeta()} to determine the metadata of each value.
-	 *
-	 * @param item        The Item
-	 * @param variantName The variant name
-	 * @param values      The values
-	 * @param <T>         The value type
-	 */
-	private <T extends IVariant> void registerVariantItemModels(final Item item, final String variantName, final T[] values) {
-		for (final T value : values) {
-			registerItemModelForMeta(item, value.getMeta(), variantName + "=" + value.getName());
-		}
 	}
 
 	/**

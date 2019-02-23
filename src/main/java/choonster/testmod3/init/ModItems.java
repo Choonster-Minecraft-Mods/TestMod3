@@ -6,6 +6,8 @@ import choonster.testmod3.capability.pigspawner.PigSpawnerInfinite;
 import choonster.testmod3.entity.EntityBlockDetectionArrow;
 import choonster.testmod3.entity.EntityModArrow;
 import choonster.testmod3.item.*;
+import choonster.testmod3.item.variantgroup.IItemVariantGroup;
+import choonster.testmod3.item.variantgroup.ItemVariantGroup;
 import choonster.testmod3.util.Constants;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
@@ -150,6 +152,15 @@ public class ModItems {
 
 	public static final ItemBucketTestMod3 STONE_BUCKET = Null();
 
+	public static class VariantGroups {
+		public static final ItemVariantGroup<ItemVariants.EnumType, ItemVariants> VARIANTS_ITEMS = ItemVariantGroup.Builder.<ItemVariants.EnumType, ItemVariants>create()
+				.groupName("variants_item")
+				.suffix()
+				.variants(ItemVariants.EnumType.values())
+				.itemFactory(ItemVariants::new)
+				.build();
+	}
+
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	public static class RegistrationHandler {
 		public static final Set<Item> ITEMS = new HashSet<>();
@@ -205,7 +216,6 @@ public class ModItems {
 					new ItemSoundEffect("saddle", ModSoundEvents.ACTION_SADDLE),
 					new ItemSlowSword(Item.ToolMaterial.WOOD, "wooden_slow_sword"),
 					new ItemSlowSword(Item.ToolMaterial.DIAMOND, "diamond_slow_sword"),
-					new ItemVariants(),
 					new ItemRitualChecker(),
 					new ItemHiddenBlockRevealer(),
 					new ItemTestMod3("no_mod_name"),
@@ -237,6 +247,8 @@ public class ModItems {
 				ITEMS.add(item);
 			}
 
+			registerItemVariantGroup(registry, VariantGroups.VARIANTS_ITEMS);
+
 			ToolMaterials.TOOL_MATERIAL_GLOWSTONE.setRepairItem(new ItemStack(Items.GLOWSTONE_DUST));
 			ArmorMaterials.ARMOUR_MATERIAL_REPLACEMENT.setRepairItem(new ItemStack(ARROW));
 
@@ -249,6 +261,11 @@ public class ModItems {
 
 			dimensionReplacement.addReplacement(DimensionType.NETHER, new ItemStack(Items.NETHER_STAR));
 			dimensionReplacement.addReplacement(DimensionType.THE_END, new ItemStack(Items.ENDER_PEARL));
+		}
+
+		private static void registerItemVariantGroup(final IForgeRegistry<Item> registry, final IItemVariantGroup<?, ?> variantGroup) {
+			variantGroup.registerItems(registry);
+			ITEMS.addAll(variantGroup.getItems());
 		}
 	}
 }

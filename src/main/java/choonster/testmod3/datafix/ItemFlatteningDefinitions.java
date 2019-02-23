@@ -2,6 +2,7 @@ package choonster.testmod3.datafix;
 
 import choonster.testmod3.block.slab.BlockColouredSlab;
 import choonster.testmod3.init.ModBlocks;
+import choonster.testmod3.init.ModItems;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -60,6 +61,15 @@ public class ItemFlatteningDefinitions {
 					oldName,
 					colourGroup.getOffsetMetadata(color),
 					slabGroup.getItem(),
+					(item, oldMetadata, oldStackTagCompound) -> new ItemStack(item)
+			));
+		});
+
+		ModItems.VariantGroups.VARIANTS_ITEMS.getItemsMap().forEach((type, itemVariants) -> {
+			flatteningDefinitions.add(new ItemFlattening.FlatteningDefinition(
+					"variants_item",
+					type.getMeta(),
+					itemVariants,
 					(item, oldMetadata, oldStackTagCompound) -> new ItemStack(item)
 			));
 		});
