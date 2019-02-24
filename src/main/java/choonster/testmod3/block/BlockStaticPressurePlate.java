@@ -3,15 +3,16 @@ package choonster.testmod3.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.EnumPushReaction;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReaderBase;
 
 /**
  * A block that uses pressure plate model, placement and piston movement behaviour; but doesn't depress when stood on.
@@ -19,22 +20,16 @@ import javax.annotation.Nullable;
  * @author Choonster
  */
 public abstract class BlockStaticPressurePlate extends Block {
-	protected final AxisAlignedBB BB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.03125D, 0.9375D);
+	protected final VoxelShape SHAPE = makeCuboidShape(1, 0, 1, 15, 0.5, 15.0);
 
-	public BlockStaticPressurePlate(final Material materialIn) {
-		super(materialIn);
+	public BlockStaticPressurePlate(final Block.Properties properties) {
+		super(properties);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public AxisAlignedBB getBoundingBox(final IBlockState state, final IBlockAccess source, final BlockPos pos) {
-		return BB;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean isOpaqueCube(final IBlockState state) {
-		return false;
+	public VoxelShape getShape(final IBlockState state, final IBlockReader worldIn, final BlockPos pos) {
+		return SHAPE;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -43,39 +38,34 @@ public abstract class BlockStaticPressurePlate extends Block {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isPassable(final IBlockAccess worldIn, final BlockPos pos) {
-		return true;
-	}
-
-	@Override
-	public boolean canPlaceBlockAt(final World worldIn, final BlockPos pos) {
-		return canBePlacedOn(worldIn, pos.down());
+	public IBlockState updatePostPlacement(final IBlockState state, final EnumFacing facing, final IBlockState facingState, final IWorld world, final BlockPos currentPos, final BlockPos facingPos) {
+		return facing == EnumFacing.DOWN && !state.isValidPosition(world, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(state, facing, facingState, world, currentPos, facingPos);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(final IBlockState state, final World worldIn, final BlockPos thisPos, final Block blockIn, final BlockPos neighbourPos) {
-		if (!this.canBePlacedOn(worldIn, thisPos.down())) {
-			this.dropBlockAsItem(worldIn, thisPos, state, 0);
-			worldIn.setBlockToAir(thisPos);
-		}
-	}
-
-	private boolean canBePlacedOn(final World world, final BlockPos pos) {
-		return world.getBlockState(pos).isSideSolid(world, pos, EnumFacing.UP) || world.getBlockState(pos).getBlock() instanceof BlockFence;
+	public boolean isValidPosition(final IBlockState state, final IWorldReaderBase world, final BlockPos pos) {
+		final IBlockState downState = world.getBlockState(pos.down());
+		return downState.isTopSolid() || downState.getBlock() instanceof BlockFence;
 	}
 
 	@SuppressWarnings("deprecation")
-	@Nullable
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(final IBlockState blockState, final IBlockAccess worldIn, final BlockPos pos) {
-		return NULL_AABB;
+	public VoxelShape getCollisionShape(final IBlockState state, final IBlockReader world, final BlockPos pos) {
+		return VoxelShapes.empty();
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public EnumPushReaction getPushReaction(final IBlockState state) {
 		return EnumPushReaction.DESTROY;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public BlockFaceShape getBlockFaceShape(final IBlockReader world, final IBlockState state, final BlockPos pos, final EnumFacing face) {
+		return BlockFaceShape.UNDEFINED;
 	}
 }

@@ -3,7 +3,6 @@ package choonster.testmod3.block;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.maxhealth.CapabilityMaxHealth;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
@@ -18,21 +17,22 @@ import net.minecraft.world.World;
  * @author Choonster
  */
 public class BlockMaxHealthSetter extends Block {
-	public BlockMaxHealthSetter() {
-		super(Material.IRON);
+	public BlockMaxHealthSetter(final Block.Properties properties) {
+		super(properties);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
-		if (!worldIn.isRemote) {
-			final IMaxHealth maxHealth = CapabilityMaxHealth.getMaxHealth(playerIn);
+	public boolean onBlockActivated(final IBlockState state, final World world, final BlockPos pos, final EntityPlayer player, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
+		if (!world.isRemote) {
+			final IMaxHealth maxHealth = CapabilityMaxHealth.getMaxHealth(player);
 
 			if (maxHealth != null) {
-				final float healthToAdd = playerIn.isSneaking() ? -1.0f : 1.0f;
+				final float healthToAdd = player.isSneaking() ? -1.0f : 1.0f;
 
 				maxHealth.addBonusMaxHealth(healthToAdd);
 
-				playerIn.sendMessage(new TextComponentTranslation("message.testmod3:max_health.add", playerIn.getDisplayName(), healthToAdd));
+				player.sendMessage(new TextComponentTranslation("message.testmod3:max_health.add", player.getDisplayName(), healthToAdd));
 			}
 		}
 

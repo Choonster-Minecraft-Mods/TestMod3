@@ -1,10 +1,12 @@
 package choonster.testmod3.block;
 
 import choonster.testmod3.tileentity.TileEntityPotionEffect;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.IBlockReader;
+
+import javax.annotation.Nullable;
 
 /**
  * A block that applies a potion effect to all entities within a certain distance of it.
@@ -15,12 +17,13 @@ import net.minecraft.world.World;
  * @author Choonster
  */
 public class BlockPotionEffect extends BlockTileEntity<TileEntityPotionEffect> {
-	public BlockPotionEffect() {
-		super(Material.ROCK, false);
+	public BlockPotionEffect(final Block.Properties properties) {
+		super(properties, false);
 	}
 
+	@Nullable
 	@Override
-	public TileEntity createTileEntity(final World world, final IBlockState state) {
+	public TileEntity createTileEntity(final IBlockState state, final IBlockReader world) {
 		return new TileEntityPotionEffect();
 	}
 }

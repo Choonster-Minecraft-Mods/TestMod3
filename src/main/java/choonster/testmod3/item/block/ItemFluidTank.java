@@ -6,26 +6,25 @@ import choonster.testmod3.fluids.FluidTankItem;
 import choonster.testmod3.tileentity.TileEntityFluidTank;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * A Fluid Tank item.
@@ -35,40 +34,34 @@ import java.util.stream.Collectors;
 public class ItemFluidTank extends ItemBlock {
 	private final List<ItemStack> tankItems = new ArrayList<>();
 
-	public ItemFluidTank(final Block block) {
-		super(block);
-		setHasSubtypes(true);
-		setMaxStackSize(1);
+	public ItemFluidTank(final Block block, final Item.Properties properties) {
+		super(block, properties);
 	}
 
 	public void addFluid(final FluidStack fluidStack) {
 		final ItemStack filledTank = new ItemStack(this);
-		final IFluidHandler fluidHandler = FluidUtil.getFluidHandler(filledTank);
-		if (fluidHandler != null) {
-			fluidHandler.fill(fluidStack, true);
-		}
+
+		FluidUtil.getFluidHandler(filledTank)
+				.ifPresent(fluidHandler -> fluidHandler.fill(fluidStack, true));
 
 		tankItems.add(filledTank);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag advanced) {
-		final IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stack);
-		if (fluidHandler != null) {
+	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
+		FluidUtil.getFluidHandler(stack).ifPresent(fluidHandler -> {
 			final IFluidTankProperties[] properties = fluidHandler.getTankProperties();
-			final List<String> lines = BlockFluidTank.getFluidDataForDisplay(properties).stream()
-					.map(ITextComponent::getFormattedText).collect(Collectors.toList());
-			tooltip.addAll(lines);
-		}
+			tooltip.addAll(BlockFluidTank.getFluidDataForDisplay(properties));
+		});
 	}
 
 	@Override
-	public void getSubItems(final CreativeTabs tab, final NonNullList<ItemStack> subItems) {
-		super.getSubItems(tab, subItems);
+	public void fillItemGroup(final ItemGroup group, final NonNullList<ItemStack> items) {
+		super.fillItemGroup(group, items);
 
-		if (isInCreativeTab(tab)) {
-			subItems.addAll(tankItems);
+		if (isInGroup(group)) {
+			items.addAll(tankItems);
 		}
 	}
 

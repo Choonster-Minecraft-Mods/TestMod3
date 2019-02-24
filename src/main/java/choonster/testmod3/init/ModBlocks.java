@@ -5,7 +5,6 @@ import choonster.testmod3.block.*;
 import choonster.testmod3.block.pipe.BlockPipeBasic;
 import choonster.testmod3.block.pipe.BlockPipeFluid;
 import choonster.testmod3.block.slab.BlockColouredSlab;
-import choonster.testmod3.block.slab.BlockSlabTestMod3;
 import choonster.testmod3.block.variantgroup.BlockVariantGroup;
 import choonster.testmod3.block.variantgroup.IBlockVariantGroup;
 import choonster.testmod3.block.variantgroup.SlabVariantGroup;
@@ -14,28 +13,30 @@ import choonster.testmod3.tileentity.*;
 import choonster.testmod3.util.RegistryUtil;
 import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.trees.*;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemMultiTexture;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.ObjectHolder;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static choonster.testmod3.util.InjectionUtil.Null;
-import static choonster.testmod3.util.RegistryUtil.setBlockName;
 
 @SuppressWarnings("WeakerAccess")
 @ObjectHolder(TestMod3.MODID)
@@ -93,7 +94,17 @@ public class ModBlocks {
 
 	public static final BlockSurvivalCommandBlock CHAIN_SURVIVAL_COMMAND_BLOCK = Null();
 
-	public static final BlockSaplingTestMod3 SAPLING = Null();
+	public static final BlockSaplingTestMod3 OAK_SAPLING = Null();
+
+	public static final BlockSaplingTestMod3 SPRUCE_SAPLING = Null();
+
+	public static final BlockSaplingTestMod3 BIRCH_SAPLING = Null();
+
+	public static final BlockSaplingTestMod3 JUNGLE_SAPLING = Null();
+
+	public static final BlockSaplingTestMod3 ACACIA_SAPLING = Null();
+
+	public static final BlockSaplingTestMod3 DARK_OAK_SAPLING = Null();
 
 	public static final BlockInvisible INVISIBLE = Null();
 
@@ -129,24 +140,13 @@ public class ModBlocks {
 				.variants(EnumDyeColor.values())
 				.material(Material.ROCK)
 				.blockFactory((colour, material, isDouble, slabGroup) -> {
-					final IProperty<EnumDyeColor> variantProperty = BlockSlabTestMod3.createVariantProperty(EnumDyeColor.class, colour);
 
-					return new BlockColouredSlab(colour, material, slabGroup) {
-						@Override
-						public boolean isDouble() {
-							return isDouble;
-						}
-
-						@Override
-						public IProperty<EnumDyeColor> getVariantProperty() {
-							return variantProperty;
-						}
-					};
+					return new BlockColouredSlab(colour, material, slabGroup);
 				})
 				.build();
 	}
 
-	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 	public static class RegistrationHandler {
 		public static final Set<ItemBlock> ITEM_BLOCKS = new HashSet<>();
 
@@ -160,36 +160,41 @@ public class ModBlocks {
 			final IForgeRegistry<Block> registry = event.getRegistry();
 
 			final Block[] blocks = {
-					setBlockName(new BlockWaterGrass(), "water_grass"),
-					setBlockName(new BlockLargeCollisionTest(), "large_collision_test"),
-					setBlockName(new BlockRightClickTest(), "right_click_test"),
-					setBlockName(new BlockClientPlayerRightClick(), "client_player_right_click"),
-					setBlockName(new BlockRotatableLamp(), "rotatable_lamp"),
-					setBlockName(new BlockItemCollisionTest(), "item_collision_test"),
-					setBlockName(new BlockFluidTank<>(), "fluid_tank"),
-					setBlockName(new BlockItemDebugger(), "item_debugger"),
-					setBlockName(new Block(Material.ROCK), "end_portal_frame_full"),
-					setBlockName(new BlockPotionEffect(), "potion_effect"),
-					setBlockName(new BlockClientPlayerRotation(), "client_player_rotation"),
-					setBlockName(new BlockPigSpawnerRefiller(), "pig_spawner_refiller"),
-					setBlockName(new BlockPlane(Material.IRON), "mirror_plane"),
-					setBlockName(new Block(Material.IRON), "vanilla_model_test"),
-					setBlockName(new Block(Material.ROCK), "fullbright").setLightLevel(1),
-					setBlockName(new Block(Material.ROCK), "normal_brightness"),
-					setBlockName(new BlockMaxHealthSetter(), "max_health_setter"),
-					setBlockName(new BlockMaxHealthGetter(), "max_health_getter"),
-					setBlockName(new BlockSmallCollisionTest(), "small_collision_test"),
-					setBlockName(new BlockModChest(), "chest"),
-					setBlockName(new BlockHidden(Material.ROCK), "hidden"),
-					setBlockName(new BlockPipeBasic(), "basic_pipe"),
-					setBlockName(new BlockPipeFluid(), "fluid_pipe"),
-					setBlockName(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.REDSTONE), "survival_command_block"),
-					setBlockName(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.AUTO), "repeating_survival_command_block"),
-					setBlockName(new BlockSurvivalCommandBlock(TileEntityCommandBlock.Mode.SEQUENCE), "chain_survival_command_block"),
-					setBlockName(new BlockSaplingTestMod3(), "sapling"),
-					setBlockName(new BlockInvisible(), "invisible"),
-					setBlockName(new BlockFluidTankRestricted(), "fluid_tank_restricted"),
-					setBlockName(new Block(Material.WOOD), "planks"),
+					new BlockWaterGrass(Block.Properties.create(Material.WATER)).setRegistryName("water_grass"),
+					new BlockLargeCollisionTest(Block.Properties.create(Material.CLOTH)).setRegistryName("large_collision_test"),
+					new BlockRightClickTest(Block.Properties.create(Material.GLASS)).setRegistryName("right_click_test"),
+					new BlockClientPlayerRightClick(Block.Properties.create(Material.ROCK)).setRegistryName("client_player_right_click"),
+					new BlockRotatableLamp(Block.Properties.create(Material.REDSTONE_LIGHT)).setRegistryName("rotatable_lamp"),
+					new BlockItemCollisionTest(Block.Properties.create(Material.CLOTH)).setRegistryName("item_collision_test"),
+					new BlockFluidTank<>(Block.Properties.create(Material.GLASS).sound(SoundType.GLASS).hardnessAndResistance(0.3f)).setRegistryName("fluid_tank"),
+					new BlockItemDebugger(Block.Properties.create(Material.IRON).hardnessAndResistance(-1, 3600000)).setRegistryName("item_debugger"),
+					new Block(Block.Properties.create(Material.ROCK)).setRegistryName("end_portal_frame_full"),
+					new BlockPotionEffect(Block.Properties.create(Material.ROCK)).setRegistryName("potion_effect"),
+					new BlockClientPlayerRotation(Block.Properties.create(Material.ROCK)).setRegistryName("client_player_rotation"),
+					new BlockPigSpawnerRefiller(Block.Properties.create(Material.IRON)).setRegistryName("pig_spawner_refiller"),
+					new BlockPlane(Block.Properties.create(Material.IRON)).setRegistryName("mirror_plane"),
+					new Block(Block.Properties.create(Material.IRON)).setRegistryName("vanilla_model_test"),
+					new Block(Block.Properties.create(Material.ROCK).lightValue(15)).setRegistryName("fullbright"),
+					new Block(Block.Properties.create(Material.ROCK)).setRegistryName("normal_brightness"),
+					new BlockMaxHealthSetter(Block.Properties.create(Material.IRON)).setRegistryName("max_health_setter"),
+					new BlockMaxHealthGetter(Block.Properties.create(Material.IRON)).setRegistryName("max_health_getter"),
+					new BlockSmallCollisionTest(Block.Properties.create(Material.IRON)).setRegistryName("small_collision_test"),
+					new BlockModChest(Block.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2.5f)).setRegistryName("chest"),
+					new BlockHidden(Block.Properties.create(Material.ROCK)).setRegistryName("hidden"),
+					new BlockPipeBasic(Block.Properties.create(Material.IRON)).setRegistryName("basic_pipe"),
+					new BlockPipeFluid(Block.Properties.create(Material.IRON)).setRegistryName("fluid_pipe"),
+					new BlockSurvivalCommandBlock(Block.Properties.from(Blocks.COMMAND_BLOCK), TileEntityCommandBlock.Mode.REDSTONE).setRegistryName("survival_command_block"),
+					new BlockSurvivalCommandBlock(Block.Properties.from(Blocks.REPEATING_COMMAND_BLOCK), TileEntityCommandBlock.Mode.AUTO).setRegistryName("repeating_survival_command_block"),
+					new BlockSurvivalCommandBlock(Block.Properties.from(Blocks.CHAIN_COMMAND_BLOCK), TileEntityCommandBlock.Mode.SEQUENCE).setRegistryName("chain_survival_command_block"),
+					new BlockSaplingTestMod3(new OakTree(), Block.Properties.from(Blocks.OAK_SAPLING)).setRegistryName("oak_sapling"),
+					new BlockSaplingTestMod3(new SpruceTree(), Block.Properties.from(Blocks.SPRUCE_SAPLING)).setRegistryName("spruce_sapling"),
+					new BlockSaplingTestMod3(new BirchTree(), Block.Properties.from(Blocks.BIRCH_SAPLING)).setRegistryName("birch_sapling"),
+					new BlockSaplingTestMod3(new JungleTree(), Block.Properties.from(Blocks.JUNGLE_SAPLING)).setRegistryName("jungle_sapling"),
+					new BlockSaplingTestMod3(new AcaciaTree(), Block.Properties.from(Blocks.ACACIA_SAPLING)).setRegistryName("acacia_sapling"),
+					new BlockSaplingTestMod3(new DarkOakTree(), Block.Properties.from(Blocks.DARK_OAK_SAPLING)).setRegistryName("dark_oak_sapling"),
+					new BlockInvisible(Block.Properties.create(Material.ROCK)).setRegistryName("invisible"),
+					new BlockFluidTankRestricted(Block.Properties.create(Material.GLASS).sound(SoundType.GLASS).hardnessAndResistance(0.3f)).setRegistryName("fluid_tank_restricted"),
+					new Block(Block.Properties.create(Material.WOOD)).setRegistryName("planks"),
 			};
 
 			for (final Block block : blocks) {
@@ -214,36 +219,41 @@ public class ModBlocks {
 		@SubscribeEvent
 		public static void registerItemBlocks(final RegistryEvent.Register<Item> event) {
 			final ItemBlock[] items = {
-					new ItemBlock(WATER_GRASS),
-					new ItemBlock(LARGE_COLLISION_TEST),
-					new ItemBlock(RIGHT_CLICK_TEST),
-					new ItemBlock(CLIENT_PLAYER_RIGHT_CLICK),
-					new ItemBlock(ROTATABLE_LAMP),
-					new ItemBlock(ITEM_COLLISION_TEST),
-					new ItemFluidTank(FLUID_TANK),
-					new ItemBlock(ITEM_DEBUGGER),
-					new ItemBlock(END_PORTAL_FRAME_FULL),
-					new ItemBlock(POTION_EFFECT),
-					new ItemBlock(CLIENT_PLAYER_ROTATION),
-					new ItemBlock(PIG_SPAWNER_REFILLER),
-					new ItemBlock(MIRROR_PLANE),
-					new ItemBlock(VANILLA_MODEL_TEST),
-					new ItemBlock(FULLBRIGHT),
-					new ItemBlock(NORMAL_BRIGHTNESS),
-					new ItemBlock(MAX_HEALTH_SETTER),
-					new ItemBlock(MAX_HEALTH_GETTER),
-					new ItemBlock(SMALL_COLLISION_TEST),
-					new ItemBlock(CHEST),
-					new ItemBlock(HIDDEN),
-					new ItemBlock(BASIC_PIPE),
-					new ItemBlock(FLUID_PIPE),
-					new ItemBlock(SURVIVAL_COMMAND_BLOCK),
-					new ItemBlock(REPEATING_SURVIVAL_COMMAND_BLOCK),
-					new ItemBlock(CHAIN_SURVIVAL_COMMAND_BLOCK),
-					new ItemMultiTexture(SAPLING, SAPLING, BlockSaplingTestMod3::getName),
-					new ItemBlock(INVISIBLE),
-					new ItemFluidTank(FLUID_TANK_RESTRICTED),
-					new ItemBlock(PLANKS),
+					new ItemBlock(WATER_GRASS, defaultItemProperties()),
+					new ItemBlock(LARGE_COLLISION_TEST, defaultItemProperties()),
+					new ItemBlock(RIGHT_CLICK_TEST, defaultItemProperties()),
+					new ItemBlock(CLIENT_PLAYER_RIGHT_CLICK, defaultItemProperties()),
+					new ItemBlock(ROTATABLE_LAMP, defaultItemProperties()),
+					new ItemBlock(ITEM_COLLISION_TEST, defaultItemProperties()),
+					new ItemFluidTank(FLUID_TANK, defaultItemProperties().maxStackSize(1)),
+					new ItemBlock(ITEM_DEBUGGER, defaultItemProperties()),
+					new ItemBlock(END_PORTAL_FRAME_FULL, defaultItemProperties()),
+					new ItemBlock(POTION_EFFECT, defaultItemProperties()),
+					new ItemBlock(CLIENT_PLAYER_ROTATION, defaultItemProperties()),
+					new ItemBlock(PIG_SPAWNER_REFILLER, defaultItemProperties()),
+					new ItemBlock(MIRROR_PLANE, defaultItemProperties()),
+					new ItemBlock(VANILLA_MODEL_TEST, defaultItemProperties()),
+					new ItemBlock(FULLBRIGHT, defaultItemProperties()),
+					new ItemBlock(NORMAL_BRIGHTNESS, defaultItemProperties()),
+					new ItemBlock(MAX_HEALTH_SETTER, defaultItemProperties()),
+					new ItemBlock(MAX_HEALTH_GETTER, defaultItemProperties()),
+					new ItemBlock(SMALL_COLLISION_TEST, defaultItemProperties()),
+					new ItemBlock(CHEST, defaultItemProperties()),
+					new ItemBlock(HIDDEN, defaultItemProperties()),
+					new ItemBlock(BASIC_PIPE, defaultItemProperties()),
+					new ItemBlock(FLUID_PIPE, defaultItemProperties()),
+					new ItemBlock(SURVIVAL_COMMAND_BLOCK, defaultItemProperties()),
+					new ItemBlock(REPEATING_SURVIVAL_COMMAND_BLOCK, defaultItemProperties()),
+					new ItemBlock(CHAIN_SURVIVAL_COMMAND_BLOCK, defaultItemProperties()),
+					new ItemBlock(OAK_SAPLING, defaultItemProperties()),
+					new ItemBlock(SPRUCE_SAPLING, defaultItemProperties()),
+					new ItemBlock(BIRCH_SAPLING, defaultItemProperties()),
+					new ItemBlock(JUNGLE_SAPLING, defaultItemProperties()),
+					new ItemBlock(ACACIA_SAPLING, defaultItemProperties()),
+					new ItemBlock(DARK_OAK_SAPLING, defaultItemProperties()),
+					new ItemBlock(INVISIBLE, defaultItemProperties()),
+					new ItemFluidTank(FLUID_TANK_RESTRICTED, defaultItemProperties()),
+					new ItemBlock(PLANKS, defaultItemProperties()),
 			};
 
 			final IForgeRegistry<Item> registry = event.getRegistry();
@@ -261,6 +271,14 @@ public class ModBlocks {
 			registerVariantGroupItems(registry, VariantGroups.VARIANTS_BLOCKS);
 		}
 
+		/**
+		 * Gets an {@link Item.Properties} instance with the {@link ItemGroup} set to {@link TestMod3#ITEM_GROUP}.
+		 *
+		 * @return The item properties
+		 */
+		private static Item.Properties defaultItemProperties() {
+			return new Item.Properties().group(TestMod3.ITEM_GROUP);
+		}
 
 		/**
 		 * Register an {@link IBlockVariantGroup}'s {@link Item}s and add them to {@link #ITEM_BLOCKS}.

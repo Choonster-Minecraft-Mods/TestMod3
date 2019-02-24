@@ -2,8 +2,11 @@ package choonster.testmod3.util;
 
 import choonster.testmod3.TestMod3;
 import com.google.common.collect.ImmutableSet;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldWriter;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -41,4 +44,11 @@ public class Constants {
 	 * Multiply the attribute's amount by 1.0 + the modifier's amount.
 	 */
 	public static final int ATTRIBUTE_MODIFIER_OPERATION_MULTIPLY_NEW_AMOUNT = 2;
+
+	public static class BlockFlags {
+		/**
+		 * Default flags for {@link IWorldWriter#setBlockState(BlockPos, IBlockState, int)}
+		 */
+		public static final int DEFAULT_FLAGS = 3;
+	}
 }

@@ -4,8 +4,7 @@ import choonster.testmod3.api.capability.pigspawner.IPigSpawner;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerInteractable;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.command.ICommandSender;
+import net.minecraft.command.ICommandSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
@@ -18,8 +17,8 @@ import javax.annotation.Nullable;
  * @author Choonster
  */
 public class BlockPigSpawnerRefiller extends Block implements IPigSpawnerInteractable {
-	public BlockPigSpawnerRefiller() {
-		super(Material.IRON);
+	public BlockPigSpawnerRefiller(final Block.Properties properties) {
+		super(properties);
 	}
 
 	/**
@@ -32,7 +31,7 @@ public class BlockPigSpawnerRefiller extends Block implements IPigSpawnerInterac
 	 * @return {@code true} to prevent the default action of the IPigSpawner
 	 */
 	@Override
-	public boolean interact(final IPigSpawner pigSpawner, final World world, final BlockPos pos, @Nullable final ICommandSender iCommandSender) {
+	public boolean interact(final IPigSpawner pigSpawner, final World world, final BlockPos pos, @Nullable final ICommandSource iCommandSender) {
 		if (pigSpawner instanceof IPigSpawnerFinite) {
 			final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) pigSpawner;
 			pigSpawnerFinite.setNumPigs(pigSpawnerFinite.getMaxNumPigs());

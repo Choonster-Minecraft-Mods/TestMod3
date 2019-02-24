@@ -1,13 +1,11 @@
 buildscript {
     repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        maven {
-            name = "forge"
-            url = "https://files.minecraftforge.net/maven"
-        }
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
 
@@ -16,7 +14,9 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '1.2.4'
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'net.minecraftforge.gradle'
+// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'eclipse'
 
 final commitId
 
@@ -30,28 +30,66 @@ version = "${mc_version}-${mod_version}-${commitId}"
 group = "${package_group}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${mod_name}"
 
-minecraft {
-    version = "${mc_version}-${forge_version}"
-    runDir = "run"
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
-    if (project.hasProperty('mappings_version'))
-        mappings = project.mappings_version
+minecraft {
+    mappings channel: project.mappings_channel, version: project.mappings_version
+
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
+    runs {
+        client {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                testmod3 {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                testmod3 {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
 }
 
 repositories {
     maven { url = "http://dvs1.progwml6.com/files/maven" }
     maven { url = "http://tehnut.info/maven" }
-    maven { url 'https://jitpack.io' }
+    maven { url = 'https://jitpack.io' }
 }
 
 dependencies {
-    deobfProvided "mezz.jei:jei_${mc_version}:${jei_version}:api"
-    runtime "mezz.jei:jei_${mc_version}:${jei_version}"
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+
+//    deobf "mezz.jei:jei_${mc_version}:${jei_version}:api"
+//    runtime "mezz.jei:jei_${mc_version}:${jei_version}"
     compile "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
-    deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}_${mc_version}"
+//    deobf "mcp.mobius.waila:Hwyla:${hwyla_version}_${mc_version}"
 //    deobfCompile "com.github.azanor:Baubles:${baubles_version}"
 }
 
+/*
+// TODO: Replace shadow with contained deps
 shadowJar {
     // Only shadow fluent-hc
     dependencies {
@@ -67,26 +105,7 @@ shadowJar {
 reobf {
     shadowJar {} // Reobfuscate the shadowed JAR
 }
-
-processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-
-        // replace version and mcversion
-        expand 'version': project.version, 'mcversion': project.minecraft.version
-    }
-
-    // copy everything else, that's not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-        exclude 'log4j2.xml'
-    }
-}
+*/
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
@@ -104,5 +123,19 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 
 artifacts {
     archives javadocJar
-    archives shadowJar
+//    archives shadowJar
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title": "Test Mod 3",
+                "Specification-Vendor": "Choonster",
+                "Specification-Version": "${mc_version}-${mod_version}",
+                "Implementation-Title": project.name,
+                "Implementation-Version": "${version}",
+                "Implementation-Vendor" :"Choonster",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
 }

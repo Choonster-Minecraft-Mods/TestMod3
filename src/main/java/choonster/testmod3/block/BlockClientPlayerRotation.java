@@ -1,12 +1,15 @@
 package choonster.testmod3.block;
 
-import choonster.testmod3.TestMod3;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,8 +36,8 @@ public class BlockClientPlayerRotation extends BlockStaticPressurePlate {
 	 */
 	private static final float ROTATION_PITCH = 2.0f;
 
-	public BlockClientPlayerRotation() {
-		super(Material.ROCK);
+	public BlockClientPlayerRotation(final Block.Properties properties) {
+		super(properties);
 	}
 
 	/**
@@ -44,15 +47,18 @@ public class BlockClientPlayerRotation extends BlockStaticPressurePlate {
 	 */
 	private boolean isPitchingUp;
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void onEntityCollision(final World worldIn, final BlockPos pos, final IBlockState state, final Entity entityIn) {
-		if (worldIn.isRemote && entityIn == TestMod3.proxy.getClientPlayer()) {
-			if (MathHelper.epsilonEquals(Math.abs(entityIn.rotationPitch), 90.0f)) {
+	public void onEntityCollision(final IBlockState state, final World world, final BlockPos pos, final Entity entity) {
+		final EntityPlayer clientPlayer = DistExecutor.callWhenOn(Dist.CLIENT, () -> () -> Minecraft.getInstance().player);
+
+		if (world.isRemote && entity == clientPlayer) {
+			if (MathHelper.epsilonEquals(Math.abs(entity.rotationPitch), 90.0f)) {
 				isPitchingUp = !isPitchingUp;
 				LOGGER.info("Switching pitch direction! Now pitching {}.", isPitchingUp ? "up" : "down");
 			}
 
-			entityIn.turn(ROTATION_YAW, isPitchingUp ? ROTATION_PITCH : -ROTATION_PITCH);
+			DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> entity.rotateTowards(ROTATION_YAW, isPitchingUp ? ROTATION_PITCH : -ROTATION_PITCH));
 		}
 	}
 }

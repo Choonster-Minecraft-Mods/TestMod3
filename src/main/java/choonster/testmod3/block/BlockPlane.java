@@ -3,32 +3,24 @@ package choonster.testmod3.block;
 import choonster.testmod3.util.VectorUtils;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.state.IProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix3d;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,20 +35,16 @@ public class BlockPlane extends Block {
 	/**
 	 * The block's rotation around the y-axis.
 	 */
-	public static final IProperty<EnumFacing> HORIZONTAL_ROTATION = PropertyDirection.create("horizontal_rotation", EnumFacing.Plane.HORIZONTAL);
+	public static final IProperty<EnumFacing> HORIZONTAL_ROTATION = DirectionProperty.create("horizontal_rotation", EnumFacing.Plane.HORIZONTAL);
 
 	/**
 	 * The block's rotation around the x-axis.
 	 */
-	public static final IProperty<EnumVerticalRotation> VERTICAL_ROTATION = PropertyEnum.create("vertical_rotation", EnumVerticalRotation.class);
+	public static final IProperty<EnumVerticalRotation> VERTICAL_ROTATION = EnumProperty.create("vertical_rotation", EnumVerticalRotation.class);
 
-	public BlockPlane(final Material material, final MapColor mapColor) {
-		super(material, mapColor);
-		setDefaultState(getBlockState().getBaseState().withProperty(HORIZONTAL_ROTATION, EnumFacing.NORTH).withProperty(VERTICAL_ROTATION, EnumVerticalRotation.UP));
-	}
-
-	public BlockPlane(final Material materialIn) {
-		this(materialIn, materialIn.getMaterialMapColor());
+	public BlockPlane(final Properties properties) {
+		super(properties);
+		setDefaultState(getStateContainer().getBaseState().with(HORIZONTAL_ROTATION, EnumFacing.NORTH).with(VERTICAL_ROTATION, EnumVerticalRotation.UP));
 	}
 
 	/**
@@ -66,9 +54,8 @@ public class BlockPlane extends Block {
 	 * <li>Value: Left = Base Bounding Box, Right = Top Bounding Box</li>
 	 * </ul>
 	 */
-	private static final Map<Pair<EnumFacing, EnumVerticalRotation>, Pair<AxisAlignedBB, AxisAlignedBB>> ROTATED_BOUNDING_BOXES;
-
-	static {
+	// TODO: Convert this to VoxelShapes
+	private static final Map<Pair<EnumFacing, EnumVerticalRotation>, Pair<AxisAlignedBB, AxisAlignedBB>> ROTATED_BOUNDING_BOXES = Util.make(() -> {
 		final ImmutableMap.Builder<Pair<EnumFacing, EnumVerticalRotation>, Pair<AxisAlignedBB, AxisAlignedBB>> builder = ImmutableMap.builder();
 
 		// The base and top AABBs for the default rotation pair
@@ -99,8 +86,9 @@ public class BlockPlane extends Block {
 			}
 		}
 
-		ROTATED_BOUNDING_BOXES = builder.build();
-	}
+		return builder.build();
+	});
+
 
 	/**
 	 * The default bounding box.
@@ -108,29 +96,21 @@ public class BlockPlane extends Block {
 	private static final AxisAlignedBB DEFAULT_BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, HORIZONTAL_ROTATION, VERTICAL_ROTATION);
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public IBlockState getStateFromMeta(final int meta) {
-		final EnumFacing horizontalRotation = EnumFacing.byHorizontalIndex(meta & 3);
-		final EnumVerticalRotation verticalRotation = EnumVerticalRotation.fromIndex(meta >> 2);
-
-		return getDefaultState().withProperty(HORIZONTAL_ROTATION, horizontalRotation).withProperty(VERTICAL_ROTATION, verticalRotation);
+	protected void fillStateContainer(final StateContainer.Builder<Block, IBlockState> builder) {
+		builder.add(HORIZONTAL_ROTATION, VERTICAL_ROTATION);
 	}
 
 	@Override
-	public int getMetaFromState(final IBlockState state) {
-		final int horizontalIndex = state.getValue(HORIZONTAL_ROTATION).getHorizontalIndex();
-		final int verticalIndex = state.getValue(VERTICAL_ROTATION).getIndex();
-
-		return (verticalIndex << 2) | horizontalIndex;
+	public IBlockState rotate(final IBlockState state, final IWorld world, final BlockPos pos, final Rotation direction) {
+		return state.with(HORIZONTAL_ROTATION, direction.rotate(state.get(HORIZONTAL_ROTATION)));
 	}
 
 	@Override
-	public boolean rotateBlock(final World world, final BlockPos pos, final EnumFacing axis) {
+	public IBlockState mirror(final IBlockState state, final Mirror mirror) {
+		return state.with(HORIZONTAL_ROTATION, mirror.mirror(state.get(HORIZONTAL_ROTATION)));
+	}
+
+	private static boolean rotateBlock(final World world, final BlockPos pos, final EnumFacing axis) {
 		final EnumFacing.Axis axisToRotate = axis.getAxis();
 
 		IBlockState state = world.getBlockState(pos);
@@ -138,54 +118,44 @@ public class BlockPlane extends Block {
 		switch (axisToRotate) {
 			case X:
 			case Z:
-				state = state.cycleProperty(VERTICAL_ROTATION);
+				state = state.cycle(VERTICAL_ROTATION);
 				break;
 			case Y:
-				final EnumFacing originalRotation = state.getValue(HORIZONTAL_ROTATION);
+				final EnumFacing originalRotation = state.get(HORIZONTAL_ROTATION);
 				final EnumFacing newRotation = axis.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? originalRotation.rotateY() : originalRotation.rotateYCCW();
-				state = state.withProperty(HORIZONTAL_ROTATION, newRotation);
+				state = state.with(HORIZONTAL_ROTATION, newRotation);
 				break;
 		}
 
 		return world.setBlockState(pos, state);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
-		return rotateBlock(worldIn, pos, side);
+	public boolean onBlockActivated(final IBlockState state, final World world, final BlockPos pos, final EntityPlayer player, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
+		return rotateBlock(world, pos, side);
 	}
 
+	@Nullable
 	@Override
-	public IBlockState getStateForPlacement(final World world, final BlockPos pos, final EnumFacing facing, final float hitX, final float hitY, final float hitZ, final int meta, final EntityLivingBase placer, final EnumHand hand) {
-		final EnumFacing horizontalRotation = placer.getHorizontalFacing();
-		final EnumVerticalRotation verticalRotation = EnumVerticalRotation.fromFacing(facing);
+	public IBlockState getStateForPlacement(final BlockItemUseContext context) {
+		final EnumFacing horizontalRotation = context.getPlacementHorizontalFacing();
+		final EnumVerticalRotation verticalRotation = EnumVerticalRotation.fromFacing(context.getFace());
 
-		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand)
-				.withProperty(HORIZONTAL_ROTATION, horizontalRotation)
-				.withProperty(VERTICAL_ROTATION, verticalRotation);
+		return getDefaultState()
+				.with(HORIZONTAL_ROTATION, horizontalRotation)
+				.with(VERTICAL_ROTATION, verticalRotation);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 
+	/*
+	// TODO: Convert this to VoxelShapes
 	@SuppressWarnings("deprecation")
-	@Override
-	public boolean isOpaqueCube(final IBlockState state) {
-		return false;
-	}
-
-	@SuppressWarnings("deprecation")
-	@SideOnly(Side.CLIENT)
-	@Override
-	public boolean shouldSideBeRendered(final IBlockState blockState, final IBlockAccess blockAccess, final BlockPos pos, final EnumFacing side) {
-		return true;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
 	public void addCollisionBoxToList(final IBlockState state, final World worldIn, final BlockPos pos, final AxisAlignedBB entityBox, final List<AxisAlignedBB> collidingBoxes, @Nullable final Entity entityIn, final boolean p_185477_7_) {
 		final Pair<EnumFacing, EnumVerticalRotation> key = Pair.of(state.getValue(HORIZONTAL_ROTATION), state.getValue(VERTICAL_ROTATION));
 		final Pair<AxisAlignedBB, AxisAlignedBB> boundingBoxes = ROTATED_BOUNDING_BOXES.get(key);
@@ -196,35 +166,15 @@ public class BlockPlane extends Block {
 		final AxisAlignedBB topBoundingBox = boundingBoxes.getRight();
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, topBoundingBox);
 	}
+	*/
 
 	/**
 	 * A rotation around the x-axis.
 	 */
 	public enum EnumVerticalRotation implements IStringSerializable {
-		DOWN(0, "down", EnumFacing.DOWN, 2),
-		UP(1, "up", EnumFacing.UP, 0),
-		SIDE(2, "side", EnumFacing.NORTH, 1);
-
-		/**
-		 * The values ordered by their index.
-		 */
-		private static final EnumVerticalRotation[] VALUES = new EnumVerticalRotation[values().length];
-
-		static {
-			for (final EnumVerticalRotation verticalRotation : values()) {
-				VALUES[verticalRotation.getIndex()] = verticalRotation;
-			}
-		}
-
-		/**
-		 * Get the value with the specified index.
-		 *
-		 * @param index The index
-		 * @return The value
-		 */
-		public static EnumVerticalRotation fromIndex(final int index) {
-			return VALUES[MathHelper.abs(index % VALUES.length)];
-		}
+		DOWN("down", EnumFacing.DOWN, 2),
+		UP("up", EnumFacing.UP, 0),
+		SIDE("side", EnumFacing.NORTH, 1);
 
 		/**
 		 * Get the value corresponding to the specified facing.
@@ -244,11 +194,6 @@ public class BlockPlane extends Block {
 		}
 
 		/**
-		 * The index.
-		 */
-		private final int index;
-
-		/**
 		 * The name.
 		 */
 		private final String name;
@@ -266,25 +211,14 @@ public class BlockPlane extends Block {
 		/**
 		 * Construct a new vertical rotation.
 		 *
-		 * @param index        The index
 		 * @param name         The name
 		 * @param facing       The corresponding facing
 		 * @param numRotations The number of 90-degree rotations relative to {@link #SIDE}
 		 */
-		EnumVerticalRotation(final int index, final String name, final EnumFacing facing, final int numRotations) {
-			this.index = index;
+		EnumVerticalRotation(final String name, final EnumFacing facing, final int numRotations) {
 			this.name = name;
 			this.facing = facing;
-			this.angle = numRotations * Math.toRadians(90);
-		}
-
-		/**
-		 * Get the index.
-		 *
-		 * @return The index
-		 */
-		public int getIndex() {
-			return index;
+			angle = numRotations * Math.toRadians(90);
 		}
 
 		/**

@@ -1,6 +1,6 @@
 package choonster.testmod3.api.capability.pigspawner;
 
-import net.minecraft.command.ICommandSender;
+import net.minecraft.command.ICommandSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -22,5 +22,5 @@ public interface IPigSpawnerInteractable {
 	 * @param iCommandSender The ICommandSender that caused the interaction, if any
 	 * @return {@code true} to prevent the default action of the IPigSpawner
 	 */
-	boolean interact(final IPigSpawner pigSpawner, final World world, final BlockPos pos, @Nullable final ICommandSender iCommandSender);
+	boolean interact(final IPigSpawner pigSpawner, final World world, final BlockPos pos, @Nullable final ICommandSource iCommandSender);
 }

@@ -1,11 +1,8 @@
 package choonster.testmod3.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 
 /**
  * A block that doesn't render in the world.
@@ -16,19 +13,13 @@ import net.minecraft.world.IBlockAccess;
  * @author Choonster
  */
 public class BlockInvisible extends Block {
-	public BlockInvisible() {
-		super(Material.ROCK);
+	public BlockInvisible(final Block.Properties properties) {
+		super(properties);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean shouldSideBeRendered(final IBlockState blockState, final IBlockAccess blockAccess, final BlockPos pos, final EnumFacing side) {
-		return false;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean isOpaqueCube(final IBlockState state) {
-		return false;
+	public boolean isSideInvisible(final IBlockState state, final IBlockState adjacentBlockState, final EnumFacing side) {
+		return true;
 	}
 }

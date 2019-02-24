@@ -1,31 +1,31 @@
 package choonster.testmod3;
 
 import choonster.testmod3.util.SwordUpgrades;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class CreativeTabTestMod3 extends CreativeTabs {
+public class ItemGroupTestMod3 extends ItemGroup {
 	private final ItemStack sword;
 
-	public CreativeTabTestMod3() {
+	public ItemGroupTestMod3() {
 		super(TestMod3.MODID);
 		sword = SwordUpgrades.upgradeSword(Items.STONE_SWORD);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public ItemStack createIcon() {
 		return sword;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void displayAllRelevantItems(final NonNullList<ItemStack> items) {
+	public void fill(final NonNullList<ItemStack> items) {
 		items.add(sword.copy());
-		super.displayAllRelevantItems(items);
+		super.fill(items);
 	}
 }

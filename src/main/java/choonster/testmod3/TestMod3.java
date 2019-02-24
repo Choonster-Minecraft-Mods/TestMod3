@@ -18,18 +18,15 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 import java.util.UUID;
 
-@Mod(modid = TestMod3.MODID, name = TestMod3.NAME, acceptedMinecraftVersions = "[1.12.2]")
+@Mod(TestMod3.MODID)
 public class TestMod3 {
 	public static final String MODID = "testmod3";
 	public static final String NAME = "Test Mod 3";
 
-	public static final CreativeTabTestMod3 creativeTab = new CreativeTabTestMod3();
+	public static final ItemGroupTestMod3 ITEM_GROUP = new ItemGroupTestMod3();
 
 	@SidedProxy(clientSide = "choonster.testmod3.proxy.CombinedClientProxy", serverSide = "choonster.testmod3.proxy.DedicatedServerProxy")
 	public static IProxy proxy;
-
-	@Instance(MODID)
-	public static TestMod3 instance;
 
 	public static SimpleNetworkWrapper network;
 

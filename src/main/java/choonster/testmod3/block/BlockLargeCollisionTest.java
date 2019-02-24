@@ -1,11 +1,10 @@
 package choonster.testmod3.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 
 /**
  * A Block with a 3x3x3 bounding box.
@@ -16,15 +15,15 @@ import net.minecraft.world.IBlockAccess;
  * @author Choonster
  */
 public class BlockLargeCollisionTest extends Block {
-	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(-1, -1, -1, 2, 2, 2);
+	private static final VoxelShape SHAPE = makeCuboidShape(-16, -16, -16, 32, 32, 32);
 
-	public BlockLargeCollisionTest() {
-		super(Material.CLOTH);
+	public BlockLargeCollisionTest(final Block.Properties properties) {
+		super(properties);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public AxisAlignedBB getBoundingBox(final IBlockState state, final IBlockAccess source, final BlockPos pos) {
-		return BOUNDING_BOX;
+	public VoxelShape getShape(final IBlockState state, final IBlockReader worldIn, final BlockPos pos) {
+		return SHAPE;
 	}
 }

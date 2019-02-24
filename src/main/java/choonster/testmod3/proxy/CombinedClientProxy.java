@@ -8,7 +8,6 @@ import choonster.testmod3.client.gui.GuiLock;
 import choonster.testmod3.client.init.ModKeyBindings;
 import choonster.testmod3.client.renderer.entity.ModRenderers;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IThreadListener;
@@ -41,8 +40,7 @@ public class CombinedClientProxy implements IProxy {
 
 	@Override
 	public void doClientRightClick() {
-		// Press the Use Item keybinding
-		KeyBinding.onTick(MINECRAFT.gameSettings.keyBindUseItem.getKeyCode());
+
 	}
 
 	@Nullable

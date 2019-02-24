@@ -45,21 +45,6 @@ public class RegistryUtil {
 	}
 
 	/**
-	 * Set the registry name of {@code block} to {@code blockName} and the translation key to the full registry name.
-	 *
-	 * @param block     The block
-	 * @param blockName The block's name
-	 * @param <BLOCK>   The block type
-	 * @return The block
-	 */
-	public static <BLOCK extends Block> BLOCK setBlockName(final BLOCK block, final String blockName) {
-		block.setRegistryName(TestMod3.MODID, blockName);
-		final ResourceLocation registryName = Preconditions.checkNotNull(block.getRegistryName());
-		block.setTranslationKey(registryName.toString());
-		return block;
-	}
-
-	/**
 	 * Sets the block's creative tab to the TestMod3 creative tab if it hasn't already been set.
 	 *
 	 * @param block   The block
@@ -67,8 +52,8 @@ public class RegistryUtil {
 	 * @return The block
 	 */
 	public static <BLOCK extends Block> BLOCK setDefaultCreativeTab(final BLOCK block) {
-		if (block.getCreativeTab() == null) {
-			block.setCreativeTab(TestMod3.creativeTab);
+		if (block.getI() == null) {
+			block.setCreativeTab(TestMod3.ITEM_GROUP);
 		}
 
 		return block;
@@ -96,7 +81,7 @@ public class RegistryUtil {
 	 */
 	public static <ITEM extends Item> ITEM setDefaultCreativeTab(final ITEM item) {
 		if (item.getCreativeTab() == null) {
-			item.setCreativeTab(TestMod3.creativeTab);
+			item.setCreativeTab(TestMod3.ITEM_GROUP);
 		}
 
 		return item;

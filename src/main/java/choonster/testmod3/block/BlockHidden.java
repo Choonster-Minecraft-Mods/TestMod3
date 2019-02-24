@@ -1,20 +1,16 @@
 package choonster.testmod3.block;
 
 import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockRevealer;
-import choonster.testmod3.capability.hiddenblockrevealer.HiddenBlockManager;
 import choonster.testmod3.tileentity.TileEntityHidden;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraft.world.IBlockReader;
+
+import javax.annotation.Nullable;
 
 /**
  * A block that only renders when the player is holding an item with the {@link IHiddenBlockRevealer} capability.
@@ -30,47 +26,32 @@ public class BlockHidden extends BlockTileEntity<TileEntityHidden> {
 	 * <p>
 	 * Only set from {@link Block#getActualState} on the client side, do not query on the server.
 	 */
-	public static final IProperty<Boolean> HIDDEN = PropertyBool.create("hidden");
+	public static final IProperty<Boolean> HIDDEN = BooleanProperty.create("hidden");
 
-	{
-		setDefaultState(getBlockState().getBaseState().withProperty(HIDDEN, true));
-	}
-
-	public BlockHidden(final Material material, final MapColor mapColor) {
-		super(material, mapColor, false);
-	}
-
-	public BlockHidden(final Material materialIn) {
-		super(materialIn, false);
+	public BlockHidden(final Properties properties) {
+		super(properties, false);
+		setDefaultState(getStateContainer().getBaseState().with(HIDDEN, true));
 	}
 
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer.Builder(this).add(HIDDEN).build();
+	protected void fillStateContainer(final StateContainer.Builder<Block, IBlockState> builder) {
+		builder.add(HIDDEN);
 	}
 
+	@Nullable
 	@Override
-	public TileEntity createTileEntity(final World world, final IBlockState state) {
+	public TileEntity createTileEntity(final IBlockState state, final IBlockReader world) {
 		return new TileEntityHidden();
-	}
-
-	@Override
-	public int getMetaFromState(final IBlockState state) {
-		return 0;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean isOpaqueCube(final IBlockState state) {
-		return false;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean isFullCube(final IBlockState state) {
-		return !state.getValue(HIDDEN);
+		return !state.get(HIDDEN);
 	}
 
+	/*
+	// TODO: Figure out how to implement this in 1.13
 	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getActualState(IBlockState state, final IBlockAccess worldIn, final BlockPos pos) {
@@ -80,5 +61,5 @@ public class BlockHidden extends BlockTileEntity<TileEntityHidden> {
 		}
 
 		return state;
-	}
+	}*/
 }

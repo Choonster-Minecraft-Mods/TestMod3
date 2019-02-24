@@ -2,7 +2,6 @@ package choonster.testmod3.block;
 
 import choonster.testmod3.capability.pigspawner.CapabilityPigSpawner;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -12,8 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.ModList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,9 +23,8 @@ import org.apache.logging.log4j.Logger;
 public class BlockItemDebugger extends Block {
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	public BlockItemDebugger() {
-		super(Material.IRON);
-		setBlockUnbreakable();
+	public BlockItemDebugger(final Block.Properties properties) {
+		super(properties);
 	}
 
 	private void logItem(final ItemStack stack) {
@@ -38,13 +35,10 @@ public class BlockItemDebugger extends Block {
 			final String modName;
 			final ResourceLocation registryName = stack.getItem().getRegistryName();
 			if (registryName != null) {
-				final ModContainer modContainer = Loader.instance().getIndexedModList().get(registryName.getNamespace());
 
-				if (modContainer != null) {
-					modName = modContainer.getName();
-				} else {
-					modName = "Unknown - No ModContainer";
-				}
+				modName = ModList.get().getModContainerById(registryName.getNamespace())
+						.map(modContainer -> modContainer.getModInfo().getDisplayName())
+						.orElse("Unknown - No ModContainer");
 			} else {
 				modName = "Unknown - No Registry Name";
 			}
@@ -54,23 +48,24 @@ public class BlockItemDebugger extends Block {
 	}
 
 	private <T> void logCapability(final ItemStack stack, final Capability<T> capability, final EnumFacing facing) {
-		if (stack.hasCapability(capability, facing)) {
-			final T instance = stack.getCapability(capability, facing);
+		stack.getCapability(capability).ifPresent(instance -> {
 			LOGGER.info("Capability: {} - {}", capability.getName(), instance);
-		}
+		});
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
-		logItem(playerIn.getHeldItem(hand));
+	public boolean onBlockActivated(final IBlockState state, final World worldIn, final BlockPos pos, final EntityPlayer player, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
+		logItem(player.getHeldItem(hand));
 
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void onBlockClicked(final World worldIn, final BlockPos pos, final EntityPlayer playerIn) {
+	public void onBlockClicked(final IBlockState state, final World worldIn, final BlockPos pos, final EntityPlayer player) {
 		for (final EnumHand hand : EnumHand.values()) {
-			logItem(playerIn.getHeldItem(hand));
+			logItem(player.getHeldItem(hand));
 		}
 	}
 }

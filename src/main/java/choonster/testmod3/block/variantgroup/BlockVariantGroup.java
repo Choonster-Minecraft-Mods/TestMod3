@@ -112,7 +112,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 
 			final BLOCK block = blockFactory.createBlock(variant, material, this);
 
-			RegistryUtil.setBlockName(block, registryName);
+			block.setRegistryName(registryName);
 			RegistryUtil.setDefaultCreativeTab(block);
 
 			registry.register(block);

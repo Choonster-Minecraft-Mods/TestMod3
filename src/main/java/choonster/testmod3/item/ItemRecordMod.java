@@ -17,6 +17,6 @@ public class ItemRecordMod extends ItemRecord {
 	public ItemRecordMod(final String recordName, final SoundEvent soundEvent) {
 		super(Constants.RESOURCE_PREFIX + recordName, soundEvent);
 		setTranslationKey("record");
-		setCreativeTab(TestMod3.creativeTab);
+		setCreativeTab(TestMod3.ITEM_GROUP);
 	}
 }

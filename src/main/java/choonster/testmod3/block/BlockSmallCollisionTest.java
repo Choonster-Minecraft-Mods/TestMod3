@@ -1,15 +1,15 @@
 package choonster.testmod3.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 /**
@@ -22,31 +22,30 @@ import net.minecraft.world.World;
  */
 public class BlockSmallCollisionTest extends Block {
 	/**
-	 * The block's collision bounding box.
+	 * The block's collision shape.
 	 */
-	private static final AxisAlignedBB BOUNDING_BOX;
-
-	static {
-		final double offset = 0.0011;
+	private static final VoxelShape COLLISION_SHAPE = Util.make(() -> {
+		final double offset = 0.0176;
 		final double min = 0 + offset;
 		final double max = 1 - offset;
-		BOUNDING_BOX = new AxisAlignedBB(min, min, min, max, max, max);
-	}
+		return makeCuboidShape(min, min, min, max, max, max);
+	});
 
-	public BlockSmallCollisionTest() {
-		super(Material.IRON);
+	public BlockSmallCollisionTest(final Block.Properties properties) {
+		super(properties);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(final IBlockState blockState, final IBlockAccess worldIn, final BlockPos pos) {
-		return BOUNDING_BOX;
+	public VoxelShape getCollisionShape(final IBlockState state, final IBlockReader world, final BlockPos pos) {
+		return COLLISION_SHAPE;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void onEntityCollision(final World worldIn, final BlockPos pos, final IBlockState state, final Entity entityIn) {
-		if (entityIn instanceof EntityLivingBase) {
-			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 10, 0));
+	public void onEntityCollision(final IBlockState state, final World world, final BlockPos pos, final Entity entity) {
+		if (entity instanceof EntityLivingBase) {
+			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 10, 0));
 		}
 	}
 }

@@ -1,14 +1,14 @@
 package choonster.testmod3.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.fluid.IFluidState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -22,15 +22,12 @@ public abstract class BlockTileEntity<TE extends TileEntity> extends Block {
 	/**
 	 * Should the {@link TileEntity} be preserved until after {@link #getDrops} has been called?
 	 */
+	// TODO: Is this still needed in 1.13?
 	private final boolean preserveTileEntity;
 
-	public BlockTileEntity(final Material material, final MapColor mapColor, final boolean preserveTileEntity) {
-		super(material, mapColor);
+	public BlockTileEntity(final Block.Properties properties, final boolean preserveTileEntity) {
+		super(properties);
 		this.preserveTileEntity = preserveTileEntity;
-	}
-
-	public BlockTileEntity(final Material materialIn, final boolean preserveTileEntity) {
-		this(materialIn, materialIn.getMaterialMapColor(), preserveTileEntity);
 	}
 
 	@Override
@@ -38,8 +35,9 @@ public abstract class BlockTileEntity<TE extends TileEntity> extends Block {
 		return true;
 	}
 
+	@Nullable
 	@Override
-	public abstract TileEntity createTileEntity(World world, IBlockState state);
+	public abstract TileEntity createTileEntity(final IBlockState state, final IBlockReader world);
 
 	/**
 	 * Get the {@link TileEntity} at the specified position.
@@ -50,14 +48,14 @@ public abstract class BlockTileEntity<TE extends TileEntity> extends Block {
 	 */
 	@SuppressWarnings("unchecked")
 	@Nullable
-	protected TE getTileEntity(final IBlockAccess world, final BlockPos pos) {
+	protected TE getTileEntity(final IBlockReader world, final BlockPos pos) {
 		return (TE) world.getTileEntity(pos);
 	}
 
 	@Override
-	public boolean removedByPlayer(final IBlockState state, final World world, final BlockPos pos, final EntityPlayer player, final boolean willHarvest) {
+	public boolean removedByPlayer(final IBlockState state, final World world, final BlockPos pos, final EntityPlayer player, final boolean willHarvest, final IFluidState fluid) {
 		// If it will harvest, delay deletion of the block until after getDrops
-		return preserveTileEntity && willHarvest || super.removedByPlayer(state, world, pos, player, false);
+		return preserveTileEntity && willHarvest || super.removedByPlayer(state, world, pos, player, willHarvest, fluid);
 	}
 
 	@Override
@@ -65,7 +63,7 @@ public abstract class BlockTileEntity<TE extends TileEntity> extends Block {
 		super.harvestBlock(world, player, pos, state, te, stack);
 
 		if (preserveTileEntity) {
-			world.setBlockToAir(pos);
+			world.setBlockState(pos, Blocks.AIR.getDefaultState());
 		}
 	}
 }

@@ -3,7 +3,6 @@ package choonster.testmod3.block;
 import choonster.testmod3.tileentity.TileEntitySurvivalCommandBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCommandBlock;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,11 +16,13 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.StringUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -40,23 +41,23 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 
 	private final TileEntityCommandBlock.Mode commandBlockMode;
 
-	public BlockSurvivalCommandBlock(final TileEntityCommandBlock.Mode commandBlockMode) {
-		super(MapColor.BROWN);
+	public BlockSurvivalCommandBlock(final Block.Properties properties, final TileEntityCommandBlock.Mode commandBlockMode) {
+		super(properties);
 		this.commandBlockMode = commandBlockMode;
-		setHardness(5);
 	}
 
+	@Nullable
 	@Override
-	public TileEntity createNewTileEntity(final World worldIn, final int meta) {
+	public TileEntity createTileEntity(final IBlockState state, final IBlockReader world) {
 		final TileEntitySurvivalCommandBlock tileEntity = new TileEntitySurvivalCommandBlock();
 		tileEntity.setAuto(getCommandBlockMode() == TileEntityCommandBlock.Mode.SEQUENCE);
 		return tileEntity;
 	}
 
 	@Override
-	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
+	public boolean onBlockActivated(final IBlockState state, final World worldIn, final BlockPos pos, final EntityPlayer player, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
 		final TileEntity tileEntity = worldIn.getTileEntity(pos);
-		return tileEntity instanceof TileEntitySurvivalCommandBlock && ((TileEntitySurvivalCommandBlock) tileEntity).getCommandBlockLogic().tryOpenEditCommandBlock(playerIn);
+		return tileEntity instanceof TileEntitySurvivalCommandBlock && ((TileEntitySurvivalCommandBlock) tileEntity).getCommandBlockLogic().tryOpenEditCommandBlock(player);
 	}
 
 	@Override
@@ -65,8 +66,8 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 		if (tileEntity instanceof TileEntitySurvivalCommandBlock && !worldIn.isRemote) {
 			final TileEntitySurvivalCommandBlock tileEntitySurvivalCommandBlock = (TileEntitySurvivalCommandBlock) tileEntity;
 
-			final NBTTagCompound tagCompound = stack.getTagCompound();
-			if (tagCompound == null || !tagCompound.hasKey("BlockEntityTag", Constants.NBT.TAG_COMPOUND)) {
+			final NBTTagCompound tagCompound = stack.getTag();
+			if (tagCompound == null || !tagCompound.contains("BlockEntityTag", Constants.NBT.TAG_COMPOUND)) {
 				tileEntitySurvivalCommandBlock.setAuto(getCommandBlockMode() == TileEntityCommandBlock.Mode.SEQUENCE);
 			}
 		}
@@ -75,12 +76,12 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 	}
 
 	@Override
-	public int quantityDropped(final Random random) {
+	public int quantityDropped(final IBlockState state, final Random random) {
 		return 1;
 	}
 
 	/**
-	 * Copy of {@link BlockCommandBlock#updateTick} that calls {@link BlockSurvivalCommandBlock#execute} and
+	 * Copy of {@link BlockCommandBlock#tick} that calls {@link BlockSurvivalCommandBlock#execute} and
 	 * {@link BlockSurvivalCommandBlock#executeChain} rather than {@link BlockCommandBlock#execute} and
 	 * {@link BlockCommandBlock#executeChain}, removing the checks for the vanilla Command Block instances.
 	 *
@@ -90,7 +91,7 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 	 * @param rand  The World's RNG
 	 */
 	@Override
-	public void updateTick(final World world, final BlockPos pos, final IBlockState state, final Random rand) {
+	public void tick(final IBlockState state, final World world, final BlockPos pos, final Random random) {
 		if (!world.isRemote) {
 			final TileEntity tileentity = world.getTileEntity(pos);
 
@@ -105,17 +106,17 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 					tileEntityCommandBlock.setConditionMet();
 
 					if (conditionMet) {
-						this.execute(state, world, pos, commandBlockLogic, hasCommand);
+						execute(state, world, pos, commandBlockLogic, hasCommand);
 					} else if (tileEntityCommandBlock.isConditional()) {
 						commandBlockLogic.setSuccessCount(0);
 					}
 
 					if (tileEntityCommandBlock.isPowered() || tileEntityCommandBlock.isAuto()) {
-						world.scheduleUpdate(pos, this, this.tickRate(world));
+						world.getPendingBlockTicks().scheduleTick(pos, this, tickRate(world));
 					}
 				} else if (mode == TileEntityCommandBlock.Mode.REDSTONE) {
 					if (conditionMet) {
-						this.execute(state, world, pos, commandBlockLogic, hasCommand);
+						execute(state, world, pos, commandBlockLogic, hasCommand);
 					} else if (tileEntityCommandBlock.isConditional()) {
 						commandBlockLogic.setSuccessCount(0);
 					}
@@ -145,7 +146,7 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 			commandBlockLogic.setSuccessCount(0);
 		}
 
-		executeChain(world, pos, state.getValue(FACING));
+		executeChain(world, pos, state.get(FACING));
 	}
 
 	/**
@@ -162,7 +163,7 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 		int i;
 		IBlockState neighbourState;
 
-		for (i = gameRules.getInt("maxCommandChainLength"); i-- > 0; facing = neighbourState.getValue(FACING)) {
+		for (i = gameRules.getInt("maxCommandChainLength"); i-- > 0; facing = neighbourState.get(FACING)) {
 			neighbourPos.move(facing);
 			neighbourState = world.getBlockState(neighbourPos);
 
