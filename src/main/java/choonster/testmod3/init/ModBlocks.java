@@ -288,7 +288,6 @@ public class ModBlocks {
 	private static void registerTileEntities() {
 		registerTileEntity(TileEntitySurvivalCommandBlock.class, "survival_command_block");
 		registerTileEntity(TileEntityFluidTank.class, "fluid_tank");
-		registerTileEntity(TileEntityColoredMultiRotatable.class, "colored_multi_rotatable");
 		registerTileEntity(TileEntityPotionEffect.class, "potion_effect");
 		registerTileEntity(TileEntityModChest.class, "mod_chest");
 		registerTileEntity(TileEntityHidden.class, "hidden");
