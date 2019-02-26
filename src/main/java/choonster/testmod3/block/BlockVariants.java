@@ -2,7 +2,6 @@ package choonster.testmod3.block;
 
 import choonster.testmod3.block.variantgroup.BlockVariantGroup;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
@@ -23,39 +22,31 @@ public class BlockVariants extends Block {
 	private final BlockVariantGroup<EnumType, ? extends BlockVariants> variantGroup;
 	private final EnumType type;
 
-	public BlockVariants(final EnumType type, final Material material, final BlockVariantGroup<EnumType, ? extends BlockVariants> variantGroup) {
-		super(material);
+	public BlockVariants(final Block.Properties properties, final EnumType type, final BlockVariantGroup<EnumType, ? extends BlockVariants> variantGroup) {
+		super(properties);
 		this.type = type;
 		this.variantGroup = variantGroup;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing facing, final float hitX, final float hitY, final float hitZ) {
+	public boolean onBlockActivated(final IBlockState state, final World world, final BlockPos pos, final EntityPlayer player, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
 		final EnumType newType = variantGroup.cycleVariant(type);
-		final Block newSBlock = variantGroup.getBlock(newType);
+		final IBlockState newState = variantGroup.getBlock(newType).getDefaultState();
 
-		worldIn.setBlockState(pos, newSBlock.getDefaultState());
+		world.setBlockState(pos, newState);
 
 		return true;
 	}
 
 	public enum EnumType implements IStringSerializable {
-		VARIANT_A(0, "a"),
-		VARIANT_B(1, "b");
+		VARIANT_A("a"),
+		VARIANT_B("b");
 
-		// TODO: Remove in 1.13
-		private final int meta;
 		private final String name;
 
-		EnumType(final int meta, final String name) {
-			this.meta = meta;
+		EnumType(final String name) {
 			this.name = name;
-		}
-
-		// TODO: Remove in 1.13
-		@Deprecated
-		public int getMeta() {
-			return meta;
 		}
 
 		@Override

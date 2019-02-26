@@ -1,48 +1,46 @@
 package choonster.testmod3.block;
 
 import choonster.testmod3.block.variantgroup.BlockVariantGroup;
+import choonster.testmod3.util.Constants;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.IProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.DyeUtils;
 
-import java.util.Optional;
+import javax.annotation.Nullable;
 
 /**
- * A block with 16 colours (stored in the metadata) and 6 facings (stored in the TileEntity).
+ * A block with 16 colours and 6 facings.
  *
  * @author Choonster
  */
 public class BlockColoredRotatable extends Block {
-	public static final IProperty<EnumFacing> FACING = PropertyDirection.create("facing");
+	public static final IProperty<EnumFacing> FACING = DirectionProperty.create("facing");
 
 	private final BlockVariantGroup<EnumDyeColor, ? extends BlockColoredRotatable> variantGroup;
 	private final EnumDyeColor color;
 
-	public BlockColoredRotatable(final EnumDyeColor color, final Material materialIn, final BlockVariantGroup<EnumDyeColor, ? extends BlockColoredRotatable> variantGroup) {
-		super(materialIn, MapColor.getBlockColor(color));
+	public BlockColoredRotatable(final Block.Properties properties, final EnumDyeColor color, final BlockVariantGroup<EnumDyeColor, ? extends BlockColoredRotatable> variantGroup) {
+		super(properties);
 		this.color = color;
 		this.variantGroup = variantGroup;
 	}
 
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, FACING);
+	protected void fillStateContainer(final StateContainer.Builder<Block, IBlockState> builder) {
+		builder.add(FACING);
 	}
 
 	public EnumDyeColor getColor() {
@@ -53,68 +51,54 @@ public class BlockColoredRotatable extends Block {
 		return variantGroup;
 	}
 
-	public EnumFacing getFacing(final IBlockAccess world, final BlockPos pos) {
-		return world.getBlockState(pos).getValue(FACING);
-	}
-
-	public void setFacing(final World world, final BlockPos pos, final EnumFacing facing) {
-		world.setBlockState(pos, getDefaultState().withProperty(FACING, facing));
-	}
-
-	@SuppressWarnings("deprecation")
+	@Nullable
 	@Override
-	public IBlockState getStateFromMeta(final int meta) {
-		return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
+	public IBlockState getStateForPlacement(final BlockItemUseContext context) {
+		return getDefaultState().with(FACING, context.getNearestLookingDirection());
 	}
 
 	@Override
-	public int getMetaFromState(final IBlockState state) {
-		return state.getValue(FACING).getIndex();
-	}
+	public final boolean recolorBlock(final IBlockState currentState, final IWorld world, final BlockPos pos, final EnumFacing facing, final EnumDyeColor color) {
+		final IBlockState newState = copyState(currentState, getVariantGroup().getBlock(color).getDefaultState());
 
-	@Override
-	public void onBlockPlacedBy(final World worldIn, final BlockPos pos, final IBlockState state, final EntityLivingBase placer, final ItemStack stack) {
-		setFacing(worldIn, pos, EnumFacing.getDirectionFromEntityLiving(pos, placer));
-	}
-
-	@Override
-	public boolean recolorBlock(final World world, final BlockPos pos, final EnumFacing side, final EnumDyeColor color) {
-		final IBlockState currentState = world.getBlockState(pos);
-		final Block newBlock = getVariantGroup().getBlock(color);
-
-		world.setBlockState(pos, newBlock.getDefaultState().withProperty(FACING, currentState.getValue(FACING)));
+		world.setBlockState(pos, newState, Constants.BlockFlags.DEFAULT_FLAGS);
 
 		return true;
 	}
 
-	@Override
+	protected IBlockState copyState(final IBlockState currentState, final IBlockState newState) {
+		return newState.with(FACING, currentState.get(FACING));
+	}
+
 	public boolean rotateBlock(final World world, final BlockPos pos, final EnumFacing axis) {
-		final EnumFacing facing = getFacing(world, pos);
-		setFacing(world, pos, facing.rotateAround(axis.getAxis()));
+		final IBlockState currentState = world.getBlockState(pos);
+		final EnumFacing facing = currentState.get(FACING);
+		final IBlockState newState = currentState.with(FACING, facing.rotateAround(axis.getAxis()));
+
+		world.setBlockState(pos, newState);
 
 		return true;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public IBlockState withRotation(final IBlockState state, final Rotation rot) {
-		return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
+	public IBlockState rotate(final IBlockState state, final IWorld world, final BlockPos pos, final Rotation direction) {
+		return state.with(FACING, direction.rotate(state.get(FACING)));
+	}
+
+	@Override
+	public IBlockState mirror(final IBlockState state, final Mirror mirror) {
+		return state.with(FACING, mirror.mirror(state.get(FACING)));
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public IBlockState withMirror(final IBlockState state, final Mirror mirrorIn) {
-		return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
-	}
-
-	@Override
-	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
-		final ItemStack heldItem = playerIn.getHeldItem(hand);
+	public boolean onBlockActivated(final IBlockState state, final World world, final BlockPos pos, final EntityPlayer player, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
+		final ItemStack heldItem = player.getHeldItem(hand);
 
 		if (!heldItem.isEmpty()) { // If the player is holding dye, change the colour
-			final Optional<EnumDyeColor> dyeColour = DyeUtils.colorFromStack(heldItem);
-			if (dyeColour.isPresent()) {
-				final boolean success = recolorBlock(worldIn, pos, side, dyeColour.get());
+			final EnumDyeColor dyeColour = EnumDyeColor.getColor(heldItem);
+			if (dyeColour != null) {
+				final boolean success = recolorBlock(state, world, pos, side, dyeColour);
 				if (success) {
 					heldItem.shrink(1);
 					return true;
@@ -123,7 +107,7 @@ public class BlockColoredRotatable extends Block {
 
 			return false;
 		} else { // Else rotate the block
-			return rotateBlock(worldIn, pos, side);
+			return rotateBlock(world, pos, side);
 		}
 	}
 }

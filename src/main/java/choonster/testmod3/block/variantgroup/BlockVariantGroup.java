@@ -1,12 +1,12 @@
 package choonster.testmod3.block.variantgroup;
 
-import choonster.testmod3.util.RegistryUtil;
+import choonster.testmod3.TestMod3;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -24,20 +24,27 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	private final String groupName;
 	private final boolean isSuffix;
 	private final Iterable<VARIANT> variants;
-	private final Material material;
 
+	private final Function<VARIANT, Block.Properties> blockPropertiesFactory;
 	private final BlockFactory<VARIANT, BLOCK> blockFactory;
-	private final Function<BLOCK, ItemBlock> itemFactory;
+
+	private final Function<VARIANT, Item.Properties> itemPropertiesFactory;
+	private final ItemFactory<VARIANT, BLOCK> itemFactory;
 
 	private Map<VARIANT, BLOCK> blocks;
 	private boolean registeredItems = false;
 
-	private BlockVariantGroup(final String groupName, final boolean isSuffix, final Iterable<VARIANT> variants, final Material material, final BlockFactory<VARIANT, BLOCK> blockFactory, final Function<BLOCK, ItemBlock> itemFactory) {
+	private BlockVariantGroup(
+			final String groupName, final boolean isSuffix, final Iterable<VARIANT> variants,
+			final Function<VARIANT, Block.Properties> blockPropertiesFactory, final BlockFactory<VARIANT, BLOCK> blockFactory,
+			final Function<VARIANT, Item.Properties> itemPropertiesFactory, final ItemFactory<VARIANT, BLOCK> itemFactory
+	) {
 		this.groupName = groupName;
 		this.isSuffix = isSuffix;
-		this.material = material;
 		this.variants = variants;
+		this.blockPropertiesFactory = blockPropertiesFactory;
 		this.blockFactory = blockFactory;
+		this.itemPropertiesFactory = itemPropertiesFactory;
 		this.itemFactory = itemFactory;
 	}
 
@@ -110,10 +117,11 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 				registryName = variant.getName() + "_" + groupName;
 			}
 
-			final BLOCK block = blockFactory.createBlock(variant, material, this);
+			final Block.Properties properties = blockPropertiesFactory.apply(variant);
+
+			final BLOCK block = blockFactory.createBlock(properties, variant, this);
 
 			block.setRegistryName(registryName);
-			RegistryUtil.setDefaultCreativeTab(block);
 
 			registry.register(block);
 			builder.put(variant, block);
@@ -136,10 +144,13 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 
 		final List<ItemBlock> items = new ArrayList<>();
 
-		blocks.values().forEach(block -> {
+		getBlocksMap().forEach((variant, block) -> {
 			final ResourceLocation registryName = Preconditions.checkNotNull(block.getRegistryName(), "Block %s has null registry name", block);
 
-			final ItemBlock item = itemFactory.apply(block);
+			final Item.Properties properties = itemPropertiesFactory.apply(variant);
+
+			final ItemBlock item = itemFactory.createItem(block, properties, variant);
+
 			item.setRegistryName(registryName);
 
 			registry.register(item);
@@ -160,17 +171,30 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	 */
 	@FunctionalInterface
 	public interface BlockFactory<VARIANT extends Enum<VARIANT> & IStringSerializable, BLOCK extends Block> {
-		BLOCK createBlock(VARIANT variant, Material material, BlockVariantGroup<VARIANT, BLOCK> variantGroup);
+		BLOCK createBlock(Block.Properties properties, VARIANT variant, BlockVariantGroup<VARIANT, BLOCK> variantGroup);
+	}
+
+	/**
+	 * A function that creates item blocks for a variant group.
+	 *
+	 * @param <VARIANT> The variant type
+	 * @param <BLOCK>   The block type
+	 */
+	@FunctionalInterface
+	public interface ItemFactory<VARIANT extends Enum<VARIANT> & IStringSerializable, BLOCK extends Block> {
+		ItemBlock createItem(BLOCK block, Item.Properties properties, VARIANT variant);
 	}
 
 	public static class Builder<VARIANT extends Enum<VARIANT> & IStringSerializable, BLOCK extends Block> {
 		private String groupName;
 		private boolean isSuffix;
 		private Iterable<VARIANT> variants;
-		private Material material;
 
+		private Function<VARIANT, Block.Properties> blockPropertiesFactory;
 		private BlockFactory<VARIANT, BLOCK> blockFactory;
-		private Function<BLOCK, ItemBlock> itemFactory = ItemBlock::new;
+
+		private Function<VARIANT, Item.Properties> itemPropertiesFactory = variant -> new Item.Properties().group(TestMod3.ITEM_GROUP);
+		private ItemFactory<VARIANT, BLOCK> itemFactory = (block, properties, variant) -> new ItemBlock(block, properties);
 
 		/**
 		 * Creates a new variant group builder.
@@ -235,15 +259,15 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 		}
 
 		/**
-		 * Sets the block material.
+		 * Sets the factory function used to create the properties for each block.
 		 *
-		 * @param material The material
+		 * @param blockPropertiesFactory The block properties factory function
 		 * @return This builder
-		 * @throws NullPointerException If {@code material} is {@code null}
+		 * @throws NullPointerException If {@code blockPropertiesFactory} is {@code null}
 		 */
-		public Builder<VARIANT, BLOCK> material(final Material material) {
-			Preconditions.checkNotNull(material, "material");
-			this.material = material;
+		public Builder<VARIANT, BLOCK> blockPropertiesFactory(final Function<VARIANT, Block.Properties> blockPropertiesFactory) {
+			Preconditions.checkNotNull(blockPropertiesFactory, "blockPropertiesFactory");
+			this.blockPropertiesFactory = blockPropertiesFactory;
 			return this;
 		}
 
@@ -261,13 +285,31 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 		}
 
 		/**
-		 * Sets the factory function used to create the block items. If no item factory is specified, a factory producing {@link ItemBlock} is used.
+		 * Sets the factory function used to create the properties for each block item.
+		 * <p>
+		 * If no item properties factory is specified, a factory producing item properties with the {@link ItemGroup}
+		 * set to {@link TestMod3#ITEM_GROUP} is used.
+		 *
+		 * @param itemPropertiesFactory The item properties factory function
+		 * @return This builder
+		 * @throws NullPointerException If {@code itemPropertiesFactory} is {@code null}
+		 */
+		public Builder<VARIANT, BLOCK> itemPropertiesFactory(final Function<VARIANT, Item.Properties> itemPropertiesFactory) {
+			Preconditions.checkNotNull(itemPropertiesFactory, "itemPropertiesFactory");
+			this.itemPropertiesFactory = itemPropertiesFactory;
+			return this;
+		}
+
+		/**
+		 * Sets the factory function used to create the block items.
+		 * <p>
+		 * If no item factory is specified, a factory producing {@link ItemBlock} is used.
 		 *
 		 * @param itemFactory The item factory function
 		 * @return This builder
 		 * @throws NullPointerException If {@code itemFactory} is {@code null}
 		 */
-		public Builder<VARIANT, BLOCK> itemFactory(final Function<BLOCK, ItemBlock> itemFactory) {
+		public Builder<VARIANT, BLOCK> itemFactory(final ItemFactory<VARIANT, BLOCK> itemFactory) {
 			Preconditions.checkNotNull(itemFactory, "itemFactory");
 			this.itemFactory = itemFactory;
 			return this;
@@ -279,16 +321,16 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 		 * @return The variant group
 		 * @throws IllegalStateException If the group name hasn't been provided
 		 * @throws IllegalStateException If the variants haven't been provided
-		 * @throws IllegalStateException If the material hasn't been provided
+		 * @throws IllegalStateException If the blockPropertiesFactory hasn't been provided
 		 * @throws IllegalStateException If the block factory hasn't been provided
 		 */
 		public BlockVariantGroup<VARIANT, BLOCK> build() {
 			Preconditions.checkState(groupName != null, "Group Name not provided");
 			Preconditions.checkState(variants != null, "Variants not provided");
-			Preconditions.checkState(material != null, "Material not provided");
+			Preconditions.checkState(blockPropertiesFactory != null, "Block Properties Factory not provided");
 			Preconditions.checkState(blockFactory != null, "Block Factory not provided");
 
-			return new BlockVariantGroup<>(groupName, isSuffix, variants, material, blockFactory, itemFactory);
+			return new BlockVariantGroup<>(groupName, isSuffix, variants, blockPropertiesFactory, blockFactory, itemPropertiesFactory, itemFactory);
 		}
 	}
 }

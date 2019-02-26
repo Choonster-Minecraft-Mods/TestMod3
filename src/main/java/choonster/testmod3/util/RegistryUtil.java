@@ -2,7 +2,6 @@ package choonster.testmod3.util;
 
 import choonster.testmod3.TestMod3;
 import com.google.common.base.Preconditions;
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -42,21 +41,6 @@ public class RegistryUtil {
 		final ResourceLocation key = new ResourceLocation(modid, name);
 		final T registryEntry = registry.getValue(key);
 		return Preconditions.checkNotNull(registryEntry, "%s doesn't exist in registry %s", key, RegistryManager.ACTIVE.getName(registry));
-	}
-
-	/**
-	 * Sets the block's creative tab to the TestMod3 creative tab if it hasn't already been set.
-	 *
-	 * @param block   The block
-	 * @param <BLOCK> The block type
-	 * @return The block
-	 */
-	public static <BLOCK extends Block> BLOCK setDefaultCreativeTab(final BLOCK block) {
-		if (block.getI() == null) {
-			block.setCreativeTab(TestMod3.ITEM_GROUP);
-		}
-
-		return block;
 	}
 
 	/**

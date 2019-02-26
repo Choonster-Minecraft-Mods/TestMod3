@@ -7,10 +7,8 @@ import choonster.testmod3.block.pipe.BlockPipeFluid;
 import choonster.testmod3.block.slab.BlockColouredSlab;
 import choonster.testmod3.block.variantgroup.BlockVariantGroup;
 import choonster.testmod3.block.variantgroup.IBlockVariantGroup;
-import choonster.testmod3.block.variantgroup.SlabVariantGroup;
 import choonster.testmod3.item.block.ItemFluidTank;
 import choonster.testmod3.tileentity.*;
-import choonster.testmod3.util.RegistryUtil;
 import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -116,14 +114,14 @@ public class ModBlocks {
 		public static final BlockVariantGroup<EnumDyeColor, BlockColoredRotatable> COLORED_ROTATABLE_BLOCKS = BlockVariantGroup.Builder.<EnumDyeColor, BlockColoredRotatable>create()
 				.groupName("rotatable_block")
 				.variants(EnumDyeColor.values())
-				.material(Material.CLOTH)
+				.blockPropertiesFactory(color -> Block.Properties.create(Material.CLOTH, color))
 				.blockFactory(BlockColoredRotatable::new)
 				.build();
 
 		public static final BlockVariantGroup<EnumDyeColor, BlockColoredMultiRotatable> COLORED_MULTI_ROTATABLE_BLOCKS = BlockVariantGroup.Builder.<EnumDyeColor, BlockColoredMultiRotatable>create()
 				.groupName("multi_rotatable_block")
 				.variants(EnumDyeColor.values())
-				.material(Material.CLOTH)
+				.blockPropertiesFactory(color -> Block.Properties.create(Material.CLOTH, color))
 				.blockFactory(BlockColoredMultiRotatable::new)
 				.build();
 
@@ -131,18 +129,15 @@ public class ModBlocks {
 				.groupName("variants_block")
 				.suffix()
 				.variants(BlockVariants.EnumType.values())
-				.material(Material.IRON)
+				.blockPropertiesFactory(type -> Block.Properties.create(Material.IRON))
 				.blockFactory(BlockVariants::new)
 				.build();
 
-		public static final SlabVariantGroup<EnumDyeColor, BlockColouredSlab> TERRACOTTA_SLABS = SlabVariantGroup.Builder.<EnumDyeColor, BlockColouredSlab>create()
+		public static final BlockVariantGroup<EnumDyeColor, BlockColouredSlab> TERRACOTTA_SLABS = BlockVariantGroup.Builder.<EnumDyeColor, BlockColouredSlab>create()
 				.groupName("terracotta_slab")
 				.variants(EnumDyeColor.values())
-				.material(Material.ROCK)
-				.blockFactory((colour, material, isDouble, slabGroup) -> {
-
-					return new BlockColouredSlab(colour, material, slabGroup);
-				})
+				.blockPropertiesFactory(color -> Block.Properties.create(Material.ROCK, color))
+				.blockFactory(BlockColouredSlab::new)
 				.build();
 	}
 
@@ -198,8 +193,6 @@ public class ModBlocks {
 			};
 
 			for (final Block block : blocks) {
-				RegistryUtil.setDefaultCreativeTab(block);
-
 				registry.register(block);
 			}
 

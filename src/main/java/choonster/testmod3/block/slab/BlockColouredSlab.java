@@ -1,6 +1,6 @@
 package choonster.testmod3.block.slab;
 
-import choonster.testmod3.block.variantgroup.SlabVariantGroup;
+import choonster.testmod3.block.variantgroup.BlockVariantGroup;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,20 +24,18 @@ public class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, BlockColo
 	/**
 	 * Create a coloured slab block.
 	 *
-	 * @param variant    The variant of this slab
-	 * @param properties The block properties of this slab
-	 * @param slabGroup  The group this slab belongs to
+	 * @param properties   The block properties of this slab
+	 * @param variant      The variant of this slab
+	 * @param variantGroup The group this slab belongs to
 	 */
-	public BlockColouredSlab(final EnumDyeColor variant, final Block.Properties properties, final SlabVariantGroup<EnumDyeColor, BlockColouredSlab>.SlabGroup slabGroup) {
-		super(variant, properties, slabGroup);
+	public BlockColouredSlab(final Block.Properties properties, final EnumDyeColor variant, final BlockVariantGroup<EnumDyeColor, BlockColouredSlab> variantGroup) {
+		super(properties, variant, variantGroup);
 	}
 
 	@Override
 	public boolean recolorBlock(final IBlockState state, final IWorld world, final BlockPos pos, final EnumFacing facing, final EnumDyeColor colour) {
-		// TODO: Merge single and double slabs
-		final SlabVariantGroup<EnumDyeColor, BlockColouredSlab>.SlabGroup newSlabGroup = slabGroup.getVariantGroup().getSlabGroup(colour);
-
-		final IBlockState newState = newSlabGroup.getSingleSlab().getDefaultState().with(TYPE, state.get(TYPE));
+		final IBlockState newState = variantGroup.getBlock(colour).getDefaultState()
+				.with(TYPE, state.get(TYPE));
 
 		return world.setBlockState(pos, newState, 3);
 	}
