@@ -1,24 +1,23 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.util.ItemStackUtils;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,6 +40,10 @@ import java.util.List;
 public class ItemEntityChecker extends Item {
 	private static final Logger LOGGER = LogManager.getLogger();
 
+	public ItemEntityChecker(final Item.Properties properties) {
+		super(properties);
+	}
+
 	/**
 	 * Get the search radius from the {@link ItemStack}.
 	 *
@@ -48,9 +51,7 @@ public class ItemEntityChecker extends Item {
 	 * @return The search radius
 	 */
 	private int getRadius(final ItemStack stack) {
-		final NBTTagCompound tagCompound = ItemStackUtils.getOrCreateTagCompound(stack);
-
-		return tagCompound.getInteger("Radius");
+		return stack.getOrCreateTag().getInt("Radius");
 	}
 
 	/**
@@ -60,10 +61,10 @@ public class ItemEntityChecker extends Item {
 	 * @return The new radius
 	 */
 	private int incrementRadius(final ItemStack stack, final int amount) {
-		final NBTTagCompound tagCompound = ItemStackUtils.getOrCreateTagCompound(stack);
+		final NBTTagCompound tag = stack.getOrCreateTag();
 
-		final int newRadius = Math.max(tagCompound.getInteger("Radius") + amount, 0); // Don't allow negative values
-		tagCompound.setInteger("Radius", newRadius);
+		final int newRadius = Math.max(tag.getInt("Radius") + amount, 0); // Don't allow negative values
+		tag.putInt("Radius", newRadius);
 
 		return newRadius;
 	}
@@ -75,9 +76,7 @@ public class ItemEntityChecker extends Item {
 	 * @return Is corner mode enabled?
 	 */
 	private boolean isCornerModeEnabled(final ItemStack stack) {
-		final NBTTagCompound tagCompound = ItemStackUtils.getOrCreateTagCompound(stack);
-
-		return tagCompound.getBoolean("CornerMode");
+		return stack.getOrCreateTag().getBoolean("CornerMode");
 	}
 
 	/**
@@ -87,10 +86,10 @@ public class ItemEntityChecker extends Item {
 	 * @return The new corner mode setting
 	 */
 	private boolean toggleCornerModeEnabled(final ItemStack stack) {
-		final NBTTagCompound tagCompound = ItemStackUtils.getOrCreateTagCompound(stack);
+		final NBTTagCompound tag = stack.getOrCreateTag();
 
-		final boolean cornerModeEnabled = !tagCompound.getBoolean("CornerMode");
-		tagCompound.setBoolean("CornerMode", cornerModeEnabled);
+		final boolean cornerModeEnabled = !tag.getBoolean("CornerMode");
+		tag.putBoolean("CornerMode", cornerModeEnabled);
 
 		return cornerModeEnabled;
 	}
@@ -119,9 +118,11 @@ public class ItemEntityChecker extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(final EntityPlayer player, final World worldIn, final BlockPos pos, final EnumHand hand, final EnumFacing facing, final float hitX, final float hitY, final float hitZ) {
-		if (!worldIn.isRemote) {
-			final ItemStack heldItem = player.getHeldItem(hand);
+	public EnumActionResult onItemUse(final ItemUseContext context) {
+		if (!context.getWorld().isRemote) {
+			final EntityPlayer player = context.getPlayer();
+			final ItemStack heldItem = context.getItem();
+			final BlockPos pos = context.getPos();
 
 			final int radius = getRadius(heldItem);
 			final AxisAlignedBB boundingBox;
@@ -136,22 +137,24 @@ public class ItemEntityChecker extends Item {
 				boundingBox = new AxisAlignedBB(pos).expand(radius, 1, radius);
 			}
 
-			final List<Entity> entities = worldIn.getEntitiesWithinAABBExcludingEntity(player, boundingBox);
+			final List<Entity> entities = context.getWorld().getEntitiesWithinAABBExcludingEntity(player, boundingBox);
 
 			LOGGER.info("Bounding box: {}", boundingBox);
-			player.sendMessage(new TextComponentTranslation("message.testmod3:entity_checker.results", entities.size()));
-			entities.forEach(entity -> player.sendMessage(new TextComponentString(entity.toString())));
+			if (player != null) {
+				player.sendMessage(new TextComponentTranslation("message.testmod3:entity_checker.results", entities.size()));
+				entities.forEach(entity -> player.sendMessage(new TextComponentString(entity.toString())));
+			}
 		}
 
 		return EnumActionResult.SUCCESS;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag flag) {
-		tooltip.add(I18n.format("item.testmod3:entity_checker.radius.desc", getRadius(stack)));
+	public void addInformation(final ItemStack stack, @Nullable final World worldIn, final List<ITextComponent> tooltip, final ITooltipFlag flagIn) {
+		tooltip.add(new TextComponentTranslation("item.testmod3:entity_checker.radius.desc", getRadius(stack)));
 
 		final String cornerModeTranslationKey = isCornerModeEnabled(stack) ? "item.testmod3:entity_checker.mode.corner.desc" : "item.testmod3:entity_checker.mode.edge.desc";
-		tooltip.add(I18n.format(cornerModeTranslationKey));
+		tooltip.add(new TextComponentTranslation(cornerModeTranslationKey));
 	}
 }

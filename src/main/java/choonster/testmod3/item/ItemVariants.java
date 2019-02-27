@@ -16,29 +16,21 @@ public class ItemVariants extends Item {
 	private final EnumType type;
 	private final ItemVariantGroup<EnumType, ItemVariants> variantGroup;
 
-	public ItemVariants(final EnumType type, final ItemVariantGroup<EnumType, ItemVariants> variantGroup) {
+	public ItemVariants(final Item.Properties properties, final EnumType type, final ItemVariantGroup<EnumType, ItemVariants> variantGroup) {
+		super(properties);
 		this.type = type;
 		this.variantGroup = variantGroup;
 	}
 
 	public enum EnumType implements IStringSerializable {
-		VARIANT_A(0, "a"),
-		VARIANT_B(1, "b"),
-		VARIANT_C(2, "c");
+		VARIANT_A("a"),
+		VARIANT_B("b"),
+		VARIANT_C("c");
 
-		// TODO: Remove in 1.13
-		private final int meta;
 		private final String name;
 
-		EnumType(final int meta, final String name) {
-			this.meta = meta;
+		EnumType(final String name) {
 			this.name = name;
-		}
-
-		// TODO: Remove in 1.13
-		@Deprecated
-		public int getMeta() {
-			return meta;
 		}
 
 		@Override

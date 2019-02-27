@@ -22,7 +22,8 @@ import java.util.Optional;
  * @author Choonster
  */
 public class ItemHiddenBlockRevealer extends Item {
-	public ItemHiddenBlockRevealer() {
+	public ItemHiddenBlockRevealer(final Item.Properties properties) {
+		super(properties);
 		CapabilityHiddenBlockRevealer.RevealHiddenBlocksGetter.addToItem(this);
 	}
 

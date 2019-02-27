@@ -22,10 +22,9 @@ public class ItemPigSpawner extends Item {
 	 */
 	private final Supplier<IPigSpawner> spawnerFactory;
 
-	public ItemPigSpawner(final Supplier<IPigSpawner> spawnerFactory) {
+	public ItemPigSpawner(final Supplier<IPigSpawner> spawnerFactory, final Item.Properties properties) {
+		super(properties);
 		this.spawnerFactory = spawnerFactory;
-
-		setHasSubtypes(true);
 	}
 
 	@Override

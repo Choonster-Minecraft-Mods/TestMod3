@@ -20,6 +20,10 @@ import net.minecraft.world.chunk.Chunk;
  * @author Choonster
  */
 public class ItemChunkEnergyGetter extends Item {
+	public ItemChunkEnergyGetter(final Item.Properties properties) {
+		super(properties);
+	}
+
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand handIn) {
 		if (!worldIn.isRemote) {

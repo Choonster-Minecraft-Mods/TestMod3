@@ -4,6 +4,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityTippedArrow;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -21,7 +22,8 @@ public class ItemModArrow extends ItemArrow {
 	 */
 	private final BiFunction<World, EntityLivingBase, EntityTippedArrow> entityFactory;
 
-	public ItemModArrow(final BiFunction<World, EntityLivingBase, EntityTippedArrow> entityFactory) {
+	public ItemModArrow(final BiFunction<World, EntityLivingBase, EntityTippedArrow> entityFactory, final Item.Properties properties) {
+		super(properties);
 		this.entityFactory = entityFactory;
 	}
 

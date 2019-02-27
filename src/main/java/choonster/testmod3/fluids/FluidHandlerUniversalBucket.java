@@ -23,9 +23,14 @@ public class FluidHandlerUniversalBucket extends FluidHandlerItemStackSimple {
 
 	@Override
 	public boolean canFillFluidType(final FluidStack fluid) {
+		return true;
+
+		/*
+		// TODO: Uncomment when fluid registry is reimplemented
 		return fluid.getFluid() == FluidRegistry.WATER ||
 				fluid.getFluid() == FluidRegistry.LAVA ||
 				fluid.getFluid().getName().equals("milk") ||
 				FluidRegistry.getBucketFluids().contains(fluid.getFluid());
+		*/
 	}
 }

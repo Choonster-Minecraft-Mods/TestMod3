@@ -1,5 +1,6 @@
 package choonster.testmod3.item;
 
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 
@@ -9,9 +10,8 @@ import net.minecraft.item.ItemStack;
  * @author Choonster
  */
 public class ItemCuttingAxe extends ItemAxe {
-
-	public ItemCuttingAxe(final ToolMaterial material) {
-		super(material);
+	public ItemCuttingAxe(final IItemTier tier, final float attackDamage, final float attackSpeed, final Properties properties) {
+		super(tier, attackDamage, attackSpeed, properties);
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class ItemCuttingAxe extends ItemAxe {
 	@Override
 	public ItemStack getContainerItem(ItemStack stack) {
 		stack = stack.copy();
-		stack.attemptDamageItem(1, itemRand, null);
+		stack.attemptDamageItem(1, random, null);
 		return stack;
 	}
 }

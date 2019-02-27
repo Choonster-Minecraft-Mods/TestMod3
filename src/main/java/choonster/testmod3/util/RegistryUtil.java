@@ -2,7 +2,6 @@ package choonster.testmod3.util;
 
 import choonster.testmod3.TestMod3;
 import com.google.common.base.Preconditions;
-import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -41,33 +40,5 @@ public class RegistryUtil {
 		final ResourceLocation key = new ResourceLocation(modid, name);
 		final T registryEntry = registry.getValue(key);
 		return Preconditions.checkNotNull(registryEntry, "%s doesn't exist in registry %s", key, RegistryManager.ACTIVE.getName(registry));
-	}
-
-	/**
-	 * Set the registry name of {@code item} to {@code itemName} and the translation key to the full registry name.
-	 *
-	 * @param item     The item
-	 * @param itemName The item's name
-	 */
-	public static <ITEM extends Item> ITEM setItemName(final ITEM item, final String itemName) {
-		item.setRegistryName(TestMod3.MODID, itemName);
-		final ResourceLocation registryName = Preconditions.checkNotNull(item.getRegistryName());
-		item.setTranslationKey(registryName.toString());
-		return item;
-	}
-
-	/**
-	 * Sets the item's creative tab to the TestMod3 creative tab if it hasn't already been set.
-	 *
-	 * @param item   The item
-	 * @param <ITEM> The item type
-	 * @return The item
-	 */
-	public static <ITEM extends Item> ITEM setDefaultCreativeTab(final ITEM item) {
-		if (item.getCreativeTab() == null) {
-			item.setCreativeTab(TestMod3.ITEM_GROUP);
-		}
-
-		return item;
 	}
 }

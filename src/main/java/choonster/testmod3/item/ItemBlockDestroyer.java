@@ -16,11 +16,14 @@ import net.minecraft.world.World;
  * @author Choonster
  */
 public class ItemBlockDestroyer extends Item {
+	public ItemBlockDestroyer(final Item.Properties properties) {
+		super(properties);
+	}
+
 	@Override
-	public boolean onBlockDestroyed(final ItemStack stack, final World worldIn, final IBlockState blockIn, final BlockPos pos, final EntityLivingBase entityLiving) {
-		if (!worldIn.isRemote) {
-			final IBlockState state = worldIn.getBlockState(pos);
-			if (state.getBlock() == Blocks.WHEAT && state.getValue(BlockCrops.AGE) >= 6) {
+	public boolean onBlockDestroyed(final ItemStack stack, final World world, final IBlockState state, final BlockPos pos, final EntityLivingBase entityLiving) {
+		if (!world.isRemote) {
+			if (state.getBlock() == Blocks.WHEAT && state.get(BlockCrops.AGE) >= 6) {
 				entityLiving.sendMessage(new TextComponentTranslation("message.testmod3:block_destroyer.destroy"));
 			}
 		}

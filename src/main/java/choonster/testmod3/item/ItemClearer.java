@@ -14,8 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * An item that clears all whitelisted blocks from the player's current chunk when used.
@@ -23,21 +23,33 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author Choonster
  */
 public class ItemClearer extends Item {
-	private static final ImmutableList<Block> whitelist = ImmutableList.of(Blocks.STONE, Blocks.DIRT, Blocks.GRASS, Blocks.GRAVEL, Blocks.SAND, Blocks.WATER, Blocks.FLOWING_WATER, Blocks.LAVA, Blocks.FLOWING_LAVA, Blocks.ICE);
+	private static final ImmutableList<Block> whitelist = ImmutableList.of(Blocks.STONE, Blocks.DIRT, Blocks.GRASS, Blocks.GRAVEL, Blocks.SAND, Blocks.WATER, Blocks.LAVA, Blocks.ICE);
 
 	private static final int MODE_WHITELIST = 0;
 	private static final int MODE_ALL = 1;
+
+	public ItemClearer(final Item.Properties properties) {
+		super(properties);
+	}
+
+	private int getMode(final ItemStack stack) {
+		return stack.getOrCreateTag().getInt("Mode");
+	}
+
+	private void setMode(final ItemStack stack, final int mode) {
+		stack.getOrCreateTag().putInt("Mode", mode);
+	}
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer player, final EnumHand hand) {
 		final ItemStack heldItem = player.getHeldItem(hand);
 
 		if (!world.isRemote) {
-			final int currentMode = heldItem.getMetadata();
+			final int currentMode = getMode(heldItem);
 
 			if (player.isSneaking()) {
 				final int newMode = currentMode == MODE_ALL ? MODE_WHITELIST : MODE_ALL;
-				heldItem.setItemDamage(newMode);
+				setMode(heldItem, newMode);
 				player.sendMessage(new TextComponentTranslation("message.testmod3:clearer.mode.%s", newMode));
 			} else {
 				final int minX = MathHelper.floor(player.posX / 16) * 16;
@@ -68,9 +80,9 @@ public class ItemClearer extends Item {
 		return new ActionResult<>(EnumActionResult.SUCCESS, heldItem);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public boolean hasEffect(final ItemStack stack) {
-		return stack.getMetadata() == MODE_ALL;
+		return getMode(stack) == MODE_ALL;
 	}
 }

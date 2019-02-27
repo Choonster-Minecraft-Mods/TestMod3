@@ -17,12 +17,16 @@ import net.minecraft.world.World;
  * @author Choonster
  */
 public class ItemHeavy extends Item {
-	@Override
-	public void onUpdate(final ItemStack stack, final World worldIn, final Entity entityIn, final int itemSlot, final boolean isSelected) {
-		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+	public ItemHeavy(final Item.Properties properties) {
+		super(properties);
+	}
 
-		if (entityIn instanceof EntityLivingBase) { // If the Entity is an instance of EntityLivingBase,
-			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 10, 1)); // Apply Slowness II (amplifier = 1) for 10 ticks (0.5 seconds)
+	@Override
+	public void inventoryTick(final ItemStack stack, final World world, final Entity entity, final int itemSlot, final boolean isSelected) {
+		super.inventoryTick(stack, world, entity, itemSlot, isSelected);
+
+		if (entity instanceof EntityLivingBase) { // If the Entity is an instance of EntityLivingBase,
+			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 10, 1)); // Apply Slowness II (amplifier = 1) for 10 ticks (0.5 seconds)
 		}
 	}
 }

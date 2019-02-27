@@ -16,6 +16,10 @@ import net.minecraft.util.text.TextComponentTranslation;
  * @author Choonster
  */
 public class ItemEntityKiller extends Item {
+	public ItemEntityKiller(final Item.Properties properties) {
+		super(properties);
+	}
+
 	@Override
 	public boolean onLeftClickEntity(final ItemStack stack, final EntityPlayer player, final Entity entity) {
 		if (!player.world.isRemote) {

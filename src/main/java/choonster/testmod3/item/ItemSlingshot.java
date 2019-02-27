@@ -3,6 +3,7 @@ package choonster.testmod3.item;
 import choonster.testmod3.capability.lastusetime.CapabilityLastUseTime;
 import choonster.testmod3.capability.lastusetime.LastUseTime;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -22,7 +23,8 @@ import javax.annotation.Nullable;
  * @author Vastatio, Choonster
  */
 public class ItemSlingshot extends ItemSnowballLauncher {
-	public ItemSlingshot() {
+	public ItemSlingshot(final Item.Properties properties) {
+		super(properties);
 		CapabilityLastUseTime.TicksSinceLastUseGetter.addToItem(this);
 	}
 

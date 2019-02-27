@@ -12,12 +12,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.ILockableContainer;
+import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.LockCode;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -81,23 +82,23 @@ public final class CapabilityLock {
 	 * @param world The world
 	 * @param pos   The position
 	 * @param side  The side
-	 * @return The ILock, or null if there isn't one.
+	 * @return A lazy optional containing the ILock, or an empty lazy optional if there isn't one
 	 */
-	@Nullable
-	public static ILock getLock(final IBlockAccess world, final BlockPos pos, @Nullable final EnumFacing side) {
+	public static LazyOptional<ILock> getLock(final IWorldReaderBase world, final BlockPos pos, @Nullable final EnumFacing side) {
 		final IBlockState state = world.getBlockState(pos);
 
 		if (state.getBlock().hasTileEntity(state)) {
 			final TileEntity tileEntity = world.getTileEntity(pos);
 			if (tileEntity != null) {
-				if (tileEntity.hasCapability(LOCK_CAPABILITY, side)) {
-					return tileEntity.getCapability(LOCK_CAPABILITY, side);
+				final LazyOptional<ILock> optionalLock = tileEntity.getCapability(LOCK_CAPABILITY, side);
+				if (optionalLock.isPresent()) {
+					return optionalLock;
 				} else if (tileEntity instanceof ILockableContainer) {
-					return new LockableContainerWrapper((ILockableContainer) tileEntity);
+					return LazyOptional.of(() -> new LockableContainerWrapper((ILockableContainer) tileEntity));
 				}
 			}
 		}
 
-		return null;
+		return LazyOptional.empty();
 	}
 }

@@ -30,6 +30,10 @@ public class ItemSnowballLauncher extends Item {
 	 */
 	private static final int COOLDOWN = 20;
 
+	public ItemSnowballLauncher(final Item.Properties properties) {
+		super(properties);
+	}
+
 	/**
 	 * Get the cooldown of the launcher (in ticks).
 	 *
@@ -48,7 +52,7 @@ public class ItemSnowballLauncher extends Item {
 	 * @return True if the player is not in creative mode and the launcher doesn't have the Infinity enchantment
 	 */
 	private boolean isAmmoRequired(final ItemStack stack, final EntityPlayer player) {
-		return !player.capabilities.isCreativeMode && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) == 0;
+		return !player.abilities.isCreativeMode && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) == 0;
 	}
 
 	/**
@@ -75,7 +79,7 @@ public class ItemSnowballLauncher extends Item {
 				playerIn.getCooldownTracker().setCooldown(this, cooldown);
 			}
 
-			worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+			worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
 
 			if (!worldIn.isRemote) {
 				final EntitySnowball entitySnowball = new EntitySnowball(worldIn, playerIn);

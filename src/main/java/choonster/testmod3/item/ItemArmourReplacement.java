@@ -3,21 +3,23 @@ package choonster.testmod3.item;
 import choonster.testmod3.util.Constants;
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
-import choonster.testmod3.util.ItemStackUtils;
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.IArmorMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.apache.logging.log4j.LogManager;
@@ -52,8 +54,8 @@ public class ItemArmourReplacement extends ItemArmor {
 	 */
 	private Set<ItemStack> replacementItems;
 
-	public ItemArmourReplacement(final ArmorMaterial material, final EntityEquipmentSlot equipmentSlot) {
-		super(material, -1, equipmentSlot);
+	public ItemArmourReplacement(final IArmorMaterial material, final EntityEquipmentSlot slot, final Item.Properties properties) {
+		super(material, slot, properties);
 	}
 
 	/**
@@ -85,7 +87,7 @@ public class ItemArmourReplacement extends ItemArmor {
 	 * @return Has this item replaced the other armour?
 	 */
 	public boolean hasReplacedArmour(final ItemStack stack) {
-		return stack.hasTagCompound() && stack.getTagCompound().hasKey(KEY_REPLACED_ARMOUR, NBT.TAG_LIST);
+		return stack.hasTag() && stack.getTag().contains(KEY_REPLACED_ARMOUR, NBT.TAG_LIST);
 	}
 
 	/**
@@ -95,7 +97,7 @@ public class ItemArmourReplacement extends ItemArmor {
 	 * @param entity The entity
 	 */
 	private void replaceArmour(final ItemStack stack, final EntityLivingBase entity) {
-		final NBTTagCompound stackTagCompound = ItemStackUtils.getOrCreateTagCompound(stack);
+		final NBTTagCompound stackTagCompound = stack.getOrCreateTag();
 		final NBTTagList replacedArmour = new NBTTagList();
 
 		// Create a mutable copy of the replacements
@@ -105,7 +107,7 @@ public class ItemArmourReplacement extends ItemArmor {
 				.filter(equipmentSlot -> equipmentSlot != armorType)
 				.forEach(equipmentSlot -> { // If it's not this item's armour type,
 					final Optional<ItemStack> optionalReplacement = replacements.stream()
-							.filter(replacementStack -> replacementStack.getItem().isValidArmor(replacementStack, equipmentSlot, entity))
+							.filter(replacementStack -> replacementStack.getItem().canEquip(replacementStack, equipmentSlot, entity))
 							.findFirst();
 
 					optionalReplacement.ifPresent(replacement -> { // If there's a replacement for this armour type,
@@ -113,13 +115,13 @@ public class ItemArmourReplacement extends ItemArmor {
 
 						// Create a compound tag to store the original and add it to the list of replaced armour
 						final NBTTagCompound tagCompound = new NBTTagCompound();
-						replacedArmour.appendTag(tagCompound);
-						tagCompound.setByte(KEY_SLOT, (byte) equipmentSlot.getSlotIndex());
+						replacedArmour.add(tagCompound);
+						tagCompound.putByte(KEY_SLOT, (byte) equipmentSlot.getSlotIndex());
 
 						// If the original item exists, add it to the compound tag
 						final ItemStack original = entity.getItemStackFromSlot(equipmentSlot);
 						if (!original.isEmpty()) {
-							tagCompound.setTag(KEY_STACK, original.serializeNBT());
+							tagCompound.put(KEY_STACK, original.serializeNBT());
 						}
 
 						entity.setItemStackToSlot(equipmentSlot, replacement.copy()); // Equip a copy of the replacement
@@ -127,7 +129,7 @@ public class ItemArmourReplacement extends ItemArmor {
 					});
 				});
 
-		stackTagCompound.setTag(KEY_REPLACED_ARMOUR, replacedArmour); // Save the replaced armour to the ItemStack
+		stackTagCompound.put(KEY_REPLACED_ARMOUR, replacedArmour); // Save the replaced armour to the ItemStack
 	}
 
 	/**
@@ -137,12 +139,12 @@ public class ItemArmourReplacement extends ItemArmor {
 	 * @param entity The entity
 	 */
 	private void restoreArmour(final ItemStack stack, final EntityLivingBase entity) {
-		final NBTTagCompound stackTagCompound = ItemStackUtils.getOrCreateTagCompound(stack);
-		final NBTTagList replacedArmour = stackTagCompound.getTagList(KEY_REPLACED_ARMOUR, NBT.TAG_COMPOUND);
+		final NBTTagCompound stackTagCompound = stack.getOrCreateTag();
+		final NBTTagList replacedArmour = stackTagCompound.getList(KEY_REPLACED_ARMOUR, NBT.TAG_COMPOUND);
 
-		for (int i = 0; i < replacedArmour.tagCount(); i++) { // For each saved armour item,
-			final NBTTagCompound replacedTagCompound = replacedArmour.getCompoundTagAt(i);
-			final ItemStack original = new ItemStack(replacedTagCompound.getCompoundTag(KEY_STACK)); // Load the original ItemStack from the NBT
+		for (int i = 0; i < replacedArmour.size(); i++) { // For each saved armour item,
+			final NBTTagCompound replacedTagCompound = replacedArmour.getCompound(i);
+			final ItemStack original = ItemStack.read(replacedTagCompound.getCompound(KEY_STACK)); // Load the original ItemStack from the NBT
 
 			final EntityEquipmentSlot equipmentSlot = InventoryUtils.getEquipmentSlotFromIndex(replacedTagCompound.getByte(KEY_SLOT)); // Get the armour slot
 			final ItemStack current = entity.getItemStackFromSlot(equipmentSlot);
@@ -169,10 +171,10 @@ public class ItemArmourReplacement extends ItemArmor {
 			}
 		}
 
-		stackTagCompound.removeTag(KEY_REPLACED_ARMOUR);
+		stackTagCompound.remove(KEY_REPLACED_ARMOUR);
 
 		if (stackTagCompound.isEmpty()) {
-			stack.setTagCompound(null);
+			stack.setTag(null);
 		}
 	}
 
@@ -197,14 +199,14 @@ public class ItemArmourReplacement extends ItemArmor {
 	/**
 	 * Called every tick while the item is worn by a player.
 	 *
-	 * @param world     The player's world
-	 * @param player    The player
-	 * @param itemStack The ItemStack of this item
+	 * @param stack  The ItemStack of this item
+	 * @param world  The player's world
+	 * @param player The player
 	 */
 	@Override
-	public void onArmorTick(final World world, final EntityPlayer player, final ItemStack itemStack) {
-		if (!world.isRemote && !hasReplacedArmour(itemStack)) { // If this is the server and the player's armour hasn't been replaced,
-			replaceArmour(itemStack, player); // Replace the player's armour
+	public void onArmorTick(final ItemStack stack, final World world, final EntityPlayer player) {
+		if (!world.isRemote && !hasReplacedArmour(stack)) { // If this is the server and the player's armour hasn't been replaced,
+			replaceArmour(stack, player); // Replace the player's armour
 			player.inventoryContainer.detectAndSendChanges(); // Sync the player's inventory with the client
 		}
 	}
@@ -213,15 +215,15 @@ public class ItemArmourReplacement extends ItemArmor {
 	 * Called every tick while the item is in a player's inventory (including while worn).
 	 *
 	 * @param stack      The ItemStack of this item
-	 * @param worldIn    The entity's world
+	 * @param world      The entity's world
 	 * @param entity     The entity
 	 * @param itemSlot   The slot containing this item
 	 * @param isSelected Is the entity holding this item?
 	 */
 	@Override
-	public void onUpdate(final ItemStack stack, final World worldIn, final Entity entity, final int itemSlot, final boolean isSelected) {
+	public void inventoryTick(final ItemStack stack, final World world, final Entity entity, final int itemSlot, final boolean isSelected) {
 		// If this is the server, the entity is living and the entity's armour has been replaced,
-		if (!worldIn.isRemote && entity instanceof EntityLivingBase && hasReplacedArmour(stack)) {
+		if (!world.isRemote && entity instanceof EntityLivingBase && hasReplacedArmour(stack)) {
 
 			// Try to restore the entity's armour
 			final EntityInventoryType successfulInventoryType = InventoryUtils.forEachEntityInventory(
@@ -236,10 +238,10 @@ public class ItemArmourReplacement extends ItemArmor {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag flag) {
-		tooltip.add(I18n.format("item.testmod3:armour_replacement.equip.desc"));
-		tooltip.add(I18n.format("item.testmod3:armour_replacement.unequip.desc"));
+	public void addInformation(final ItemStack stack, @Nullable final World worldIn, final List<ITextComponent> tooltip, final ITooltipFlag flagIn) {
+		tooltip.add(new TextComponentTranslation("item.testmod3:armour_replacement.equip.desc"));
+		tooltip.add(new TextComponentTranslation("item.testmod3:armour_replacement.unequip.desc"));
 	}
 }

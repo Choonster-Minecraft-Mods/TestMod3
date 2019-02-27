@@ -4,7 +4,6 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.lastusetime.ILastUseTime;
 import choonster.testmod3.capability.CapabilityContainerListenerManager;
 import choonster.testmod3.capability.CapabilityProviderSerializable;
-import choonster.testmod3.item.IItemPropertyGetterFix;
 import choonster.testmod3.util.CapabilityUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.IItemPropertyGetter;
@@ -142,13 +141,13 @@ public final class CapabilityLastUseTime {
 		/**
 		 * The getter.
 		 */
-		private static final IItemPropertyGetter GETTER = IItemPropertyGetterFix.create((stack, worldIn, entityIn) -> {
+		private static final IItemPropertyGetter GETTER = (stack, worldIn, entityIn) -> {
 			final ILastUseTime lastUseTime = getLastUseTime(stack);
 
 			final World world = worldIn != null ? worldIn : entityIn != null ? entityIn.getEntityWorld() : null;
 
 			return lastUseTime != null && world != null ? world.getTotalWorldTime() - lastUseTime.get() : Float.MAX_VALUE;
-		});
+		};
 
 		/**
 		 * Add this getter to an {@link Item}.

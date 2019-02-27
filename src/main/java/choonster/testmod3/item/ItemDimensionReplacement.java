@@ -2,17 +2,17 @@ package choonster.testmod3.item;
 
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
-import choonster.testmod3.util.ItemStackUtils;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.DimensionType;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,6 +45,10 @@ public class ItemDimensionReplacement extends Item {
 	 */
 	private final Map<DimensionType, ItemStack> replacements = new HashMap<>();
 
+	public ItemDimensionReplacement(final Item.Properties properties) {
+		super(properties);
+	}
+
 	/**
 	 * Add a replacement for this item.
 	 *
@@ -62,7 +66,7 @@ public class ItemDimensionReplacement extends Item {
 	 * @return Does the World have a replacement?
 	 */
 	private boolean hasReplacement(@Nullable final World world) {
-		return world != null && replacements.containsKey(world.provider.getDimensionType());
+		return world != null && replacements.containsKey(world.dimension.getType());
 	}
 
 	/**
@@ -72,29 +76,29 @@ public class ItemDimensionReplacement extends Item {
 	 * @return The replacement
 	 */
 	private ItemStack getReplacement(final World world) {
-		return replacements.get(world.provider.getDimensionType());
+		return replacements.get(world.dimension.getType());
 	}
 
 	@Override
-	public void onUpdate(final ItemStack stack, final World worldIn, final Entity entityIn, final int itemSlot, final boolean isSelected) {
-		final NBTTagCompound stackTagCompound = ItemStackUtils.getOrCreateTagCompound(stack);
+	public void inventoryTick(final ItemStack stack, final World world, final Entity entity, final int itemSlot, final boolean isSelected) {
+		final NBTTagCompound stackTagCompound = stack.getOrCreateTag();
 
 		if (!stackTagCompound.getBoolean(KEY_REPLACED)) { // If the replacement logic hasn't been run,
-			stackTagCompound.setBoolean(KEY_REPLACED, true); // Mark it as run
+			stackTagCompound.putBoolean(KEY_REPLACED, true); // Mark it as run
 
-			if (hasReplacement(worldIn)) { // If there's a replacement for this dimension
-				final ItemStack replacement = getReplacement(worldIn).copy(); // Get it
+			if (hasReplacement(world)) { // If there's a replacement for this dimension
+				final ItemStack replacement = getReplacement(world).copy(); // Get it
 				replacement.setCount(stack.getCount()); // Copy the stack size from this item
 
 				// Try to replace this item
 				final EntityInventoryType successfulInventoryType = InventoryUtils.forEachEntityInventory(
-						entityIn,
+						entity,
 						inventory -> tryReplaceItem(inventory, itemSlot, stack, replacement),
 						EntityInventoryType.MAIN, EntityInventoryType.HAND
 				);
 
 				if (successfulInventoryType != null) {
-					LOGGER.info("Replaced item in slot {} of {}'s {} inventory with {}", itemSlot, entityIn.getName(), successfulInventoryType, replacement.getDisplayName());
+					LOGGER.info("Replaced item in slot {} of {}'s {} inventory with {}", itemSlot, entity.getName(), successfulInventoryType, replacement.getDisplayName());
 				}
 			}
 		}
@@ -119,13 +123,13 @@ public class ItemDimensionReplacement extends Item {
 		return false;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag flag) {
+	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
 		if (hasReplacement(world)) {
-			tooltip.add(I18n.format("item.testmod3:dimension_replacement.replacement.desc", getReplacement(world).getDisplayName()));
+			tooltip.add(new TextComponentTranslation("item.testmod3:dimension_replacement.replacement.desc", getReplacement(world).getDisplayName()));
 		} else {
-			tooltip.add(I18n.format("item.testmod3:dimension_replacement.no_replacement.desc"));
+			tooltip.add(new TextComponentTranslation("item.testmod3:dimension_replacement.no_replacement.desc"));
 		}
 	}
 }

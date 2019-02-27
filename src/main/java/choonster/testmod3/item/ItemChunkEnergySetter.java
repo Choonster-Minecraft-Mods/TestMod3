@@ -21,6 +21,10 @@ import net.minecraft.world.chunk.Chunk;
  * @author Choonster
  */
 public class ItemChunkEnergySetter extends Item {
+	public ItemChunkEnergySetter(final Item.Properties properties) {
+		super(properties);
+	}
+
 	/**
 	 * Add or remove chunk energy from the player's current chunk.
 	 *
@@ -57,10 +61,10 @@ public class ItemChunkEnergySetter extends Item {
 	}
 
 	@Override
-	public boolean onEntitySwing(final EntityLivingBase entityLiving, final ItemStack stack) {
-		final World world = entityLiving.getEntityWorld();
-		if (!world.isRemote && entityLiving instanceof EntityPlayer) {
-			addRemoveChunkEnergy(world, (EntityPlayer) entityLiving, 100);
+	public boolean onEntitySwing(final ItemStack stack, final EntityLivingBase entity) {
+		final World world = entity.getEntityWorld();
+		if (!world.isRemote && entity instanceof EntityPlayer) {
+			addRemoveChunkEnergy(world, (EntityPlayer) entity, 100);
 		}
 
 		return false;

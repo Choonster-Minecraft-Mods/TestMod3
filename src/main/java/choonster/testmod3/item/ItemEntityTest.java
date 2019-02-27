@@ -22,6 +22,10 @@ import java.util.List;
  * @author Choonster
  */
 public class ItemEntityTest extends Item {
+	public ItemEntityTest(final Item.Properties properties) {
+		super(properties);
+	}
+
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer player, final EnumHand hand) {
 		final ItemStack heldItem = player.getHeldItem(hand);
@@ -45,17 +49,17 @@ public class ItemEntityTest extends Item {
 		final float f8 = f3 * f5;
 		final double multiplier = 5.0;
 		final Vec3d endVector = startVector.add((double) f7 * multiplier, (double) f6 * multiplier, (double) f8 * multiplier);
-		final RayTraceResult rayTraceResult = world.rayTraceBlocks(startVector, endVector, true);
+		final RayTraceResult rayTraceResult = world.rayTraceBlocks(startVector, endVector, RayTraceFluidMode.ALWAYS);
 
 		if (rayTraceResult == null) return new ActionResult<>(EnumActionResult.PASS, heldItem);
 
 		final Vec3d lookVector = player.getLook(1.0F);
-		final List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().expand(lookVector.x * multiplier, lookVector.y * multiplier, lookVector.z * multiplier).expand(1.0, 1.0, 1.0)); // Use entity.getEntityBoundingBox() instead of entity.boundingBox
+		final List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(player, player.getBoundingBox().expand(lookVector.x * multiplier, lookVector.y * multiplier, lookVector.z * multiplier).expand(1.0, 1.0, 1.0)); // Use entity.getEntityBoundingBox() instead of entity.boundingBox
 
 		for (final Entity entity : entities) {
 			if (entity.canBeCollidedWith()) {
 				final double collisionBorderSize = entity.getCollisionBorderSize();
-				final AxisAlignedBB axisAlignedBB = entity.getEntityBoundingBox().expand(collisionBorderSize, collisionBorderSize, collisionBorderSize);
+				final AxisAlignedBB axisAlignedBB = entity.getBoundingBox().expand(collisionBorderSize, collisionBorderSize, collisionBorderSize);
 
 				if (axisAlignedBB.contains(startVector)) {
 					return new ActionResult<>(EnumActionResult.PASS, heldItem);
@@ -63,7 +67,7 @@ public class ItemEntityTest extends Item {
 			}
 		}
 
-		if (rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
+		if (rayTraceResult.type == RayTraceResult.Type.BLOCK) {
 			BlockPos blockPos = rayTraceResult.getBlockPos(); // Use blockPos instead of coordinate variables
 
 			if (world.getBlockState(blockPos).getBlock() == Blocks.SNOW) // Use world.getBlockState().getBlock() instead of world.getBlock()
@@ -75,7 +79,7 @@ public class ItemEntityTest extends Item {
 			entity.rotationYaw = (float) (((MathHelper.floor((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) - 1) * 90);
 			entity.setPosition(blockPos.getX(), blockPos.getY() + 2, blockPos.getZ());
 
-			if (!world.getCollisionBoxes(entity, entity.getEntityBoundingBox().expand(-0.1D, -0.1D, -0.1D)).isEmpty()) {
+			if (!world.isCollisionBoxesEmpty(entity, entity.getBoundingBox().expand(-0.1D, -0.1D, -0.1D))) {
 				return new ActionResult<>(EnumActionResult.FAIL, heldItem);
 			}
 
@@ -83,11 +87,11 @@ public class ItemEntityTest extends Item {
 				world.spawnEntity(entity);
 			}
 
-			if (!player.capabilities.isCreativeMode) {
+			if (!player.abilities.isCreativeMode) {
 				heldItem.shrink(1);
 			}
 
-			player.addStat(StatList.getObjectUseStats(this));
+			player.addStat(StatList.ITEM_USED.get(this));
 		}
 
 		return new ActionResult<>(EnumActionResult.PASS, heldItem);

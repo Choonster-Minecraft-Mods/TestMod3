@@ -25,8 +25,8 @@ import javax.annotation.Nullable;
  * @author Choonster
  */
 public class ItemLastUseTimeModel extends Item {
-
-	public ItemLastUseTimeModel() {
+	public ItemLastUseTimeModel(final Item.Properties properties) {
+		super(properties);
 		CapabilityLastUseTime.TicksSinceLastUseGetter.addToItem(this);
 	}
 

@@ -33,6 +33,10 @@ import java.util.Optional;
  * @author Choonster
  */
 public class ItemRitualChecker extends Item {
+	public ItemRitualChecker(final Item.Properties properties) {
+		super(properties);
+	}
+
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
 		if (!worldIn.isRemote) {

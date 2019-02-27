@@ -15,13 +15,17 @@ import net.minecraft.util.text.TextComponentTranslation;
  * @author Choonster
  */
 public class ItemMaxHealthGetter extends Item {
+	public ItemMaxHealthGetter(final Item.Properties properties) {
+		super(properties);
+	}
+
 	@Override
-	public boolean itemInteractionForEntity(final ItemStack stack, final EntityPlayer playerIn, final EntityLivingBase target, final EnumHand hand) {
-		if (!playerIn.world.isRemote) {
+	public boolean itemInteractionForEntity(final ItemStack stack, final EntityPlayer player, final EntityLivingBase target, final EnumHand hand) {
+		if (!player.world.isRemote) {
 			final IMaxHealth maxHealth = CapabilityMaxHealth.getMaxHealth(target);
 
 			if (maxHealth != null) {
-				playerIn.sendMessage(new TextComponentTranslation("message.testmod3:max_health.get", target.getDisplayName(), target.getMaxHealth(), maxHealth.getBonusMaxHealth()));
+				player.sendMessage(new TextComponentTranslation("message.testmod3:max_health.get", target.getDisplayName(), target.getMaxHealth(), maxHealth.getBonusMaxHealth()));
 			}
 		}
 

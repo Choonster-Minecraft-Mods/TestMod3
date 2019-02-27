@@ -1,7 +1,6 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.TestMod3;
-import choonster.testmod3.util.Constants;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemRecord;
 import net.minecraft.util.SoundEvent;
 
@@ -14,9 +13,7 @@ import net.minecraft.util.SoundEvent;
  * @author Choonster
  */
 public class ItemRecordMod extends ItemRecord {
-	public ItemRecordMod(final String recordName, final SoundEvent soundEvent) {
-		super(Constants.RESOURCE_PREFIX + recordName, soundEvent);
-		setTranslationKey("record");
-		setCreativeTab(TestMod3.ITEM_GROUP);
+	public ItemRecordMod(final int comparatorValue, final SoundEvent soundIn, final Item.Properties builder) {
+		super(comparatorValue, soundIn, builder);
 	}
 }

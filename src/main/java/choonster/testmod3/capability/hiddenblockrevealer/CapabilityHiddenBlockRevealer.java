@@ -3,7 +3,6 @@ package choonster.testmod3.capability.hiddenblockrevealer;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockRevealer;
 import choonster.testmod3.capability.CapabilityContainerListenerManager;
-import choonster.testmod3.item.IItemPropertyGetterFix;
 import choonster.testmod3.util.CapabilityUtils;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
@@ -104,10 +103,10 @@ public final class CapabilityHiddenBlockRevealer {
 		/**
 		 * The getter.
 		 */
-		private static final IItemPropertyGetter GETTER = IItemPropertyGetterFix.create((stack, worldIn, entityIn) -> {
+		private static final IItemPropertyGetter GETTER = (stack, worldIn, entityIn) -> {
 			final IHiddenBlockRevealer hiddenBlockRevealer = CapabilityHiddenBlockRevealer.getHiddenBlockRevealer(stack);
 			return hiddenBlockRevealer != null && hiddenBlockRevealer.revealHiddenBlocks() ? 1 : 0;
-		});
+		};
 
 		/**
 		 * Add this getter to an {@link Item}.

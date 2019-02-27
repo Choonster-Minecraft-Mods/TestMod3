@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
@@ -19,22 +20,22 @@ import java.util.function.IntFunction;
 public abstract class ItemWithScripts extends Item {
 	private final IntFunction<String> scriptFunction;
 
-	public ItemWithScripts(final IntFunction<String> scriptFunction) {
+	public ItemWithScripts(final IntFunction<String> scriptFunction, final Properties properties) {
+		super(properties);
 		this.scriptFunction = scriptFunction;
-		setHasSubtypes(true);
 	}
 
 	private int getNumber(final ItemStack stack) {
-		if (stack.hasTagCompound()) {
-			return stack.getTagCompound().getInteger("Number");
+		if (stack.hasTag()) {
+			return stack.getTag().getInt("Number");
 		} else {
 			return -1337;
 		}
 	}
 
 	@Override
-	public String getItemStackDisplayName(final ItemStack stack) {
-		return super.getItemStackDisplayName(stack) + scriptFunction.apply(stack.getItemDamage());
+	public ITextComponent getDisplayName(final ItemStack stack) {
+		return super.getDisplayName(stack).appendText(scriptFunction.apply(getNumber(stack)));
 	}
 
 	@Override

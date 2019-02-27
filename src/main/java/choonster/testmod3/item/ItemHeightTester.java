@@ -10,28 +10,33 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.Heightmap;
 
 /**
- * When right clicked, prints the value of {@link World#getHeight(BlockPos)} at the player's current position.
- * When sneak-right clicked, regenerates the skylight map for the player's current chunk (updating the height map used by {@link World#getHeight(BlockPos)}.
+ * When right clicked, prints the value of {@link World#getHeight(Heightmap.Type, BlockPos)} at the player's current position.
+ * When sneak-right clicked, regenerates the skylight map for the player's current chunk (updating the height map used by {@link World#getHeight(Heightmap.Type, BlockPos)}.
  *
  * @author Choonster
  */
 public class ItemHeightTester extends Item {
-	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
-		if (!worldIn.isRemote) {
-			final BlockPos pos = playerIn.getPosition();
+	public ItemHeightTester(final Item.Properties properties) {
+		super(properties);
+	}
 
-			if (playerIn.isSneaking()) {
-				final Chunk chunk = worldIn.getChunk(pos);
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer player, final EnumHand hand) {
+		if (!world.isRemote) {
+			final BlockPos pos = player.getPosition();
+
+			if (player.isSneaking()) {
+				final Chunk chunk = world.getChunk(pos);
 				chunk.generateSkylightMap();
-				playerIn.sendMessage(new TextComponentTranslation("message.testmod3:height_tester.generate", chunk.x, chunk.z, pos.getX(), pos.getY(), pos.getZ()));
+				player.sendMessage(new TextComponentTranslation("message.testmod3:height_tester.generate", chunk.x, chunk.z, pos.getX(), pos.getY(), pos.getZ()));
 			} else {
-				playerIn.sendMessage(new TextComponentTranslation("message.testmod3:height_tester.height", pos.getX(), pos.getZ(), worldIn.getHeight(pos).getY()));
+				player.sendMessage(new TextComponentTranslation("message.testmod3:height_tester.height", pos.getX(), pos.getZ(), world.getHeight(Heightmap.Type.WORLD_SURFACE, pos).getY()));
 			}
 		}
 
-		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
+		return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 	}
 }

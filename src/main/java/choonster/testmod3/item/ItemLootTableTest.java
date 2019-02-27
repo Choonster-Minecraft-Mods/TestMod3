@@ -18,6 +18,7 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Gives the player random loot from a {@link LootTable} when they right click.
@@ -28,14 +29,18 @@ import java.util.List;
  * @author Choonster
  */
 public class ItemLootTableTest extends Item {
+	public ItemLootTableTest(final Item.Properties properties) {
+		super(properties);
+	}
+
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
 		if (!worldIn.isRemote) {
-			final LootTable lootTable = worldIn.getLootTableManager().getLootTableFromLocation(ModLootTables.LOOT_TABLE_TEST);
+			final LootTable lootTable = Objects.requireNonNull(worldIn.getServer()).getLootTableManager().getLootTableFromLocation(ModLootTables.LOOT_TABLE_TEST);
 
 			final LootContext lootContext = new LootContext.Builder((WorldServer) worldIn).withPlayer(playerIn).build();
 
-			final List<ItemStack> itemStacks = lootTable.generateLootForPools(itemRand, lootContext);
+			final List<ItemStack> itemStacks = lootTable.generateLootForPools(random, lootContext);
 			for (final ItemStack itemStack : itemStacks) {
 				ItemHandlerHelper.giveItemToPlayer(playerIn, itemStack);
 			}

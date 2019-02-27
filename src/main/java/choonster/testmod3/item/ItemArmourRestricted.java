@@ -2,16 +2,19 @@ package choonster.testmod3.item;
 
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.IArmorMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,22 +33,22 @@ import java.util.List;
 public class ItemArmourRestricted extends ItemArmor {
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	public ItemArmourRestricted(final ArmorMaterial material, final EntityEquipmentSlot equipmentSlot) {
-		super(material, -1, equipmentSlot);
+	public ItemArmourRestricted(final IArmorMaterial material, final EntityEquipmentSlot equipmentSlot, final Item.Properties properties) {
+		super(material, equipmentSlot, properties);
 	}
 
 	/**
 	 * Called every tick while the item is in a player's inventory (including while worn).
 	 *
 	 * @param stack      The ItemStack of this item
-	 * @param worldIn    The entity's world
+	 * @param world      The entity's world
 	 * @param entity     The entity
 	 * @param itemSlot   The slot containing this item
 	 * @param isSelected Is the entity holding this item?
 	 */
 	@Override
-	public void onUpdate(final ItemStack stack, final World worldIn, final Entity entity, final int itemSlot, final boolean isSelected) {
-		if (!worldIn.isRemote) { // If this is the server,
+	public void inventoryTick(final ItemStack stack, final World world, final Entity entity, final int itemSlot, final boolean isSelected) {
+		if (!world.isRemote) { // If this is the server,
 			// Try to remove the item from the entity's inventories
 			final EntityInventoryType successfulInventoryType = InventoryUtils.forEachEntityInventory(
 					entity,
@@ -77,22 +80,22 @@ public class ItemArmourRestricted extends ItemArmor {
 	}
 
 	/**
-	 * Called by the default implementation of {@link EntityItem#onUpdate()}, allowing for cleaner
+	 * Called by the default implementation of {@link EntityItem#tick()}, allowing for cleaner
 	 * control over the update of the item without having to write a subclass.
 	 *
-	 * @param entityItem The item entity
+	 * @param entity The item entity
 	 * @return Return true to skip any further update code.
 	 */
 	@Override
-	public boolean onEntityItemUpdate(final EntityItem entityItem) {
-		entityItem.setDead(); // Kill the item entity
-		LOGGER.info("Restricted armour deleted from world at {}", entityItem.getPosition());
+	public boolean onEntityItemUpdate(final ItemStack stack, final EntityItem entity) {
+		entity.remove(); // Kill the item entity
+		LOGGER.info("Restricted armour deleted from world at {}", entity.getPosition());
 		return true; // Skip the rest of the update
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(final ItemStack stack, @Nullable final World world, final List<String> tooltip, final ITooltipFlag flag) {
-		tooltip.add(I18n.format("item.testmod3:armour_restricted.desc"));
+	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
+		tooltip.add(new TextComponentTranslation("item.testmod3:armour_restricted.desc"));
 	}
 }

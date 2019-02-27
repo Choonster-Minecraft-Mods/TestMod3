@@ -1,17 +1,15 @@
 package choonster.testmod3.item;
 
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.IItemTier;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.ToolType;
 
 import java.util.Collections;
 import java.util.Set;
@@ -29,7 +27,7 @@ public class ItemHarvestSword extends ItemTool {
 	/**
 	 * The speed at which Cobwebs are harvested
 	 */
-	private static final float DIG_SPEED_WEB = 15.0f;
+	private static final float DIG_SPEED_COBWEB = 15.0f;
 
 	/**
 	 * The speed at which Sword-effective {@link Material}s are harvested
@@ -42,7 +40,7 @@ public class ItemHarvestSword extends ItemTool {
 	private static final float DIG_SPEED_DEFAULT = 1.0f;
 
 	/**
-	 * The base attack damage before the {@link ToolMaterial}'s attack damage is factored in
+	 * The base attack damage before the {@link IItemTier}'s attack damage is factored in
 	 */
 	private static final float BASE_DAMAGE = 3.0f;
 
@@ -51,15 +49,24 @@ public class ItemHarvestSword extends ItemTool {
 	 */
 	private static final float ATTACK_SPEED = -2.4f;
 
-	public ItemHarvestSword(final ToolMaterial toolMaterial) {
-		super(BASE_DAMAGE, ATTACK_SPEED, toolMaterial, Collections.emptySet());
+	public ItemHarvestSword(final IItemTier itemTier, final Item.Properties properties) {
+		super(BASE_DAMAGE, ATTACK_SPEED, itemTier, Collections.emptySet(), properties);
+	}
 
-		setHarvestLevel("pickaxe", toolMaterial.getHarvestLevel());
-		setHarvestLevel("axe", toolMaterial.getHarvestLevel());
-		setHarvestLevel("shovel", toolMaterial.getHarvestLevel());
-
-		// Waila Harvestability sets the harvest tool of Cobwebs to "sword"
-		setHarvestLevel("sword", toolMaterial.getHarvestLevel());
+	/**
+	 * Add the pickaxe, axe, shovel and sword tool types to the item properties,
+	 * using the {@link IItemTier}'s harvest level for each tool.
+	 *
+	 * @param itemTier   The item tier
+	 * @param properties The item properties to add the tool types to
+	 * @return The item properties with the tool types added
+	 */
+	public static Item.Properties addToolTypes(final IItemTier itemTier, final Item.Properties properties) {
+		return properties
+				.addToolType(ToolType.PICKAXE, itemTier.getHarvestLevel())
+				.addToolType(ToolType.AXE, itemTier.getHarvestLevel())
+				.addToolType(ToolType.SHOVEL, itemTier.getHarvestLevel())
+				.addToolType(ToolType.get("sword"), itemTier.getHarvestLevel()); // Waila Harvestability sets the harvest tool of Cobwebs to "sword"
 	}
 
 	/**
@@ -83,30 +90,26 @@ public class ItemHarvestSword extends ItemTool {
 			Material.PLANTS, Material.VINE, Material.CORAL, Material.LEAVES, Material.GOURD
 	);
 
-	/**
-	 * Can this tool harvest the {@link IBlockState}?
-	 * <p>
-	 * This should only be used by {@link ForgeHooks#canHarvestBlock(Block, EntityPlayer, IBlockAccess, BlockPos)},
-	 * use the tool class/harvest level system where possible.
-	 *
-	 * @param state The IBlockState
-	 * @param stack The tool
-	 * @return Is this tool effective on the {@link IBlockState}'s {@link Material}?
-	 */
 	@Override
-	public boolean canHarvestBlock(final IBlockState state, final ItemStack stack) {
-		return EFFECTIVE_MATERIALS.contains(state.getMaterial()) || state.getBlock() == Blocks.WEB;
+	public boolean canHarvestBlock(final IBlockState blockIn) {
+		return super.canHarvestBlock(blockIn);
+	}
+
+	@Override
+	public boolean canHarvestBlock(final ItemStack stack, final IBlockState state) {
+		return EFFECTIVE_MATERIALS.contains(state.getMaterial()) || state.getBlock() == Blocks.COBWEB;
 	}
 
 	@Override
 	public float getDestroySpeed(final ItemStack stack, final IBlockState state) {
-		if (state.getBlock() == Blocks.WEB) {
-			return DIG_SPEED_WEB;
+		if (state.getBlock() == Blocks.COBWEB) {
+			return DIG_SPEED_COBWEB;
 		}
 
-		for (final String type : getToolClasses(stack)) {
-			if (state.getBlock().isToolEffective(type, state))
+		for (final ToolType type : getToolTypes(stack)) {
+			if (state.isToolEffective(type)) {
 				return efficiency;
+			}
 		}
 
 		// Not all blocks have a harvest tool/level set, so we need to fall back to checking the Material like the vanilla tools do
