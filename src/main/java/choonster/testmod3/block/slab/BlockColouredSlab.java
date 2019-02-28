@@ -40,6 +40,7 @@ public class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, BlockColo
 		return world.setBlockState(pos, newState, 3);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onBlockActivated(final IBlockState state, final World world, final BlockPos pos, final EntityPlayer player, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
 		final ItemStack heldItem = player.getHeldItem(hand);
