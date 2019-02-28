@@ -1,5 +1,8 @@
 package choonster.testmod3.entity;
 
+import choonster.testmod3.init.ModEntities;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -22,6 +25,11 @@ public class EntityPlayerAvoidingCreeper extends EntityCreeper {
 	}
 
 	@Override
+	public EntityType<?> getType() {
+		return ModEntities.PLAYER_AVOIDING_CREEPER;
+	}
+
+	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
 
@@ -32,19 +40,19 @@ public class EntityPlayerAvoidingCreeper extends EntityCreeper {
 				.ifPresent(taskEntry -> targetTasks.removeTask(taskEntry.action));
 
 		// Avoid players if they have an item in their off hand
-		tasks.addTask(3, new EntityAIAvoidEntity<>(this, EntityPlayer.class, this::shouldAvoidPlayer, 6.0F, 1.0D, 1.2D));
+		tasks.addTask(3, new EntityAIAvoidEntity<>(this, EntityPlayer.class, 6.0F, 1.0D, 1.2D, this::shouldAvoidEntity));
 
 		// Only attack players without an item in their off hand
-		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 10, true, false, (player) -> !shouldAvoidPlayer(player)));
+		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 10, true, false, (player) -> !shouldAvoidEntity(player)));
 	}
 
 	/**
-	 * Should this creeper avoid the specified player?
+	 * Should this creeper avoid the specified entity?
 	 *
-	 * @param player The player
-	 * @return True if the player has an item in their off hand
+	 * @param entity The entity
+	 * @return True if the entity is a player with an item in their off hand
 	 */
-	private boolean shouldAvoidPlayer(@Nullable final EntityPlayer player) {
-		return player != null && !player.getHeldItemOffhand().isEmpty();
+	private boolean shouldAvoidEntity(@Nullable final Entity entity) {
+		return entity instanceof EntityPlayer && !((EntityPlayer) entity).getHeldItemOffhand().isEmpty();
 	}
 }

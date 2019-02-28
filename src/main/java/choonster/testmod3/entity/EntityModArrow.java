@@ -1,13 +1,13 @@
 package choonster.testmod3.entity;
 
+import choonster.testmod3.init.ModEntities;
 import choonster.testmod3.init.ModItems;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.IThrowableEntity;
 
 /**
  * An arrow entity that behaves like the vanilla arrow but renders with a different texture.
@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.registry.IThrowableEntity;
  *
  * @author Choonster
  */
-public class EntityModArrow extends EntityTippedArrow implements IThrowableEntity {
+public class EntityModArrow extends EntityTippedArrow {
 	public EntityModArrow(final World worldIn) {
 		super(worldIn);
 	}
@@ -31,6 +31,11 @@ public class EntityModArrow extends EntityTippedArrow implements IThrowableEntit
 	}
 
 	@Override
+	public EntityType<?> getType() {
+		return ModEntities.MOD_ARROW;
+	}
+
+	@Override
 	public void setPotionEffect(final ItemStack stack) {
 		super.setPotionEffect(new ItemStack(Items.ARROW)); // Mod arrows can't have potion effects
 	}
@@ -38,25 +43,5 @@ public class EntityModArrow extends EntityTippedArrow implements IThrowableEntit
 	@Override
 	protected ItemStack getArrowStack() {
 		return new ItemStack(ModItems.ARROW);
-	}
-
-	/**
-	 * Gets the entity that threw/created this entity.
-	 *
-	 * @return The owner instance, Null if none.
-	 */
-	@Override
-	public Entity getThrower() {
-		return shootingEntity;
-	}
-
-	/**
-	 * Sets the entity that threw/created this entity.
-	 *
-	 * @param entity The new thrower/creator.
-	 */
-	@Override
-	public void setThrower(final Entity entity) {
-		shootingEntity = entity;
 	}
 }
