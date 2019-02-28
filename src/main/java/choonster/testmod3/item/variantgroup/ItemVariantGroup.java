@@ -1,15 +1,17 @@
 package choonster.testmod3.item.variantgroup;
 
-import choonster.testmod3.util.RegistryUtil;
+import choonster.testmod3.TestMod3;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * A group consisting of a collection of variants with an item registered for each one.
@@ -21,14 +23,19 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 	private final boolean isSuffix;
 	private final Iterable<VARIANT> variants;
 
+	private final Function<VARIANT, Item.Properties> itemPropertiesFactory;
 	private final ItemFactory<VARIANT, ITEM> itemFactory;
 
 	private Map<VARIANT, ITEM> items;
 
-	private ItemVariantGroup(final String groupName, final boolean isSuffix, final Iterable<VARIANT> variants, final ItemFactory<VARIANT, ITEM> itemFactory) {
+	private ItemVariantGroup(
+			final String groupName, final boolean isSuffix, final Iterable<VARIANT> variants,
+			final Function<VARIANT, Item.Properties> itemPropertiesFactory, final ItemFactory<VARIANT, ITEM> itemFactory
+	) {
 		this.groupName = groupName;
 		this.isSuffix = isSuffix;
 		this.variants = variants;
+		this.itemPropertiesFactory = itemPropertiesFactory;
 		this.itemFactory = itemFactory;
 	}
 
@@ -101,10 +108,11 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 				registryName = variant.getName() + "_" + groupName;
 			}
 
-			final ITEM item = itemFactory.createItem(variant, this);
+			final Item.Properties properties = itemPropertiesFactory.apply(variant);
+
+			final ITEM item = itemFactory.createItem(variant, this, properties);
 
 			item.setRegistryName(registryName);
-			RegistryUtil.setDefaultCreativeTab(item);
 
 			registry.register(item);
 			builder.put(variant, item);
@@ -121,7 +129,7 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 	 */
 	@FunctionalInterface
 	public interface ItemFactory<VARIANT extends Enum<VARIANT> & IStringSerializable, ITEM extends Item> {
-		ITEM createItem(VARIANT variant, ItemVariantGroup<VARIANT, ITEM> variantGroup);
+		ITEM createItem(VARIANT variant, ItemVariantGroup<VARIANT, ITEM> variantGroup, Item.Properties properties);
 	}
 
 	public static class Builder<VARIANT extends Enum<VARIANT> & IStringSerializable, ITEM extends Item> {
@@ -129,6 +137,7 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 		private boolean isSuffix;
 		private Iterable<VARIANT> variants;
 
+		private Function<VARIANT, Item.Properties> itemPropertiesFactory = variant -> new Item.Properties().group(TestMod3.ITEM_GROUP);
 		private ItemFactory<VARIANT, ITEM> itemFactory;
 
 		/**
@@ -194,6 +203,22 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 		}
 
 		/**
+		 * Sets the factory function used to create the properties for each item.
+		 * <p>
+		 * If no item properties factory is specified, a factory producing item properties with the {@link ItemGroup}
+		 * set to {@link TestMod3#ITEM_GROUP} is used.
+		 *
+		 * @param itemPropertiesFactory The item properties factory function
+		 * @return This builder
+		 * @throws NullPointerException If {@code itemPropertiesFactory} is {@code null}
+		 */
+		public ItemVariantGroup.Builder<VARIANT, ITEM> itemPropertiesFactory(final Function<VARIANT, Item.Properties> itemPropertiesFactory) {
+			Preconditions.checkNotNull(itemPropertiesFactory, "itemPropertiesFactory");
+			this.itemPropertiesFactory = itemPropertiesFactory;
+			return this;
+		}
+
+		/**
 		 * Sets the factory function used to create the items.
 		 *
 		 * @param itemFactory The item factory function
@@ -219,7 +244,7 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 			Preconditions.checkState(variants != null, "Variants not provided");
 			Preconditions.checkState(itemFactory != null, "Item Factory not provided");
 
-			return new ItemVariantGroup<>(groupName, isSuffix, variants, itemFactory);
+			return new ItemVariantGroup<>(groupName, isSuffix, variants, itemPropertiesFactory, itemFactory);
 		}
 	}
 }

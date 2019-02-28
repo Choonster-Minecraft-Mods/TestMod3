@@ -16,7 +16,7 @@ public class ItemVariants extends Item {
 	private final EnumType type;
 	private final ItemVariantGroup<EnumType, ItemVariants> variantGroup;
 
-	public ItemVariants(final Item.Properties properties, final EnumType type, final ItemVariantGroup<EnumType, ItemVariants> variantGroup) {
+	public ItemVariants(final EnumType type, final ItemVariantGroup<EnumType, ItemVariants> variantGroup, final Item.Properties properties) {
 		super(properties);
 		this.type = type;
 		this.variantGroup = variantGroup;
