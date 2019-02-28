@@ -55,7 +55,7 @@ public class BlockFluidTankRestricted extends BlockFluidTank<TileEntityFluidTank
 			}
 		}
 
-		return super.onBlockActivated(state, world, pos, player, hand, side, hitX, hitY, hitZ)
+		return super.onBlockActivated(state, world, pos, player, hand, side, hitX, hitY, hitZ);
 	}
 
 	@SuppressWarnings("deprecation")
