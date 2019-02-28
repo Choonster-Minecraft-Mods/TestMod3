@@ -1,15 +1,15 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.world.biome.BiomeDesertTest;
+import choonster.testmod3.world.biome.DesertTestBiome;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.ObjectHolder;
 
 import static choonster.testmod3.util.InjectionUtil.Null;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
@@ -18,7 +18,8 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
 @ObjectHolder(TestMod3.MODID)
 public class ModBiomes {
 
-	public static final BiomeDesertTest DESERT_TEST = Null();
+	public static final DesertTestBiome DESERT_TEST = Null();
+
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	public static class RegistrationHandler {
@@ -31,13 +32,7 @@ public class ModBiomes {
 		public static void registerBiomes(final RegistryEvent.Register<Biome> event) {
 			final IForgeRegistry<Biome> registry = event.getRegistry();
 
-			registerBiome(registry, new BiomeDesertTest(new Biome.BiomeProperties("TestMod3 Desert Test")
-					.setBaseHeight(0.125F)
-					.setHeightVariation(0.05F)
-					.setTemperature(2.0F)
-					.setRainfall(0.0F)
-					.setRainDisabled()
-			), "desert_test", BiomeManager.BiomeType.DESERT, 1000, HOT, DRY, SANDY, JUNGLE, SWAMP);
+			registerBiome(registry, new DesertTestBiome(), "desert_test", BiomeManager.BiomeType.DESERT, 1000, HOT, DRY, SANDY, JUNGLE, SWAMP);
 		}
 
 		private static <T extends Biome> void registerBiome(final IForgeRegistry<Biome> registry, final T biome, final String biomeName, final BiomeManager.BiomeType biomeType, final int weight, final BiomeDictionary.Type... types) {
