@@ -22,7 +22,7 @@ public class BlockSaplingTestMod3 extends BlockSapling {
 	 */
 	public static final IProperty<Boolean> ITEM = BooleanProperty.create("item");
 
-	public BlockSaplingTestMod3(final AbstractTree tree, final Properties properties) {
+	public BlockSaplingTestMod3(final AbstractTree tree, final Block.Properties properties) {
 		super(tree, properties);
 	}
 

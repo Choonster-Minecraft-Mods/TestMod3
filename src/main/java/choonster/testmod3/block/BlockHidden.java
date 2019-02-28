@@ -28,8 +28,8 @@ public class BlockHidden extends BlockTileEntity<TileEntityHidden> {
 	 */
 	public static final IProperty<Boolean> HIDDEN = BooleanProperty.create("hidden");
 
-	public BlockHidden(final Properties properties) {
-		super(properties, false);
+	public BlockHidden(final Block.Properties properties) {
+		super(false, properties);
 		setDefaultState(getStateContainer().getBaseState().with(HIDDEN, true));
 	}
 

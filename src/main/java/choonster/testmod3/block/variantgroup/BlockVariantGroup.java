@@ -119,7 +119,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 
 			final Block.Properties properties = blockPropertiesFactory.apply(variant);
 
-			final BLOCK block = blockFactory.createBlock(properties, variant, this);
+			final BLOCK block = blockFactory.createBlock(variant, this, properties);
 
 			block.setRegistryName(registryName);
 
@@ -171,7 +171,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	 */
 	@FunctionalInterface
 	public interface BlockFactory<VARIANT extends Enum<VARIANT> & IStringSerializable, BLOCK extends Block> {
-		BLOCK createBlock(Block.Properties properties, VARIANT variant, BlockVariantGroup<VARIANT, BLOCK> variantGroup);
+		BLOCK createBlock(VARIANT variant, BlockVariantGroup<VARIANT, BLOCK> variantGroup, Block.Properties properties);
 	}
 
 	/**

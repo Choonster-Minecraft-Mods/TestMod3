@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
  */
 public class BlockPotionEffect extends BlockTileEntity<TileEntityPotionEffect> {
 	public BlockPotionEffect(final Block.Properties properties) {
-		super(properties, false);
+		super(false, properties);
 	}
 
 	@Nullable

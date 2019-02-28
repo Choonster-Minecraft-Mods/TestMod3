@@ -22,7 +22,7 @@ public class BlockVariants extends Block {
 	private final BlockVariantGroup<EnumType, ? extends BlockVariants> variantGroup;
 	private final EnumType type;
 
-	public BlockVariants(final Block.Properties properties, final EnumType type, final BlockVariantGroup<EnumType, ? extends BlockVariants> variantGroup) {
+	public BlockVariants(final EnumType type, final BlockVariantGroup<EnumType, ? extends BlockVariants> variantGroup, final Block.Properties properties) {
 		super(properties);
 		this.type = type;
 		this.variantGroup = variantGroup;

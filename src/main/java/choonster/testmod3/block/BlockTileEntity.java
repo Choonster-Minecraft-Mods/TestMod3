@@ -25,7 +25,7 @@ public abstract class BlockTileEntity<TE extends TileEntity> extends Block {
 	// TODO: Is this still needed in 1.13?
 	private final boolean preserveTileEntity;
 
-	public BlockTileEntity(final Block.Properties properties, final boolean preserveTileEntity) {
+	public BlockTileEntity(final boolean preserveTileEntity, final Block.Properties properties) {
 		super(properties);
 		this.preserveTileEntity = preserveTileEntity;
 	}

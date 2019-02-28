@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
@@ -22,16 +23,14 @@ import org.apache.logging.log4j.Logger;
 public class BlockItemCollisionTest extends Block {
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	private static final VoxelShape SHAPE;
-
-	static {
+	private static final VoxelShape SHAPE = Util.make(() -> {
 		// A small value to offset each side of the block's bounding box by to allow entities to collide with the block
 		// and thus call onEntityCollidedWithBlock
 		final float minBound = 0.16f;
 		final float maxBound = 16 - minBound;
 
-		SHAPE = makeCuboidShape(minBound, minBound, minBound, maxBound, maxBound, maxBound);
-	}
+		return makeCuboidShape(minBound, minBound, minBound, maxBound, maxBound, maxBound);
+	});
 
 	public BlockItemCollisionTest(final Block.Properties properties) {
 		super(properties);

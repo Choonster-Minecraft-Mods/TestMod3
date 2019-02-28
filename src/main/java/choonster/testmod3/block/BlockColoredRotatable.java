@@ -32,7 +32,7 @@ public class BlockColoredRotatable extends Block {
 	private final BlockVariantGroup<EnumDyeColor, ? extends BlockColoredRotatable> variantGroup;
 	private final EnumDyeColor color;
 
-	public BlockColoredRotatable(final Block.Properties properties, final EnumDyeColor color, final BlockVariantGroup<EnumDyeColor, ? extends BlockColoredRotatable> variantGroup) {
+	public BlockColoredRotatable(final EnumDyeColor color, final BlockVariantGroup<EnumDyeColor, ? extends BlockColoredRotatable> variantGroup, final Block.Properties properties) {
 		super(properties);
 		this.color = color;
 		this.variantGroup = variantGroup;

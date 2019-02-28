@@ -40,7 +40,7 @@ import java.util.List;
  */
 public class BlockFluidTank<TE extends TileEntityFluidTank> extends BlockTileEntity<TE> {
 	public BlockFluidTank(final Block.Properties properties) {
-		super(properties, true);
+		super(true, properties);
 	}
 
 	@Override

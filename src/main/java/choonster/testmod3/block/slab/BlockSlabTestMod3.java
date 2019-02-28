@@ -1,6 +1,7 @@
 package choonster.testmod3.block.slab;
 
 import choonster.testmod3.block.variantgroup.BlockVariantGroup;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.util.IStringSerializable;
 
@@ -29,11 +30,11 @@ public abstract class BlockSlabTestMod3<
 	/**
 	 * Create a slab block.
 	 *
-	 * @param properties   The block properties of this slab
 	 * @param variant      The variant of this slab
 	 * @param variantGroup The group this slab belongs to
+	 * @param properties   The block properties of this slab
 	 */
-	public BlockSlabTestMod3(final Properties properties, final VARIANT variant, final BlockVariantGroup<VARIANT, SLAB> variantGroup) {
+	public BlockSlabTestMod3(final VARIANT variant, final BlockVariantGroup<VARIANT, SLAB> variantGroup, final Block.Properties properties) {
 		super(properties);
 
 		this.variant = variant;

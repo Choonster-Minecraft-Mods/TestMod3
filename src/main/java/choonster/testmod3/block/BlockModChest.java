@@ -36,7 +36,7 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 	public static final IProperty<EnumFacing> FACING = DirectionProperty.create("facing", EnumFacing.Plane.HORIZONTAL);
 
 	public BlockModChest(final Block.Properties properties) {
-		super(properties, true);
+		super(true, properties);
 	}
 
 	@Override

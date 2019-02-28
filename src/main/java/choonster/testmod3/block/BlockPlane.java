@@ -42,7 +42,7 @@ public class BlockPlane extends Block {
 	 */
 	public static final IProperty<EnumVerticalRotation> VERTICAL_ROTATION = EnumProperty.create("vertical_rotation", EnumVerticalRotation.class);
 
-	public BlockPlane(final Properties properties) {
+	public BlockPlane(final Block.Properties properties) {
 		super(properties);
 		setDefaultState(getStateContainer().getBaseState().with(HORIZONTAL_ROTATION, EnumFacing.NORTH).with(VERTICAL_ROTATION, EnumVerticalRotation.UP));
 	}

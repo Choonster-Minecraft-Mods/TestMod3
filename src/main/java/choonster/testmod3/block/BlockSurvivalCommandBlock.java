@@ -41,7 +41,7 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 
 	private final TileEntityCommandBlock.Mode commandBlockMode;
 
-	public BlockSurvivalCommandBlock(final Block.Properties properties, final TileEntityCommandBlock.Mode commandBlockMode) {
+	public BlockSurvivalCommandBlock(final TileEntityCommandBlock.Mode commandBlockMode, final Block.Properties properties) {
 		super(properties);
 		this.commandBlockMode = commandBlockMode;
 	}

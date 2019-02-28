@@ -24,12 +24,12 @@ public class BlockColouredSlab extends BlockSlabTestMod3<EnumDyeColor, BlockColo
 	/**
 	 * Create a coloured slab block.
 	 *
-	 * @param properties   The block properties of this slab
 	 * @param variant      The variant of this slab
 	 * @param variantGroup The group this slab belongs to
+	 * @param properties   The block properties of this slab
 	 */
-	public BlockColouredSlab(final Block.Properties properties, final EnumDyeColor variant, final BlockVariantGroup<EnumDyeColor, BlockColouredSlab> variantGroup) {
-		super(properties, variant, variantGroup);
+	public BlockColouredSlab(final EnumDyeColor variant, final BlockVariantGroup<EnumDyeColor, BlockColouredSlab> variantGroup, final Block.Properties properties) {
+		super(variant, variantGroup, properties);
 	}
 
 	@Override
