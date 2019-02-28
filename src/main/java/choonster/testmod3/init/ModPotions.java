@@ -4,9 +4,9 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.potion.PotionTestMod3;
 import net.minecraft.potion.Potion;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
+import net.minecraftforge.registries.ObjectHolder;
 
 import static choonster.testmod3.util.InjectionUtil.Null;
 
