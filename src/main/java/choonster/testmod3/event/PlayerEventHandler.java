@@ -11,8 +11,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -34,11 +34,11 @@ public class PlayerEventHandler {
 	 */
 	@SubscribeEvent
 	public static void playerLoggedIn(final PlayerEvent.PlayerLoggedInEvent event) {
-		final EntityPlayer player = event.player;
+		final EntityPlayer player = event.getPlayer();
 
 		final NBTTagCompound entityData = player.getEntityData();
-		final NBTTagCompound persistedData = entityData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
-		entityData.setTag(EntityPlayer.PERSISTED_NBT_TAG, persistedData);
+		final NBTTagCompound persistedData = entityData.getCompound(EntityPlayer.PERSISTED_NBT_TAG);
+		entityData.put(EntityPlayer.PERSISTED_NBT_TAG, persistedData);
 
 		final String key = Constants.RESOURCE_PREFIX + "ReceivedItems";
 		final String message;
@@ -46,7 +46,7 @@ public class PlayerEventHandler {
 		if (persistedData.getBoolean(key)) {
 			message = "message.testmod3:login.already_received";
 		} else {
-			persistedData.setBoolean(key, true);
+			persistedData.putBoolean(key, true);
 
 			ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(Items.APPLE));
 
@@ -68,7 +68,7 @@ public class PlayerEventHandler {
 		if (event.getEntity() instanceof EntityPlayer && !event.getEntity().getEntityWorld().isRemote) {
 			final EntityPlayer player = (EntityPlayer) event.getEntity();
 			final BlockPos pos = player.getPosition();
-			player.sendMessage(new TextComponentTranslation("message.testmod3:death.coordinates", pos.getX(), pos.getY(), pos.getZ(), player.dimension, player.getEntityWorld().provider.getDimensionType().getName()));
+			player.sendMessage(new TextComponentTranslation("message.testmod3:death.coordinates", pos.getX(), pos.getY(), pos.getZ(), player.dimension, player.getEntityWorld().dimension.getType().getRegistryName()));
 		}
 	}
 }

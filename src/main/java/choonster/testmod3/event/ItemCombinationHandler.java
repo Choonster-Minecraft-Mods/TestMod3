@@ -6,14 +6,14 @@ import com.google.common.collect.ImmutableSet;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Items;
+import net.minecraft.init.Particles;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
@@ -70,8 +70,8 @@ public class ItemCombinationHandler {
 	 * @param entityItem The item entity
 	 */
 	private static void handleEntity(final EntityItem entityItem) {
-		// If the item entity is dead, do nothing
-		if (!entityItem.isEntityAlive()) return;
+		// If the item entity is removed, do nothing
+		if (!entityItem.isAlive()) return;
 
 		final World world = entityItem.getEntityWorld();
 
@@ -82,7 +82,7 @@ public class ItemCombinationHandler {
 		matchingEntityItems.add(entityItem);
 
 		// Find all other item entities with input items within 3 blocks
-		final AxisAlignedBB axisAlignedBB = entityItem.getEntityBoundingBox().grow(3);
+		final AxisAlignedBB axisAlignedBB = entityItem.getBoundingBox().grow(3);
 		final List<Entity> nearbyEntityItems = world.getEntitiesInAABBexcluding(entityItem, axisAlignedBB, isMatchingItemEntity(remainingInputs)::test);
 
 		// For each nearby item entity
@@ -97,14 +97,14 @@ public class ItemCombinationHandler {
 					final EntityItem outputEntityItem = new EntityItem(world, x, y, z, OUTPUT.copy());
 					world.spawnEntity(outputEntityItem);
 
-					((WorldServer) world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, x + 0.5, y + 1.0, z + 0.5, 1, 0, 0, 0, 0, new int[0]);
+					((WorldServer) world).spawnParticle(Particles.LARGE_SMOKE, x + 0.5, y + 1.0, z + 0.5, 1, 0.0, 0.0, 0.0, 0);
 
 					// Consume one item from each matching entity
 					matchingEntityItems.forEach(matchingEntityItem -> {
 						final ItemStack itemStack = matchingEntityItem.getItem();
 						itemStack.shrink(1);
 						if (itemStack.isEmpty()) {
-							matchingEntityItem.setDead();
+							matchingEntityItem.remove();
 						}
 					});
 				}
@@ -114,12 +114,12 @@ public class ItemCombinationHandler {
 	}
 
 	/**
-	 * Returns a predicate that determines whether the entity is a living {@link EntityItem} whose {@link Item} is contained in the {@link Set}.
+	 * Returns a predicate that determines whether the entity is a non-removed {@link EntityItem} whose {@link Item} is contained in the {@link Set}.
 	 *
 	 * @param items The set of items to match
 	 * @return The predicate
 	 */
 	private static Predicate<Entity> isMatchingItemEntity(final Set<Item> items) {
-		return entity -> entity.isEntityAlive() && entity instanceof EntityItem && items.contains(((EntityItem) entity).getItem().getItem());
+		return entity -> entity.isAlive() && entity instanceof EntityItem && items.contains(((EntityItem) entity).getItem().getItem());
 	}
 }

@@ -5,13 +5,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod.EventBusSubscriber(modid = TestMod3.MODID)
 public class BlockEventHandler {
@@ -28,23 +28,21 @@ public class BlockEventHandler {
 	 * @return True if the tool can harvest the block
 	 */
 	private static boolean canToolHarvestBlock(final IBlockState state, final ItemStack stack, final EntityPlayer player) {
-		final String tool = state.getBlock().getHarvestTool(state);
+		final ToolType tool = state.getHarvestTool();
 		return !stack.isEmpty() && tool != null
-				&& stack.getItem().getHarvestLevel(stack, tool, player, state) >= state.getBlock().getHarvestLevel(state);
+				&& stack.getItem().getHarvestLevel(stack, tool, player, state) >= state.getHarvestLevel();
 	}
 
 	/**
 	 * Is the player harvesting a log block without the correct tool?
 	 *
-	 * @param state       The block's state
-	 * @param blockAccess The world that the block is in
-	 * @param pos         The position of the block
-	 * @param player      The player harvesting the block
+	 * @param state  The block's state
+	 * @param player The player harvesting the block
 	 * @return True if the block is a log, the player isn't in creative mode and the player doesn't have the correct tool equipped
 	 */
-	private static boolean isPlayerHarvestingLogWithoutCorrectTool(final IBlockState state, final IBlockAccess blockAccess, final BlockPos pos, final EntityPlayer player) {
-		return !player.capabilities.isCreativeMode
-				&& state.getBlock().isWood(blockAccess, pos)
+	private static boolean isPlayerHarvestingLogWithoutCorrectTool(final IBlockState state, final EntityPlayer player) {
+		return !player.abilities.isCreativeMode
+				&& state.isIn(BlockTags.LOGS)
 				&& !canToolHarvestBlock(state, player.getHeldItemMainhand(), player);
 	}
 
@@ -55,7 +53,7 @@ public class BlockEventHandler {
 	 */
 	@SubscribeEvent
 	public static void harvestDrops(final BlockEvent.HarvestDropsEvent event) {
-		if (event.getState().getBlock().isLeaves(event.getState(), event.getWorld(), event.getPos())) {
+		if (event.getState().isIn(BlockTags.LEAVES)) {
 			event.getDrops().add(new ItemStack(Items.STICK, 2));
 		}
 	}
@@ -67,7 +65,7 @@ public class BlockEventHandler {
 	 */
 	@SubscribeEvent
 	public static void breakSpeed(final PlayerEvent.BreakSpeed event) {
-		if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getEntityPlayer().getEntityWorld(), event.getPos(), event.getEntityPlayer())) {
+		if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getEntityPlayer())) {
 			event.setCanceled(true);
 		}
 	}
@@ -79,7 +77,7 @@ public class BlockEventHandler {
 	 */
 	@SubscribeEvent
 	public static void breakBlock(final BlockEvent.BreakEvent event) {
-		if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getWorld(), event.getPos(), event.getPlayer())) {
+		if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getPlayer())) {
 			event.setCanceled(true);
 		}
 	}

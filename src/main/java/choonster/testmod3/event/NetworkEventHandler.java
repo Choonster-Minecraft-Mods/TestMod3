@@ -1,18 +1,14 @@
 package choonster.testmod3.event;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.util.IThreadListener;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
-import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Handler for {@link FMLNetworkEvent} subclasses.
+ * Handler for {@code FMLNetworkEvent} subclasses.
  * <p>
  * WARNING: These events are fired on a Netty thread rather than the main client/server thread, so the handler methods must not directly interact with normal Minecraft classes.
  * <p>
@@ -20,9 +16,10 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber(value = Side.CLIENT, modid = TestMod3.MODID)
+@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = TestMod3.MODID)
 public class NetworkEventHandler {
 	private static final Logger LOGGER = LogManager.getLogger();
+
 
 	/**
 	 * Prints server connection info when the client connects to a server.
@@ -32,6 +29,9 @@ public class NetworkEventHandler {
 	 *
 	 * @param event The event
 	 */
+
+	/*
+	// TODO: Uncomment when event is re-added (https://github.com/MinecraftForge/MinecraftForge/issues/5536)
 	@SubscribeEvent
 	public static void clientConnectedToServer(final FMLNetworkEvent.ClientConnectedToServerEvent event) {
 		final IThreadListener mainThread = Minecraft.getMinecraft();
@@ -40,4 +40,5 @@ public class NetworkEventHandler {
 			LOGGER.info("Server Connected! Local? {} - Address: {}", event.isLocal(), serverData != null ? serverData.serverIP : "<No ServerData>");
 		});
 	}
+	*/
 }
