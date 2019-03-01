@@ -3,6 +3,7 @@ package choonster.testmod3.capability;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nullable;
 
@@ -28,35 +29,22 @@ public class CapabilityProviderSimple<HANDLER> implements ICapabilityProvider {
 	 */
 	protected final HANDLER instance;
 
+	/**
+	 * A lazy optional containing handler instance to provide.
+	 */
+	protected final LazyOptional<HANDLER> lazyOptional;
+
 	public CapabilityProviderSimple(final Capability<HANDLER> capability, @Nullable final EnumFacing facing, @Nullable final HANDLER instance) {
 		this.capability = capability;
 		this.facing = facing;
+
 		this.instance = instance;
-	}
 
-	@Deprecated
-	public CapabilityProviderSimple(@Nullable final HANDLER instance, final Capability<HANDLER> capability, @Nullable final EnumFacing facing) {
-		this(capability, facing, instance);
-	}
-
-	/**
-	 * Determines if this object has support for the capability in question on the specific side.
-	 * The return value of this MIGHT change during runtime if this object gains or looses support
-	 * for a capability.
-	 * <p>
-	 * Example:
-	 * A Pipe getting a cover placed on one side causing it loose the Inventory attachment function for that side.
-	 * <p>
-	 * This is a light weight version of getCapability, intended for metadata uses.
-	 *
-	 * @param capability The capability to check
-	 * @param facing     The Side to check from:
-	 *                   CAN BE NULL. Null is defined to represent 'internal' or 'self'
-	 * @return True if this object supports the capability.
-	 */
-	@Override
-	public boolean hasCapability(final Capability<?> capability, @Nullable final EnumFacing facing) {
-		return capability == getCapability();
+		if (this.instance != null) {
+			lazyOptional = LazyOptional.of(() -> this.instance);
+		} else {
+			lazyOptional = LazyOptional.empty();
+		}
 	}
 
 	/**
@@ -67,16 +55,11 @@ public class CapabilityProviderSimple<HANDLER> implements ICapabilityProvider {
 	 * @param capability The capability to check
 	 * @param facing     The Side to check from:
 	 *                   CAN BE NULL. Null is defined to represent 'internal' or 'self'
-	 * @return The handler if this object supports the capability.
+	 * @return A lazy optional containing the handler, if this object supports the capability.
 	 */
 	@Override
-	@Nullable
-	public <T> T getCapability(final Capability<T> capability, @Nullable final EnumFacing facing) {
-		if (capability == getCapability()) {
-			return getCapability().cast(getInstance());
-		}
-
-		return null;
+	public <T> LazyOptional<T> getCapability(final Capability<T> capability, @Nullable final EnumFacing facing) {
+		return getCapability().orEmpty(capability, lazyOptional);
 	}
 
 	/**
@@ -101,7 +84,7 @@ public class CapabilityProviderSimple<HANDLER> implements ICapabilityProvider {
 	/**
 	 * Get the handler instance.
 	 *
-	 * @return The handler instance
+	 * @return A lazy optional containing the handler instance
 	 */
 	@Nullable
 	public final HANDLER getInstance() {

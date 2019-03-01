@@ -6,22 +6,22 @@ import choonster.testmod3.capability.CapabilityProviderSerializable;
 import choonster.testmod3.network.MessageUpdateChunkEnergyValue;
 import choonster.testmod3.util.CapabilityUtils;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.IChunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import javax.annotation.Nullable;
 
 import static choonster.testmod3.util.InjectionUtil.Null;
 
@@ -60,12 +60,12 @@ public class CapabilityChunkEnergy {
 	public static void register() {
 		CapabilityManager.INSTANCE.register(IChunkEnergy.class, new Capability.IStorage<IChunkEnergy>() {
 			@Override
-			public NBTBase writeNBT(final Capability<IChunkEnergy> capability, final IChunkEnergy instance, final EnumFacing side) {
+			public INBTBase writeNBT(final Capability<IChunkEnergy> capability, final IChunkEnergy instance, final EnumFacing side) {
 				return new NBTTagInt(instance.getEnergyStored());
 			}
 
 			@Override
-			public void readNBT(final Capability<IChunkEnergy> capability, final IChunkEnergy instance, final EnumFacing side, final NBTBase nbt) {
+			public void readNBT(final Capability<IChunkEnergy> capability, final IChunkEnergy instance, final EnumFacing side, final INBTBase nbt) {
 				if (!(instance instanceof ChunkEnergy))
 					throw new IllegalArgumentException("Can not deserialize to an instance that isn't the default implementation");
 
@@ -79,10 +79,9 @@ public class CapabilityChunkEnergy {
 	 *
 	 * @param world    The World
 	 * @param chunkPos The chunk position
-	 * @return The IChunkEnergy, if any
+	 * @return A lazy optional containing the IChunkEnergy, if any
 	 */
-	@Nullable
-	public static IChunkEnergy getChunkEnergy(final World world, final ChunkPos chunkPos) {
+	public static LazyOptional<IChunkEnergy> getChunkEnergy(final World world, final ChunkPos chunkPos) {
 		return getChunkEnergy(world.getChunk(chunkPos.x, chunkPos.z));
 	}
 
@@ -90,10 +89,9 @@ public class CapabilityChunkEnergy {
 	 * Get the {@link IChunkEnergy} for the chunk.
 	 *
 	 * @param chunk The chunk
-	 * @return The IChunkEnergy, if any
+	 * @return A lazy optional containing the IChunkEnergy, if any
 	 */
-	@Nullable
-	public static IChunkEnergy getChunkEnergy(final Chunk chunk) {
+	public static LazyOptional<IChunkEnergy> getChunkEnergy(final Chunk chunk) {
 		return CapabilityUtils.getCapability(chunk, CHUNK_ENERGY_CHUNK_CAPABILITY, DEFAULT_FACING);
 	}
 
@@ -115,13 +113,11 @@ public class CapabilityChunkEnergy {
 		@SubscribeEvent
 		public static void chunkWatch(final ChunkWatchEvent.Watch event) {
 			final EntityPlayerMP player = event.getPlayer();
-			final Chunk chunk = event.getChunkInstance();
-			if (chunk == null) return;
+			final IChunk chunk = event.getChunk();
+			if (!(chunk instanceof Chunk)) return;
 
-			final IChunkEnergy chunkEnergy = getChunkEnergy(chunk);
-			if (chunkEnergy == null) return;
-
-			TestMod3.network.sendTo(new MessageUpdateChunkEnergyValue(chunkEnergy), player);
+			getChunkEnergy((Chunk) chunk)
+					.ifPresent((chunkEnergy) -> TestMod3.network.sendTo(new MessageUpdateChunkEnergyValue(chunkEnergy), player));
 		}
 	}
 }

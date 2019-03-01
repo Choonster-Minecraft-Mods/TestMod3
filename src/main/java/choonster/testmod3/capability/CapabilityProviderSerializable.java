@@ -1,6 +1,6 @@
 package choonster.testmod3.capability;
 
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
  *
  * @author Choonster
  */
-public class CapabilityProviderSerializable<HANDLER> extends CapabilityProviderSimple<HANDLER> implements INBTSerializable<NBTBase> {
+public class CapabilityProviderSerializable<HANDLER> extends CapabilityProviderSimple<HANDLER> implements INBTSerializable<INBTBase> {
 
 	/**
 	 * Create a provider for the default handler instance.
@@ -41,13 +41,25 @@ public class CapabilityProviderSerializable<HANDLER> extends CapabilityProviderS
 
 	@Nullable
 	@Override
-	public NBTBase serializeNBT() {
-		return getCapability().writeNBT(getInstance(), getFacing());
+	public INBTBase serializeNBT() {
+		final HANDLER instance = getInstance();
+
+		if (instance == null) {
+			return null;
+		}
+
+		return getCapability().writeNBT(instance, getFacing());
 	}
 
 	@Override
-	public void deserializeNBT(final NBTBase nbt) {
-		getCapability().readNBT(getInstance(), getFacing(), nbt);
+	public void deserializeNBT(final INBTBase nbt) {
+		final HANDLER instance = getInstance();
+
+		if (instance == null) {
+			return;
+		}
+
+		getCapability().readNBT(instance, getFacing(), nbt);
 	}
 
 }

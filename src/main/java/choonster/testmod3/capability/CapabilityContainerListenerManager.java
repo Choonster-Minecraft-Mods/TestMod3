@@ -7,8 +7,8 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
 import java.util.HashSet;
@@ -58,8 +58,8 @@ public class CapabilityContainerListenerManager {
 		 */
 		@SubscribeEvent
 		public static void playerLoggedIn(final PlayerLoggedInEvent event) {
-			if (event.player instanceof EntityPlayerMP) {
-				final EntityPlayerMP player = (EntityPlayerMP) event.player;
+			if (event.getPlayer() instanceof EntityPlayerMP) {
+				final EntityPlayerMP player = (EntityPlayerMP) event.getPlayer();
 				addListeners(player, player.inventoryContainer);
 			}
 		}

@@ -5,10 +5,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.network.play.server.SPacketSoundEffect;
+import net.minecraft.util.INameable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.LockCode;
 
 /**
@@ -18,7 +18,7 @@ import net.minecraft.world.LockCode;
  *
  * @author Choonster
  */
-public interface ILock extends IWorldNameable {
+public interface ILock extends INameable {
 
 	/**
 	 * @return Is this locked?

@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -18,11 +18,10 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import javax.annotation.Nullable;
 
 import static choonster.testmod3.util.InjectionUtil.Null;
 
@@ -51,12 +50,12 @@ public final class CapabilityLastUseTime {
 	public static void register() {
 		CapabilityManager.INSTANCE.register(ILastUseTime.class, new Capability.IStorage<ILastUseTime>() {
 			@Override
-			public NBTBase writeNBT(final Capability<ILastUseTime> capability, final ILastUseTime instance, final EnumFacing side) {
+			public INBTBase writeNBT(final Capability<ILastUseTime> capability, final ILastUseTime instance, final EnumFacing side) {
 				return new NBTTagLong(instance.get());
 			}
 
 			@Override
-			public void readNBT(final Capability<ILastUseTime> capability, final ILastUseTime instance, final EnumFacing side, final NBTBase nbt) {
+			public void readNBT(final Capability<ILastUseTime> capability, final ILastUseTime instance, final EnumFacing side, final INBTBase nbt) {
 				instance.set(((NBTTagLong) nbt).getLong());
 			}
 		}, () -> new LastUseTime(true));
@@ -68,10 +67,9 @@ public final class CapabilityLastUseTime {
 	 * Get the {@link ILastUseTime} from the specified {@link ItemStack}'s capabilities, if any.
 	 *
 	 * @param itemStack The ItemStack
-	 * @return The ILastUseTime, or null if there isn't one
+	 * @return A lazy optional containing the ILastUseTime, if any
 	 */
-	@Nullable
-	public static ILastUseTime getLastUseTime(final ItemStack itemStack) {
+	public static LazyOptional<ILastUseTime> getLastUseTime(final ItemStack itemStack) {
 		return CapabilityUtils.getCapability(itemStack, LAST_USE_TIME_CAPABILITY, DEFAULT_FACING);
 	}
 
@@ -82,12 +80,11 @@ public final class CapabilityLastUseTime {
 	 * @param itemStack The held ItemStack
 	 */
 	public static void updateLastUseTime(final EntityPlayer player, final ItemStack itemStack) {
-		final ILastUseTime lastUseTime = getLastUseTime(itemStack);
-		if (lastUseTime == null) return;
+		getLastUseTime(itemStack).ifPresent((lastUseTime) -> {
+			final World world = player.getEntityWorld();
 
-		final World world = player.getEntityWorld();
-
-		lastUseTime.set(world.getTotalWorldTime());
+			lastUseTime.set(world.getGameTime());
+		});
 	}
 
 	/**
@@ -122,10 +119,12 @@ public final class CapabilityLastUseTime {
 		@SubscribeEvent
 		public static void playerInteract(final PlayerInteractEvent.RightClickItem event) {
 			final ItemStack itemStack = event.getItemStack();
-			final ILastUseTime lastUseTime = getLastUseTime(itemStack);
-			if (lastUseTime != null && lastUseTime.automaticUpdates()) {
-				updateLastUseTime(event.getEntityPlayer(), itemStack);
-			}
+
+			getLastUseTime(itemStack).ifPresent(lastUseTime -> {
+				if (lastUseTime.automaticUpdates()) {
+					updateLastUseTime(event.getEntityPlayer(), itemStack);
+				}
+			});
 		}
 	}
 
@@ -141,12 +140,17 @@ public final class CapabilityLastUseTime {
 		/**
 		 * The getter.
 		 */
-		private static final IItemPropertyGetter GETTER = (stack, worldIn, entityIn) -> {
-			final ILastUseTime lastUseTime = getLastUseTime(stack);
-
+		private static final IItemPropertyGetter GETTER = (stack, worldIn, entityIn) ->
+		{
 			final World world = worldIn != null ? worldIn : entityIn != null ? entityIn.getEntityWorld() : null;
 
-			return lastUseTime != null && world != null ? world.getTotalWorldTime() - lastUseTime.get() : Float.MAX_VALUE;
+			if (world == null) {
+				return Float.MAX_VALUE;
+			}
+
+			return getLastUseTime(stack)
+					.map(lastUseTime -> (float) world.getGameTime() - lastUseTime.get())
+					.orElse(Float.MAX_VALUE);
 		};
 
 		/**

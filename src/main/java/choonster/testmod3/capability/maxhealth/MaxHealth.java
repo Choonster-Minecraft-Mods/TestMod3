@@ -85,7 +85,7 @@ public class MaxHealth implements IMaxHealth {
 	@Override
 	public void synchronise() {
 		if (entity != null && !entity.getEntityWorld().isRemote) {
-			final IAttributeInstance entityMaxHealthAttribute = entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
+			final IAttributeInstance entityMaxHealthAttribute = entity.getAttribute(SharedMonsterAttributes.MAX_HEALTH);
 			final SPacketEntityProperties packet = new SPacketEntityProperties(entity.getEntityId(), Collections.singleton(entityMaxHealthAttribute));
 			((WorldServer) entity.getEntityWorld()).getEntityTracker().sendToTrackingAndSelf(entity, packet);
 		}
@@ -106,7 +106,7 @@ public class MaxHealth implements IMaxHealth {
 	protected void onBonusMaxHealthChanged() {
 		if (entity == null) return;
 
-		final IAttributeInstance entityMaxHealthAttribute = entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
+		final IAttributeInstance entityMaxHealthAttribute = entity.getAttribute(SharedMonsterAttributes.MAX_HEALTH);
 
 		final AttributeModifier modifier = createModifier();
 

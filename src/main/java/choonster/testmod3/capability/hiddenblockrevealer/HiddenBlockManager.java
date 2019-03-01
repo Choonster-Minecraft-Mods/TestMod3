@@ -7,10 +7,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * Manages the hidden block state for the client.
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber(value = Side.CLIENT, modid = TestMod3.MODID)
+@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = TestMod3.MODID)
 public class HiddenBlockManager {
 	private static volatile boolean lastCheckResult = false;
 	private static boolean toggled = false;
@@ -32,8 +32,11 @@ public class HiddenBlockManager {
 	 */
 	private static boolean shouldHeldItemRevealHiddenBlocks(final EntityPlayer player) {
 		for (final EnumHand hand : EnumHand.values()) {
-			final IHiddenBlockRevealer hiddenBlockRevealer = CapabilityHiddenBlockRevealer.getHiddenBlockRevealer(player.getHeldItem(hand));
-			if (hiddenBlockRevealer != null && hiddenBlockRevealer.revealHiddenBlocks()) {
+			final boolean revealHiddenBlocks = CapabilityHiddenBlockRevealer.getHiddenBlockRevealer(player.getHeldItem(hand))
+					.map(IHiddenBlockRevealer::revealHiddenBlocks)
+					.orElse(false);
+
+			if (revealHiddenBlocks) {
 				return true;
 			}
 		}

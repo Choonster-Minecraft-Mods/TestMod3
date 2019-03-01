@@ -10,12 +10,12 @@ import choonster.testmod3.util.CapabilityUtils;
 import choonster.testmod3.util.DebugUtil;
 import choonster.testmod3.util.LogUtil;
 import net.minecraft.block.Block;
-import net.minecraft.command.ICommandSender;
+import net.minecraft.command.ICommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -23,19 +23,20 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -78,23 +79,23 @@ public final class CapabilityPigSpawner {
 	public static void register() {
 		CapabilityManager.INSTANCE.register(IPigSpawner.class, new Capability.IStorage<IPigSpawner>() {
 			@Override
-			public NBTBase writeNBT(final Capability<IPigSpawner> capability, final IPigSpawner instance, final EnumFacing side) {
+			public INBTBase writeNBT(final Capability<IPigSpawner> capability, final IPigSpawner instance, final EnumFacing side) {
 				final NBTTagCompound tagCompound = new NBTTagCompound();
 				if (instance instanceof IPigSpawnerFinite) {
-					tagCompound.setInteger("NumPigs", ((IPigSpawnerFinite) instance).getNumPigs());
+					tagCompound.putInt("NumPigs", ((IPigSpawnerFinite) instance).getNumPigs());
 				}
 				return tagCompound;
 			}
 
 			@Override
-			public void readNBT(final Capability<IPigSpawner> capability, final IPigSpawner instance, final EnumFacing side, final NBTBase nbt) {
+			public void readNBT(final Capability<IPigSpawner> capability, final IPigSpawner instance, final EnumFacing side, final INBTBase nbt) {
 				if (instance instanceof IPigSpawnerFinite) {
 					final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) instance;
 					final NBTTagCompound tagCompound = (NBTTagCompound) nbt;
 
-					LogUtil.debug(LOGGER, LOG_MARKER, DebugUtil.getStackTrace(10), "Reading finite pig spawner from NBT: %s (Current: %d, New: %d)", instance, pigSpawnerFinite.getNumPigs(), tagCompound.getInteger("NumPigs"));
+					LogUtil.debug(LOGGER, LOG_MARKER, DebugUtil.getStackTrace(10), "Reading finite pig spawner from NBT: %s (Current: %d, New: %d)", instance, pigSpawnerFinite.getNumPigs(), tagCompound.getInt("NumPigs"));
 
-					pigSpawnerFinite.setNumPigs(tagCompound.getInteger("NumPigs"));
+					pigSpawnerFinite.setNumPigs(tagCompound.getInt("NumPigs"));
 				}
 			}
 		}, () -> new PigSpawnerFinite(20));
@@ -106,10 +107,9 @@ public final class CapabilityPigSpawner {
 	 * Get the {@link IPigSpawner} from the specified {@link ItemStack}'s capabilities, if any.
 	 *
 	 * @param itemStack The ItemStack
-	 * @return The IPigSpawner, or null if there isn't one
+	 * @return A lazy optional containing the IPigSpawner, if amy
 	 */
-	@Nullable
-	public static IPigSpawner getPigSpawner(final ItemStack itemStack) {
+	public static LazyOptional<IPigSpawner> getPigSpawner(final ItemStack itemStack) {
 		return CapabilityUtils.getCapability(itemStack, PIG_SPAWNER_CAPABILITY, DEFAULT_FACING);
 	}
 
@@ -162,15 +162,15 @@ public final class CapabilityPigSpawner {
 		 * @param z               The z position to spawn the pig at
 		 * @param interactable    The IPigSpawnerInteractable, if any
 		 * @param interactablePos The position of the IPigSpawnerInteractable
-		 * @param iCommandSender  The ICommandSender, if any
+		 * @param commandSource   The command source, if any
 		 */
-		private static void trySpawnPig(final IPigSpawner pigSpawner, final World world, final double x, final double y, final double z, @Nullable final IPigSpawnerInteractable interactable, final BlockPos interactablePos, @Nullable final ICommandSender iCommandSender) {
+		private static void trySpawnPig(final IPigSpawner pigSpawner, final World world, final double x, final double y, final double z, @Nullable final IPigSpawnerInteractable interactable, final BlockPos interactablePos, @Nullable final ICommandSource commandSource) {
 			if (world.isRemote) return;
 
 			boolean shouldSpawnPig = true;
 
 			if (interactable != null) {
-				shouldSpawnPig = !interactable.interact(pigSpawner, world, interactablePos, iCommandSender);
+				shouldSpawnPig = !interactable.interact(pigSpawner, world, interactablePos, commandSource);
 			}
 
 			if (shouldSpawnPig && pigSpawner.canSpawnPig(world, x, y, z)) {
@@ -198,11 +198,9 @@ public final class CapabilityPigSpawner {
 			final IPigSpawnerInteractable interactable = block instanceof IPigSpawnerInteractable ? (IPigSpawnerInteractable) block : null;
 
 			final EntityPlayer player = event.getEntityPlayer();
-			final IPigSpawner pigSpawner = getPigSpawner(event.getItemStack());
 
-			if (pigSpawner != null) {
-				trySpawnPig(pigSpawner, world, x, y, z, interactable, event.getPos(), player);
-			}
+			getPigSpawner(event.getItemStack())
+					.ifPresent(pigSpawner -> trySpawnPig(pigSpawner, world, x, y, z, interactable, event.getPos(), player));
 		}
 
 		/**
@@ -222,33 +220,32 @@ public final class CapabilityPigSpawner {
 
 			final EnumHand hand = event.getHand();
 
-			final IPigSpawner pigSpawner = getPigSpawner(event.getEntityPlayer().getHeldItem(hand));
-			if (pigSpawner != null) {
-				trySpawnPig(pigSpawner, world, x, y, z, interactable, target.getPosition(), event.getEntityPlayer());
-			}
+			getPigSpawner(event.getEntityPlayer().getHeldItem(hand))
+					.ifPresent(pigSpawner -> trySpawnPig(pigSpawner, world, x, y, z, interactable, target.getPosition(), event.getEntityPlayer()));
 		}
 
+	}
+
+	@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = TestMod3.MODID)
+	private static class ClientEventHandler {
 		/**
 		 * Add the {@link IPigSpawner}'s tooltip lines to the tooltip if the item has the {@link IPigSpawner} capability
 		 *
 		 * @param event The event
 		 */
-		@SideOnly(Side.CLIENT)
 		@SubscribeEvent
 		public static void itemTooltip(final ItemTooltipEvent event) {
-			final IPigSpawner pigSpawner = getPigSpawner(event.getItemStack());
-			if (pigSpawner == null) return;
+			getPigSpawner(event.getItemStack()).ifPresent(pigSpawner -> {
+				final Style style = new Style().setColor(TextFormatting.LIGHT_PURPLE);
 
-			final Style style = new Style().setColor(TextFormatting.LIGHT_PURPLE);
+				final List<ITextComponent> tooltipLines = pigSpawner.getTooltipLines().stream()
+						.map(iTextComponent -> iTextComponent.setStyle(style))
+						.collect(Collectors.toList());
 
-			final List<ITextComponent> chatComponents = pigSpawner.getTooltipLines();
-			final List<String> tooltipLines = chatComponents.stream()
-					.map(iTextComponent -> iTextComponent.setStyle(style))
-					.map(ITextComponent::getFormattedText)
-					.collect(Collectors.toList());
+				event.getToolTip().add(new TextComponentString(""));
+				event.getToolTip().addAll(tooltipLines);
 
-			event.getToolTip().add("");
-			event.getToolTip().addAll(tooltipLines);
+			});
 		}
 	}
 }

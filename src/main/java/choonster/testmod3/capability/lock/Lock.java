@@ -7,6 +7,7 @@ import net.minecraft.world.LockCode;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
@@ -54,10 +55,10 @@ public class Lock implements ILock, INBTSerializable<NBTTagCompound> {
 	public NBTTagCompound serializeNBT() {
 		final NBTTagCompound tagCompound = new NBTTagCompound();
 
-		code.toNBT(tagCompound);
+		code.write(tagCompound);
 
 		if (hasCustomName()) {
-			tagCompound.setString("DisplayName", ITextComponent.Serializer.componentToJson(getDisplayName()));
+			tagCompound.putString("DisplayName", ITextComponent.Serializer.toJson(getDisplayName()));
 		}
 
 		return tagCompound;
@@ -65,10 +66,10 @@ public class Lock implements ILock, INBTSerializable<NBTTagCompound> {
 
 	@Override
 	public void deserializeNBT(final NBTTagCompound nbt) {
-		code = LockCode.fromNBT(nbt);
+		code = LockCode.read(nbt);
 
-		if (nbt.hasKey("DisplayName")) {
-			final ITextComponent displayName = Objects.requireNonNull(ITextComponent.Serializer.jsonToComponent(nbt.getString("DisplayName")));
+		if (nbt.contains("DisplayName")) {
+			final ITextComponent displayName = Objects.requireNonNull(ITextComponent.Serializer.fromJson(nbt.getString("DisplayName")));
 			setDisplayName(displayName);
 		}
 	}
@@ -77,8 +78,8 @@ public class Lock implements ILock, INBTSerializable<NBTTagCompound> {
 	 * Get the name of this object. For players this returns their username
 	 */
 	@Override
-	public String getName() {
-		return getDisplayName().getUnformattedText();
+	public ITextComponent getName() {
+		return getDisplayName();
 	}
 
 	/**
@@ -97,12 +98,18 @@ public class Lock implements ILock, INBTSerializable<NBTTagCompound> {
 		return hasCustomName() ? displayName : defaultName;
 	}
 
+	@Nullable
+	@Override
+	public ITextComponent getCustomName() {
+		return displayName;
+	}
+
 	/**
 	 * Set the display name.
 	 *
 	 * @param displayName The display name
 	 */
 	public void setDisplayName(final ITextComponent displayName) {
-		this.displayName = displayName.createCopy();
+		this.displayName = displayName.deepCopy();
 	}
 }

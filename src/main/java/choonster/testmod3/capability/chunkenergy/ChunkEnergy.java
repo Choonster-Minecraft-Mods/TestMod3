@@ -108,6 +108,6 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 		if (playerChunkMapEntry == null) return;
 
 		final IMessage message = new MessageUpdateChunkEnergyValue(this);
-		TestMod3.network.sendToAllTracking(message, new NetworkRegistry.TargetPoint(world.provider.getDimension(), chunkOrigin.getX(), chunkOrigin.getY(), chunkOrigin.getZ(), 0));
+		TestMod3.network.sendToAllTracking(message, new NetworkRegistry.TargetPoint(world.dimension.getDimension(), chunkOrigin.getX(), chunkOrigin.getY(), chunkOrigin.getZ(), 0));
 	}
 }

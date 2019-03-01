@@ -4,7 +4,7 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.lock.ILock;
 import choonster.testmod3.capability.lock.wrapper.LockableContainerWrapper;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -45,31 +45,31 @@ public final class CapabilityLock {
 	public static void register() {
 		CapabilityManager.INSTANCE.register(ILock.class, new Capability.IStorage<ILock>() {
 			@Override
-			public NBTBase writeNBT(final Capability<ILock> capability, final ILock instance, final EnumFacing side) {
+			public INBTBase writeNBT(final Capability<ILock> capability, final ILock instance, final EnumFacing side) {
 				final NBTTagCompound tagCompound = new NBTTagCompound();
 
 				final LockCode lockCode = instance.getLockCode();
-				lockCode.toNBT(tagCompound);
+				lockCode.write(tagCompound);
 
 				if (instance.hasCustomName()) {
-					tagCompound.setString("DisplayName", ITextComponent.Serializer.componentToJson(instance.getDisplayName()));
+					tagCompound.putString("DisplayName", ITextComponent.Serializer.toJson(instance.getDisplayName()));
 				}
 
 				return tagCompound;
 			}
 
 			@Override
-			public void readNBT(final Capability<ILock> capability, final ILock instance, final EnumFacing side, final NBTBase nbt) {
+			public void readNBT(final Capability<ILock> capability, final ILock instance, final EnumFacing side, final INBTBase nbt) {
 				if (!(instance instanceof Lock))
 					throw new RuntimeException("Can not deserialise to an instance that isn't the default implementation");
 
 				final Lock lock = (Lock) instance;
 				final NBTTagCompound tagCompound = (NBTTagCompound) nbt;
 
-				lock.setLockCode(LockCode.fromNBT(tagCompound));
+				lock.setLockCode(LockCode.read(tagCompound));
 
-				if (tagCompound.hasKey("DisplayName")) {
-					final ITextComponent displayName = Objects.requireNonNull(ITextComponent.Serializer.jsonToComponent(tagCompound.getString("DisplayName")));
+				if (tagCompound.contains("DisplayName")) {
+					final ITextComponent displayName = Objects.requireNonNull(ITextComponent.Serializer.fromJson(tagCompound.getString("DisplayName")));
 					lock.setDisplayName(displayName);
 				}
 			}

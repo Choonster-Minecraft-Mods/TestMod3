@@ -5,6 +5,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.LockCode;
 
+import javax.annotation.Nullable;
+
 /**
  * {@link ILock} wrapper around {@link ILockableContainer}.
  *
@@ -45,11 +47,9 @@ public class LockableContainerWrapper implements ILock {
 		return lockableContainer.getLockCode();
 	}
 
-	/**
-	 * Get the name of this object. For players this returns their username
-	 */
+
 	@Override
-	public String getName() {
+	public ITextComponent getName() {
 		return lockableContainer.getName();
 	}
 
@@ -62,10 +62,16 @@ public class LockableContainerWrapper implements ILock {
 	}
 
 	/**
-	 * Get the formatted ChatComponent that will be used for the sender's username in chat
+	 * Get the formatted ITextComponent that will be used for the sender's username in chat
 	 */
 	@Override
 	public ITextComponent getDisplayName() {
 		return lockableContainer.getDisplayName();
+	}
+
+	@Nullable
+	@Override
+	public ITextComponent getCustomName() {
+		return lockableContainer.getCustomName();
 	}
 }

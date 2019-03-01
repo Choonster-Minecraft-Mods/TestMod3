@@ -8,7 +8,7 @@ import choonster.testmod3.util.LogUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -16,15 +16,14 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
-
-import javax.annotation.Nullable;
 
 import static choonster.testmod3.util.InjectionUtil.Null;
 
@@ -56,12 +55,12 @@ public final class CapabilityMaxHealth {
 	public static void register() {
 		CapabilityManager.INSTANCE.register(IMaxHealth.class, new Capability.IStorage<IMaxHealth>() {
 			@Override
-			public NBTBase writeNBT(final Capability<IMaxHealth> capability, final IMaxHealth instance, final EnumFacing side) {
+			public INBTBase writeNBT(final Capability<IMaxHealth> capability, final IMaxHealth instance, final EnumFacing side) {
 				return new NBTTagFloat(instance.getBonusMaxHealth());
 			}
 
 			@Override
-			public void readNBT(final Capability<IMaxHealth> capability, final IMaxHealth instance, final EnumFacing side, final NBTBase nbt) {
+			public void readNBT(final Capability<IMaxHealth> capability, final IMaxHealth instance, final EnumFacing side, final INBTBase nbt) {
 				instance.setBonusMaxHealth(((NBTTagFloat) nbt).getFloat());
 			}
 		}, () -> new MaxHealth(null));
@@ -71,10 +70,9 @@ public final class CapabilityMaxHealth {
 	 * Get the {@link IMaxHealth} from the specified entity.
 	 *
 	 * @param entity The entity
-	 * @return The IMaxHealth
+	 * @return A lazy optional containing the IMaxHealth, if any
 	 */
-	@Nullable
-	public static IMaxHealth getMaxHealth(final EntityLivingBase entity) {
+	public static LazyOptional<IMaxHealth> getMaxHealth(final EntityLivingBase entity) {
 		return CapabilityUtils.getCapability(entity, MAX_HEALTH_CAPABILITY, DEFAULT_FACING);
 	}
 
@@ -125,12 +123,11 @@ public final class CapabilityMaxHealth {
 		 */
 		@SubscribeEvent
 		public static void playerClone(final PlayerEvent.Clone event) {
-			final IMaxHealth oldMaxHealth = getMaxHealth(event.getOriginal());
-			final IMaxHealth newMaxHealth = getMaxHealth(event.getEntityPlayer());
-
-			if (newMaxHealth != null && oldMaxHealth != null) {
-				newMaxHealth.setBonusMaxHealth(oldMaxHealth.getBonusMaxHealth());
-			}
+			getMaxHealth(event.getOriginal()).ifPresent(oldMaxHealth -> {
+				getMaxHealth(event.getEntityPlayer()).ifPresent(newMaxHealth -> {
+					newMaxHealth.setBonusMaxHealth(oldMaxHealth.getBonusMaxHealth());
+				});
+			});
 		}
 
 		/**
@@ -140,11 +137,8 @@ public final class CapabilityMaxHealth {
 		 */
 		@SubscribeEvent
 		public static void playerChangeDimension(final PlayerChangedDimensionEvent event) {
-			final IMaxHealth maxHealth = getMaxHealth(event.player);
-
-			if (maxHealth != null) {
-				maxHealth.synchronise();
-			}
+			getMaxHealth(event.getPlayer())
+					.ifPresent(IMaxHealth::synchronise);
 		}
 	}
 }
