@@ -43,7 +43,7 @@ public class TestMod3 {
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
 
 		ModMessages.registerMessages();
-		ModMapGen.registerMapGen();
+		ModWorldGen.registerMapGen();
 		ModDispenseBehaviors.registerDispenseBehaviors();
 		ModLootTables.registerLootTables();
 
@@ -55,7 +55,7 @@ public class TestMod3 {
 	@EventHandler
 	public void init(final FMLInitializationEvent event) {
 		ModRecipes.registerRecipes();
-		ModMapGen.registerWorldGenerators();
+		ModWorldGen.registerFeatures();
 		ModDataFixers.registerDataFixers();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
