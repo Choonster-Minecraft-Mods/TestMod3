@@ -11,7 +11,6 @@ buildscript {
 
 plugins {
     id 'org.ajoberstar.grgit' version '1.7.2'
-    id 'com.github.johnrengelman.shadow' version '1.2.4'
 }
 
 apply plugin: 'net.minecraftforge.gradle'
@@ -129,12 +128,12 @@ artifacts {
 jar {
     manifest {
         attributes([
-                "Specification-Title": "Test Mod 3",
-                "Specification-Vendor": "Choonster",
-                "Specification-Version": "${mc_version}-${mod_version}",
-                "Implementation-Title": project.name,
-                "Implementation-Version": "${version}",
-                "Implementation-Vendor" :"Choonster",
+                "Specification-Title"     : "Test Mod 3",
+                "Specification-Vendor"    : "Choonster",
+                "Specification-Version"   : "${mc_version}-${mod_version}",
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : "${version}",
+                "Implementation-Vendor"   : "Choonster",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
