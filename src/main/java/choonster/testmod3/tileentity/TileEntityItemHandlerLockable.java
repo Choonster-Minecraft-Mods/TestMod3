@@ -6,10 +6,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
@@ -19,12 +21,20 @@ import javax.annotation.Nullable;
  *
  * @author Choonster
  */
-public abstract class TileEntityItemHandlerLockable<INVENTORY extends IItemHandler & INBTSerializable<NBTTagCompound>, LOCK extends ILock & INBTSerializable<NBTTagCompound>> extends TileEntityItemHandler<INVENTORY> {
-
+public abstract class TileEntityItemHandlerLockable<
+		INVENTORY extends IItemHandler & INBTSerializable<NBTTagCompound>,
+		LOCK extends ILock & INBTSerializable<NBTTagCompound>
+		> extends TileEntityItemHandler<INVENTORY> {
 	/**
 	 * The lock.
 	 */
 	protected final LOCK lock = createLock();
+
+	private final LazyOptional<LOCK> holder = LazyOptional.of(() -> lock);
+
+	public TileEntityItemHandlerLockable(final TileEntityType<?> tileEntityType) {
+		super(tileEntityType);
+	}
 
 	/**
 	 * Create and return the lock.
@@ -41,22 +51,22 @@ public abstract class TileEntityItemHandlerLockable<INVENTORY extends IItemHandl
 	}
 
 	@Override
-	public void readFromNBT(final NBTTagCompound compound) {
-		super.readFromNBT(compound);
-		lock.deserializeNBT(compound.getCompoundTag("Lock"));
+	public void read(final NBTTagCompound compound) {
+		super.read(compound);
+		lock.deserializeNBT(compound.getCompound("Lock"));
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(final NBTTagCompound compound) {
-		super.writeToNBT(compound);
-		compound.setTag("Lock", lock.serializeNBT());
+	public NBTTagCompound write(final NBTTagCompound compound) {
+		super.write(compound);
+		compound.put("Lock", lock.serializeNBT());
 		return compound;
 	}
 
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		final NBTTagCompound updateTag = super.getUpdateTag();
-		updateTag.setTag("Lock", lock.serializeNBT());
+		updateTag.put("Lock", lock.serializeNBT());
 		return updateTag;
 	}
 
@@ -67,14 +77,15 @@ public abstract class TileEntityItemHandlerLockable<INVENTORY extends IItemHandl
 	}
 
 	@Override
-	public boolean hasCapability(final Capability<?> capability, @Nullable final EnumFacing facing) {
-		return capability == CapabilityLock.LOCK_CAPABILITY || super.hasCapability(capability, facing);
+	protected void invalidateCaps() {
+		super.invalidateCaps();
+		holder.invalidate();
 	}
 
 	@Override
-	public <T> T getCapability(final Capability<T> capability, @Nullable final EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(final Capability<T> capability, @Nullable final EnumFacing facing) {
 		if (capability == CapabilityLock.LOCK_CAPABILITY) {
-			return CapabilityLock.LOCK_CAPABILITY.cast(lock);
+			return holder.cast();
 		}
 
 		return super.getCapability(capability, facing);

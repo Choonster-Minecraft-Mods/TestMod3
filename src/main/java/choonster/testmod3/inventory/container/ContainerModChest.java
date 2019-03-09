@@ -54,37 +54,37 @@ public class ContainerModChest extends Container {
 
 		final int chestOffset = (numRows - 4) * 18;
 
-		for (int row = 0; row < this.numRows; ++row) {
+		for (int row = 0; row < numRows; ++row) {
 			for (int col = 0; col < SLOTS_PER_ROW; ++col) {
-				addSlotToContainer(new SlotItemHandler(chestInventory, col + row * SLOTS_PER_ROW, 8 + col * 18, 18 + row * 18));
+				addSlot(new SlotItemHandler(chestInventory, col + row * SLOTS_PER_ROW, 8 + col * 18, 18 + row * 18));
 			}
 		}
 
 		for (int row = 0; row < 3; ++row) {
 			for (int col = 0; col < SLOTS_PER_ROW; ++col) {
-				addSlotToContainer(new SlotItemHandler(playerInventory, col + row * SLOTS_PER_ROW + SLOTS_PER_ROW, 8 + col * 18, 103 + row * 18 + chestOffset));
+				addSlot(new SlotItemHandler(playerInventory, col + row * SLOTS_PER_ROW + SLOTS_PER_ROW, 8 + col * 18, 103 + row * 18 + chestOffset));
 			}
 		}
 
 		for (int col = 0; col < SLOTS_PER_ROW; ++col) {
-			addSlotToContainer(new SlotItemHandler(playerInventory, col, 8 + col * 18, 161 + chestOffset));
+			addSlot(new SlotItemHandler(playerInventory, col, 8 + col * 18, 161 + chestOffset));
 		}
 
 	}
 
 	@Override
 	public ItemStack transferStackInSlot(final EntityPlayer player, final int index) {
-		final Slot slot = this.inventorySlots.get(index);
+		final Slot slot = inventorySlots.get(index);
 
 		if (slot != null && !slot.getStack().isEmpty()) {
 			final ItemStack stack = slot.getStack();
 			final ItemStack originalStack = stack.copy();
 
-			if (index < this.numRows * SLOTS_PER_ROW) {
-				if (!this.mergeItemStack(stack, this.numRows * SLOTS_PER_ROW, this.inventorySlots.size(), true)) {
+			if (index < numRows * SLOTS_PER_ROW) {
+				if (!mergeItemStack(stack, numRows * SLOTS_PER_ROW, inventorySlots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(stack, 0, this.numRows * SLOTS_PER_ROW, false)) {
+			} else if (!mergeItemStack(stack, 0, numRows * SLOTS_PER_ROW, false)) {
 				return ItemStack.EMPTY;
 			}
 

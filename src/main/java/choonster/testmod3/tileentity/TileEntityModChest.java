@@ -2,6 +2,7 @@ package choonster.testmod3.tileentity;
 
 import choonster.testmod3.capability.lock.Lock;
 import choonster.testmod3.client.gui.GuiIDs;
+import choonster.testmod3.init.ModTileEntities;
 import choonster.testmod3.inventory.IContainerCallbacks;
 import choonster.testmod3.inventory.container.ContainerModChest;
 import choonster.testmod3.inventory.itemhandler.IItemHandlerNameable;
@@ -35,6 +36,10 @@ public class TileEntityModChest extends TileEntityItemHandlerLoot implements ICo
 	 * The default name of this chest's inventory.
 	 */
 	private static final ITextComponent DEFAULT_NAME = new TextComponentTranslation("container.testmod3:chest");
+
+	public TileEntityModChest() {
+		super(ModTileEntities.MOD_CHEST);
+	}
 
 	/**
 	 * Create and return the inventory.
@@ -119,7 +124,7 @@ public class TileEntityModChest extends TileEntityItemHandlerLoot implements ICo
 	 * @param displayName The display name
 	 */
 	public void setDisplayName(final ITextComponent displayName) {
-		inventory.setDisplayName(displayName);
+		inventory.setCustomName(displayName);
 		lock.setDisplayName(displayName);
 	}
 }

@@ -1,6 +1,6 @@
 package choonster.testmod3.inventory.itemhandler;
 
-import net.minecraft.world.IWorldNameable;
+import net.minecraft.util.INameable;
 import net.minecraftforge.items.IItemHandler;
 
 /**
@@ -8,6 +8,6 @@ import net.minecraftforge.items.IItemHandler;
  *
  * @author Choonster
  */
-public interface IItemHandlerNameable extends IItemHandler, IWorldNameable {
+public interface IItemHandlerNameable extends IItemHandler, INameable {
 
 }

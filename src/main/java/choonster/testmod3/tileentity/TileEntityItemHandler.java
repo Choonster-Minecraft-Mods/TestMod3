@@ -7,10 +7,12 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -27,6 +29,12 @@ public abstract class TileEntityItemHandler<INVENTORY extends IItemHandler & INB
 	 * The inventory.
 	 */
 	protected final INVENTORY inventory = createInventory();
+
+	private final LazyOptional<INVENTORY> holder = LazyOptional.of(() -> inventory);
+
+	public TileEntityItemHandler(final TileEntityType<?> tileEntityType) {
+		super(tileEntityType);
+	}
 
 	/**
 	 * Create and return the inventory.
@@ -72,27 +80,28 @@ public abstract class TileEntityItemHandler<INVENTORY extends IItemHandler & INB
 	}
 
 	@Override
-	public void readFromNBT(final NBTTagCompound compound) {
-		super.readFromNBT(compound);
-		inventory.deserializeNBT(compound.getCompoundTag("ItemHandler"));
+	public void read(final NBTTagCompound compound) {
+		super.read(compound);
+		inventory.deserializeNBT(compound.getCompound("ItemHandler"));
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(final NBTTagCompound compound) {
-		super.writeToNBT(compound);
-		compound.setTag("ItemHandler", inventory.serializeNBT());
+	public NBTTagCompound write(final NBTTagCompound compound) {
+		super.write(compound);
+		compound.put("ItemHandler", inventory.serializeNBT());
 		return compound;
 	}
 
 	@Override
-	public boolean hasCapability(final Capability<?> capability, @Nullable final EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	protected void invalidateCaps() {
+		super.invalidateCaps();
+		holder.invalidate();
 	}
 
 	@Override
-	public <T> T getCapability(final Capability<T> capability, @Nullable final EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(final Capability<T> capability, @Nullable final EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
+			return holder.cast();
 		}
 
 		return super.getCapability(capability, facing);

@@ -6,6 +6,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
@@ -22,53 +23,45 @@ public class ItemHandlerNameable extends ItemStackHandler implements IItemHandle
 	/**
 	 * The custom name of this inventory, if any.
 	 */
-	private ITextComponent displayName;
+	private ITextComponent customName;
 
 	public ItemHandlerNameable(final ITextComponent defaultName) {
-		this.defaultName = defaultName.createCopy();
+		this.defaultName = defaultName.deepCopy();
 	}
 
 	public ItemHandlerNameable(final int size, final ITextComponent defaultName) {
 		super(size);
-		this.defaultName = defaultName.createCopy();
+		this.defaultName = defaultName.deepCopy();
 	}
 
 	public ItemHandlerNameable(final NonNullList<ItemStack> stacks, final ITextComponent defaultName) {
 		super(stacks);
-		this.defaultName = defaultName.createCopy();
+		this.defaultName = defaultName.deepCopy();
 	}
 
-	/**
-	 * Get the name of this object. For players this returns their username
-	 */
 	@Override
-	public String getName() {
-		return getDisplayName().getUnformattedText();
+	public ITextComponent getName() {
+		return hasCustomName() ? customName : defaultName;
 	}
 
-	/**
-	 * Returns true if this thing is named
-	 */
 	@Override
 	public boolean hasCustomName() {
-		return displayName != null;
+		return customName != null;
 	}
 
-	/**
-	 * Get the formatted ChatComponent that will be used for the sender's username in chat
-	 */
+	@Nullable
 	@Override
-	public ITextComponent getDisplayName() {
-		return hasCustomName() ? displayName : defaultName;
+	public ITextComponent getCustomName() {
+		return customName;
 	}
 
 	/**
-	 * Set the display name of this inventory.
+	 * Set the custom name of this inventory.
 	 *
-	 * @param displayName The display name
+	 * @param customName The custom name
 	 */
-	public void setDisplayName(final ITextComponent displayName) {
-		this.displayName = displayName.createCopy();
+	public void setCustomName(final ITextComponent customName) {
+		this.customName = customName.deepCopy();
 	}
 
 	@Override
@@ -76,7 +69,7 @@ public class ItemHandlerNameable extends ItemStackHandler implements IItemHandle
 		final NBTTagCompound tagCompound = super.serializeNBT();
 
 		if (hasCustomName()) {
-			tagCompound.setString("DisplayName", ITextComponent.Serializer.componentToJson(getDisplayName()));
+			tagCompound.putString("DisplayName", ITextComponent.Serializer.toJson(getDisplayName()));
 		}
 
 		return tagCompound;
@@ -86,9 +79,9 @@ public class ItemHandlerNameable extends ItemStackHandler implements IItemHandle
 	public void deserializeNBT(final NBTTagCompound nbt) {
 		super.deserializeNBT(nbt);
 
-		if (nbt.hasKey("DisplayName")) {
-			final ITextComponent displayName = Objects.requireNonNull(ITextComponent.Serializer.jsonToComponent(nbt.getString("DisplayName")));
-			setDisplayName(displayName);
+		if (nbt.contains("DisplayName")) {
+			final ITextComponent customName = Objects.requireNonNull(ITextComponent.Serializer.fromJson(nbt.getString("DisplayName")));
+			setCustomName(customName);
 		}
 	}
 }

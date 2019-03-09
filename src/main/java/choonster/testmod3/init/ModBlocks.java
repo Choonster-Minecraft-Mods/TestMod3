@@ -8,7 +8,7 @@ import choonster.testmod3.block.slab.BlockColouredSlab;
 import choonster.testmod3.block.variantgroup.BlockVariantGroup;
 import choonster.testmod3.block.variantgroup.IBlockVariantGroup;
 import choonster.testmod3.item.block.ItemFluidTank;
-import choonster.testmod3.tileentity.*;
+import choonster.testmod3.tileentity.TileEntityFluidTank;
 import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -19,14 +19,12 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolder;
 
@@ -200,8 +198,6 @@ public class ModBlocks {
 			VariantGroups.COLORED_MULTI_ROTATABLE_BLOCKS.registerBlocks(registry);
 			VariantGroups.TERRACOTTA_SLABS.registerBlocks(registry);
 			VariantGroups.VARIANTS_BLOCKS.registerBlocks(registry);
-
-			registerTileEntities();
 		}
 
 		/**
@@ -283,18 +279,5 @@ public class ModBlocks {
 			final List<? extends ItemBlock> items = group.registerItems(registry);
 			ITEM_BLOCKS.addAll(items);
 		}
-	}
-
-	private static void registerTileEntities() {
-		registerTileEntity(TileEntitySurvivalCommandBlock.class, "survival_command_block");
-		registerTileEntity(TileEntityFluidTank.class, "fluid_tank");
-		registerTileEntity(TileEntityPotionEffect.class, "potion_effect");
-		registerTileEntity(TileEntityModChest.class, "mod_chest");
-		registerTileEntity(TileEntityHidden.class, "hidden");
-		registerTileEntity(TileEntityFluidTankRestricted.class, "fluid_tank_restricted");
-	}
-
-	private static void registerTileEntity(final Class<? extends TileEntity> tileEntityClass, final String name) {
-		GameRegistry.registerTileEntity(tileEntityClass, new ResourceLocation(TestMod3.MODID, name));
 	}
 }

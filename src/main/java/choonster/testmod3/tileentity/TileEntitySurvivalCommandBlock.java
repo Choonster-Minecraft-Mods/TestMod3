@@ -3,21 +3,19 @@ package choonster.testmod3.tileentity;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.BlockSurvivalCommandBlock;
 import choonster.testmod3.client.gui.GuiIDs;
-import io.netty.buffer.ByteBuf;
+import choonster.testmod3.init.ModTileEntities;
+import choonster.testmod3.util.Constants;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.command.CommandResultStats;
-import net.minecraft.entity.Entity;
+import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityCommandBlock;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.WorldServer;
 
 /**
  * A Command Block that's accessible outside of Creative Mode.
@@ -30,91 +28,58 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 
 	private final SurvivalCommandBlockLogic survivalCommandBlockLogic = new SurvivalCommandBlockLogic(SurvivalCommandBlockLogic.Type.BLOCK) {
-		/**
-		 * Get the position in the world. <b>{@code null} is not allowed!</b> If you are not an entity in the world,
-		 * return the coordinates 0, 0, 0
-		 */
-		@Override
-		public BlockPos getPosition() {
-			return TileEntitySurvivalCommandBlock.this.getPos();
-		}
-
-		/**
-		 * Get the position vector. <b>{@code null} is not allowed!</b> If you are not an entity in the world, return
-		 * 0.0D, 0.0D, 0.0D
-		 */
-		@Override
-		public Vec3d getPositionVector() {
-			return new Vec3d(TileEntitySurvivalCommandBlock.this.pos.getX() + 0.5D, TileEntitySurvivalCommandBlock.this.pos.getY() + 0.5D, TileEntitySurvivalCommandBlock.this.pos.getZ() + 0.5D);
-		}
-
-		/**
-		 * Get the world, if available. <b>{@code null} is not allowed!</b> If you are not an entity in the world,
-		 * return the overworld
-		 */
-		@Override
-		public World getEntityWorld() {
-			return TileEntitySurvivalCommandBlock.this.getWorld();
-		}
-
-		/**
-		 * Sets the command.
-		 */
 		@Override
 		public void setCommand(final String command) {
 			super.setCommand(command);
-			TileEntitySurvivalCommandBlock.this.markDirty();
+			markDirty();
 		}
 
 		@Override
 		public void updateCommand() {
-			final BlockPos pos = getPosition();
-			final IBlockState state = TileEntitySurvivalCommandBlock.this.getWorld().getBlockState(pos);
-			TileEntitySurvivalCommandBlock.this.getWorld().notifyBlockUpdate(pos, state, state, 3);
+			final IBlockState state = getWorld().getBlockState(pos);
+			getWorld().notifyBlockUpdate(pos, state, state, Constants.BlockFlags.DEFAULT_FLAGS);
 		}
 
 		@Override
-		@SideOnly(Side.CLIENT)
-		public void fillInInfo(final ByteBuf byteBuf) {
-			byteBuf.writeInt(TileEntitySurvivalCommandBlock.this.getPos().getX());
-			byteBuf.writeInt(TileEntitySurvivalCommandBlock.this.getPos().getY());
-			byteBuf.writeInt(TileEntitySurvivalCommandBlock.this.getPos().getZ());
+		public WorldServer getWorld() {
+			return (WorldServer) world;
 		}
 
-		/**
-		 * Called when a player right clicks on the Command Block to open the edit GUI.
-		 *
-		 * @param player The player
-		 * @return Did the player open the edit GUI?
-		 */
 		@Override
 		public boolean tryOpenEditCommandBlock(final EntityPlayer player) {
 			if (player.getEntityWorld().isRemote) {
-				final BlockPos pos = getPosition();
 				player.openGui(TestMod3.instance, GuiIDs.SURVIVAL_COMMAND_BLOCK, player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());
 			} else {
-				TileEntitySurvivalCommandBlock.this.sendToClient((EntityPlayerMP) player);
+				sendToClient((EntityPlayerMP) player);
 			}
 
 			return true;
 		}
 
-		/**
-		 * Returns the entity associated with the command sender. MAY BE NULL!
-		 */
 		@Override
-		public Entity getCommandSenderEntity() {
-			return null;
+		public Vec3d getPositionVector() {
+			return new Vec3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 		}
 
-		/**
-		 * Get the Minecraft server instance
-		 */
-		@Override
-		public MinecraftServer getServer() {
-			return TileEntitySurvivalCommandBlock.this.getWorld().getMinecraftServer();
+		public CommandSource getCommandSource() {
+			return new CommandSource(
+					this,
+					new Vec3d(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5D),
+					Vec2f.ZERO,
+					getWorld(),
+					2,
+					getName().getString(),
+					getName(),
+					getWorld().getServer(),
+					null
+			);
 		}
 	};
+
+	@Override
+	public TileEntityType<?> getType() {
+		return ModTileEntities.SURVIVAL_COMMAND_BLOCK;
+	}
 
 	@Override
 	public SurvivalCommandBlockLogic getCommandBlockLogic() {
@@ -122,29 +87,19 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 	}
 
 	@Override
-	public CommandResultStats getCommandResultStats() {
-		return getCommandBlockLogic().getCommandResultStats();
+	public void read(final NBTTagCompound compound) {
+		super.read(compound);
+
+		getCommandBlockLogic().read(compound.getCompound("SurvivalCommandBlockLogic"));
 	}
 
 	@Override
-	public void readFromNBT(final NBTTagCompound compound) {
-		super.readFromNBT(compound);
+	public NBTTagCompound write(final NBTTagCompound compound) {
+		super.write(compound);
 
-		getCommandBlockLogic().readDataFromNBT(compound.getCompoundTag("SurvivalCommandBlockLogic"));
-	}
-
-	@Override
-	public NBTTagCompound writeToNBT(final NBTTagCompound compound) {
-		super.writeToNBT(compound);
-
-		compound.setTag("SurvivalCommandBlockLogic", getCommandBlockLogic().writeToNBT(new NBTTagCompound()));
+		compound.put("SurvivalCommandBlockLogic", getCommandBlockLogic().write(new NBTTagCompound()));
 
 		return compound;
-	}
-
-	@Override
-	public boolean shouldRefresh(final World world, final BlockPos pos, final IBlockState oldState, final IBlockState newSate) {
-		return oldState.getBlock() != newSate.getBlock();
 	}
 
 	/**
@@ -163,6 +118,6 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 
 	@Override
 	public Mode getMode() {
-		return ((BlockSurvivalCommandBlock) getBlockType()).getCommandBlockMode();
+		return ((BlockSurvivalCommandBlock) getBlockState().getBlock()).getCommandBlockMode();
 	}
 }

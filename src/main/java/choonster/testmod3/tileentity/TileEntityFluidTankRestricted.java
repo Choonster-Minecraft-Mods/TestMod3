@@ -1,8 +1,10 @@
 package choonster.testmod3.tileentity;
 
+import choonster.testmod3.init.ModTileEntities;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -15,12 +17,16 @@ import java.util.Set;
  *
  * @author Choonster
  */
-public class TileEntityFluidTankRestricted extends TileEntityFluidTank {
+public class TileEntityFluidTankRestricted extends TileEntityFluidTankBase {
 
 	/**
 	 * The facings that the {@link IFluidHandler} can be accessed from.
 	 */
 	private final Set<EnumFacing> enabledFacings = EnumSet.allOf(EnumFacing.class);
+
+	public TileEntityFluidTankRestricted() {
+		super(ModTileEntities.FLUID_TANK_RESTRICTED);
+	}
 
 	/**
 	 * Toggle the enabled state for the specified facing.
@@ -58,8 +64,8 @@ public class TileEntityFluidTankRestricted extends TileEntityFluidTank {
 	}
 
 	@Override
-	public void readFromNBT(final NBTTagCompound tag) {
-		super.readFromNBT(tag);
+	public void read(final NBTTagCompound tag) {
+		super.read(tag);
 
 		enabledFacings.clear();
 
@@ -70,34 +76,20 @@ public class TileEntityFluidTankRestricted extends TileEntityFluidTank {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(final NBTTagCompound tag) {
+	public NBTTagCompound write(final NBTTagCompound tag) {
 		final int[] enabledFacingIndices = enabledFacings.stream()
 				.mapToInt(EnumFacing::getIndex)
 				.toArray();
 
-		tag.setIntArray("EnabledFacings", enabledFacingIndices);
+		tag.putIntArray("EnabledFacings", enabledFacingIndices);
 
-		return super.writeToNBT(tag);
+		return super.write(tag);
 	}
 
 	@Override
-	public boolean hasCapability(final Capability<?> capability, @Nullable final EnumFacing facing) {
-		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return isFacingEnabled(facing);
-		}
-
-		return super.hasCapability(capability, facing);
-	}
-
-	@Nullable
-	@Override
-	public <T> T getCapability(final Capability<T> capability, @Nullable final EnumFacing facing) {
-		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			if (isFacingEnabled(facing)) {
-				return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tank);
-			}
-
-			return null;
+	public <T> LazyOptional<T> getCapability(final Capability<T> capability, @Nullable final EnumFacing facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && !isFacingEnabled(facing)) {
+			return LazyOptional.empty();
 		}
 
 		return super.getCapability(capability, facing);

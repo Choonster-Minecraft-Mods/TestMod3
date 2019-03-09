@@ -2,9 +2,11 @@ package choonster.testmod3.inventory.itemhandler;
 
 import choonster.testmod3.util.IWorldContainer;
 import choonster.testmod3.util.InventoryUtils;
+import com.google.common.base.Preconditions;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -67,10 +69,10 @@ public class ItemHandlerLoot extends ItemHandlerNameable implements ILootContain
 	 */
 	protected boolean checkLootAndWrite(final NBTTagCompound compound) {
 		if (lootTableLocation != null) {
-			compound.setString("LootTable", lootTableLocation.toString());
+			compound.putString("LootTable", lootTableLocation.toString());
 
 			if (lootTableSeed != 0L) {
-				compound.setLong("LootTableSeed", lootTableSeed);
+				compound.putLong("LootTableSeed", lootTableSeed);
 			}
 
 			return true;
@@ -86,7 +88,7 @@ public class ItemHandlerLoot extends ItemHandlerNameable implements ILootContain
 	 * @return Was the location read from NBT?
 	 */
 	protected boolean checkLootAndRead(final NBTTagCompound compound) {
-		if (compound.hasKey("LootTable", Constants.NBT.TAG_STRING)) {
+		if (compound.contains("LootTable", Constants.NBT.TAG_STRING)) {
 			lootTableLocation = new ResourceLocation(compound.getString("LootTable"));
 			lootTableSeed = compound.getLong("LootTableSeed");
 			return true;
@@ -100,7 +102,7 @@ public class ItemHandlerLoot extends ItemHandlerNameable implements ILootContain
 		final NBTTagCompound tagCompound = super.serializeNBT();
 
 		if (checkLootAndWrite(tagCompound)) { // If the LootTable location exists, don't write the inventory contents to NBT
-			tagCompound.removeTag("Items");
+			tagCompound.remove("Items");
 		}
 
 		return tagCompound;
@@ -109,7 +111,7 @@ public class ItemHandlerLoot extends ItemHandlerNameable implements ILootContain
 	@Override
 	public void deserializeNBT(final NBTTagCompound nbt) {
 		if (checkLootAndRead(nbt)) { // If the LootTable location exists, don't read the inventory contents from NBT
-			setSize(nbt.hasKey("Size", Constants.NBT.TAG_INT) ? nbt.getInteger("Size") : stacks.size());
+			setSize(nbt.contains("Size", Constants.NBT.TAG_INT) ? nbt.getInt("Size") : stacks.size());
 			onLoad();
 		} else {
 			super.deserializeNBT(nbt);
@@ -126,7 +128,8 @@ public class ItemHandlerLoot extends ItemHandlerNameable implements ILootContain
 	public void fillWithLoot(@Nullable final EntityPlayer player) {
 		final World world = worldContainer.getContainedWorld();
 		if (lootTableLocation != null && !world.isRemote) {
-			final LootTable lootTable = world.getLootTableManager().getLootTableFromLocation(lootTableLocation);
+			final MinecraftServer server = Preconditions.checkNotNull(world.getServer());
+			final LootTable lootTable = server.getLootTableManager().getLootTableFromLocation(lootTableLocation);
 			lootTableLocation = null;
 
 			final Random random = lootTableSeed == 0 ? new Random() : new Random(lootTableSeed);

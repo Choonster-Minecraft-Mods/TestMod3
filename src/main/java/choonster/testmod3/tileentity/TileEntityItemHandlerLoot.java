@@ -5,6 +5,7 @@ import choonster.testmod3.inventory.itemhandler.ItemHandlerLoot;
 import choonster.testmod3.util.IWorldContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -19,6 +20,10 @@ import net.minecraft.world.storage.loot.LootTable;
  * @author Choonster
  */
 public abstract class TileEntityItemHandlerLoot extends TileEntityItemHandlerLockable<ItemHandlerLoot, Lock> implements IWorldContainer {
+
+	public TileEntityItemHandlerLoot(final TileEntityType<?> tileEntityType) {
+		super(tileEntityType);
+	}
 
 	@Override
 	public void openGUI(final World world, final EntityPlayer player) {
