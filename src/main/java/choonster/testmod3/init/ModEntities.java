@@ -41,7 +41,7 @@ public class ModEntities {
 		 */
 		@SubscribeEvent
 		public static void registerEntities(final RegistryEvent.Register<EntityType<?>> event) {
-			final EntityType<?>[] entries = {
+			final EntityType<?>[] entityTypes = {
 					build(
 							"mod_arrow",
 							EntityType.Builder.create(EntityModArrow.class, EntityModArrow::new)
@@ -61,7 +61,7 @@ public class ModEntities {
 					)
 			};
 
-			event.getRegistry().registerAll(entries);
+			event.getRegistry().registerAll(entityTypes);
 		}
 
 		/**
