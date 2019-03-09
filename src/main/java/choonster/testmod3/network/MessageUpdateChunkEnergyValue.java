@@ -1,92 +1,70 @@
 package choonster.testmod3.network;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.capability.chunkenergy.CapabilityChunkEnergy;
 import choonster.testmod3.capability.chunkenergy.ChunkEnergy;
-import io.netty.buffer.ByteBuf;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.LogicalSidedProvider;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Sent from the server to update the energy value of an {@link IChunkEnergy}.
  *
  * @author Choonster
  */
-public class MessageUpdateChunkEnergyValue implements IMessage {
+public class MessageUpdateChunkEnergyValue {
 	/**
 	 * The position of the {@link IChunkEnergy}'s chunk.
 	 */
-	private ChunkPos chunkPos;
+	private final ChunkPos chunkPos;
 
 	/**
 	 * The new energy value.
 	 */
-	private int energy;
+	private final int energy;
 
-	@SuppressWarnings("unused")
-	public MessageUpdateChunkEnergyValue() {
-	}
 
 	public MessageUpdateChunkEnergyValue(final IChunkEnergy chunkEnergy) {
-		this.chunkPos = chunkEnergy.getChunkPos();
-		this.energy = chunkEnergy.getEnergyStored();
+		chunkPos = chunkEnergy.getChunkPos();
+		energy = chunkEnergy.getEnergyStored();
 	}
 
-	/**
-	 * Convert from the supplied buffer into your specific message type
-	 *
-	 * @param buf The buffer
-	 */
-	@Override
-	public void fromBytes(final ByteBuf buf) {
-		final int chunkX = buf.readInt();
-		final int chunkZ = buf.readInt();
-		chunkPos = new ChunkPos(chunkX, chunkZ);
-		energy = buf.readInt();
+	private MessageUpdateChunkEnergyValue(final ChunkPos chunkPos, final int energy) {
+		this.chunkPos = chunkPos;
+		this.energy = energy;
 	}
 
-	/**
-	 * Deconstruct your message into the supplied byte buffer
-	 *
-	 * @param buf The buffer
-	 */
-	@Override
-	public void toBytes(final ByteBuf buf) {
-		buf.writeInt(chunkPos.x);
-		buf.writeInt(chunkPos.z);
-		buf.writeInt(energy);
+	public static MessageUpdateChunkEnergyValue decode(final PacketBuffer buffer) {
+		return new MessageUpdateChunkEnergyValue(
+				new ChunkPos(buffer.readInt(), buffer.readInt()),
+				buffer.readInt()
+		);
 	}
 
-	public static class Handler implements IMessageHandler<MessageUpdateChunkEnergyValue, IMessage> {
+	public static void encode(final MessageUpdateChunkEnergyValue message, final PacketBuffer buffer) {
+		buffer.writeInt(message.chunkPos.x);
+		buffer.writeInt(message.chunkPos.z);
+		buffer.writeInt(message.energy);
+	}
 
-		/**
-		 * Called when a message is received of the appropriate type. You can optionally return a reply message, or null if no reply
-		 * is needed.
-		 *
-		 * @param message The message
-		 * @param ctx     The message context
-		 * @return An optional return message
-		 */
-		@Nullable
-		@Override
-		public IMessage onMessage(final MessageUpdateChunkEnergyValue message, final MessageContext ctx) {
-			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
-				final World world = TestMod3.proxy.getClientWorld();
-				assert world != null;
+	public static void handle(final MessageUpdateChunkEnergyValue message, final Supplier<NetworkEvent.Context> ctx) {
+		ctx.get().enqueueWork(() -> {
+			final Optional<World> optionalWorld = LogicalSidedProvider.CLIENTWORLD.get(ctx.get().getDirection().getReceptionSide());
 
-				final IChunkEnergy chunkEnergy = CapabilityChunkEnergy.getChunkEnergy(world, message.chunkPos);
-				if (!(chunkEnergy instanceof ChunkEnergy)) return;
+			optionalWorld.ifPresent(world ->
+					CapabilityChunkEnergy.getChunkEnergy(world, message.chunkPos).ifPresent(chunkEnergy -> {
+						if (!(chunkEnergy instanceof ChunkEnergy)) return;
 
-				((ChunkEnergy) chunkEnergy).setEnergy(message.energy);
-			});
+						((ChunkEnergy) chunkEnergy).setEnergy(message.energy);
+					})
+			);
+		});
 
-			return null;
-		}
+		ctx.get().setPacketHandled(true);
 	}
 }

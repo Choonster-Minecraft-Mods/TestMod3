@@ -1,15 +1,13 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModLootTables;
-import choonster.testmod3.network.MessagePlayerReceivedLoot;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -19,6 +17,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 /**
  * Gives the player random loot from a {@link LootTable} when they right click.
@@ -34,27 +33,45 @@ public class ItemLootTableTest extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
-		if (!worldIn.isRemote) {
-			final LootTable lootTable = Objects.requireNonNull(worldIn.getServer()).getLootTableManager().getLootTableFromLocation(ModLootTables.LOOT_TABLE_TEST);
+	public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer player, final EnumHand hand) {
+		if (!world.isRemote) {
+			final LootTable lootTable = Objects.requireNonNull(world.getServer()).getLootTableManager().getLootTableFromLocation(ModLootTables.LOOT_TABLE_TEST);
 
-			final LootContext lootContext = new LootContext.Builder((WorldServer) worldIn).withPlayer(playerIn).build();
+			final LootContext lootContext = new LootContext.Builder((WorldServer) world).withPlayer(player).build();
 
 			final List<ItemStack> itemStacks = lootTable.generateLootForPools(random, lootContext);
 			for (final ItemStack itemStack : itemStacks) {
-				ItemHandlerHelper.giveItemToPlayer(playerIn, itemStack);
+				ItemHandlerHelper.giveItemToPlayer(player, itemStack);
 			}
 
-			playerIn.inventoryContainer.detectAndSendChanges();
+			player.inventoryContainer.detectAndSendChanges();
 
 			if (itemStacks.size() > 0) {
-				TestMod3.network.sendTo(new MessagePlayerReceivedLoot(itemStacks), (EntityPlayerMP) playerIn);
+				final ITextComponent lootMessage = getItemStackTextComponent(itemStacks.get(0));
+
+				IntStream.range(1, itemStacks.size()).forEachOrdered(i -> {
+					lootMessage.appendText(", ");
+					lootMessage.appendSibling(getItemStackTextComponent(itemStacks.get(i)));
+				});
+
+				final ITextComponent chatMessage = new TextComponentTranslation("message.testmod3:player_received_loot.base", lootMessage);
+
+				player.sendMessage(chatMessage);
 			} else {
-				playerIn.sendMessage(new TextComponentTranslation("message.testmod3:player_received_loot.no_loot"));
+				player.sendMessage(new TextComponentTranslation("message.testmod3:player_received_loot.no_loot"));
 			}
 		}
 
+		return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+	}
 
-		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
+	/**
+	 * Get an {@link ITextComponent} with the quantity and display name of the {@link ItemStack}.
+	 *
+	 * @param itemStack The ItemStack
+	 * @return The ITextComponent
+	 */
+	private ITextComponent getItemStackTextComponent(final ItemStack itemStack) {
+		return new TextComponentTranslation("message.testmod3:player_received_loot.item", itemStack.getCount(), itemStack.getTextComponent());
 	}
 }

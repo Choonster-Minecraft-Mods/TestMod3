@@ -44,7 +44,7 @@ public class ContainerListenerFluidTank extends CapabilityContainerListener<IFlu
 	 */
 	@Override
 	protected MessageBulkUpdateContainerFluidTanks createBulkUpdateMessage(final int windowID, final NonNullList<ItemStack> items) {
-		return new MessageBulkUpdateContainerFluidTanks(windowID, items);
+		return new MessageBulkUpdateContainerFluidTanks(null, windowID, items);
 	}
 
 	/**

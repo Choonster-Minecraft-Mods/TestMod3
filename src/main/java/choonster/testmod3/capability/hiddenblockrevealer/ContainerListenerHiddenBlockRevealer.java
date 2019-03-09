@@ -29,7 +29,7 @@ public class ContainerListenerHiddenBlockRevealer extends CapabilityContainerLis
 	 */
 	@Override
 	protected MessageBulkUpdateContainerHiddenBlockRevealers createBulkUpdateMessage(final int windowID, final NonNullList<ItemStack> items) {
-		return new MessageBulkUpdateContainerHiddenBlockRevealers(windowID, items);
+		return new MessageBulkUpdateContainerHiddenBlockRevealers(CapabilityHiddenBlockRevealer.DEFAULT_FACING, windowID, items);
 	}
 
 	/**

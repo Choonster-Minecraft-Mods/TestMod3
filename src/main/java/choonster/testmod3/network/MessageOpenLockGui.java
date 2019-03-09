@@ -17,6 +17,7 @@ import javax.annotation.Nullable;
  *
  * @author Choonster
  */
+// TODO: Replace with custom data in GUI Handler
 public class MessageOpenLockGui implements IMessage {
 	private BlockPos pos;
 	private boolean hasFacing;
@@ -29,7 +30,7 @@ public class MessageOpenLockGui implements IMessage {
 	public MessageOpenLockGui(final BlockPos pos, @Nullable final EnumFacing facing) {
 		this.pos = pos;
 		this.facing = facing;
-		this.hasFacing = facing != null;
+		hasFacing = facing != null;
 	}
 
 	/**

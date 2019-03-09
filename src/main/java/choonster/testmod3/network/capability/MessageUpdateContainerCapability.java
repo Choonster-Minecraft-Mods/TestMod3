@@ -6,11 +6,9 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import javax.annotation.Nullable;
 
@@ -21,7 +19,7 @@ import javax.annotation.Nullable;
  * @param <DATA>    The data type written to and read from the buffer
  * @author Choonster
  */
-public abstract class MessageUpdateContainerCapability<HANDLER, DATA> implements IMessage {
+public abstract class MessageUpdateContainerCapability<HANDLER, DATA> {
 	/**
 	 * The {@link Capability} instance to update.
 	 */
@@ -31,22 +29,22 @@ public abstract class MessageUpdateContainerCapability<HANDLER, DATA> implements
 	 * The {@link EnumFacing} to get the capability handler from.
 	 */
 	@Nullable
-	EnumFacing facing;
+	protected EnumFacing facing;
 
 	/**
 	 * The window ID of the {@link Container}.
 	 */
-	int windowID;
+	protected int windowID;
 
 	/**
 	 * The slot's index in the {@link Container}.
 	 */
-	int slotNumber;
+	protected int slotNumber;
 
 	/**
 	 * The capability data instance.
 	 */
-	DATA capabilityData;
+	protected DATA capabilityData;
 
 	protected MessageUpdateContainerCapability(final Capability<HANDLER> capability) {
 		this.capability = capability;
@@ -57,50 +55,38 @@ public abstract class MessageUpdateContainerCapability<HANDLER, DATA> implements
 		this.facing = facing;
 		this.windowID = windowID;
 		this.slotNumber = slotNumber;
-		this.capabilityData = convertCapabilityToData(handler);
+		capabilityData = convertCapabilityToData(handler);
 	}
 
-	/**
-	 * Convert from the supplied buffer into your specific message type
-	 *
-	 * @param buf The buffer
-	 */
-	@Override
-	public final void fromBytes(final ByteBuf buf) {
-		windowID = buf.readInt();
-		slotNumber = buf.readInt();
+	public final void fromBytes(final PacketBuffer buffer) {
+		windowID = buffer.readInt();
+		slotNumber = buffer.readInt();
 
-		final int facingIndex = buf.readByte();
+		final int facingIndex = buffer.readByte();
 		if (facingIndex >= 0) {
 			facing = EnumFacing.byIndex(facingIndex);
 		} else {
 			facing = null;
 		}
 
-		final boolean hasData = buf.readBoolean();
+		final boolean hasData = buffer.readBoolean();
 		if (hasData) {
-			capabilityData = readCapabilityData(buf);
+			capabilityData = readCapabilityData(buffer);
 		}
 	}
 
-	/**
-	 * Deconstruct your message into the supplied byte buffer
-	 *
-	 * @param buf The buffer
-	 */
-	@Override
-	public final void toBytes(final ByteBuf buf) {
-		buf.writeInt(windowID);
-		buf.writeInt(slotNumber);
+	public final void toBytes(final PacketBuffer buffer) {
+		buffer.writeInt(windowID);
+		buffer.writeInt(slotNumber);
 
 		if (facing != null) {
-			buf.writeByte(facing.getIndex());
+			buffer.writeByte(facing.getIndex());
 		} else {
-			buf.writeByte(-1);
+			buffer.writeByte(-1);
 		}
 
-		buf.writeBoolean(hasData());
-		writeCapabilityData(buf, capabilityData);
+		buffer.writeBoolean(hasData());
+		writeCapabilityData(buffer, capabilityData);
 	}
 
 	/**
@@ -137,7 +123,7 @@ public abstract class MessageUpdateContainerCapability<HANDLER, DATA> implements
 	 */
 	protected abstract void writeCapabilityData(final ByteBuf buf, DATA data);
 
-	public abstract static class Handler<HANDLER, DATA, MESSAGE extends MessageUpdateContainerCapability<HANDLER, DATA>> implements IMessageHandler<MESSAGE, IMessage> {
+	public abstract static class Handler<HANDLER, DATA, MESSAGE extends MessageUpdateContainerCapability<HANDLER, DATA>> {
 
 		/**
 		 * Called when a message is received of the appropriate type. You can optionally return a reply message, or null if no reply
@@ -148,8 +134,7 @@ public abstract class MessageUpdateContainerCapability<HANDLER, DATA> implements
 		 * @return an optional return message
 		 */
 		@Nullable
-		@Override
-		public final IMessage onMessage(final MESSAGE message, final MessageContext ctx) {
+		public final void onMessage(final MESSAGE message, final ChanCon ctx) {
 			if (!message.hasData()) return null; // Don't do anything if no data was sent
 
 			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {

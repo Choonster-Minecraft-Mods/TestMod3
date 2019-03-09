@@ -1,110 +1,84 @@
 package choonster.testmod3.network;
 
-import choonster.testmod3.TestMod3;
-import choonster.testmod3.api.capability.lock.ILock;
 import choonster.testmod3.capability.lock.CapabilityLock;
 import choonster.testmod3.client.gui.GuiLock;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * Sent to the server by {@link GuiLock} to set the new lock code.
  *
  * @author Choonster
  */
-public class MessageLockSetLockCode implements IMessage {
-	private BlockPos pos;
-	private boolean hasFacing;
-	private EnumFacing facing;
-	private String lockCode;
-
-	@SuppressWarnings("unused")
-	public MessageLockSetLockCode() {
-	}
+public class MessageLockSetLockCode {
+	private final BlockPos pos;
+	private final boolean hasFacing;
+	private final EnumFacing facing;
+	private final String lockCode;
 
 	public MessageLockSetLockCode(final BlockPos pos, @Nullable final EnumFacing facing, final String lockCode) {
 		this.pos = pos;
 		this.facing = facing;
 		this.lockCode = lockCode;
-		this.hasFacing = facing != null;
+		hasFacing = facing != null;
 	}
 
-	/**
-	 * Convert from the supplied buffer into your specific message type
-	 *
-	 * @param buf The buffer
-	 */
-	@Override
-	public void fromBytes(final ByteBuf buf) {
-		pos = BlockPos.fromLong(buf.readLong());
-		hasFacing = buf.readBoolean();
+	public static MessageLockSetLockCode decode(final PacketBuffer buffer) {
+		final BlockPos pos = BlockPos.fromLong(buffer.readLong());
+		final boolean hasFacing = buffer.readBoolean();
 
+		final EnumFacing facing;
 		if (hasFacing) {
-			facing = EnumFacing.byIndex(buf.readUnsignedByte());
+			facing = buffer.readEnumValue(EnumFacing.class);
+		} else {
+			facing = null;
 		}
 
-		lockCode = ByteBufUtils.readUTF8String(buf);
+		final String lockCode = buffer.readString(Short.MAX_VALUE);
+
+		return new MessageLockSetLockCode(pos, facing, lockCode);
 	}
 
-	/**
-	 * Deconstruct your message into the supplied byte buffer
-	 *
-	 * @param buf The buffer
-	 */
-	@Override
-	public void toBytes(final ByteBuf buf) {
-		buf.writeLong(pos.toLong());
-		buf.writeBoolean(hasFacing);
+	public static void encode(final MessageLockSetLockCode message, final PacketBuffer buffer) {
+		buffer.writeLong(message.pos.toLong());
+		buffer.writeBoolean(message.hasFacing);
 
-		if (hasFacing) {
-			buf.writeByte(facing.getIndex());
+		if (message.hasFacing) {
+			buffer.writeByte(message.facing.getIndex());
 		}
 
-		ByteBufUtils.writeUTF8String(buf, lockCode);
+		buffer.writeString(message.lockCode);
 	}
 
-	public static class Handler implements IMessageHandler<MessageLockSetLockCode, IMessage> {
 
-		/**
-		 * Called when a message is received of the appropriate type. You can optionally return a reply message, or null if no reply
-		 * is needed.
-		 *
-		 * @param message The message
-		 * @param ctx     The message context
-		 * @return an optional return message
-		 */
-		@Nullable
-		@Override
-		public IMessage onMessage(final MessageLockSetLockCode message, final MessageContext ctx) {
-			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
-				final EntityPlayerMP player = (EntityPlayerMP) TestMod3.proxy.getPlayer(ctx);
-				final World world = player.world;
+	public static void handle(final MessageLockSetLockCode message, final Supplier<NetworkEvent.Context> ctx) {
+		ctx.get().enqueueWork(() -> {
+			final EntityPlayerMP player = ctx.get().getSender();
+			final World world = player.world;
 
-				player.markPlayerActive();
+			player.markPlayerActive();
 
-				if (world.isBlockLoaded(message.pos)) {
-					final ILock lock = CapabilityLock.getLock(world, message.pos, message.facing);
-					if (lock != null) {
-						if (lock.isLocked()) {
-							player.sendMessage(new TextComponentTranslation("testmod3:lock.already_locked"));
-						}
-						lock.setLockCode(new LockCode(message.lockCode));
+			if (world.isBlockLoaded(message.pos)) {
+				CapabilityLock.getLock(world, message.pos, message.facing).ifPresent((lock) -> {
+					if (lock.isLocked()) {
+						player.sendMessage(new TextComponentTranslation("testmod3:lock.already_locked"));
 					}
-				}
-			});
 
-			return null;
-		}
+					lock.setLockCode(new LockCode(message.lockCode));
+				});
+			}
+		});
+
+		ctx.get().setPacketHandled(true);
 	}
+
 }

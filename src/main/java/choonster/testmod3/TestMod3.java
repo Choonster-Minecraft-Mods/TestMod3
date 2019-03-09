@@ -10,11 +10,10 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 import java.util.UUID;
 
@@ -28,7 +27,7 @@ public class TestMod3 {
 	@SidedProxy(clientSide = "choonster.testmod3.proxy.CombinedClientProxy", serverSide = "choonster.testmod3.proxy.DedicatedServerProxy")
 	public static IProxy proxy;
 
-	public static SimpleNetworkWrapper network;
+	public static final SimpleChannel network = ModNetwork.getNetworkChannel();
 
 	static {
 		FluidRegistry.enableUniversalBucket(); // Must be called before preInit
@@ -40,9 +39,6 @@ public class TestMod3 {
 
 		ModCapabilities.registerCapabilities();
 
-		network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
-
-		ModMessages.registerMessages();
 		ModWorldGen.registerMapGen();
 		ModDispenseBehaviors.registerDispenseBehaviors();
 		ModLootTables.registerLootTables();

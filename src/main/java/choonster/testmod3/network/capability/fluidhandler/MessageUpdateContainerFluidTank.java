@@ -3,13 +3,10 @@ package choonster.testmod3.network.capability.fluidhandler;
 import choonster.testmod3.network.capability.MessageUpdateContainerCapability;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.inventory.Container;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 import javax.annotation.Nullable;
 
@@ -53,7 +50,7 @@ public class MessageUpdateContainerFluidTank extends MessageUpdateContainerCapab
 	 */
 	@Override
 	protected FluidTankInfo readCapabilityData(final ByteBuf buf) {
-		return readFluidTankInfo(buf);
+		return decodeFluidTankInfo(buf);
 	}
 
 	/**
@@ -64,42 +61,9 @@ public class MessageUpdateContainerFluidTank extends MessageUpdateContainerCapab
 	 */
 	@Override
 	protected void writeCapabilityData(final ByteBuf buf, final FluidTankInfo fluidTankInfo) {
-		writeFluidTankInfo(buf, fluidTankInfo);
+		encodeFluidTankInfo(fluidTankInfo, buf);
 	}
 
-	/**
-	 * Read a {@link FluidTankInfo} from the buffer
-	 *
-	 * @param buf The buffer
-	 * @return The FluidTankInfo
-	 */
-	static FluidTankInfo readFluidTankInfo(final ByteBuf buf) {
-		final NBTTagCompound tagCompound = ByteBufUtils.readTag(buf);
-		final FluidStack contents = FluidStack.loadFluidStackFromNBT(tagCompound);
-
-		final int capacity = buf.readInt();
-
-		return new FluidTankInfo(contents, capacity);
-	}
-
-	/**
-	 * Write a {@link FluidTankInfo} to the buffer
-	 *
-	 * @param buf           The buffer
-	 * @param fluidTankInfo The FluidTankInfo
-	 */
-	static void writeFluidTankInfo(final ByteBuf buf, final FluidTankInfo fluidTankInfo) {
-		final FluidStack contents = fluidTankInfo.fluid;
-		final NBTTagCompound tagCompound = new NBTTagCompound();
-
-		if (contents != null) {
-			contents.writeToNBT(tagCompound);
-		}
-
-		ByteBufUtils.writeTag(buf, tagCompound);
-
-		buf.writeInt(fluidTankInfo.capacity);
-	}
 
 	public static class Handler extends MessageUpdateContainerCapability.Handler<IFluidHandlerItem, FluidTankInfo, MessageUpdateContainerFluidTank> {
 

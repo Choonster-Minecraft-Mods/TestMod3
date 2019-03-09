@@ -1,22 +1,25 @@
 package choonster.testmod3.network.capability;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.util.CapabilityUtils;
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import io.netty.buffer.ByteBuf;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 /**
  * Base class for messages that update the capability data for each slot of a {@link Container}.
@@ -29,7 +32,7 @@ import java.util.List;
  * @param <DATA>    The data type written to and read from the buffer
  * @author Choonster
  */
-public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> implements IMessage {
+public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> {
 	/**
 	 * The {@link Capability} instance to update.
 	 */
@@ -49,78 +52,43 @@ public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> implem
 	/**
 	 * The capability data instances for each slot, indexed by their index in the original {@link List<ItemStack>}.
 	 */
-	final TIntObjectMap<DATA> capabilityData = new TIntObjectHashMap<>();
+	final Int2ObjectMap<DATA> capabilityData;
 
-	protected MessageBulkUpdateContainerCapability(final Capability<HANDLER> capability) {
-		this.capability = capability;
-	}
-
-	public MessageBulkUpdateContainerCapability(final Capability<HANDLER> capability, @Nullable final EnumFacing facing, final int windowID, final NonNullList<ItemStack> items) {
+	public MessageBulkUpdateContainerCapability(
+			final Capability<HANDLER> capability,
+			@Nullable final EnumFacing facing,
+			final int windowID,
+			final NonNullList<ItemStack> items,
+			final CapabilityDataConverter<HANDLER, DATA> capabilityDataConverter
+	) {
 		this.capability = capability;
 		this.facing = facing;
 		this.windowID = windowID;
 
-		for (int index = 0; index < items.size(); index++) {
+		capabilityData = new Int2ObjectOpenHashMap<>();
+		IntStream.range(0, items.size()).forEach(index -> {
 			final ItemStack stack = items.get(index);
 
-			final HANDLER handler = CapabilityUtils.getCapability(stack, capability, facing);
-
-			if (handler != null) {
-				final DATA data = convertCapabilityToData(handler);
+			CapabilityUtils.getCapability(stack, capability, facing).ifPresent((handler) -> {
+				final DATA data = capabilityDataConverter.convert(handler);
 
 				if (data != null) {
 					capabilityData.put(index, data);
 				}
-			}
-		}
-	}
-
-	/**
-	 * Convert from the supplied buffer into your specific message type
-	 *
-	 * @param buf The buffer
-	 */
-	@Override
-	public final void fromBytes(final ByteBuf buf) {
-		windowID = buf.readInt();
-
-		final int facingIndex = buf.readByte();
-		if (facingIndex >= 0) {
-			facing = EnumFacing.byIndex(facingIndex);
-		} else {
-			facing = null;
-		}
-
-		final int numEntries = buf.readInt();
-		for (int i = 0; i < numEntries; i++) {
-			final int index = buf.readInt();
-			final DATA data = readCapabilityData(buf);
-			capabilityData.put(index, data);
-		}
-	}
-
-	/**
-	 * Deconstruct your message into the supplied byte buffer
-	 *
-	 * @param buf The buffer
-	 */
-	@Override
-	public final void toBytes(final ByteBuf buf) {
-		buf.writeInt(windowID);
-
-		if (facing != null) {
-			buf.writeByte(facing.getIndex());
-		} else {
-			buf.writeByte(-1);
-		}
-
-		buf.writeInt(capabilityData.size());
-		capabilityData.forEachEntry((index, data) -> {
-			buf.writeInt(index);
-			writeCapabilityData(buf, data);
-
-			return true;
+			});
 		});
+	}
+
+	protected MessageBulkUpdateContainerCapability(
+			final Capability<HANDLER> capability,
+			@Nullable final EnumFacing facing,
+			final int windowID,
+			final Int2ObjectMap<DATA> capabilityData
+	) {
+		this.capability = capability;
+		this.facing = facing;
+		this.windowID = windowID;
+		this.capabilityData = capabilityData;
 	}
 
 	/**
@@ -133,86 +101,198 @@ public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> implem
 	}
 
 	/**
-	 * Convert a capability handler instance to a data instance.
+	 * Decodes a bulk update message from the network.
 	 *
-	 * @param handler The handler
-	 * @return The data instance
+	 * @param buffer                The packet buffer
+	 * @param capabilityDataDecoder A function that decodes a data instance from the buffer
+	 * @param messageFactory        A function to create the message instance
+	 * @param <HANDLER>             The capability handler type
+	 * @param <DATA>                The data type written to and read from the buffer
+	 * @param <MESSAGE>             The message type
+	 * @return The decoded message
 	 */
-	@Nullable
-	protected abstract DATA convertCapabilityToData(final HANDLER handler);
+	protected static <
+			HANDLER,
+			DATA,
+			MESSAGE extends MessageBulkUpdateContainerCapability<HANDLER, DATA>
+			>
+	MESSAGE decode(
+			final PacketBuffer buffer,
+			final CapabilityDataDecoder<DATA> capabilityDataDecoder,
+			final MessageFactory<HANDLER, DATA, MESSAGE> messageFactory
+	) {
+		final boolean hasFacing = buffer.readBoolean();
+
+		final EnumFacing facing;
+		if (hasFacing) {
+			facing = buffer.readEnumValue(EnumFacing.class);
+		} else {
+			facing = null;
+		}
+
+		final int windowID = buffer.readInt();
+
+		final Int2ObjectMap<DATA> capabilityData = new Int2ObjectOpenHashMap<>();
+
+		final int numEntries = buffer.readInt();
+		for (int i = 0; i < numEntries; i++) {
+			final int index = buffer.readInt();
+			final DATA data = capabilityDataDecoder.decode(buffer);
+			capabilityData.put(index, data);
+		}
+
+		return messageFactory.createMessage(facing, windowID, capabilityData);
+	}
 
 	/**
-	 * Read a data instance from the buffer.
+	 * Encodes a bulk update message to be sent over the network.
 	 *
-	 * @param buf The buffer
-	 * @return The data instance
+	 * @param message               The message to encode
+	 * @param buffer                The packet buffer
+	 * @param capabilityDataEncoder A function that encodes a data instance to the buffer
+	 * @param <HANDLER>             The capability handler type
+	 * @param <DATA>                The data type written to and read from the buffer
+	 * @param <MESSAGE>             The message type
 	 */
-	protected abstract DATA readCapabilityData(final ByteBuf buf);
+	protected static <
+			HANDLER,
+			DATA,
+			MESSAGE extends MessageBulkUpdateContainerCapability<HANDLER, DATA>
+			>
+	void encode(
+			final MESSAGE message,
+			final PacketBuffer buffer,
+			final CapabilityDataEncoder<DATA> capabilityDataEncoder
+	) {
+		final boolean hasFacing = message.facing != null;
+		buffer.writeBoolean(hasFacing);
+
+		if (hasFacing) {
+			buffer.writeEnumValue(message.facing);
+		}
+
+		buffer.writeInt(message.windowID);
+
+		buffer.writeInt(message.capabilityData.size());
+		Int2ObjectMaps.fastForEach(message.capabilityData, (entry) -> {
+			buffer.writeInt(entry.getIntKey());
+			capabilityDataEncoder.encode(entry.getValue(), buffer);
+		});
+	}
 
 	/**
-	 * Write a data instance to the buffer.
+	 * Handles a bulk update message.
 	 *
-	 * @param buf  The buffer
-	 * @param data The data instance
+	 * @param message               The message to handle
+	 * @param ctx                   The network context
+	 * @param capabilityDataApplier A function that applies the capability data from a data instance to a capability handler instance.
+	 * @param <HANDLER>             The capability handler type
+	 * @param <DATA>                The data type written to and read from the buffer
+	 * @param <MESSAGE>             The message type
 	 */
-	protected abstract void writeCapabilityData(final ByteBuf buf, DATA data);
+	protected static <
+			HANDLER,
+			DATA,
+			MESSAGE extends MessageBulkUpdateContainerCapability<HANDLER, DATA>
+			>
+	void handle(
+			final MESSAGE message,
+			final Supplier<NetworkEvent.Context> ctx,
+			final CapabilityDataApplier<HANDLER, DATA> capabilityDataApplier
+	) {
+		if (!message.hasData()) return; // Don't do anything if no data was sent
 
-	public abstract static class Handler<HANDLER, DATA, MESSAGE extends MessageBulkUpdateContainerCapability<HANDLER, DATA>> implements IMessageHandler<MESSAGE, IMessage> {
+		ctx.get().enqueueWork(() -> DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+			final EntityPlayer player = Minecraft.getInstance().player;
 
-		/**
-		 * Called when a message is received of the appropriate type. You can optionally return a reply message, or null if no reply
-		 * is needed.
-		 *
-		 * @param message The message
-		 * @param ctx     The message context
-		 * @return an optional return message
-		 */
-		@Nullable
-		@Override
-		public final IMessage onMessage(final MESSAGE message, final MessageContext ctx) {
-			if (!message.hasData()) return null; // Don't do anything if no data was sent
+			final Container container;
+			if (message.windowID == 0) {
+				container = player.inventoryContainer;
+			} else if (message.windowID == player.openContainer.windowId) {
+				container = player.openContainer;
+			} else {
+				return;
+			}
 
-			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
-				final EntityPlayer player = TestMod3.proxy.getPlayer(ctx);
+			Int2ObjectMaps.fastForEach(message.capabilityData, (entry) -> {
+				final int index = entry.getIntKey();
+				final DATA data = entry.getValue();
 
-				final Container container;
-				if (message.windowID == 0) {
-					container = player.inventoryContainer;
-				} else if (message.windowID == player.openContainer.windowId) {
-					container = player.openContainer;
-				} else {
-					return;
-				}
+				final ItemStack originalStack = container.getSlot(index).getStack();
 
-				message.capabilityData.forEachEntry((index, data) -> {
-					final ItemStack originalStack = container.getSlot(index).getStack();
-					final HANDLER originalHandler = CapabilityUtils.getCapability(originalStack, message.capability, message.facing);
-					if (originalHandler != null) {
-						final ItemStack newStack = originalStack.copy();
+				CapabilityUtils.getCapability(originalStack, message.capability, message.facing).ifPresent(originalHandler -> {
+					final ItemStack newStack = originalStack.copy();
 
-						final HANDLER newHandler = CapabilityUtils.getCapability(newStack, message.capability, message.facing);
-						assert newHandler != null;
-
-						applyCapabilityData(newHandler, data);
+					CapabilityUtils.getCapability(newStack, message.capability, message.facing).ifPresent(newHandler -> {
+						capabilityDataApplier.apply(newHandler, data);
 
 						if (!originalHandler.equals(newHandler)) {
 							container.putStackInSlot(index, newStack);
 						}
-					}
-
-					return true;
+					});
 				});
 			});
+		}));
 
-			return null;
-		}
+		ctx.get().setPacketHandled(true);
+	}
 
-		/**
-		 * Apply the capability data from the data instance to the capability handler instance.
-		 *
-		 * @param handler The capability handler instance
-		 * @param data    The data instance
-		 */
-		protected abstract void applyCapabilityData(final HANDLER handler, final DATA data);
+	/**
+	 * A function that creates bulk update message instances from network data.
+	 *
+	 * @param <HANDLER> The capability handler type
+	 * @param <DATA>    The data type written to and read from the buffer
+	 * @param <MESSAGE> The message type
+	 */
+	@FunctionalInterface
+	public interface MessageFactory<HANDLER, DATA, MESSAGE extends MessageBulkUpdateContainerCapability<HANDLER, DATA>> {
+		MESSAGE createMessage(
+				@Nullable EnumFacing facing,
+				int windowID,
+				Int2ObjectMap<DATA> capabilityData
+		);
+	}
+
+	/**
+	 * Converts a capability handler instance to a data instance.
+	 *
+	 * @param <HANDLER> The capability handler type
+	 * @param <DATA>    The data type written to and read from the buffer
+	 */
+	@FunctionalInterface
+	public interface CapabilityDataConverter<HANDLER, DATA> {
+		@Nullable
+		DATA convert(HANDLER handler);
+	}
+
+	/**
+	 * A function that decodes a data instance from the buffer
+	 *
+	 * @param <DATA> The data type written to and read from the buffer
+	 */
+	@FunctionalInterface
+	public interface CapabilityDataDecoder<DATA> {
+		DATA decode(PacketBuffer buffer);
+	}
+
+	/**
+	 * A function that encodes a data instance to the buffer
+	 *
+	 * @param <DATA> The data type written to and read from the buffer
+	 */
+	@FunctionalInterface
+	public interface CapabilityDataEncoder<DATA> {
+		void encode(DATA data, PacketBuffer buffer);
+	}
+
+	/**
+	 * A function that applies the capability data from a data instance to a capability handler instance.
+	 *
+	 * @param <HANDLER> The capability handler type
+	 * @param <DATA>    The data type written to and read from the buffer
+	 */
+	@FunctionalInterface
+	public interface CapabilityDataApplier<HANDLER, DATA> {
+		void apply(HANDLER handler, DATA data);
 	}
 }

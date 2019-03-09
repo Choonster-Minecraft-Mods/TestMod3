@@ -1,22 +1,21 @@
 package choonster.testmod3.network;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.BlockFluidTank;
-import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * Sent by {@link BlockFluidTank} to notify the player of the tank's contents.
@@ -30,49 +29,34 @@ import javax.annotation.Nullable;
  *
  * @author Choonster
  */
-public class MessageFluidTankContents implements IMessage {
-
-	private IFluidTankProperties[] fluidTankProperties;
-
-	@SuppressWarnings("unused")
-	public MessageFluidTankContents() {
-	}
+// TODO: Update/remove when fluids are re-implemented in 1.14
+public class MessageFluidTankContents {
+	private final IFluidTankProperties[] fluidTankProperties;
 
 	public MessageFluidTankContents(final IFluidTankProperties[] fluidTankProperties) {
 		this.fluidTankProperties = fluidTankProperties;
 	}
 
-
-	/**
-	 * Convert from the supplied buffer into your specific message type
-	 *
-	 * @param buf The buffer
-	 */
-	@Override
-	public void fromBytes(final ByteBuf buf) {
-		final int numProperties = buf.readInt();
-		fluidTankProperties = new IFluidTankProperties[numProperties];
+	public static MessageFluidTankContents decode(final PacketBuffer buffer) {
+		final int numProperties = buffer.readInt();
+		final IFluidTankProperties[] fluidTankProperties = new IFluidTankProperties[numProperties];
 
 		for (int i = 0; i < numProperties; i++) {
-			final NBTTagCompound tagCompound = ByteBufUtils.readTag(buf);
+			final NBTTagCompound tagCompound = buffer.readCompoundTag();
 			final FluidStack contents = FluidStack.loadFluidStackFromNBT(tagCompound);
 
-			final int capacity = buf.readInt();
+			final int capacity = buffer.readInt();
 
 			fluidTankProperties[i] = new FluidTankProperties(contents, capacity);
 		}
+
+		return new MessageFluidTankContents(fluidTankProperties);
 	}
 
-	/**
-	 * Deconstruct your message into the supplied byte buffer
-	 *
-	 * @param buf The buffer
-	 */
-	@Override
-	public void toBytes(final ByteBuf buf) {
-		buf.writeInt(fluidTankProperties.length);
+	public static void encode(final MessageFluidTankContents message, final PacketBuffer buffer) {
+		buffer.writeInt(message.fluidTankProperties.length);
 
-		for (final IFluidTankProperties properties : fluidTankProperties) {
+		for (final IFluidTankProperties properties : message.fluidTankProperties) {
 			final FluidStack contents = properties.getContents();
 			final NBTTagCompound tagCompound = new NBTTagCompound();
 
@@ -80,32 +64,19 @@ public class MessageFluidTankContents implements IMessage {
 				contents.writeToNBT(tagCompound);
 			}
 
-			ByteBufUtils.writeTag(buf, tagCompound);
+			buffer.writeCompoundTag(tagCompound);
 
-			buf.writeInt(properties.getCapacity());
+			buffer.writeInt(properties.getCapacity());
 		}
 	}
 
-	public static class Handler implements IMessageHandler<MessageFluidTankContents, IMessage> {
+	public static void handle(final MessageFluidTankContents message, final Supplier<NetworkEvent.Context> ctx) {
+		ctx.get().enqueueWork(() -> DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+			final EntityPlayer player = Minecraft.getInstance().player;
 
-		/**
-		 * Called when a message is received of the appropriate type. You can optionally return a reply message, or null if no reply
-		 * is needed.
-		 *
-		 * @param message The message
-		 * @param ctx     The context
-		 * @return an optional return message
-		 */
-		@Nullable
-		@Override
-		public IMessage onMessage(final MessageFluidTankContents message, final MessageContext ctx) {
-			TestMod3.proxy.getThreadListener(ctx).addScheduledTask(() -> {
-				final EntityPlayer player = TestMod3.proxy.getPlayer(ctx);
+			BlockFluidTank.getFluidDataForDisplay(message.fluidTankProperties).forEach(player::sendMessage);
+		}));
 
-				BlockFluidTank.getFluidDataForDisplay(message.fluidTankProperties).forEach(player::sendMessage);
-			});
-
-			return null;
-		}
+		ctx.get().setPacketHandled(true);
 	}
 }
