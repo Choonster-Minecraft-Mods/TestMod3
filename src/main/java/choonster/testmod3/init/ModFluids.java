@@ -1,41 +1,22 @@
 package choonster.testmod3.init;
 
-import choonster.testmod3.TestMod3;
-import choonster.testmod3.block.fluid.BlockFluidNoFlow;
-import choonster.testmod3.block.fluid.BlockFluidPortalDisplacement;
-import choonster.testmod3.item.block.ItemFluidTank;
-import choonster.testmod3.tileentity.TileEntityFluidTank;
-import choonster.testmod3.util.Constants;
-import choonster.testmod3.util.RegistryUtil;
-import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.MaterialLiquid;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fluids.*;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.registries.IForgeRegistry;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Function;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.IFluidBlock;
 
 @SuppressWarnings("WeakerAccess")
+// TODO: Update when fluids are re-implemented in 1.14
 public class ModFluids {
-	/**
+	/*
+	 *//**
 	 * The fluids registered by this mod. Includes fluids that were already registered by another mod.
-	 */
+	 *//*
 	public static final Set<Fluid> FLUIDS = new HashSet<>();
 
-	/**
+	*//**
 	 * The fluid blocks from this mod only. Doesn't include blocks for fluids that were already registered by another mod.
-	 */
+	 *//*
 	public static final Set<IFluidBlock> MOD_FLUID_BLOCKS = new HashSet<>();
 
 	public static final Fluid STATIC = createFluid("static", false,
@@ -62,7 +43,7 @@ public class ModFluids {
 			fluid -> fluid.setLuminosity(10).setDensity(1600).setViscosity(100),
 			fluid -> new BlockFluidPortalDisplacement(fluid, new MaterialLiquid(MapColor.DIAMOND)));
 
-	/**
+	*//**
 	 * Create a {@link Fluid} and its {@link IFluidBlock}, or use the existing ones if a fluid has already been registered with the same name.
 	 *
 	 * @param name                 The name of the fluid
@@ -70,7 +51,7 @@ public class ModFluids {
 	 * @param fluidPropertyApplier A function that sets the properties of the {@link Fluid}
 	 * @param blockFactory         A function that creates the {@link IFluidBlock}
 	 * @return The fluid and block
-	 */
+	 *//*
 	private static <T extends Block & IFluidBlock> Fluid createFluid(final String name, final boolean hasFlowIcon, final Consumer<Fluid> fluidPropertyApplier, final Function<Fluid, T> blockFactory) {
 		final String texturePrefix = Constants.RESOURCE_PREFIX + "blocks/fluid_";
 
@@ -95,11 +76,11 @@ public class ModFluids {
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	public static class RegistrationHandler {
 
-		/**
-		 * Register this mod's fluid {@link Block}s.
-		 *
-		 * @param event The event
-		 */
+		*//**
+	 * Register this mod's fluid {@link Block}s.
+	 *
+	 * @param event The event
+	 *//*
 		@SubscribeEvent
 		public static void registerBlocks(final RegistryEvent.Register<Block> event) {
 			final IForgeRegistry<Block> registry = event.getRegistry();
@@ -113,11 +94,11 @@ public class ModFluids {
 			}
 		}
 
-		/**
-		 * Register this mod's fluid {@link ItemBlock}s.
-		 *
-		 * @param event The event
-		 */
+		*//**
+	 * Register this mod's fluid {@link ItemBlock}s.
+	 *
+	 * @param event The event
+	 *//*
 		// Use EventPriority.LOWEST so this is called after the RegistryEvent.Register<Item> handler in ModBlocks where
 		// the ItemBlock for ModBlocks.FLUID_TANK is registered.
 		@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -136,9 +117,9 @@ public class ModFluids {
 		}
 	}
 
-	/**
+	*//**
 	 * Register this mod's tanks and buckets.
-	 */
+	 *//*
 	private static void registerFluidContainers() {
 		registerTank(FluidRegistry.WATER);
 		registerTank(FluidRegistry.LAVA);
@@ -161,4 +142,5 @@ public class ModFluids {
 
 		((ItemFluidTank) item).addFluid(fluidStack);
 	}
+*/
 }

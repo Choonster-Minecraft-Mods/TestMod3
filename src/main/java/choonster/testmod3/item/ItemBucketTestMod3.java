@@ -49,7 +49,7 @@ public class ItemBucketTestMod3 extends UniversalBucket {
 		subItems.add(empty);
 
 		/*
-		// TODO: Uncomment when fluid registry is reimplemented
+		// TODO: Uncomment when fluids are reimplemented in 1.14
 		for (final Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
 			// Add all fluids that the bucket can be filled with
 			final FluidStack fs = new FluidStack(fluid, getCapacity());

@@ -1,10 +1,5 @@
 package choonster.testmod3.block.fluid;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraftforge.fluids.BlockFluidClassic;
-import net.minecraftforge.fluids.Fluid;
-
 /**
  * A fluid block that displaces portals.
  * <p>
@@ -13,6 +8,8 @@ import net.minecraftforge.fluids.Fluid;
  *
  * @author Choonster
  */
+// TODO: Update when fluids are re-implemented in 1.14
+/*
 public class BlockFluidPortalDisplacement extends BlockFluidClassic {
 	public BlockFluidPortalDisplacement(final Fluid fluid, final Material material) {
 		super(fluid, material);
@@ -20,3 +17,4 @@ public class BlockFluidPortalDisplacement extends BlockFluidClassic {
 		displacements.put(Blocks.END_PORTAL, true);
 	}
 }
+*/
