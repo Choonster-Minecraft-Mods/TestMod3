@@ -50,7 +50,6 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 		return SHAPE;
 	}
 
-	@Nullable
 	@Override
 	public TileEntity createTileEntity(final IBlockState state, final IBlockReader world) {
 		return new TileEntityModChest();

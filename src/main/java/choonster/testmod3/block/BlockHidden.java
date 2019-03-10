@@ -10,8 +10,6 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockReader;
 
-import javax.annotation.Nullable;
-
 /**
  * A block that only renders when the player is holding an item with the {@link IHiddenBlockRevealer} capability.
  * <p>
@@ -38,7 +36,6 @@ public class BlockHidden extends BlockTileEntity<TileEntityHidden> {
 		builder.add(HIDDEN);
 	}
 
-	@Nullable
 	@Override
 	public TileEntity createTileEntity(final IBlockState state, final IBlockReader world) {
 		return new TileEntityHidden();

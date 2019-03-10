@@ -15,7 +15,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,7 +30,6 @@ public class BlockFluidTankRestricted extends BlockFluidTank<TileEntityFluidTank
 		super(properties);
 	}
 
-	@Nullable
 	@Override
 	public TileEntity createTileEntity(final IBlockState state, final IBlockReader world) {
 		return new TileEntityFluidTankRestricted();

@@ -35,7 +35,6 @@ public abstract class BlockTileEntity<TE extends TileEntity> extends Block {
 		return true;
 	}
 
-	@Nullable
 	@Override
 	public abstract TileEntity createTileEntity(final IBlockState state, final IBlockReader world);
 
