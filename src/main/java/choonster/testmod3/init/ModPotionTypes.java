@@ -10,6 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolder;
@@ -33,7 +34,7 @@ public class ModPotionTypes {
 
 	public static final PotionType STRONG_TEST = Null();
 
-	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 	public static class RegistrationHandler {
 		/**
 		 * Register this mod's {@link PotionType}s.

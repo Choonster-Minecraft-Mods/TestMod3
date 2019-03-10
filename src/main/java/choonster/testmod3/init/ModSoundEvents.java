@@ -9,6 +9,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.registries.ObjectHolder;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -35,7 +36,7 @@ public class ModSoundEvents {
 	public static final SoundEvent ACTION_SADDLE = Null();
 
 
-	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 	public static class RegistrationHandler {
 		private static Map<ResourceLocation, SoundEvent> SOUND_EVENTS;
 

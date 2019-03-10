@@ -6,6 +6,7 @@ import net.minecraft.potion.Potion;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.registries.ObjectHolder;
 
 import static choonster.testmod3.util.InjectionUtil.Null;
@@ -21,7 +22,7 @@ public class ModPotions {
 
 	public static final PotionTestMod3 TEST = Null();
 
-	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 	public static class RegistrationHandler {
 		/**
 		 * Register this mod's {@link Potion}s.
