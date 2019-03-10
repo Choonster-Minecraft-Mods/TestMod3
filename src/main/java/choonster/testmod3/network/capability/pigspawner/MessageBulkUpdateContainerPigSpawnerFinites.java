@@ -4,12 +4,16 @@ import choonster.testmod3.api.capability.pigspawner.IPigSpawner;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
 import choonster.testmod3.capability.pigspawner.CapabilityPigSpawner;
 import choonster.testmod3.network.capability.MessageBulkUpdateContainerCapability;
-import io.netty.buffer.ByteBuf;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * Updates the {@link IPigSpawnerFinite} for each slot of a {@link Container}.
@@ -17,66 +21,50 @@ import javax.annotation.Nullable;
  * @author Choonster
  */
 public class MessageBulkUpdateContainerPigSpawnerFinites extends MessageBulkUpdateContainerCapability<IPigSpawner, Integer> {
-
-	@SuppressWarnings("unused")
-	protected MessageBulkUpdateContainerPigSpawnerFinites() {
-		super(CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY);
+	public MessageBulkUpdateContainerPigSpawnerFinites(
+			@Nullable final EnumFacing facing,
+			final int windowID,
+			final NonNullList<ItemStack> items
+	) {
+		super(
+				CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY,
+				facing, windowID, items,
+				PigSpawnerFunctions::convertFinitePigSpawnerToNumPigs
+		);
 	}
 
-	public MessageBulkUpdateContainerPigSpawnerFinites(final int windowID, final NonNullList<ItemStack> items) {
-		super(CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY, CapabilityPigSpawner.DEFAULT_FACING, windowID, items);
+	private MessageBulkUpdateContainerPigSpawnerFinites(
+			@Nullable final EnumFacing facing,
+			final int windowID,
+			final Int2ObjectMap<Integer> capabilityData
+	) {
+		super(
+				CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY,
+				facing, windowID, capabilityData
+		);
 	}
 
-	/**
-	 * Convert a capability handler instance to a data instance.
-	 *
-	 * @param pigSpawner The handler
-	 * @return The data instance
-	 */
-	@Nullable
-	@Override
-	protected Integer convertCapabilityToData(final IPigSpawner pigSpawner) {
-		if (pigSpawner instanceof IPigSpawnerFinite) {
-			return ((IPigSpawnerFinite) pigSpawner).getNumPigs();
-		} else {
-			return null;
-		}
+	public static MessageBulkUpdateContainerPigSpawnerFinites decode(final PacketBuffer buffer) {
+		return MessageBulkUpdateContainerCapability.decode(
+				buffer,
+				PigSpawnerFunctions::decodeNumPigs,
+				MessageBulkUpdateContainerPigSpawnerFinites::new
+		);
 	}
 
-	/**
-	 * Read a data instance from the buffer.
-	 *
-	 * @param buf The buffer
-	 */
-	@Override
-	protected Integer readCapabilityData(final ByteBuf buf) {
-		return buf.readInt();
+	public static void encode(final MessageBulkUpdateContainerPigSpawnerFinites message, final PacketBuffer buffer) {
+		MessageBulkUpdateContainerCapability.encode(
+				message,
+				buffer,
+				PigSpawnerFunctions::encodeNumPigs
+		);
 	}
 
-	/**
-	 * Write a data instance to the buffer.
-	 *
-	 * @param buf  The buffer
-	 * @param data The data instance
-	 */
-	@Override
-	protected void writeCapabilityData(final ByteBuf buf, final Integer data) {
-		buf.writeInt(data);
-	}
-
-	public static class Handler extends MessageBulkUpdateContainerCapability.Handler<IPigSpawner, Integer, MessageBulkUpdateContainerPigSpawnerFinites> {
-
-		/**
-		 * Apply the capability data from the data instance to the capability handler instance.
-		 *
-		 * @param pigSpawner The capability handler instance
-		 * @param data       The data instance
-		 */
-		@Override
-		protected void applyCapabilityData(final IPigSpawner pigSpawner, final Integer data) {
-			if (pigSpawner instanceof IPigSpawnerFinite) {
-				((IPigSpawnerFinite) pigSpawner).setNumPigs(data);
-			}
-		}
+	public static void handle(final MessageBulkUpdateContainerPigSpawnerFinites message, final Supplier<NetworkEvent.Context> ctx) {
+		MessageBulkUpdateContainerCapability.handle(
+				message,
+				ctx,
+				PigSpawnerFunctions::applyNumPigsToFinitePigSpawner
+		);
 	}
 }

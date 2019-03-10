@@ -66,5 +66,4 @@ public class MessageBulkUpdateContainerHiddenBlockRevealers extends MessageBulkU
 				HiddenBlockRevealerFunctions::applyRevealHiddenBlocksFlagToHiddenBlocksRevealer
 		);
 	}
-
 }

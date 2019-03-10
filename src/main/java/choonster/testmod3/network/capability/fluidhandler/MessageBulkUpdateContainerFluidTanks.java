@@ -61,9 +61,9 @@ public class MessageBulkUpdateContainerFluidTanks extends MessageBulkUpdateConta
 		);
 	}
 
-	public static void handle(final MessageBulkUpdateContainerFluidTanks messageBulkUpdateContainerFluidTanks, final Supplier<NetworkEvent.Context> ctx) {
+	public static void handle(final MessageBulkUpdateContainerFluidTanks message, final Supplier<NetworkEvent.Context> ctx) {
 		MessageBulkUpdateContainerCapability.handle(
-				messageBulkUpdateContainerFluidTanks,
+				message,
 				ctx,
 				FluidHandlerFunctions::applyFluidTankInfoToFluidTank
 		);

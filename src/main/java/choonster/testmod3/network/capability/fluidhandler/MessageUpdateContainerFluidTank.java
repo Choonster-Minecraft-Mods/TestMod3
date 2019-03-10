@@ -1,14 +1,17 @@
 package choonster.testmod3.network.capability.fluidhandler;
 
 import choonster.testmod3.network.capability.MessageUpdateContainerCapability;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.inventory.Container;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * Updates the {@link FluidTank} for a single slot of a {@link Container}.
@@ -16,68 +19,52 @@ import javax.annotation.Nullable;
  * @author Choonster
  */
 public class MessageUpdateContainerFluidTank extends MessageUpdateContainerCapability<IFluidHandlerItem, FluidTankInfo> {
-
-	@SuppressWarnings("unused")
-	public MessageUpdateContainerFluidTank() {
-		super(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
+	public MessageUpdateContainerFluidTank(
+			@Nullable final EnumFacing facing,
+			final int windowID,
+			final int slotNumber,
+			final IFluidHandlerItem fluidHandler
+	) {
+		super(
+				CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
+				facing, windowID, slotNumber, fluidHandler,
+				FluidHandlerFunctions::convertFluidHandlerToFluidTankInfo
+		);
 	}
 
-	public MessageUpdateContainerFluidTank(final int windowID, final int slotNumber, final IFluidHandlerItem fluidHandlerItem) {
-		super(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null, windowID, slotNumber, fluidHandlerItem);
+	private MessageUpdateContainerFluidTank(
+			@Nullable final EnumFacing facing,
+			final int windowID,
+			final int slotNumber,
+			final FluidTankInfo capabilityData
+	) {
+		super(
+				CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
+				facing, windowID, slotNumber, capabilityData
+		);
 	}
 
-	/**
-	 * Convert the capability handler instance to a data instance.
-	 *
-	 * @param fluidHandlerItem The handler
-	 * @return The data instance
-	 */
-	@Nullable
-	@Override
-	protected FluidTankInfo convertCapabilityToData(final IFluidHandlerItem fluidHandlerItem) {
-		if (fluidHandlerItem instanceof FluidTank) {
-			return ((FluidTank) fluidHandlerItem).getInfo();
-		} else {
-			return null;
-		}
+	public static MessageUpdateContainerFluidTank decode(final PacketBuffer buffer) {
+		return MessageUpdateContainerCapability.decode(
+				buffer,
+				FluidHandlerFunctions::decodeFluidTankInfo,
+				MessageUpdateContainerFluidTank::new
+		);
 	}
 
-	/**
-	 * Read the capability data from the buffer.
-	 *
-	 * @param buf The buffer
-	 * @return The data instance
-	 */
-	@Override
-	protected FluidTankInfo readCapabilityData(final ByteBuf buf) {
-		return decodeFluidTankInfo(buf);
+	public static void encode(final MessageUpdateContainerFluidTank message, final PacketBuffer buffer) {
+		MessageUpdateContainerCapability.encode(
+				message,
+				buffer,
+				FluidHandlerFunctions::encodeFluidTankInfo
+		);
 	}
 
-	/**
-	 * Write the capability data to the buffer.
-	 *
-	 * @param buf           The buffer
-	 * @param fluidTankInfo The data instance
-	 */
-	@Override
-	protected void writeCapabilityData(final ByteBuf buf, final FluidTankInfo fluidTankInfo) {
-		encodeFluidTankInfo(fluidTankInfo, buf);
-	}
-
-
-	public static class Handler extends MessageUpdateContainerCapability.Handler<IFluidHandlerItem, FluidTankInfo, MessageUpdateContainerFluidTank> {
-
-		/**
-		 * Apply the capability data from the data instance to the capability handler instance.
-		 *
-		 * @param fluidHandlerItem The capability handler instance
-		 * @param fluidTankInfo    The data
-		 */
-		@Override
-		protected void applyCapabilityData(final IFluidHandlerItem fluidHandlerItem, final FluidTankInfo fluidTankInfo) {
-			if (fluidHandlerItem instanceof FluidTank) {
-				((FluidTank) fluidHandlerItem).setFluid(fluidTankInfo.fluid);
-			}
-		}
+	public static void handle(final MessageUpdateContainerFluidTank message, final Supplier<NetworkEvent.Context> ctx) {
+		MessageUpdateContainerCapability.handle(
+				message,
+				ctx,
+				FluidHandlerFunctions::applyFluidTankInfoToFluidTank
+		);
 	}
 }

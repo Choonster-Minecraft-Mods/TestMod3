@@ -3,12 +3,16 @@ package choonster.testmod3.network.capability.lastusetime;
 import choonster.testmod3.api.capability.lastusetime.ILastUseTime;
 import choonster.testmod3.capability.lastusetime.CapabilityLastUseTime;
 import choonster.testmod3.network.capability.MessageBulkUpdateContainerCapability;
-import io.netty.buffer.ByteBuf;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * Updates the {@link ILastUseTime} for each slot of a {@link Container}.
@@ -16,58 +20,50 @@ import javax.annotation.Nullable;
  * @author Choonster
  */
 public class MessageBulkUpdateContainerLastUseTimes extends MessageBulkUpdateContainerCapability<ILastUseTime, Long> {
-	protected MessageBulkUpdateContainerLastUseTimes() {
-		super(CapabilityLastUseTime.LAST_USE_TIME_CAPABILITY);
+	public MessageBulkUpdateContainerLastUseTimes(
+			@Nullable final EnumFacing facing,
+			final int windowID,
+			final NonNullList<ItemStack> items
+	) {
+		super(
+				CapabilityLastUseTime.LAST_USE_TIME_CAPABILITY,
+				facing, windowID, items,
+				LastUseTimeFunctions::convertLastUseTimeToLastUseTimeValue
+		);
 	}
 
-	public MessageBulkUpdateContainerLastUseTimes(final int windowID, final NonNullList<ItemStack> items) {
-		super(CapabilityLastUseTime.LAST_USE_TIME_CAPABILITY, CapabilityLastUseTime.DEFAULT_FACING, windowID, items);
+	private MessageBulkUpdateContainerLastUseTimes(
+			@Nullable final EnumFacing facing,
+			final int windowID,
+			final Int2ObjectMap<Long> capabilityData
+	) {
+		super(
+				CapabilityLastUseTime.LAST_USE_TIME_CAPABILITY,
+				facing, windowID, capabilityData
+		);
 	}
 
-	/**
-	 * Convert a capability handler instance to a data instance.
-	 *
-	 * @param lastUseTime The handler
-	 * @return The data instance
-	 */
-	@Nullable
-	@Override
-	protected Long convertCapabilityToData(final ILastUseTime lastUseTime) {
-		return lastUseTime.get();
+	public static MessageBulkUpdateContainerLastUseTimes decode(final PacketBuffer buffer) {
+		return MessageBulkUpdateContainerCapability.decode(
+				buffer,
+				LastUseTimeFunctions::decodeLastUseTimeValue,
+				MessageBulkUpdateContainerLastUseTimes::new
+		);
 	}
 
-	/**
-	 * Read a data instance from the buffer.
-	 *
-	 * @param buf The buffer
-	 */
-	@Override
-	protected Long readCapabilityData(final ByteBuf buf) {
-		return buf.readLong();
+	public static void encode(final MessageBulkUpdateContainerLastUseTimes message, final PacketBuffer buffer) {
+		MessageBulkUpdateContainerCapability.encode(
+				message,
+				buffer,
+				LastUseTimeFunctions::encodeLastUseTimeValue
+		);
 	}
 
-	/**
-	 * Write a data instance to the buffer.
-	 *
-	 * @param buf  The buffer
-	 * @param data The data instance
-	 */
-	@Override
-	protected void writeCapabilityData(final ByteBuf buf, final Long data) {
-		buf.writeLong(data);
-	}
-
-	public static class Handler extends MessageBulkUpdateContainerCapability.Handler<ILastUseTime, Long, MessageBulkUpdateContainerLastUseTimes> {
-
-		/**
-		 * Apply the capability data from the data instance to the capability handler instance.
-		 *
-		 * @param lastUseTime The capability handler instance
-		 * @param data        The data instance
-		 */
-		@Override
-		protected void applyCapabilityData(final ILastUseTime lastUseTime, final Long data) {
-			lastUseTime.set(data);
-		}
+	public static void handle(final MessageBulkUpdateContainerLastUseTimes message, final Supplier<NetworkEvent.Context> ctx) {
+		MessageBulkUpdateContainerCapability.handle(
+				message,
+				ctx,
+				LastUseTimeFunctions::applyLastUseTimeValueToLastUseTime
+		);
 	}
 }

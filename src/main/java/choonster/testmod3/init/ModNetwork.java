@@ -16,7 +16,6 @@ import choonster.testmod3.network.capability.pigspawner.MessageUpdateContainerPi
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class ModNetwork {
 	public static final ResourceLocation CHANNEL_NAME = new ResourceLocation(TestMod3.MODID, "network");
@@ -54,13 +53,19 @@ public class ModNetwork {
 				.consumer(MessageUpdateChunkEnergyValue::handle)
 				.add();
 
+
 		channel.messageBuilder(MessageBulkUpdateContainerFluidTanks.class, 5)
 				.decoder(MessageBulkUpdateContainerFluidTanks::decode)
 				.encoder(MessageBulkUpdateContainerFluidTanks::encode)
 				.consumer(MessageBulkUpdateContainerFluidTanks::handle)
 				.add();
 
-		registerMessage(MessageUpdateContainerFluidTank.Handler.class, MessageUpdateContainerFluidTank.class, Side.CLIENT);
+		channel.messageBuilder(MessageUpdateContainerFluidTank.class, 6)
+				.decoder(MessageUpdateContainerFluidTank::decode)
+				.encoder(MessageUpdateContainerFluidTank::encode)
+				.consumer(MessageUpdateContainerFluidTank::handle)
+				.add();
+
 
 		channel.messageBuilder(MessageBulkUpdateContainerHiddenBlockRevealers.class, 7)
 				.decoder(MessageBulkUpdateContainerHiddenBlockRevealers::decode)
@@ -68,13 +73,37 @@ public class ModNetwork {
 				.consumer(MessageBulkUpdateContainerHiddenBlockRevealers::handle)
 				.add();
 
-		registerMessage(MessageUpdateContainerHiddenBlockRevealer.Handler.class, MessageUpdateContainerHiddenBlockRevealer.class, Side.CLIENT);
+		channel.messageBuilder(MessageUpdateContainerHiddenBlockRevealer.class, 8)
+				.decoder(MessageUpdateContainerHiddenBlockRevealer::decode)
+				.encoder(MessageUpdateContainerHiddenBlockRevealer::encode)
+				.consumer(MessageUpdateContainerHiddenBlockRevealer::handle)
+				.add();
 
-		registerMessage(MessageBulkUpdateContainerLastUseTimes.Handler.class, MessageBulkUpdateContainerLastUseTimes.class, Side.CLIENT);
-		registerMessage(MessageUpdateContainerLastUseTime.Handler.class, MessageUpdateContainerLastUseTime.class, Side.CLIENT);
 
-		registerMessage(MessageBulkUpdateContainerPigSpawnerFinites.Handler.class, MessageBulkUpdateContainerPigSpawnerFinites.class, Side.CLIENT);
-		registerMessage(MessageUpdateContainerPigSpawnerFinite.Handler.class, MessageUpdateContainerPigSpawnerFinite.class, Side.CLIENT);
+		channel.messageBuilder(MessageBulkUpdateContainerLastUseTimes.class, 9)
+				.decoder(MessageBulkUpdateContainerLastUseTimes::decode)
+				.encoder(MessageBulkUpdateContainerLastUseTimes::encode)
+				.consumer(MessageBulkUpdateContainerLastUseTimes::handle)
+				.add();
+
+		channel.messageBuilder(MessageUpdateContainerLastUseTime.class, 10)
+				.decoder(MessageUpdateContainerLastUseTime::decode)
+				.encoder(MessageUpdateContainerLastUseTime::encode)
+				.consumer(MessageUpdateContainerLastUseTime::handle)
+				.add();
+
+
+		channel.messageBuilder(MessageBulkUpdateContainerPigSpawnerFinites.class, 11)
+				.decoder(MessageBulkUpdateContainerPigSpawnerFinites::decode)
+				.encoder(MessageBulkUpdateContainerPigSpawnerFinites::encode)
+				.consumer(MessageBulkUpdateContainerPigSpawnerFinites::handle)
+				.add();
+
+		channel.messageBuilder(MessageUpdateContainerPigSpawnerFinite.class, 12)
+				.decoder(MessageUpdateContainerPigSpawnerFinite::decode)
+				.encoder(MessageUpdateContainerPigSpawnerFinite::encode)
+				.consumer(MessageUpdateContainerPigSpawnerFinite::handle)
+				.add();
 
 		return channel;
 	}

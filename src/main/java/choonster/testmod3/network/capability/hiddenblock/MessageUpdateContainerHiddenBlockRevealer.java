@@ -4,6 +4,12 @@ import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockReveale
 import choonster.testmod3.capability.hiddenblockrevealer.CapabilityHiddenBlockRevealer;
 import choonster.testmod3.network.capability.MessageUpdateContainerCapability;
 import net.minecraft.inventory.Container;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.network.NetworkEvent;
+
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * Updates the {@link IHiddenBlockRevealer} for a single slot of a {@link Container}.
@@ -11,28 +17,52 @@ import net.minecraft.inventory.Container;
  * @author Choonster
  */
 public class MessageUpdateContainerHiddenBlockRevealer extends MessageUpdateContainerCapability<IHiddenBlockRevealer, Boolean> {
-
-	@SuppressWarnings("unused")
-	public MessageUpdateContainerHiddenBlockRevealer() {
-		super(CapabilityHiddenBlockRevealer.HIDDEN_BLOCK_REVEALER_CAPABILITY);
+	public MessageUpdateContainerHiddenBlockRevealer(
+			@Nullable final EnumFacing facing,
+			final int windowID,
+			final int slotNumber,
+			final IHiddenBlockRevealer hiddenBlockRevealer
+	) {
+		super(
+				CapabilityHiddenBlockRevealer.HIDDEN_BLOCK_REVEALER_CAPABILITY,
+				facing, windowID, slotNumber, hiddenBlockRevealer,
+				HiddenBlockRevealerFunctions::convertHiddenBlockRevealerToRevealHiddenBlocksFlag
+		);
 	}
 
-	public MessageUpdateContainerHiddenBlockRevealer(final int windowID, final int slotNumber, final IHiddenBlockRevealer hiddenBlockRevealer) {
-		super(CapabilityHiddenBlockRevealer.HIDDEN_BLOCK_REVEALER_CAPABILITY, CapabilityHiddenBlockRevealer.DEFAULT_FACING, windowID, slotNumber, hiddenBlockRevealer);
+	private MessageUpdateContainerHiddenBlockRevealer(
+			@Nullable final EnumFacing facing,
+			final int windowID,
+			final int slotNumber,
+			final boolean revealHiddenBlocks
+	) {
+		super(
+				CapabilityHiddenBlockRevealer.HIDDEN_BLOCK_REVEALER_CAPABILITY,
+				facing, windowID, slotNumber, revealHiddenBlocks
+		);
 	}
 
+	public static MessageUpdateContainerHiddenBlockRevealer decode(final PacketBuffer buffer) {
+		return MessageUpdateContainerCapability.decode(
+				buffer,
+				HiddenBlockRevealerFunctions::decodeRevealHiddenBlocksFlag,
+				MessageUpdateContainerHiddenBlockRevealer::new
+		);
+	}
 
-	public static class Handler extends MessageUpdateContainerCapability.Handler<IHiddenBlockRevealer, Boolean, MessageUpdateContainerHiddenBlockRevealer> {
+	public static void encode(final MessageUpdateContainerHiddenBlockRevealer message, final PacketBuffer buffer) {
+		MessageUpdateContainerCapability.encode(
+				message,
+				buffer,
+				HiddenBlockRevealerFunctions::encodeRevealHiddenBlocksFlag
+		);
+	}
 
-		/**
-		 * Apply the capability data from the message to the capability handler instance.
-		 *
-		 * @param hiddenBlockRevealer The IHiddenBlockRevealer
-		 * @param data                The message
-		 */
-		@Override
-		protected void applyCapabilityData(final IHiddenBlockRevealer hiddenBlockRevealer, final Boolean data) {
-			hiddenBlockRevealer.setRevealHiddenBlocks(data);
-		}
+	public static void handle(final MessageUpdateContainerHiddenBlockRevealer message, final Supplier<NetworkEvent.Context> ctx) {
+		MessageUpdateContainerCapability.handle(
+				message,
+				ctx,
+				HiddenBlockRevealerFunctions::applyRevealHiddenBlocksFlagToHiddenBlocksRevealer
+		);
 	}
 }

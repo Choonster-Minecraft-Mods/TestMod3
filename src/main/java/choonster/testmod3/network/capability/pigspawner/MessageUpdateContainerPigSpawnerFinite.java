@@ -4,10 +4,13 @@ import choonster.testmod3.api.capability.pigspawner.IPigSpawner;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
 import choonster.testmod3.capability.pigspawner.CapabilityPigSpawner;
 import choonster.testmod3.network.capability.MessageUpdateContainerCapability;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.inventory.Container;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * Updates the {@link IPigSpawnerFinite} for a single slot of a {@link Container}.
@@ -15,64 +18,52 @@ import javax.annotation.Nullable;
  * @author Choonster
  */
 public class MessageUpdateContainerPigSpawnerFinite extends MessageUpdateContainerCapability<IPigSpawner, Integer> {
-	public MessageUpdateContainerPigSpawnerFinite() {
-		super(CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY);
+	public MessageUpdateContainerPigSpawnerFinite(
+			@Nullable final EnumFacing facing,
+			final int windowID,
+			final int slotNumber,
+			final IPigSpawner pigSpawner
+	) {
+		super(
+				CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY,
+				facing, windowID, slotNumber, pigSpawner,
+				PigSpawnerFunctions::convertFinitePigSpawnerToNumPigs
+		);
 	}
 
-	public MessageUpdateContainerPigSpawnerFinite(final int windowID, final int slotNumber, final IPigSpawner pigSpawner) {
-		super(CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY, CapabilityPigSpawner.DEFAULT_FACING, windowID, slotNumber, pigSpawner);
+	private MessageUpdateContainerPigSpawnerFinite(
+			@Nullable final EnumFacing facing,
+			final int windowID,
+			final int slotNumber,
+			final int numPigs
+	) {
+		super(
+				CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY,
+				facing, windowID, slotNumber, numPigs
+		);
 	}
 
-	/**
-	 * Convert a capability handler instance to a data instance.
-	 *
-	 * @param pigSpawner The handler
-	 * @return The data instance
-	 */
-	@Nullable
-	@Override
-	protected Integer convertCapabilityToData(final IPigSpawner pigSpawner) {
-		if (pigSpawner instanceof IPigSpawnerFinite) {
-			return ((IPigSpawnerFinite) pigSpawner).getNumPigs();
-		} else {
-			return null;
-		}
+	public static MessageUpdateContainerPigSpawnerFinite decode(final PacketBuffer buffer) {
+		return MessageUpdateContainerCapability.decode(
+				buffer,
+				PigSpawnerFunctions::decodeNumPigs,
+				MessageUpdateContainerPigSpawnerFinite::new
+		);
 	}
 
-	/**
-	 * Read a data instance from the buffer.
-	 *
-	 * @param buf The buffer
-	 */
-	@Override
-	protected Integer readCapabilityData(final ByteBuf buf) {
-		return buf.readInt();
+	public static void encode(final MessageUpdateContainerPigSpawnerFinite message, final PacketBuffer buffer) {
+		MessageUpdateContainerCapability.encode(
+				message,
+				buffer,
+				PigSpawnerFunctions::encodeNumPigs
+		);
 	}
 
-	/**
-	 * Write a data instance to the buffer.
-	 *
-	 * @param buf  The buffer
-	 * @param data The data instance
-	 */
-	@Override
-	protected void writeCapabilityData(final ByteBuf buf, final Integer data) {
-		buf.writeInt(data);
-	}
-
-	public static class Handler extends MessageUpdateContainerCapability.Handler<IPigSpawner, Integer, MessageUpdateContainerPigSpawnerFinite> {
-
-		/**
-		 * Apply the capability data from the data instance to the capability handler instance.
-		 *
-		 * @param pigSpawner The capability handler instance
-		 * @param data       The data
-		 */
-		@Override
-		protected void applyCapabilityData(final IPigSpawner pigSpawner, final Integer data) {
-			if (pigSpawner instanceof IPigSpawnerFinite) {
-				((IPigSpawnerFinite) pigSpawner).setNumPigs(data);
-			}
-		}
+	public static void handle(final MessageUpdateContainerPigSpawnerFinite message, final Supplier<NetworkEvent.Context> ctx) {
+		MessageUpdateContainerCapability.handle(
+				message,
+				ctx,
+				PigSpawnerFunctions::applyNumPigsToFinitePigSpawner
+		);
 	}
 }

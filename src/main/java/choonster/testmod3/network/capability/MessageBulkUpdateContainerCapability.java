@@ -17,7 +17,6 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
@@ -42,15 +41,15 @@ public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> {
 	 * The {@link EnumFacing} to get the capability handler from.
 	 */
 	@Nullable
-	EnumFacing facing;
+	final EnumFacing facing;
 
 	/**
 	 * The window ID of the {@link Container}.
 	 */
-	int windowID;
+	final int windowID;
 
 	/**
-	 * The capability data instances for each slot, indexed by their index in the original {@link List<ItemStack>}.
+	 * The capability data instances for each slot, indexed by their index in the original {@link NonNullList<ItemStack>}.
 	 */
 	final Int2ObjectMap<DATA> capabilityData;
 
@@ -59,21 +58,21 @@ public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> {
 			@Nullable final EnumFacing facing,
 			final int windowID,
 			final NonNullList<ItemStack> items,
-			final CapabilityDataConverter<HANDLER, DATA> capabilityDataConverter
+			final CapabilityContainerUpdateMessageUtils.CapabilityDataConverter<HANDLER, DATA> capabilityDataConverter
 	) {
 		this.capability = capability;
 		this.facing = facing;
 		this.windowID = windowID;
 
 		capabilityData = new Int2ObjectOpenHashMap<>();
-		IntStream.range(0, items.size()).forEach(index -> {
-			final ItemStack stack = items.get(index);
+		IntStream.range(0, items.size()).forEach(slotNumber -> {
+			final ItemStack stack = items.get(slotNumber);
 
 			CapabilityUtils.getCapability(stack, capability, facing).ifPresent((handler) -> {
 				final DATA data = capabilityDataConverter.convert(handler);
 
 				if (data != null) {
-					capabilityData.put(index, data);
+					capabilityData.put(slotNumber, data);
 				}
 			});
 		});
@@ -118,7 +117,7 @@ public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> {
 			>
 	MESSAGE decode(
 			final PacketBuffer buffer,
-			final CapabilityDataDecoder<DATA> capabilityDataDecoder,
+			final CapabilityContainerUpdateMessageUtils.CapabilityDataDecoder<DATA> capabilityDataDecoder,
 			final MessageFactory<HANDLER, DATA, MESSAGE> messageFactory
 	) {
 		final boolean hasFacing = buffer.readBoolean();
@@ -136,9 +135,9 @@ public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> {
 
 		final int numEntries = buffer.readInt();
 		for (int i = 0; i < numEntries; i++) {
-			final int index = buffer.readInt();
+			final int slotNumber = buffer.readInt();
 			final DATA data = capabilityDataDecoder.decode(buffer);
-			capabilityData.put(index, data);
+			capabilityData.put(slotNumber, data);
 		}
 
 		return messageFactory.createMessage(facing, windowID, capabilityData);
@@ -162,7 +161,7 @@ public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> {
 	void encode(
 			final MESSAGE message,
 			final PacketBuffer buffer,
-			final CapabilityDataEncoder<DATA> capabilityDataEncoder
+			final CapabilityContainerUpdateMessageUtils.CapabilityDataEncoder<DATA> capabilityDataEncoder
 	) {
 		final boolean hasFacing = message.facing != null;
 		buffer.writeBoolean(hasFacing);
@@ -185,7 +184,7 @@ public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> {
 	 *
 	 * @param message               The message to handle
 	 * @param ctx                   The network context
-	 * @param capabilityDataApplier A function that applies the capability data from a data instance to a capability handler instance.
+	 * @param capabilityDataApplier A function that applies the capability data from a data instance to a capability handler instance
 	 * @param <HANDLER>             The capability handler type
 	 * @param <DATA>                The data type written to and read from the buffer
 	 * @param <MESSAGE>             The message type
@@ -198,9 +197,12 @@ public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> {
 	void handle(
 			final MESSAGE message,
 			final Supplier<NetworkEvent.Context> ctx,
-			final CapabilityDataApplier<HANDLER, DATA> capabilityDataApplier
+			final CapabilityContainerUpdateMessageUtils.CapabilityDataApplier<HANDLER, DATA> capabilityDataApplier
 	) {
-		if (!message.hasData()) return; // Don't do anything if no data was sent
+		if (!message.hasData()) { // Don't do anything if no data was sent
+			ctx.get().setPacketHandled(true);
+			return;
+		}
 
 		ctx.get().enqueueWork(() -> DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
 			final EntityPlayer player = Minecraft.getInstance().player;
@@ -215,22 +217,17 @@ public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> {
 			}
 
 			Int2ObjectMaps.fastForEach(message.capabilityData, (entry) -> {
-				final int index = entry.getIntKey();
+				final int slotNumber = entry.getIntKey();
 				final DATA data = entry.getValue();
 
-				final ItemStack originalStack = container.getSlot(index).getStack();
-
-				CapabilityUtils.getCapability(originalStack, message.capability, message.facing).ifPresent(originalHandler -> {
-					final ItemStack newStack = originalStack.copy();
-
-					CapabilityUtils.getCapability(newStack, message.capability, message.facing).ifPresent(newHandler -> {
-						capabilityDataApplier.apply(newHandler, data);
-
-						if (!originalHandler.equals(newHandler)) {
-							container.putStackInSlot(index, newStack);
-						}
-					});
-				});
+				CapabilityContainerUpdateMessageUtils.applyCapabilityDataToContainerSlot(
+						container,
+						slotNumber,
+						message.capability,
+						message.facing,
+						data,
+						capabilityDataApplier
+				);
 			});
 		}));
 
@@ -251,48 +248,5 @@ public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> {
 				int windowID,
 				Int2ObjectMap<DATA> capabilityData
 		);
-	}
-
-	/**
-	 * Converts a capability handler instance to a data instance.
-	 *
-	 * @param <HANDLER> The capability handler type
-	 * @param <DATA>    The data type written to and read from the buffer
-	 */
-	@FunctionalInterface
-	public interface CapabilityDataConverter<HANDLER, DATA> {
-		@Nullable
-		DATA convert(HANDLER handler);
-	}
-
-	/**
-	 * A function that decodes a data instance from the buffer
-	 *
-	 * @param <DATA> The data type written to and read from the buffer
-	 */
-	@FunctionalInterface
-	public interface CapabilityDataDecoder<DATA> {
-		DATA decode(PacketBuffer buffer);
-	}
-
-	/**
-	 * A function that encodes a data instance to the buffer
-	 *
-	 * @param <DATA> The data type written to and read from the buffer
-	 */
-	@FunctionalInterface
-	public interface CapabilityDataEncoder<DATA> {
-		void encode(DATA data, PacketBuffer buffer);
-	}
-
-	/**
-	 * A function that applies the capability data from a data instance to a capability handler instance.
-	 *
-	 * @param <HANDLER> The capability handler type
-	 * @param <DATA>    The data type written to and read from the buffer
-	 */
-	@FunctionalInterface
-	public interface CapabilityDataApplier<HANDLER, DATA> {
-		void apply(HANDLER handler, DATA data);
 	}
 }
