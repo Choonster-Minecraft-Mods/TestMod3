@@ -1,6 +1,6 @@
 {
 	"__comment": "Uses the same display transforms as the vanilla bow.",
-	"parent": "item/generated",
+	"parent": "minecraft:item/generated",
 	"display": {
 		"thirdperson_righthand": {
 			"rotation": [ -80, 260, -40 ],

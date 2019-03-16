@@ -1,4 +1,0 @@
-{
-	"__comment": "Allows blockstates files to use basic item models",
-	"parent": "minecraft:item/generated"
-}

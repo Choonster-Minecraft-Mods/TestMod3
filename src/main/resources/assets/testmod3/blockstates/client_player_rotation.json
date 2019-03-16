@@ -1,11 +1,11 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "minecraft:light_pressure_plate_down",
+		"model": "minecraft:block/light_pressure_plate_down",
 		"transform": "forge:default-block"
 	},
 	"variants": {
-		"normal": [ { } ],
+		"": [ { } ],
 		"inventory": [ { } ]
 	}
 }

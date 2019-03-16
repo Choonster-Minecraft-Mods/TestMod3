@@ -1,10 +1,10 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "testmod3:chest",
+		"model": "testmod3:block/chest",
 		"textures": {
-			"chest": "testmod3:blocks/chest/wood",
-			"particle": "minecraft:blocks/planks_oak"
+			"chest": "testmod3:block/chest/wood",
+			"particle": "minecraft:block/planks_oak"
 		}
 	},
 	"variants": {

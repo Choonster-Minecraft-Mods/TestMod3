@@ -1,13 +1,13 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "minecraft:cube_all",
+		"model": "minecraft:block/cube_all",
 		"textures": {
-			"all": "testmod3:blocks/fullbright"
+			"all": "testmod3:block/fullbright"
 		}
 	},
 	"variants": {
-		"normal": [ { } ],
+		"": [ { } ],
 		"inventory": [ { } ]
 	}
 }

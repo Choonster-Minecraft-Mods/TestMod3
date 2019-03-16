@@ -1,10 +1,10 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "minecraft:white_wool"
+		"model": "minecraft:block/white_wool"
 	},
 	"variants": {
-		"normal": [ { } ],
+		"": [ { } ],
 		"inventory": [ { } ]
 	}
 }

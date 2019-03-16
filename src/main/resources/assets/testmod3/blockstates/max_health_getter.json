@@ -1,13 +1,13 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "minecraft:cube_all",
+		"model": "minecraft:block/cube_all",
 		"textures": {
-			"all": "testmod3:blocks/max_health_getter"
+			"all": "testmod3:block/max_health_getter"
 		}
 	},
 	"variants": {
-		"normal": [ { } ],
+		"": [ { } ],
 		"inventory": [ { } ]
 	}
 }

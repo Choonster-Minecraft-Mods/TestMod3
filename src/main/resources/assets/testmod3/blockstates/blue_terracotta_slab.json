@@ -2,7 +2,7 @@
 	"forge_marker": 1,
 	"defaults": {
 		"textures": {
-			"all": "minecraft:blocks/hardened_clay_stained_blue",
+			"all": "minecraft:block/hardened_clay_stained_blue",
 			"top": "#all",
 			"bottom": "#all",
 			"side": "#all"
@@ -11,10 +11,10 @@
 	"variants": {
 		"half": {
 			"bottom": {
-				"model": "minecraft:half_slab"
+				"model": "minecraft:block/half_slab"
 			},
 			"top": {
-				"model": "minecraft:upper_slab"
+				"model": "minecraft:block/upper_slab"
 			}
 		},
 		"variant": {

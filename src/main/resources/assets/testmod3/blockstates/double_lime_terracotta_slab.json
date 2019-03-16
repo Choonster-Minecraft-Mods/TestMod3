@@ -1,9 +1,9 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "minecraft:cube_all",
+		"model": "minecraft:block/cube_all",
 		"textures": {
-			"all": "minecraft:blocks/hardened_clay_stained_lime"
+			"all": "minecraft:block/hardened_clay_stained_lime"
 		}
 	},
 	"variants": {

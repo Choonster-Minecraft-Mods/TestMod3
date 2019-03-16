@@ -1,6 +1,6 @@
 {
 	"parent": "item/handheld",
 	"textures": {
-		"layer0": "testmod3:items/chunk_energy_display"
+		"layer0": "testmod3:item/chunk_energy_display"
 	}
 }

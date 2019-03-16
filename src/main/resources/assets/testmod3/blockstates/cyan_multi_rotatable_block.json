@@ -3,8 +3,8 @@
 	"defaults": {
 		"uvlock": true,
 		"textures": {
-			"front": "testmod3:blocks/colored_rotatable/cyan_front_multi",
-			"side": "testmod3:blocks/colored_rotatable/cyan"
+			"front": "testmod3:block/colored_rotatable/cyan_front_multi",
+			"side": "testmod3:block/colored_rotatable/cyan"
 		}
 	},
 	"variants": {
@@ -28,16 +28,16 @@
 		},
 		"face_rotation": {
 			"up": {
-				"model": "testmod3:orientable_single"
+				"model": "testmod3:block/orientable_single"
 			},
 			"right": {
-				"model": "testmod3:orientable_single_rotated_right"
+				"model": "testmod3:block/orientable_single_rotated_right"
 			},
 			"down": {
-				"model": "testmod3:orientable_single_rotated_down"
+				"model": "testmod3:block/orientable_single_rotated_down"
 			},
 			"left": {
-				"model": "testmod3:orientable_single_rotated_left"
+				"model": "testmod3:block/orientable_single_rotated_left"
 			}
 		}
 	}

@@ -1,6 +1,6 @@
 {
 	"parent": "minecraft:item/generated",
 	"textures": {
-		"layer0": "testmod3:items/entity_killer"
+		"layer0": "testmod3:item/entity_killer"
 	}
 }

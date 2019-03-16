@@ -2,11 +2,11 @@
 	"forge_marker": 1,
 	"variants": {
 		"inventory": {
-			"model": "forge:forgebucket",
+			"model": "forge:block/forgebucket",
 			"textures": {
-				"base": "testmod3:items/stone_bucket_base",
-				"fluid": "forge:items/bucket_fluid",
-				"cover": "testmod3:items/stone_bucket_cover"
+				"base": "testmod3:item/stone_bucket_base",
+				"fluid": "forge:item/bucket_fluid",
+				"cover": "testmod3:item/stone_bucket_cover"
 			},
 			"transform": "forge:default-item",
 			"custom": {

@@ -1,7 +1,7 @@
 {
 	"parent": "testmod3:item/simple_model",
 	"textures": {
-		"layer0": "testmod3:items/slingshot"
+		"layer0": "testmod3:item/slingshot"
 	},
 	"overrides": [
 		{

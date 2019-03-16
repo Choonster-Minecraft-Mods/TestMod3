@@ -2,10 +2,10 @@
 	"forge_marker": 1,
 	"defaults": {
 		"textures": {
-			"centre": "minecraft:blocks/glass",
-			"side": "minecraft:blocks/glass"
+			"centre": "minecraft:block/glass",
+			"side": "minecraft:block/glass"
 		},
-		"model": "testmod3:pipe/pipe_centre",
+		"model": "testmod3:block/pipe/pipe_centre",
 		"uvlock": true
 	},
 	"variants": {
@@ -13,7 +13,7 @@
 			"true": {
 				"submodel": {
 					"pipe_down": {
-						"model": "testmod3:pipe/pipe_part",
+						"model": "testmod3:block/pipe/pipe_part",
 						"x": 90,
 						"uvlock": true
 					}
@@ -25,7 +25,7 @@
 			"true": {
 				"submodel": {
 					"pipe_up": {
-						"model": "testmod3:pipe/pipe_part",
+						"model": "testmod3:block/pipe/pipe_part",
 						"x": -90,
 						"uvlock": true
 					}
@@ -37,7 +37,7 @@
 			"true": {
 				"submodel": {
 					"pipe_north": {
-						"model": "testmod3:pipe/pipe_part",
+						"model": "testmod3:block/pipe/pipe_part",
 						"uvlock": true
 					}
 				}
@@ -48,7 +48,7 @@
 			"true": {
 				"submodel": {
 					"pipe_south": {
-						"model": "testmod3:pipe/pipe_part",
+						"model": "testmod3:block/pipe/pipe_part",
 						"y": 180,
 						"uvlock": true
 					}
@@ -60,7 +60,7 @@
 			"true": {
 				"submodel": {
 					"pipe_east": {
-						"model": "testmod3:pipe/pipe_part",
+						"model": "testmod3:block/pipe/pipe_part",
 						"y": 90,
 						"uvlock": true
 					}
@@ -72,7 +72,7 @@
 			"true": {
 				"submodel": {
 					"pipe_west": {
-						"model": "testmod3:pipe/pipe_part",
+						"model": "testmod3:block/pipe/pipe_part",
 						"y": -90,
 						"uvlock": true
 					}
@@ -84,11 +84,11 @@
 			{
 				"submodel": {
 					"pipe_north": {
-						"model": "testmod3:pipe/pipe_part",
+						"model": "testmod3:block/pipe/pipe_part",
 						"uvlock": true
 					},
 					"pipe_south": {
-						"model": "testmod3:pipe/pipe_part",
+						"model": "testmod3:block/pipe/pipe_part",
 						"y": 180,
 						"uvlock": true
 					}

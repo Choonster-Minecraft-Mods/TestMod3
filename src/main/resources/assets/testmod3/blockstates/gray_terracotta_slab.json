@@ -1,24 +1,24 @@
 {
-"forge_marker": 1,
-"defaults": {
-"textures": {
-"all": "minecraft:blocks/hardened_clay_stained_gray",
-"top": "#all",
-"bottom": "#all",
-"side": "#all"
-}
-},
-"variants": {
-"half": {
-"bottom": {
-"model": "minecraft:half_slab"
-},
-"top": {
-"model": "minecraft:upper_slab"
-}
-},
-"variant": {
-"gray": { }
-}
-}
+	"forge_marker": 1,
+	"defaults": {
+		"textures": {
+			"all": "minecraft:block/hardened_clay_stained_gray",
+			"top": "#all",
+			"bottom": "#all",
+			"side": "#all"
+		}
+	},
+	"variants": {
+		"half": {
+			"bottom": {
+				"model": "minecraft:block/half_slab"
+			},
+			"top": {
+				"model": "minecraft:block/upper_slab"
+			}
+		},
+		"variant": {
+			"gray": { }
+		}
+	}
 }

@@ -3,13 +3,13 @@
 	"variants": {
 		"item": {
 			"true": {
-				"model": "testmod3:item/generated",
+				"model": "minecraft:item/generated",
 				"textures": {
 					"layer0": "#sapling"
 				}
 			},
 			"false": {
-				"model": "minecraft:cross",
+				"model": "minecraft:block/cross",
 				"textures": {
 					"cross": "#sapling"
 				}
@@ -22,32 +22,32 @@
 		"type": {
 			"oak": {
 				"textures": {
-					"sapling": "minecraft:blocks/sapling_oak"
+					"sapling": "minecraft:block/sapling_oak"
 				}
 			},
 			"spruce": {
 				"textures": {
-					"sapling": "minecraft:blocks/sapling_spruce"
+					"sapling": "minecraft:block/sapling_spruce"
 				}
 			},
 			"birch": {
 				"textures": {
-					"sapling": "minecraft:blocks/sapling_birch"
+					"sapling": "minecraft:block/sapling_birch"
 				}
 			},
 			"jungle": {
 				"textures": {
-					"sapling": "minecraft:blocks/sapling_jungle"
+					"sapling": "minecraft:block/sapling_jungle"
 				}
 			},
 			"acacia": {
 				"textures": {
-					"sapling": "minecraft:blocks/sapling_acacia"
+					"sapling": "minecraft:block/sapling_acacia"
 				}
 			},
 			"dark_oak": {
 				"textures": {
-					"sapling": "minecraft:blocks/sapling_roofed_oak"
+					"sapling": "minecraft:block/sapling_roofed_oak"
 				}
 			}
 		}

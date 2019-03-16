@@ -1,7 +1,7 @@
 {
 	"parent": "testmod3:item/simple_model",
 	"textures": {
-		"layer0": "items/bow_standby"
+		"layer0": "item/bow_standby"
 	},
 	"overrides": [
 		{

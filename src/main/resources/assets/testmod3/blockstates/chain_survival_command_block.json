@@ -1,11 +1,11 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "minecraft:chain_command_block"
+		"model": "minecraft:block/chain_command_block"
 	},
 	"variants": {
 		"conditional": {
-			"true": { "model": "minecraft:chain_command_block_conditional" },
+			"true": { "model": "minecraft:block/chain_command_block_conditional" },
 			"false": { }
 		},
 		"facing": {

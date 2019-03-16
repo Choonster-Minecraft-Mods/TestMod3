@@ -1,10 +1,10 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "forge:fluid"
+		"model": "forge:block/fluid"
 	},
 	"variants": {
-		"normal": [
+		"": [
 			{
 				"custom": {
 					"fluid": "normal"

@@ -1,6 +1,6 @@
 {
 	"parent": "item/handheld",
 	"textures": {
-		"layer0": "testmod3:items/max_health_getter"
+		"layer0": "testmod3:item/max_health_getter"
 	}
 }

@@ -8,11 +8,11 @@ import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.world.ColorizerGrass;
-import net.minecraft.world.biome.BiomeColorHelper;
+import net.minecraft.world.GrassColors;
+import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * Registers {@link IBlockColor}/{@link IItemColor} handlers for this mod's blocks/items.
@@ -34,13 +34,13 @@ public class ModColourManager {
 		// Use the grass colour of the biome or the default grass colour
 		final IBlockColor grassColourHandler = (state, blockAccess, pos, tintIndex) -> {
 			if (blockAccess != null && pos != null) {
-				return BiomeColorHelper.getGrassColorAtPos(blockAccess, pos);
+				return BiomeColors.getGrassColor(blockAccess, pos);
 			}
 
-			return ColorizerGrass.getGrassColor(0.5D, 1.0D);
+			return GrassColors.get(0.5d, 1.0d);
 		};
 
-		blockColors.registerBlockColorHandler(grassColourHandler, ModBlocks.WATER_GRASS);
+		blockColors.register(grassColourHandler, ModBlocks.WATER_GRASS);
 	}
 
 	/**
@@ -55,11 +55,10 @@ public class ModColourManager {
 
 		// Use the Block's colour handler for an ItemBlock
 		final IItemColor itemBlockColourHandler = (stack, tintIndex) -> {
-			@SuppressWarnings("deprecation")
-			final IBlockState state = ((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata());
-			return blockColors.colorMultiplier(state, null, null, tintIndex);
+			final IBlockState state = ((ItemBlock) stack.getItem()).getBlock().getDefaultState();
+			return blockColors.getColor(state, null, null, tintIndex);
 		};
 
-		itemColors.registerItemColorHandler(itemBlockColourHandler, ModBlocks.WATER_GRASS);
+		itemColors.register(itemBlockColourHandler, ModBlocks.WATER_GRASS);
 	}
 }

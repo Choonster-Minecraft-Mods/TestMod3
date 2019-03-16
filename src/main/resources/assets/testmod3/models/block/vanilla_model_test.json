@@ -1,6 +1,6 @@
 {
 	"parent": "minecraft:block/cube_all",
 	"textures": {
-		"all": "minecraft:blocks/log_acacia_top"
+		"all": "minecraft:block/log_acacia_top"
 	}
 }
