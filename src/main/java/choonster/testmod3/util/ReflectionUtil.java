@@ -2,10 +2,7 @@ package choonster.testmod3.util;
 
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 /**
  * Utility methods for reflection.
@@ -13,56 +10,31 @@ import java.lang.reflect.Method;
  * @author Choonster
  */
 public class ReflectionUtil {
-
 	/**
-	 * Get a {@link MethodHandle} for a method.
+	 * Finds the field with the specified name in the given class and makes it accessible.
+	 * Note: For performance, store the returned value and avoid calling this repeatedly.
+	 * <p>
+	 * Throws an exception if the field is not found.
+	 * <p>
+	 * This is a copy of Forge's ObfuscationReflectionHelper.findField.
 	 *
-	 * @param clazz          The class to find the method on.
-	 * @param srgName        The obfuscated name of the method to find.
-	 * @param returnType     The return type of the method to find.
-	 * @param parameterTypes The parameter types of the method to find.
-	 * @return The MethodHandle
+	 * @param clazz   The class to find the field on.
+	 * @param srgName The SRG (obfuscated) name of the field to find(e.g. "field_146485_f").
+	 * @return The field
 	 */
-	public static MethodHandle findMethod(final Class<?> clazz, final String srgName, final Class<?> returnType, final Class<?>... parameterTypes) {
-		final Method method = ObfuscationReflectionHelper.findMethod(clazz, srgName, returnType, parameterTypes);
+	public static Field findField(final Class<?> clazz, final String srgName) {
 		try {
-			return MethodHandles.lookup().unreflect(method);
-		} catch (final IllegalAccessException e) {
-			throw new RuntimeException("Failed to create MethodHandle for method", e);
+			final Field field = clazz.getDeclaredField(ObfuscationReflectionHelper.remapName(srgName));
+			field.setAccessible(true);
+			return field;
+		} catch (final Exception e1) {
+			throw new UnableToFindFieldException(e1);
 		}
 	}
 
-	/**
-	 * Get a {@link MethodHandle} for a field's getter.
-	 *
-	 * @param clazz   The class
-	 * @param srgName The obfuscated name of the field to find.
-	 * @return The MethodHandle
-	 */
-	public static MethodHandle findFieldGetter(final Class<?> clazz, final String srgName) {
-		final Field field = ObfuscationReflectionHelper.findField(clazz, srgName);
-
-		try {
-			return MethodHandles.lookup().unreflectGetter(field);
-		} catch (final IllegalAccessException e) {
-			throw new RuntimeException("Unable to create MethodHandle for field getter", e);
-		}
-	}
-
-	/**
-	 * Get a {@link MethodHandle} for a field's setter.
-	 *
-	 * @param clazz   The class
-	 * @param srgName The obfuscated name of the field to find.
-	 * @return The MethodHandle
-	 */
-	public static MethodHandle findFieldSetter(final Class<?> clazz, final String srgName) {
-		final Field field = ObfuscationReflectionHelper.findField(clazz, srgName);
-
-		try {
-			return MethodHandles.lookup().unreflectSetter(field);
-		} catch (final IllegalAccessException e) {
-			throw new RuntimeException("Unable to create MethodHandle for field setter", e);
+	public static class UnableToFindFieldException extends RuntimeException {
+		private UnableToFindFieldException(final Exception e) {
+			super(e);
 		}
 	}
 }

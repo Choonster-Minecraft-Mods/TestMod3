@@ -13,15 +13,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.lang.invoke.MethodHandle;
+import java.lang.reflect.Field;
 
 public class GuiSurvivalCommandBlock extends GuiCommandBlock {
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	private static final MethodHandle COMMAND_TEXT_GETTER = ReflectionUtil.findFieldGetter(GuiCommandBlock.class, "field_146485_f" /* commandTextField */);
-	private static final MethodHandle COMMAND_BLOCK_MODE_GETTER = ReflectionUtil.findFieldGetter(GuiCommandBlock.class, "field_184082_w" /* commandBlockMode */);
-	private static final MethodHandle CONDITIONAL_GETTER = ReflectionUtil.findFieldGetter(GuiCommandBlock.class, "field_184084_y" /* conditional */);
-	private static final MethodHandle AUTOMATIC_GETTER = ReflectionUtil.findFieldGetter(GuiCommandBlock.class, "field_184085_z" /* automatic */);
+	private static final Field COMMAND_TEXT = ReflectionUtil.findField(GuiCommandBlock.class, "field_146485_f" /* commandTextField */);
+	private static final Field COMMAND_BLOCK_MODE = ReflectionUtil.findField(GuiCommandBlock.class, "field_184082_w" /* commandBlockMode */);
+	private static final Field CONDITIONAL = ReflectionUtil.findField(GuiCommandBlock.class, "field_184084_y" /* conditional */);
+	private static final Field AUTOMATIC = ReflectionUtil.findField(GuiCommandBlock.class, "field_184085_z" /* automatic */);
 
 	private final SurvivalCommandBlockLogic survivalCommandBlockLogic;
 
@@ -34,10 +34,10 @@ public class GuiSurvivalCommandBlock extends GuiCommandBlock {
 	protected void actionPerformed(final GuiButton button) throws IOException {
 		if (button.enabled && button.id == 0) {
 			try {
-				final GuiTextField commandTextField = (GuiTextField) COMMAND_TEXT_GETTER.invokeExact((GuiCommandBlock) this);
-				final TileEntityCommandBlock.Mode commandBlockMode = (TileEntityCommandBlock.Mode) COMMAND_BLOCK_MODE_GETTER.invokeExact((GuiCommandBlock) this);
-				final boolean conditional = (boolean) CONDITIONAL_GETTER.invokeExact((GuiCommandBlock) this);
-				final boolean automatic = (boolean) AUTOMATIC_GETTER.invokeExact((GuiCommandBlock) this);
+				final GuiTextField commandTextField = (GuiTextField) COMMAND_TEXT.get(this);
+				final TileEntityCommandBlock.Mode commandBlockMode = (TileEntityCommandBlock.Mode) COMMAND_BLOCK_MODE.get(this);
+				final boolean conditional = (boolean) CONDITIONAL.get(this);
+				final boolean automatic = (boolean) AUTOMATIC.get(this);
 
 				TestMod3.network.sendToServer(new MessageSurvivalCommandBlockSaveChanges(survivalCommandBlockLogic, commandTextField.getText(), commandBlockMode, conditional, automatic));
 			} catch (final Throwable throwable) {

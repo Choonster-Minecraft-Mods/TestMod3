@@ -10,6 +10,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.PlayerArmorInvWrapper;
@@ -18,7 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
-import java.lang.invoke.MethodHandle;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -49,7 +50,7 @@ public class InventoryUtils {
 	/**
 	 * A reference to {@link LootTable#shuffleItems}.
 	 */
-	private static final MethodHandle SHUFFLE_ITEMS = ReflectionUtil.findMethod(LootTable.class, "func_186463_a" /* shuffleItems */, void.class, List.class, int.class, Random.class);
+	private static final Method SHUFFLE_ITEMS = ObfuscationReflectionHelper.findMethod(LootTable.class, "func_186463_a" /* shuffleItems */, List.class, int.class, Random.class);
 
 	/**
 	 * Fill an {@link IItemHandler} with random loot from a {@link LootTable}.
@@ -66,7 +67,7 @@ public class InventoryUtils {
 		final List<Integer> emptySlots = getEmptySlotsRandomized(itemHandler, random);
 
 		try {
-			SHUFFLE_ITEMS.invokeExact(lootTable, items, emptySlots.size(), random);
+			SHUFFLE_ITEMS.invoke(lootTable, items, emptySlots.size(), random);
 		} catch (final Throwable throwable) {
 			throw new RuntimeException("Failed to shuffle items while generating loot", throwable);
 		}
