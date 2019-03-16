@@ -161,6 +161,8 @@ public class ModItems {
 		 */
 		@SubscribeEvent
 		public static void registerItems(final RegistryEvent.Register<Item> event) {
+			ModSoundEvents.RegistrationHandler.initialiseSoundEvents();
+
 			final ItemSwapTest swapTestA = new ItemSwapTest(defaultItemProperties());
 			final ItemSwapTest swapTestB = new ItemSwapTest(defaultItemProperties());
 

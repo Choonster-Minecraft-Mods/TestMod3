@@ -15,8 +15,9 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -112,7 +113,8 @@ public class SpawnerDrops {
 		event.getDrops().add(droppedItem); // Add the ItemStack to the drops list
 	}
 
-	public static void serverStopped() {
+	@SubscribeEvent
+	public static void serverStopped(final FMLServerStoppedEvent event) {
 		storedSpawners.clear(); // Clear the map when the server stops
 	}
 }
