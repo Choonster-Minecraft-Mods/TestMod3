@@ -1,37 +1,32 @@
 package choonster.testmod3.init;
 
-import choonster.testmod3.command.*;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.server.command.CommandTreeHelp;
+import choonster.testmod3.TestMod3;
+import choonster.testmod3.command.TestMod3Command;
+import choonster.testmod3.command.arguments.AxisArgument;
+import net.minecraft.command.arguments.ArgumentSerializer;
+import net.minecraft.command.arguments.ArgumentTypes;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 /**
  * Registers this mod's commands.
  *
  * @author Choonster
  */
+@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 public class ModCommands {
 
 	/**
-	 * Register the commands.
+	 * Register the commands and command arguments.
 	 *
 	 * @param event The server starting event
 	 */
+	@SubscribeEvent
 	public static void registerCommands(final FMLServerStartingEvent event) {
-		event.registerServerCommand(new CommandTestMod3());
-	}
+		ArgumentTypes.register(new ResourceLocation(TestMod3.MODID, "axis"), AxisArgument.class, new ArgumentSerializer<>(AxisArgument::axis));
 
-	/**
-	 * Register the sub-commands of the {@code /testmod3} command.
-	 *
-	 * @param commandTestMod3 The /testmod3 command
-	 */
-	public static void registerSubCommands(final CommandTestMod3 commandTestMod3) {
-		commandTestMod3.addSubcommand(new CommandRotateVector());
-		commandTestMod3.addSubcommand(new CommandRunTests());
-		commandTestMod3.addSubcommand(new CommandMaxHealthAdd());
-		commandTestMod3.addSubcommand(new CommandMaxHealthSet());
-		commandTestMod3.addSubcommand(new CommandMaxHealthGet());
-		commandTestMod3.addSubcommand(new CommandTreeHelp(commandTestMod3));
-		commandTestMod3.addSubcommand(new CommandDebugConfig());
+		TestMod3Command.register(event.getCommandDispatcher());
 	}
 }

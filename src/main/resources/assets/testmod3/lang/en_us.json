@@ -274,18 +274,12 @@
 	"item_group.testmod3": "Test Mod 3",
 
 
-	"commands.testmod3.rotatevector.usage": "/testmod3 rotatevector <x> <y> <z> <axis> <degrees>",
-	"commands.testmod3.rotatevector.invalid_axis": "axis must be x, y or z",
+	"arguments.testmod3.axis.invalid": "Invalid axis, expected 'x', 'y' or 'z'",
+
+	"commands.testmod3.maxhealth.invalid_entity": "Invalid entity, only living entities (e.g. players, animals, monsters) are supported",
 	"commands.testmod3.rotatevector.result": "Rotated vector: [%s, %s, %s]",
-	"commands.testmod3.runtests.usage": "/testmod3 runtests",
 	"commands.testmod3.runtests.tests_passed": "All tests passed.",
 	"commands.testmod3.runtests.tests_failed": "Tests failed. See log for more details.",
-	"commands.testmod3.add_max_health.usage": "/testmod3 addmaxhealth <entity> <amount>",
-	"commands.testmod3.set_max_health.usage": "/testmod3 setmaxhealth <entity> <amount>",
-	"commands.testmod3.get_max_health.usage": "/testmod3 getmaxhealth <entity>",
-	"commands.testmod3.usage": "/testmod3 <command>",
-	"commands.testmod3.help.usage": "/testmod3 help [page|command name]",
-	"commands.testmod3.listplayers.usage": "/listplayers",
 	"commands.testmod3.listplayers.players": "Players:",
 
 

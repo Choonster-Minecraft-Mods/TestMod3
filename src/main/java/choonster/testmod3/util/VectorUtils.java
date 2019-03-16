@@ -1,9 +1,8 @@
 package choonster.testmod3.util;
 
-import com.google.common.collect.Maps;
-import gnu.trove.TCollections;
-import gnu.trove.map.TObjectDoubleMap;
-import gnu.trove.map.hash.TObjectDoubleHashMap;
+import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import it.unimi.dsi.fastutil.objects.Object2DoubleMaps;
+import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3i;
@@ -11,7 +10,8 @@ import net.minecraft.util.math.Vec3i;
 import javax.vecmath.AxisAngle4d;
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.EnumMap;
 import java.util.Map;
 
 /**
@@ -25,10 +25,10 @@ public class VectorUtils {
 	 */
 	private static final Map<EnumFacing.Axis, Vec3i> AXIS_DIRECTION_VECTORS;
 
-	private static final TObjectDoubleMap<EnumFacing> HORIZONTAL_ROTATIONS;
+	private static final Object2DoubleMap<EnumFacing> HORIZONTAL_ROTATIONS;
 
 	static {
-		final Map<EnumFacing.Axis, Vec3i> axisVectors = new HashMap<>();
+		final Map<EnumFacing.Axis, Vec3i> axisVectors = new EnumMap<>(EnumFacing.Axis.class);
 
 		for (final EnumFacing.Axis axis : EnumFacing.Axis.values()) { // For each axis,
 			// Get the direction vector of the positive facing of the axis
@@ -36,20 +36,20 @@ public class VectorUtils {
 			axisVectors.put(axis, directionVec); // Add it to the map
 		}
 
-		AXIS_DIRECTION_VECTORS = Maps.immutableEnumMap(axisVectors); // Wrap the map in an immutable enum map
+		AXIS_DIRECTION_VECTORS = Collections.unmodifiableMap(axisVectors); // Wrap the map in an unmodifiable map
 
 
 		// 90 degrees in radians
 		final double rotationIncrement = Math.toRadians(90);
 
-		final TObjectDoubleMap<EnumFacing> horizontalRotations = new TObjectDoubleHashMap<>();
+		final Object2DoubleMap<EnumFacing> horizontalRotations = new Object2DoubleOpenHashMap<>();
 
 		horizontalRotations.put(EnumFacing.NORTH, 0);
 		horizontalRotations.put(EnumFacing.EAST, rotationIncrement);
 		horizontalRotations.put(EnumFacing.SOUTH, 2 * rotationIncrement);
 		horizontalRotations.put(EnumFacing.WEST, 3 * rotationIncrement);
 
-		HORIZONTAL_ROTATIONS = TCollections.unmodifiableMap(horizontalRotations);
+		HORIZONTAL_ROTATIONS = Object2DoubleMaps.unmodifiable(horizontalRotations);
 	}
 
 	/**

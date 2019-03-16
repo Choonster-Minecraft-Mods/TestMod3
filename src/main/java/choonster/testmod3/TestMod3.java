@@ -69,11 +69,6 @@ public class TestMod3 {
 	}
 
 	@EventHandler
-	public void serverStarting(final FMLServerStartingEvent event) {
-		ModCommands.registerCommands(event);
-	}
-
-	@EventHandler
 	public void serverStopped(final FMLServerStoppedEvent event) {
 		SpawnerDrops.serverStopped();
 	}
