@@ -26,7 +26,7 @@ public class FluidHandlerUniversalBucket extends FluidHandlerItemStackSimple {
 		return true;
 
 		/*
-		// TODO: Uncomment when fluid registry is reimplemented
+		// TODO: Uncomment when fluids are reimplemented in 1.14
 		return fluid.getFluid() == FluidRegistry.WATER ||
 				fluid.getFluid() == FluidRegistry.LAVA ||
 				fluid.getFluid().getName().equals("milk") ||
