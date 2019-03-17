@@ -72,9 +72,9 @@ minecraft {
 }
 
 repositories {
-    maven { url = "http://dvs1.progwml6.com/files/maven" }
+    maven { url = "http://dvs1.progwml6.com/files/maven/" }
     maven { url = "https://tehnut.info/maven/" }
-    maven { url = 'https://jitpack.io' }
+    maven { url = 'https://jitpack.io/' }
 }
 
 dependencies {
