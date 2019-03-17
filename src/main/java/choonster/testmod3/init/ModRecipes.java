@@ -15,11 +15,13 @@ import net.minecraft.potion.PotionHelper;
 import net.minecraft.potion.PotionType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
@@ -33,13 +35,15 @@ import java.util.function.Predicate;
 /**
  * Adds and removes recipes.
  */
+@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 public class ModRecipes {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	/**
 	 * Add this mod's recipes.
 	 */
-	public static void registerRecipes() {
+	@SubscribeEvent
+	public static void registerRecipes(final FMLCommonSetupEvent event) {
 		addSmeltingRecipes();
 		addBrewingRecipes();
 	}

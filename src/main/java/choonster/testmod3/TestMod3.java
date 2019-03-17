@@ -1,19 +1,13 @@
 package choonster.testmod3;
 
-import choonster.testmod3.client.command.ModCommandsClient;
 import choonster.testmod3.client.gui.GuiHandler;
-import choonster.testmod3.client.init.ModKeyBindings;
-import choonster.testmod3.client.renderer.entity.ModRenderers;
-import choonster.testmod3.init.*;
+import choonster.testmod3.init.ModNetwork;
 import choonster.testmod3.tests.Tests;
 import choonster.testmod3.util.BlockDumper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
@@ -43,25 +37,9 @@ public class TestMod3 {
 		LOGGER.warn("Random UUID: {}", UUID.randomUUID().toString());
 		LOGGER.warn("****************************************");
 
-		ModCapabilities.registerCapabilities();
-
-		ModWorldGen.registerFeatures();
-		ModDispenseBehaviors.registerDispenseBehaviors();
-		ModLootTables.registerLootTables();
-
-		ModRecipes.registerRecipes();
-		ModDataFixers.registerDataFixers();
-
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
 		BlockDumper.dump();
 		Tests.runTests();
-	}
-
-	@SubscribeEvent
-	public static void clientSetup(final FMLClientSetupEvent event) {
-		ModRenderers.register();
-		ModCommandsClient.registerCommands();
-		ModKeyBindings.registerKeyBindings();
 	}
 }

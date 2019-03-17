@@ -1,5 +1,6 @@
 package choonster.testmod3.init;
 
+import choonster.testmod3.TestMod3;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.dispenser.IBehaviorDispenseItem;
@@ -11,17 +12,23 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 /**
  * Registers this mod's {@link IBehaviorDispenseItem}s.
  *
  * @author Choonster
  */
+@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 public class ModDispenseBehaviors {
 	/**
 	 * Register this mod's {@link IBehaviorDispenseItem}s.
 	 */
-	public static void registerDispenseBehaviors() {
+	@SubscribeEvent
+	public static void registerDispenseBehaviors(final FMLCommonSetupEvent event) {
 		// Add a dispense behaviour that causes Ink Sacs to place Black Wool.
 		// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2789286-override-dispenser-dispense-only-for-a-certain
 		BlockDispenser.registerDispenseBehavior(Items.INK_SAC, new Bootstrap.BehaviorDispenseOptional() {

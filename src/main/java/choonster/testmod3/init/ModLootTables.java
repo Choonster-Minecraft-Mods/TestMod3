@@ -4,6 +4,10 @@ import choonster.testmod3.TestMod3;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,14 +19,15 @@ import static choonster.testmod3.init.ModLootTables.RegistrationHandler.create;
  *
  * @author Choonster
  */
+@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 public class ModLootTables {
 	public static final ResourceLocation LOOT_TABLE_TEST = create("loot_table_test");
-
 
 	/**
 	 * Register this mod's {@link LootTable}s.
 	 */
-	public static void registerLootTables() {
+	@SubscribeEvent
+	public static void registerLootTables(final FMLCommonSetupEvent event) {
 		RegistrationHandler.LOOT_TABLES.forEach(LootTableList::register);
 	}
 

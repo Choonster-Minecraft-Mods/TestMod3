@@ -1,5 +1,6 @@
 package choonster.testmod3.init;
 
+import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.gen.feature.BannerFeature;
 import choonster.testmod3.world.gen.placement.AtSurfaceInSurfaceWorldChunksDivisibleBy16;
 import net.minecraft.block.state.pattern.BlockMatcher;
@@ -14,8 +15,13 @@ import net.minecraft.world.gen.placement.BasePlacement;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
+@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 public class ModWorldGen {
 	public static class Features {
 		public static final Feature<NoFeatureConfig> BANNER = new BannerFeature();
@@ -25,7 +31,8 @@ public class ModWorldGen {
 		public static final BasePlacement<FrequencyConfig> AT_SURFACE_IN_SURFACE_WORLD_CHUNKS_DIVISIBLE_BY_16 = new AtSurfaceInSurfaceWorldChunksDivisibleBy16();
 	}
 
-	public static void registerFeatures() {
+	@SubscribeEvent
+	public static void registerFeatures(final FMLCommonSetupEvent event) {
 		for (final Biome biome : ForgeRegistries.BIOMES) {
 			/*
 				Generates Banners with a specific pattern in chunks with coordinates divisible by 16.
