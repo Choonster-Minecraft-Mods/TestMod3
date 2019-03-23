@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 
@@ -56,7 +57,7 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 
 		final MessageBulkUpdateContainerCapability<HANDLER, ?> message = createBulkUpdateMessage(containerToSend.windowId, syncableItemsList);
 		if (message.hasData()) { // Don't send the message if there's nothing to update
-			TestMod3.network.sendTo(message, player);
+			TestMod3.network.send(PacketDistributor.PLAYER.with(() -> player), message);
 		}
 	}
 
@@ -64,13 +65,12 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 	public final void sendSlotContents(final Container containerToSend, final int slotInd, final ItemStack stack) {
 		if (!shouldSyncItem(stack)) return;
 
-		final HANDLER handler = stack.getCapability(capability, facing);
-		if (handler == null) return;
-
-		final MessageUpdateContainerCapability<HANDLER, ?> message = createSingleUpdateMessage(containerToSend.windowId, slotInd, handler);
-		if (message.hasData()) { // Don't send the message if there's nothing to update
-			TestMod3.network.sendTo(message, player);
-		}
+		stack.getCapability(capability, facing).ifPresent(handler -> {
+			final MessageUpdateContainerCapability<HANDLER, ?> message = createSingleUpdateMessage(containerToSend.windowId, slotInd, handler);
+			if (message.hasData()) { // Don't send the message if there's nothing to update
+				TestMod3.network.send(PacketDistributor.PLAYER.with(() -> player), message);
+			}
+		});
 	}
 
 	@Override

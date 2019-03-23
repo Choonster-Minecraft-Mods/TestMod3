@@ -4,15 +4,13 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.network.MessageUpdateChunkEnergyValue;
 import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 /**
  * Default implementation of {@link IChunkEnergy}.
@@ -99,15 +97,12 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 		if (world.isRemote) return;
 
 		final BlockPos chunkOrigin = chunkPos.getBlock(0, 0, 0);
+		final Chunk chunk = world.getChunk(chunkPos.x, chunkPos.z);
 
 		if (world.isBlockLoaded(chunkOrigin)) {
-			world.getChunk(chunkPos.x, chunkPos.z).markDirty();
+			chunk.markDirty();
 		}
 
-		final PlayerChunkMapEntry playerChunkMapEntry = ((WorldServer) world).getPlayerChunkMap().getEntry(chunkPos.x, chunkPos.z);
-		if (playerChunkMapEntry == null) return;
-
-		final IMessage message = new MessageUpdateChunkEnergyValue(this);
-		TestMod3.network.sendToAllTracking(message, new NetworkRegistry.TargetPoint(world.dimension.getDimension(), chunkOrigin.getX(), chunkOrigin.getY(), chunkOrigin.getZ(), 0));
+		TestMod3.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> chunk), new MessageUpdateChunkEnergyValue(this));
 	}
 }

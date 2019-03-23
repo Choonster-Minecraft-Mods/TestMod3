@@ -21,6 +21,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 import static choonster.testmod3.util.InjectionUtil.Null;
 
@@ -116,7 +117,7 @@ public class CapabilityChunkEnergy {
 			if (!(chunk instanceof Chunk)) return;
 
 			getChunkEnergy((Chunk) chunk)
-					.ifPresent((chunkEnergy) -> TestMod3.network.sendTo(new MessageUpdateChunkEnergyValue(chunkEnergy), player));
+					.ifPresent((chunkEnergy) -> TestMod3.network.send(PacketDistributor.PLAYER.with(() -> player), new MessageUpdateChunkEnergyValue(chunkEnergy)));
 		}
 	}
 }
