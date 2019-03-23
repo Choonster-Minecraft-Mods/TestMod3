@@ -1,18 +1,23 @@
 package choonster.testmod3.tweak.snowbuildup;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.block.BlockSnow;
+import net.minecraft.block.BlockSnowLayer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.Heightmap;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.Iterator;
 import java.util.Random;
+import java.util.Spliterators;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Allows snow layers to build up in areas where it's snowing.
@@ -47,28 +52,35 @@ public class SnowBuildup {
 		final WorldServer world = (WorldServer) event.world;
 
 		// If this is the post tick, the world's total time (number of ticks) is divisible by NUM_TICKS and it's raining/snowing,
-		if (event.phase != TickEvent.Phase.END || world.getTotalWorldTime() % NUM_TICKS != 0 || !world.isRaining())
+		if (event.phase != TickEvent.Phase.END || world.getGameTime() % NUM_TICKS != 0 || !world.isRaining())
 			return;
 
+		// Get the normal and force-loaded chunks
+		// Copied from Forge's WorldServer#tickBlocks patch
+		final Stream<Chunk> chunks = Stream.concat(
+				StreamSupport.stream(Spliterators.spliteratorUnknownSize(world.getPlayerChunkMap().getChunkIterator(), 0), false),
+				world.getForcedChunks().stream().map(l -> world.getChunk(ChunkPos.getX(l), ChunkPos.getZ(l)))
+		).distinct();
+
 		// For each loaded chunk
-		for (final Iterator<Chunk> iterator = world.getPersistentChunkIterable(world.getPlayerChunkMap().getChunkIterator()); iterator.hasNext(); ) {
+		for (final Iterator<Chunk> iterator = chunks.iterator(); iterator.hasNext(); ) {
 			final Chunk chunk = iterator.next();
 
 			for (int x = 0; x < 16; x++) {
 				for (int z = 0; z < 16; z++) {
 					// Get the position of top block at the current x and z coordinates within the chunk
-					final BlockPos pos = world.getHeight(chunk.getPos().getBlock(x, 0, z));
+					final BlockPos pos = world.getHeight(Heightmap.Type.WORLD_SURFACE, chunk.getPos().getBlock(x, 0, z));
 
 					// Get the state of the block at that position
 					final IBlockState state = world.getBlockState(pos);
 
 					// If the biome at that position allows snow, the block is a snow layer and a random integer in the range [0,24) is 0 (roughly 4% chance),
-					if (world.getBiome(pos).getEnableSnow() && state.getBlock() == Blocks.SNOW_LAYER && random.nextInt(24) == 0) {
+					if (world.getBiome(pos).doesSnowGenerate(world, pos) && state.getBlock() == Blocks.SNOW && random.nextInt(24) == 0) {
 						// Get the number of layers
-						final int numLayers = state.getValue(BlockSnow.LAYERS);
+						final int numLayers = state.get(BlockSnowLayer.LAYERS);
 
 						if (numLayers < MAX_LAYERS) { // If it's less than the maximum, increase it by 1
-							world.setBlockState(pos, state.withProperty(BlockSnow.LAYERS, numLayers + 1));
+							world.setBlockState(pos, state.with(BlockSnowLayer.LAYERS, numLayers + 1));
 						}
 					}
 				}
