@@ -1,6 +1,6 @@
 package choonster.testmod3.compat.waila;
 
-import net.minecraft.block.properties.IProperty;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.EnumFacing;
 
 /**
@@ -11,10 +11,10 @@ import net.minecraft.util.EnumFacing;
 public class HUDHandlerRotatable extends HUDHandlerEnumProperty<EnumFacing> {
 
 	public HUDHandlerRotatable(final IProperty<EnumFacing> property) {
-		this(property, "testmod3:rotatable.facing.desc");
+		this(property, "testmod3.rotatable.facing.desc");
 	}
 
 	public HUDHandlerRotatable(final IProperty<EnumFacing> property, final String tooltipTranslationKey) {
-		super(property, tooltipTranslationKey, "testmod3:facing");
+		super(property, tooltipTranslationKey, "testmod3.facing");
 	}
 }
