@@ -1,6 +1,5 @@
 package choonster.testmod3.network.capability;
 
-import choonster.testmod3.util.CapabilityUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -68,7 +67,7 @@ public abstract class MessageBulkUpdateContainerCapability<HANDLER, DATA> {
 		IntStream.range(0, items.size()).forEach(slotNumber -> {
 			final ItemStack stack = items.get(slotNumber);
 
-			CapabilityUtils.getCapability(stack, capability, facing).ifPresent((handler) -> {
+			stack.getCapability(capability, facing).ifPresent((handler) -> {
 				final DATA data = capabilityDataConverter.convert(handler);
 
 				if (data != null) {

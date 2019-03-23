@@ -10,6 +10,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -18,7 +19,6 @@ import net.minecraftforge.items.wrapper.PlayerOffhandInvWrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nullable;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Predicate;
@@ -48,7 +48,7 @@ public class InventoryUtils {
 	}
 
 	/**
-	 * A reference to {@link LootTable#shuffleItems}.
+	 * A reference to LootTable#shuffleItems.
 	 */
 	private static final Method SHUFFLE_ITEMS = ObfuscationReflectionHelper.findMethod(LootTable.class, "func_186463_a" /* shuffleItems */, List.class, int.class, Random.class);
 
@@ -89,7 +89,7 @@ public class InventoryUtils {
 	/**
 	 * Get a list containing the indices of the empty slots in an {@link IItemHandler} in random order.
 	 * <p>
-	 * Adapted from {@link LootTable#getEmptySlotsRandomized}.
+	 * Adapted from LootTable#getEmptySlotsRandomized.
 	 *
 	 * @param itemHandler The inventory
 	 * @param random      The Random object
@@ -155,15 +155,14 @@ public class InventoryUtils {
 	 * For players, this returns the main inventory. For other entities, this returns null.
 	 *
 	 * @param entity The entity
-	 * @return The inventory, if any
+	 * @return A lazy optional containing the inventory, if any
 	 */
-	@Nullable
-	public static IItemHandler getMainInventory(final Entity entity) {
+	public static LazyOptional<IItemHandler> getMainInventory(final Entity entity) {
 		if (entity instanceof EntityPlayer) {
 			return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
 		}
 
-		return null;
+		return LazyOptional.empty();
 	}
 
 	/**
@@ -172,12 +171,11 @@ public class InventoryUtils {
 	 * For players, this returns the off hand inventory. For other entities, this returns the {@link EnumFacing#UP} {@link IItemHandler} capability.
 	 *
 	 * @param entity The entity
-	 * @return The hand inventory, if any
+	 * @return A lazy optional containing the hand inventory, if any
 	 */
-	@Nullable
-	public static IItemHandler getHandInventory(final Entity entity) {
+	public static LazyOptional<IItemHandler> getHandInventory(final Entity entity) {
 		if (entity instanceof EntityPlayer) {
-			return new PlayerOffhandInvWrapper(((EntityPlayer) entity).inventory);
+			return LazyOptional.of(() -> new PlayerOffhandInvWrapper(((EntityPlayer) entity).inventory));
 		}
 
 		return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
@@ -189,12 +187,11 @@ public class InventoryUtils {
 	 * For players, this returns the armour inventory. For other entities, this returns the {@link EnumFacing#NORTH} {@link IItemHandler} capability.
 	 *
 	 * @param entity The entity
-	 * @return The inventory, if any
+	 * @return A lazy optional containing the inventory, if any
 	 */
-	@Nullable
-	public static IItemHandler getArmourInventory(final Entity entity) {
+	public static LazyOptional<IItemHandler> getArmourInventory(final Entity entity) {
 		if (entity instanceof EntityPlayer) {
-			return new PlayerArmorInvWrapper(((EntityPlayer) entity).inventory);
+			return LazyOptional.of(() -> new PlayerArmorInvWrapper(((EntityPlayer) entity).inventory));
 		}
 
 		return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
@@ -205,10 +202,9 @@ public class InventoryUtils {
 	 *
 	 * @param entity        The entity
 	 * @param inventoryType The inventory type.
-	 * @return The inventory, if any
+	 * @return A lazy optional containing the inventory, if any
 	 */
-	@Nullable
-	public static IItemHandler getInventoryForType(final Entity entity, final EntityInventoryType inventoryType) {
+	public static LazyOptional<IItemHandler> getInventoryForType(final Entity entity, final EntityInventoryType inventoryType) {
 		switch (inventoryType) {
 			case MAIN:
 				return getMainInventory(entity);
@@ -216,9 +212,9 @@ public class InventoryUtils {
 				return getHandInventory(entity);
 			case ARMOUR:
 				return getArmourInventory(entity);
+			default:
+				throw new IllegalArgumentException("Unknown inventory type: " + inventoryType);
 		}
-
-		return null;
 	}
 
 	/**
@@ -226,22 +222,24 @@ public class InventoryUtils {
 	 * <p>
 	 * Only performs the operation on inventory types that exist for the entity.
 	 * <p>
-	 * This is mainly useful in {@link Item#onUpdate(ItemStack, World, Entity, int, boolean)}, where the item can be in any of the player's inventories.
+	 * This is mainly useful in {@link Item#inventoryTick(ItemStack, World, Entity, int, boolean)}, where the item can be in any of the player's inventories.
 	 *
 	 * @param entity         The entity
 	 * @param operation      The operation to perform
 	 * @param inventoryTypes The inventory types to perform the operation on, in order
 	 * @return The inventory type of the first successful operation, or null if all operations failed
 	 */
-	@Nullable
-	public static EntityInventoryType forEachEntityInventory(final Entity entity, final Predicate<IItemHandler> operation, final EntityInventoryType... inventoryTypes) {
+	public static Optional<EntityInventoryType> forEachEntityInventory(final Entity entity, final Predicate<IItemHandler> operation, final EntityInventoryType... inventoryTypes) {
 		for (final EntityInventoryType inventoryType : inventoryTypes) {
-			final IItemHandler inventory = getInventoryForType(entity, inventoryType);
-			if (inventory != null && operation.test(inventory)) {
-				return inventoryType;
+			final boolean result = getInventoryForType(entity, inventoryType)
+					.map(operation::test)
+					.orElse(false);
+
+			if (result) {
+				return Optional.of(inventoryType);
 			}
 		}
 
-		return null;
+		return Optional.empty();
 	}
 }

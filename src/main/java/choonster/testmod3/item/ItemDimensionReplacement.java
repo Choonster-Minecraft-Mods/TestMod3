@@ -91,15 +91,13 @@ public class ItemDimensionReplacement extends Item {
 				replacement.setCount(stack.getCount()); // Copy the stack size from this item
 
 				// Try to replace this item
-				final EntityInventoryType successfulInventoryType = InventoryUtils.forEachEntityInventory(
+				InventoryUtils.forEachEntityInventory(
 						entity,
 						inventory -> tryReplaceItem(inventory, itemSlot, stack, replacement),
 						EntityInventoryType.MAIN, EntityInventoryType.HAND
+				).ifPresent(successfulInventoryType ->
+						LOGGER.info("Replaced item in slot {} of {}'s {} inventory with {}", itemSlot, entity.getName(), successfulInventoryType, replacement.getDisplayName())
 				);
-
-				if (successfulInventoryType != null) {
-					LOGGER.info("Replaced item in slot {} of {}'s {} inventory with {}", itemSlot, entity.getName(), successfulInventoryType, replacement.getDisplayName());
-				}
 			}
 		}
 	}

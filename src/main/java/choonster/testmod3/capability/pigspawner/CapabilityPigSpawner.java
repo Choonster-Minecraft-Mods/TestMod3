@@ -6,7 +6,6 @@ import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerInteractable;
 import choonster.testmod3.capability.CapabilityContainerListenerManager;
 import choonster.testmod3.capability.CapabilityProviderSerializable;
-import choonster.testmod3.util.CapabilityUtils;
 import choonster.testmod3.util.DebugUtil;
 import choonster.testmod3.util.LogUtil;
 import net.minecraft.block.Block;
@@ -110,7 +109,7 @@ public final class CapabilityPigSpawner {
 	 * @return A lazy optional containing the IPigSpawner, if amy
 	 */
 	public static LazyOptional<IPigSpawner> getPigSpawner(final ItemStack itemStack) {
-		return CapabilityUtils.getCapability(itemStack, PIG_SPAWNER_CAPABILITY, DEFAULT_FACING);
+		return itemStack.getCapability(PIG_SPAWNER_CAPABILITY, DEFAULT_FACING);
 	}
 
 	/**

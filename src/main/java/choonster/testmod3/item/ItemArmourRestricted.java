@@ -50,15 +50,13 @@ public class ItemArmourRestricted extends ItemArmor {
 	public void inventoryTick(final ItemStack stack, final World world, final Entity entity, final int itemSlot, final boolean isSelected) {
 		if (!world.isRemote) { // If this is the server,
 			// Try to remove the item from the entity's inventories
-			final EntityInventoryType successfulInventoryType = InventoryUtils.forEachEntityInventory(
+			InventoryUtils.forEachEntityInventory(
 					entity,
 					inventory -> tryRemoveStack(inventory, itemSlot, stack),
 					EntityInventoryType.MAIN, EntityInventoryType.HAND
+			).ifPresent(successfulInventoryType ->
+					LOGGER.info("Restricted armour deleted from slot {} of {}'s {} inventory", itemSlot, entity.getName(), successfulInventoryType)
 			);
-
-			if (successfulInventoryType != null) {
-				LOGGER.info("Restricted armour deleted from slot {} of {}'s {} inventory", itemSlot, entity.getName(), successfulInventoryType);
-			}
 		}
 	}
 

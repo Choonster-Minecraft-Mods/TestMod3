@@ -3,7 +3,6 @@ package choonster.testmod3.capability;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.network.capability.MessageBulkUpdateContainerCapability;
 import choonster.testmod3.network.capability.MessageUpdateContainerCapability;
-import choonster.testmod3.util.CapabilityUtils;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
@@ -65,7 +64,7 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 	public final void sendSlotContents(final Container containerToSend, final int slotInd, final ItemStack stack) {
 		if (!shouldSyncItem(stack)) return;
 
-		final HANDLER handler = CapabilityUtils.getCapability(stack, capability, facing);
+		final HANDLER handler = stack.getCapability(capability, facing);
 		if (handler == null) return;
 
 		final MessageUpdateContainerCapability<HANDLER, ?> message = createSingleUpdateMessage(containerToSend.windowId, slotInd, handler);

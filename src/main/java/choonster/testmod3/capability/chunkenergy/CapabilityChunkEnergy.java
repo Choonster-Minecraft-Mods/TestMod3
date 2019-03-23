@@ -4,7 +4,6 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.capability.CapabilityProviderSerializable;
 import choonster.testmod3.network.MessageUpdateChunkEnergyValue;
-import choonster.testmod3.util.CapabilityUtils;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagInt;
@@ -92,7 +91,7 @@ public class CapabilityChunkEnergy {
 	 * @return A lazy optional containing the IChunkEnergy, if any
 	 */
 	public static LazyOptional<IChunkEnergy> getChunkEnergy(final Chunk chunk) {
-		return CapabilityUtils.getCapability(chunk, CHUNK_ENERGY_CHUNK_CAPABILITY, DEFAULT_FACING);
+		return chunk.getCapability(CHUNK_ENERGY_CHUNK_CAPABILITY, DEFAULT_FACING);
 	}
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)

@@ -3,7 +3,6 @@ package choonster.testmod3.capability.hiddenblockrevealer;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockRevealer;
 import choonster.testmod3.capability.CapabilityContainerListenerManager;
-import choonster.testmod3.util.CapabilityUtils;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -67,7 +66,7 @@ public final class CapabilityHiddenBlockRevealer {
 	 * @return A lazy optional containing the IHiddenBlockRevealer for the {@link ItemStack}, if any
 	 */
 	public static LazyOptional<IHiddenBlockRevealer> getHiddenBlockRevealer(final ItemStack stack) {
-		return CapabilityUtils.getCapability(stack, HIDDEN_BLOCK_REVEALER_CAPABILITY, DEFAULT_FACING);
+		return stack.getCapability(HIDDEN_BLOCK_REVEALER_CAPABILITY, DEFAULT_FACING);
 	}
 
 	/**

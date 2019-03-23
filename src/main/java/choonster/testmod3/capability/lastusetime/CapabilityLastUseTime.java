@@ -4,7 +4,6 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.lastusetime.ILastUseTime;
 import choonster.testmod3.capability.CapabilityContainerListenerManager;
 import choonster.testmod3.capability.CapabilityProviderSerializable;
-import choonster.testmod3.util.CapabilityUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
@@ -70,7 +69,7 @@ public final class CapabilityLastUseTime {
 	 * @return A lazy optional containing the ILastUseTime, if any
 	 */
 	public static LazyOptional<ILastUseTime> getLastUseTime(final ItemStack itemStack) {
-		return CapabilityUtils.getCapability(itemStack, LAST_USE_TIME_CAPABILITY, DEFAULT_FACING);
+		return itemStack.getCapability(LAST_USE_TIME_CAPABILITY, DEFAULT_FACING);
 	}
 
 	/**

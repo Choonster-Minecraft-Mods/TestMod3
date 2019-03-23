@@ -3,7 +3,6 @@ package choonster.testmod3.capability.maxhealth;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.CapabilityProviderSerializable;
-import choonster.testmod3.util.CapabilityUtils;
 import choonster.testmod3.util.LogUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -73,7 +72,7 @@ public final class CapabilityMaxHealth {
 	 * @return A lazy optional containing the IMaxHealth, if any
 	 */
 	public static LazyOptional<IMaxHealth> getMaxHealth(final EntityLivingBase entity) {
-		return CapabilityUtils.getCapability(entity, MAX_HEALTH_CAPABILITY, DEFAULT_FACING);
+		return entity.getCapability(MAX_HEALTH_CAPABILITY, DEFAULT_FACING);
 	}
 
 	/**

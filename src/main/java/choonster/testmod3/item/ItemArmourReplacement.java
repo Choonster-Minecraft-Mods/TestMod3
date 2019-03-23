@@ -226,15 +226,13 @@ public class ItemArmourReplacement extends ItemArmor {
 		if (!world.isRemote && entity instanceof EntityLivingBase && hasReplacedArmour(stack)) {
 
 			// Try to restore the entity's armour
-			final EntityInventoryType successfulInventoryType = InventoryUtils.forEachEntityInventory(
+			InventoryUtils.forEachEntityInventory(
 					entity,
 					inventory -> tryRestoreArmour(inventory, itemSlot, stack, (EntityLivingBase) entity),
 					EntityInventoryType.MAIN, EntityInventoryType.HAND
+			).ifPresent(successfulInventoryType ->
+					LOGGER.info("Restored saved armour for slot {} of {}'s {} inventory", itemSlot, entity.getName(), successfulInventoryType)
 			);
-
-			if (successfulInventoryType != null) {
-				LOGGER.info("Restored saved armour for slot {} of {}'s {} inventory", itemSlot, entity.getName(), successfulInventoryType);
-			}
 		}
 	}
 
