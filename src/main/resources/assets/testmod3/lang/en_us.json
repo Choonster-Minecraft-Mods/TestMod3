@@ -243,27 +243,14 @@
 	"message.testmod3.entity_checker.mode.edge": "Mode set to Edge",
 
 
-	"testmod3.config.title": "TestMod3 Config",
+	"testmod3.config.common.fooBar": "Foo Bar",
+	"testmod3.config.common.exampleEnumProperty": "Example Enum Property",
+	"testmod3.config.common.exampleMapField": "Example Map Field",
 
-	"testmod3.general.client": "Client",
-	"testmod3.general.client.tooltip": "Settings that only affect the local client.",
-	"testmod3.general.client.chunkenergyhudpos": "Chunk Energy HUD Position",
-	"testmod3.general.client.chunkenergyhudpos.tooltip": "The position of the Chunk Energy HUD",
-
-	"testmod3.general.foobar": "Foo Bar",
-	"testmod3.general.foobar.tooltip": "This is an example boolean property.",
-	"testmod3.general.client.baz": "Baz",
-	"testmod3.general.client.baz.tooltip": "This is an example int property.",
-
-	"testmod3.general.exampleenumproperty": "Example Enum Property",
-	"testmod3.general.exampleenumproperty.tooltip": "This is an example enum property.\\nIt will use a GuiConfigEntries.CycleValueEntry in the config GUI.",
-	"testmod3.general.client.examplesubcategoryenumproperty": "Example Subcategory Enum Property",
-	"testmod3.general.client.examplesubcategoryenumproperty.tooltip": "This is an example enum property in a subcategory of the main category.",
-	"testmod3.general.client.examplenestedenumproperty": "Example Nested Enum Property",
-	"testmod3.general.client.examplenestedenumproperty.tooltip": "This is an example enum property that uses an enum defined in a nested class.",
-
-	"testmod3.general.examplemapfield": "Example Map Field",
-	"testmod3.general.examplemapfield.tooltip": "This an example Map field.\\nIt will be converted to a category containing a property for each key-value pair.",
+	"testmod3.config.client.baz": "Baz",
+	"testmod3.config.client.subcategory.exampleSubcategoryEnumProperty": "Example Subcategory Enum Property",
+	"testmod3.config.client.exampleNestedEnumProperty": "Example Nested Enum Property",
+	"testmod3.config.client.chunkEnergyHUDPos": "Chunk Energy HUD Position",
 
 
 	"entity.testmod3.mod_arrow": "Mod Arrow",

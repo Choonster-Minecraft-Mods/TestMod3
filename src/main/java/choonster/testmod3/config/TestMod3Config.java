@@ -5,6 +5,8 @@ import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.common.ForgeConfigSpec.EnumValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
@@ -82,9 +84,12 @@ public class TestMod3Config {
 			chunkEnergyHUDPos = new HUDPos(
 					builder,
 					"The position of the Chunk Energy HUD on the screen",
+					"testmod3.config.client.chunkEnergyHUDPos",
 					"chunkEnergyHUDPos",
 					0, 0
 			);
+
+			builder.pop();
 		}
 
 		public enum EnumExampleNested {
@@ -92,7 +97,7 @@ public class TestMod3Config {
 			NESTED_2,
 			NESTED_3,
 			NESTED_4,
-			NESTED_5
+			NESTED_5,
 		}
 
 		public static class HUDPos {
@@ -100,8 +105,9 @@ public class TestMod3Config {
 
 			public final IntValue y;
 
-			HUDPos(final ForgeConfigSpec.Builder builder, final String comment, final String path, final int defaultX, final int defaultY) {
+			HUDPos(final ForgeConfigSpec.Builder builder, final String comment, final String translation, final String path, final int defaultX, final int defaultY) {
 				builder.comment(comment)
+						.translation(translation)
 						.push(path);
 
 				x = builder
@@ -111,6 +117,8 @@ public class TestMod3Config {
 				y = builder
 						.comment("The y coordinate")
 						.defineInRange("y", defaultY, 0, Integer.MAX_VALUE);
+
+				builder.pop();
 			}
 		}
 	}
@@ -119,7 +127,7 @@ public class TestMod3Config {
 		VALUE_1,
 		VALUE_2,
 		VALUE_3,
-		VALUE_4
+		VALUE_4,
 	}
 
 
@@ -140,5 +148,10 @@ public class TestMod3Config {
 		final Pair<Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Client::new);
 		clientSpec = specPair.getRight();
 		CLIENT = specPair.getLeft();
+	}
+
+	public static void register(final ModLoadingContext context) {
+		context.registerConfig(ModConfig.Type.COMMON, commonSpec);
+		context.registerConfig(ModConfig.Type.CLIENT, clientSpec);
 	}
 }

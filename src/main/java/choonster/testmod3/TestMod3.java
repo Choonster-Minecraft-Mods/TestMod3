@@ -1,11 +1,13 @@
 package choonster.testmod3;
 
 import choonster.testmod3.client.gui.GuiHandler;
+import choonster.testmod3.config.TestMod3Config;
 import choonster.testmod3.init.ModNetwork;
 import choonster.testmod3.tests.Tests;
 import choonster.testmod3.util.BlockDumper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -29,6 +31,10 @@ public class TestMod3 {
 
 	static {
 		FluidRegistry.enableUniversalBucket(); // Must be called before preInit
+	}
+
+	public TestMod3() {
+		TestMod3Config.register(ModLoadingContext.get());
 	}
 
 	@SubscribeEvent
