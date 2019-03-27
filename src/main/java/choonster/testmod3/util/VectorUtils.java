@@ -103,6 +103,6 @@ public class VectorUtils {
 	 * @return The angle in radians
 	 */
 	public static double getHorizontalRotation(final EnumFacing facing) {
-		return HORIZONTAL_ROTATIONS.get(facing);
+		return HORIZONTAL_ROTATIONS.getDouble(facing);
 	}
 }
