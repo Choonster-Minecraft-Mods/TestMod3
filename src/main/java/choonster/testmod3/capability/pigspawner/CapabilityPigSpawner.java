@@ -106,7 +106,7 @@ public final class CapabilityPigSpawner {
 	 * Get the {@link IPigSpawner} from the specified {@link ItemStack}'s capabilities, if any.
 	 *
 	 * @param itemStack The ItemStack
-	 * @return A lazy optional containing the IPigSpawner, if amy
+	 * @return A lazy optional containing the IPigSpawner, if any
 	 */
 	public static LazyOptional<IPigSpawner> getPigSpawner(final ItemStack itemStack) {
 		return itemStack.getCapability(PIG_SPAWNER_CAPABILITY, DEFAULT_FACING);
