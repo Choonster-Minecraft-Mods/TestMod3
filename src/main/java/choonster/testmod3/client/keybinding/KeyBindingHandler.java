@@ -16,10 +16,10 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.Collection;
 
@@ -28,9 +28,9 @@ import java.util.Collection;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber(value = Side.CLIENT, modid = TestMod3.MODID)
+@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = TestMod3.MODID)
 public class KeyBindingHandler {
-	private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
+	private static final Minecraft MINECRAFT = Minecraft.getInstance();
 
 	/**
 	 * Handle the effects of this mod's {@link KeyBinding}s.
@@ -73,7 +73,7 @@ public class KeyBindingHandler {
 				clientPlayer.swingArm(hand);
 
 				if (!heldItem.isEmpty() && (heldItem.getCount() != heldItemCount || MINECRAFT.playerController.isInCreativeMode())) {
-					MINECRAFT.entityRenderer.itemRenderer.resetEquippedProgress(hand);
+					MINECRAFT.gameRenderer.itemRenderer.resetEquippedProgress(hand);
 				}
 
 				return;
@@ -91,21 +91,21 @@ public class KeyBindingHandler {
 		final RayTraceResult objectMouseOver = MINECRAFT.objectMouseOver;
 		final EntityPlayerSP clientPlayer = MINECRAFT.player;
 
-		if (objectMouseOver.typeOfHit == RayTraceResult.Type.ENTITY && objectMouseOver.entityHit != null) {
-			if (objectMouseOver.entityHit instanceof EntityLivingBase) {
-				final Collection<PotionEffect> activePotionEffects = ((EntityLivingBase) objectMouseOver.entityHit).getActivePotionEffects();
+		if (objectMouseOver.type == RayTraceResult.Type.ENTITY && objectMouseOver.entity != null) {
+			if (objectMouseOver.entity instanceof EntityLivingBase) {
+				final Collection<PotionEffect> activePotionEffects = ((EntityLivingBase) objectMouseOver.entity).getActivePotionEffects();
 
 				if (activePotionEffects.isEmpty()) {
-					clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3:print_potions.no_potions", objectMouseOver.entityHit.getDisplayName()));
+					clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3:print_potions.no_potions", objectMouseOver.entity.getDisplayName()));
 				} else {
-					clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3:print_potions.potions", objectMouseOver.entityHit.getDisplayName()));
+					clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3:print_potions.potions", objectMouseOver.entity.getDisplayName()));
 
 					activePotionEffects.forEach(
 							potionEffect -> clientPlayer.sendMessage(new TextComponentString(potionEffect.toString()))
 					);
 				}
 			} else {
-				clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3:print_potions.not_living", objectMouseOver.entityHit.getDisplayName()));
+				clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3:print_potions.not_living", objectMouseOver.entity.getDisplayName()));
 			}
 		} else {
 			clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3:print_potions.no_entity"));

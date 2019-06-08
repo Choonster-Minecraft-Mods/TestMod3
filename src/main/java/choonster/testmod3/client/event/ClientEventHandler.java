@@ -11,18 +11,19 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
-@Mod.EventBusSubscriber(value = Side.CLIENT, modid = TestMod3.MODID)
+@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = TestMod3.MODID)
 public class ClientEventHandler {
-	private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
+	private static final Minecraft MINECRAFT = Minecraft.getInstance();
 
 	@SubscribeEvent
 	public static void onFOVUpdate(final FOVUpdateEvent event) {
@@ -43,16 +44,16 @@ public class ClientEventHandler {
 	 * Rotate the player every tick while they're standing on a Block of Iron.
 	 * <p>
 	 * Test for this thread:
-	 * http://www.minecraftforge.net/forum/index.php/topic,36093.0.html
+	 * https://www.minecraftforge.net/forum/topic/35880-solved189-multiplayer-anti-afk/
 	 *
 	 * @param event The event
 	 */
 	@SubscribeEvent
 	public static void onClientTick(final TickEvent.ClientTickEvent event) {
-		if (event.phase == TickEvent.Phase.END && MINECRAFT.player != null) {
+		if (event.phase == TickEvent.Phase.END && MINECRAFT.player != null && MINECRAFT.world != null) {
 			final EntityPlayer player = MINECRAFT.player;
 			if (MINECRAFT.world.getBlockState(new BlockPos(player).down()).getBlock() == Blocks.IRON_BLOCK) {
-				player.turn(5, 0);
+				player.rotateTowards(5, 0);
 			}
 		}
 	}
@@ -72,13 +73,15 @@ public class ClientEventHandler {
 
 		if (world.isRemote && entity instanceof EntityMinecart) {
 			final Scoreboard scoreboard = world.getScoreboard();
-			if (scoreboard.getTeam(TestMod3.MODID) == null) {
-				final ScorePlayerTeam team = scoreboard.createTeam(TestMod3.MODID);
-				team.setPrefix(TextFormatting.DARK_AQUA.toString());
+
+			ScorePlayerTeam team = scoreboard.getTeam(TestMod3.MODID);
+			if (team == null) {
+				team = scoreboard.createTeam(TestMod3.MODID);
+				team.setPrefix(new TextComponentString("").applyTextStyle(TextFormatting.DARK_AQUA));
 				team.setColor(TextFormatting.DARK_AQUA);
 			}
 
-			scoreboard.addPlayerToTeam(entity.getCachedUniqueIdString(), TestMod3.MODID);
+			scoreboard.addPlayerToTeam(entity.getCachedUniqueIdString(), team);
 			entity.setGlowing(true);
 		}
 	}
