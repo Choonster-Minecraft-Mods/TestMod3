@@ -6,11 +6,10 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.awt.*;
-import java.util.Objects;
 
 
 /**
@@ -26,24 +25,12 @@ public class PotionTestMod3 extends Potion {
 
 	public PotionTestMod3(final boolean isBadEffect, final int liquidColor, final String name) {
 		super(isBadEffect, liquidColor);
-		setPotionName(this, name);
+		setRegistryName(TestMod3.MODID, name);
 		iconTexture = new ResourceLocation(TestMod3.MODID, "textures/potions/" + name + ".png");
 	}
 
 	public PotionTestMod3(final boolean isBadEffect, final int liquidR, final int liquidG, final int liquidB, final String name) {
 		this(isBadEffect, new Color(liquidR, liquidG, liquidB).getRGB(), name);
-	}
-
-	/**
-	 * Set the registry name of {@code potion} to {@code potionName} and the translation key to the full registry name.
-	 *
-	 * @param potion     The potion
-	 * @param potionName The potion's name
-	 */
-	public static void setPotionName(final Potion potion, final String potionName) {
-		potion.setRegistryName(TestMod3.MODID, potionName);
-		final ResourceLocation registryName = Objects.requireNonNull(potion.getRegistryName());
-		potion.setPotionName("effect." + registryName.toString());
 	}
 
 	@Override
@@ -61,10 +48,10 @@ public class PotionTestMod3 extends Potion {
 	 * @param y      the y coordinate
 	 * @param z      the z level
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void renderInventoryEffect(final PotionEffect effect, final Gui gui, final int x, final int y, final float z) {
-		Minecraft.getMinecraft().getTextureManager().bindTexture(iconTexture);
+		Minecraft.getInstance().getTextureManager().bindTexture(iconTexture);
 		Gui.drawModalRectWithCustomSizedTexture(x + 6, y + 7, 0, 0, 18, 18, 18, 18);
 	}
 
@@ -79,10 +66,10 @@ public class PotionTestMod3 extends Potion {
 	 * @param z      the z level
 	 * @param alpha  the alpha value, blinks when the potion is about to run out
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void renderHUDEffect(final PotionEffect effect, final Gui gui, final int x, final int y, final float z, final float alpha) {
-		Minecraft.getMinecraft().getTextureManager().bindTexture(iconTexture);
+		Minecraft.getInstance().getTextureManager().bindTexture(iconTexture);
 		Gui.drawModalRectWithCustomSizedTexture(x + 3, y + 3, 0, 0, 18, 18, 18, 18);
 	}
 }
