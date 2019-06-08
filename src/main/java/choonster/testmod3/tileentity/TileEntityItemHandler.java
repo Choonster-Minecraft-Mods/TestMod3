@@ -1,18 +1,17 @@
 package choonster.testmod3.tileentity;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.util.InventoryUtils;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
+import net.minecraft.world.IInteractionObject;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -24,7 +23,7 @@ import java.util.List;
  *
  * @param <INVENTORY> The inventory type
  */
-public abstract class TileEntityItemHandler<INVENTORY extends IItemHandler & INBTSerializable<NBTTagCompound>> extends TileEntity {
+public abstract class TileEntityItemHandler<INVENTORY extends IItemHandler & INBTSerializable<NBTTagCompound>> extends TileEntity implements IInteractionObject {
 	/**
 	 * The inventory.
 	 */
@@ -46,29 +45,13 @@ public abstract class TileEntityItemHandler<INVENTORY extends IItemHandler & INB
 	/**
 	 * Open the GUI for the specified player.
 	 *
-	 * @param world  The world
 	 * @param player The player
 	 */
-	public void openGUI(final World world, final EntityPlayer player) {
+	public void openGUI(final EntityPlayerMP player) {
 		if (!world.isRemote) {
-			player.openGui(TestMod3.MODID, getGuiId(), world, pos.getX(), pos.getY(), pos.getZ());
+			NetworkHooks.openGui(player, this, getPos());
 		}
 	}
-
-	/**
-	 * Create a {@link Container} of this inventory for the specified player.
-	 *
-	 * @param player The player
-	 * @return The Container
-	 */
-	public abstract Container createContainer(EntityPlayer player);
-
-	/**
-	 * Get the GUI ID.
-	 *
-	 * @return The GUI ID
-	 */
-	protected abstract int getGuiId();
 
 	/**
 	 * Get the inventory contents to drop.

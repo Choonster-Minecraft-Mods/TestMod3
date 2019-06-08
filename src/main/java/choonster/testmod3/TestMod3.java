@@ -1,6 +1,5 @@
 package choonster.testmod3;
 
-import choonster.testmod3.client.gui.GuiHandler;
 import choonster.testmod3.config.TestMod3Config;
 import choonster.testmod3.init.ModNetwork;
 import choonster.testmod3.tests.Tests;
@@ -42,8 +41,6 @@ public class TestMod3 {
 		LOGGER.warn("****************************************");
 		LOGGER.warn("Random UUID: {}", UUID.randomUUID().toString());
 		LOGGER.warn("****************************************");
-
-		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
 		BlockDumper.dump();
 		Tests.runTests();

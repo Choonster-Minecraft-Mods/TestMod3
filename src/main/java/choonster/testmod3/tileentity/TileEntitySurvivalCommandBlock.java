@@ -1,10 +1,10 @@
 package choonster.testmod3.tileentity;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.BlockSurvivalCommandBlock;
 import choonster.testmod3.client.gui.GuiIDs;
 import choonster.testmod3.init.ModTileEntities;
 import choonster.testmod3.util.Constants;
+import choonster.testmod3.util.NetworkUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,10 +47,10 @@ public class TileEntitySurvivalCommandBlock extends TileEntityCommandBlock {
 
 		@Override
 		public boolean tryOpenEditCommandBlock(final EntityPlayer player) {
-			if (player.getEntityWorld().isRemote) {
-				player.openGui(TestMod3.instance, GuiIDs.SURVIVAL_COMMAND_BLOCK, player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());
-			} else {
-				sendToClient((EntityPlayerMP) player);
+			if (!player.getEntityWorld().isRemote) {
+				final EntityPlayerMP playerMP = (EntityPlayerMP) player;
+				NetworkUtil.openClientGui(playerMP, GuiIDs.Client.SURVIVAL_COMMAND_BLOCK, pos);
+				sendToClient(playerMP);
 			}
 
 			return true;

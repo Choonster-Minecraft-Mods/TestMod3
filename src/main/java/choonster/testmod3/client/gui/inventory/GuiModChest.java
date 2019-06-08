@@ -59,8 +59,8 @@ public class GuiModChest extends GuiContainer {
 	 */
 	@Override
 	protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY) {
-		this.fontRenderer.drawString(this.chestInventory.getDisplayName().getUnformattedText(), 8, 6, TEXT_COLOUR);
-		this.fontRenderer.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, TEXT_COLOUR);
+		fontRenderer.drawString(chestInventory.getDisplayName().getString(), 8, 6, TEXT_COLOUR);
+		fontRenderer.drawString(playerInventory.getDisplayName().getString(), 8, ySize - 96 + 2, TEXT_COLOUR);
 	}
 
 	/**
@@ -72,13 +72,13 @@ public class GuiModChest extends GuiContainer {
 	 */
 	@Override
 	protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY) {
-		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-		this.mc.getTextureManager().bindTexture(CHEST_GUI_TEXTURE);
+		mc.getTextureManager().bindTexture(CHEST_GUI_TEXTURE);
 
-		final int x = (this.width - this.xSize) / 2;
-		final int y = (this.height - this.ySize) / 2;
-		this.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.numRows * 18 + 17);
-		this.drawTexturedModalRect(x, y + this.numRows * 18 + 17, 0, 126, this.xSize, 96);
+		final int x = (width - xSize) / 2;
+		final int y = (height - ySize) / 2;
+		drawTexturedModalRect(x, y, 0, 0, xSize, numRows * 18 + 17);
+		drawTexturedModalRect(x, y + numRows * 18 + 17, 0, 126, xSize, 96);
 	}
 }

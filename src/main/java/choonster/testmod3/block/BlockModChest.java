@@ -6,6 +6,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
@@ -77,7 +78,7 @@ public class BlockModChest extends BlockTileEntity<TileEntityModChest> {
 		if (!world.isRemote && !isBlocked(world, pos)) {
 			final TileEntityModChest tileEntity = getTileEntity(world, pos);
 			if (tileEntity != null) {
-				tileEntity.openGUI(world, player);
+				tileEntity.openGUI((EntityPlayerMP) player);
 			}
 		}
 

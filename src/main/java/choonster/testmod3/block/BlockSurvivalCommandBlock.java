@@ -85,10 +85,10 @@ public class BlockSurvivalCommandBlock extends BlockCommandBlock {
 	 * {@link BlockSurvivalCommandBlock#executeChain} rather than {@link BlockCommandBlock#execute} and
 	 * {@link BlockCommandBlock#executeChain}, removing the checks for the vanilla Command Block instances.
 	 *
-	 * @param world The World
-	 * @param pos   The position
-	 * @param state The block state
-	 * @param rand  The World's RNG
+	 * @param world  The World
+	 * @param pos    The position
+	 * @param state  The block state
+	 * @param random The World's RNG
 	 */
 	@Override
 	public void tick(final IBlockState state, final World world, final BlockPos pos, final Random random) {

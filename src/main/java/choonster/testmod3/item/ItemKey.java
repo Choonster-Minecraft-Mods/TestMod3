@@ -1,9 +1,9 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.lock.ILock;
 import choonster.testmod3.capability.lock.CapabilityLock;
-import choonster.testmod3.network.MessageOpenLockGui;
+import choonster.testmod3.client.gui.GuiIDs;
+import choonster.testmod3.util.NetworkUtil;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemUseContext;
@@ -28,7 +28,10 @@ public class ItemKey extends Item {
 						if (lock.isLocked()) {
 							context.getPlayer().sendMessage(new TextComponentTranslation("testmod3:lock.already_locked"));
 						} else {
-							TestMod3.network.sendTo(new MessageOpenLockGui(context.getPos(), context.getFace()), (EntityPlayerMP) context.getPlayer());
+							NetworkUtil.openClientGui((EntityPlayerMP) context.getPlayer(), GuiIDs.Client.LOCK, buffer -> {
+								buffer.writeBlockPos(context.getPos());
+								NetworkUtil.writeNullableFacing(context.getFace(), buffer);
+							});
 						}
 					}
 

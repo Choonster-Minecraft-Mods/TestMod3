@@ -2,13 +2,12 @@ package choonster.testmod3.tileentity;
 
 import choonster.testmod3.api.capability.lock.ILock;
 import choonster.testmod3.capability.lock.CapabilityLock;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -44,9 +43,9 @@ public abstract class TileEntityItemHandlerLockable<
 	protected abstract LOCK createLock();
 
 	@Override
-	public void openGUI(final World world, final EntityPlayer player) {
+	public void openGUI(final EntityPlayerMP player) {
 		if (lock.tryOpen(player)) {
-			super.openGUI(world, player);
+			super.openGUI(player);
 		}
 	}
 

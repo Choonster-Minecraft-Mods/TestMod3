@@ -2,6 +2,7 @@ package choonster.testmod3.network;
 
 import choonster.testmod3.capability.lock.CapabilityLock;
 import choonster.testmod3.client.gui.GuiLock;
+import choonster.testmod3.util.NetworkUtil;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
@@ -21,7 +22,6 @@ import java.util.function.Supplier;
  */
 public class MessageLockSetLockCode {
 	private final BlockPos pos;
-	private final boolean hasFacing;
 	private final EnumFacing facing;
 	private final String lockCode;
 
@@ -29,20 +29,11 @@ public class MessageLockSetLockCode {
 		this.pos = pos;
 		this.facing = facing;
 		this.lockCode = lockCode;
-		hasFacing = facing != null;
 	}
 
 	public static MessageLockSetLockCode decode(final PacketBuffer buffer) {
 		final BlockPos pos = BlockPos.fromLong(buffer.readLong());
-		final boolean hasFacing = buffer.readBoolean();
-
-		final EnumFacing facing;
-		if (hasFacing) {
-			facing = buffer.readEnumValue(EnumFacing.class);
-		} else {
-			facing = null;
-		}
-
+		final EnumFacing facing = NetworkUtil.readNullableFacing(buffer);
 		final String lockCode = buffer.readString(Short.MAX_VALUE);
 
 		return new MessageLockSetLockCode(pos, facing, lockCode);
@@ -50,12 +41,7 @@ public class MessageLockSetLockCode {
 
 	public static void encode(final MessageLockSetLockCode message, final PacketBuffer buffer) {
 		buffer.writeLong(message.pos.toLong());
-		buffer.writeBoolean(message.hasFacing);
-
-		if (message.hasFacing) {
-			buffer.writeByte(message.facing.getIndex());
-		}
-
+		NetworkUtil.writeNullableFacing(message.facing, buffer);
 		buffer.writeString(message.lockCode);
 	}
 

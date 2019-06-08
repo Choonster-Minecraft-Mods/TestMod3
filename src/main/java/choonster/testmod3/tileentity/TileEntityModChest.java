@@ -9,6 +9,7 @@ import choonster.testmod3.inventory.itemhandler.IItemHandlerNameable;
 import choonster.testmod3.inventory.itemhandler.ItemHandlerLoot;
 import choonster.testmod3.inventory.itemhandler.wrapper.NameableCombinedInvWrapper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntityChest;
@@ -61,30 +62,19 @@ public class TileEntityModChest extends TileEntityItemHandlerLoot implements ICo
 		return new Lock(DEFAULT_NAME);
 	}
 
-	/**
-	 * Get the GUI ID.
-	 *
-	 * @return The GUI ID
-	 */
 	@Override
-	protected int getGuiId() {
-		return GuiIDs.MOD_CHEST;
-	}
-
-	/**
-	 * Create a {@link Container} of this inventory for the specified player.
-	 *
-	 * @param player The player
-	 * @return The Container
-	 */
-	@Override
-	public ContainerModChest createContainer(final EntityPlayer player) {
+	public ContainerModChest createContainer(final InventoryPlayer playerInventory, final EntityPlayer player) {
 		inventory.fillWithLoot(player);
 
-		final IItemHandlerModifiable playerInventory = (IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
-		final IItemHandlerNameable playerInventoryWrapper = new NameableCombinedInvWrapper(player.inventory, playerInventory);
+		final IItemHandlerModifiable playerInventoryItemHandler = (IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
+		final IItemHandlerNameable playerInventoryWrapper = new NameableCombinedInvWrapper(playerInventory, playerInventoryItemHandler);
 
 		return new ContainerModChest(playerInventoryWrapper, inventory, player, this);
+	}
+
+	@Override
+	public String getGuiID() {
+		return GuiIDs.Container.MOD_CHEST.toString();
 	}
 
 	/**

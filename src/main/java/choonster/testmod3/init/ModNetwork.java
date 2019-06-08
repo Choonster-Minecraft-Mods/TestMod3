@@ -1,10 +1,7 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.network.MessageFluidTankContents;
-import choonster.testmod3.network.MessageLockSetLockCode;
-import choonster.testmod3.network.MessageSurvivalCommandBlockSaveChanges;
-import choonster.testmod3.network.MessageUpdateChunkEnergyValue;
+import choonster.testmod3.network.*;
 import choonster.testmod3.network.capability.fluidhandler.MessageBulkUpdateContainerFluidTanks;
 import choonster.testmod3.network.capability.fluidhandler.MessageUpdateContainerFluidTank;
 import choonster.testmod3.network.capability.hiddenblock.MessageBulkUpdateContainerHiddenBlockRevealers;
@@ -103,6 +100,12 @@ public class ModNetwork {
 				.decoder(MessageUpdateContainerPigSpawnerFinite::decode)
 				.encoder(MessageUpdateContainerPigSpawnerFinite::encode)
 				.consumer(MessageUpdateContainerPigSpawnerFinite::handle)
+				.add();
+
+		channel.messageBuilder(MessageOpenClientGui.class, 13)
+				.decoder(MessageOpenClientGui::decode)
+				.encoder(MessageOpenClientGui::encode)
+				.consumer(MessageOpenClientGui::handle)
 				.add();
 
 		return channel;
