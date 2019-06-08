@@ -1,0 +1,21 @@
+{
+	"replace": false,
+	"values": [
+		"minecraft:ink_sac",
+		"minecraft:blue_dye",
+		"minecraft:brown_dye",
+		"minecraft:cyan_dye",
+		"minecraft:gray_dye",
+		"minecraft:cactus_green",
+		"minecraft:light_blue_dye",
+		"minecraft:light_gray_dye",
+		"minecraft:lime_dye",
+		"minecraft:magenta_dye",
+		"minecraft:orange_dye",
+		"minecraft:pink_dye",
+		"minecraft:purple_dye",
+		"minecraft:rose_red",
+		"minecraft:bone_meal",
+		"minecraft:dandelion_yellow"
+	]
+}

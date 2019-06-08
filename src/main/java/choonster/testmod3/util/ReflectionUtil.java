@@ -1,5 +1,6 @@
 package choonster.testmod3.util;
 
+import cpw.mods.modlauncher.api.INameMappingService;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
@@ -24,7 +25,7 @@ public class ReflectionUtil {
 	 */
 	public static Field findField(final Class<?> clazz, final String srgName) {
 		try {
-			final Field field = clazz.getDeclaredField(ObfuscationReflectionHelper.remapName(srgName));
+			final Field field = clazz.getDeclaredField(ObfuscationReflectionHelper.remapName(INameMappingService.Domain.FIELD, srgName));
 			field.setAccessible(true);
 			return field;
 		} catch (final Exception e1) {

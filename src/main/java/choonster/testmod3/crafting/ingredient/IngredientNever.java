@@ -1,19 +1,20 @@
 package choonster.testmod3.crafting.ingredient;
 
+import choonster.testmod3.init.ModCrafting;
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraftforge.common.crafting.IIngredientFactory;
-import net.minecraftforge.common.crafting.JsonContext;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.common.crafting.IIngredientSerializer;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.stream.Stream;
 
 /**
  * An {@link Ingredient} that never matches any {@link ItemStack}.
  * <p>
  * Test for this thread:
- * http://www.minecraftforge.net/forum/topic/59744-112-how-to-disable-some-mod-recipe-files-via-config-file/
+ * https://www.minecraftforge.net/forum/topic/59744-112-how-to-disable-some-mod-recipe-files-via-config-file/
  *
  * @author Choonster
  */
@@ -22,20 +23,34 @@ public class IngredientNever extends Ingredient {
 	public static final IngredientNever INSTANCE = new IngredientNever();
 
 	private IngredientNever() {
-		super(0);
+		super(Stream.empty());
 	}
 
 	@Override
-	public boolean apply(@Nullable final ItemStack p_apply_1_) {
+	public boolean test(@Nullable final ItemStack p_test_1_) {
 		return false;
 	}
 
-	public static class Factory implements IIngredientFactory {
+	@Override
+	public IIngredientSerializer<? extends Ingredient> getSerializer() {
+		return ModCrafting.Ingredients.NEVER;
+	}
 
-		@Nonnull
+	public static class Serializer implements IIngredientSerializer<IngredientNever> {
+
 		@Override
-		public Ingredient parse(final JsonContext context, final JsonObject json) {
+		public IngredientNever parse(final JsonObject json) {
 			return IngredientNever.INSTANCE;
+		}
+
+		@Override
+		public IngredientNever parse(final PacketBuffer buffer) {
+			return IngredientNever.INSTANCE;
+		}
+
+		@Override
+		public void write(final PacketBuffer buffer, final IngredientNever ingredient) {
+			// No-op
 		}
 	}
 }

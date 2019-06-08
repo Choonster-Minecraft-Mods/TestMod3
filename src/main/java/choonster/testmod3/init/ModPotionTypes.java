@@ -55,6 +55,7 @@ public class ModPotionTypes {
 			final int HARMFUL_DURATION_STRONG = 900;
 
 			// Can't use the fields from ModPotions because object holders haven't been applied between RegistryEvent.Register<Potion> and now
+			// TODO: Check if ObjectHolders are applied between every registry event now
 			final IForgeRegistry<Potion> potionRegistry = ForgeRegistries.POTIONS;
 			final Potion test = RegistryUtil.getRegistryEntry(potionRegistry, "test");
 

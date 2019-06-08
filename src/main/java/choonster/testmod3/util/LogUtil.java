@@ -29,4 +29,16 @@ public class LogUtil {
 	public static void debug(final Logger logger, final Marker marker, final Throwable throwable, final String message, final Object... params) {
 		logger.log(Level.DEBUG, marker, logger.getMessageFactory().newMessage(message, params), throwable);
 	}
+
+	/**
+	 * Logs an error message with parameters and a the stack trace of a {@link Throwable}.
+	 *
+	 * @param logger    The logger
+	 * @param throwable The throwable to log the stack trace of
+	 * @param message   The message to log
+	 * @param params    The parameters to the message
+	 */
+	public static void error(final Logger logger, final Throwable throwable, final String message, final Object... params) {
+		logger.error(logger.getMessageFactory().newMessage(message, params), throwable);
+	}
 }

@@ -2,12 +2,11 @@ package choonster.testmod3.crafting.ingredient;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.JsonUtils;
-import net.minecraftforge.common.crafting.IIngredientFactory;
-import net.minecraftforge.common.crafting.JsonContext;
-import net.minecraftforge.fluids.*;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.minecraftforge.common.crafting.IngredientNBT;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.UniversalBucket;
 
 /**
  * An ingredient factory that produces a {@link UniversalBucket} filled with the specified {@link Fluid}.
@@ -19,11 +18,12 @@ import net.minecraftforge.fluids.*;
  *
  * @author Choonster
  */
-@SuppressWarnings("unused")
-public class FilledUniversalBucketIngredientFactory implements IIngredientFactory {
+// TODO: Update when fluids are re-implemented in 1.14
+public class FilledUniversalBucketIngredientSerializer implements IIngredientSerializer<IngredientNBT> {
 
 	@Override
-	public Ingredient parse(final JsonContext context, final JsonObject json) {
+	public IngredientNBTTestMod3 parse(final JsonObject json) {
+		/*
 		final String fluidName = JsonUtils.getString(json, "fluid");
 		final Fluid fluid = FluidRegistry.getFluid(fluidName);
 
@@ -38,5 +38,18 @@ public class FilledUniversalBucketIngredientFactory implements IIngredientFactor
 		}
 
 		return new IngredientNBTTestMod3(filledBucket);
+		*/
+
+		throw new JsonSyntaxException("Fluids aren't implemented");
+	}
+
+	@Override
+	public IngredientNBTTestMod3 parse(final PacketBuffer buffer) {
+		throw new UnsupportedOperationException("Fluids aren't implemented");
+	}
+
+	@Override
+	public void write(final PacketBuffer buffer, final IngredientNBT ingredient) {
+		throw new UnsupportedOperationException("Fluids aren't implemented");
 	}
 }
