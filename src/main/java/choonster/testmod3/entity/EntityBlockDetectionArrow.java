@@ -47,7 +47,7 @@ public class EntityBlockDetectionArrow extends EntityModArrow {
 	protected void onHit(final RayTraceResult rayTraceResult) {
 		super.onHit(rayTraceResult);
 
-		final Entity shootingEntity = func_212360_k();
+		final Entity shootingEntity = getShooter();
 
 		if (rayTraceResult.type == RayTraceResult.Type.BLOCK && shootingEntity != null) {
 			final BlockPos pos = rayTraceResult.getBlockPos();
