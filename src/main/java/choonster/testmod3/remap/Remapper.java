@@ -8,8 +8,8 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.RegistryEvent.MissingMappings.Mapping;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.logging.log4j.LogManager;
@@ -100,14 +100,6 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 	 * Names to ignore and leave in the save.
 	 */
 	private static final List<String> namesToIgnore = ImmutableList.<String>builder()
-			.add("colored_rotatable")
-			.add("colored_multi_rotatable")
-			.add("variants")
-			.add("stained_clay_slab_low")
-			.add("stained_clay_slab_high")
-			.add("double_stained_clay_slab_low")
-			.add("double_stained_clay_slab_high")
-			.add("variants_item")
 			.build();
 
 	private boolean ignoreName(final Mapping<T> missingMapping) {
