@@ -173,6 +173,9 @@ public class ModItems {
 			final ItemArmourRestricted replacementLeggings = new ItemArmourRestricted(ModArmourMaterial.REPLACEMENT, EntityEquipmentSlot.LEGS, defaultItemProperties());
 			final ItemArmourRestricted replacementBoots = new ItemArmourRestricted(ModArmourMaterial.REPLACEMENT, EntityEquipmentSlot.FEET, defaultItemProperties());
 
+			// Capabilities are registered and injected in FMLCommonSetupEvent, which is fired after RegistryEvent.Register.
+			// This means that item constructors can't directly reference Capability fields (e.g. CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY).
+			@SuppressWarnings("Convert2MethodRef")
 			final Item[] items = {
 					new ItemCuttingAxe(ItemTier.WOOD, 6.0f, -3.2f, defaultItemProperties()).setRegistryName("wooden_axe"),
 					new ItemEntityTest(defaultItemProperties()).setRegistryName("entity_test"),
@@ -192,10 +195,10 @@ public class ModItems {
 					new ItemHarvestSword(ItemTier.WOOD, ItemHarvestSword.addToolTypes(ItemTier.WOOD, defaultItemProperties())).setRegistryName("wooden_harvest_sword"),
 					new ItemHarvestSword(ItemTier.DIAMOND, ItemHarvestSword.addToolTypes(ItemTier.DIAMOND, defaultItemProperties())).setRegistryName("diamond_harvest_sword"),
 					new ItemClearer(defaultItemProperties()).setRegistryName("clearer"),
-					new ItemModBow(defaultItemProperties().defaultMaxDamage(384).maxStackSize(1)).setRegistryName("bow"),
+					new ItemModBow(defaultItemProperties().defaultMaxDamage(384)).setRegistryName("bow"),
 					new ItemModArrow(EntityModArrow::new, defaultItemProperties()).setRegistryName("arrow"),
 					new ItemHeightTester(defaultItemProperties()).setRegistryName("height_tester"),
-					new ItemPigSpawner(CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY::getDefaultInstance, defaultItemProperties()).setRegistryName("pig_spawner_finite"),
+					new ItemPigSpawner(() -> CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY.getDefaultInstance(), defaultItemProperties()).setRegistryName("pig_spawner_finite"),
 					new ItemPigSpawner(PigSpawnerInfinite::new, defaultItemProperties()).setRegistryName("pig_spawner_infinite"),
 					new ItemContinuousBow(defaultItemProperties()).setRegistryName("continuous_bow"),
 					new ItemRespawner(defaultItemProperties()).setRegistryName("respawner"),
