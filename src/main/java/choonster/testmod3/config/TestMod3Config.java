@@ -84,7 +84,6 @@ public class TestMod3Config {
 			chunkEnergyHUDPos = new HUDPos(
 					builder,
 					"The position of the Chunk Energy HUD on the screen",
-					"testmod3.config.client.chunkEnergyHUDPos",
 					"chunkEnergyHUDPos",
 					0, 0
 			);
@@ -105,9 +104,8 @@ public class TestMod3Config {
 
 			public final IntValue y;
 
-			HUDPos(final ForgeConfigSpec.Builder builder, final String comment, final String translation, final String path, final int defaultX, final int defaultY) {
+			HUDPos(final ForgeConfigSpec.Builder builder, final String comment, final String path, final int defaultX, final int defaultY) {
 				builder.comment(comment)
-						.translation(translation)
 						.push(path);
 
 				x = builder
