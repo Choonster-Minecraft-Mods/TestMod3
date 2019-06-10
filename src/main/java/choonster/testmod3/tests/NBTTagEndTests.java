@@ -21,9 +21,9 @@ public class NBTTagEndTests extends Test {
 	@Override
 	protected void runTest() {
 		final NBTTagCompound originalCompound = new NBTTagCompound();
-		originalCompound.setString("Tag1", "Test2");
-		originalCompound.setTag("EndTag", new NBTTagEnd());
-		originalCompound.setFloat("Tag2", 3.55f);
+		originalCompound.putString("Tag1", "Test2");
+		originalCompound.put("EndTag", new NBTTagEnd());
+		originalCompound.putFloat("Tag2", 3.55f);
 
 		final File file = new File("./endTagTest.dat");
 
