@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
  * @author Choonster
  */
 public class BlockRotatableLamp extends Block {
-	public static final IProperty<EnumFacing> FACING = DirectionProperty.create("facing");
+	public static final IProperty<EnumFacing> FACING = DirectionProperty.create("facing", facing -> true);
 	public static final IProperty<Boolean> LIT = BooleanProperty.create("lit");
 
 	public BlockRotatableLamp(final Block.Properties properties) {

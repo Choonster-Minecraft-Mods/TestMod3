@@ -8,9 +8,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
  * @author Choonster
  */
 public class BlockColoredRotatable extends Block {
-	public static final IProperty<EnumFacing> FACING = DirectionProperty.create("facing");
+	public static final IProperty<EnumFacing> FACING = BlockStateProperties.FACING;
 
 	private final BlockVariantGroup<EnumDyeColor, ? extends BlockColoredRotatable> variantGroup;
 	private final EnumDyeColor color;
@@ -85,6 +85,7 @@ public class BlockColoredRotatable extends Block {
 		return state.with(FACING, direction.rotate(state.get(FACING)));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState mirror(final IBlockState state, final Mirror mirror) {
 		return state.with(FACING, mirror.mirror(state.get(FACING)));
