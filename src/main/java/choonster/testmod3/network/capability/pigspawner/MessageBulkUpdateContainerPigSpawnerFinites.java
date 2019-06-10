@@ -45,7 +45,7 @@ public class MessageBulkUpdateContainerPigSpawnerFinites extends MessageBulkUpda
 	}
 
 	public static MessageBulkUpdateContainerPigSpawnerFinites decode(final PacketBuffer buffer) {
-		return MessageBulkUpdateContainerCapability.decode(
+		return MessageBulkUpdateContainerCapability.<IPigSpawner, Integer, MessageBulkUpdateContainerPigSpawnerFinites>decode(
 				buffer,
 				PigSpawnerFunctions::decodeNumPigs,
 				MessageBulkUpdateContainerPigSpawnerFinites::new
