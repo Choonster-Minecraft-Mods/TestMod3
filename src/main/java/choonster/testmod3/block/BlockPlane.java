@@ -105,6 +105,7 @@ public class BlockPlane extends Block {
 		return state.with(HORIZONTAL_ROTATION, direction.rotate(state.get(HORIZONTAL_ROTATION)));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState mirror(final IBlockState state, final Mirror mirror) {
 		return state.with(HORIZONTAL_ROTATION, mirror.mirror(state.get(HORIZONTAL_ROTATION)));
