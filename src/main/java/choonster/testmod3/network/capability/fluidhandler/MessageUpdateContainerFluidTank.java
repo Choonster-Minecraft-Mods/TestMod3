@@ -45,7 +45,7 @@ public class MessageUpdateContainerFluidTank extends MessageUpdateContainerCapab
 	}
 
 	public static MessageUpdateContainerFluidTank decode(final PacketBuffer buffer) {
-		return MessageUpdateContainerCapability.decode(
+		return MessageUpdateContainerCapability.<IFluidHandlerItem, FluidTankInfo, MessageUpdateContainerFluidTank>decode(
 				buffer,
 				FluidHandlerFunctions::decodeFluidTankInfo,
 				MessageUpdateContainerFluidTank::new

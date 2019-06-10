@@ -44,7 +44,7 @@ public class MessageBulkUpdateContainerHiddenBlockRevealers extends MessageBulkU
 	}
 
 	public static MessageBulkUpdateContainerHiddenBlockRevealers decode(final PacketBuffer buffer) {
-		return MessageBulkUpdateContainerCapability.decode(
+		return MessageBulkUpdateContainerCapability.<IHiddenBlockRevealer, Boolean, MessageBulkUpdateContainerHiddenBlockRevealers>decode(
 				buffer,
 				HiddenBlockRevealerFunctions::decodeRevealHiddenBlocksFlag,
 				MessageBulkUpdateContainerHiddenBlockRevealers::new

@@ -44,7 +44,7 @@ public class MessageBulkUpdateContainerLastUseTimes extends MessageBulkUpdateCon
 	}
 
 	public static MessageBulkUpdateContainerLastUseTimes decode(final PacketBuffer buffer) {
-		return MessageBulkUpdateContainerCapability.decode(
+		return MessageBulkUpdateContainerCapability.<ILastUseTime, Long, MessageBulkUpdateContainerLastUseTimes>decode(
 				buffer,
 				LastUseTimeFunctions::decodeLastUseTimeValue,
 				MessageBulkUpdateContainerLastUseTimes::new
