@@ -10,9 +10,10 @@ package choonster.testmod3.init;
 public class ModDataFixers {
  	/**
  	* The current data version.
- 	*//*
+ 	*/
 	public static final int DATA_VERSION = 103;
-*//**
+	
+	/**
 	 * Register this mod's data fixers.
  	*//*
 	@SubscribeEvent
