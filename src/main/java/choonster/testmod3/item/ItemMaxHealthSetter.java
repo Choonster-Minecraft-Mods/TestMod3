@@ -22,15 +22,13 @@ public class ItemMaxHealthSetter extends Item {
 	@Override
 	public boolean itemInteractionForEntity(final ItemStack stack, final EntityPlayer player, final EntityLivingBase target, final EnumHand hand) {
 		if (!player.world.isRemote) {
-			final IMaxHealth maxHealth = CapabilityMaxHealth.getMaxHealth(target);
-
-			if (maxHealth != null) {
+			CapabilityMaxHealth.getMaxHealth(target).ifPresent(maxHealth -> {
 				final float healthToAdd = player.isSneaking() ? -1.0f : 1.0f;
 
 				maxHealth.addBonusMaxHealth(healthToAdd);
 
 				player.sendMessage(new TextComponentTranslation("message.testmod3:max_health.add", target.getDisplayName(), healthToAdd));
-			}
+			});
 		}
 
 		return true;

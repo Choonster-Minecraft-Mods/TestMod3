@@ -32,7 +32,7 @@ public class ContainerListenerPigSpawnerFinite extends CapabilityContainerListen
 	 */
 	@Override
 	protected MessageBulkUpdateContainerCapability<IPigSpawner, ?> createBulkUpdateMessage(final int windowID, final NonNullList<ItemStack> items) {
-		return new MessageBulkUpdateContainerPigSpawnerFinites(windowID, items);
+		return new MessageBulkUpdateContainerPigSpawnerFinites(CapabilityPigSpawner.DEFAULT_FACING, windowID, items);
 	}
 
 	/**
@@ -45,6 +45,6 @@ public class ContainerListenerPigSpawnerFinite extends CapabilityContainerListen
 	 */
 	@Override
 	protected MessageUpdateContainerCapability<IPigSpawner, ?> createSingleUpdateMessage(final int windowID, final int slotNumber, final IPigSpawner pigSpawner) {
-		return new MessageUpdateContainerPigSpawnerFinite(windowID, slotNumber, pigSpawner);
+		return new MessageUpdateContainerPigSpawnerFinite(CapabilityPigSpawner.DEFAULT_FACING, windowID, slotNumber, pigSpawner);
 	}
 }

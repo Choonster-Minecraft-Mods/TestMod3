@@ -13,6 +13,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 
 /**
@@ -70,8 +71,8 @@ public class ItemSnowballLauncher extends Item {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);
 
 		final boolean ammoRequired = isAmmoRequired(heldItem, playerIn);
-		final IItemHandler ammoSlot = ammoRequired ? ItemModBow.findAmmoSlot(playerIn, this::isAmmo) : null;
-		final boolean hasAmmo = ammoSlot != null;
+		final LazyOptional<IItemHandler> optionalAmmoSlot = ammoRequired ? ItemModBow.findAmmoSlot(playerIn, this::isAmmo) : LazyOptional.empty();
+		final boolean hasAmmo = optionalAmmoSlot.isPresent();
 
 		if (!ammoRequired || hasAmmo) {
 			final int cooldown = getCooldown(heldItem);
@@ -87,10 +88,12 @@ public class ItemSnowballLauncher extends Item {
 				worldIn.spawnEntity(entitySnowball);
 			}
 
-			if (hasAmmo && !ammoSlot.extractItem(0, 1, true).isEmpty()) {
-				ammoSlot.extractItem(0, 1, false);
-				playerIn.inventoryContainer.detectAndSendChanges();
-			}
+			optionalAmmoSlot.ifPresent(ammoSlot -> {
+				if (!ammoSlot.extractItem(0, 1, true).isEmpty()) {
+					ammoSlot.extractItem(0, 1, false);
+					playerIn.inventoryContainer.detectAndSendChanges();
+				}
+			});
 
 			return new ActionResult<>(EnumActionResult.SUCCESS, heldItem);
 		}

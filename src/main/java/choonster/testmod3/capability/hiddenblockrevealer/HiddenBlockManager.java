@@ -3,12 +3,14 @@ package choonster.testmod3.capability.hiddenblockrevealer;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockRevealer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -48,12 +50,14 @@ public class HiddenBlockManager {
 	public static void clientTick(final TickEvent.ClientTickEvent event) {
 		if (event.phase != TickEvent.Phase.END) return;
 
-		final EntityPlayer player = TestMod3.proxy.getClientPlayer();
-		if (player == null) return;
+		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+			final EntityPlayer player = Minecraft.getInstance().player;
+			if (player == null) return;
 
-		final boolean checkResult = shouldHeldItemRevealHiddenBlocks(player);
-		toggled = lastCheckResult != checkResult;
-		lastCheckResult = checkResult;
+			final boolean checkResult = shouldHeldItemRevealHiddenBlocks(player);
+			toggled = lastCheckResult != checkResult;
+			lastCheckResult = checkResult;
+		});
 	}
 
 	/**

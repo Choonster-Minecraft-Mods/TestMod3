@@ -39,38 +39,35 @@ public class ItemPigSpawner extends Item {
 
 	@Override
 	public int getMaxDamage(final ItemStack stack) {
-		final IPigSpawner pigSpawner = CapabilityPigSpawner.getPigSpawner(stack);
-
-		if (pigSpawner instanceof IPigSpawnerFinite) {
-			final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) pigSpawner;
-			return pigSpawnerFinite.getMaxNumPigs();
-		}
-
-		return super.getMaxDamage(stack);
+		return CapabilityPigSpawner.getPigSpawner(stack)
+				.filter(pigSpawner -> pigSpawner instanceof IPigSpawnerFinite)
+				.map(pigSpawner -> {
+					final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) pigSpawner;
+					return pigSpawnerFinite.getMaxNumPigs();
+				})
+				.orElse(super.getMaxDamage(stack));
 	}
 
 	@Override
 	public boolean isDamaged(final ItemStack stack) {
-		final IPigSpawner pigSpawner = CapabilityPigSpawner.getPigSpawner(stack);
-
-		if (pigSpawner instanceof IPigSpawnerFinite) {
-			final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) pigSpawner;
-			return pigSpawnerFinite.getNumPigs() < pigSpawnerFinite.getMaxNumPigs();
-		}
-
-		return super.isDamaged(stack);
+		return CapabilityPigSpawner.getPigSpawner(stack)
+				.filter(pigSpawner -> pigSpawner instanceof IPigSpawnerFinite)
+				.map(pigSpawner -> {
+					final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) pigSpawner;
+					return pigSpawnerFinite.getNumPigs() < pigSpawnerFinite.getMaxNumPigs();
+				})
+				.orElse(super.isDamaged(stack));
 	}
 
 	@Override
 	public double getDurabilityForDisplay(final ItemStack stack) {
-		final IPigSpawner pigSpawner = CapabilityPigSpawner.getPigSpawner(stack);
-
-		if (pigSpawner instanceof IPigSpawnerFinite) {
-			final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) pigSpawner;
-			final int maxNumPigs = pigSpawnerFinite.getMaxNumPigs();
-			return (double) (maxNumPigs - pigSpawnerFinite.getNumPigs()) / maxNumPigs;
-		}
-
-		return super.getDurabilityForDisplay(stack);
+		return CapabilityPigSpawner.getPigSpawner(stack)
+				.filter(pigSpawner -> pigSpawner instanceof IPigSpawnerFinite)
+				.map(pigSpawner -> {
+					final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) pigSpawner;
+					final int maxNumPigs = pigSpawnerFinite.getMaxNumPigs();
+					return (double) (maxNumPigs - pigSpawnerFinite.getNumPigs()) / maxNumPigs;
+				})
+				.orElse(super.getDurabilityForDisplay(stack));
 	}
 }

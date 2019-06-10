@@ -25,15 +25,13 @@ public class BlockMaxHealthSetter extends Block {
 	@Override
 	public boolean onBlockActivated(final IBlockState state, final World world, final BlockPos pos, final EntityPlayer player, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
 		if (!world.isRemote) {
-			final IMaxHealth maxHealth = CapabilityMaxHealth.getMaxHealth(player);
-
-			if (maxHealth != null) {
+			CapabilityMaxHealth.getMaxHealth(player).ifPresent(maxHealth -> {
 				final float healthToAdd = player.isSneaking() ? -1.0f : 1.0f;
 
 				maxHealth.addBonusMaxHealth(healthToAdd);
 
 				player.sendMessage(new TextComponentTranslation("message.testmod3:max_health.add", player.getDisplayName(), healthToAdd));
-			}
+			});
 		}
 
 		return true;

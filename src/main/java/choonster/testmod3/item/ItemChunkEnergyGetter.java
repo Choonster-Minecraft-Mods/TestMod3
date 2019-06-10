@@ -29,13 +29,16 @@ public class ItemChunkEnergyGetter extends Item {
 		if (!worldIn.isRemote) {
 			final Chunk chunk = worldIn.getChunk(new BlockPos(playerIn));
 			final ChunkPos chunkPos = chunk.getPos();
-			final IChunkEnergy chunkEnergy = CapabilityChunkEnergy.getChunkEnergy(chunk);
 
-			if (chunkEnergy != null) {
-				playerIn.sendMessage(new TextComponentTranslation("message.testmod3:chunk_energy.get", chunkPos, chunkEnergy.getEnergyStored()));
-			} else {
-				playerIn.sendMessage(new TextComponentTranslation("message.testmod3:chunk_energy.not_found", chunkPos));
-			}
+			CapabilityChunkEnergy.getChunkEnergy(chunk)
+					.map(chunkEnergy -> {
+						playerIn.sendMessage(new TextComponentTranslation("message.testmod3:chunk_energy.get", chunkPos, chunkEnergy.getEnergyStored()));
+						return true;
+					})
+					.orElseGet(() -> {
+						playerIn.sendMessage(new TextComponentTranslation("message.testmod3:chunk_energy.not_found", chunkPos));
+						return false;
+					});
 		}
 
 		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));

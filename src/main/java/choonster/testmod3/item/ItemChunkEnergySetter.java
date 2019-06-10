@@ -35,20 +35,25 @@ public class ItemChunkEnergySetter extends Item {
 	private void addRemoveChunkEnergy(final World world, final EntityPlayer player, final int amount) {
 		final Chunk chunk = world.getChunk(new BlockPos(player));
 		final ChunkPos chunkPos = chunk.getPos();
-		final IChunkEnergy chunkEnergy = CapabilityChunkEnergy.getChunkEnergy(chunk);
 
-		if (chunkEnergy != null) {
-			if (player.isSneaking()) {
-				final int energyRemoved = chunkEnergy.extractEnergy(amount, false);
-				player.sendMessage(new TextComponentTranslation("message.testmod3:chunk_energy.remove", energyRemoved, chunkPos));
-			} else {
-				final int energyAdded = chunkEnergy.receiveEnergy(amount, false);
-				player.sendMessage(new TextComponentTranslation("message.testmod3:chunk_energy.add", energyAdded, chunkPos));
+		CapabilityChunkEnergy.getChunkEnergy(chunk)
+				.map(chunkEnergy -> {
+					if (player.isSneaking()) {
+						final int energyRemoved = chunkEnergy.extractEnergy(amount, false);
+						player.sendMessage(new TextComponentTranslation("message.testmod3:chunk_energy.remove", energyRemoved, chunkPos));
+					} else {
+						final int energyAdded = chunkEnergy.receiveEnergy(amount, false);
+						player.sendMessage(new TextComponentTranslation("message.testmod3:chunk_energy.add", energyAdded, chunkPos));
 
-			}
-		} else {
-			player.sendMessage(new TextComponentTranslation("message.testmod3:chunk_energy.not_found", chunkPos));
-		}
+					}
+
+					return true;
+				})
+				.orElseGet(() -> {
+					player.sendMessage(new TextComponentTranslation("message.testmod3:chunk_energy.not_found", chunkPos));
+
+					return false;
+				});
 	}
 
 	@Override

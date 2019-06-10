@@ -30,7 +30,7 @@ public class ContainerListenerLastUseTime extends CapabilityContainerListener<IL
 	 */
 	@Override
 	protected MessageBulkUpdateContainerLastUseTimes createBulkUpdateMessage(final int windowID, final NonNullList<ItemStack> items) {
-		return new MessageBulkUpdateContainerLastUseTimes(windowID, items);
+		return new MessageBulkUpdateContainerLastUseTimes(CapabilityLastUseTime.DEFAULT_FACING, windowID, items);
 	}
 
 	/**
@@ -43,6 +43,6 @@ public class ContainerListenerLastUseTime extends CapabilityContainerListener<IL
 	 */
 	@Override
 	protected MessageUpdateContainerLastUseTime createSingleUpdateMessage(final int windowID, final int slotNumber, final ILastUseTime lastUseTime) {
-		return new MessageUpdateContainerLastUseTime(windowID, slotNumber, lastUseTime);
+		return new MessageUpdateContainerLastUseTime(CapabilityLastUseTime.DEFAULT_FACING, windowID, slotNumber, lastUseTime);
 	}
 }

@@ -6,7 +6,6 @@ import choonster.testmod3.network.capability.fluidhandler.MessageBulkUpdateConta
 import choonster.testmod3.network.capability.fluidhandler.MessageUpdateContainerFluidTank;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidTank;
@@ -32,7 +31,7 @@ public class ContainerListenerFluidTank extends CapabilityContainerListener<IFlu
 	 */
 	@Override
 	protected boolean shouldSyncItem(final ItemStack stack) {
-		return stack.getItem() == Item.getItemFromBlock(ModBlocks.FLUID_TANK);
+		return stack.getItem() == ModBlocks.FLUID_TANK.asItem();
 	}
 
 	/**
@@ -57,6 +56,6 @@ public class ContainerListenerFluidTank extends CapabilityContainerListener<IFlu
 	 */
 	@Override
 	protected MessageUpdateContainerFluidTank createSingleUpdateMessage(final int windowID, final int slotNumber, final IFluidHandlerItem fluidHandlerItem) {
-		return new MessageUpdateContainerFluidTank(windowID, slotNumber, fluidHandlerItem);
+		return new MessageUpdateContainerFluidTank(null, windowID, slotNumber, fluidHandlerItem);
 	}
 }

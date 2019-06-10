@@ -14,7 +14,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
 
 /**
  * An item that reveals hidden blocks.
@@ -30,14 +29,11 @@ public class ItemHiddenBlockRevealer extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final EntityPlayer playerIn, final EnumHand hand) {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);
-		final Optional<Boolean> revealHiddenBlocks = CapabilityHiddenBlockRevealer.toggleRevealHiddenBlocks(heldItem);
-
-		if (!worldIn.isRemote) {
-			revealHiddenBlocks.ifPresent((value) -> {
-				final String message = value ? "message.testmod3:hidden_block_revealer.reveal" : "message.testmod3:hidden_block_revealer.hide";
-				playerIn.sendMessage(new TextComponentTranslation(message));
-			});
-		}
+		CapabilityHiddenBlockRevealer.toggleRevealHiddenBlocks(heldItem)
+				.ifPresent(revealHiddenBlocks -> {
+					final String message = revealHiddenBlocks ? "message.testmod3:hidden_block_revealer.reveal" : "message.testmod3:hidden_block_revealer.hide";
+					playerIn.sendMessage(new TextComponentTranslation(message));
+				});
 
 		return new ActionResult<>(EnumActionResult.SUCCESS, heldItem);
 	}
