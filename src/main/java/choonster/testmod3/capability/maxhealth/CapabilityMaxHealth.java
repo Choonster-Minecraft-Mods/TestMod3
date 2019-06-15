@@ -47,7 +47,7 @@ public final class CapabilityMaxHealth {
 	/**
 	 * The ID of this capability.
 	 */
-	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "MaxHealth");
+	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "max_health");
 
 	public static final Marker LOG_MARKER = MarkerManager.getMarker("MaxHealth").addParents(LogUtil.MOD_MARKER);
 

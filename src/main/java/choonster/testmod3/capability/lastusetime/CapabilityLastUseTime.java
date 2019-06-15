@@ -44,7 +44,7 @@ public final class CapabilityLastUseTime {
 	/**
 	 * The ID of this capability.
 	 */
-	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "LastUseTime");
+	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "last_use_time");
 
 	public static void register() {
 		CapabilityManager.INSTANCE.register(ILastUseTime.class, new Capability.IStorage<ILastUseTime>() {
