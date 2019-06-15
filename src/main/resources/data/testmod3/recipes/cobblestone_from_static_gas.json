@@ -5,13 +5,16 @@
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
 		{
-			"item": "#BUCKET_OF_STATIC_GAS"
+			"type": "testmod3:filled_universal_bucket",
+			"fluid": "static_gas"
 		},
 		{
-			"item": "#BUCKET_OF_STATIC_GAS"
+			"type": "testmod3:filled_universal_bucket",
+			"fluid": "static_gas"
 		},
 		{
-			"item": "#BUCKET_OF_STATIC_GAS"
+			"type": "testmod3:filled_universal_bucket",
+			"fluid": "static_gas"
 		}
 	],
 	"result": {

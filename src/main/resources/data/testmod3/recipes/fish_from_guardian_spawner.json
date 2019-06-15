@@ -1,19 +1,18 @@
 {
 	"_comment": [
-		"Craft eight Fish from a Guardian Spawner",
+		"Craft eight Raw Cod from a Guardian Spawner",
 		"Test for MobSpawnerIngredientFactory"
 	],
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
 		{
 			"type": "testmod3:mob_spawner",
-			"item": "minecraft:mob_spawner",
+			"item": "minecraft:spawner",
 			"entity": "minecraft:guardian"
 		}
 	],
 	"result": {
-		"item": "minecraft:fish",
-		"data": 0,
+		"item": "minecraft:cod",
 		"count": 8
 	}
 }

@@ -6,16 +6,14 @@
 	"group": "minecraft:planks",
 	"ingredients": [
 		{
-			"item": "testmod3:wooden_axe",
-			"data": 32767
+			"item": "testmod3:wooden_axe"
 		},
 		{
-			"item": "#OAK_LOG"
+			"constant": "testmod3:oak_log"
 		}
 	],
 	"result": {
-		"item": "minecraft:planks",
-		"data": 0,
+		"item": "minecraft:oak_planks",
 		"count": 2
 	}
 }

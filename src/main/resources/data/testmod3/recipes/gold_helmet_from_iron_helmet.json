@@ -14,8 +14,7 @@
 			"item": "minecraft:gold_block"
 		},
 		"H": {
-			"item": "minecraft:iron_helmet",
-			"data": 32767
+			"item": "minecraft:iron_helmet"
 		}
 	},
 	"result": {

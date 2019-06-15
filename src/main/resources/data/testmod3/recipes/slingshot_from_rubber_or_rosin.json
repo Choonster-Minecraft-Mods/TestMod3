@@ -8,8 +8,7 @@
 	"key": {
 		"C": [
 			{
-				"type": "forge:ore_dict",
-				"ore": "itemRubber"
+				"tag": "forge:rubber"
 			},
 			{
 				"type": "testmod3:conditional",

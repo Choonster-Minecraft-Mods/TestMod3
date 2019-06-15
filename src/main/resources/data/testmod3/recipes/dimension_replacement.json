@@ -5,12 +5,10 @@
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [
 		{
-			"item": "testmod3:subscripts",
-			"data": 0
+			"item": "testmod3:subscripts"
 		},
 		{
-			"item": "testmod3:superscripts",
-			"data": 0
+			"item": "testmod3:superscripts"
 		}
 	],
 	"result": {

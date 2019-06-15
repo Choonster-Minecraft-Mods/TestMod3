@@ -1,6 +1,6 @@
 {
 	"_comment": [
-		"Craft an Acacia Boat from a non-existent Ore Ingredient",
+		"Craft an Acacia Boat from a non-existent Tag",
 		"http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2751505-ore-dictionary-dependant-item-registration"
 	],
 	"type": "minecraft:crafting_shaped",
@@ -9,8 +9,7 @@
 	],
 	"key": {
 		"F": {
-			"type": "forge:ore_dict",
-			"ore": "fooBar"
+			"tag": "testmod3:non-existent_tag"
 		}
 	},
 	"result": {
