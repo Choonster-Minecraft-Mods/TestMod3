@@ -7,10 +7,10 @@ package choonster.testmod3.tests;
  */
 public class Tests {
 	public static boolean runTests() {
-		boolean allTestsPassed;
+		boolean allTestsPassed = true;
 
 		//		NBTTagEndTests.INSTANCE.test();
-		allTestsPassed = HttpClientTests.INSTANCE.test();
+		//allTestsPassed = HttpClientTests.INSTANCE.test(); // TODO: Uncomment when contained dependencies are re-enabled
 
 		return allTestsPassed;
 	}

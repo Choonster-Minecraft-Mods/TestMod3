@@ -1,3 +1,10 @@
+import groovy.transform.Field
+
+import java.util.jar.Attributes
+import java.util.jar.JarFile
+import java.util.jar.Manifest
+import java.util.zip.ZipInputStream
+
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
@@ -72,9 +79,18 @@ minecraft {
 }
 
 repositories {
+    mavenCentral()
     maven { url = "http://dvs1.progwml6.com/files/maven/" }
     maven { url = "https://tehnut.info/maven/" }
     maven { url = 'https://jitpack.io/' }
+}
+
+configurations {
+    embed {
+        transitive = false
+    }
+
+    compile.extendsFrom embed
 }
 
 dependencies {
@@ -82,29 +98,10 @@ dependencies {
 
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
-    compile "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
+    embed "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
     compile fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}_${mc_version}")
 //    deobfCompile "com.github.azanor:Baubles:${baubles_version}"
 }
-
-/*
-// TODO: Replace shadow with contained deps
-shadowJar {
-    // Only shadow fluent-hc
-    dependencies {
-        include(dependency('org.apache.httpcomponents:fluent-hc:.*'))
-    }
-
-    // Relocate fluent-hc to prevent conflicts with other mods that include it
-    relocate 'org.apache.http.client.fluent', 'choonster.testmod3.repack.org.apache.http.client.fluent'
-
-    classifier '' // Replace the default JAR
-}
-
-reobf {
-    shadowJar {} // Reobfuscate the shadowed JAR
-}
-*/
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
@@ -122,7 +119,6 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 
 artifacts {
     archives javadocJar
-//    archives shadowJar
 }
 
 jar {
@@ -134,7 +130,72 @@ jar {
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : "${version}",
                 "Implementation-Vendor"   : "Choonster",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
         ])
     }
+}
+
+// makeLibraryMetas task adapted from covers1624's ContainedDepsPlugin:
+// https://github.com/covers1624/GradleStuff
+// TODO: Contained dependencies are disabled in 1.13, re-evaluate when they're re-enabled
+@Field def MAVEN_ARTIFACT = new Attributes.Name("Maven-Artifact")
+
+task makeLibraryMetas {
+    outputs.upToDateWhen { false }
+
+    def temp = getTemporaryDir()
+    if (temp.exists()) {
+        delete temp.listFiles()
+    }
+
+    def configuration = configurations.embed
+
+    configuration.getResolvedConfiguration().getResolvedArtifacts().forEach { dep ->
+        def file = dep.getFile()
+        def mavenArtifact = dep.getId().getComponentIdentifier().toString()
+        if (!hasMavenArtifactAttribute(file)) {
+            def manifest = new Manifest()
+            def attributes = manifest.getMainAttributes()
+            attributes.put Attributes.Name.MANIFEST_VERSION, "1.0"
+            attributes.put MAVEN_ARTIFACT, mavenArtifact
+
+            new File(temp, file.getName() + ".meta").withOutputStream { os ->
+                manifest.write(os)
+            }
+        }
+    }
+
+    def str = configuration.collect { file -> file.getName() }.join(" ")
+    def tasks = project.tasks.withType(Jar.class)
+    tasks.each { task -> task.from temp, { CopySpec spec -> spec.rename '(.+.jar.meta)', 'META-INF/libraries/$1' } }
+    tasks.each { task -> task.from configuration, { CopySpec spec -> spec.rename '(.+.jar)', 'META-INF/libraries/$1' } }
+    tasks.each { task -> task.getManifest().getAttributes().putAt 'ContainedDeps', str }
+}
+
+tasks.withType(Jar.class).each { task ->
+    task.dependsOn(makeLibraryMetas)
+}
+
+boolean hasMavenArtifactAttribute(File file) {
+    def zi = new ZipInputStream((InputStream) new FileInputStream(file))
+
+    def ze = zi.getNextEntry()
+    while (ze != null) {
+        if (ze.getName().equalsIgnoreCase(JarFile.MANIFEST_NAME)) {
+            def manifest = new Manifest((InputStream) zi)
+            if (manifest.getMainAttributes().containsKey(MAVEN_ARTIFACT)) {
+                zi.closeQuietly()
+                return true
+            }
+        }
+        ze = zi.getNextEntry()
+    }
+
+    try {
+        zi.close()
+    }
+    catch (ignored) {
+    }
+
+    return false
 }
