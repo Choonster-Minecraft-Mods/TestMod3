@@ -32,11 +32,11 @@ public class ItemChunkEnergyGetter extends Item {
 
 			CapabilityChunkEnergy.getChunkEnergy(chunk)
 					.map(chunkEnergy -> {
-						playerIn.sendMessage(new TextComponentTranslation("message.testmod3:chunk_energy.get", chunkPos, chunkEnergy.getEnergyStored()));
+						playerIn.sendMessage(new TextComponentTranslation("message.testmod3.chunk_energy.get", chunkPos, chunkEnergy.getEnergyStored()));
 						return true;
 					})
 					.orElseGet(() -> {
-						playerIn.sendMessage(new TextComponentTranslation("message.testmod3:chunk_energy.not_found", chunkPos));
+						playerIn.sendMessage(new TextComponentTranslation("message.testmod3.chunk_energy.not_found", chunkPos));
 						return false;
 					});
 		}

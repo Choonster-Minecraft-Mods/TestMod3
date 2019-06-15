@@ -36,7 +36,7 @@ public class TileEntityModChest extends TileEntityItemHandlerLoot implements ICo
 	/**
 	 * The default name of this chest's inventory.
 	 */
-	private static final ITextComponent DEFAULT_NAME = new TextComponentTranslation("container.testmod3:chest");
+	private static final ITextComponent DEFAULT_NAME = new TextComponentTranslation("container.testmod3.chest");
 
 	public TileEntityModChest() {
 		super(ModTileEntities.MOD_CHEST);

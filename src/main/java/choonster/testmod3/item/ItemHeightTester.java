@@ -31,9 +31,9 @@ public class ItemHeightTester extends Item {
 			if (player.isSneaking()) {
 				final Chunk chunk = world.getChunk(pos);
 				chunk.generateSkylightMap();
-				player.sendMessage(new TextComponentTranslation("message.testmod3:height_tester.generate", chunk.x, chunk.z, pos.getX(), pos.getY(), pos.getZ()));
+				player.sendMessage(new TextComponentTranslation("message.testmod3.height_tester.generate", chunk.x, chunk.z, pos.getX(), pos.getY(), pos.getZ()));
 			} else {
-				player.sendMessage(new TextComponentTranslation("message.testmod3:height_tester.height", pos.getX(), pos.getZ(), world.getHeight(Heightmap.Type.WORLD_SURFACE, pos).getY()));
+				player.sendMessage(new TextComponentTranslation("message.testmod3.height_tester.height", pos.getX(), pos.getZ(), world.getHeight(Heightmap.Type.WORLD_SURFACE, pos).getY()));
 			}
 		}
 

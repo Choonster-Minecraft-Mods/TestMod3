@@ -56,7 +56,7 @@ public class MessageLockSetLockCode {
 			if (world.isBlockLoaded(message.pos)) {
 				CapabilityLock.getLock(world, message.pos, message.facing).ifPresent((lock) -> {
 					if (lock.isLocked()) {
-						player.sendMessage(new TextComponentTranslation("testmod3:lock.already_locked"));
+						player.sendMessage(new TextComponentTranslation("testmod3.lock.already_locked"));
 					}
 
 					lock.setLockCode(new LockCode(message.lockCode));

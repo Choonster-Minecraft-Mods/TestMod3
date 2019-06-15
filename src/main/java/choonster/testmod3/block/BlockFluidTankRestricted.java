@@ -45,7 +45,7 @@ public class BlockFluidTankRestricted extends BlockFluidTank<TileEntityFluidTank
 				final boolean enabled = tileEntity.toggleFacing(side);
 
 				if (!world.isRemote) {
-					final String message = enabled ? "message.testmod3:fluid_tank_restricted.facing_enabled" : "message.testmod3:fluid_tank_restricted.facing_disabled";
+					final String message = enabled ? "message.testmod3.fluid_tank_restricted.facing_enabled" : "message.testmod3.fluid_tank_restricted.facing_disabled";
 					player.sendMessage(new TextComponentTranslation(message, side));
 				}
 
@@ -61,7 +61,7 @@ public class BlockFluidTankRestricted extends BlockFluidTank<TileEntityFluidTank
 	public void onBlockClicked(final IBlockState state, final World worldIn, final BlockPos pos, final EntityPlayer player) {
 		if (!worldIn.isRemote) {
 			final String enabledFacingsString = getEnabledFacingsString(worldIn, pos);
-			player.sendMessage(new TextComponentTranslation("message.testmod3:fluid_tank_restricted.enabled_facings", enabledFacingsString));
+			player.sendMessage(new TextComponentTranslation("message.testmod3.fluid_tank_restricted.enabled_facings", enabledFacingsString));
 		}
 	}
 

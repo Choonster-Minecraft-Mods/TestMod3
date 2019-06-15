@@ -33,7 +33,7 @@ public class ItemEntityInteractionTest extends Item {
 			final int count = getInteractCount(stack) + 1;
 			stack.getTag().putInt("Count", count);
 
-			player.sendMessage(new TextComponentTranslation("message.testmod3:entity_interact_count", count));
+			player.sendMessage(new TextComponentTranslation("message.testmod3.entity_interact_count", count));
 		}
 
 		return true;
@@ -46,7 +46,7 @@ public class ItemEntityInteractionTest extends Item {
 		if (!player.world.isRemote) {
 			final int count = getInteractCount(heldItem);
 
-			player.sendMessage(new TextComponentTranslation("message.testmod3:entity_interact_count", count));
+			player.sendMessage(new TextComponentTranslation("message.testmod3.entity_interact_count", count));
 		}
 
 		return new ActionResult<>(EnumActionResult.SUCCESS, heldItem);

@@ -103,7 +103,7 @@ public class PigSpawnerFinite extends PigSpawnerBase implements IPigSpawnerFinit
 	 */
 	@Override
 	public List<ITextComponent> getTooltipLines() {
-		return ImmutableList.of(new TextComponentTranslation("testmod3:pig_spawner.finite.desc", getNumPigs(), getMaxNumPigs()));
+		return ImmutableList.of(new TextComponentTranslation("testmod3.pig_spawner.finite.desc", getNumPigs(), getMaxNumPigs()));
 	}
 
 	@Override

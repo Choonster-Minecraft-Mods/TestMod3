@@ -32,8 +32,8 @@ public class ItemUnicodeTooltips extends Item {
 	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
 		super.addInformation(stack, world, tooltip, flag);
 
-		tooltip.add(new TextComponentTranslation("item.testmod3:unicode_tooltips.1.desc"));
-		tooltip.add(new TextComponentString("§a§o").appendSibling(new TextComponentTranslation("item.testmod3:unicode_tooltips.2.desc")).appendText("§r"));
-		tooltip.add(new TextComponentString("" + TextFormatting.GREEN + TextFormatting.ITALIC).appendSibling(new TextComponentTranslation("item.testmod3:unicode_tooltips.3.desc")).appendText("" + TextFormatting.RESET));
+		tooltip.add(new TextComponentTranslation("item.testmod3.unicode_tooltips.1.desc"));
+		tooltip.add(new TextComponentString("§a§o").appendSibling(new TextComponentTranslation("item.testmod3.unicode_tooltips.2.desc")).appendText("§r"));
+		tooltip.add(new TextComponentString("" + TextFormatting.GREEN + TextFormatting.ITALIC).appendSibling(new TextComponentTranslation("item.testmod3.unicode_tooltips.3.desc")).appendText("" + TextFormatting.RESET));
 	}
 }

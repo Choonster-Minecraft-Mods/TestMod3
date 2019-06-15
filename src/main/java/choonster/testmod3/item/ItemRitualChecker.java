@@ -45,10 +45,10 @@ public class ItemRitualChecker extends Item {
 			final Optional<BlockPos> invalidPosition = checkRitual(playerIn);
 			if (invalidPosition.isPresent()) {
 				final BlockPos pos = invalidPosition.get();
-				textComponent = new TextComponentTranslation("message.testmod3:ritual_checker.failure", pos.getX(), pos.getY(), pos.getZ());
+				textComponent = new TextComponentTranslation("message.testmod3.ritual_checker.failure", pos.getX(), pos.getY(), pos.getZ());
 				textComponent.getStyle().setColor(TextFormatting.RED);
 			} else {
-				textComponent = new TextComponentTranslation("message.testmod3:ritual_checker.success");
+				textComponent = new TextComponentTranslation("message.testmod3.ritual_checker.success");
 				textComponent.getStyle().setColor(TextFormatting.GREEN);
 			}
 

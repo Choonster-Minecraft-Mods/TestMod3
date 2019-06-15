@@ -96,19 +96,19 @@ public class KeyBindingHandler {
 				final Collection<PotionEffect> activePotionEffects = ((EntityLivingBase) objectMouseOver.entity).getActivePotionEffects();
 
 				if (activePotionEffects.isEmpty()) {
-					clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3:print_potions.no_potions", objectMouseOver.entity.getDisplayName()));
+					clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3.print_potions.no_potions", objectMouseOver.entity.getDisplayName()));
 				} else {
-					clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3:print_potions.potions", objectMouseOver.entity.getDisplayName()));
+					clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3.print_potions.potions", objectMouseOver.entity.getDisplayName()));
 
 					activePotionEffects.forEach(
 							potionEffect -> clientPlayer.sendMessage(new TextComponentString(potionEffect.toString()))
 					);
 				}
 			} else {
-				clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3:print_potions.not_living", objectMouseOver.entity.getDisplayName()));
+				clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3.print_potions.not_living", objectMouseOver.entity.getDisplayName()));
 			}
 		} else {
-			clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3:print_potions.no_entity"));
+			clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3.print_potions.no_entity"));
 		}
 	}
 }

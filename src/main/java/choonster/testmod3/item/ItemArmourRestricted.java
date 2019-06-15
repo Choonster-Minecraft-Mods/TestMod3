@@ -94,6 +94,6 @@ public class ItemArmourRestricted extends ItemArmor {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
-		tooltip.add(new TextComponentTranslation("item.testmod3:armour_restricted.desc"));
+		tooltip.add(new TextComponentTranslation("item.testmod3.armour_restricted.desc"));
 	}
 }

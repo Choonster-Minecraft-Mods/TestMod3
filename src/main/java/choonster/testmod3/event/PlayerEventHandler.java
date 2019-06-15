@@ -44,13 +44,13 @@ public class PlayerEventHandler {
 		final String message;
 
 		if (persistedData.getBoolean(key)) {
-			message = "message.testmod3:login.already_received";
+			message = "message.testmod3.login.already_received";
 		} else {
 			persistedData.putBoolean(key, true);
 
 			ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(Items.APPLE));
 
-			message = "message.testmod3:login.free_apple";
+			message = "message.testmod3.login.free_apple";
 		}
 
 		final ITextComponent chatComponent = new TextComponentTranslation(message);
@@ -68,7 +68,7 @@ public class PlayerEventHandler {
 		if (event.getEntity() instanceof EntityPlayer && !event.getEntity().getEntityWorld().isRemote) {
 			final EntityPlayer player = (EntityPlayer) event.getEntity();
 			final BlockPos pos = player.getPosition();
-			player.sendMessage(new TextComponentTranslation("message.testmod3:death.coordinates", pos.getX(), pos.getY(), pos.getZ(), player.dimension, player.getEntityWorld().dimension.getType().getRegistryName()));
+			player.sendMessage(new TextComponentTranslation("message.testmod3.death.coordinates", pos.getX(), pos.getY(), pos.getZ(), player.dimension, player.getEntityWorld().dimension.getType().getRegistryName()));
 		}
 	}
 }

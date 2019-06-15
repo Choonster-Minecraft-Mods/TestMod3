@@ -105,8 +105,8 @@ public class GuiLock extends GuiScreen {
 	@Override
 	public void render(final int mouseX, final int mouseY, final float partialTicks) {
 		drawDefaultBackground();
-		drawCenteredString(fontRenderer, I18n.format("testmod3:lock.set_lock_code"), width / 2, 20, 0xffffff);
-		drawString(fontRenderer, I18n.format("testmod3:lock.lock_code"), width / 2 - 150, 37, 0xa0a0a0);
+		drawCenteredString(fontRenderer, I18n.format("testmod3.lock.set_lock_code"), width / 2, 20, 0xffffff);
+		drawString(fontRenderer, I18n.format("testmod3.lock.lock_code"), width / 2 - 150, 37, 0xa0a0a0);
 		lockCodeTextField.drawTextField(mouseX, mouseY, partialTicks);
 		drawString(fontRenderer, "", width / 2 - 150, 75 * fontRenderer.FONT_HEIGHT, 0xa0a0a0);
 

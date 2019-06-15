@@ -27,7 +27,7 @@ public class ItemMaxHealthSetter extends Item {
 
 				maxHealth.addBonusMaxHealth(healthToAdd);
 
-				player.sendMessage(new TextComponentTranslation("message.testmod3:max_health.add", target.getDisplayName(), healthToAdd));
+				player.sendMessage(new TextComponentTranslation("message.testmod3.max_health.add", target.getDisplayName(), healthToAdd));
 			});
 		}
 

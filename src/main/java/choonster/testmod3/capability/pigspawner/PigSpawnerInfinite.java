@@ -33,6 +33,6 @@ public class PigSpawnerInfinite extends PigSpawnerBase {
 	 */
 	@Override
 	public List<ITextComponent> getTooltipLines() {
-		return ImmutableList.of(new TextComponentTranslation("testmod3:pig_spawner.infinite.desc"));
+		return ImmutableList.of(new TextComponentTranslation("testmod3.pig_spawner.infinite.desc"));
 	}
 }

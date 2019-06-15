@@ -40,7 +40,7 @@ public class GetMaxHealthCommand {
 		CapabilityMaxHealth.getMaxHealth(entityLivingBase).ifPresent(maxHealth ->
 				context.getSource().sendFeedback(
 						new TextComponentTranslation(
-								"message.testmod3:max_health.get",
+								"message.testmod3.max_health.get",
 								entity.getDisplayName(),
 								CapabilityMaxHealth.formatMaxHealth(maxHealth.getBonusMaxHealth())
 						),

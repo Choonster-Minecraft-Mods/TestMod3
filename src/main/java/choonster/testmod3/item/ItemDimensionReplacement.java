@@ -125,9 +125,9 @@ public class ItemDimensionReplacement extends Item {
 	@Override
 	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
 		if (hasReplacement(world)) {
-			tooltip.add(new TextComponentTranslation("item.testmod3:dimension_replacement.replacement.desc", getReplacement(world).getDisplayName()));
+			tooltip.add(new TextComponentTranslation("item.testmod3.dimension_replacement.replacement.desc", getReplacement(world).getDisplayName()));
 		} else {
-			tooltip.add(new TextComponentTranslation("item.testmod3:dimension_replacement.no_replacement.desc"));
+			tooltip.add(new TextComponentTranslation("item.testmod3.dimension_replacement.no_replacement.desc"));
 		}
 	}
 }

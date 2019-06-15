@@ -239,7 +239,7 @@ public class ItemArmourReplacement extends ItemArmor {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(final ItemStack stack, @Nullable final World worldIn, final List<ITextComponent> tooltip, final ITooltipFlag flagIn) {
-		tooltip.add(new TextComponentTranslation("item.testmod3:armour_replacement.equip.desc"));
-		tooltip.add(new TextComponentTranslation("item.testmod3:armour_replacement.unequip.desc"));
+		tooltip.add(new TextComponentTranslation("item.testmod3.armour_replacement.equip.desc"));
+		tooltip.add(new TextComponentTranslation("item.testmod3.armour_replacement.unequip.desc"));
 	}
 }

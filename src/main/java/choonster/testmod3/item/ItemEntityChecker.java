@@ -100,7 +100,7 @@ public class ItemEntityChecker extends Item {
 
 		if (!world.isRemote) {
 			final int newRadius = incrementRadius(heldItem, player.isSneaking() ? -1 : 1);
-			player.sendMessage(new TextComponentTranslation("message.testmod3:entity_checker.radius", newRadius));
+			player.sendMessage(new TextComponentTranslation("message.testmod3.entity_checker.radius", newRadius));
 		}
 
 		return new ActionResult<>(EnumActionResult.SUCCESS, heldItem);
@@ -110,7 +110,7 @@ public class ItemEntityChecker extends Item {
 	public boolean onLeftClickEntity(final ItemStack stack, final EntityPlayer player, final Entity entity) {
 		if (!player.getEntityWorld().isRemote) {
 			final boolean cornerModeEnabled = toggleCornerModeEnabled(stack);
-			final String message = cornerModeEnabled ? "message.testmod3:entity_checker.mode.corner" : "message.testmod3:entity_checker.mode.edge";
+			final String message = cornerModeEnabled ? "message.testmod3.entity_checker.mode.corner" : "message.testmod3.entity_checker.mode.edge";
 			player.sendMessage(new TextComponentTranslation(message, cornerModeEnabled));
 		}
 
@@ -141,7 +141,7 @@ public class ItemEntityChecker extends Item {
 
 			LOGGER.info("Bounding box: {}", boundingBox);
 			if (player != null) {
-				player.sendMessage(new TextComponentTranslation("message.testmod3:entity_checker.results", entities.size()));
+				player.sendMessage(new TextComponentTranslation("message.testmod3.entity_checker.results", entities.size()));
 				entities.forEach(entity -> player.sendMessage(new TextComponentString(entity.toString())));
 			}
 		}
@@ -152,9 +152,9 @@ public class ItemEntityChecker extends Item {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(final ItemStack stack, @Nullable final World worldIn, final List<ITextComponent> tooltip, final ITooltipFlag flagIn) {
-		tooltip.add(new TextComponentTranslation("item.testmod3:entity_checker.radius.desc", getRadius(stack)));
+		tooltip.add(new TextComponentTranslation("item.testmod3.entity_checker.radius.desc", getRadius(stack)));
 
-		final String cornerModeTranslationKey = isCornerModeEnabled(stack) ? "item.testmod3:entity_checker.mode.corner.desc" : "item.testmod3:entity_checker.mode.edge.desc";
+		final String cornerModeTranslationKey = isCornerModeEnabled(stack) ? "item.testmod3.entity_checker.mode.corner.desc" : "item.testmod3.entity_checker.mode.edge.desc";
 		tooltip.add(new TextComponentTranslation(cornerModeTranslationKey));
 	}
 }

@@ -45,9 +45,9 @@ public class ItemSwapTest extends Item {
 		super.addInformation(stack, world, tooltip, flag);
 
 		if (hasOtherItem()) {
-			tooltip.add(new TextComponentTranslation("item.testmod3:swap_test.with_item.desc", otherItem.getDisplayName()));
+			tooltip.add(new TextComponentTranslation("item.testmod3.swap_test.with_item.desc", otherItem.getDisplayName()));
 		} else {
-			tooltip.add(new TextComponentTranslation("item.testmod3:swap_test.without_item.desc"));
+			tooltip.add(new TextComponentTranslation("item.testmod3.swap_test.without_item.desc"));
 		}
 	}
 

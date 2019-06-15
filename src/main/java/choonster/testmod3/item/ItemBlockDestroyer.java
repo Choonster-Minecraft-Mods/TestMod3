@@ -24,7 +24,7 @@ public class ItemBlockDestroyer extends Item {
 	public boolean onBlockDestroyed(final ItemStack stack, final World world, final IBlockState state, final BlockPos pos, final EntityLivingBase entityLiving) {
 		if (!world.isRemote) {
 			if (state.getBlock() == Blocks.WHEAT && state.get(BlockCrops.AGE) >= 6) {
-				entityLiving.sendMessage(new TextComponentTranslation("message.testmod3:block_destroyer.destroy"));
+				entityLiving.sendMessage(new TextComponentTranslation("message.testmod3.block_destroyer.destroy"));
 			}
 		}
 

@@ -54,11 +54,11 @@ public class ItemLootTableTest extends Item {
 					lootMessage.appendSibling(getItemStackTextComponent(itemStacks.get(i)));
 				});
 
-				final ITextComponent chatMessage = new TextComponentTranslation("message.testmod3:player_received_loot.base", lootMessage);
+				final ITextComponent chatMessage = new TextComponentTranslation("message.testmod3.player_received_loot.base", lootMessage);
 
 				player.sendMessage(chatMessage);
 			} else {
-				player.sendMessage(new TextComponentTranslation("message.testmod3:player_received_loot.no_loot"));
+				player.sendMessage(new TextComponentTranslation("message.testmod3.player_received_loot.no_loot"));
 			}
 		}
 
@@ -72,6 +72,6 @@ public class ItemLootTableTest extends Item {
 	 * @return The ITextComponent
 	 */
 	private ITextComponent getItemStackTextComponent(final ItemStack itemStack) {
-		return new TextComponentTranslation("message.testmod3:player_received_loot.item", itemStack.getCount(), itemStack.getTextComponent());
+		return new TextComponentTranslation("message.testmod3.player_received_loot.item", itemStack.getCount(), itemStack.getTextComponent());
 	}
 }

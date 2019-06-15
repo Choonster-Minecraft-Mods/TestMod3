@@ -40,17 +40,17 @@ public class ItemChunkEnergySetter extends Item {
 				.map(chunkEnergy -> {
 					if (player.isSneaking()) {
 						final int energyRemoved = chunkEnergy.extractEnergy(amount, false);
-						player.sendMessage(new TextComponentTranslation("message.testmod3:chunk_energy.remove", energyRemoved, chunkPos));
+						player.sendMessage(new TextComponentTranslation("message.testmod3.chunk_energy.remove", energyRemoved, chunkPos));
 					} else {
 						final int energyAdded = chunkEnergy.receiveEnergy(amount, false);
-						player.sendMessage(new TextComponentTranslation("message.testmod3:chunk_energy.add", energyAdded, chunkPos));
+						player.sendMessage(new TextComponentTranslation("message.testmod3.chunk_energy.add", energyAdded, chunkPos));
 
 					}
 
 					return true;
 				})
 				.orElseGet(() -> {
-					player.sendMessage(new TextComponentTranslation("message.testmod3:chunk_energy.not_found", chunkPos));
+					player.sendMessage(new TextComponentTranslation("message.testmod3.chunk_energy.not_found", chunkPos));
 
 					return false;
 				});

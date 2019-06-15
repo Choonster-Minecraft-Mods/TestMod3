@@ -89,12 +89,12 @@ public class BlockFluidTank<TE extends TileEntityFluidTankBase> extends BlockTil
 
 			if (fluidStack != null && fluidStack.amount > 0) {
 				hasFluid = true;
-				data.add(new TextComponentTranslation("tile.testmod3:fluid_tank.fluid.desc", fluidStack.getLocalizedName(), fluidStack.amount, properties.getCapacity()));
+				data.add(new TextComponentTranslation("block.testmod3.fluid_tank.fluid.desc", fluidStack.getLocalizedName(), fluidStack.amount, properties.getCapacity()));
 			}
 		}
 
 		if (!hasFluid) {
-			data.add(new TextComponentTranslation("tile.testmod3:fluid_tank.empty.desc"));
+			data.add(new TextComponentTranslation("block.testmod3.fluid_tank.empty.desc"));
 		}
 
 		return data;

@@ -26,7 +26,7 @@ public class BlockMaxHealthGetter extends Block {
 	public boolean onBlockActivated(final IBlockState state, final World worldIn, final BlockPos pos, final EntityPlayer player, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ) {
 		if (!worldIn.isRemote) {
 			CapabilityMaxHealth.getMaxHealth(player).ifPresent(maxHealth ->
-					player.sendMessage(new TextComponentTranslation("message.testmod3:max_health.get", player.getDisplayName(), player.getMaxHealth(), maxHealth.getBonusMaxHealth()))
+					player.sendMessage(new TextComponentTranslation("message.testmod3.max_health.get", player.getDisplayName(), player.getMaxHealth(), maxHealth.getBonusMaxHealth()))
 			);
 		}
 

@@ -22,7 +22,7 @@ public class WailaCompat implements IWailaPlugin {
 		registrar.registerComponentProvider(new HUDHandlerRotatable(BlockRotatableLamp.FACING), TooltipPosition.BODY, BlockRotatableLamp.class);
 		registrar.registerComponentProvider(new HUDHandlerRotatable(BlockModChest.FACING), TooltipPosition.BODY, BlockModChest.class);
 
-		registrar.registerComponentProvider(new HUDHandlerRotatable(BlockPlane.HORIZONTAL_ROTATION, "tile.testmod3:plane.horizontal_rotation.desc"), TooltipPosition.BODY, BlockPlane.class);
+		registrar.registerComponentProvider(new HUDHandlerRotatable(BlockPlane.HORIZONTAL_ROTATION, "block.testmod3.plane.horizontal_rotation.desc"), TooltipPosition.BODY, BlockPlane.class);
 		registrar.registerComponentProvider(new HUDHandlerVerticalRotatable(BlockPlane.VERTICAL_ROTATION), TooltipPosition.BODY, BlockPlane.class);
 
 		registrar.registerComponentProvider(new HUDHandlerFluidTankRestrictedEnabledFacings(), TooltipPosition.BODY, BlockFluidTankRestricted.class);

@@ -26,7 +26,7 @@ public class ItemKey extends Item {
 				.map(lock -> {
 					if (!context.getWorld().isRemote && context.getPlayer() != null) {
 						if (lock.isLocked()) {
-							context.getPlayer().sendMessage(new TextComponentTranslation("testmod3:lock.already_locked"));
+							context.getPlayer().sendMessage(new TextComponentTranslation("testmod3.lock.already_locked"));
 						} else {
 							NetworkUtil.openClientGui((EntityPlayerMP) context.getPlayer(), GuiIDs.Client.LOCK, buffer -> {
 								buffer.writeBlockPos(context.getPos());

@@ -22,8 +22,8 @@ public class ModKeyBindings {
 
 	private static final String CATEGORY = "key.category.testmod3.general";
 
-	public static final KeyBinding PLACE_HELD_BLOCK = new KeyBinding("key.testmod3:place_held_block", KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_L, CATEGORY);
-	public static final KeyBinding PRINT_POTIONS = new KeyBinding("key.testmod3:print_potions", KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
+	public static final KeyBinding PLACE_HELD_BLOCK = new KeyBinding("key.testmod3.place_held_block", KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_L, CATEGORY);
+	public static final KeyBinding PRINT_POTIONS = new KeyBinding("key.testmod3.print_potions", KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
 
 	@SubscribeEvent
 	public static void registerKeyBindings(final FMLClientSetupEvent event) {

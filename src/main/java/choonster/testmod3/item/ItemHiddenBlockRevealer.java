@@ -31,7 +31,7 @@ public class ItemHiddenBlockRevealer extends Item {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);
 		CapabilityHiddenBlockRevealer.toggleRevealHiddenBlocks(heldItem)
 				.ifPresent(revealHiddenBlocks -> {
-					final String message = revealHiddenBlocks ? "message.testmod3:hidden_block_revealer.reveal" : "message.testmod3:hidden_block_revealer.hide";
+					final String message = revealHiddenBlocks ? "message.testmod3.hidden_block_revealer.reveal" : "message.testmod3.hidden_block_revealer.hide";
 					playerIn.sendMessage(new TextComponentTranslation(message));
 				});
 

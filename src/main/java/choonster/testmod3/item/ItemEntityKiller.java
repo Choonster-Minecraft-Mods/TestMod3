@@ -31,7 +31,7 @@ public class ItemEntityKiller extends Item {
 			}
 
 			entityToKill.onKillCommand();
-			player.sendMessage(new TextComponentTranslation("commands.kill.successful", entityToKill.getDisplayName()));
+			player.sendMessage(new TextComponentTranslation("commands.kill.success.single", entityToKill.getDisplayName()));
 		}
 
 		return true;
