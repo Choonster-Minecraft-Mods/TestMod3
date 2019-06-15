@@ -6,6 +6,8 @@ import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SharedConstants;
 import net.minecraft.util.datafix.DataFixesManager;
 import net.minecraft.util.datafix.TypeReferences;
 import net.minecraftforge.event.RegistryEvent;
@@ -52,16 +54,27 @@ public class ModTileEntities {
 		}
 
 		private static <T extends TileEntity> TileEntityType<T> build(final String name, final TileEntityType.Builder<T> builder) {
-			final Type<?> type = DataFixesManager.getDataFixer()
-					.getSchema(DataFixUtils.makeKey(ModDataFixers.DATA_VERSION))
-					.getChoiceType(TypeReferences.BLOCK_ENTITY, name);
+			final ResourceLocation registryName = new ResourceLocation(TestMod3.MODID, name);
 
-			final TileEntityType<T> tileEntityType = builder.build(type);
-			tileEntityType.setRegistryName(TestMod3.MODID, name);
+			Type<?> dataFixerType = null;
+
+			try {
+				dataFixerType = DataFixesManager.getDataFixer()
+						.getSchema(DataFixUtils.makeKey(ModDataFixers.DATA_VERSION))
+						.getChoiceType(TypeReferences.BLOCK_ENTITY, registryName.toString());
+			} catch (IllegalArgumentException e) {
+				if (SharedConstants.developmentMode) {
+					throw e;
+				}
+
+				LOGGER.warn("No data fixer registered for TileEntity {}", registryName);
+			}
+
+			@SuppressWarnings("ConstantConditions") // dataFixerType will always be null until mod data fixers are implemented
+			final TileEntityType<T> tileEntityType = builder.build(dataFixerType);
+			tileEntityType.setRegistryName(registryName);
 
 			return tileEntityType;
 		}
 	}
-
-
 }
