@@ -4,6 +4,7 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.network.MessageUpdateChunkEnergyValue;
 import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.util.Scheduler;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -96,13 +97,10 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 
 		if (world.isRemote) return;
 
-		final BlockPos chunkOrigin = chunkPos.getBlock(0, 0, 0);
-		final Chunk chunk = world.getChunk(chunkPos.x, chunkPos.z);
-
-		if (world.isBlockLoaded(chunkOrigin)) {
+		if (world.isChunkLoaded(chunkPos.x, chunkPos.z, true)) {  // Don't load the chunk when reading from NBT
+			final Chunk chunk = world.getChunk(chunkPos.x, chunkPos.z);
 			chunk.markDirty();
+			TestMod3.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> chunk), new MessageUpdateChunkEnergyValue(this));
 		}
-
-		TestMod3.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> chunk), new MessageUpdateChunkEnergyValue(this));
 	}
 }
