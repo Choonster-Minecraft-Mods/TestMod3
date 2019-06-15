@@ -18,7 +18,6 @@ public class TestMod3Command {
 		dispatcher.register(
 				Commands.literal("testmod3")
 						.then(RotateVectorCommand.register())
-						.then(DebugConfigCommand.register())
 						.then(MaxHealthCommand.register())
 						.then(RunTestsCommand.register())
 		);

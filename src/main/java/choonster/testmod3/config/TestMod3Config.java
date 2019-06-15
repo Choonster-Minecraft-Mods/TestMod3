@@ -18,8 +18,6 @@ public class TestMod3Config {
 
 		public final EnumValue<EnumExample> exampleEnumProperty;
 
-		public final ConfigValue<Map<String, Double>> exampleMapField;
-
 		Common(final ForgeConfigSpec.Builder builder) {
 			builder.comment("Common config settings")
 					.push("common");
@@ -33,21 +31,6 @@ public class TestMod3Config {
 					.comment("This is an example enum property.", "It will use a GuiConfigEntries.CycleValueEntry in the config GUI.")
 					.translation("testmod3.config.common.exampleEnumProperty")
 					.defineEnum("exampleEnumProperty", EnumExample.VALUE_1);
-
-			exampleMapField = builder
-					.comment("This an example Map field.", "It will be converted to a category containing a property for each key-value pair.")
-					.translation("testmod3.config.common.exampleMapField")
-					.define(
-							"exampleMapField",
-							() -> {
-								final Map<String, Double> map = new HashMap<>();
-								map.put("foobar", 2.0);
-								map.put("foobaz", 100.5);
-								map.put("barbaz", Double.MAX_VALUE);
-								return map;
-							},
-							o -> o instanceof Map
-					);
 
 			builder.pop();
 		}
