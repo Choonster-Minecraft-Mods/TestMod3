@@ -3,4 +3,4 @@ This is a Minecraft Forge 1.13.2 mod that I use to test various things (mainly c
 
 It's not supposed to be a complete or working mod.
 
-**WARNING: The 1.13.2 update is still a work in progress. Not everything is working yet.**
+**WARNING: The 1.13.2 update will not be completed. I'm working on the 1.14.3 update instead.**
