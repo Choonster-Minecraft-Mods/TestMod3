@@ -1,14 +1,13 @@
 package choonster.testmod3.capability;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.network.capability.MessageBulkUpdateContainerCapability;
-import choonster.testmod3.network.capability.MessageUpdateContainerCapability;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.IInventory;
+import choonster.testmod3.network.capability.BulkUpdateContainerCapabilityMessage;
+import choonster.testmod3.network.capability.UpdateContainerCapabilityMessage;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -25,7 +24,7 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 	/**
 	 * The player.
 	 */
-	private final EntityPlayerMP player;
+	private final ServerPlayerEntity player;
 
 	/**
 	 * The {@link Capability} instance to update.
@@ -33,12 +32,12 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 	private final Capability<HANDLER> capability;
 
 	/**
-	 * The {@link EnumFacing} to get the capability handler from.
+	 * The {@link Direction} to get the capability handler from.
 	 */
 	@Nullable
-	private final EnumFacing facing;
+	private final Direction facing;
 
-	public CapabilityContainerListener(final EntityPlayerMP player, final Capability<HANDLER> capability, @Nullable final EnumFacing facing) {
+	public CapabilityContainerListener(final ServerPlayerEntity player, final Capability<HANDLER> capability, @Nullable final Direction facing) {
 		this.player = player;
 		this.capability = capability;
 		this.facing = facing;
@@ -55,7 +54,7 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 			}
 		}
 
-		final MessageBulkUpdateContainerCapability<HANDLER, ?> message = createBulkUpdateMessage(containerToSend.windowId, syncableItemsList);
+		final BulkUpdateContainerCapabilityMessage<HANDLER, ?> message = createBulkUpdateMessage(containerToSend.windowId, syncableItemsList);
 		if (message.hasData()) { // Don't send the message if there's nothing to update
 			TestMod3.network.send(PacketDistributor.PLAYER.with(() -> player), message);
 		}
@@ -66,7 +65,7 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 		if (!shouldSyncItem(stack)) return;
 
 		stack.getCapability(capability, facing).ifPresent(handler -> {
-			final MessageUpdateContainerCapability<HANDLER, ?> message = createSingleUpdateMessage(containerToSend.windowId, slotInd, handler);
+			final UpdateContainerCapabilityMessage<HANDLER, ?> message = createSingleUpdateMessage(containerToSend.windowId, slotInd, handler);
 			if (message.hasData()) { // Don't send the message if there's nothing to update
 				TestMod3.network.send(PacketDistributor.PLAYER.with(() -> player), message);
 			}
@@ -75,11 +74,6 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 
 	@Override
 	public final void sendWindowProperty(final Container containerIn, final int varToUpdate, final int newValue) {
-		// No-op
-	}
-
-	@Override
-	public final void sendAllWindowProperties(final Container containerIn, final IInventory inventory) {
 		// No-op
 	}
 
@@ -100,7 +94,7 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 	 * @param items    The items list
 	 * @return The bulk update message
 	 */
-	protected abstract MessageBulkUpdateContainerCapability<HANDLER, ?> createBulkUpdateMessage(final int windowID, final NonNullList<ItemStack> items);
+	protected abstract BulkUpdateContainerCapabilityMessage<HANDLER, ?> createBulkUpdateMessage(final int windowID, final NonNullList<ItemStack> items);
 
 	/**
 	 * Create an instance of the single update message.
@@ -110,5 +104,5 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 	 * @param handler    The capability handler instance
 	 * @return The single update message
 	 */
-	protected abstract MessageUpdateContainerCapability<HANDLER, ?> createSingleUpdateMessage(final int windowID, final int slotNumber, final HANDLER handler);
+	protected abstract UpdateContainerCapabilityMessage<HANDLER, ?> createSingleUpdateMessage(final int windowID, final int slotNumber, final HANDLER handler);
 }

@@ -7,7 +7,7 @@ import com.google.gson.JsonParseException;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -40,9 +40,9 @@ public class RecipeUtil {
 	public static ShapedPrimer parseShaped(final JsonObject json) {
 		try {
 			@SuppressWarnings("unchecked")
-			final Map<String, Ingredient> key = (Map<String, Ingredient>) DESERIALIZE_KEY.invoke(null, JsonUtils.getJsonObject(json, "key"));
+			final Map<String, Ingredient> key = (Map<String, Ingredient>) DESERIALIZE_KEY.invoke(null, JSONUtils.getJsonObject(json, "key"));
 
-			final String[] pattern = (String[]) SHRINK.invoke(null, PATTERN_FROM_JSON.invoke(null, JsonUtils.getJsonArray(json, "pattern")));
+			final String[] pattern = (String[]) SHRINK.invoke(null, PATTERN_FROM_JSON.invoke(null, JSONUtils.getJsonArray(json, "pattern")));
 
 			final int recipeWidth = pattern[0].length();
 			final int recipeHeight = pattern.length;
@@ -64,7 +64,7 @@ public class RecipeUtil {
 	 */
 	public static NonNullList<Ingredient> parseShapeless(final JsonObject json) {
 		final NonNullList<Ingredient> ingredients = NonNullList.create();
-		for (final JsonElement element : JsonUtils.getJsonArray(json, "ingredients"))
+		for (final JsonElement element : JSONUtils.getJsonArray(json, "ingredients"))
 			ingredients.add(CraftingHelper.getIngredient(element));
 
 		if (ingredients.isEmpty())
@@ -76,12 +76,12 @@ public class RecipeUtil {
 	public static class ShapedPrimer {
 		private final NonNullList<Ingredient> ingredients;
 		private final int recipeWidth;
-		private final int recipeHeght;
+		private final int recipeHeight;
 
-		public ShapedPrimer(final NonNullList<Ingredient> ingredients, final int recipeWidth, final int recipeHeght) {
+		public ShapedPrimer(final NonNullList<Ingredient> ingredients, final int recipeWidth, final int recipeHeight) {
 			this.ingredients = ingredients;
 			this.recipeWidth = recipeWidth;
-			this.recipeHeght = recipeHeght;
+			this.recipeHeight = recipeHeight;
 		}
 
 		public NonNullList<Ingredient> getIngredients() {
@@ -92,8 +92,8 @@ public class RecipeUtil {
 			return recipeWidth;
 		}
 
-		public int getRecipeHeght() {
-			return recipeHeght;
+		public int getRecipeHeight() {
+			return recipeHeight;
 		}
 	}
 }

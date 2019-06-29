@@ -2,8 +2,9 @@ package choonster.testmod3.util;
 
 import choonster.testmod3.TestMod3;
 import com.google.common.base.Charsets;
-import net.minecraft.init.Items;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +15,7 @@ import java.util.Objects;
 import java.util.stream.StreamSupport;
 
 /**
- * Dumps the translation keys and the output of the {@link net.minecraft.item.ItemBlock}'s {@link Object#toString()} method for all of this mod's blocks.
+ * Dumps the translation keys and the output of the {@link BlockItem}'s {@link Object#toString()} method for all of this mod's blocks.
  * <p>
  * I wrote this because I was getting an {@link AbstractMethodError} from a lambda implementing ItemMeshDefinition and the only the toString output was included in the crash report.
  *

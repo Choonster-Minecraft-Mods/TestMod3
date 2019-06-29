@@ -1,26 +1,26 @@
 package choonster.testmod3.crafting.recipe;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModCrafting;
 import com.google.gson.JsonObject;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemAxe;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapelessRecipe;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 /**
- * A shapeless recipe that damages any {@link ItemAxe} ingredients.
+ * A shapeless recipe that damages any {@link AxeItem} ingredients.
  *
  * @author Choonster
  */
@@ -30,8 +30,8 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 	}
 
 	private ItemStack damageAxe(final ItemStack stack) {
-		final EntityPlayer craftingPlayer = ForgeHooks.getCraftingPlayer();
-		if (stack.attemptDamageItem(1, craftingPlayer.getEntityWorld().rand, craftingPlayer instanceof EntityPlayerMP ? (EntityPlayerMP) craftingPlayer : null)) {
+		final PlayerEntity craftingPlayer = ForgeHooks.getCraftingPlayer();
+		if (stack.attemptDamageItem(1, craftingPlayer.getEntityWorld().rand, craftingPlayer instanceof ServerPlayerEntity ? (ServerPlayerEntity) craftingPlayer : null)) {
 			ForgeEventFactory.onPlayerDestroyItem(craftingPlayer, stack, null);
 			return ItemStack.EMPTY;
 		}
@@ -40,13 +40,13 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getRemainingItems(final IInventory inv) {
+	public NonNullList<ItemStack> getRemainingItems(final CraftingInventory inv) {
 		final NonNullList<ItemStack> remainingItems = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 
 		for (int i = 0; i < remainingItems.size(); ++i) {
 			final ItemStack itemstack = inv.getStackInSlot(i);
 
-			if (!itemstack.isEmpty() && itemstack.getItem() instanceof ItemAxe) {
+			if (!itemstack.isEmpty() && itemstack.getItem() instanceof AxeItem) {
 				remainingItems.set(i, damageAxe(itemstack.copy()));
 			} else {
 				remainingItems.set(i, ForgeHooks.getContainerItem(itemstack));
@@ -61,14 +61,12 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 		return ModCrafting.Recipes.CUTTING_SHAPELESS;
 	}
 
-	public static class Serializer implements IRecipeSerializer<ShapelessCuttingRecipe> {
-		private static final ResourceLocation NAME = new ResourceLocation(TestMod3.MODID, "cutting_shapeless");
-
+	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<ShapelessCuttingRecipe> {
 		@Override
 		public ShapelessCuttingRecipe read(final ResourceLocation recipeID, final JsonObject json) {
-			final String group = JsonUtils.getString(json, "group", "");
+			final String group = JSONUtils.getString(json, "group", "");
 			final NonNullList<Ingredient> ingredients = RecipeUtil.parseShapeless(json);
-			final ItemStack result = CraftingHelper.getItemStack(JsonUtils.getJsonObject(json, "result"), true);
+			final ItemStack result = CraftingHelper.getItemStack(JSONUtils.getJsonObject(json, "result"), true);
 
 			return new ShapelessCuttingRecipe(recipeID, group, result, ingredients);
 		}
@@ -98,11 +96,6 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 			}
 
 			buffer.writeItemStack(recipe.getRecipeOutput());
-		}
-
-		@Override
-		public ResourceLocation getName() {
-			return NAME;
 		}
 	}
 }

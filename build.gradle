@@ -75,6 +75,24 @@ minecraft {
                 }
             }
         }
+
+        data {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            args '--mod', 'testmod3', '--all', '--output', file('src/generated/resources/')
+
+            mods {
+                testmod3 {
+                    source sourceSets.main
+                }
+            }
+        }
     }
 }
 
@@ -96,10 +114,10 @@ configurations {
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.14.2:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.14.2:${jei_version}")
     embed "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
-    compile fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}_${mc_version}")
+    compile fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}_1.14.2")
 //    deobfCompile "com.github.azanor:Baubles:${baubles_version}"
 }
 
@@ -137,7 +155,7 @@ jar {
 
 // makeLibraryMetas task adapted from covers1624's ContainedDepsPlugin:
 // https://github.com/covers1624/GradleStuff
-// TODO: Contained dependencies are disabled in 1.13, re-evaluate when they're re-enabled
+// TODO: Contained dependencies are disabled in 1.14, re-evaluate when they're re-enabled
 @Field def MAVEN_ARTIFACT = new Attributes.Name("Maven-Artifact")
 
 task makeLibraryMetas {

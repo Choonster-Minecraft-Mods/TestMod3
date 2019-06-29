@@ -2,10 +2,8 @@ package choonster.testmod3.capability.chunkenergy;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
-import choonster.testmod3.network.MessageUpdateChunkEnergyValue;
-import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.util.Scheduler;
-import net.minecraft.util.math.BlockPos;
+import choonster.testmod3.network.UpdateChunkEnergyValueMessage;
+import net.minecraft.nbt.IntNBT;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -18,7 +16,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
  *
  * @author Choonster
  */
-public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSerializable<NBTTagInt> {
+public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSerializable<IntNBT> {
 	/**
 	 * The {@link World} containing this instance's chunk.
 	 */
@@ -37,12 +35,12 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 	}
 
 	@Override
-	public NBTTagInt serializeNBT() {
-		return new NBTTagInt(getEnergyStored());
+	public IntNBT serializeNBT() {
+		return new IntNBT(getEnergyStored());
 	}
 
 	@Override
-	public void deserializeNBT(final NBTTagInt nbt) {
+	public void deserializeNBT(final IntNBT nbt) {
 		energy = nbt.getInt();
 	}
 
@@ -97,10 +95,10 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 
 		if (world.isRemote) return;
 
-		if (world.isChunkLoaded(chunkPos.x, chunkPos.z, true)) {  // Don't load the chunk when reading from NBT
+		if (world.chunkExists(chunkPos.x, chunkPos.z)) {  // Don't load the chunk when reading from NBT
 			final Chunk chunk = world.getChunk(chunkPos.x, chunkPos.z);
 			chunk.markDirty();
-			TestMod3.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> chunk), new MessageUpdateChunkEnergyValue(this));
+			TestMod3.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> chunk), new UpdateChunkEnergyValueMessage(this));
 		}
 	}
 }

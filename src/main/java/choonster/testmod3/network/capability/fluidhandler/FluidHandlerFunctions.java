@@ -1,6 +1,6 @@
 package choonster.testmod3.network.capability.fluidhandler;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -25,8 +25,8 @@ class FluidHandlerFunctions {
 	}
 
 	static FluidTankInfo decodeFluidTankInfo(final PacketBuffer buffer) {
-		final NBTTagCompound tagCompound = buffer.readCompoundTag();
-		final FluidStack contents = FluidStack.loadFluidStackFromNBT(tagCompound);
+		final CompoundNBT compoundTag = buffer.readCompoundTag();
+		final FluidStack contents = FluidStack.loadFluidStackFromNBT(compoundTag);
 
 		final int capacity = buffer.readInt();
 
@@ -35,13 +35,13 @@ class FluidHandlerFunctions {
 
 	static void encodeFluidTankInfo(final FluidTankInfo fluidTankInfo, final PacketBuffer buffer) {
 		final FluidStack contents = fluidTankInfo.fluid;
-		final NBTTagCompound tagCompound = new NBTTagCompound();
+		final CompoundNBT compoundTag = new CompoundNBT();
 
 		if (contents != null) {
-			contents.writeToNBT(tagCompound);
+			contents.writeToNBT(compoundTag);
 		}
 
-		buffer.writeCompoundTag(tagCompound);
+		buffer.writeCompoundTag(compoundTag);
 
 		buffer.writeInt(fluidTankInfo.capacity);
 	}

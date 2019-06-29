@@ -37,7 +37,6 @@ public class TestMod3 {
 		TestMod3Config.register(ModLoadingContext.get());
 
 		ModCrafting.Ingredients.register();
-		ModCrafting.Recipes.register();
 	}
 
 	@SubscribeEvent

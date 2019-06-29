@@ -22,17 +22,17 @@ import static choonster.testmod3.util.InjectionUtil.Null;
 
 @ObjectHolder(TestMod3.MODID)
 public class ModTileEntities {
-	public static TileEntityType<TileEntitySurvivalCommandBlock> SURVIVAL_COMMAND_BLOCK = Null();
+	public static TileEntityType<SurvivalCommandBlockTileEntity> SURVIVAL_COMMAND_BLOCK = Null();
 
-	public static TileEntityType<TileEntityFluidTank> FLUID_TANK = Null();
+	public static TileEntityType<FluidTankTileEntity> FLUID_TANK = Null();
 
-	public static TileEntityType<TileEntityFluidTankRestricted> FLUID_TANK_RESTRICTED = Null();
+	public static TileEntityType<RestrictedFluidTankTileEntity> FLUID_TANK_RESTRICTED = Null();
 
-	public static TileEntityType<TileEntityPotionEffect> POTION_EFFECT = Null();
+	public static TileEntityType<PotionEffectTileEntity> POTION_EFFECT = Null();
 
-	public static TileEntityType<TileEntityModChest> MOD_CHEST = Null();
+	public static TileEntityType<ModChestTileEntity> MOD_CHEST = Null();
 
-	public static TileEntityType<TileEntityHidden> HIDDEN = Null();
+	public static TileEntityType<HiddenTileEntity> HIDDEN = Null();
 
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
@@ -42,12 +42,12 @@ public class ModTileEntities {
 		@SubscribeEvent
 		public static void registerTileEntityTypes(final RegistryEvent.Register<TileEntityType<?>> event) {
 			final TileEntityType<?>[] tileEntityTypes = new TileEntityType[]{
-					build("survival_command_block", TileEntityType.Builder.create(TileEntitySurvivalCommandBlock::new)),
-					build("fluid_tank", TileEntityType.Builder.create(TileEntityFluidTank::new)),
-					build("fluid_tank_restricted", TileEntityType.Builder.create(TileEntityFluidTankRestricted::new)),
-					build("potion_effect", TileEntityType.Builder.create(TileEntityPotionEffect::new)),
-					build("mod_chest", TileEntityType.Builder.create(TileEntityModChest::new)),
-					build("hidden", TileEntityType.Builder.create(TileEntityHidden::new)),
+					build("survival_command_block", TileEntityType.Builder.create(SurvivalCommandBlockTileEntity::new)),
+					build("fluid_tank", TileEntityType.Builder.create(FluidTankTileEntity::new)),
+					build("fluid_tank_restricted", TileEntityType.Builder.create(RestrictedFluidTankTileEntity::new)),
+					build("potion_effect", TileEntityType.Builder.create(PotionEffectTileEntity::new)),
+					build("mod_chest", TileEntityType.Builder.create(ModChestTileEntity::new)),
+					build("hidden", TileEntityType.Builder.create(HiddenTileEntity::new)),
 			};
 
 			event.getRegistry().registerAll(tileEntityTypes);
@@ -62,7 +62,7 @@ public class ModTileEntities {
 				dataFixerType = DataFixesManager.getDataFixer()
 						.getSchema(DataFixUtils.makeKey(ModDataFixers.DATA_VERSION))
 						.getChoiceType(TypeReferences.BLOCK_ENTITY, registryName.toString());
-			} catch (IllegalArgumentException e) {
+			} catch (final IllegalArgumentException e) {
 				if (SharedConstants.developmentMode) {
 					throw e;
 				}
@@ -70,7 +70,8 @@ public class ModTileEntities {
 				LOGGER.warn("No data fixer registered for TileEntity {}", registryName);
 			}
 
-			@SuppressWarnings("ConstantConditions") // dataFixerType will always be null until mod data fixers are implemented
+			@SuppressWarnings("ConstantConditions")
+			// dataFixerType will always be null until mod data fixers are implemented
 			final TileEntityType<T> tileEntityType = builder.build(dataFixerType);
 			tileEntityType.setRegistryName(registryName);
 

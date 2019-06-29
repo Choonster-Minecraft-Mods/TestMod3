@@ -2,9 +2,8 @@ package choonster.testmod3.util;
 
 import choonster.testmod3.TestMod3;
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.block.BlockState;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldWriter;
 
@@ -18,36 +17,15 @@ public class Constants {
 	/**
 	 * The armour equipment slots.
 	 */
-	public static final Set<EntityEquipmentSlot> ARMOUR_SLOTS = ImmutableSet.copyOf(
-			Stream.of(EntityEquipmentSlot.values())
-					.filter(equipmentSlot -> equipmentSlot.getSlotType() == EntityEquipmentSlot.Type.ARMOR)
+	public static final Set<EquipmentSlotType> ARMOUR_SLOTS = ImmutableSet.copyOf(
+			Stream.of(EquipmentSlotType.values())
+					.filter(equipmentSlot -> equipmentSlot.getSlotType() == EquipmentSlotType.Group.ARMOR)
 					.collect(Collectors.toList())
 	);
 
-	/**
-	 * {@link AttributeModifier} operation 0.
-	 * <p>
-	 * Add the modifier's amount to the attribute's amount.
-	 */
-	public static final int ATTRIBUTE_MODIFIER_OPERATION_ADD = 0;
-
-	/**
-	 * {@link AttributeModifier} operation 1.
-	 * <p>
-	 * Add the result of operation 0 multiplied by the modifier's amount to the attribute's amount.
-	 */
-	public static final int ATTRIBUTE_MODIFIER_OPERATION_MULTIPLY_OLD_AMOUNT = 1;
-
-	/**
-	 * {@link AttributeModifier} operation 2.
-	 * <p>
-	 * Multiply the attribute's amount by 1.0 + the modifier's amount.
-	 */
-	public static final int ATTRIBUTE_MODIFIER_OPERATION_MULTIPLY_NEW_AMOUNT = 2;
-
 	public static class BlockFlags {
 		/**
-		 * Default flags for {@link IWorldWriter#setBlockState(BlockPos, IBlockState, int)}
+		 * Default flags for {@link IWorldWriter#setBlockState(BlockPos, BlockState, int)}
 		 */
 		public static final int DEFAULT_FLAGS = 3;
 	}

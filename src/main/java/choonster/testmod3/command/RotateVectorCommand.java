@@ -8,9 +8,9 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.Vec3Argument;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
@@ -38,13 +38,13 @@ public class RotateVectorCommand {
 				);
 	}
 
-	private static int execute(final CommandContext<CommandSource> context, final Vec3d inputVector, final EnumFacing.Axis axis, final int degrees) {
+	private static int execute(final CommandContext<CommandSource> context, final Vec3d inputVector, final Direction.Axis axis, final int degrees) {
 		final Matrix3d rotationMatrix = VectorUtils.getRotationMatrix(axis, Math.toRadians(degrees));
 
 		final Vector3d outputVector = new Vector3d(inputVector.x, inputVector.y, inputVector.z);
 		rotationMatrix.transform(outputVector);
 
-		context.getSource().sendFeedback(new TextComponentTranslation("commands.testmod3.rotatevector.result", outputVector.getX(), outputVector.getY(), outputVector.getZ()), true);
+		context.getSource().sendFeedback(new TranslationTextComponent("commands.testmod3.rotatevector.result", outputVector.getX(), outputVector.getY(), outputVector.getZ()), true);
 
 		return 0;
 	}

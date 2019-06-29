@@ -1,19 +1,18 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.capability.pigspawner.CapabilityPigSpawner;
-import choonster.testmod3.capability.pigspawner.PigSpawnerInfinite;
-import choonster.testmod3.entity.EntityBlockDetectionArrow;
-import choonster.testmod3.entity.EntityModArrow;
+import choonster.testmod3.capability.pigspawner.InfinitePigSpawner;
+import choonster.testmod3.capability.pigspawner.PigSpawnerCapability;
+import choonster.testmod3.entity.BlockDetectionArrowEntity;
+import choonster.testmod3.entity.ModArrowEntity;
 import choonster.testmod3.item.*;
 import choonster.testmod3.item.variantgroup.IItemVariantGroup;
 import choonster.testmod3.item.variantgroup.ItemVariantGroup;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
-import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.RegistryEvent;
@@ -31,122 +30,122 @@ import static choonster.testmod3.util.InjectionUtil.Null;
 @SuppressWarnings("WeakerAccess")
 @ObjectHolder(TestMod3.MODID)
 public class ModItems {
-	public static final ItemCuttingAxe WOODEN_AXE = Null();
+	public static final CuttingAxeItem WOODEN_AXE = Null();
 
-	public static final ItemEntityTest ENTITY_TEST = Null();
+	public static final EntityTestItem ENTITY_TEST = Null();
 
-	public static final ItemRecordMod RECORD_SOLARIS = Null();
+	public static final ModMusicDiscItem RECORD_SOLARIS = Null();
 
-	public static final ItemHeavy HEAVY = Null();
+	public static final HeavyItem HEAVY = Null();
 
-	public static final ItemEntityInteractionTest ENTITY_INTERACTION_TEST = Null();
+	public static final EntityInteractionTestItem ENTITY_INTERACTION_TEST = Null();
 
-	public static final ItemBlockDestroyer BLOCK_DESTROYER = Null();
+	public static final BlockDestroyerItem BLOCK_DESTROYER = Null();
 
-	public static final ItemWithSubscripts SUBSCRIPTS = Null();
+	public static final SubscriptsItem SUBSCRIPTS = Null();
 
-	public static final ItemWithSuperscripts SUPERSCRIPTS = Null();
+	public static final SuperscriptsItem SUPERSCRIPTS = Null();
 
-	public static final ItemLastUseTimeModel MODEL_TEST = Null();
+	public static final LastUseTimeModelItem MODEL_TEST = Null();
 
-	public static final ItemSnowballLauncher SNOWBALL_LAUNCHER = Null();
+	public static final SnowballLauncherItem SNOWBALL_LAUNCHER = Null();
 
-	public static final ItemSlingshot SLINGSHOT = Null();
+	public static final SlingshotItem SLINGSHOT = Null();
 
-	public static final ItemUnicodeTooltips UNICODE_TOOLTIPS = Null();
+	public static final UnicodeTooltipsItem UNICODE_TOOLTIPS = Null();
 
-	public static final ItemSwapTest SWAP_TEST_A = Null();
+	public static final SwapTestItem SWAP_TEST_A = Null();
 
-	public static final ItemSwapTest SWAP_TEST_B = Null();
+	public static final SwapTestItem SWAP_TEST_B = Null();
 
-	public static final ItemBlockDebugger BLOCK_DEBUGGER = Null();
+	public static final BlockDebuggerItem BLOCK_DEBUGGER = Null();
 
-	public static final ItemHarvestSword WOODEN_HARVEST_SWORD = Null();
+	public static final HarvestSwordItem WOODEN_HARVEST_SWORD = Null();
 
-	public static final ItemHarvestSword DIAMOND_HARVEST_SWORD = Null();
+	public static final HarvestSwordItem DIAMOND_HARVEST_SWORD = Null();
 
-	public static final ItemClearer CLEARER = Null();
+	public static final ClearerItem CLEARER = Null();
 
-	public static final ItemModBow BOW = Null();
+	public static final ModBowItem BOW = Null();
 
 	public static final Item ARROW = Null();
 
-	public static final ItemHeightTester HEIGHT_TESTER = Null();
+	public static final HeightTesterItem HEIGHT_TESTER = Null();
 
-	public static final ItemPigSpawner PIG_SPAWNER_FINITE = Null();
+	public static final PigSpawnerItem PIG_SPAWNER_FINITE = Null();
 
-	public static final ItemPigSpawner PIG_SPAWNER_INFINITE = Null();
+	public static final PigSpawnerItem PIG_SPAWNER_INFINITE = Null();
 
-	public static final ItemContinuousBow CONTINUOUS_BOW = Null();
+	public static final ContinuousBowItem CONTINUOUS_BOW = Null();
 
-	public static final ItemRespawner RESPAWNER = Null();
+	public static final RespawnerItem RESPAWNER = Null();
 
-	public static final ItemLootTableTest LOOT_TABLE_TEST = Null();
+	public static final LootTableTestItem LOOT_TABLE_TEST = Null();
 
-	public static final ItemMaxHealthSetter MAX_HEALTH_SETTER_ITEM = Null();
+	public static final MaxHealthSetterItem MAX_HEALTH_SETTER_ITEM = Null();
 
-	public static final ItemMaxHealthGetter MAX_HEALTH_GETTER_ITEM = Null();
+	public static final MaxHealthGetterItem MAX_HEALTH_GETTER_ITEM = Null();
 
-	public static final ItemSoundEffect GUN = Null();
+	public static final SoundEffectItem GUN = Null();
 
-	public static final ItemDimensionReplacement DIMENSION_REPLACEMENT = Null();
+	public static final DimensionReplacementItem DIMENSION_REPLACEMENT = Null();
 
-	public static final ItemSoundEffect SADDLE = Null();
+	public static final SoundEffectItem SADDLE = Null();
 
-	public static final ItemSlowSword WOODEN_SLOW_SWORD = Null();
+	public static final SlowSwordItem WOODEN_SLOW_SWORD = Null();
 
-	public static final ItemSlowSword DIAMOND_SLOW_SWORD = Null();
+	public static final SlowSwordItem DIAMOND_SLOW_SWORD = Null();
 
-	public static final ItemVariants VARIANTS_ITEM = Null();
+	public static final VariantsItem VARIANTS_ITEM = Null();
 
-	public static final ItemRitualChecker RITUAL_CHECKER = Null();
+	public static final RitualCheckerItem RITUAL_CHECKER = Null();
 
-	public static final ItemHiddenBlockRevealer HIDDEN_BLOCK_REVEALER = Null();
+	public static final HiddenBlockRevealerItem HIDDEN_BLOCK_REVEALER = Null();
 
 	public static final Item NO_MOD_NAME = Null();
 
-	public static final ItemKey KEY = Null();
+	public static final KeyItem KEY = Null();
 
-	public static final ItemModArrow BLOCK_DETECTION_ARROW = Null();
+	public static final ModArrowItem BLOCK_DETECTION_ARROW = Null();
 
 	public static final Item TRANSLUCENT_ITEM = Null();
 
-	public static final ItemEntityKiller ENTITY_KILLER = Null();
+	public static final EntityKillerItem ENTITY_KILLER = Null();
 
-	public static final ItemChunkEnergySetter CHUNK_ENERGY_SETTER = Null();
+	public static final ChunkEnergySetterItem CHUNK_ENERGY_SETTER = Null();
 
-	public static final ItemChunkEnergyGetter CHUNK_ENERGY_GETTER = Null();
+	public static final ChunkEnergyGetterItem CHUNK_ENERGY_GETTER = Null();
 
 	public static final Item CHUNK_ENERGY_DISPLAY = Null();
 
 	public static final Item BEACON_ITEM = Null();
 
-	public static final ItemArmourPotionEffect SATURATION_HELMET = Null();
+	public static final PotionEffectArmourItem SATURATION_HELMET = Null();
 
-	public static final ItemEntityChecker ENTITY_CHECKER = Null();
+	public static final EntityCheckerItem ENTITY_CHECKER = Null();
 
 	public static final Item RUBBER = Null();
 
 
-	public static final ItemArmourReplacement REPLACEMENT_HELMET = Null();
+	public static final ReplacementArmourItem REPLACEMENT_HELMET = Null();
 
-	public static final ItemArmourRestricted REPLACEMENT_CHESTPLATE = Null();
+	public static final RestrictedArmourItem REPLACEMENT_CHESTPLATE = Null();
 
-	public static final ItemArmourRestricted REPLACEMENT_LEGGINGS = Null();
+	public static final RestrictedArmourItem REPLACEMENT_LEGGINGS = Null();
 
-	public static final ItemArmourRestricted REPLACEMENT_BOOTS = Null();
+	public static final RestrictedArmourItem REPLACEMENT_BOOTS = Null();
 
 
-	public static final ItemBucketTestMod3 WOODEN_BUCKET = Null();
+	public static final TestMod3BucketItem WOODEN_BUCKET = Null();
 
-	public static final ItemBucketTestMod3 STONE_BUCKET = Null();
+	public static final TestMod3BucketItem STONE_BUCKET = Null();
 
 	public static class VariantGroups {
-		public static final ItemVariantGroup<ItemVariants.EnumType, ItemVariants> VARIANTS_ITEMS = ItemVariantGroup.Builder.<ItemVariants.EnumType, ItemVariants>create()
+		public static final ItemVariantGroup<VariantsItem.Type, VariantsItem> VARIANTS_ITEMS = ItemVariantGroup.Builder.<VariantsItem.Type, VariantsItem>create()
 				.groupName("variants_item")
 				.suffix()
-				.variants(ItemVariants.EnumType.values())
-				.itemFactory(ItemVariants::new)
+				.variants(VariantsItem.Type.values())
+				.itemFactory(VariantsItem::new)
 				.build();
 	}
 
@@ -163,66 +162,66 @@ public class ModItems {
 		public static void registerItems(final RegistryEvent.Register<Item> event) {
 			ModSoundEvents.RegistrationHandler.initialiseSoundEvents();
 
-			final ItemSwapTest swapTestA = new ItemSwapTest(defaultItemProperties());
-			final ItemSwapTest swapTestB = new ItemSwapTest(defaultItemProperties());
+			final SwapTestItem swapTestA = new SwapTestItem(defaultItemProperties());
+			final SwapTestItem swapTestB = new SwapTestItem(defaultItemProperties());
 
-			final ItemDimensionReplacement dimensionReplacement = new ItemDimensionReplacement(defaultItemProperties());
+			final DimensionReplacementItem dimensionReplacement = new DimensionReplacementItem(defaultItemProperties());
 
-			final ItemArmourReplacement replacementHelmet = new ItemArmourReplacement(ModArmourMaterial.REPLACEMENT, EntityEquipmentSlot.HEAD, defaultItemProperties());
-			final ItemArmourRestricted replacementChestplate = new ItemArmourRestricted(ModArmourMaterial.REPLACEMENT, EntityEquipmentSlot.CHEST, defaultItemProperties());
-			final ItemArmourRestricted replacementLeggings = new ItemArmourRestricted(ModArmourMaterial.REPLACEMENT, EntityEquipmentSlot.LEGS, defaultItemProperties());
-			final ItemArmourRestricted replacementBoots = new ItemArmourRestricted(ModArmourMaterial.REPLACEMENT, EntityEquipmentSlot.FEET, defaultItemProperties());
+			final ReplacementArmourItem replacementHelmet = new ReplacementArmourItem(ModArmourMaterial.REPLACEMENT, EquipmentSlotType.HEAD, defaultItemProperties());
+			final RestrictedArmourItem replacementChestplate = new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, EquipmentSlotType.CHEST, defaultItemProperties());
+			final RestrictedArmourItem replacementLeggings = new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, EquipmentSlotType.LEGS, defaultItemProperties());
+			final RestrictedArmourItem replacementBoots = new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, EquipmentSlotType.FEET, defaultItemProperties());
 
 			// Capabilities are registered and injected in FMLCommonSetupEvent, which is fired after RegistryEvent.Register.
 			// This means that item constructors can't directly reference Capability fields (e.g. CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY).
 			@SuppressWarnings("Convert2MethodRef")
 			final Item[] items = {
-					new ItemCuttingAxe(ItemTier.WOOD, 6.0f, -3.2f, defaultItemProperties()).setRegistryName("wooden_axe"),
-					new ItemEntityTest(defaultItemProperties()).setRegistryName("entity_test"),
-					new ItemRecordMod(13, ModSoundEvents.RegistrationHandler.getSoundEvent(new ResourceLocation(TestMod3.MODID, "record.solaris")), defaultItemProperties()).setRegistryName("record_solaris"),
-					new ItemHeavy(defaultItemProperties()).setRegistryName("heavy"),
-					new ItemEntityInteractionTest(defaultItemProperties()).setRegistryName("entity_interaction_test"),
-					new ItemBlockDestroyer(defaultItemProperties()).setRegistryName("block_destroyer"),
-					new ItemWithSubscripts(defaultItemProperties()).setRegistryName("subscripts"),
-					new ItemWithSuperscripts(defaultItemProperties()).setRegistryName("superscripts"),
-					new ItemLastUseTimeModel(defaultItemProperties()).setRegistryName("model_test"),
-					new ItemSnowballLauncher(defaultItemProperties()).setRegistryName("snowball_launcher"),
-					new ItemSlingshot(defaultItemProperties()).setRegistryName("slingshot"),
-					new ItemUnicodeTooltips(defaultItemProperties()).setRegistryName("unicode_tooltips"),
+					new CuttingAxeItem(ItemTier.WOOD, 6.0f, -3.2f, defaultItemProperties()).setRegistryName("wooden_axe"),
+					new EntityTestItem(defaultItemProperties()).setRegistryName("entity_test"),
+					new ModMusicDiscItem(13, ModSoundEvents.RegistrationHandler.getSoundEvent(new ResourceLocation(TestMod3.MODID, "record.solaris")), defaultItemProperties()).setRegistryName("record_solaris"),
+					new HeavyItem(defaultItemProperties()).setRegistryName("heavy"),
+					new EntityInteractionTestItem(defaultItemProperties()).setRegistryName("entity_interaction_test"),
+					new BlockDestroyerItem(defaultItemProperties()).setRegistryName("block_destroyer"),
+					new SubscriptsItem(defaultItemProperties()).setRegistryName("subscripts"),
+					new SuperscriptsItem(defaultItemProperties()).setRegistryName("superscripts"),
+					new LastUseTimeModelItem(defaultItemProperties()).setRegistryName("model_test"),
+					new SnowballLauncherItem(defaultItemProperties()).setRegistryName("snowball_launcher"),
+					new SlingshotItem(defaultItemProperties()).setRegistryName("slingshot"),
+					new UnicodeTooltipsItem(defaultItemProperties()).setRegistryName("unicode_tooltips"),
 					swapTestA.setRegistryName("swap_test_a"),
 					swapTestB.setRegistryName("swap_test_b"),
-					new ItemBlockDebugger(defaultItemProperties()).setRegistryName("block_debugger"),
-					new ItemHarvestSword(ItemTier.WOOD, ItemHarvestSword.addToolTypes(ItemTier.WOOD, defaultItemProperties())).setRegistryName("wooden_harvest_sword"),
-					new ItemHarvestSword(ItemTier.DIAMOND, ItemHarvestSword.addToolTypes(ItemTier.DIAMOND, defaultItemProperties())).setRegistryName("diamond_harvest_sword"),
-					new ItemClearer(defaultItemProperties()).setRegistryName("clearer"),
-					new ItemModBow(defaultItemProperties().defaultMaxDamage(384)).setRegistryName("bow"),
-					new ItemModArrow(EntityModArrow::new, defaultItemProperties()).setRegistryName("arrow"),
-					new ItemHeightTester(defaultItemProperties()).setRegistryName("height_tester"),
-					new ItemPigSpawner(() -> CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY.getDefaultInstance(), defaultItemProperties()).setRegistryName("pig_spawner_finite"),
-					new ItemPigSpawner(PigSpawnerInfinite::new, defaultItemProperties()).setRegistryName("pig_spawner_infinite"),
-					new ItemContinuousBow(defaultItemProperties()).setRegistryName("continuous_bow"),
-					new ItemRespawner(defaultItemProperties()).setRegistryName("respawner"),
-					new ItemLootTableTest(defaultItemProperties()).setRegistryName("loot_table_test"),
-					new ItemMaxHealthSetter(defaultItemProperties()).setRegistryName("max_health_setter_item"),
-					new ItemMaxHealthGetter(defaultItemProperties()).setRegistryName("max_health_getter_item"),
-					new ItemSoundEffect(() -> ModSoundEvents.NINE_MM_FIRE, defaultItemProperties()).setRegistryName("gun"),
+					new BlockDebuggerItem(defaultItemProperties()).setRegistryName("block_debugger"),
+					new HarvestSwordItem(ItemTier.WOOD, HarvestSwordItem.addToolTypes(ItemTier.WOOD, defaultItemProperties())).setRegistryName("wooden_harvest_sword"),
+					new HarvestSwordItem(ItemTier.DIAMOND, HarvestSwordItem.addToolTypes(ItemTier.DIAMOND, defaultItemProperties())).setRegistryName("diamond_harvest_sword"),
+					new ClearerItem(defaultItemProperties()).setRegistryName("clearer"),
+					new ModBowItem(defaultItemProperties().defaultMaxDamage(384)).setRegistryName("bow"),
+					new ModArrowItem(ModArrowEntity::new, defaultItemProperties()).setRegistryName("arrow"),
+					new HeightTesterItem(defaultItemProperties()).setRegistryName("height_tester"),
+					new PigSpawnerItem(() -> PigSpawnerCapability.PIG_SPAWNER_CAPABILITY.getDefaultInstance(), defaultItemProperties()).setRegistryName("pig_spawner_finite"),
+					new PigSpawnerItem(InfinitePigSpawner::new, defaultItemProperties()).setRegistryName("pig_spawner_infinite"),
+					new ContinuousBowItem(defaultItemProperties()).setRegistryName("continuous_bow"),
+					new RespawnerItem(defaultItemProperties()).setRegistryName("respawner"),
+					new LootTableTestItem(defaultItemProperties()).setRegistryName("loot_table_test"),
+					new MaxHealthSetterItem(defaultItemProperties()).setRegistryName("max_health_setter_item"),
+					new MaxHealthGetterItem(defaultItemProperties()).setRegistryName("max_health_getter_item"),
+					new SoundEffectItem(() -> ModSoundEvents.NINE_MM_FIRE, defaultItemProperties()).setRegistryName("gun"),
 					dimensionReplacement.setRegistryName("dimension_replacement"),
-					new ItemSoundEffect(() -> ModSoundEvents.ACTION_SADDLE, defaultItemProperties()).setRegistryName("saddle"),
-					new ItemSlowSword(ItemTier.WOOD, defaultItemProperties()).setRegistryName("wooden_slow_sword"),
-					new ItemSlowSword(ItemTier.DIAMOND, defaultItemProperties()).setRegistryName("diamond_slow_sword"),
-					new ItemRitualChecker(defaultItemProperties()).setRegistryName("ritual_checker"),
-					new ItemHiddenBlockRevealer(defaultItemProperties()).setRegistryName("hidden_block_revealer"),
+					new SoundEffectItem(() -> ModSoundEvents.ACTION_SADDLE, defaultItemProperties()).setRegistryName("saddle"),
+					new SlowSwordItem(ItemTier.WOOD, defaultItemProperties()).setRegistryName("wooden_slow_sword"),
+					new SlowSwordItem(ItemTier.DIAMOND, defaultItemProperties()).setRegistryName("diamond_slow_sword"),
+					new RitualCheckerItem(defaultItemProperties()).setRegistryName("ritual_checker"),
+					new HiddenBlockRevealerItem(defaultItemProperties()).setRegistryName("hidden_block_revealer"),
 					new Item(defaultItemProperties()).setRegistryName("no_mod_name"),
-					new ItemKey(defaultItemProperties()).setRegistryName("key"),
-					new ItemModArrow(EntityBlockDetectionArrow::new, defaultItemProperties()).setRegistryName("block_detection_arrow"),
+					new KeyItem(defaultItemProperties()).setRegistryName("key"),
+					new ModArrowItem(BlockDetectionArrowEntity::new, defaultItemProperties()).setRegistryName("block_detection_arrow"),
 					new Item(defaultItemProperties()).setRegistryName("translucent_item"),
-					new ItemEntityKiller(defaultItemProperties()).setRegistryName("entity_killer"),
-					new ItemChunkEnergySetter(defaultItemProperties()).setRegistryName("chunk_energy_setter"),
-					new ItemChunkEnergyGetter(defaultItemProperties()).setRegistryName("chunk_energy_getter"),
+					new EntityKillerItem(defaultItemProperties()).setRegistryName("entity_killer"),
+					new ChunkEnergySetterItem(defaultItemProperties()).setRegistryName("chunk_energy_setter"),
+					new ChunkEnergyGetterItem(defaultItemProperties()).setRegistryName("chunk_energy_getter"),
 					new Item(defaultItemProperties()).setRegistryName("chunk_energy_display"),
 					new Item(defaultItemProperties()).setRegistryName("beacon_item"),
-					new ItemArmourPotionEffect(ArmorMaterial.CHAIN, EntityEquipmentSlot.HEAD, new PotionEffect(MobEffects.SATURATION, 1, 0, true, false), defaultItemProperties()).setRegistryName("saturation_helmet"),
-					new ItemEntityChecker(defaultItemProperties()).setRegistryName("entity_checker"),
+					new PotionEffectArmourItem(ArmorMaterial.CHAIN, EquipmentSlotType.HEAD, new EffectInstance(Effects.SATURATION, 1, 0, true, false), defaultItemProperties()).setRegistryName("saturation_helmet"),
+					new EntityCheckerItem(defaultItemProperties()).setRegistryName("entity_checker"),
 					new Item(defaultItemProperties()).setRegistryName("rubber"),
 
 					replacementHelmet.setRegistryName("replacement_helmet"),
@@ -230,8 +229,8 @@ public class ModItems {
 					replacementLeggings.setRegistryName("replacement_leggings"),
 					replacementBoots.setRegistryName("replacement_boots"),
 
-					new ItemBucketTestMod3(defaultItemProperties()).setRegistryName("wooden_bucket"),
-					new ItemBucketTestMod3(defaultItemProperties()).setRegistryName("stone_bucket"),
+					new TestMod3BucketItem(defaultItemProperties()).setRegistryName("wooden_bucket"),
+					new TestMod3BucketItem(defaultItemProperties()).setRegistryName("stone_bucket"),
 			};
 
 			final IForgeRegistry<Item> registry = event.getRegistry();
@@ -250,7 +249,7 @@ public class ModItems {
 			chest.addEnchantment(Enchantments.SHARPNESS, 1);
 			replacementHelmet.setReplacementItems(chest, new ItemStack(replacementLeggings), new ItemStack(replacementBoots));
 
-			dimensionReplacement.addReplacement(DimensionType.NETHER, new ItemStack(Items.NETHER_STAR));
+			dimensionReplacement.addReplacement(DimensionType.THE_NETHER, new ItemStack(Items.NETHER_STAR));
 			dimensionReplacement.addReplacement(DimensionType.THE_END, new ItemStack(Items.ENDER_PEARL));
 		}
 

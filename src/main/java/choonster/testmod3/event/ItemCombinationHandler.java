@@ -2,20 +2,22 @@ package choonster.testmod3.event;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModItems;
+import choonster.testmod3.util.ReflectionUtil;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Items;
-import net.minecraft.init.Particles;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +37,8 @@ import java.util.stream.Collectors;
  */
 @Mod.EventBusSubscriber(modid = TestMod3.MODID)
 public class ItemCombinationHandler {
+	private static final Field GLOBAL_ENTITIES = ReflectionUtil.findField(ServerWorld.class, "field_217497_w" /* globalEntities */);
+
 	/**
 	 * The input items.
 	 */
@@ -54,50 +58,57 @@ public class ItemCombinationHandler {
 
 		// If this is the END phase on the server,
 		if (event.phase == TickEvent.Phase.END && !world.isRemote) {
+			try {
+				// Handle each loaded EntityItem with an input item
 
-			// Handle each loaded EntityItem with an input item
-			world.loadedEntityList.stream()
-					.filter(isMatchingItemEntity(INPUTS))
-					.map(entity -> (EntityItem) entity)
-					.collect(Collectors.toList())
-					.forEach(ItemCombinationHandler::handleEntity);
+				@SuppressWarnings("unchecked")
+				final List<Entity> entities = (List<Entity>) GLOBAL_ENTITIES.get(world);
+
+				entities.stream()
+						.filter(isMatchingItemEntity(INPUTS))
+						.map(entity -> (ItemEntity) entity)
+						.collect(Collectors.toList())
+						.forEach(ItemCombinationHandler::handleEntity);
+			} catch (final IllegalAccessException e) {
+				throw new RuntimeException("Couldn't access ServerWorld.globalEntities to handle item combinations");
+			}
 		}
 	}
 
 	/**
-	 * Handles the combination effect for an {@link EntityItem}.
+	 * Handles the combination effect for an {@link ItemEntity}.
 	 *
 	 * @param entityItem The item entity
 	 */
-	private static void handleEntity(final EntityItem entityItem) {
+	private static void handleEntity(final ItemEntity entityItem) {
 		// If the item entity is removed, do nothing
 		if (!entityItem.isAlive()) return;
 
 		final World world = entityItem.getEntityWorld();
 
 		final Set<Item> remainingInputs = new HashSet<>(INPUTS); // Create a mutable copy of the input set to track which items have been found
-		final List<EntityItem> matchingEntityItems = new ArrayList<>(); // Create a list to track the item entities containing the input items
+		final List<ItemEntity> matchingEntityItems = new ArrayList<>(); // Create a list to track the item entities containing the input items
 
 		remainingInputs.remove(entityItem.getItem().getItem());
 		matchingEntityItems.add(entityItem);
 
 		// Find all other item entities with input items within 3 blocks
 		final AxisAlignedBB axisAlignedBB = entityItem.getBoundingBox().grow(3);
-		final List<Entity> nearbyEntityItems = world.getEntitiesInAABBexcluding(entityItem, axisAlignedBB, isMatchingItemEntity(remainingInputs)::test);
+		final List<Entity> nearbyEntityItems = world.getEntitiesInAABBexcluding(entityItem, axisAlignedBB, isMatchingItemEntity(remainingInputs));
 
 		// For each nearby item entity
 		nearbyEntityItems.forEach(nearbyEntity -> {
-			final EntityItem nearbyEntityItem = (EntityItem) nearbyEntity;
+			final ItemEntity nearbyEntityItem = (ItemEntity) nearbyEntity;
 			if (remainingInputs.remove(nearbyEntityItem.getItem().getItem())) { // If the entity's item is a remaining input,
 				matchingEntityItems.add(nearbyEntityItem); // Add it to the list of matching item entities
 
 				if (remainingInputs.isEmpty()) { // If all inputs have been found,
 					// Spawn the output item at the first item's position
 					final double x = entityItem.posX, y = entityItem.posY, z = entityItem.posZ;
-					final EntityItem outputEntityItem = new EntityItem(world, x, y, z, OUTPUT.copy());
-					world.spawnEntity(outputEntityItem);
+					final ItemEntity outputEntityItem = new ItemEntity(world, x, y, z, OUTPUT.copy());
+					world.addEntity(outputEntityItem);
 
-					((WorldServer) world).spawnParticle(Particles.LARGE_SMOKE, x + 0.5, y + 1.0, z + 0.5, 1, 0.0, 0.0, 0.0, 0);
+					((ServerWorld) world).spawnParticle(ParticleTypes.LARGE_SMOKE, x + 0.5, y + 1.0, z + 0.5, 1, 0.0, 0.0, 0.0, 0);
 
 					// Consume one item from each matching entity
 					matchingEntityItems.forEach(matchingEntityItem -> {
@@ -114,12 +125,12 @@ public class ItemCombinationHandler {
 	}
 
 	/**
-	 * Returns a predicate that determines whether the entity is a non-removed {@link EntityItem} whose {@link Item} is contained in the {@link Set}.
+	 * Returns a predicate that determines whether the entity is a non-removed {@link ItemEntity} whose {@link Item} is contained in the {@link Set}.
 	 *
 	 * @param items The set of items to match
 	 * @return The predicate
 	 */
 	private static Predicate<Entity> isMatchingItemEntity(final Set<Item> items) {
-		return entity -> entity.isAlive() && entity instanceof EntityItem && items.contains(((EntityItem) entity).getItem().getItem());
+		return entity -> entity.isAlive() && entity instanceof ItemEntity && items.contains(((ItemEntity) entity).getItem().getItem());
 	}
 }

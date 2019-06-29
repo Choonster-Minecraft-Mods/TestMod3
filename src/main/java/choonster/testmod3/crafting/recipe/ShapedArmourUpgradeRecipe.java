@@ -1,20 +1,20 @@
 package choonster.testmod3.crafting.recipe;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModCrafting;
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 /**
  * A shaped recipe class that copies the item damage of the first armour ingredient to the output. The damage is clamped to the output item's damage range.
@@ -30,14 +30,14 @@ public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
 	}
 
 	@Override
-	public ItemStack getCraftingResult(final IInventory inv) {
+	public ItemStack getCraftingResult(final CraftingInventory inv) {
 		final ItemStack output = super.getCraftingResult(inv); // Get the default output
 
 		if (!output.isEmpty()) {
 			for (int i = 0; i < inv.getSizeInventory(); i++) { // For each slot in the crafting inventory,
 				final ItemStack ingredient = inv.getStackInSlot(i); // Get the ingredient in the slot
 
-				if (!ingredient.isEmpty() && ingredient.getItem() instanceof ItemArmor) { // If it's an armour item,
+				if (!ingredient.isEmpty() && ingredient.getItem() instanceof ArmorItem) { // If it's an armour item,
 					// Clone its item damage, clamping it to the output's damage range
 					final int newDamage = MathHelper.clamp(ingredient.getDamage(), 0, output.getMaxDamage());
 					output.setDamage(newDamage);
@@ -54,16 +54,14 @@ public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
 		return ModCrafting.Recipes.ARMOUR_UPGRADE_SHAPED;
 	}
 
-	public static class Serializer implements IRecipeSerializer<ShapedArmourUpgradeRecipe> {
-		private static final ResourceLocation NAME = new ResourceLocation(TestMod3.MODID, "armour_upgrade_shaped");
-
+	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<ShapedArmourUpgradeRecipe> {
 		@Override
 		public ShapedArmourUpgradeRecipe read(final ResourceLocation recipeID, final JsonObject json) {
-			final String group = JsonUtils.getString(json, "group", "");
+			final String group = JSONUtils.getString(json, "group", "");
 			final RecipeUtil.ShapedPrimer primer = RecipeUtil.parseShaped(json);
-			final ItemStack result = CraftingHelper.getItemStack(JsonUtils.getJsonObject(json, "result"), true);
+			final ItemStack result = CraftingHelper.getItemStack(JSONUtils.getJsonObject(json, "result"), true);
 
-			return new ShapedArmourUpgradeRecipe(recipeID, group, primer.getRecipeWidth(), primer.getRecipeHeght(), primer.getIngredients(), result);
+			return new ShapedArmourUpgradeRecipe(recipeID, group, primer.getRecipeWidth(), primer.getRecipeHeight(), primer.getIngredients(), result);
 		}
 
 		@Override
@@ -93,11 +91,6 @@ public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
 			}
 
 			buffer.writeItemStack(recipe.getRecipeOutput());
-		}
-
-		@Override
-		public ResourceLocation getName() {
-			return NAME;
 		}
 	}
 }

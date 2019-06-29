@@ -1,7 +1,7 @@
 package choonster.testmod3.event;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.util.IThreadListener;
+import net.minecraft.util.concurrent.ITaskExecutor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
  * <p>
  * WARNING: These events are fired on a Netty thread rather than the main client/server thread, so the handler methods must not directly interact with normal Minecraft classes.
  * <p>
- * Use {@link IThreadListener#addScheduledTask} to run a task on the main thread where you can safely interact with normal Minecraft classes.
+ * Use {@link ITaskExecutor#enqueue} to run a task on the main thread where you can safely interact with normal Minecraft classes.
  *
  * @author Choonster
  */

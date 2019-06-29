@@ -1,6 +1,6 @@
 package choonster.testmod3.item;
 
-import net.minecraft.init.Items;
+import net.minecraft.item.Items;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemTier;
 import net.minecraft.item.crafting.Ingredient;

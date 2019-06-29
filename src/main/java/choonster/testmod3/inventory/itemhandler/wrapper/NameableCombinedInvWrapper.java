@@ -1,6 +1,6 @@
 package choonster.testmod3.inventory.itemhandler.wrapper;
 
-import choonster.testmod3.inventory.itemhandler.IItemHandlerNameable;
+import choonster.testmod3.inventory.itemhandler.INameableItemHandler;
 import net.minecraft.util.INameable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -9,11 +9,11 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import javax.annotation.Nullable;
 
 /**
- * An {@link IItemHandlerNameable} wrapper around an {@link INameable} and one or more {@link IItemHandlerModifiable} inventories.
+ * An {@link INameableItemHandler} wrapper around an {@link INameable} and one or more {@link IItemHandlerModifiable} inventories.
  *
  * @author Choonster
  */
-public class NameableCombinedInvWrapper extends CombinedInvWrapper implements IItemHandlerNameable {
+public class NameableCombinedInvWrapper extends CombinedInvWrapper implements INameableItemHandler {
 	/**
 	 * The {@link INameable} to get the name from.
 	 */

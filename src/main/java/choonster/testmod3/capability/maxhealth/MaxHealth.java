@@ -1,13 +1,12 @@
 package choonster.testmod3.capability.maxhealth;
 
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
-import choonster.testmod3.util.Constants;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.network.play.server.SPacketEntityProperties;
-import net.minecraft.world.WorldServer;
+import net.minecraft.network.play.server.SEntityPropertiesPacket;
+import net.minecraft.world.ServerWorld;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,14 +35,14 @@ public class MaxHealth implements IMaxHealth {
 	/**
 	 * The entity this is attached to.
 	 */
-	private final EntityLivingBase entity;
+	private final LivingEntity entity;
 
 	/**
 	 * The bonus max health.
 	 */
 	private float bonusMaxHealth;
 
-	public MaxHealth(@Nullable final EntityLivingBase entity) {
+	public MaxHealth(@Nullable final LivingEntity entity) {
 		this.entity = entity;
 	}
 
@@ -86,8 +85,9 @@ public class MaxHealth implements IMaxHealth {
 	public void synchronise() {
 		if (entity != null && !entity.getEntityWorld().isRemote) {
 			final IAttributeInstance entityMaxHealthAttribute = entity.getAttribute(SharedMonsterAttributes.MAX_HEALTH);
-			final SPacketEntityProperties packet = new SPacketEntityProperties(entity.getEntityId(), Collections.singleton(entityMaxHealthAttribute));
-			((WorldServer) entity.getEntityWorld()).getEntityTracker().sendToTrackingAndSelf(entity, packet);
+			final SEntityPropertiesPacket packet = new SEntityPropertiesPacket(entity.getEntityId(), Collections.singleton(entityMaxHealthAttribute));
+
+			((ServerWorld) entity.getEntityWorld()).getChunkProvider().sendToTrackingAndSelf(entity, packet);
 		}
 	}
 
@@ -97,7 +97,7 @@ public class MaxHealth implements IMaxHealth {
 	 * @return The AttributeModifier
 	 */
 	protected AttributeModifier createModifier() {
-		return new AttributeModifier(MODIFIER_ID, MODIFIER_NAME, getBonusMaxHealth(), Constants.ATTRIBUTE_MODIFIER_OPERATION_ADD);
+		return new AttributeModifier(MODIFIER_ID, MODIFIER_NAME, getBonusMaxHealth(), AttributeModifier.Operation.ADDITION);
 	}
 
 	/**
@@ -119,11 +119,11 @@ public class MaxHealth implements IMaxHealth {
 
 			oldAmount = (float) oldModifier.getAmount();
 
-			LOGGER.debug(CapabilityMaxHealth.LOG_MARKER, "Max Health Changed! Entity: {} - Old: {} - New: {}", entity, CapabilityMaxHealth.formatMaxHealth(oldAmount), CapabilityMaxHealth.formatMaxHealth(newAmount));
+			LOGGER.debug(MaxHealthCapability.LOG_MARKER, "Max Health Changed! Entity: {} - Old: {} - New: {}", entity, MaxHealthCapability.formatMaxHealth(oldAmount), MaxHealthCapability.formatMaxHealth(newAmount));
 		} else {
 			oldAmount = 0.0f;
 
-			LOGGER.debug(CapabilityMaxHealth.LOG_MARKER, "Max Health Added! Entity: {} - New: {}", entity, CapabilityMaxHealth.formatMaxHealth(newAmount));
+			LOGGER.debug(MaxHealthCapability.LOG_MARKER, "Max Health Added! Entity: {} - New: {}", entity, MaxHealthCapability.formatMaxHealth(newAmount));
 		}
 
 		entityMaxHealthAttribute.applyModifier(modifier);

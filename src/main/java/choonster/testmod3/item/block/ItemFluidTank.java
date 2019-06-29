@@ -1,16 +1,15 @@
 package choonster.testmod3.item.block;
 
-import choonster.testmod3.block.BlockFluidTank;
-import choonster.testmod3.capability.CapabilityProviderSerializable;
-import choonster.testmod3.fluids.FluidTankItem;
-import choonster.testmod3.tileentity.TileEntityFluidTank;
+import choonster.testmod3.block.FluidTankBlock;
+import choonster.testmod3.capability.SerializableCapabilityProvider;
+import choonster.testmod3.tileentity.FluidTankTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
@@ -31,7 +30,7 @@ import java.util.List;
  *
  * @author Choonster
  */
-public class ItemFluidTank extends ItemBlock {
+public class ItemFluidTank extends BlockItem {
 	private final List<ItemStack> tankItems = new ArrayList<>();
 
 	public ItemFluidTank(final Block block, final Item.Properties properties) {
@@ -52,7 +51,7 @@ public class ItemFluidTank extends ItemBlock {
 	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
 		FluidUtil.getFluidHandler(stack).ifPresent(fluidHandler -> {
 			final IFluidTankProperties[] properties = fluidHandler.getTankProperties();
-			tooltip.addAll(BlockFluidTank.getFluidDataForDisplay(properties));
+			tooltip.addAll(FluidTankBlock.getFluidDataForDisplay(properties));
 		});
 	}
 
@@ -66,7 +65,7 @@ public class ItemFluidTank extends ItemBlock {
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final NBTTagCompound nbt) {
-		return new CapabilityProviderSerializable<>(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null, new FluidTankItem(stack, TileEntityFluidTank.CAPACITY));
+	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final CompoundNBT nbt) {
+		return new SerializableCapabilityProvider<>(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null, new choonster.testmod3.fluids.ItemFluidTank(stack, FluidTankTileEntity.CAPACITY));
 	}
 }

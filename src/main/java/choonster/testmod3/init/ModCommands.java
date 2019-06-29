@@ -25,7 +25,7 @@ public class ModCommands {
 	 */
 	@SubscribeEvent
 	public static void registerCommands(final FMLServerStartingEvent event) {
-		ArgumentTypes.register(new ResourceLocation(TestMod3.MODID, "axis"), AxisArgument.class, new ArgumentSerializer<>(AxisArgument::axis));
+		ArgumentTypes.register(new ResourceLocation(TestMod3.MODID, "axis").toString(), AxisArgument.class, new ArgumentSerializer<>(AxisArgument::axis));
 
 		TestMod3Command.register(event.getCommandDispatcher());
 	}

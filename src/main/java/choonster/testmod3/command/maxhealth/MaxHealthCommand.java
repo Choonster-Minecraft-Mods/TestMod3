@@ -1,7 +1,7 @@
 package choonster.testmod3.command.maxhealth;
 
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
-import choonster.testmod3.capability.maxhealth.CapabilityMaxHealth;
+import choonster.testmod3.capability.maxhealth.MaxHealthCapability;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -11,8 +11,8 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.text.TranslationTextComponent;
 
 /**
  * Base class for commands that affect an entity's {@link IMaxHealth}.
@@ -20,7 +20,7 @@ import net.minecraft.util.text.TextComponentTranslation;
  * @author Choonster
  */
 public class MaxHealthCommand {
-	private static final SimpleCommandExceptionType INVALID_ENTITY_EXCEPTION = new SimpleCommandExceptionType(new TextComponentTranslation("commands.testmod3.maxhealth.invalid_entity"));
+	private static final SimpleCommandExceptionType INVALID_ENTITY_EXCEPTION = new SimpleCommandExceptionType(new TranslationTextComponent("commands.testmod3.maxhealth.invalid_entity"));
 
 	public static ArgumentBuilder<CommandSource, ?> register() {
 		return Commands.literal("maxhealth")
@@ -57,17 +57,17 @@ public class MaxHealthCommand {
 	 *                       This will be provided with the entity's display name and the amount as format arguments.
 	 */
 	private static int execute(final CommandContext<CommandSource> context, final Entity entity, final float amount, final IEntityProcessor processor, final String successMessage) throws CommandSyntaxException {
-		if (!(entity instanceof EntityLivingBase)) {
+		if (!(entity instanceof LivingEntity)) {
 			throw INVALID_ENTITY_EXCEPTION.create();
 		}
 
-		final EntityLivingBase entityLivingBase = (EntityLivingBase) entity;
+		final LivingEntity entityLivingBase = (LivingEntity) entity;
 
-		CapabilityMaxHealth.getMaxHealth(entityLivingBase)
+		MaxHealthCapability.getMaxHealth(entityLivingBase)
 				.ifPresent(maxHealth -> processor.process(entityLivingBase, maxHealth, amount));
 
 		context.getSource()
-				.sendFeedback(new TextComponentTranslation(successMessage, entity.getDisplayName(), CapabilityMaxHealth.formatMaxHealth(amount)), true);
+				.sendFeedback(new TranslationTextComponent(successMessage, entity.getDisplayName(), MaxHealthCapability.formatMaxHealth(amount)), true);
 
 		return 0;
 	}
@@ -81,6 +81,6 @@ public class MaxHealthCommand {
 		 * @param maxHealth The entity's IMaxHealth
 		 * @param amount    The amount to add/set
 		 */
-		void process(EntityLivingBase entity, IMaxHealth maxHealth, float amount);
+		void process(LivingEntity entity, IMaxHealth maxHealth, float amount);
 	}
 }

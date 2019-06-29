@@ -1,14 +1,14 @@
 package choonster.testmod3.tileentity;
 
-import net.minecraft.tileentity.CommandBlockBaseLogic;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.tileentity.CommandBlockLogic;
+import net.minecraft.util.text.StringTextComponent;
 
-public abstract class SurvivalCommandBlockLogic extends CommandBlockBaseLogic {
+public abstract class SurvivalCommandBlockLogic extends CommandBlockLogic {
 	private final Type type;
 
 	public SurvivalCommandBlockLogic(final Type type) {
 		this.type = type;
-		setName(new TextComponentString("Server"));
+		setName(new StringTextComponent("Server"));
 	}
 
 	public Type getType() {

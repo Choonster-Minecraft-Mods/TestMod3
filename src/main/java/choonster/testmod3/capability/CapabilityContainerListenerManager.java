@@ -1,10 +1,10 @@
 package choonster.testmod3.capability;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,14 +24,14 @@ public class CapabilityContainerListenerManager {
 	/**
 	 * The {@link CapabilityContainerListener} factories.
 	 */
-	private static final Set<Function<EntityPlayerMP, CapabilityContainerListener<?>>> containerListenerFactories = new HashSet<>();
+	private static final Set<Function<ServerPlayerEntity, CapabilityContainerListener<?>>> containerListenerFactories = new HashSet<>();
 
 	/**
 	 * Register a factory for a {@link CapabilityContainerListener}.
 	 *
 	 * @param factory The factory
 	 */
-	public static void registerListenerFactory(final Function<EntityPlayerMP, CapabilityContainerListener<?>> factory) {
+	public static void registerListenerFactory(final Function<ServerPlayerEntity, CapabilityContainerListener<?>> factory) {
 		containerListenerFactories.add(factory);
 	}
 
@@ -45,47 +45,47 @@ public class CapabilityContainerListenerManager {
 		 * @param player    The player
 		 * @param container The Container
 		 */
-		private static void addListeners(final EntityPlayerMP player, final Container container) {
+		private static void addListeners(final ServerPlayerEntity player, final Container container) {
 			containerListenerFactories.forEach(
 					factory -> container.addListener(factory.apply(player))
 			);
 		}
 
 		/**
-		 * Add the listeners to {@link EntityPlayer#inventoryContainer} when an {@link EntityPlayerMP} logs in.
+		 * Add the listeners to {@link PlayerEntity#container} when an {@link ServerPlayerEntity} logs in.
 		 *
 		 * @param event The event
 		 */
 		@SubscribeEvent
 		public static void playerLoggedIn(final PlayerLoggedInEvent event) {
-			if (event.getPlayer() instanceof EntityPlayerMP) {
-				final EntityPlayerMP player = (EntityPlayerMP) event.getPlayer();
-				addListeners(player, player.inventoryContainer);
+			if (event.getPlayer() instanceof ServerPlayerEntity) {
+				final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+				addListeners(player, player.container);
 			}
 		}
 
 		/**
-		 * Add the listeners to {@link EntityPlayer#inventoryContainer} when an {@link EntityPlayerMP} is cloned.
+		 * Add the listeners to {@link PlayerEntity#container} when an {@link ServerPlayerEntity} is cloned.
 		 *
 		 * @param event The event
 		 */
 		@SubscribeEvent
 		public static void playerClone(final PlayerEvent.Clone event) {
-			if (event.getEntityPlayer() instanceof EntityPlayerMP) {
-				final EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
-				addListeners(player, player.inventoryContainer);
+			if (event.getEntityPlayer() instanceof ServerPlayerEntity) {
+				final ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityPlayer();
+				addListeners(player, player.container);
 			}
 		}
 
 		/**
-		 * Add the listeners to a {@link Container} when it's opened by an {@link EntityPlayerMP}.
+		 * Add the listeners to a {@link Container} when it's opened by an {@link ServerPlayerEntity}.
 		 *
 		 * @param event The event
 		 */
 		@SubscribeEvent
 		public static void containerOpen(final PlayerContainerEvent.Open event) {
-			if (event.getEntityPlayer() instanceof EntityPlayerMP) {
-				final EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
+			if (event.getEntityPlayer() instanceof ServerPlayerEntity) {
+				final ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityPlayer();
 				addListeners(player, event.getContainer());
 			}
 		}

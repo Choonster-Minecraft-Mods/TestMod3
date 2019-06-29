@@ -1,17 +1,17 @@
 package choonster.testmod3.client.event;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.item.ItemModBow;
+import choonster.testmod3.item.ModBowItem;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -27,7 +27,7 @@ public class ClientEventHandler {
 
 	@SubscribeEvent
 	public static void onFOVUpdate(final FOVUpdateEvent event) {
-		if (event.getEntity().isHandActive() && event.getEntity().getActiveItemStack().getItem() instanceof ItemModBow) {
+		if (event.getEntity().isHandActive() && event.getEntity().getActiveItemStack().getItem() instanceof ModBowItem) {
 			float fovModifier = event.getEntity().getItemInUseMaxCount() / 20.0f;
 
 			if (fovModifier > 1.0f) {
@@ -51,7 +51,7 @@ public class ClientEventHandler {
 	@SubscribeEvent
 	public static void onClientTick(final TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.END && MINECRAFT.player != null && MINECRAFT.world != null) {
-			final EntityPlayer player = MINECRAFT.player;
+			final PlayerEntity player = MINECRAFT.player;
 			if (MINECRAFT.world.getBlockState(new BlockPos(player).down()).getBlock() == Blocks.IRON_BLOCK) {
 				player.rotateTowards(5, 0);
 			}
@@ -59,7 +59,7 @@ public class ClientEventHandler {
 	}
 
 	/**
-	 * When an {@link EntityMinecart} is spawned on the client side, add it to a {@link Team} and make it glow.
+	 * When an {@link AbstractMinecartEntity} is spawned on the client side, add it to a {@link Team} and make it glow.
 	 * <p>
 	 * Test for this thread:
 	 * http://www.minecraftforge.net/forum/topic/50836-adding-an-entity-other-than-a-player-to-a-team/
@@ -71,13 +71,13 @@ public class ClientEventHandler {
 		final World world = event.getWorld();
 		final Entity entity = event.getEntity();
 
-		if (world.isRemote && entity instanceof EntityMinecart) {
+		if (world.isRemote && entity instanceof AbstractMinecartEntity) {
 			final Scoreboard scoreboard = world.getScoreboard();
 
 			ScorePlayerTeam team = scoreboard.getTeam(TestMod3.MODID);
 			if (team == null) {
 				team = scoreboard.createTeam(TestMod3.MODID);
-				team.setPrefix(new TextComponentString("").applyTextStyle(TextFormatting.DARK_AQUA));
+				team.setPrefix(new StringTextComponent("").applyTextStyle(TextFormatting.DARK_AQUA));
 				team.setColor(TextFormatting.DARK_AQUA);
 			}
 

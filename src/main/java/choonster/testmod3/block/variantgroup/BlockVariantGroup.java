@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
@@ -138,18 +138,18 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	 * @throws IllegalStateException If the items have already been registered
 	 */
 	@Override
-	public List<ItemBlock> registerItems(final IForgeRegistry<Item> registry) {
+	public List<BlockItem> registerItems(final IForgeRegistry<Item> registry) {
 		Preconditions.checkState(blocks != null, "Attempt to register Items before Blocks for Variant Group %s", groupName);
 		Preconditions.checkState(!registeredItems, "Attempt to re-register Items for Variant Group %s", groupName);
 
-		final List<ItemBlock> items = new ArrayList<>();
+		final List<BlockItem> items = new ArrayList<>();
 
 		getBlocksMap().forEach((variant, block) -> {
 			final ResourceLocation registryName = Preconditions.checkNotNull(block.getRegistryName(), "Block %s has null registry name", block);
 
 			final Item.Properties properties = itemPropertiesFactory.apply(variant);
 
-			final ItemBlock item = itemFactory.createItem(block, properties, variant);
+			final BlockItem item = itemFactory.createItem(block, properties, variant);
 
 			item.setRegistryName(registryName);
 
@@ -182,7 +182,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	 */
 	@FunctionalInterface
 	public interface ItemFactory<VARIANT extends Enum<VARIANT> & IStringSerializable, BLOCK extends Block> {
-		ItemBlock createItem(BLOCK block, Item.Properties properties, VARIANT variant);
+		BlockItem createItem(BLOCK block, Item.Properties properties, VARIANT variant);
 	}
 
 	public static class Builder<VARIANT extends Enum<VARIANT> & IStringSerializable, BLOCK extends Block> {
@@ -194,7 +194,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 		private BlockFactory<VARIANT, BLOCK> blockFactory;
 
 		private Function<VARIANT, Item.Properties> itemPropertiesFactory = variant -> new Item.Properties().group(TestMod3.ITEM_GROUP);
-		private ItemFactory<VARIANT, BLOCK> itemFactory = (block, properties, variant) -> new ItemBlock(block, properties);
+		private ItemFactory<VARIANT, BLOCK> itemFactory = (block, properties, variant) -> new BlockItem(block, properties);
 
 		/**
 		 * Creates a new variant group builder.
@@ -303,7 +303,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 		/**
 		 * Sets the factory function used to create the block items.
 		 * <p>
-		 * If no item factory is specified, a factory producing {@link ItemBlock} is used.
+		 * If no item factory is specified, a factory producing {@link BlockItem} is used.
 		 *
 		 * @param itemFactory The item factory function
 		 * @return This builder

@@ -1,7 +1,7 @@
 package choonster.testmod3;
 
 import choonster.testmod3.util.SwordUpgrades;
-import net.minecraft.init.Items;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;

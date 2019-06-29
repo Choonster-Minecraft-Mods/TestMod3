@@ -1,7 +1,8 @@
 package choonster.testmod3.capability.lock;
 
 import choonster.testmod3.api.capability.lock.ILock;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.LockCode;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -15,7 +16,7 @@ import java.util.Objects;
  *
  * @author Choonster
  */
-public class Lock implements ILock, INBTSerializable<NBTTagCompound> {
+public class Lock implements ILock, INBTSerializable<CompoundNBT> {
 	/**
 	 * The lock code.
 	 */
@@ -38,7 +39,8 @@ public class Lock implements ILock, INBTSerializable<NBTTagCompound> {
 
 	@Override
 	public boolean isLocked() {
-		return !code.isEmpty();
+		// An empty ItemStack can only unlock an empty lock code
+		return !getLockCode().func_219964_a(ItemStack.EMPTY);
 	}
 
 	@Override
@@ -52,8 +54,8 @@ public class Lock implements ILock, INBTSerializable<NBTTagCompound> {
 	}
 
 	@Override
-	public NBTTagCompound serializeNBT() {
-		final NBTTagCompound tagCompound = new NBTTagCompound();
+	public CompoundNBT serializeNBT() {
+		final CompoundNBT tagCompound = new CompoundNBT();
 
 		code.write(tagCompound);
 
@@ -65,7 +67,7 @@ public class Lock implements ILock, INBTSerializable<NBTTagCompound> {
 	}
 
 	@Override
-	public void deserializeNBT(final NBTTagCompound nbt) {
+	public void deserializeNBT(final CompoundNBT nbt) {
 		code = LockCode.read(nbt);
 
 		if (nbt.contains("DisplayName")) {

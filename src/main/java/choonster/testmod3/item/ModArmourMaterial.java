@@ -2,8 +2,8 @@ package choonster.testmod3.item;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModItems;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.crafting.Ingredient;
@@ -84,11 +84,11 @@ public enum ModArmourMaterial implements IArmorMaterial {
 		this.repairMaterial = new LazyLoadBase<>(repairMaterial);
 	}
 
-	public int getDurability(final EntityEquipmentSlot slotIn) {
+	public int getDurability(final EquipmentSlotType slotIn) {
 		return MAX_DAMAGE_ARRAY[slotIn.getIndex()] * maxDamageFactor;
 	}
 
-	public int getDamageReductionAmount(final EntityEquipmentSlot slotIn) {
+	public int getDamageReductionAmount(final EquipmentSlotType slotIn) {
 		return damageReductionAmountArray[slotIn.getIndex()];
 	}
 

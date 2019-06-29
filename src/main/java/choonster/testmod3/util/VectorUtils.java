@@ -3,7 +3,7 @@ package choonster.testmod3.util;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMaps;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3i;
 
@@ -23,16 +23,16 @@ public class VectorUtils {
 	/**
 	 * A cache of the positive facing's direction vector for each axis.
 	 */
-	private static final Map<EnumFacing.Axis, Vec3i> AXIS_DIRECTION_VECTORS;
+	private static final Map<Direction.Axis, Vec3i> AXIS_DIRECTION_VECTORS;
 
-	private static final Object2DoubleMap<EnumFacing> HORIZONTAL_ROTATIONS;
+	private static final Object2DoubleMap<Direction> HORIZONTAL_ROTATIONS;
 
 	static {
-		final Map<EnumFacing.Axis, Vec3i> axisVectors = new EnumMap<>(EnumFacing.Axis.class);
+		final Map<Direction.Axis, Vec3i> axisVectors = new EnumMap<>(Direction.Axis.class);
 
-		for (final EnumFacing.Axis axis : EnumFacing.Axis.values()) { // For each axis,
+		for (final Direction.Axis axis : Direction.Axis.values()) { // For each axis,
 			// Get the direction vector of the positive facing of the axis
-			final Vec3i directionVec = EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.POSITIVE, axis).getDirectionVec();
+			final Vec3i directionVec = Direction.getFacingFromAxis(Direction.AxisDirection.POSITIVE, axis).getDirectionVec();
 			axisVectors.put(axis, directionVec); // Add it to the map
 		}
 
@@ -42,12 +42,12 @@ public class VectorUtils {
 		// 90 degrees in radians
 		final double rotationIncrement = Math.toRadians(90);
 
-		final Object2DoubleMap<EnumFacing> horizontalRotations = new Object2DoubleOpenHashMap<>();
+		final Object2DoubleMap<Direction> horizontalRotations = new Object2DoubleOpenHashMap<>();
 
-		horizontalRotations.put(EnumFacing.NORTH, 0);
-		horizontalRotations.put(EnumFacing.EAST, rotationIncrement);
-		horizontalRotations.put(EnumFacing.SOUTH, 2 * rotationIncrement);
-		horizontalRotations.put(EnumFacing.WEST, 3 * rotationIncrement);
+		horizontalRotations.put(Direction.NORTH, 0);
+		horizontalRotations.put(Direction.EAST, rotationIncrement);
+		horizontalRotations.put(Direction.SOUTH, 2 * rotationIncrement);
+		horizontalRotations.put(Direction.WEST, 3 * rotationIncrement);
 
 		HORIZONTAL_ROTATIONS = Object2DoubleMaps.unmodifiable(horizontalRotations);
 	}
@@ -59,7 +59,7 @@ public class VectorUtils {
 	 * @param radians The angle in radians
 	 * @return The rotation matrix
 	 */
-	public static Matrix3d getRotationMatrix(final EnumFacing.Axis axis, final double radians) {
+	public static Matrix3d getRotationMatrix(final Direction.Axis axis, final double radians) {
 		final Vec3i axisDirectionVector = AXIS_DIRECTION_VECTORS.get(axis);
 		final AxisAngle4d axisAngle = new AxisAngle4d(axisDirectionVector.getX(), axisDirectionVector.getY(), axisDirectionVector.getZ(), radians);
 
@@ -97,12 +97,12 @@ public class VectorUtils {
 	}
 
 	/**
-	 * Get the angle of the specified {@link EnumFacing} relative to {@link EnumFacing#NORTH} along the horizontal plane.
+	 * Get the angle of the specified {@link Direction} relative to {@link Direction#NORTH} along the horizontal plane.
 	 *
 	 * @param facing The facing
 	 * @return The angle in radians
 	 */
-	public static double getHorizontalRotation(final EnumFacing facing) {
+	public static double getHorizontalRotation(final Direction facing) {
 		return HORIZONTAL_ROTATIONS.getDouble(facing);
 	}
 }

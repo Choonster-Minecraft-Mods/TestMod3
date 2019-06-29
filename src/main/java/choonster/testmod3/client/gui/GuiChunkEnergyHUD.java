@@ -1,9 +1,9 @@
 package choonster.testmod3.client.gui;
 
-import choonster.testmod3.capability.chunkenergy.CapabilityChunkEnergy;
+import choonster.testmod3.capability.chunkenergy.ChunkEnergyCapability;
 import choonster.testmod3.config.TestMod3Config;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.BlockPos;
 
@@ -12,11 +12,11 @@ import net.minecraft.util.math.BlockPos;
  *
  * @author Choonster
  */
-public class GuiChunkEnergyHUD extends Gui {
+public class GuiChunkEnergyHUD extends AbstractGui {
 	private static final Minecraft minecraft = Minecraft.getInstance();
 
 	public void drawHUD() {
-		CapabilityChunkEnergy.getChunkEnergy(minecraft.world.getChunk(new BlockPos(minecraft.player)))
+		ChunkEnergyCapability.getChunkEnergy(minecraft.world.getChunkAt(new BlockPos(minecraft.player)))
 				.ifPresent(chunkEnergy -> {
 					final String text = I18n.format("testmod3.chunk_energy.hud", chunkEnergy.getEnergyStored(), chunkEnergy.getMaxEnergyStored());
 					final TestMod3Config.Client.HUDPos hudPos = TestMod3Config.CLIENT.chunkEnergyHUDPos;

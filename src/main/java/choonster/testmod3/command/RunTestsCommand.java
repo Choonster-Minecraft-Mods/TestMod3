@@ -4,7 +4,7 @@ import choonster.testmod3.tests.Tests;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 
 /**
  * A command that runs this mod's tests.
@@ -16,9 +16,9 @@ class RunTestsCommand {
 		return Commands.literal("runtests")
 				.executes(context -> {
 					if (Tests.runTests()) {
-						context.getSource().sendFeedback(new TextComponentTranslation("commands.testmod3.runtests.tests_passed"), true);
+						context.getSource().sendFeedback(new TranslationTextComponent("commands.testmod3.runtests.tests_passed"), true);
 					} else {
-						context.getSource().sendFeedback(new TextComponentTranslation("commands.testmod3.runtests.tests_failed"), true);
+						context.getSource().sendFeedback(new TranslationTextComponent("commands.testmod3.runtests.tests_failed"), true);
 					}
 
 					return 0;

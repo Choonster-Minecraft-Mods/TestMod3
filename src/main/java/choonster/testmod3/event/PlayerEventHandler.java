@@ -2,14 +2,14 @@ package choonster.testmod3.event;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.util.Constants;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -34,11 +34,11 @@ public class PlayerEventHandler {
 	 */
 	@SubscribeEvent
 	public static void playerLoggedIn(final PlayerEvent.PlayerLoggedInEvent event) {
-		final EntityPlayer player = event.getPlayer();
+		final PlayerEntity player = event.getPlayer();
 
-		final NBTTagCompound entityData = player.getEntityData();
-		final NBTTagCompound persistedData = entityData.getCompound(EntityPlayer.PERSISTED_NBT_TAG);
-		entityData.put(EntityPlayer.PERSISTED_NBT_TAG, persistedData);
+		final CompoundNBT entityData = player.getEntityData();
+		final CompoundNBT persistedData = entityData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
+		entityData.put(PlayerEntity.PERSISTED_NBT_TAG, persistedData);
 
 		final String key = Constants.RESOURCE_PREFIX + "ReceivedItems";
 		final String message;
@@ -53,9 +53,9 @@ public class PlayerEventHandler {
 			message = "message.testmod3.login.free_apple";
 		}
 
-		final ITextComponent chatComponent = new TextComponentTranslation(message);
-		chatComponent.getStyle().setColor(TextFormatting.LIGHT_PURPLE);
-		player.sendMessage(chatComponent);
+		final ITextComponent textComponent = new TranslationTextComponent(message);
+		textComponent.getStyle().setColor(TextFormatting.LIGHT_PURPLE);
+		player.sendMessage(textComponent);
 	}
 
 	/**
@@ -65,10 +65,10 @@ public class PlayerEventHandler {
 	 */
 	@SubscribeEvent
 	public static void livingDeath(final LivingDeathEvent event) {
-		if (event.getEntity() instanceof EntityPlayer && !event.getEntity().getEntityWorld().isRemote) {
-			final EntityPlayer player = (EntityPlayer) event.getEntity();
+		if (event.getEntity() instanceof PlayerEntity && !event.getEntity().getEntityWorld().isRemote) {
+			final PlayerEntity player = (PlayerEntity) event.getEntity();
 			final BlockPos pos = player.getPosition();
-			player.sendMessage(new TextComponentTranslation("message.testmod3.death.coordinates", pos.getX(), pos.getY(), pos.getZ(), player.dimension, player.getEntityWorld().dimension.getType().getRegistryName()));
+			player.sendMessage(new TranslationTextComponent("message.testmod3.death.coordinates", pos.getX(), pos.getY(), pos.getZ(), player.dimension, player.getEntityWorld().dimension.getType().getRegistryName()));
 		}
 	}
 }

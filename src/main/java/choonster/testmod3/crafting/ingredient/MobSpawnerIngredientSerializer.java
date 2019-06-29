@@ -4,9 +4,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
@@ -31,14 +31,14 @@ public class MobSpawnerIngredientSerializer implements IIngredientSerializer<Ing
 	public IngredientNBT parse(final JsonObject json) {
 		final ItemStack stack = CraftingHelper.getItemStack(json, true);
 
-		final ResourceLocation entityRegistryName = new ResourceLocation(JsonUtils.getString(json, "entity"));
+		final ResourceLocation entityRegistryName = new ResourceLocation(JSONUtils.getString(json, "entity"));
 		if (!ForgeRegistries.ENTITIES.containsKey(entityRegistryName)) {
 			throw new JsonSyntaxException("Unknown entity type '" + entityRegistryName.toString() + "'");
 		}
 
-		final NBTTagCompound tileEntityData = stack.getOrCreateChildTag("BlockEntityTag");
+		final CompoundNBT tileEntityData = stack.getOrCreateChildTag("BlockEntityTag");
 
-		final NBTTagCompound spawnData = tileEntityData.getCompound("SpawnData");
+		final CompoundNBT spawnData = tileEntityData.getCompound("SpawnData");
 		spawnData.putString("id", entityRegistryName.toString());
 		tileEntityData.put("SpawnData", spawnData);
 

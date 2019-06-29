@@ -1,15 +1,15 @@
 package choonster.testmod3.tweak.spawnerdrops;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Enchantments;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.dimension.DimensionType;
@@ -50,7 +50,7 @@ public class SpawnerDrops {
 	 * @param player The player who broke the block
 	 * @return Is the event valid?
 	 */
-	private static boolean isValid(final IWorld world, final IBlockState state, @Nullable final EntityPlayer player) {
+	private static boolean isValid(final IWorld world, final BlockState state, @Nullable final PlayerEntity player) {
 		if (player == null) return false;
 
 		final ItemStack heldItem = player.getHeldItemMainhand();
@@ -70,7 +70,7 @@ public class SpawnerDrops {
 		if (!isValid(world, event.getState(), event.getPlayer())) return;
 
 		// If the TileEntity isn't a mob spawner, do nothing
-		if (!(world.getTileEntity(pos) instanceof TileEntityMobSpawner)) {
+		if (!(world.getTileEntity(pos) instanceof MobSpawnerTileEntity)) {
 			return;
 		}
 
@@ -88,7 +88,7 @@ public class SpawnerDrops {
 	public static void blockHarvested(final BlockEvent.HarvestDropsEvent event) {
 		final IWorld world = event.getWorld();
 		final BlockPos pos = event.getPos();
-		final IBlockState state = event.getState();
+		final BlockState state = event.getState();
 
 		// If the event isn't valid, do nothing
 		if (!isValid(world, state, event.getHarvester())) return;
@@ -103,7 +103,7 @@ public class SpawnerDrops {
 		final TileEntity tileEntity = storedSpawnersInDimension.remove(pos); // Get the stored TileEntity for this position and remove it from the map
 		if (tileEntity == null) return; // If the TileEntity doesn't exist, do nothing
 
-		final NBTTagCompound tileData = tileEntity.serializeNBT(); // Write the TileEntity to NBT
+		final CompoundNBT tileData = tileEntity.serializeNBT(); // Write the TileEntity to NBT
 		tileData.remove("x"); // Remove the coordinate tags so spawners of the same type from different positions stack
 		tileData.remove("y");
 		tileData.remove("z");

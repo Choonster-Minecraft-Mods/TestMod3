@@ -4,7 +4,7 @@ import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 
 /**
  * Add max health to an entity using {@link IMaxHealth}.
@@ -20,7 +20,7 @@ class AddMaxHealthCommand {
 		);
 	}
 
-	private static void addMaxHealth(final EntityLivingBase entity, final IMaxHealth maxHealth, final float amount) {
+	private static void addMaxHealth(final LivingEntity entity, final IMaxHealth maxHealth, final float amount) {
 		maxHealth.addBonusMaxHealth(amount);
 	}
 }

@@ -2,12 +2,12 @@ package choonster.testmod3.client.model;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModBlocks;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.world.GrassColors;
 import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.client.event.ColorHandlerEvent;
@@ -55,7 +55,7 @@ public class ModColourManager {
 
 		// Use the Block's colour handler for an ItemBlock
 		final IItemColor itemBlockColourHandler = (stack, tintIndex) -> {
-			final IBlockState state = ((ItemBlock) stack.getItem()).getBlock().getDefaultState();
+			final BlockState state = ((BlockItem) stack.getItem()).getBlock().getDefaultState();
 			return blockColors.getColor(state, null, null, tintIndex);
 		};
 

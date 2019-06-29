@@ -1,9 +1,9 @@
 package choonster.testmod3.event;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.ForgeHooks;
@@ -27,7 +27,7 @@ public class BlockEventHandler {
 	 * @param player The player harvesting the block
 	 * @return True if the tool can harvest the block
 	 */
-	private static boolean canToolHarvestBlock(final IBlockState state, final ItemStack stack, final EntityPlayer player) {
+	private static boolean canToolHarvestBlock(final BlockState state, final ItemStack stack, final PlayerEntity player) {
 		final ToolType tool = state.getHarvestTool();
 		return !stack.isEmpty() && tool != null
 				&& stack.getItem().getHarvestLevel(stack, tool, player, state) >= state.getHarvestLevel();
@@ -40,7 +40,7 @@ public class BlockEventHandler {
 	 * @param player The player harvesting the block
 	 * @return True if the block is a log, the player isn't in creative mode and the player doesn't have the correct tool equipped
 	 */
-	private static boolean isPlayerHarvestingLogWithoutCorrectTool(final IBlockState state, final EntityPlayer player) {
+	private static boolean isPlayerHarvestingLogWithoutCorrectTool(final BlockState state, final PlayerEntity player) {
 		return !player.abilities.isCreativeMode
 				&& state.isIn(BlockTags.LOGS)
 				&& !canToolHarvestBlock(state, player.getHeldItemMainhand(), player);

@@ -1,18 +1,15 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.util.RegistryUtil;
 import com.google.common.base.Preconditions;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.potion.PotionType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolder;
 
 import javax.annotation.Nullable;
@@ -20,7 +17,7 @@ import javax.annotation.Nullable;
 import static choonster.testmod3.util.InjectionUtil.Null;
 
 /**
- * Registers this mod's {@link PotionType}s.
+ * Registers this mod's {@link Potion}s.
  *
  * @author Choonster
  */
@@ -28,21 +25,21 @@ import static choonster.testmod3.util.InjectionUtil.Null;
 @ObjectHolder(TestMod3.MODID)
 public class ModPotionTypes {
 
-	public static final PotionType TEST = Null();
+	public static final Potion TEST = Null();
 
-	public static final PotionType LONG_TEST = Null();
+	public static final Potion LONG_TEST = Null();
 
-	public static final PotionType STRONG_TEST = Null();
+	public static final Potion STRONG_TEST = Null();
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 	public static class RegistrationHandler {
 		/**
-		 * Register this mod's {@link PotionType}s.
+		 * Register this mod's {@link Potion}s.
 		 *
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void registerPotionTypes(final RegistryEvent.Register<PotionType> event) {
+		public static void registerPotionTypes(final RegistryEvent.Register<Potion> event) {
 			final String LONG_PREFIX = "long_";
 			final String STRONG_PREFIX = "strong_";
 
@@ -54,43 +51,38 @@ public class ModPotionTypes {
 			final int HARMFUL_DURATION_LONG = 4800;
 			final int HARMFUL_DURATION_STRONG = 900;
 
-			// Can't use the fields from ModPotions because object holders haven't been applied between RegistryEvent.Register<Potion> and now
-			// TODO: Check if ObjectHolders are applied between every registry event now
-			final IForgeRegistry<Potion> potionRegistry = ForgeRegistries.POTIONS;
-			final Potion test = RegistryUtil.getRegistryEntry(potionRegistry, "test");
-
-			final PotionType[] potionTypes = new PotionType[]{
-					createPotionType(new PotionEffect(test, HELPFUL_DURATION_STANDARD)),
-					createPotionType(new PotionEffect(test, HELPFUL_DURATION_LONG), LONG_PREFIX),
-					createPotionType(new PotionEffect(test, HELPFUL_DURATION_STRONG, 1), STRONG_PREFIX),
+			final Potion[] potions = new Potion[]{
+					createPotion(new EffectInstance(ModEffects.TEST, HELPFUL_DURATION_STANDARD)),
+					createPotion(new EffectInstance(ModEffects.TEST, HELPFUL_DURATION_LONG), LONG_PREFIX),
+					createPotion(new EffectInstance(ModEffects.TEST, HELPFUL_DURATION_STRONG, 1), STRONG_PREFIX),
 			};
 
-			event.getRegistry().registerAll(potionTypes);
+			event.getRegistry().registerAll(potions);
 		}
 
 		/**
-		 * Create a {@link PotionType} from the specified {@link PotionEffect}.
+		 * Create a {@link Potion} from the specified {@link EffectInstance}.
 		 * <p>
-		 * Uses the {@link Potion}'s registry name as the {@link PotionType}'s registry name and name.
+		 * Uses the {@link Effect}'s registry name as the {@link Potion}'s registry name and name.
 		 *
-		 * @param potionEffect The PotionEffect
-		 * @return The PotionType
+		 * @param effectInstance The effect instance
+		 * @return The potion
 		 */
-		private static PotionType createPotionType(final PotionEffect potionEffect) {
-			return createPotionType(potionEffect, null);
+		private static Potion createPotion(final EffectInstance effectInstance) {
+			return createPotion(effectInstance, null);
 		}
 
 		/**
-		 * Create a {@link PotionType} from the specified {@link PotionEffect}
+		 * Create a {@link Potion} from the specified {@link EffectInstance}
 		 * <p>
-		 * Uses the {@link Potion}'s registry name as the {@link PotionType}'s registry name (with an optional prefix) and name (with no prefix).
+		 * Uses the {@link Effect}'s registry name as the {@link Potion}'s registry name (with an optional prefix) and name (with no prefix).
 		 *
-		 * @param potionEffect The PotionEffect
-		 * @param namePrefix   The name prefix, if any
+		 * @param effectInstance The effect instance
+		 * @param namePrefix     The name prefix, if any
 		 * @return The PotionType
 		 */
-		private static PotionType createPotionType(final PotionEffect potionEffect, @Nullable final String namePrefix) {
-			final ResourceLocation potionName = Preconditions.checkNotNull(potionEffect.getPotion().getRegistryName());
+		private static Potion createPotion(final EffectInstance effectInstance, @Nullable final String namePrefix) {
+			final ResourceLocation potionName = Preconditions.checkNotNull(effectInstance.getPotion().getRegistryName());
 
 			final ResourceLocation potionTypeName;
 			if (namePrefix != null) {
@@ -99,7 +91,7 @@ public class ModPotionTypes {
 				potionTypeName = potionName;
 			}
 
-			return new PotionType(potionName.toString(), potionEffect).setRegistryName(potionTypeName);
+			return new Potion(potionName.toString(), effectInstance).setRegistryName(potionTypeName);
 		}
 	}
 }

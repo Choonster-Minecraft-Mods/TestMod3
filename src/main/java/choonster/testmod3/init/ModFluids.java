@@ -1,7 +1,7 @@
 package choonster.testmod3.init;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.IFluidBlock;
 
@@ -95,7 +95,7 @@ public class ModFluids {
 		}
 
 		*//**
-	 * Register this mod's fluid {@link ItemBlock}s.
+	 * Register this mod's fluid {@link BlockItem}s.
 	 *
 	 * @param event The event
 	 *//*

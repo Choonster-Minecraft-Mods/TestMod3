@@ -1,23 +1,25 @@
 package choonster.testmod3.world.gen.feature;
 
-import choonster.testmod3.util.Constants;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumDyeColor;
+import com.mojang.datafixers.Dynamic;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.BannerPattern;
+import net.minecraft.tileentity.BannerTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.IChunkGenSettings;
-import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
+import java.util.function.Function;
 
 /**
  * Generates Banners with a specific pattern.
@@ -30,6 +32,10 @@ import java.util.Random;
 public class BannerFeature extends Feature<NoFeatureConfig> {
 	private final ItemStack bannerStack = createBannerStack();
 
+	public BannerFeature(final Function<Dynamic<?>, ? extends NoFeatureConfig> configFactory) {
+		super(configFactory);
+	}
+
 	/**
 	 * Create the Banner ItemStack used as a template for the generated banners.
 	 *
@@ -38,12 +44,12 @@ public class BannerFeature extends Feature<NoFeatureConfig> {
 	protected ItemStack createBannerStack() {
 		final ItemStack bannerStack = new ItemStack(Items.PINK_BANNER);
 
-		final NBTTagCompound bannerData = bannerStack.getOrCreateChildTag("BlockEntityTag");
+		final CompoundNBT bannerData = bannerStack.getOrCreateChildTag("BlockEntityTag");
 
-		final NBTTagList patternsList = new NBTTagList();
+		final ListNBT patternsList = new ListNBT();
 		bannerData.put("Patterns", patternsList);
-		patternsList.add(createPatternTag(BannerPattern.GRADIENT_UP, EnumDyeColor.MAGENTA));
-		patternsList.add(createPatternTag(BannerPattern.FLOWER, EnumDyeColor.BLACK));
+		patternsList.add(createPatternTag(BannerPattern.GRADIENT_UP, DyeColor.MAGENTA));
+		patternsList.add(createPatternTag(BannerPattern.FLOWER, DyeColor.BLACK));
 
 		return bannerStack;
 	}
@@ -55,20 +61,20 @@ public class BannerFeature extends Feature<NoFeatureConfig> {
 	 * @param color   The colour
 	 * @return The compound tag
 	 */
-	protected NBTTagCompound createPatternTag(final BannerPattern pattern, final EnumDyeColor color) {
-		final NBTTagCompound tag = new NBTTagCompound();
+	protected CompoundNBT createPatternTag(final BannerPattern pattern, final DyeColor color) {
+		final CompoundNBT tag = new CompoundNBT();
 		tag.putString("Pattern", pattern.getHashname());
 		tag.putInt("Color", color.getId());
 		return tag;
 	}
 
 	@Override
-	public boolean place(final IWorld world, final IChunkGenerator<? extends IChunkGenSettings> chunkGenerator, final Random random, final BlockPos pos, final NoFeatureConfig featureConfig) {
-		world.setBlockState(pos, Blocks.PINK_BANNER.getDefaultState(), Constants.BlockFlags.DEFAULT_FLAGS);
+	public boolean place(final IWorld world, final ChunkGenerator<? extends GenerationSettings> chunkGenerator, final Random random, final BlockPos pos, final NoFeatureConfig featureConfig) {
+		world.setBlockState(pos, Blocks.PINK_BANNER.getDefaultState(), Constants.BlockFlags.DEFAULT);
 
 		final TileEntity tileEntity = world.getTileEntity(pos);
-		if (tileEntity instanceof TileEntityBanner) {
-			((TileEntityBanner) tileEntity).loadFromItemStack(bannerStack, EnumDyeColor.PINK);
+		if (tileEntity instanceof BannerTileEntity) {
+			((BannerTileEntity) tileEntity).loadFromItemStack(bannerStack, DyeColor.PINK);
 		}
 
 		return true;

@@ -3,7 +3,7 @@ package choonster.testmod3.compat.waila;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModItems;
 import mcp.mobius.waila.Waila;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -24,7 +24,7 @@ public class ItemTooltipModNameRemover {
 	public static void itemTooltip(final ItemTooltipEvent event) {
 		if (event.getItemStack().getItem() == ModItems.NO_MOD_NAME) {
 			final String name = String.format(Waila.CONFIG.get().getFormatting().getModName(), TestMod3.NAME);
-			event.getToolTip().remove(new TextComponentString(name));
+			event.getToolTip().remove(new StringTextComponent(name));
 		}
 	}
 }

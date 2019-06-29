@@ -1,12 +1,12 @@
 package choonster.testmod3.util;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
@@ -32,13 +32,13 @@ public class InventoryUtils {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	/**
-	 * Get the {@link EntityEquipmentSlot} with the specified index (as returned by {@link EntityEquipmentSlot#getSlotIndex()}.
+	 * Get the {@link EquipmentSlotType} with the specified index (as returned by {@link EquipmentSlotType#getSlotIndex()}.
 	 *
 	 * @param index The index
 	 * @return The equipment slot
 	 */
-	public static EntityEquipmentSlot getEquipmentSlotFromIndex(final int index) {
-		for (final EntityEquipmentSlot equipmentSlot : EntityEquipmentSlot.values()) {
+	public static EquipmentSlotType getEquipmentSlotFromIndex(final int index) {
+		for (final EquipmentSlotType equipmentSlot : EquipmentSlotType.values()) {
 			if (equipmentSlot.getSlotIndex() == index) {
 				return equipmentSlot;
 			}
@@ -48,7 +48,7 @@ public class InventoryUtils {
 	}
 
 	/**
-	 * A reference to LootTable#shuffleItems.
+	 * A reference to {@link LootTable#shuffleItems}.
 	 */
 	private static final Method SHUFFLE_ITEMS = ObfuscationReflectionHelper.findMethod(LootTable.class, "func_186463_a" /* shuffleItems */, List.class, int.class, Random.class);
 
@@ -59,11 +59,11 @@ public class InventoryUtils {
 	 *
 	 * @param itemHandler The inventory to fill with loot
 	 * @param lootTable   The LootTable to generate loot from
-	 * @param random      The Random object to use in the loot generation
 	 * @param context     The LootContext to use in the loot generation
 	 */
-	public static void fillItemHandlerWithLoot(final IItemHandler itemHandler, final LootTable lootTable, final Random random, final LootContext context) {
-		final List<ItemStack> items = lootTable.generateLootForPools(random, context);
+	public static void fillItemHandlerWithLoot(final IItemHandler itemHandler, final LootTable lootTable, final LootContext context) {
+		final Random random = context.getRandom();
+		final List<ItemStack> items = lootTable.generate(context);
 		final List<Integer> emptySlots = getEmptySlotsRandomized(itemHandler, random);
 
 		try {
@@ -89,7 +89,7 @@ public class InventoryUtils {
 	/**
 	 * Get a list containing the indices of the empty slots in an {@link IItemHandler} in random order.
 	 * <p>
-	 * Adapted from LootTable#getEmptySlotsRandomized.
+	 * Adapted from {@link LootTable#getEmptySlotsRandomized}.
 	 *
 	 * @param itemHandler The inventory
 	 * @param random      The Random object
@@ -158,8 +158,8 @@ public class InventoryUtils {
 	 * @return A lazy optional containing the inventory, if any
 	 */
 	public static LazyOptional<IItemHandler> getMainInventory(final Entity entity) {
-		if (entity instanceof EntityPlayer) {
-			return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
+		if (entity instanceof PlayerEntity) {
+			return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP);
 		}
 
 		return LazyOptional.empty();
@@ -168,33 +168,33 @@ public class InventoryUtils {
 	/**
 	 * Get the hand inventory of the specified entity.
 	 * <p>
-	 * For players, this returns the off hand inventory. For other entities, this returns the {@link EnumFacing#UP} {@link IItemHandler} capability.
+	 * For players, this returns the off hand inventory. For other entities, this returns the {@link Direction#UP} {@link IItemHandler} capability.
 	 *
 	 * @param entity The entity
 	 * @return A lazy optional containing the hand inventory, if any
 	 */
 	public static LazyOptional<IItemHandler> getHandInventory(final Entity entity) {
-		if (entity instanceof EntityPlayer) {
-			return LazyOptional.of(() -> new PlayerOffhandInvWrapper(((EntityPlayer) entity).inventory));
+		if (entity instanceof PlayerEntity) {
+			return LazyOptional.of(() -> new PlayerOffhandInvWrapper(((PlayerEntity) entity).inventory));
 		}
 
-		return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
+		return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP);
 	}
 
 	/**
 	 * Get the armour inventory of the specified entity.
 	 * <p>
-	 * For players, this returns the armour inventory. For other entities, this returns the {@link EnumFacing#NORTH} {@link IItemHandler} capability.
+	 * For players, this returns the armour inventory. For other entities, this returns the {@link Direction#NORTH} {@link IItemHandler} capability.
 	 *
 	 * @param entity The entity
 	 * @return A lazy optional containing the inventory, if any
 	 */
 	public static LazyOptional<IItemHandler> getArmourInventory(final Entity entity) {
-		if (entity instanceof EntityPlayer) {
-			return LazyOptional.of(() -> new PlayerArmorInvWrapper(((EntityPlayer) entity).inventory));
+		if (entity instanceof PlayerEntity) {
+			return LazyOptional.of(() -> new PlayerArmorInvWrapper(((PlayerEntity) entity).inventory));
 		}
 
-		return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
+		return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.NORTH);
 	}
 
 	/**

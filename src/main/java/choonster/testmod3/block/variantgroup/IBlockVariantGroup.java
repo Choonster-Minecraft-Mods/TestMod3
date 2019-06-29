@@ -2,7 +2,7 @@ package choonster.testmod3.block.variantgroup;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -79,5 +79,5 @@ public interface IBlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSeria
 	 * @return The registered items
 	 * @throws IllegalStateException If the items have already been registered
 	 */
-	List<? extends ItemBlock> registerItems(IForgeRegistry<Item> registry);
+	List<? extends BlockItem> registerItems(IForgeRegistry<Item> registry);
 }

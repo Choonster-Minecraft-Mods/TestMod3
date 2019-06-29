@@ -2,10 +2,10 @@ package choonster.testmod3.capability.hiddenblockrevealer;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockRevealer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumHand;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,9 +32,9 @@ public class HiddenBlockManager {
 	 * @param player The player
 	 * @return Should hidden blocks be revealed?
 	 */
-	private static boolean shouldHeldItemRevealHiddenBlocks(final EntityPlayer player) {
-		for (final EnumHand hand : EnumHand.values()) {
-			final boolean revealHiddenBlocks = CapabilityHiddenBlockRevealer.getHiddenBlockRevealer(player.getHeldItem(hand))
+	private static boolean shouldHeldItemRevealHiddenBlocks(final PlayerEntity player) {
+		for (final Hand hand : Hand.values()) {
+			final boolean revealHiddenBlocks = HiddenBlockRevealerCapability.getHiddenBlockRevealer(player.getHeldItem(hand))
 					.map(IHiddenBlockRevealer::revealHiddenBlocks)
 					.orElse(false);
 
@@ -51,7 +51,7 @@ public class HiddenBlockManager {
 		if (event.phase != TickEvent.Phase.END) return;
 
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-			final EntityPlayer player = Minecraft.getInstance().player;
+			final PlayerEntity player = Minecraft.getInstance().player;
 			if (player == null) return;
 
 			final boolean checkResult = shouldHeldItemRevealHiddenBlocks(player);
@@ -79,7 +79,7 @@ public class HiddenBlockManager {
 	 */
 	public static void refresh(final World world, final BlockPos pos) {
 		if (toggled) {
-			final IBlockState state = world.getBlockState(pos);
+			final BlockState state = world.getBlockState(pos);
 			world.notifyBlockUpdate(pos, state, state, 3);
 		}
 	}

@@ -2,12 +2,12 @@ package choonster.testmod3.util;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.client.init.ModGuiFactories;
-import choonster.testmod3.network.MessageOpenClientGui;
+import choonster.testmod3.network.OpenClientScreenMessage;
 import io.netty.buffer.Unpooled;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -33,7 +33,7 @@ public class NetworkUtil {
 	 * @param player The player to open the GUI for
 	 * @param id     The ID of the GUI to open.
 	 */
-	public static void openClientGui(final EntityPlayerMP player, final ResourceLocation id) {
+	public static void openClientGui(final ServerPlayerEntity player, final ResourceLocation id) {
 		openClientGui(player, id, buf -> {
 		});
 	}
@@ -49,7 +49,7 @@ public class NetworkUtil {
 	 * @param id     The ID of the GUI to open.
 	 * @param pos    A BlockPos, which will be encoded into the additional data for this request
 	 */
-	public static void openClientGui(final EntityPlayerMP player, final ResourceLocation id, final BlockPos pos) {
+	public static void openClientGui(final ServerPlayerEntity player, final ResourceLocation id, final BlockPos pos) {
 		openClientGui(player, id, buf -> buf.writeBlockPos(pos));
 	}
 
@@ -66,10 +66,10 @@ public class NetworkUtil {
 	 * @param id              The ID of the GUI to open.
 	 * @param extraDataWriter Consumer to write any additional data required by the GUI
 	 */
-	public static void openClientGui(final EntityPlayerMP player, final ResourceLocation id, final Consumer<PacketBuffer> extraDataWriter) {
+	public static void openClientGui(final ServerPlayerEntity player, final ResourceLocation id, final Consumer<PacketBuffer> extraDataWriter) {
 		if (player.world.isRemote) return;
 		player.closeScreen();
-		player.openContainer = player.inventoryContainer;
+		player.openContainer = player.container;
 
 		final PacketBuffer extraData = new PacketBuffer(Unpooled.buffer());
 		extraDataWriter.accept(extraData);
@@ -83,17 +83,17 @@ public class NetworkUtil {
 			throw new IllegalArgumentException("Invalid PacketBuffer for openClientGui, found " + output.readableBytes() + " bytes");
 		}
 
-		final MessageOpenClientGui message = new MessageOpenClientGui(id, extraData);
+		final OpenClientScreenMessage message = new OpenClientScreenMessage(id, extraData);
 		TestMod3.network.send(PacketDistributor.PLAYER.with(() -> player), message);
 	}
 
 	/**
-	 * Writes a nullable {@link EnumFacing} to a {@link PacketBuffer}.
+	 * Writes a nullable {@link Direction} to a {@link PacketBuffer}.
 	 *
 	 * @param facing The facing
 	 * @param buffer The buffer
 	 */
-	public static void writeNullableFacing(@Nullable final EnumFacing facing, final PacketBuffer buffer) {
+	public static void writeNullableFacing(@Nullable final Direction facing, final PacketBuffer buffer) {
 		final boolean hasFacing = facing != null;
 
 		buffer.writeBoolean(hasFacing);
@@ -104,17 +104,17 @@ public class NetworkUtil {
 	}
 
 	/**
-	 * Reads a nullable {@link EnumFacing} from a {@link PacketBuffer}.
+	 * Reads a nullable {@link Direction} from a {@link PacketBuffer}.
 	 *
 	 * @param buffer The buffer
 	 * @return The facing
 	 */
 	@Nullable
-	public static EnumFacing readNullableFacing(final PacketBuffer buffer) {
+	public static Direction readNullableFacing(final PacketBuffer buffer) {
 		final boolean hasFacing = buffer.readBoolean();
 
 		if (hasFacing) {
-			return buffer.readEnumValue(EnumFacing.class);
+			return buffer.readEnumValue(Direction.class);
 		}
 
 		return null;

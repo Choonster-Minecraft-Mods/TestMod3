@@ -3,19 +3,17 @@ package choonster.testmod3.client.keybinding;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.client.init.ModKeyBindings;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.*;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -59,17 +57,18 @@ public class KeyBindingHandler {
 	 * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2786461-how-to-get-minecraftserver-instance
 	 */
 	private static void placeHeldBlock() {
-		final EntityPlayerSP clientPlayer = MINECRAFT.player;
+		final ClientPlayerEntity clientPlayer = MINECRAFT.player;
 
-		for (final EnumHand hand : EnumHand.values()) {
+		for (final Hand hand : Hand.values()) {
 			final ItemStack heldItem = clientPlayer.getHeldItem(hand);
 			final int heldItemCount = heldItem.getCount();
 
 			final BlockPos pos = new BlockPos(clientPlayer).down();
+			final BlockRayTraceResult rayTraceResult = new BlockRayTraceResult(new Vec3d(0, 0, 0), Direction.UP, pos, false);
 
-			final EnumActionResult actionResult = MINECRAFT.playerController.processRightClickBlock(clientPlayer, MINECRAFT.world, pos, EnumFacing.UP, new Vec3d(0, 0, 0), hand);
+			final ActionResultType actionResult = MINECRAFT.playerController.func_217292_a(clientPlayer, MINECRAFT.world, hand, rayTraceResult);
 
-			if (actionResult == EnumActionResult.SUCCESS) {
+			if (actionResult == ActionResultType.SUCCESS) {
 				clientPlayer.swingArm(hand);
 
 				if (!heldItem.isEmpty() && (heldItem.getCount() != heldItemCount || MINECRAFT.playerController.isInCreativeMode())) {
@@ -88,27 +87,27 @@ public class KeyBindingHandler {
 	 * http://www.minecraftforge.net/forum/index.php?topic=45025.0
 	 */
 	private static void printPotions() {
-		final RayTraceResult objectMouseOver = MINECRAFT.objectMouseOver;
-		final EntityPlayerSP clientPlayer = MINECRAFT.player;
+		final ClientPlayerEntity clientPlayer = MINECRAFT.player;
 
-		if (objectMouseOver.type == RayTraceResult.Type.ENTITY && objectMouseOver.entity != null) {
-			if (objectMouseOver.entity instanceof EntityLivingBase) {
-				final Collection<PotionEffect> activePotionEffects = ((EntityLivingBase) objectMouseOver.entity).getActivePotionEffects();
+		if (MINECRAFT.objectMouseOver.getType() == RayTraceResult.Type.ENTITY) {
+			final EntityRayTraceResult rayTraceResult = (EntityRayTraceResult) MINECRAFT.objectMouseOver;
+			if (rayTraceResult.getEntity() instanceof LivingEntity) {
+				final Collection<EffectInstance> activePotionEffects = ((LivingEntity) rayTraceResult.getEntity()).getActivePotionEffects();
 
 				if (activePotionEffects.isEmpty()) {
-					clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3.print_potions.no_potions", objectMouseOver.entity.getDisplayName()));
+					clientPlayer.sendMessage(new TranslationTextComponent("message.testmod3.print_potions.no_potions", rayTraceResult.getEntity().getDisplayName()));
 				} else {
-					clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3.print_potions.potions", objectMouseOver.entity.getDisplayName()));
+					clientPlayer.sendMessage(new TranslationTextComponent("message.testmod3.print_potions.potions", rayTraceResult.getEntity().getDisplayName()));
 
 					activePotionEffects.forEach(
-							potionEffect -> clientPlayer.sendMessage(new TextComponentString(potionEffect.toString()))
+							potionEffect -> clientPlayer.sendMessage(new StringTextComponent(potionEffect.toString()))
 					);
 				}
 			} else {
-				clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3.print_potions.not_living", objectMouseOver.entity.getDisplayName()));
+				clientPlayer.sendMessage(new TranslationTextComponent("message.testmod3.print_potions.not_living", rayTraceResult.getEntity().getDisplayName()));
 			}
 		} else {
-			clientPlayer.sendMessage(new TextComponentTranslation("message.testmod3.print_potions.no_entity"));
+			clientPlayer.sendMessage(new TranslationTextComponent("message.testmod3.print_potions.no_entity"));
 		}
 	}
 }

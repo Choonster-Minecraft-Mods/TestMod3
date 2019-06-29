@@ -1,15 +1,15 @@
 package choonster.testmod3.network.capability;
 
-import net.minecraft.inventory.Container;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
 
 /**
- * Utility methods and common interfaces for {@link MessageUpdateContainerCapability} and {@link MessageBulkUpdateContainerCapability}.
+ * Utility methods and common interfaces for {@link UpdateContainerCapabilityMessage} and {@link BulkUpdateContainerCapabilityMessage}.
  *
  * @author Choonster
  */
@@ -30,7 +30,7 @@ public class CapabilityContainerUpdateMessageUtils {
 			final Container container,
 			final int slotNumber,
 			final Capability<HANDLER> capability,
-			@Nullable final EnumFacing facing,
+			@Nullable final Direction facing,
 			final DATA data,
 			final CapabilityDataApplier<HANDLER, DATA> capabilityDataApplier
 	) {
