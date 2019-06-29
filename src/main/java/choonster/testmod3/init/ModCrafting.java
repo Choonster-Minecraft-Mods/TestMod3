@@ -57,7 +57,7 @@ public class ModCrafting {
 		 */
 		@SubscribeEvent
 		public static void registerBrewingRecipes(final FMLCommonSetupEvent event) {
-			addStandardConversionRecipes(ModPotionTypes.TEST, ModPotionTypes.LONG_TEST, ModPotionTypes.STRONG_TEST, ModItems.ARROW);
+			addStandardConversionRecipes(ModPotions.TEST, ModPotions.LONG_TEST, ModPotions.STRONG_TEST, ModItems.ARROW);
 		}
 
 		/**

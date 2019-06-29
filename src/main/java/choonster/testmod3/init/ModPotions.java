@@ -23,7 +23,7 @@ import static choonster.testmod3.util.InjectionUtil.Null;
  */
 @SuppressWarnings("WeakerAccess")
 @ObjectHolder(TestMod3.MODID)
-public class ModPotionTypes {
+public class ModPotions {
 
 	public static final Potion TEST = Null();
 
