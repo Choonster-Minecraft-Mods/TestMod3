@@ -42,12 +42,12 @@ public class ModTileEntities {
 		@SubscribeEvent
 		public static void registerTileEntityTypes(final RegistryEvent.Register<TileEntityType<?>> event) {
 			final TileEntityType<?>[] tileEntityTypes = new TileEntityType[]{
-					build("survival_command_block", TileEntityType.Builder.create(SurvivalCommandBlockTileEntity::new)),
-					build("fluid_tank", TileEntityType.Builder.create(FluidTankTileEntity::new)),
-					build("fluid_tank_restricted", TileEntityType.Builder.create(RestrictedFluidTankTileEntity::new)),
-					build("potion_effect", TileEntityType.Builder.create(PotionEffectTileEntity::new)),
-					build("mod_chest", TileEntityType.Builder.create(ModChestTileEntity::new)),
-					build("hidden", TileEntityType.Builder.create(HiddenTileEntity::new)),
+					build("survival_command_block", TileEntityType.Builder.create(SurvivalCommandBlockTileEntity::new, ModBlocks.SURVIVAL_COMMAND_BLOCK)),
+					build("fluid_tank", TileEntityType.Builder.create(FluidTankTileEntity::new, ModBlocks.FLUID_TANK)),
+					build("fluid_tank_restricted", TileEntityType.Builder.create(RestrictedFluidTankTileEntity::new, ModBlocks.FLUID_TANK_RESTRICTED)),
+					build("potion_effect", TileEntityType.Builder.create(PotionEffectTileEntity::new, ModBlocks.POTION_EFFECT)),
+					build("mod_chest", TileEntityType.Builder.create(ModChestTileEntity::new, ModBlocks.CHEST)),
+					build("hidden", TileEntityType.Builder.create(HiddenTileEntity::new, ModBlocks.HIDDEN)),
 			};
 
 			event.getRegistry().registerAll(tileEntityTypes);
