@@ -57,8 +57,8 @@ public class ModSoundEvents {
 		/**
 		 * Initialise this mod's {@link SoundEvent}s.
 		 * <p>
-		 * This needs to be done before {@link RegistryEvent.Register<SoundEvent>} is fired so that the sound events
-		 * can be used by record item constructors in {@link RegistryEvent.Register<Item>}.
+		 * This needs to be done before {@link RegistryEvent.Register}&lt;{@link SoundEvent}&gt; is fired so that the sound events
+		 * can be used by record item constructors in {@link RegistryEvent.Register}&lt;{@link Item}&gt;.
 		 */
 		public static void initialiseSoundEvents() {
 			Preconditions.checkState(SOUND_EVENTS == null, "Attempt to re-initialise Sound Events");

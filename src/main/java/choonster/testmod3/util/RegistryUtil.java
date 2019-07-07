@@ -79,6 +79,8 @@ public class RegistryUtil {
 	 *
 	 * @param item     The item
 	 * @param itemName The item's name
+	 * @param <ITEM>   The item type
+	 * @return The item
 	 */
 	public static <ITEM extends Item> ITEM setItemName(final ITEM item, final String itemName) {
 		item.setRegistryName(TestMod3.MODID, itemName);

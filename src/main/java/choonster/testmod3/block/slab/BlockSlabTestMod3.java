@@ -46,6 +46,7 @@ public abstract class BlockSlabTestMod3<
 	 *
 	 * @param variant   The variant of this slab
 	 * @param material  The Material of this slab
+	 * @param mapColor  The Map Colour of this slab
 	 * @param slabGroup The group this slab belongs to
 	 */
 	public BlockSlabTestMod3(final VARIANT variant, final Material material, final MapColor mapColor, final SlabVariantGroup<VARIANT, SLAB>.SlabGroup slabGroup) {
