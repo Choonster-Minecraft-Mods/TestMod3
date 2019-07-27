@@ -13,5 +13,5 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
  */
 @Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 public class ModLootTables {
-	public static final ResourceLocation LOOT_TABLE_TEST = new ResourceLocation(TestMod3.MODID, " loot_table_test");
+	public static final ResourceLocation LOOT_TABLE_TEST = new ResourceLocation(TestMod3.MODID, "loot_table_test");
 }
