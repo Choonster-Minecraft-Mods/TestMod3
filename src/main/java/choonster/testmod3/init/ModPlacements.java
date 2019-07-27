@@ -25,7 +25,7 @@ public class ModPlacements {
 		@SubscribeEvent
 		public static void registerPlacements(final RegistryEvent.Register<Placement<?>> event) {
 			event.getRegistry().registerAll(
-					new AtSurfaceInSurfaceWorldChunksDivisibleBy16(FrequencyConfig::deserialize)
+					new AtSurfaceInSurfaceWorldChunksDivisibleBy16(FrequencyConfig::deserialize).setRegistryName("at_surface_in_surface_world_chunks_divisible_by_16")
 			);
 		}
 	}
