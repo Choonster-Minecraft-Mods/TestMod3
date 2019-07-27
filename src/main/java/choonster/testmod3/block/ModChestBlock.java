@@ -13,7 +13,10 @@ import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -137,13 +140,5 @@ public class ModChestBlock extends TileEntityBlock<ModChestTileEntity> {
 		return state.with(FACING, mirror.mirror(state.get(FACING)));
 	}
 
-	@Override
-	public void getDrops(final BlockState state, final NonNullList<ItemStack> drops, final World world, final BlockPos pos, final int fortune) {
-		super.getDrops(state, drops, world, pos, fortune);
-
-		final ModChestTileEntity tileEntity = getTileEntity(world, pos);
-		if (tileEntity != null) {
-			drops.addAll(tileEntity.getDrops());
-		}
-	}
+	// TODO: Loot Tables
 }

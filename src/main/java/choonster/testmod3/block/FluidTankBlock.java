@@ -14,7 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
@@ -24,7 +23,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -46,16 +44,7 @@ public class FluidTankBlock<TE extends BaseFluidTankTileEntity> extends TileEnti
 		super(true, properties);
 	}
 
-	@Override
-	public void getDrops(final BlockState state, final NonNullList<ItemStack> drops, final World world, final BlockPos pos, final int fortune) {
-		getFluidHandler(world, pos).ifPresent(fluidHandler -> {
-			final FluidActionResult fluidActionResult = FluidUtil.tryFillContainer(new ItemStack(this), fluidHandler, Integer.MAX_VALUE, null, true);
-
-			if (fluidActionResult.isSuccess()) {
-				drops.add(fluidActionResult.getResult());
-			}
-		});
-	}
+	// TODO: Loot Tables
 
 	/**
 	 * Get the {@link IFluidHandler} from the {@link TileEntity} at the specified position.

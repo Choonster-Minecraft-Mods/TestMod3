@@ -76,10 +76,7 @@ public class SurvivalCommandBlockBlock extends CommandBlockBlock {
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 	}
 
-	@Override
-	public int quantityDropped(final BlockState state, final Random random) {
-		return 1;
-	}
+	// TODO: Loot Tables
 
 	/**
 	 * Copy of {@link CommandBlockBlock#tick} that calls {@link SurvivalCommandBlockBlock#execute} and

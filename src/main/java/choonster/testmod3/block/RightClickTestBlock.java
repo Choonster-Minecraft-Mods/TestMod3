@@ -10,12 +10,9 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 /**
  * A Block that changes state when right clicked with an Eye of Ender.
@@ -55,17 +52,5 @@ public class RightClickTestBlock extends GlassBlock {
 		return false;
 	}
 
-	@Override
-	public int quantityDropped(final BlockState state, final Random random) {
-		return 1;
-	}
-
-	@Override
-	public void getDrops(final BlockState state, final NonNullList<ItemStack> drops, final World world, final BlockPos pos, final int fortune) {
-		super.getDrops(state, drops, world, pos, fortune);
-
-		if (state.get(HAS_ENDER_EYE)) {
-			drops.add(new ItemStack(Items.ENDER_EYE));
-		}
-	}
+	// TODO: Loot Tables
 }
