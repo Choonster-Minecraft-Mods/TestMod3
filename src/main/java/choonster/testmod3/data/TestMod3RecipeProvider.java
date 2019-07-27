@@ -184,4 +184,9 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 	private InventoryChangeTrigger.Instance hasItem(final ItemPredicate... predicates) {
 		return new InventoryChangeTrigger.Instance(MinMaxBounds.IntBound.UNBOUNDED, MinMaxBounds.IntBound.UNBOUNDED, MinMaxBounds.IntBound.UNBOUNDED, predicates);
 	}
+
+	@Override
+	public String getName() {
+		return "TestMod3Recipes";
+	}
 }
