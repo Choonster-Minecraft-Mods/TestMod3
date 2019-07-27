@@ -86,10 +86,10 @@ public class ModCrafting {
 
 	@SuppressWarnings("unused")
 	public static class Ingredients {
-		public static IIngredientSerializer<Ingredient> CONDITIONAL = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "conditional"), new ConditionalIngredientSerializer());
-		public static IIngredientSerializer<IngredientNBT> FILLED_UNIVERSAL_BUCKET = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "filled_universal_bucket"), new FilledUniversalBucketIngredientSerializer());
-		public static IIngredientSerializer<IngredientNBT> MOB_SPAWNER = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "mob_spawner"), new MobSpawnerIngredientSerializer());
-		public static IIngredientSerializer<IngredientNever> NEVER = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "never"), new IngredientNever.Serializer());
+		public static final IIngredientSerializer<Ingredient> CONDITIONAL = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "conditional"), new ConditionalIngredientSerializer());
+		public static final IIngredientSerializer<IngredientNBT> FILLED_UNIVERSAL_BUCKET = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "filled_universal_bucket"), new FilledUniversalBucketIngredientSerializer());
+		public static final IIngredientSerializer<IngredientNBT> MOB_SPAWNER = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "mob_spawner"), new MobSpawnerIngredientSerializer());
+		public static final IIngredientSerializer<IngredientNever> NEVER = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "never"), new IngredientNever.Serializer());
 
 		public static void register() {
 			// No-op method to ensure that this class is loaded and its static initialisers are run
@@ -100,8 +100,8 @@ public class ModCrafting {
 	@ObjectHolder(TestMod3.MODID)
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 	public static class Recipes {
-		public static IRecipeSerializer<ShapedArmourUpgradeRecipe> ARMOUR_UPGRADE_SHAPED = Null();
-		public static IRecipeSerializer<ShapelessCuttingRecipe> CUTTING_SHAPELESS = Null();
+		public static final IRecipeSerializer<ShapedArmourUpgradeRecipe> ARMOUR_UPGRADE_SHAPED = Null();
+		public static final IRecipeSerializer<ShapelessCuttingRecipe> CUTTING_SHAPELESS = Null();
 
 		@SubscribeEvent
 		public static void register(final RegistryEvent.Register<IRecipeSerializer<?>> event) {
