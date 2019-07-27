@@ -1,5 +1,6 @@
 package choonster.testmod3.init;
 
+import choonster.testmod3.TestMod3;
 import net.minecraft.block.Blocks;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
@@ -11,9 +12,12 @@ import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
+@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 public class ModWorldGen {
 	@SubscribeEvent
 	public static void addFeaturesToBiomes(final FMLCommonSetupEvent event) {
