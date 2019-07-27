@@ -1,6 +1,7 @@
 {
 	"_comment": [
-		"Craft Cobblestone from three Buckets of Static Gas"
+		"Craft Cobblestone from three Buckets of Static Gas",
+		"This can't be generated in the code until the fluid system is re-implemented"
 	],
 	"type": "minecraft:crafting_shapeless",
 	"ingredients": [

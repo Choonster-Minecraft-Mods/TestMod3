@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "testmod3:golden_helmet_from_iron_helmet"
+    ]
+  },
+  "criteria": {
+    "has_gold_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:gold_block"
+          }
+        ]
+      }
+    },
+    "has_iron_helmet": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:iron_helmet"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "testmod3:golden_helmet_from_iron_helmet"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_gold_block",
+      "has_iron_helmet",
+      "has_the_recipe"
+    ]
+  ]
+}

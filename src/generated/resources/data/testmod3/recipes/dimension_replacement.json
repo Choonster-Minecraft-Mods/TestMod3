@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "testmod3:subscripts"
+    },
+    {
+      "item": "testmod3:superscripts"
+    }
+  ],
+  "result": {
+    "item": "testmod3:dimension_replacement"
+  }
+}

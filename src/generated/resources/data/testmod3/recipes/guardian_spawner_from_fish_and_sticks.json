@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "SCS",
+    "SSS"
+  ],
+  "key": {
+    "S": [],
+    "C": {
+      "item": "minecraft:cod"
+    }
+  },
+  "result": {
+    "item": "minecraft:spawner",
+    "nbt": "{BlockEntityTag:{SpawnData:{id:\"minecraft:guardian\"},SpawnPotentials:[]}}"
+  }
+}

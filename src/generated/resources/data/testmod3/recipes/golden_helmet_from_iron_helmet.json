@@ -1,0 +1,19 @@
+{
+  "type": "testmod3:armour_upgrade_shaped",
+  "pattern": [
+    "GGG",
+    "GHG",
+    "GGG"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:gold_block"
+    },
+    "H": {
+      "item": "minecraft:iron_helmet"
+    }
+  },
+  "result": {
+    "item": "minecraft:golden_helmet"
+  }
+}

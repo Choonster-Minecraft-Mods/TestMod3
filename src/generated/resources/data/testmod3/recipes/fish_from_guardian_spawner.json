@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:spawner",
+      "type": "testmod3:mob_spawner",
+      "entity": "minecraft:guardian"
+    }
+  ],
+  "result": {
+    "item": "minecraft:cod",
+    "count": 8
+  }
+}

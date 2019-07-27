@@ -11,3 +11,5 @@
 !/gradle.properties
 !.gitattributes
 !ASSETS_LICENSE.txt
+
+src/generated/resources/\.cache/

@@ -1,4 +1,8 @@
 {
+	"_comment": [
+		"Crafts a Slingshot item from any item tagged as rubber, or from Thermal Foundation's Rosin item",
+		"This can't be generated in the code until Thermal Foundation is updated"
+	],
 	"type": "minecraft:crafting_shaped",
 	"pattern": [
 		" C ",

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "testmod3:dimension_replacement_from_subscripts"
+    ]
+  },
+  "criteria": {
+    "has_subscripts": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "testmod3:subscripts"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "testmod3:dimension_replacement_from_subscripts"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_subscripts",
+      "has_the_recipe"
+    ]
+  ]
+}

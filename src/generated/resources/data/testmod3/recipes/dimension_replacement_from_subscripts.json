@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "testmod3:subscripts"
+  },
+  "result": "testmod3:dimension_replacement",
+  "experience": 0.35,
+  "cookingtime": 200
+}
