@@ -31,9 +31,9 @@ public class LootTableEventHandler {
 					LootPool.builder()
 							.name(ModLootTables.LOOT_TABLE_TEST.toString())
 							.rolls(new RandomValueRange(0, 1))
-							// TODO: Bonus rolls - new RandomValueRange(0, 1) - https://github.com/MinecraftForge/MinecraftForge/issues/5887
+							.bonusRolls(0, 1)
 							.addEntry(
-									TableLootEntry.func_216171_a(ModLootTables.LOOT_TABLE_TEST)
+									TableLootEntry.builder(ModLootTables.LOOT_TABLE_TEST)
 							)
 							.build()
 			);

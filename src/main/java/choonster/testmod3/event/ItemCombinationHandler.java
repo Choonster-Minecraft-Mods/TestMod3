@@ -11,8 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 /**
  * Combines items in the world.
  * <p>
- * Uses {@link TickEvent.WorldTickEvent} and iterates through {@link World#loadedEntityList} to allow for all input items to be from vanilla or other mods. Creating a dedicated item with a custom entity to act as the controller of this effect would be more efficient.
+ * Uses {@link TickEvent.WorldTickEvent} and iterates through {@link ServerWorld#globalEntities} to allow for all input items to be from vanilla or other mods. Creating a dedicated item with a custom entity to act as the controller of this effect would be more efficient.
  * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2728653-better-way-to-check-for-entities-in-world

@@ -2,7 +2,7 @@
 modLoader="javafml" #mandatory
 
 # A version range to match for said mod loader - for regular FML @Mod it will be the forge version
-loaderVersion="[25,)" #mandatory (24 is current forge version)
+loaderVersion="[28,)" #mandatory (28 is current forge version)
 
 # A URL to refer people to when problems occur with this mod
 issueTrackerURL="https://github.com/Choonster-Minecraft-Mods/TestMod3" #optional
@@ -41,7 +41,7 @@ issueTrackerURL="https://github.com/Choonster-Minecraft-Mods/TestMod3" #optional
 		mandatory=true #mandatory
 
 		# The version range of the dependency
-		versionRange="[25,)" #mandatory
+		versionRange="[28,)" #mandatory
 
 		# An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
 		ordering="NONE"
@@ -58,7 +58,7 @@ issueTrackerURL="https://github.com/Choonster-Minecraft-Mods/TestMod3" #optional
 		mandatory=true
 
 		# The version range of the dependency
-		versionRange="[1.13.2]"
+		versionRange="[1.14.4]"
 
 	   	# An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
 		ordering="NONE"

@@ -63,7 +63,7 @@ public class SnowballLauncherItem extends ShootableItem {
 		final ItemStack heldItem = player.getHeldItem(hand);
 
 		final boolean ammoRequired = isAmmoRequired(heldItem, player);
-		final ItemStack ammo = player.func_213356_f(heldItem);
+		final ItemStack ammo = player.findAmmo(heldItem);
 		final boolean hasAmmo = !ammo.isEmpty();
 
 		if (!ammoRequired || hasAmmo) {

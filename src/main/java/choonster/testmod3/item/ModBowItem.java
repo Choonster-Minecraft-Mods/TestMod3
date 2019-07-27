@@ -45,7 +45,7 @@ public class ModBowItem extends BowItem {
 	 * @return The result
 	 */
 	protected ActionResult<ItemStack> nockArrow(final ItemStack bow, final World world, final PlayerEntity shooter, final Hand hand) {
-		final boolean hasAmmo = !shooter.func_213356_f(bow).isEmpty();
+		final boolean hasAmmo = !shooter.findAmmo(bow).isEmpty();
 
 		final ActionResult<ItemStack> ret = ForgeEventFactory.onArrowNock(bow, world, shooter, hand, hasAmmo);
 		if (ret != null) return ret;
@@ -71,7 +71,7 @@ public class ModBowItem extends BowItem {
 
 		final PlayerEntity player = (PlayerEntity) shooter;
 		final boolean ammoRequired = isAmmoRequired(bow, player);
-		ItemStack ammo = player.func_213356_f(bow);
+		ItemStack ammo = player.findAmmo(bow);
 
 		charge = ForgeEventFactory.onArrowLoose(bow, world, player, charge, !ammo.isEmpty() || !ammoRequired);
 		if (charge < 0) return;

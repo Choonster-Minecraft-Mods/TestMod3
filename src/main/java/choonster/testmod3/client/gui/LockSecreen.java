@@ -43,7 +43,7 @@ public class LockSecreen extends Screen {
 	private Button cancelButton;
 
 	public LockSecreen(final ILock lock, final BlockPos pos, @Nullable final Direction facing) {
-		super(NarratorChatListener.field_216868_a);
+		super(NarratorChatListener.EMPTY);
 		this.lock = lock;
 		this.pos = pos;
 		this.facing = facing;

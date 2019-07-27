@@ -15,7 +15,7 @@ import net.minecraft.tileentity.CommandBlockTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.server.ServerWorld;
 
 /**
  * A Command Block that's accessible outside of Creative Mode.
