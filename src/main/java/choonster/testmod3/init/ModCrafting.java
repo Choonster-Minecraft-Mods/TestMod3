@@ -8,6 +8,9 @@ import choonster.testmod3.crafting.ingredient.MobSpawnerIngredientSerializer;
 import choonster.testmod3.crafting.recipe.ShapedArmourUpgradeRecipe;
 import choonster.testmod3.crafting.recipe.ShapelessCuttingRecipe;
 import choonster.testmod3.util.LogUtil;
+import com.google.common.collect.ImmutableMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -17,7 +20,6 @@ import net.minecraft.potion.PotionBrewing;
 import net.minecraft.potion.Potions;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.common.crafting.IngredientNBT;
@@ -32,12 +34,11 @@ import net.minecraftforge.registries.ObjectHolder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static choonster.testmod3.util.InjectionUtil.Null;
 
@@ -116,7 +117,7 @@ public class ModCrafting {
 	public static class RecipeRemover {
 		private static final Logger LOGGER = LogManager.getLogger();
 
-		private static final Method GET_RECIPES = ObfuscationReflectionHelper.findMethod(RecipeManager.class, "func_215366_a" /* getRecipes */, IRecipeType.class);
+		private static final Field RECIPES = ObfuscationReflectionHelper.findField(RecipeManager.class, "field_199522_d" /* recipes */);
 
 		/**
 		 * Removes recipes from the server's recipe manager when it starts up.
@@ -169,27 +170,39 @@ public class ModCrafting {
 		 * @return The number of recipes removed
 		 */
 		private static int removeRecipes(final RecipeManager recipeManager, final Predicate<IRecipe> predicate) {
-			final Set<IRecipe> toRemove = recipeManager.getRecipes()
-					.stream()
-					.filter(predicate)
-					.collect(Collectors.toSet());
+			final Map<IRecipeType<?>, Map<ResourceLocation, IRecipe<?>>> existingRecipes;
+			try {
+				@SuppressWarnings("unchecked")
+				final Map<IRecipeType<?>, Map<ResourceLocation, IRecipe<?>>> recipesMap = (Map<IRecipeType<?>, Map<ResourceLocation, IRecipe<?>>>) RECIPES.get(recipeManager);
+				existingRecipes = recipesMap;
+			} catch (final IllegalAccessException e) {
+				throw new RuntimeException("Couldn't get recipes map while removing recipes", e);
+			}
 
-			recipeManager.getRecipes().removeAll(toRemove);
+			final Object2IntMap<IRecipeType<?>> removedCounts = new Object2IntOpenHashMap<>();
+			final ImmutableMap.Builder<IRecipeType<?>, Map<ResourceLocation, IRecipe<?>>> newRecipes = ImmutableMap.builder();
 
-			toRemove.stream()
-					.map(IRecipe::getType)
-					.distinct()
-					.forEach(recipeType -> {
-						try {
-							@SuppressWarnings("unchecked")
-							final Map<ResourceLocation, IRecipe<?>> recipes = (Map<ResourceLocation, IRecipe<?>>) GET_RECIPES.invoke(recipeManager, recipeType);
-							recipes.values().removeAll(toRemove);
-						} catch (final IllegalAccessException | InvocationTargetException e) {
-							throw new RuntimeException(String.format("Couldn't get recipes for type %s while removing recipes", Registry.RECIPE_TYPE.getKey(recipeType)), e);
-						}
-					});
+			// For each recipe type, create a new map that doesn't contain the recipes to be removed
+			existingRecipes.forEach((recipeType, existingRecipesForType) -> {
+				//noinspection UnstableApiUsage
+				final ImmutableMap<ResourceLocation, IRecipe<?>> newRecipesForType = existingRecipesForType.entrySet()
+						.stream()
+						.filter(entry -> !predicate.test(entry.getValue()))
+						.collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, Map.Entry::getValue));
 
-			return toRemove.size();
+				removedCounts.put(recipeType, existingRecipesForType.size() - newRecipesForType.size());
+				newRecipes.put(recipeType, newRecipesForType);
+			});
+
+			final int removedCount = removedCounts.values().stream().reduce(0, Integer::sum);
+
+			try {
+				RECIPES.set(recipeManager, newRecipes.build());
+			} catch (final IllegalAccessException e) {
+				throw new RuntimeException("Couldn't replace recipes map while removing recipes");
+			}
+
+			return removedCount;
 		}
 	}
 }
