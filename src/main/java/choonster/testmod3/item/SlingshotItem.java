@@ -41,6 +41,9 @@ public class SlingshotItem extends SnowballLauncherItem {
 
 	@Override
 	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final CompoundNBT nbt) {
+		//noinspection ConstantConditions
+		if (LastUseTimeCapability.LAST_USE_TIME_CAPABILITY == null) return null;
+
 		return LastUseTimeCapability.createProvider(new LastUseTime(false));
 	}
 

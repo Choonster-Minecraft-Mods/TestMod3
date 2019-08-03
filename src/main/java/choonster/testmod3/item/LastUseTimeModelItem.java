@@ -37,6 +37,9 @@ public class LastUseTimeModelItem extends Item {
 
 	@Override
 	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final CompoundNBT nbt) {
+		//noinspection ConstantConditions
+		if (LastUseTimeCapability.LAST_USE_TIME_CAPABILITY == null) return null;
+
 		return LastUseTimeCapability.createProvider();
 	}
 }

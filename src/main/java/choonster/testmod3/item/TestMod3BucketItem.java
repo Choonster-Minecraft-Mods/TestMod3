@@ -20,6 +20,7 @@ import net.minecraft.util.text.translation.LanguageMap;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
@@ -142,6 +143,8 @@ public class TestMod3BucketItem extends UniversalBucket {
 
 	@Override
 	public ICapabilityProvider initCapabilities(final ItemStack stack, final CompoundNBT nbt) {
+		if (CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY == null) return null;
+
 		// FluidBucketWrapper only works with Forge's UniversalBucket instance, use a different IFluidHandlerItem implementation instead
 		return new UniversalBucketFluidHandler(stack, getCapacity());
 	}

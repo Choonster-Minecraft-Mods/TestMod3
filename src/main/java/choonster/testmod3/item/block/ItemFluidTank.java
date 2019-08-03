@@ -66,6 +66,8 @@ public class ItemFluidTank extends BlockItem {
 
 	@Override
 	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final CompoundNBT nbt) {
+		if (CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY == null) return null;
+
 		return new SerializableCapabilityProvider<>(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null, new choonster.testmod3.fluids.ItemFluidTank(stack, FluidTankTileEntity.CAPACITY));
 	}
 }

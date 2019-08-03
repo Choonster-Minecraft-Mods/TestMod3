@@ -40,6 +40,9 @@ public class HiddenBlockRevealerItem extends Item {
 
 	@Override
 	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final CompoundNBT nbt) {
+		//noinspection ConstantConditions
+		if (HiddenBlockRevealerCapability.HIDDEN_BLOCK_REVEALER_CAPABILITY == null) return null;
+
 		return new SerializableCapabilityProvider<>(HiddenBlockRevealerCapability.HIDDEN_BLOCK_REVEALER_CAPABILITY, HiddenBlockRevealerCapability.DEFAULT_FACING);
 	}
 }
