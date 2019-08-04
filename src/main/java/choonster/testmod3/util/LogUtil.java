@@ -18,7 +18,7 @@ public class LogUtil {
 	public static final Marker MOD_MARKER = MarkerManager.getMarker(TestMod3.MODID);
 
 	/**
-	 * Logs a debug message with parameters and a the stack trace of a {@link Throwable}.
+	 * Logs a debug message with parameters and the stack trace of a {@link Throwable}.
 	 *
 	 * @param logger    The logger
 	 * @param marker    The log marker
@@ -31,7 +31,7 @@ public class LogUtil {
 	}
 
 	/**
-	 * Logs an error message with parameters and a the stack trace of a {@link Throwable}.
+	 * Logs an error message with parameters and the stack trace of a {@link Throwable}.
 	 *
 	 * @param logger    The logger
 	 * @param throwable The throwable to log the stack trace of

@@ -34,7 +34,7 @@ public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinit
 
 	public FinitePigSpawner(final int maxNumPigs) {
 		this.maxNumPigs = maxNumPigs;
-		LogUtil.debug(LOGGER, PigSpawnerCapability.LOG_MARKER, DebugUtil.getStackTrace(10), "Creating finite pig spawner: %s", this);
+		LogUtil.debug(LOGGER, PigSpawnerCapability.LOG_MARKER, DebugUtil.getStackTrace(10), "Creating finite pig spawner: {}", this);
 	}
 
 	/**
