@@ -7,6 +7,10 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryManager;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 /**
  * Utility methods for Forge registries.
  *
@@ -40,5 +44,18 @@ public class RegistryUtil {
 		final ResourceLocation key = new ResourceLocation(modid, name);
 		final T registryEntry = registry.getValue(key);
 		return Preconditions.checkNotNull(registryEntry, "%s doesn't exist in registry %s", key, RegistryManager.ACTIVE.getName(registry));
+	}
+
+	/**
+	 * Get all of this mod's registry entries from the provided registry.
+	 *
+	 * @param registry The registry
+	 * @param <T>      The registry type
+	 * @return A Set containing the registry entries
+	 */
+	public static <T extends IForgeRegistryEntry<T>> Set<T> getModRegistryEntries(final IForgeRegistry<T> registry) {
+		return StreamSupport.stream(registry.spliterator(), false)
+				.filter(entry -> entry.getRegistryName() != null && entry.getRegistryName().getNamespace().equals(TestMod3.MODID))
+				.collect(Collectors.toSet());
 	}
 }

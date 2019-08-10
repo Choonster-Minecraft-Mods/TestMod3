@@ -1,8 +1,8 @@
 package choonster.testmod3.data.loot;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.RightClickTestBlock;
 import choonster.testmod3.init.ModBlocks;
+import choonster.testmod3.util.RegistryUtil;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.block.SlabBlock;
@@ -23,8 +23,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * Generates this mod's block loot tables.
@@ -113,11 +111,7 @@ public class TestMod3BlockLootTables extends BlockLootTables {
 		final Map<ResourceLocation, LootTable.Builder> builders = getBuilders();
 		final Set<ResourceLocation> registryNames = Sets.newHashSet();
 
-		final Set<Block> modBlocks = StreamSupport.stream(ForgeRegistries.BLOCKS.spliterator(), false)
-				.filter(block -> block.getRegistryName() != null && block.getRegistryName().getNamespace().equals(TestMod3.MODID))
-				.collect(Collectors.toSet());
-
-		for (final Block block : modBlocks) {
+		for (final Block block : RegistryUtil.getModRegistryEntries(ForgeRegistries.BLOCKS)) {
 			final ResourceLocation lootTable = block.getLootTable();
 			if (lootTable != LootTables.EMPTY && registryNames.add(lootTable)) {
 				final LootTable.Builder lootTableBuilder = builders.remove(lootTable);
