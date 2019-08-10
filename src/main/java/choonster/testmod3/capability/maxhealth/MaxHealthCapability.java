@@ -20,7 +20,6 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 
@@ -123,7 +122,7 @@ public final class MaxHealthCapability {
 		@SubscribeEvent
 		public static void playerClone(final PlayerEvent.Clone event) {
 			getMaxHealth(event.getOriginal()).ifPresent(oldMaxHealth -> {
-				getMaxHealth(event.getEntityPlayer()).ifPresent(newMaxHealth -> {
+				getMaxHealth(event.getPlayer()).ifPresent(newMaxHealth -> {
 					newMaxHealth.setBonusMaxHealth(oldMaxHealth.getBonusMaxHealth());
 				});
 			});
@@ -135,7 +134,7 @@ public final class MaxHealthCapability {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void playerChangeDimension(final PlayerChangedDimensionEvent event) {
+		public static void playerChangeDimension(final PlayerEvent.PlayerChangedDimensionEvent event) {
 			getMaxHealth(event.getPlayer())
 					.ifPresent(IMaxHealth::synchronise);
 		}

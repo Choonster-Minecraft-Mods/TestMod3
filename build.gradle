@@ -114,10 +114,10 @@ configurations {
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
-    compileOnly fg.deobf("mezz.jei:jei-1.14.3:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.14.3:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.14.4:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:${jei_version}")
     embed "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
-    compile fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}_1.14.2")
+    compile fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}_1.14.4")
 //    deobfCompile "com.github.azanor:Baubles:${baubles_version}"
 }
 

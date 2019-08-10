@@ -3,8 +3,8 @@ package choonster.testmod3.event;
 import choonster.testmod3.TestMod3;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ToolType;
@@ -65,7 +65,7 @@ public class BlockEventHandler {
 	 */
 	@SubscribeEvent
 	public static void breakSpeed(final PlayerEvent.BreakSpeed event) {
-		if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getEntityPlayer())) {
+		if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getPlayer())) {
 			event.setCanceled(true);
 		}
 	}

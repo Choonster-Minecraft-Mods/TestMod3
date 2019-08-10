@@ -197,7 +197,7 @@ public final class PigSpawnerCapability {
 			final Block block = world.getBlockState(event.getPos()).getBlock();
 			final IPigSpawnerInteractable interactable = block instanceof IPigSpawnerInteractable ? (IPigSpawnerInteractable) block : null;
 
-			final PlayerEntity player = event.getEntityPlayer();
+			final PlayerEntity player = event.getPlayer();
 
 			getPigSpawner(event.getItemStack())
 					.ifPresent(pigSpawner -> trySpawnPig(pigSpawner, world, x, y, z, interactable, event.getPos(), player));
@@ -212,7 +212,7 @@ public final class PigSpawnerCapability {
 		 */
 		@SubscribeEvent
 		public static void entityInteract(final PlayerInteractEvent.EntityInteract event) {
-			final World world = event.getEntityPlayer().getEntityWorld();
+			final World world = event.getPlayer().getEntityWorld();
 
 			final Entity target = event.getTarget();
 			final double x = target.posX, y = target.posY, z = target.posZ;
@@ -220,8 +220,8 @@ public final class PigSpawnerCapability {
 
 			final Hand hand = event.getHand();
 
-			getPigSpawner(event.getEntityPlayer().getHeldItem(hand))
-					.ifPresent(pigSpawner -> trySpawnPig(pigSpawner, world, x, y, z, interactable, target.getPosition(), event.getEntityPlayer()));
+			getPigSpawner(event.getPlayer().getHeldItem(hand))
+					.ifPresent(pigSpawner -> trySpawnPig(pigSpawner, world, x, y, z, interactable, target.getPosition(), event.getPlayer()));
 		}
 
 	}

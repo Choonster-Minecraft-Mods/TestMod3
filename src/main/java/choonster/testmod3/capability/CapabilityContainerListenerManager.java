@@ -9,7 +9,6 @@ import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -57,7 +56,7 @@ public class CapabilityContainerListenerManager {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void playerLoggedIn(final PlayerLoggedInEvent event) {
+		public static void playerLoggedIn(final PlayerEvent.PlayerLoggedInEvent event) {
 			if (event.getPlayer() instanceof ServerPlayerEntity) {
 				final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 				addListeners(player, player.container);
@@ -71,8 +70,8 @@ public class CapabilityContainerListenerManager {
 		 */
 		@SubscribeEvent
 		public static void playerClone(final PlayerEvent.Clone event) {
-			if (event.getEntityPlayer() instanceof ServerPlayerEntity) {
-				final ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityPlayer();
+			if (event.getPlayer() instanceof ServerPlayerEntity) {
+				final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 				addListeners(player, player.container);
 			}
 		}
@@ -84,8 +83,8 @@ public class CapabilityContainerListenerManager {
 		 */
 		@SubscribeEvent
 		public static void containerOpen(final PlayerContainerEvent.Open event) {
-			if (event.getEntityPlayer() instanceof ServerPlayerEntity) {
-				final ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityPlayer();
+			if (event.getPlayer() instanceof ServerPlayerEntity) {
+				final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 				addListeners(player, event.getContainer());
 			}
 		}

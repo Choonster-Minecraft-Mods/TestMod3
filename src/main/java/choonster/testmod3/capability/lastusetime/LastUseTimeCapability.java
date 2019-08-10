@@ -121,7 +121,7 @@ public final class LastUseTimeCapability {
 
 			getLastUseTime(itemStack).ifPresent(lastUseTime -> {
 				if (lastUseTime.automaticUpdates()) {
-					updateLastUseTime(event.getEntityPlayer(), itemStack);
+					updateLastUseTime(event.getPlayer(), itemStack);
 				}
 			});
 		}
