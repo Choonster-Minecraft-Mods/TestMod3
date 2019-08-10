@@ -76,8 +76,6 @@ public class SurvivalCommandBlockBlock extends CommandBlockBlock {
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 	}
 
-	// TODO: Loot Tables
-
 	/**
 	 * Copy of {@link CommandBlockBlock#tick} that calls {@link SurvivalCommandBlockBlock#execute} and
 	 * {@link SurvivalCommandBlockBlock#executeChain} rather than {@link CommandBlockBlock#execute} and
