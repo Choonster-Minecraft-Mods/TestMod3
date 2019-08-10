@@ -1,6 +1,7 @@
 package choonster.testmod3.block;
 
 import choonster.testmod3.tileentity.ModChestTileEntity;
+import choonster.testmod3.util.InventoryUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -25,6 +26,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
 
@@ -140,5 +142,19 @@ public class ModChestBlock extends TileEntityBlock<ModChestTileEntity> {
 		return state.with(FACING, mirror.mirror(state.get(FACING)));
 	}
 
-	// TODO: Loot Tables
+	@SuppressWarnings("deprecation")
+	@Override
+	public void onReplaced(final BlockState state, final World world, final BlockPos pos, final BlockState newState, final boolean isMoving) {
+		if (state.getBlock() != newState.getBlock()) {
+			final ModChestTileEntity tileEntity = getTileEntity(world, pos);
+			if (tileEntity != null) {
+				tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent(itemHandler -> {
+					InventoryUtils.dropItemHandlerContents(world, pos, itemHandler);
+					world.updateComparatorOutputLevel(pos, this);
+				});
+			}
+
+			super.onReplaced(state, world, pos, newState, isMoving);
+		}
+	}
 }

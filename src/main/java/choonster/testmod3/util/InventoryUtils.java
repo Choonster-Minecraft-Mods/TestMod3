@@ -3,10 +3,12 @@ package choonster.testmod3.util;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
@@ -110,29 +112,19 @@ public class InventoryUtils {
 	}
 
 	/**
-	 * Get a list of the {@link IItemHandler}'s contents with the stacks randomly split.
+	 * Drops the contents of the {@link IItemHandler} in the world.
 	 * <p>
-	 * Adapted from {@link InventoryHelper#dropInventoryItems}.
+	 * Adapted from {@link InventoryHelper#dropInventoryItems(World, BlockPos, IInventory)}.
 	 *
-	 * @param itemHandler The inventory
-	 * @param random      The Random object
-	 * @return The drops list
+	 * @param world       The World
+	 * @param pos         The position to drop the items around
+	 * @param itemHandler The inventory to drop the contents of
 	 */
-	public static List<ItemStack> dropItemHandlerContents(final IItemHandler itemHandler, final Random random) {
-		final List<ItemStack> drops = new ArrayList<>();
-
-		for (int slot = 0; slot < itemHandler.getSlots(); ++slot) {
-			while (!itemHandler.getStackInSlot(slot).isEmpty()) {
-				final int amount = random.nextInt(21) + 10;
-
-				if (!itemHandler.extractItem(slot, amount, true).isEmpty()) {
-					final ItemStack itemStack = itemHandler.extractItem(slot, amount, false);
-					drops.add(itemStack);
-				}
-			}
+	public static void dropItemHandlerContents(final World world, final BlockPos pos, final IItemHandler itemHandler) {
+		for (int slot = 0; slot < itemHandler.getSlots(); slot++) {
+			final ItemStack stack = itemHandler.extractItem(slot, Integer.MAX_VALUE, false);
+			InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
 		}
-
-		return drops;
 	}
 
 	/**

@@ -1,9 +1,7 @@
 package choonster.testmod3.tileentity;
 
-import choonster.testmod3.util.InventoryUtils;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -16,7 +14,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * A {@link TileEntity} with a single {@link IItemHandler} inventory.
@@ -51,15 +48,6 @@ public abstract class ItemHandlerTileEntity<INVENTORY extends IItemHandler & INB
 		if (!world.isRemote) {
 			NetworkHooks.openGui(player, this, getPos());
 		}
-	}
-
-	/**
-	 * Get the inventory contents to drop.
-	 *
-	 * @return The drops list
-	 */
-	public List<ItemStack> getDrops() {
-		return InventoryUtils.dropItemHandlerContents(inventory, getWorld().rand);
 	}
 
 	@Override
