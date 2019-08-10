@@ -1,6 +1,8 @@
-package choonster.testmod3.init;
+package choonster.testmod3.world.gen;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.init.ModFeatures;
+import choonster.testmod3.init.ModPlacements;
 import net.minecraft.block.Blocks;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
