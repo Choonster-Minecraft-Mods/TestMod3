@@ -95,7 +95,7 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 
 		if (world.isRemote) return;
 
-		if (world.chunkExists(chunkPos.x, chunkPos.z)) {  // Don't load the chunk when reading from NBT
+		if (world.getChunkProvider().isChunkLoaded(chunkPos)) {  // Don't load the chunk when reading from NBT
 			final Chunk chunk = world.getChunk(chunkPos.x, chunkPos.z);
 			chunk.markDirty();
 			TestMod3.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> chunk), new UpdateChunkEnergyValueMessage(this));
