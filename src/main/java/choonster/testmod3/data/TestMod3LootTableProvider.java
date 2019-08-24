@@ -3,6 +3,7 @@ package choonster.testmod3.data;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.data.loot.TestMod3BlockLootTables;
 import choonster.testmod3.data.loot.TestMod3EntityLootTables;
+import choonster.testmod3.data.loot.TestMod3GenericLootTables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
@@ -45,7 +46,8 @@ public class TestMod3LootTableProvider implements IDataProvider {
 
 	private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> lootTableGenerators = ImmutableList.of(
 			Pair.of(TestMod3BlockLootTables::new, LootParameterSets.BLOCK),
-			Pair.of(TestMod3EntityLootTables::new, LootParameterSets.ENTITY)
+			Pair.of(TestMod3EntityLootTables::new, LootParameterSets.ENTITY),
+			Pair.of(TestMod3GenericLootTables::new, LootParameterSets.GENERIC)
 	);
 
 	public TestMod3LootTableProvider(final DataGenerator dataGenerator) {
