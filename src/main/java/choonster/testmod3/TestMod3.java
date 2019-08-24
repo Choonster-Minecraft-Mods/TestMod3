@@ -2,6 +2,7 @@ package choonster.testmod3;
 
 import choonster.testmod3.config.TestMod3Config;
 import choonster.testmod3.init.ModCrafting;
+import choonster.testmod3.init.ModLootTables;
 import choonster.testmod3.init.ModNetwork;
 import choonster.testmod3.tests.Tests;
 import choonster.testmod3.util.BlockDumper;
@@ -37,6 +38,7 @@ public class TestMod3 {
 		TestMod3Config.register(ModLoadingContext.get());
 
 		ModCrafting.Ingredients.register();
+		ModLootTables.registerLootTables();
 	}
 
 	@SubscribeEvent
