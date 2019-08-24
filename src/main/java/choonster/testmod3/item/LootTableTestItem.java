@@ -1,11 +1,14 @@
 package choonster.testmod3.item;
 
 import choonster.testmod3.init.ModLootTables;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -41,6 +44,15 @@ public class LootTableTestItem extends Item {
 
 			final LootContext lootContext = new LootContext.Builder((ServerWorld) world)
 					.withParameter(LootParameters.THIS_ENTITY, player)
+					.withParameter(LootParameters.LAST_DAMAGE_PLAYER, player)
+					.withParameter(LootParameters.KILLER_ENTITY, player)
+					.withParameter(LootParameters.DIRECT_KILLER_ENTITY, player)
+					.withParameter(LootParameters.DAMAGE_SOURCE, DamageSource.ANVIL)
+					.withParameter(LootParameters.TOOL, player.getHeldItemMainhand())
+					.withParameter(LootParameters.POSITION, player.getPosition())
+					.withParameter(LootParameters.BLOCK_STATE, Blocks.CHEST.getDefaultState())
+					.withParameter(LootParameters.BLOCK_ENTITY, Objects.requireNonNull(TileEntityType.CHEST.create()))
+					.withParameter(LootParameters.EXPLOSION_RADIUS, 99.0f)
 					.build(LootParameterSets.GENERIC);
 
 			final List<ItemStack> itemStacks = lootTable.generate(lootContext);
