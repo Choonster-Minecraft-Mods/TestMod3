@@ -96,8 +96,6 @@ public class ModItems {
 
 	public static final SlowSwordItem DIAMOND_SLOW_SWORD = Null();
 
-	public static final VariantsItem VARIANTS_ITEM = Null();
-
 	public static final RitualCheckerItem RITUAL_CHECKER = Null();
 
 	public static final HiddenBlockRevealerItem HIDDEN_BLOCK_REVEALER = Null();
