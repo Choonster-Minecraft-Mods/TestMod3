@@ -38,6 +38,14 @@ archivesBaseName = "${mod_name}"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
+sourceSets {
+    main {
+        resources {
+            srcDirs += "$rootDir/src/generated/resources"
+        }
+    }
+}
+
 minecraft {
     mappings channel: project.mappings_channel, version: project.mappings_version
 
