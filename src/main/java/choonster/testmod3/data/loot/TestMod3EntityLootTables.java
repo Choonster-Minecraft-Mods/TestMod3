@@ -46,7 +46,7 @@ public class TestMod3EntityLootTables extends EntityLootTables {
 						.addLootPool(
 								LootPool.builder()
 										.addEntry(TagLootEntry.func_216176_b(ItemTags.MUSIC_DISCS))
-										.acceptCondition(EntityHasProperty.func_215999_a(LootContext.EntityTarget.KILLER, EntityPredicate.Builder.create().func_217989_a(EntityTypeTags.SKELETONS)))
+										.acceptCondition(EntityHasProperty.builder(LootContext.EntityTarget.KILLER, EntityPredicate.Builder.create().func_217989_a(EntityTypeTags.SKELETONS)))
 						)
 		);
 
