@@ -8,22 +8,14 @@ import choonster.testmod3.data.crafting.recipe.ShapedArmourUpgradeRecipeBuilder;
 import choonster.testmod3.data.crafting.recipe.ShapelessCuttingRecipeBuilder;
 import choonster.testmod3.init.ModItems;
 import com.google.common.base.Preconditions;
-import net.minecraft.advancements.criterion.EnterBlockTrigger;
-import net.minecraft.advancements.criterion.InventoryChangeTrigger;
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.advancements.criterion.MinMaxBounds;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
 import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.tags.Tag;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 
@@ -148,41 +140,6 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.addCriterion("has_log", hasItem(Blocks.OAK_LOG))
 					.build(recipeConsumer, new ResourceLocation(TestMod3.MODID, "oak_planks_with_vanilla_axe"));
 		}
-	}
-
-	/**
-	 * Creates a new {@link EnterBlockTrigger} for use with recipe unlock criteria.
-	 */
-	private EnterBlockTrigger.Instance enteredBlock(final Block block) {
-		return new EnterBlockTrigger.Instance(block, null);
-	}
-
-	/**
-	 * Creates a new {@link InventoryChangeTrigger} that checks for a player having a certain amount of an item.
-	 */
-	private InventoryChangeTrigger.Instance hasItem(final MinMaxBounds.IntBound amount, final IItemProvider item) {
-		return hasItem(ItemPredicate.Builder.create().item(item).count(amount).build());
-	}
-
-	/**
-	 * Creates a new {@link InventoryChangeTrigger} that checks for a player having a certain item.
-	 */
-	private InventoryChangeTrigger.Instance hasItem(final IItemProvider item) {
-		return hasItem(ItemPredicate.Builder.create().item(item).build());
-	}
-
-	/**
-	 * Creates a new {@link InventoryChangeTrigger} that checks for a player having an item within the given tag.
-	 */
-	private InventoryChangeTrigger.Instance hasItem(final Tag<Item> tag) {
-		return hasItem(ItemPredicate.Builder.create().tag(tag).build());
-	}
-
-	/**
-	 * Creates a new {@link InventoryChangeTrigger} that checks for a player having a certain item.
-	 */
-	private InventoryChangeTrigger.Instance hasItem(final ItemPredicate... predicates) {
-		return new InventoryChangeTrigger.Instance(MinMaxBounds.IntBound.UNBOUNDED, MinMaxBounds.IntBound.UNBOUNDED, MinMaxBounds.IntBound.UNBOUNDED, predicates);
 	}
 
 	@Override
