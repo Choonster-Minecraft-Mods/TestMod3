@@ -7,7 +7,7 @@ import choonster.testmod3.block.pipe.FluidPipeBlock;
 import choonster.testmod3.block.slab.ColouredSlabBlock;
 import choonster.testmod3.block.variantgroup.BlockVariantGroup;
 import choonster.testmod3.block.variantgroup.IBlockVariantGroup;
-import choonster.testmod3.item.block.ItemFluidTank;
+import choonster.testmod3.item.block.FluidTankItem;
 import choonster.testmod3.tileentity.FluidTankTileEntity;
 import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
@@ -214,7 +214,7 @@ public class ModBlocks {
 					new BlockItem(CLIENT_PLAYER_RIGHT_CLICK, defaultItemProperties()),
 					new BlockItem(ROTATABLE_LAMP, defaultItemProperties()),
 					new BlockItem(ITEM_COLLISION_TEST, defaultItemProperties()),
-					new ItemFluidTank(FLUID_TANK, defaultItemProperties().maxStackSize(1)),
+					new FluidTankItem(FLUID_TANK, defaultItemProperties().maxStackSize(1)),
 					new BlockItem(ITEM_DEBUGGER, defaultItemProperties()),
 					new BlockItem(END_PORTAL_FRAME_FULL, defaultItemProperties()),
 					new BlockItem(POTION_EFFECT, defaultItemProperties()),
@@ -241,7 +241,7 @@ public class ModBlocks {
 					new BlockItem(ACACIA_SAPLING, defaultItemProperties()),
 					new BlockItem(DARK_OAK_SAPLING, defaultItemProperties()),
 					new BlockItem(INVISIBLE, defaultItemProperties()),
-					new ItemFluidTank(FLUID_TANK_RESTRICTED, defaultItemProperties()),
+					new FluidTankItem(FLUID_TANK_RESTRICTED, defaultItemProperties()),
 					new BlockItem(PLANKS, defaultItemProperties()),
 			};
 

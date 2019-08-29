@@ -1,6 +1,7 @@
 package choonster.testmod3.block;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.fluids.FluidTankSnapshot;
 import choonster.testmod3.network.FluidTankContentsMessage;
 import choonster.testmod3.tileentity.BaseFluidTankTileEntity;
 import choonster.testmod3.tileentity.FluidTankTileEntity;
@@ -27,7 +28,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 import javax.annotation.Nullable;
@@ -69,17 +69,16 @@ public class FluidTankBlock<TE extends BaseFluidTankTileEntity> extends TileEnti
 		return new FluidTankTileEntity();
 	}
 
-	public static List<ITextComponent> getFluidDataForDisplay(final IFluidTankProperties[] fluidTankProperties) {
+	public static List<ITextComponent> getFluidDataForDisplay(final FluidTankSnapshot[] fluidTankSnapshots) {
 		final List<ITextComponent> data = new ArrayList<>();
 
 		boolean hasFluid = false;
 
-		for (final IFluidTankProperties properties : fluidTankProperties) {
-			final FluidStack fluidStack = properties.getContents();
-
-			if (fluidStack != null && fluidStack.amount > 0) {
+		for (final FluidTankSnapshot snapshot : fluidTankSnapshots) {
+			final FluidStack contents = snapshot.getContents();
+			if (!contents.isEmpty()) {
 				hasFluid = true;
-				data.add(new TranslationTextComponent("block.testmod3.fluid_tank.fluid.desc", fluidStack.getLocalizedName(), fluidStack.amount, properties.getCapacity()));
+				data.add(new TranslationTextComponent("block.testmod3.fluid_tank.fluid.desc", contents.getDisplayName(), contents.getAmount(), snapshot.getCapacity()));
 			}
 		}
 
@@ -101,7 +100,8 @@ public class FluidTankBlock<TE extends BaseFluidTankTileEntity> extends TileEnti
 
 					// If the contents changed or this is the off hand, send a chat message to the player
 					if (!world.isRemote && (success || hand == Hand.OFF_HAND)) {
-						TestMod3.network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new FluidTankContentsMessage(fluidHandler.getTankProperties()));
+						final FluidTankSnapshot[] fluidTankSnapshots = FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler);
+						TestMod3.network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new FluidTankContentsMessage(fluidTankSnapshots));
 					}
 
 					// If the held item is a fluid container, stop processing here so it doesn't try to place its contents

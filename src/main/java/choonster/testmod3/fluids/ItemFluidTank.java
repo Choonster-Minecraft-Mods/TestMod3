@@ -1,13 +1,11 @@
 package choonster.testmod3.fluids;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 
 /**
  * An implementation of {@link IFluidHandlerItem} that stores its contents as a {@link FluidStack} in memory rather than
@@ -20,16 +18,6 @@ public class ItemFluidTank extends FluidTank implements IFluidHandlerItem {
 
 	public ItemFluidTank(final ItemStack container, final int capacity) {
 		super(capacity);
-		this.container = container;
-	}
-
-	public ItemFluidTank(final ItemStack container, @Nullable final FluidStack fluidStack, final int capacity) {
-		super(fluidStack, capacity);
-		this.container = container;
-	}
-
-	public ItemFluidTank(final ItemStack container, final Fluid fluid, final int amount, final int capacity) {
-		super(fluid, amount, capacity);
 		this.container = container;
 	}
 
@@ -51,11 +39,11 @@ public class ItemFluidTank extends FluidTank implements IFluidHandlerItem {
 
 		final FluidTank that = ((FluidTank) obj);
 
-		return Objects.equals(getFluid(), that.getFluid());
+		return getFluid().equals(that.getFluid());
 	}
 
 	@Override
 	public int hashCode() {
-		return fluid != null ? fluid.hashCode() : 0;
+		return fluid.hashCode();
 	}
 }

@@ -7,7 +7,6 @@ import choonster.testmod3.init.ModNetwork;
 import choonster.testmod3.tests.Tests;
 import choonster.testmod3.util.BlockDumper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -29,10 +28,6 @@ public class TestMod3 {
 	public static final ItemGroupTestMod3 ITEM_GROUP = new ItemGroupTestMod3();
 
 	public static final SimpleChannel network = ModNetwork.getNetworkChannel();
-
-	static {
-		FluidRegistry.enableUniversalBucket(); // Must be called before preInit
-	}
 
 	public TestMod3() {
 		TestMod3Config.register(ModLoadingContext.get());

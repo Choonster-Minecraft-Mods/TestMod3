@@ -1,5 +1,6 @@
 package choonster.testmod3.network.capability.fluidhandler;
 
+import choonster.testmod3.fluids.FluidTankSnapshot;
 import choonster.testmod3.network.capability.BulkUpdateContainerCapabilityMessage;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.inventory.container.Container;
@@ -7,10 +8,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nullable;
@@ -21,7 +21,7 @@ import java.util.function.Supplier;
  *
  * @author Choonster
  */
-public class BulkUpdateContainerFluidTanksMessage extends BulkUpdateContainerCapabilityMessage<IFluidHandlerItem, FluidTankInfo> {
+public class BulkUpdateContainerFluidTanksMessage extends BulkUpdateContainerCapabilityMessage<IFluidHandlerItem, FluidTankSnapshot> {
 	public BulkUpdateContainerFluidTanksMessage(
 			@Nullable final Direction facing,
 			final int windowID,
@@ -30,14 +30,14 @@ public class BulkUpdateContainerFluidTanksMessage extends BulkUpdateContainerCap
 		super(
 				CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
 				facing, windowID, items,
-				FluidHandlerFunctions::convertFluidHandlerToFluidTankInfo
+				FluidHandlerFunctions::convertFluidHandlerToFluidTankSnapshot
 		);
 	}
 
 	private BulkUpdateContainerFluidTanksMessage(
 			@Nullable final Direction facing,
 			final int windowID,
-			final Int2ObjectMap<FluidTankInfo> capabilityData
+			final Int2ObjectMap<FluidTankSnapshot> capabilityData
 	) {
 		super(
 				CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
@@ -46,9 +46,9 @@ public class BulkUpdateContainerFluidTanksMessage extends BulkUpdateContainerCap
 	}
 
 	public static BulkUpdateContainerFluidTanksMessage decode(final PacketBuffer buffer) {
-		return BulkUpdateContainerCapabilityMessage.<IFluidHandlerItem, FluidTankInfo, BulkUpdateContainerFluidTanksMessage>decode(
+		return BulkUpdateContainerCapabilityMessage.<IFluidHandlerItem, FluidTankSnapshot, BulkUpdateContainerFluidTanksMessage>decode(
 				buffer,
-				FluidHandlerFunctions::decodeFluidTankInfo,
+				FluidHandlerFunctions::decodeFluidTankSnapshot,
 				BulkUpdateContainerFluidTanksMessage::new
 		);
 	}
@@ -57,7 +57,7 @@ public class BulkUpdateContainerFluidTanksMessage extends BulkUpdateContainerCap
 		BulkUpdateContainerCapabilityMessage.encode(
 				message,
 				buffer,
-				FluidHandlerFunctions::encodeFluidTankInfo
+				FluidHandlerFunctions::encodeFluidTankSnapshot
 		);
 	}
 
@@ -65,7 +65,7 @@ public class BulkUpdateContainerFluidTanksMessage extends BulkUpdateContainerCap
 		BulkUpdateContainerCapabilityMessage.handle(
 				message,
 				ctx,
-				FluidHandlerFunctions::applyFluidTankInfoToFluidTank
+				FluidHandlerFunctions::applyFluidTankSnapshotToFluidTank
 		);
 	}
 }

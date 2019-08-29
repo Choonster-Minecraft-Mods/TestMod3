@@ -1,17 +1,12 @@
 package choonster.testmod3.network;
 
 import choonster.testmod3.block.FluidTankBlock;
+import choonster.testmod3.fluids.FluidTankSnapshot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.FluidTankProperties;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -19,54 +14,39 @@ import java.util.function.Supplier;
 
 /**
  * Sent by {@link FluidTankBlock} to notify the player of the tank's contents.
- * <p>
- * This is required because the Forge-provided {@link Fluid}s for Water and Lava only override {@link Fluid#getLocalizedName}
- * and not {@link Fluid#getUnlocalizedName}, so sending a {@link TranslationTextComponent} with
- * the translation key doesn't display the correct translation.
- * <p>
- * Can be replaced by an {@link ITextComponent} once this PR is merged:
- * https://github.com/MinecraftForge/MinecraftForge/pull/2948
  *
  * @author Choonster
  */
-// TODO: Update/remove when fluids are re-implemented in 1.14
 public class FluidTankContentsMessage {
-	private final IFluidTankProperties[] fluidTankProperties;
+	private final FluidTankSnapshot[] fluidTankSnapshots;
 
-	public FluidTankContentsMessage(final IFluidTankProperties[] fluidTankProperties) {
-		this.fluidTankProperties = fluidTankProperties;
+	public FluidTankContentsMessage(final FluidTankSnapshot[] fluidTankSnapshots) {
+		this.fluidTankSnapshots = fluidTankSnapshots;
 	}
 
 	public static FluidTankContentsMessage decode(final PacketBuffer buffer) {
-		final int numProperties = buffer.readInt();
-		final IFluidTankProperties[] fluidTankProperties = new IFluidTankProperties[numProperties];
+		final int numTanks = buffer.readInt();
+		final FluidTankSnapshot[] fluidTankSnapshots = new FluidTankSnapshot[numTanks];
 
-		for (int i = 0; i < numProperties; i++) {
-			final CompoundNBT tagCompound = buffer.readCompoundTag();
-			final FluidStack contents = FluidStack.loadFluidStackFromNBT(tagCompound);
+		for (int i = 0; i < numTanks; i++) {
+			final FluidStack contents = FluidStack.readFromPacket(buffer);
 
 			final int capacity = buffer.readInt();
 
-			fluidTankProperties[i] = new FluidTankProperties(contents, capacity);
+			fluidTankSnapshots[i] = new FluidTankSnapshot(contents, capacity);
 		}
 
-		return new FluidTankContentsMessage(fluidTankProperties);
+		return new FluidTankContentsMessage(fluidTankSnapshots);
 	}
 
 	public static void encode(final FluidTankContentsMessage message, final PacketBuffer buffer) {
-		buffer.writeInt(message.fluidTankProperties.length);
+		buffer.writeInt(message.fluidTankSnapshots.length);
 
-		for (final IFluidTankProperties properties : message.fluidTankProperties) {
-			final FluidStack contents = properties.getContents();
-			final CompoundNBT tagCompound = new CompoundNBT();
+		for (final FluidTankSnapshot snapshot : message.fluidTankSnapshots) {
+			final FluidStack contents = snapshot.getContents();
+			contents.writeToPacket(buffer);
 
-			if (contents != null) {
-				contents.writeToNBT(tagCompound);
-			}
-
-			buffer.writeCompoundTag(tagCompound);
-
-			buffer.writeInt(properties.getCapacity());
+			buffer.writeInt(snapshot.getCapacity());
 		}
 	}
 
@@ -74,7 +54,7 @@ public class FluidTankContentsMessage {
 		ctx.get().enqueueWork(() -> DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
 			final PlayerEntity player = Minecraft.getInstance().player;
 
-			FluidTankBlock.getFluidDataForDisplay(message.fluidTankProperties).forEach(player::sendMessage);
+			FluidTankBlock.getFluidDataForDisplay(message.fluidTankSnapshots).forEach(player::sendMessage);
 		}));
 
 		ctx.get().setPacketHandled(true);

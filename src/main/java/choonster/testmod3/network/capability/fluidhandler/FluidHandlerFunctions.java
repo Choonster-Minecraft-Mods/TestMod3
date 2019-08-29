@@ -1,13 +1,10 @@
 package choonster.testmod3.network.capability.fluidhandler;
 
-import net.minecraft.nbt.CompoundNBT;
+import choonster.testmod3.fluids.FluidTankSnapshot;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-
-import javax.annotation.Nullable;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 /**
  * Functions used by the {@link IFluidHandlerItem} capability update messages.
@@ -15,40 +12,27 @@ import javax.annotation.Nullable;
  * @author Choonster
  */
 class FluidHandlerFunctions {
-	@Nullable
-	static FluidTankInfo convertFluidHandlerToFluidTankInfo(final IFluidHandlerItem fluidHandlerItem) {
-		if (fluidHandlerItem instanceof FluidTank) {
-			return ((FluidTank) fluidHandlerItem).getInfo();
-		} else {
-			return null;
-		}
+	static FluidTankSnapshot convertFluidHandlerToFluidTankSnapshot(final IFluidHandlerItem fluidHandlerItem) {
+		return new FluidTankSnapshot(fluidHandlerItem.getFluidInTank(0), fluidHandlerItem.getTankCapacity(0));
 	}
 
-	static FluidTankInfo decodeFluidTankInfo(final PacketBuffer buffer) {
-		final CompoundNBT compoundTag = buffer.readCompoundTag();
-		final FluidStack contents = FluidStack.loadFluidStackFromNBT(compoundTag);
-
+	static FluidTankSnapshot decodeFluidTankSnapshot(final PacketBuffer buffer) {
+		final FluidStack contents = FluidStack.readFromPacket(buffer);
 		final int capacity = buffer.readInt();
 
-		return new FluidTankInfo(contents, capacity);
+		return new FluidTankSnapshot(contents, capacity);
 	}
 
-	static void encodeFluidTankInfo(final FluidTankInfo fluidTankInfo, final PacketBuffer buffer) {
-		final FluidStack contents = fluidTankInfo.fluid;
-		final CompoundNBT compoundTag = new CompoundNBT();
+	static void encodeFluidTankSnapshot(final FluidTankSnapshot fluidTankSnapshot, final PacketBuffer buffer) {
+		final FluidStack contents = fluidTankSnapshot.getContents();
+		contents.writeToPacket(buffer);
 
-		if (contents != null) {
-			contents.writeToNBT(compoundTag);
-		}
-
-		buffer.writeCompoundTag(compoundTag);
-
-		buffer.writeInt(fluidTankInfo.capacity);
+		buffer.writeInt(fluidTankSnapshot.getCapacity());
 	}
 
-	static void applyFluidTankInfoToFluidTank(final IFluidHandlerItem fluidHandlerItem, final FluidTankInfo fluidTankInfo) {
+	static void applyFluidTankSnapshotToFluidTank(final IFluidHandlerItem fluidHandlerItem, final FluidTankSnapshot fluidTankSnapshot) {
 		if (fluidHandlerItem instanceof FluidTank) {
-			((FluidTank) fluidHandlerItem).setFluid(fluidTankInfo.fluid);
+			((FluidTank) fluidHandlerItem).setFluid(fluidTankSnapshot.getContents());
 		}
 	}
 }

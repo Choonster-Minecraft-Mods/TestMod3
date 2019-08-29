@@ -2,6 +2,7 @@ package choonster.testmod3.item.block;
 
 import choonster.testmod3.block.FluidTankBlock;
 import choonster.testmod3.capability.SerializableCapabilityProvider;
+import choonster.testmod3.fluids.FluidTankSnapshot;
 import choonster.testmod3.tileentity.FluidTankTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
@@ -19,7 +20,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -30,10 +31,10 @@ import java.util.List;
  *
  * @author Choonster
  */
-public class ItemFluidTank extends BlockItem {
+public class FluidTankItem extends BlockItem {
 	private final List<ItemStack> tankItems = new ArrayList<>();
 
-	public ItemFluidTank(final Block block, final Item.Properties properties) {
+	public FluidTankItem(final Block block, final Item.Properties properties) {
 		super(block, properties);
 	}
 
@@ -41,7 +42,7 @@ public class ItemFluidTank extends BlockItem {
 		final ItemStack filledTank = new ItemStack(this);
 
 		FluidUtil.getFluidHandler(filledTank)
-				.ifPresent(fluidHandler -> fluidHandler.fill(fluidStack, true));
+				.ifPresent(fluidHandler -> fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE));
 
 		tankItems.add(filledTank);
 	}
@@ -50,8 +51,8 @@ public class ItemFluidTank extends BlockItem {
 	@Override
 	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
 		FluidUtil.getFluidHandler(stack).ifPresent(fluidHandler -> {
-			final IFluidTankProperties[] properties = fluidHandler.getTankProperties();
-			tooltip.addAll(FluidTankBlock.getFluidDataForDisplay(properties));
+			final FluidTankSnapshot[] fluidTankSnapshots = FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler);
+			tooltip.addAll(FluidTankBlock.getFluidDataForDisplay(fluidTankSnapshots));
 		});
 	}
 

@@ -1,13 +1,13 @@
 package choonster.testmod3.network.capability.fluidhandler;
 
+import choonster.testmod3.fluids.FluidTankSnapshot;
 import choonster.testmod3.network.capability.UpdateContainerCapabilityMessage;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nullable;
@@ -18,7 +18,7 @@ import java.util.function.Supplier;
  *
  * @author Choonster
  */
-public class UpdateContainerFluidTankMessage extends UpdateContainerCapabilityMessage<IFluidHandlerItem, FluidTankInfo> {
+public class UpdateContainerFluidTankMessage extends UpdateContainerCapabilityMessage<IFluidHandlerItem, FluidTankSnapshot> {
 	public UpdateContainerFluidTankMessage(
 			@Nullable final Direction facing,
 			final int windowID,
@@ -28,7 +28,7 @@ public class UpdateContainerFluidTankMessage extends UpdateContainerCapabilityMe
 		super(
 				CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
 				facing, windowID, slotNumber, fluidHandler,
-				FluidHandlerFunctions::convertFluidHandlerToFluidTankInfo
+				FluidHandlerFunctions::convertFluidHandlerToFluidTankSnapshot
 		);
 	}
 
@@ -36,7 +36,7 @@ public class UpdateContainerFluidTankMessage extends UpdateContainerCapabilityMe
 			@Nullable final Direction facing,
 			final int windowID,
 			final int slotNumber,
-			final FluidTankInfo capabilityData
+			final FluidTankSnapshot capabilityData
 	) {
 		super(
 				CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
@@ -45,9 +45,9 @@ public class UpdateContainerFluidTankMessage extends UpdateContainerCapabilityMe
 	}
 
 	public static UpdateContainerFluidTankMessage decode(final PacketBuffer buffer) {
-		return UpdateContainerCapabilityMessage.<IFluidHandlerItem, FluidTankInfo, UpdateContainerFluidTankMessage>decode(
+		return UpdateContainerCapabilityMessage.<IFluidHandlerItem, FluidTankSnapshot, UpdateContainerFluidTankMessage>decode(
 				buffer,
-				FluidHandlerFunctions::decodeFluidTankInfo,
+				FluidHandlerFunctions::decodeFluidTankSnapshot,
 				UpdateContainerFluidTankMessage::new
 		);
 	}
@@ -56,7 +56,7 @@ public class UpdateContainerFluidTankMessage extends UpdateContainerCapabilityMe
 		UpdateContainerCapabilityMessage.encode(
 				message,
 				buffer,
-				FluidHandlerFunctions::encodeFluidTankInfo
+				FluidHandlerFunctions::encodeFluidTankSnapshot
 		);
 	}
 
@@ -64,7 +64,7 @@ public class UpdateContainerFluidTankMessage extends UpdateContainerCapabilityMe
 		UpdateContainerCapabilityMessage.handle(
 				message,
 				ctx,
-				FluidHandlerFunctions::applyFluidTankInfoToFluidTank
+				FluidHandlerFunctions::applyFluidTankSnapshotToFluidTank
 		);
 	}
 }
