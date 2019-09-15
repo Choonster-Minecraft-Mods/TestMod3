@@ -36,7 +36,7 @@ public class PlayerEventHandler {
 	public static void playerLoggedIn(final PlayerEvent.PlayerLoggedInEvent event) {
 		final PlayerEntity player = event.getPlayer();
 
-		final CompoundNBT entityData = player.getPersistantData();
+		final CompoundNBT entityData = player.getPersistentData();
 		final CompoundNBT persistedData = entityData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
 		entityData.put(PlayerEntity.PERSISTED_NBT_TAG, persistedData);
 
