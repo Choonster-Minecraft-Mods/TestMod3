@@ -199,7 +199,7 @@ public class ModCrafting {
 			try {
 				RECIPES.set(recipeManager, newRecipes.build());
 			} catch (final IllegalAccessException e) {
-				throw new RuntimeException("Couldn't replace recipes map while removing recipes");
+				throw new RuntimeException("Couldn't replace recipes map while removing recipes", e);
 			}
 
 			return removedCount;
