@@ -2,15 +2,18 @@ package choonster.testmod3;
 
 import choonster.testmod3.config.TestMod3Config;
 import choonster.testmod3.init.ModCrafting;
+import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModLootTables;
 import choonster.testmod3.init.ModNetwork;
 import choonster.testmod3.tests.Tests;
 import choonster.testmod3.util.BlockDumper;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,6 +34,10 @@ public class TestMod3 {
 
 	public TestMod3() {
 		TestMod3Config.register(ModLoadingContext.get());
+
+		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+		ModFluids.initialise(modEventBus);
 
 		ModCrafting.Ingredients.register();
 		ModLootTables.registerLootTables();

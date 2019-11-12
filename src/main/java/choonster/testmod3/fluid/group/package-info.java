@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package choonster.testmod3.fluids;
+package choonster.testmod3.fluid.group;
 
 import mcp.MethodsReturnNonnullByDefault;
 

@@ -1,7 +1,7 @@
 package choonster.testmod3.block;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.fluids.FluidTankSnapshot;
+import choonster.testmod3.fluid.FluidTankSnapshot;
 import choonster.testmod3.network.FluidTankContentsMessage;
 import choonster.testmod3.tileentity.BaseFluidTankTileEntity;
 import choonster.testmod3.tileentity.FluidTankTileEntity;

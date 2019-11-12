@@ -1,30 +1,6 @@
 package choonster.testmod3.item;
 
-import choonster.testmod3.fluids.UniversalBucketFluidHandler;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.util.text.translation.LanguageMap;
-import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fluids.*;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * A copy of Forge's Universal Bucket that uses a single {@link Item} for both the full and empty buckets.
@@ -34,6 +10,7 @@ import javax.annotation.Nullable;
  *
  * @author Choonster
  */
+/*
 public class TestMod3BucketItem extends UniversalBucket {
 	private final ItemStack empty = new ItemStack(this);
 
@@ -51,7 +28,8 @@ public class TestMod3BucketItem extends UniversalBucket {
 
 		subItems.add(empty);
 
-		/*
+		*/
+/*
 		// TODO: Uncomment when fluids are reimplemented in 1.14
 		for (final Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
 			// Add all fluids that the bucket can be filled with
@@ -63,7 +41,8 @@ public class TestMod3BucketItem extends UniversalBucket {
 				subItems.add(filled);
 			}
 		}
-		*/
+		*//*
+
 	}
 
 	@Override
@@ -149,3 +128,4 @@ public class TestMod3BucketItem extends UniversalBucket {
 		return new UniversalBucketFluidHandler(stack, getCapacity());
 	}
 }
+*/

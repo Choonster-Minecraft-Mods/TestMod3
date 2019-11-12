@@ -1,4 +1,4 @@
-package choonster.testmod3.fluids;
+package choonster.testmod3.fluid;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;

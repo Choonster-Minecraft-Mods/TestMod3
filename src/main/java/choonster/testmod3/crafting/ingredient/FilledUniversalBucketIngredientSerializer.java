@@ -2,11 +2,10 @@ package choonster.testmod3.crafting.ingredient;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.common.crafting.IngredientNBT;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.UniversalBucket;
 
 /**
  * An ingredient factory that produces a {@link UniversalBucket} filled with the specified {@link Fluid}.

@@ -134,9 +134,9 @@ public class ModItems {
 	public static final RestrictedArmourItem REPLACEMENT_BOOTS = Null();
 
 
-	public static final TestMod3BucketItem WOODEN_BUCKET = Null();
-
-	public static final TestMod3BucketItem STONE_BUCKET = Null();
+//	public static final TestMod3BucketItem WOODEN_BUCKET = Null();
+//
+//	public static final TestMod3BucketItem STONE_BUCKET = Null();
 
 	public static class VariantGroups {
 		public static final ItemVariantGroup<VariantsItem.Type, VariantsItem> VARIANTS_ITEMS = ItemVariantGroup.Builder.<VariantsItem.Type, VariantsItem>create()
@@ -227,8 +227,8 @@ public class ModItems {
 					replacementLeggings.setRegistryName("replacement_leggings"),
 					replacementBoots.setRegistryName("replacement_boots"),
 
-					new TestMod3BucketItem(defaultItemProperties()).setRegistryName("wooden_bucket"),
-					new TestMod3BucketItem(defaultItemProperties()).setRegistryName("stone_bucket"),
+//					new TestMod3BucketItem(defaultItemProperties()).setRegistryName("wooden_bucket"),
+//					new TestMod3BucketItem(defaultItemProperties()).setRegistryName("stone_bucket"),
 			};
 
 			final IForgeRegistry<Item> registry = event.getRegistry();

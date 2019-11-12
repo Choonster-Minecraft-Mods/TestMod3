@@ -1,6 +1,6 @@
 package choonster.testmod3.network.capability.fluidhandler;
 
-import choonster.testmod3.fluids.FluidTankSnapshot;
+import choonster.testmod3.fluid.FluidTankSnapshot;
 import choonster.testmod3.network.capability.BulkUpdateContainerCapabilityMessage;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.inventory.container.Container;

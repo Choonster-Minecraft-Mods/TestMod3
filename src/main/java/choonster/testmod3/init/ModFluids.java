@@ -1,146 +1,149 @@
 package choonster.testmod3.init;
 
+import choonster.testmod3.TestMod3;
+import choonster.testmod3.fluid.PortalDisplacementFluid;
+import choonster.testmod3.fluid.StaticFluid;
+import choonster.testmod3.fluid.group.FluidGroup;
+import choonster.testmod3.fluid.group.StandardFluidGroup;
+import choonster.testmod3.item.block.FluidTankItem;
+import choonster.testmod3.tileentity.FluidTankTileEntity;
 import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.IFluidBlock;
+import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.fluid.FlowingFluid;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.function.Supplier;
 
 @SuppressWarnings("WeakerAccess")
-// TODO: Update when fluids are re-implemented in 1.14
 public class ModFluids {
-	/*
-	 *//**
-	 * The fluids registered by this mod. Includes fluids that were already registered by another mod.
-	 *//*
-	public static final Set<Fluid> FLUIDS = new HashSet<>();
+	private static final DeferredRegister<Fluid> FLUIDS = new DeferredRegister<>(ForgeRegistries.FLUIDS, TestMod3.MODID);
+	private static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, TestMod3.MODID);
+	private static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, TestMod3.MODID);
 
-	*//**
-	 * The fluid blocks from this mod only. Doesn't include blocks for fluids that were already registered by another mod.
-	 *//*
-	public static final Set<IFluidBlock> MOD_FLUID_BLOCKS = new HashSet<>();
+	private static boolean isInitialised = false;
 
-	public static final Fluid STATIC = createFluid("static", false,
-			fluid -> fluid.setLuminosity(10).setDensity(800).setViscosity(1500),
-			fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.BROWN)));
+	public static final FluidGroup<FlowingFluid, FlowingFluid, FlowingFluidBlock, Item> STATIC = new StandardFluidGroup.Builder("static", FLUIDS, BLOCKS, ITEMS)
+			.stillFactory(StaticFluid.Source::new)
+			.flowingFactory(StaticFluid.Flowing::new)
+			.attributes(
+					FluidAttributes.builder(new ResourceLocation(TestMod3.MODID, "block/fluid_static_still"), new ResourceLocation(TestMod3.MODID, "block/fluid_static_still"))
+							.luminosity(10)
+							.density(800)
+							.viscosity(1500)
+			)
+			.blockMaterial(ModMaterials.STATIC)
+			.build();
 
-	public static final Fluid STATIC_GAS = createFluid("static_gas", false,
-			fluid -> fluid.setLuminosity(10).setDensity(-800).setViscosity(1500).setGaseous(true),
-			fluid -> new BlockFluidNoFlow(fluid, new MaterialLiquid(MapColor.BROWN)));
+	// TODO: Implement gases
+	public static final FluidGroup<FlowingFluid, FlowingFluid, FlowingFluidBlock, Item> STATIC_GAX = new StandardFluidGroup.Builder("static_gas", FLUIDS, BLOCKS, ITEMS)
+			.stillFactory(StaticFluid.Source::new)
+			.flowingFactory(StaticFluid.Flowing::new)
+			.attributes(
+					FluidAttributes.builder(new ResourceLocation(TestMod3.MODID, "block/fluid_static_gas_still"), new ResourceLocation(TestMod3.MODID, "block/fluid_static_gas_still"))
+							.luminosity(10)
+							.density(-800)
+							.viscosity(1500)
+							.gaseous()
+			)
+			.blockMaterial(ModMaterials.STATIC_GAS)
+			.build();
 
-	public static final Fluid NORMAL = createFluid("normal", true,
-			fluid -> fluid.setLuminosity(10).setDensity(1600).setViscosity(100),
-			fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.ADOBE)));
+	public static final FluidGroup<FlowingFluid, FlowingFluid, FlowingFluidBlock, Item> NORMAL = new StandardFluidGroup.Builder("normal", FLUIDS, BLOCKS, ITEMS)
+			.attributes(
+					FluidAttributes.builder(new ResourceLocation(TestMod3.MODID, "block/fluid_normal_still"), new ResourceLocation(TestMod3.MODID, "block/fluid_normal_flow"))
+							.luminosity(10)
+							.density(800)
+							.viscosity(1500)
+			)
+			.blockMaterial(ModMaterials.NORMAL)
+			.build();
 
-	public static final Fluid NORMAL_GAS = createFluid("normal_gas", true,
-			fluid -> fluid.setLuminosity(10).setDensity(-1600).setViscosity(100).setGaseous(true),
-			fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.ADOBE)));
+	public static final FluidGroup<FlowingFluid, FlowingFluid, FlowingFluidBlock, Item> NORMAL_GAS = new StandardFluidGroup.Builder("normal_gas", FLUIDS, BLOCKS, ITEMS)
+			.attributes(
+					FluidAttributes.builder(new ResourceLocation(TestMod3.MODID, "block/fluid_normal_gas_still"), new ResourceLocation(TestMod3.MODID, "block/fluid_normal_gas_flow"))
+							.luminosity(10)
+							.density(-1600)
+							.viscosity(100)
+							.gaseous()
+			)
+			.blockMaterial(ModMaterials.NORMAL_GAS)
+			.build();
 
-	public static final Fluid FINITE = createFluid("finite", false,
-			fluid -> fluid.setLuminosity(10).setDensity(800).setViscosity(1500),
-			fluid -> new BlockFluidFinite(fluid, new MaterialLiquid(MapColor.BLACK)));
+	public static final FluidGroup<FlowingFluid, FlowingFluid, FlowingFluidBlock, Item> PORTAL_DISPLACEMENT = new StandardFluidGroup.Builder("portal_displacement", FLUIDS, BLOCKS, ITEMS)
+			.stillFactory(PortalDisplacementFluid.Source::new)
+			.flowingFactory(PortalDisplacementFluid.Flowing::new)
+			.attributes(
+					FluidAttributes.builder(new ResourceLocation(TestMod3.MODID, "block/fluid_portal_displacement_still"), new ResourceLocation(TestMod3.MODID, "block/fluid_portal_displacement_flow"))
+							.luminosity(10)
+							.density(1600)
+							.viscosity(100)
+			)
+			.blockMaterial(ModMaterials.PORTAL_DISPLACEMENT)
+			.build();
 
-	public static final Fluid PORTAL_DISPLACEMENT = createFluid("portal_displacement", true,
-			fluid -> fluid.setLuminosity(10).setDensity(1600).setViscosity(100),
-			fluid -> new BlockFluidPortalDisplacement(fluid, new MaterialLiquid(MapColor.DIAMOND)));
+	// TODO: Finite fluid implementation?
+//	public static final Fluid FINITE = createFluid("finite", false,
+//			fluid -> fluid.setLuminosity(10).setDensity(800).setViscosity(1500),
+//			fluid -> new BlockFluidFinite(fluid, new MaterialLiquid(MapColor.BLACK)));
+//
 
-	*//**
-	 * Create a {@link Fluid} and its {@link IFluidBlock}, or use the existing ones if a fluid has already been registered with the same name.
+	/**
+	 * Registers the {@link DeferredRegister} instances with the mod event bus.
+	 * <p>
+	 * This should be called during mod construction.
 	 *
-	 * @param name                 The name of the fluid
-	 * @param hasFlowIcon          Does the fluid have a flow icon?
-	 * @param fluidPropertyApplier A function that sets the properties of the {@link Fluid}
-	 * @param blockFactory         A function that creates the {@link IFluidBlock}
-	 * @return The fluid and block
-	 *//*
-	private static <T extends Block & IFluidBlock> Fluid createFluid(final String name, final boolean hasFlowIcon, final Consumer<Fluid> fluidPropertyApplier, final Function<Fluid, T> blockFactory) {
-		final String texturePrefix = Constants.RESOURCE_PREFIX + "blocks/fluid_";
-
-		final ResourceLocation still = new ResourceLocation(texturePrefix + name + "_still");
-		final ResourceLocation flowing = hasFlowIcon ? new ResourceLocation(texturePrefix + name + "_flow") : still;
-
-		Fluid fluid = new Fluid(name, still, flowing);
-		final boolean useOwnFluid = FluidRegistry.registerFluid(fluid);
-
-		if (useOwnFluid) {
-			fluidPropertyApplier.accept(fluid);
-			MOD_FLUID_BLOCKS.add(blockFactory.apply(fluid));
-		} else {
-			fluid = FluidRegistry.getFluid(name);
+	 * @param modEventBus The mod event bus
+	 */
+	public static void initialise(final IEventBus modEventBus) {
+		if (isInitialised) {
+			throw new IllegalStateException("Already initialised");
 		}
 
-		FLUIDS.add(fluid);
+		FLUIDS.register(modEventBus);
+		BLOCKS.register(modEventBus);
+		ITEMS.register(modEventBus);
 
-		return fluid;
+		isInitialised = true;
 	}
 
-	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 	public static class RegistrationHandler {
 
-		*//**
-	 * Register this mod's fluid {@link Block}s.
-	 *
-	 * @param event The event
-	 *//*
 		@SubscribeEvent
-		public static void registerBlocks(final RegistryEvent.Register<Block> event) {
-			final IForgeRegistry<Block> registry = event.getRegistry();
-
-			for (final IFluidBlock fluidBlock : MOD_FLUID_BLOCKS) {
-				final Block block = (Block) fluidBlock;
-				block.setRegistryName(TestMod3.MODID, "fluid." + fluidBlock.getFluid().getName());
-				block.setTranslationKey(Constants.RESOURCE_PREFIX + fluidBlock.getFluid().getUnlocalizedName());
-				RegistryUtil.setDefaultCreativeTab(block);
-				registry.register(block);
-			}
-		}
-
-		*//**
-	 * Register this mod's fluid {@link BlockItem}s.
-	 *
-	 * @param event The event
-	 *//*
-		// Use EventPriority.LOWEST so this is called after the RegistryEvent.Register<Item> handler in ModBlocks where
-		// the ItemBlock for ModBlocks.FLUID_TANK is registered.
-		@SubscribeEvent(priority = EventPriority.LOWEST)
-		public static void registerItems(final RegistryEvent.Register<Item> event) {
-			final IForgeRegistry<Item> registry = event.getRegistry();
-
-			for (final IFluidBlock fluidBlock : MOD_FLUID_BLOCKS) {
-				final Block block = (Block) fluidBlock;
-				final ItemBlock itemBlock = new ItemBlock(block);
-				final ResourceLocation registryName = Preconditions.checkNotNull(block.getRegistryName());
-				itemBlock.setRegistryName(registryName);
-				registry.register(itemBlock);
-			}
-
+		public static void commonSetup(final FMLCommonSetupEvent event) {
 			registerFluidContainers();
 		}
-	}
 
-	*//**
-	 * Register this mod's tanks and buckets.
-	 *//*
-	private static void registerFluidContainers() {
-		registerTank(FluidRegistry.WATER);
-		registerTank(FluidRegistry.LAVA);
+		/**
+		 * Register this mod's tanks.
+		 */
+		private static void registerFluidContainers() {
+			registerTank(() -> Fluids.WATER);
+			registerTank(() -> Fluids.LAVA);
 
-		for (final Fluid fluid : FLUIDS) {
-			registerBucket(fluid);
-			registerTank(fluid);
+			FLUIDS.getEntries().forEach(RegistrationHandler::registerTank);
+		}
+
+		private static void registerTank(final Supplier<Fluid> fluid) {
+			final Fluid fluid1 = fluid.get();
+			final FluidStack fluidStack = new FluidStack(fluid1, FluidTankTileEntity.CAPACITY);
+
+			final Item item = ModBlocks.FLUID_TANK.asItem();
+			assert item instanceof FluidTankItem;
+
+			((FluidTankItem) item).addFluid(fluidStack);
 		}
 	}
-
-	private static void registerBucket(final Fluid fluid) {
-		FluidRegistry.addBucketForFluid(fluid);
-	}
-
-	private static void registerTank(final Fluid fluid) {
-		final FluidStack fluidStack = new FluidStack(fluid, TileEntityFluidTank.CAPACITY);
-
-		final Item item = Item.getItemFromBlock(ModBlocks.FLUID_TANK);
-		assert item instanceof ItemFluidTank;
-
-		((ItemFluidTank) item).addFluid(fluidStack);
-	}
-*/
 }

@@ -1,7 +1,7 @@
 package choonster.testmod3.network;
 
 import choonster.testmod3.block.FluidTankBlock;
-import choonster.testmod3.fluids.FluidTankSnapshot;
+import choonster.testmod3.fluid.FluidTankSnapshot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
