@@ -34,14 +34,14 @@ public class TestMod3GenericLootTables implements Consumer<BiConsumer<ResourceLo
 										.addEntry(
 												ItemLootEntry.builder(Items.PORKCHOP)
 														.weight(1)
-														.acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 3)))
+														.acceptFunction(SetCount.builder(new RandomValueRange(1, 3)))
 														.acceptFunction(
 																Smelt.func_215953_b()
 																		.acceptCondition(
 																				EntityHasProperty.builder(
 																						LootContext.EntityTarget.THIS,
 																						EntityPredicate.Builder.create()
-																								.func_217987_a(EntityFlagsPredicate.Builder.create().onFire(true).build())
+																								.flags(EntityFlagsPredicate.Builder.create().onFire(true).build())
 																				)
 																		)
 														)
@@ -50,7 +50,7 @@ public class TestMod3GenericLootTables implements Consumer<BiConsumer<ResourceLo
 										.addEntry(
 												ItemLootEntry.builder(ModItems.ARROW)
 														.weight(2)
-														.acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 64)))
+														.acceptFunction(SetCount.builder(new RandomValueRange(1, 64)))
 										)
 										.addEntry(
 												ItemLootEntry.builder(Items.WOODEN_AXE)

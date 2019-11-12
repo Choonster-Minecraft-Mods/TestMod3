@@ -39,14 +39,14 @@ public class TestMod3EntityLootTables extends EntityLootTables {
 								LootPool.builder()
 										.rolls(ConstantRange.of(1))
 										.addEntry(ItemLootEntry.builder(Items.GUNPOWDER)
-												.acceptFunction(SetCount.func_215932_a(RandomValueRange.func_215837_a(0.0F, 2.0F)))
-												.acceptFunction(LootingEnchantBonus.func_215915_a(RandomValueRange.func_215837_a(0.0F, 1.0F)))
+												.acceptFunction(SetCount.builder(RandomValueRange.of(0.0F, 2.0F)))
+												.acceptFunction(LootingEnchantBonus.func_215915_a(RandomValueRange.of(0.0F, 1.0F)))
 										)
 						)
 						.addLootPool(
 								LootPool.builder()
 										.addEntry(TagLootEntry.func_216176_b(ItemTags.MUSIC_DISCS))
-										.acceptCondition(EntityHasProperty.builder(LootContext.EntityTarget.KILLER, EntityPredicate.Builder.create().func_217989_a(EntityTypeTags.SKELETONS)))
+										.acceptCondition(EntityHasProperty.builder(LootContext.EntityTarget.KILLER, EntityPredicate.Builder.create().type(EntityTypeTags.SKELETONS)))
 						)
 		);
 
