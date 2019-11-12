@@ -63,7 +63,7 @@ public class ModPotions {
 		/**
 		 * Create a {@link Potion} from the specified {@link EffectInstance}.
 		 * <p>
-		 * Uses the {@link Effect}'s registry name as the {@link Potion}'s registry name and name.
+		 * Uses the {@link Effect}'s registry name as the {@link Potion}'s registry name and base name.
 		 *
 		 * @param effectInstance The effect instance
 		 * @return The potion
@@ -75,23 +75,26 @@ public class ModPotions {
 		/**
 		 * Create a {@link Potion} from the specified {@link EffectInstance}
 		 * <p>
-		 * Uses the {@link Effect}'s registry name as the {@link Potion}'s registry name (with an optional prefix) and name (with no prefix).
+		 * Uses the {@link Effect}'s registry name as the {@link Potion}'s registry name (with an optional prefix) and base name (with no prefix).
 		 *
 		 * @param effectInstance The effect instance
 		 * @param namePrefix     The name prefix, if any
 		 * @return The PotionType
 		 */
 		private static Potion createPotion(final EffectInstance effectInstance, @Nullable final String namePrefix) {
-			final ResourceLocation potionName = Preconditions.checkNotNull(effectInstance.getPotion().getRegistryName());
+			final ResourceLocation effectName = Preconditions.checkNotNull(effectInstance.getPotion().getRegistryName());
 
-			final ResourceLocation potionTypeName;
+			final ResourceLocation potionName;
 			if (namePrefix != null) {
-				potionTypeName = new ResourceLocation(potionName.getNamespace(), namePrefix + potionName.getPath());
+				potionName = new ResourceLocation(effectName.getNamespace(), namePrefix + effectName.getPath());
 			} else {
-				potionTypeName = potionName;
+				potionName = effectName;
 			}
 
-			return new Potion(potionName.toString(), effectInstance).setRegistryName(potionTypeName);
+			// Based on net.minecraft.util.Util.makeTranslationKey. This ensures that the base name is valid in ResourceLocation paths.
+			final String potionBaseName = effectName.getNamespace() + "." + effectName.getPath().replace('/', '.');
+
+			return new Potion(potionBaseName, effectInstance).setRegistryName(potionName);
 		}
 	}
 }
