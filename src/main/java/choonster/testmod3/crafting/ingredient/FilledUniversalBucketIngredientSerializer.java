@@ -8,7 +8,7 @@ import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.common.crafting.IngredientNBT;
 
 /**
- * An ingredient factory that produces a {@link UniversalBucket} filled with the specified {@link Fluid}.
+ * An ingredient factory that produces a {_@link UniversalBucket} filled with the specified {@link Fluid}.
  * <p>
  * JSON Properties:
  * <ul>

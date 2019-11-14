@@ -26,6 +26,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 public class ModDispenseBehaviors {
 	/**
 	 * Register this mod's {@link IDispenseItemBehavior}s.
+	 *
+	 * @param event The common setup event
 	 */
 	@SubscribeEvent
 	public static void registerDispenseBehaviors(final FMLCommonSetupEvent event) {

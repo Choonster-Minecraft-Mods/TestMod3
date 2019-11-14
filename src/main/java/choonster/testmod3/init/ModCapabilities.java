@@ -22,6 +22,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 public class ModCapabilities {
 	/**
 	 * Register the capabilities.
+	 *
+	 * @param event The common setup event
 	 */
 	@SubscribeEvent
 	public static void registerCapabilities(final FMLCommonSetupEvent event) {

@@ -28,6 +28,9 @@ public class ShapelessCuttingRecipeBuilder extends ShapelessRecipeBuilder {
 
 	/**
 	 * Creates a new builder for a shapeless cutting recipe.
+	 *
+	 * @param resultIn The result item
+	 * @return The builder
 	 */
 	public static ShapelessCuttingRecipeBuilder shapelessCuttingRecipe(final IItemProvider resultIn) {
 		return new ShapelessCuttingRecipeBuilder(resultIn, 1);
@@ -35,6 +38,10 @@ public class ShapelessCuttingRecipeBuilder extends ShapelessRecipeBuilder {
 
 	/**
 	 * Creates a new builder for a shapeless cutting recipe.
+	 *
+	 * @param resultIn The result item
+	 * @param countIn  The result count
+	 * @return The builder
 	 */
 	public static ShapelessCuttingRecipeBuilder shapelessCuttingRecipe(final IItemProvider resultIn, final int countIn) {
 		return new ShapelessCuttingRecipeBuilder(resultIn, countIn);
@@ -42,6 +49,8 @@ public class ShapelessCuttingRecipeBuilder extends ShapelessRecipeBuilder {
 
 	/**
 	 * Builds this recipe into an {@link IFinishedRecipe}.
+	 *
+	 * @param consumer The recipe consumer
 	 */
 	@Override
 	public void build(final Consumer<IFinishedRecipe> consumer) {
@@ -51,6 +60,9 @@ public class ShapelessCuttingRecipeBuilder extends ShapelessRecipeBuilder {
 	/**
 	 * Builds this recipe into an {@link IFinishedRecipe}. Use {@link #build(Consumer)} if save is the same as the ID for
 	 * the result.
+	 *
+	 * @param consumer The recipe consumer
+	 * @param save     The ID to use for the recipe
 	 */
 	@Override
 	public void build(final Consumer<IFinishedRecipe> consumer, final String save) {
@@ -64,6 +76,9 @@ public class ShapelessCuttingRecipeBuilder extends ShapelessRecipeBuilder {
 
 	/**
 	 * Builds this recipe into an {@link IFinishedRecipe}.
+	 *
+	 * @param consumer The recipe consumer
+	 * @param id       The ID to use for the recipe
 	 */
 	@Override
 	public void build(final Consumer<IFinishedRecipe> consumer, final ResourceLocation id) {

@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
  * An {@link IFluidHandlerItem} implementation that only allows complete filling/draining and can only be filled with
  * Water, Lava, Milk and {@link Fluid}s registered for the Universal Bucket.
  * <p>
- * Ignores {@link FluidRegistry#isUniversalBucketEnabled()}, unlike {@link FluidBucketWrapper}.
+ * Ignores {_@link FluidRegistry#isUniversalBucketEnabled()}, unlike {@link FluidBucketWrapper}.
  *
  * @author Choonster
  */

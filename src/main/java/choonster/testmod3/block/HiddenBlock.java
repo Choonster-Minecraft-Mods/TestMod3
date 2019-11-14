@@ -22,7 +22,7 @@ public class HiddenBlock extends TileEntityBlock<HiddenTileEntity> {
 	/**
 	 * Is this block hidden?
 	 * <p>
-	 * Only set from {@link Block#getActualState} on the client side, do not query on the server.
+	 * Only set from {_@link Block#getActualState} on the client side, do not query on the server.
 	 */
 	public static final IProperty<Boolean> HIDDEN = BooleanProperty.create("hidden");
 

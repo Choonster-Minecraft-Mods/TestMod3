@@ -55,6 +55,8 @@ public class ModCrafting {
 
 		/**
 		 * Add this mod's brewing recipes.
+		 *
+		 * @param event The common setup event
 		 */
 		@SubscribeEvent
 		public static void registerBrewingRecipes(final FMLCommonSetupEvent event) {
@@ -121,6 +123,8 @@ public class ModCrafting {
 
 		/**
 		 * Removes recipes from the server's recipe manager when it starts up.
+		 *
+		 * @param event The server starting event
 		 */
 		@SubscribeEvent
 		public static void removeRecipes(final FMLServerStartedEvent event) {
