@@ -40,4 +40,8 @@ public abstract class TestMod3SlabBlock<
 		this.variant = variant;
 		this.variantGroup = variantGroup;
 	}
+
+	public VARIANT getVariant() {
+		return variant;
+	}
 }

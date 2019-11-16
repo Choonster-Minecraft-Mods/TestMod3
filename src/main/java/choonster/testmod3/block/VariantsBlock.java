@@ -28,6 +28,10 @@ public class VariantsBlock extends Block {
 		this.variantGroup = variantGroup;
 	}
 
+	public EnumType getType() {
+		return type;
+	}
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {

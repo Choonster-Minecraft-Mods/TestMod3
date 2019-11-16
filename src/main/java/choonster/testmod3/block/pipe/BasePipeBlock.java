@@ -52,6 +52,16 @@ public class BasePipeBlock extends Block {
 		return dir == 1 ? 1 : PIPE_MAX_POS;
 	}
 
+	/**
+	 * Gets the connected property for the specified direction.
+	 *
+	 * @param direction The direction
+	 * @return The property
+	 */
+	public static IProperty<Boolean> getConnectedProperty(final Direction direction) {
+		return CONNECTED_PROPERTIES.get(direction.getIndex());
+	}
+
 	public BasePipeBlock(final Block.Properties properties) {
 		super(properties);
 	}

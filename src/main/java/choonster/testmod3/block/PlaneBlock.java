@@ -240,12 +240,21 @@ public class PlaneBlock extends Block {
 		}
 
 		/**
-		 * Get the angle of this vertical rotation relative to {@link #SIDE}.
+		 * Get the angle in radians of this vertical rotation relative to {@link #SIDE}.
 		 *
 		 * @return The angle
 		 */
 		public double getAngle() {
 			return angle;
+		}
+
+		/**
+		 * Get the angle in degrees of this vertical rotation relative to {@link #SIDE}.
+		 *
+		 * @return The angle
+		 */
+		public double getAngleDegrees() {
+			return Math.toDegrees(getAngle());
 		}
 
 		@Override
