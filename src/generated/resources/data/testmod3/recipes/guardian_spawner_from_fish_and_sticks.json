@@ -6,7 +6,9 @@
     "SSS"
   ],
   "key": {
-    "S": [],
+    "S": {
+      "tag": "forge:rods/wooden"
+    },
     "C": {
       "item": "minecraft:cod"
     }
