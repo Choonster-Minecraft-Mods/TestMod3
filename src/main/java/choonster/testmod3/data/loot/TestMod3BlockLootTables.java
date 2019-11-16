@@ -5,16 +5,12 @@ import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.util.RegistryUtil;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
-import net.minecraft.block.SlabBlock;
 import net.minecraft.data.loot.BlockLootTables;
 import net.minecraft.item.Items;
-import net.minecraft.state.properties.SlabType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.BlockStateProperty;
 import net.minecraft.world.storage.loot.conditions.SurvivesExplosion;
-import net.minecraft.world.storage.loot.functions.ExplosionDecay;
-import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -105,7 +101,7 @@ public class TestMod3BlockLootTables extends BlockLootTables {
 
 		ModBlocks.VariantGroups.TERRACOTTA_SLABS
 				.getBlocks()
-				.forEach(slab -> registerLootTable(slab, this::getSlabLootTable));
+				.forEach(slab -> registerLootTable(slab, BlockLootTables::droppingSlab));
 
 		final Map<ResourceLocation, LootTable.Builder> builders = getBuilders();
 		final Set<ResourceLocation> registryNames = Sets.newHashSet();
@@ -127,28 +123,8 @@ public class TestMod3BlockLootTables extends BlockLootTables {
 		}
 	}
 
-	private static <T> T withExplosionDecay(final ILootFunctionConsumer<T> lootFunctionConsumer) {
-		return lootFunctionConsumer.acceptFunction(ExplosionDecay.builder());
-	}
-
 	private static <T> T withSurvivesExplosion(final ILootConditionConsumer<T> lootConditionConsumer) {
 		return lootConditionConsumer.acceptCondition(SurvivesExplosion.builder());
-	}
-
-	private LootTable.Builder getSlabLootTable(final Block block) {
-		return LootTable.builder().addLootPool(
-				LootPool.builder()
-						.rolls(ConstantRange.of(1))
-						.addEntry(
-								withExplosionDecay(
-										ItemLootEntry.builder(block)
-												.acceptFunction(
-														SetCount.builder(ConstantRange.of(2))
-																.acceptCondition(BlockStateProperty.builder(block).with(SlabBlock.TYPE, SlabType.DOUBLE))
-												)
-								)
-						)
-		);
 	}
 
 	private Map<ResourceLocation, LootTable.Builder> getBuilders() {
