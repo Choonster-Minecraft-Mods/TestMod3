@@ -96,7 +96,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 		final ModelFile rotatableLampOff = orientableSingle(
 				name(ModBlocks.ROTATABLE_LAMP) + "_off",
-				mcLoc("block/redstone_lamp_off"),
+				mcLoc("block/redstone_lamp"),
 				modLoc("block/rotatable_lamp_off")
 		);
 
@@ -128,7 +128,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 				name(ModBlocks.END_PORTAL_FRAME_FULL),
 				modLoc("block/end_portal_side_full"),
 				mcLoc("block/end_stone"),
-				mcLoc("block/end_portal_frame_top.png")
+				mcLoc("block/end_portal_frame_top")
 		);
 
 		simpleBlock(ModBlocks.END_PORTAL_FRAME_FULL, endPortalFrameFull);
