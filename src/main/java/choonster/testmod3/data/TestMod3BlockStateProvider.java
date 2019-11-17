@@ -88,7 +88,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		simpleBlock(ModBlocks.CLIENT_PLAYER_RIGHT_CLICK, existingMcModel(name(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE) + "_down"));
 
 
-		final ModelFile rotatableLampOn = orientableSingle( // TODO: Modded textures aren't working, see MinecraftForge/MinecraftForge#6322
+		final ModelFile rotatableLampOn = orientableSingle(
 				name(ModBlocks.ROTATABLE_LAMP) + "_on",
 				mcLoc("block/redstone_lamp_on"),
 				modLoc("block/rotatable_lamp_on")
