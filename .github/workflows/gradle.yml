@@ -27,8 +27,8 @@ jobs:
                 restore-keys: |
                     ${{ runner.os }}-gradle-
 
-            - name: Print cache key (post-build)
-              run: echo ${{ hashFiles('**/*.gradle') }}
-
             - name: Build with Gradle
               run: ./gradlew build
+      
+            - name: Print cache key (post-build)
+              run: echo ${{ hashFiles('**/*.gradle') }}
