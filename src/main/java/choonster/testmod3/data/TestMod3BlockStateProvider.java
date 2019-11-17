@@ -169,7 +169,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 				.rotation(null) // TODO: Remove parameter when MinecraftForge/MinecraftForge#6321 is fixed
 				.origin(0, 16, 0)
 				.axis(Direction.Axis.X)
-				.angle(-45)
+				.angle(-45) // TODO: Angle validation is broken, see MinecraftForge/MinecraftForge#6323
 				.rescale(true)
 				.end()
 
