@@ -19,13 +19,13 @@ jobs:
             - name: Print cache key (pre-build)
               run: echo ${{ hashFiles('**/*.gradle') }}
 
-            - name: Restore Gradle cache
-              uses: actions/cache@v1
-              with:
-                path: ~/.gradle/caches
-                key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-                restore-keys: |
-                    ${{ runner.os }}-gradle-
+#             - name: Restore Gradle cache
+#               uses: actions/cache@v1
+#               with:
+#                 path: ~/.gradle/caches
+#                 key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+#                 restore-keys: |
+#                     ${{ runner.os }}-gradle-
 
             - name: Build with Gradle
               run: ./gradlew build
