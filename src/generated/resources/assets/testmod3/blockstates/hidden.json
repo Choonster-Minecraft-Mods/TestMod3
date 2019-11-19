@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hidden=false": {
+      "model": "testmod3:block/hidden"
+    },
+    "hidden=true": {
+      "model": "testmod3:block/empty"
+    }
+  }
+}

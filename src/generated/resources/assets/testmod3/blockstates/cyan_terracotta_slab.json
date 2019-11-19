@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=top": {
+      "model": "testmod3:block/cyan_terracotta_slab_top"
+    },
+    "type=bottom": {
+      "model": "testmod3:block/cyan_terracotta_slab"
+    },
+    "type=double": {
+      "model": "minecraft:block/cyan_terracotta"
+    }
+  }
+}

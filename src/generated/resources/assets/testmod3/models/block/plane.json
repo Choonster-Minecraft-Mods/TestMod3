@@ -1,0 +1,58 @@
+{
+  "parent": "block/block",
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#base"
+        },
+        "north": {
+          "texture": "#base"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "rotation": {
+        "origin": [
+          0,
+          16,
+          0
+        ],
+        "axis": "x",
+        "angle": 0.0,
+        "rescale": true
+      },
+      "faces": {
+        "south": {
+          "texture": "#plane"
+        }
+      }
+    }
+  ]
+}

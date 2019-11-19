@@ -1,0 +1,8 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "block/light_gray_terracotta",
+    "bottom": "block/light_gray_terracotta",
+    "top": "block/light_gray_terracotta"
+  }
+}

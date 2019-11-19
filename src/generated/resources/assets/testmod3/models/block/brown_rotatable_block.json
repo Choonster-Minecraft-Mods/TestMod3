@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "side": "testmod3:block/colored_rotatable/brown",
+    "front": "testmod3:block/colored_rotatable/brown_front",
+    "top": "testmod3:block/colored_rotatable/brown"
+  }
+}

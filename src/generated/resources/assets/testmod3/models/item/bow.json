@@ -1,0 +1,28 @@
+{
+  "parent": "testmod3:item/simple_model",
+  "textures": {
+    "layer0": "item/bow"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "pulling": 1.0
+      },
+      "model": "testmod3:item/bow_0"
+    },
+    {
+      "predicate": {
+        "pulling": 1.0,
+        "pull": 0.65
+      },
+      "model": "testmod3:item/bow_1"
+    },
+    {
+      "predicate": {
+        "pulling": 1.0,
+        "pull": 0.9
+      },
+      "model": "testmod3:item/bow_2"
+    }
+  ]
+}

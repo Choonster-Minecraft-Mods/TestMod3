@@ -1,0 +1,20 @@
+{
+  "parent": "testmod3:item/simple_model",
+  "textures": {
+    "layer0": "testmod3:item/slingshot"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "testmod3:ticks_since_last_use": 0.0
+      },
+      "model": "testmod3:item/slingshot_pulled"
+    },
+    {
+      "predicate": {
+        "testmod3:ticks_since_last_use": 20.0
+      },
+      "model": "testmod3:item/slingshot"
+    }
+  ]
+}

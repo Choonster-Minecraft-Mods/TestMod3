@@ -1,0 +1,6 @@
+{
+  "parent": "testmod3:item/hidden_block_revealer",
+  "textures": {
+    "layer0": "testmod3:item/hidden_block_revealer_active"
+  }
+}

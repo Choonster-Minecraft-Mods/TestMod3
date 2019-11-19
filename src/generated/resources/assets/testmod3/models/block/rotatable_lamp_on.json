@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "side": "block/redstone_lamp_on",
+    "front": "testmod3:block/rotatable_lamp_on",
+    "top": "block/redstone_lamp_on"
+  }
+}

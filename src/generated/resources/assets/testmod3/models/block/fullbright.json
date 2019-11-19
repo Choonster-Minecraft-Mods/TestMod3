@@ -1,0 +1,6 @@
+{
+  "parent": "testmod3:block/template_fullbright",
+  "textures": {
+    "all": "testmod3:block/fullbright"
+  }
+}

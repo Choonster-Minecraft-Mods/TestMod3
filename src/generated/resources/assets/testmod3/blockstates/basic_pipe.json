@@ -1,0 +1,69 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "testmod3:block/basic_pipe_centre",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "down": "true"
+      },
+      "apply": {
+        "model": "testmod3:block/basic_pipe_side",
+        "x": 90,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "up": "true"
+      },
+      "apply": {
+        "model": "testmod3:block/basic_pipe_side",
+        "x": -90,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "testmod3:block/basic_pipe_side",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "testmod3:block/basic_pipe_side",
+        "y": 180,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "testmod3:block/basic_pipe_side",
+        "y": 270,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "testmod3:block/basic_pipe_side",
+        "y": 90,
+        "uvlock": true
+      }
+    }
+  ]
+}

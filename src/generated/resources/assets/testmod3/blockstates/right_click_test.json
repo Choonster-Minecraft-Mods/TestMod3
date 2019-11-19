@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "has_ender_eye=false": {
+      "model": "minecraft:block/black_stained_glass"
+    },
+    "has_ender_eye=true": {
+      "model": "minecraft:block/white_stained_glass"
+    }
+  }
+}

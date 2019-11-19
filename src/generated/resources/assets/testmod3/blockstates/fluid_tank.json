@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "testmod3:block/fluid_tank"
+    }
+  }
+}

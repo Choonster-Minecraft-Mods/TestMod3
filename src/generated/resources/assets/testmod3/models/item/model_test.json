@@ -1,0 +1,32 @@
+{
+  "parent": "testmod3:item/simple_model",
+  "textures": {
+    "layer0": "testmod3:item/model_test_standby"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "testmod3:ticks_since_last_use": 0.0
+      },
+      "model": "testmod3:item/model_test_0"
+    },
+    {
+      "predicate": {
+        "testmod3:ticks_since_last_use": 20.0
+      },
+      "model": "testmod3:item/model_test_1"
+    },
+    {
+      "predicate": {
+        "testmod3:ticks_since_last_use": 40.0
+      },
+      "model": "testmod3:item/model_test_2"
+    },
+    {
+      "predicate": {
+        "testmod3:ticks_since_last_use": 60.0
+      },
+      "model": "testmod3:item/model_test"
+    }
+  ]
+}

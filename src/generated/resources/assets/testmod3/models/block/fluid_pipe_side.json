@@ -1,0 +1,6 @@
+{
+  "parent": "testmod3:block/pipe/pipe_part",
+  "textures": {
+    "side": "block/glass"
+  }
+}
