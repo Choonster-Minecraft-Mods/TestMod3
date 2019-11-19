@@ -33,7 +33,6 @@ import java.util.function.Function;
 public class TestMod3BlockStateProvider extends BlockStateProvider {
 	private static final Logger LOGGER = LogManager.getLogger();
 
-
 	/**
 	 * Centre cube of the pipe model.
 	 */
@@ -62,6 +61,11 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 	public TestMod3BlockStateProvider(final DataGenerator gen, final ExistingFileHelper exFileHelper) {
 		super(gen, TestMod3.MODID, exFileHelper);
+	}
+
+	@Override
+	public String getName() {
+		return "TestMod3BlockStates";
 	}
 
 	@Override
@@ -169,7 +173,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 				.rotation(null) // TODO: Remove parameter when MinecraftForge/MinecraftForge#6321 is fixed
 				.origin(0, 16, 0)
 				.axis(Direction.Axis.X)
-				.angle(-45) // TODO: Angle validation is broken, see MinecraftForge/MinecraftForge#6323
+//				.angle(-45) // TODO: Angle validation is broken, see MinecraftForge/MinecraftForge#6323
 				.rescale(true)
 				.end()
 
@@ -201,18 +205,19 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 								.build()
 				)
 
-				// Set the model for the horizontal_rotation=north, vertical_rotation=up state
-				.partialState()
-				.with(PlaneBlock.HORIZONTAL_ROTATION, Direction.NORTH)
-				.with(PlaneBlock.VERTICAL_ROTATION, PlaneBlock.VerticalRotation.UP)
-				.modelForState()
-				.modelFile(mirrorPlaneT)
-				.addModel();
+//				// Set the model for the horizontal_rotation=north, vertical_rotation=up state
+//				.partialState() // TODO: How to special-case this state?
+//				.with(PlaneBlock.HORIZONTAL_ROTATION, Direction.NORTH)
+//				.with(PlaneBlock.VERTICAL_ROTATION, PlaneBlock.VerticalRotation.UP)
+//				.modelForState()
+//				.modelFile(mirrorPlaneT)
+//				.addModel()
+		;
 
 
 		final ModelFile vanillaModelTest = cubeAll(
 				name(ModBlocks.VANILLA_MODEL_TEST),
-				mcLoc("block/log_acacia_top")
+				mcLoc("block/acacia_log_top")
 		);
 
 		simpleBlock(ModBlocks.VANILLA_MODEL_TEST, vanillaModelTest);
@@ -249,7 +254,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 		// I'm keeping template_chest as JSON since it's a relatively complex model
 		final ModelFile chest = withExistingParent(name(ModBlocks.CHEST), modLoc("template_chest"))
-				.texture("chest", blockTexture(ModBlocks.CHEST));
+				.texture("chest", modLoc("block/chest/wood"))
+				.texture("particle", blockTexture(Blocks.OAK_PLANKS));
 
 		simpleBlock(ModBlocks.CHEST, chest);
 
@@ -333,8 +339,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 				.forEach(block ->
 						slabBlock(
 								block,
-								mcLoc(block.getVariant().getName() + "_terracotta"),
-								mcLoc(block.getVariant().getName() + "_terracotta")
+								mcLoc("block/" + block.getVariant().getName() + "_terracotta"),
+								mcLoc("block/" + block.getVariant().getName() + "_terracotta")
 						)
 				);
 
@@ -405,21 +411,21 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	protected void directionalBlockUvLock(final Block block, final Function<BlockState, ModelFile> modelFunc) {
 		getVariantBuilder(block)
 				.forAllStates(state -> {
-					final Direction dir = state.get(BlockStateProperties.FACING);
+					final Direction direction = state.get(BlockStateProperties.FACING);
 					return ConfiguredModel.builder()
 							.modelFile(modelFunc.apply(state))
-							.rotationX(dir == Direction.DOWN ? 180 : dir.getAxis().isHorizontal() ? 90 : 0)
-							.rotationY(dir.getAxis().isVertical() ? 0 : (int) dir.getHorizontalAngle())
+							.rotationX(getRotationX(direction))
+							.rotationY(getRotationY(direction))
 							.build();
 				});
 	}
 
 	private void pipeBlock(final BasePipeBlock block, final ResourceLocation centre, final ResourceLocation side) {
-		final ModelFile centreModel = getBuilder(name(block) + "centre")
+		final ModelFile centreModel = getBuilder(name(block) + "_centre")
 				.parent(pipeCentre.getValue())
 				.texture("centre", centre);
 
-		final ModelFile sideModel = getBuilder(name(block) + "side")
+		final ModelFile sideModel = getBuilder(name(block) + "_side")
 				.parent(pipePart.getValue())
 				.texture("side", side);
 
@@ -437,6 +443,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 					.part()
 					.modelFile(sideModel)
 					.uvLock(true)
+					.rotationX(direction == Direction.DOWN ? 90 : direction.getAxis().isHorizontal() ? 0 : -90)
+					.rotationY(getRotationY(direction.getOpposite()))
 					.addModel()
 					.condition(BasePipeBlock.getConnectedProperty(direction), true);
 		}
@@ -455,9 +463,17 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 					return ConfiguredModel.builder()
 							.modelFile(modelFile)
-							.rotationX(direction == Direction.DOWN ? 180 : direction.getAxis().isHorizontal() ? 90 : 0)
-							.rotationY(direction.getAxis().isVertical() ? 0 : (int) direction.getHorizontalAngle())
+							.rotationX(getRotationX(direction))
+							.rotationY(getRotationY(direction))
 							.build();
 				});
+	}
+
+	private int getRotationX(final Direction direction) {
+		return direction == Direction.DOWN ? 180 : direction.getAxis().isHorizontal() ? 90 : 0;
+	}
+
+	private int getRotationY(final Direction direction) {
+		return direction.getAxis().isVertical() ? 0 : (int) direction.getHorizontalAngle();
 	}
 }
