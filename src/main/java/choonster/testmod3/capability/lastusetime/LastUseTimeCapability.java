@@ -134,7 +134,7 @@ public final class LastUseTimeCapability {
 		/**
 		 * The ID of this getter.
 		 */
-		private static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "ticks_since_last_use");
+		public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "ticks_since_last_use");
 
 		/**
 		 * The getter.

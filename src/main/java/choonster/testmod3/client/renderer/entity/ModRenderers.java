@@ -21,7 +21,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ModRenderers {
 	@SubscribeEvent
 	public static void register(final FMLClientSetupEvent event) {
-		RenderingRegistry.registerEntityRenderingHandler(ModArrowEntity.class, renderManager -> new RenderModArrow(renderManager, new ResourceLocation(TestMod3.MODID, "textures/entity/mod_arrow.png")));
+		RenderingRegistry.registerEntityRenderingHandler(ModArrowEntity.class, renderManager -> new RenderModArrow(renderManager, new ResourceLocation(TestMod3.MODID, "textures/entity/arrow.png")));
 		RenderingRegistry.registerEntityRenderingHandler(BlockDetectionArrowEntity.class, renderManager -> new RenderModArrow(renderManager, new ResourceLocation(TestMod3.MODID, "textures/entity/block_detection_arrow.png")));
 	}
 }

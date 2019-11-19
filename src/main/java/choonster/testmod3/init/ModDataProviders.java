@@ -2,6 +2,7 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.data.TestMod3BlockStateProvider;
+import choonster.testmod3.data.TestMod3ItemModelProvider;
 import choonster.testmod3.data.TestMod3LootTableProvider;
 import choonster.testmod3.data.TestMod3RecipeProvider;
 import net.minecraft.data.DataGenerator;
@@ -26,6 +27,7 @@ public class ModDataProviders {
 
 		if (event.includeClient()) {
 			dataGenerator.addProvider(new TestMod3BlockStateProvider(dataGenerator, existingFileHelper));
+			dataGenerator.addProvider(new TestMod3ItemModelProvider(dataGenerator, existingFileHelper));
 		}
 
 		if (event.includeServer()) {

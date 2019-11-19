@@ -22,6 +22,14 @@ public class VariantsItem extends Item {
 		this.variantGroup = variantGroup;
 	}
 
+	public Type getType() {
+		return type;
+	}
+
+	public ItemVariantGroup<Type, VariantsItem> getVariantGroup() {
+		return variantGroup;
+	}
+
 	public enum Type implements IStringSerializable {
 		VARIANT_A("a"),
 		VARIANT_B("b"),

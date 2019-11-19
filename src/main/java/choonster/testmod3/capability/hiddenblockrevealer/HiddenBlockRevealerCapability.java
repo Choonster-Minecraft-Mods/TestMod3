@@ -92,7 +92,7 @@ public final class HiddenBlockRevealerCapability {
 		/**
 		 * The ID of this getter.
 		 */
-		private static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "reveal_hidden_blocks");
+		public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "reveal_hidden_blocks");
 
 		/**
 		 * The getter.
