@@ -1,10 +1,10 @@
 {
   "variants": {
     "has_ender_eye=false": {
-      "model": "minecraft:block/black_stained_glass"
+      "model": "testmod3:block/right_click_test_without_ender_eye"
     },
     "has_ender_eye=true": {
-      "model": "minecraft:block/white_stained_glass"
+      "model": "testmod3:block/right_click_test_with_ender_eye"
     }
   }
 }

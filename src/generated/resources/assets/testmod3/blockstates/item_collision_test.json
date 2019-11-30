@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/cyan_wool"
+      "model": "testmod3:block/item_collision_test"
     }
   }
 }

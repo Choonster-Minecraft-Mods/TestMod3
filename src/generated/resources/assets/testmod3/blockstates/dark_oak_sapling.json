@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/dark_oak_sapling"
+      "model": "testmod3:block/dark_oak_sapling"
     }
   }
 }

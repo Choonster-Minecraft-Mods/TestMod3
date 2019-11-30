@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/stone"
+      "model": "testmod3:block/invisible"
     }
   }
 }

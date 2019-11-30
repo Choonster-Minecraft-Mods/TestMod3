@@ -132,26 +132,28 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 	@Override
 	protected void registerStatesAndModels() {
-		simpleBlock(ModBlocks.WATER_GRASS, existingModel(Blocks.GRASS));
+		simpleBlockWithExistingParent(ModBlocks.WATER_GRASS, Blocks.GRASS);
 
-		simpleBlock(ModBlocks.LARGE_COLLISION_TEST, existingModel(Blocks.WHITE_WOOL));
+		simpleBlockWithExistingParent(ModBlocks.LARGE_COLLISION_TEST, Blocks.WHITE_WOOL);
 
 
 		getVariantBuilder(ModBlocks.RIGHT_CLICK_TEST)
 				.partialState()
 				.with(RightClickTestBlock.HAS_ENDER_EYE, true)
 				.modelForState()
-				.modelFile(existingModel(Blocks.WHITE_STAINED_GLASS))
+				.modelFile(getBuilder(name(ModBlocks.RIGHT_CLICK_TEST) + "_with_ender_eye")
+						.parent(existingModel(Blocks.WHITE_STAINED_GLASS)))
 				.addModel()
 
 				.partialState()
 				.with(RightClickTestBlock.HAS_ENDER_EYE, false)
 				.modelForState()
-				.modelFile(existingModel(Blocks.BLACK_STAINED_GLASS))
+				.modelFile(getBuilder(name(ModBlocks.RIGHT_CLICK_TEST) + "_without_ender_eye")
+						.parent(existingModel(Blocks.BLACK_STAINED_GLASS)))
 				.addModel();
 
 
-		simpleBlock(ModBlocks.CLIENT_PLAYER_RIGHT_CLICK, existingMcModel(name(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE) + "_down"));
+		simpleBlockWithExistingParent(ModBlocks.CLIENT_PLAYER_RIGHT_CLICK, existingMcModel(name(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE) + "_down"));
 
 
 		final ModelFile rotatableLampOn = orientableSingle(
@@ -172,7 +174,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		);
 
 
-		simpleBlock(ModBlocks.ITEM_COLLISION_TEST, existingModel(Blocks.CYAN_WOOL));
+		simpleBlockWithExistingParent(ModBlocks.ITEM_COLLISION_TEST, Blocks.CYAN_WOOL);
 
 
 		final ModelFile fluidTank = cubeBottomTop(
@@ -184,10 +186,10 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 		simpleBlock(ModBlocks.FLUID_TANK, fluidTank);
 
-		simpleBlock(ModBlocks.FLUID_TANK_RESTRICTED, fluidTank);
+		simpleBlockWithExistingParent(ModBlocks.FLUID_TANK_RESTRICTED, fluidTank);
 
 
-		simpleBlock(ModBlocks.ITEM_DEBUGGER, existingModel(Blocks.SEA_LANTERN));
+		simpleBlockWithExistingParent(ModBlocks.ITEM_DEBUGGER, Blocks.SEA_LANTERN);
 
 
 		final ModelFile endPortalFrameFull = cubeBottomTop(
@@ -200,9 +202,9 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		simpleBlock(ModBlocks.END_PORTAL_FRAME_FULL, endPortalFrameFull);
 
 
-		simpleBlock(ModBlocks.POTION_EFFECT, existingModel(Blocks.COARSE_DIRT));
+		simpleBlockWithExistingParent(ModBlocks.POTION_EFFECT, Blocks.COARSE_DIRT);
 
-		simpleBlock(ModBlocks.CLIENT_PLAYER_ROTATION, existingMcModel(name(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE) + "_down"));
+		simpleBlockWithExistingParent(ModBlocks.CLIENT_PLAYER_ROTATION, existingMcModel(name(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE) + "_down"));
 
 		simpleBlock(ModBlocks.PIG_SPAWNER_REFILLER);
 
@@ -309,7 +311,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 		simpleBlock(ModBlocks.MAX_HEALTH_GETTER);
 
-		simpleBlock(ModBlocks.SMALL_COLLISION_TEST, existingModel(Blocks.SEA_LANTERN));
+		simpleBlockWithExistingParent(ModBlocks.SMALL_COLLISION_TEST, existingModel(Blocks.SEA_LANTERN));
 
 
 		// I'm keeping template_chest as JSON since it's a relatively complex model
@@ -347,19 +349,19 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 		commandBlock(ModBlocks.CHAIN_SURVIVAL_COMMAND_BLOCK, Blocks.CHAIN_COMMAND_BLOCK);
 
-		simpleBlock(ModBlocks.OAK_SAPLING, existingModel(Blocks.OAK_SAPLING));
+		simpleBlockWithExistingParent(ModBlocks.OAK_SAPLING, Blocks.OAK_SAPLING);
 
-		simpleBlock(ModBlocks.SPRUCE_SAPLING, existingModel(Blocks.SPRUCE_SAPLING));
+		simpleBlockWithExistingParent(ModBlocks.SPRUCE_SAPLING, Blocks.SPRUCE_SAPLING);
 
-		simpleBlock(ModBlocks.BIRCH_SAPLING, existingModel(Blocks.BIRCH_SAPLING));
+		simpleBlockWithExistingParent(ModBlocks.BIRCH_SAPLING, Blocks.BIRCH_SAPLING);
 
-		simpleBlock(ModBlocks.JUNGLE_SAPLING, existingModel(Blocks.JUNGLE_SAPLING));
+		simpleBlockWithExistingParent(ModBlocks.JUNGLE_SAPLING, Blocks.JUNGLE_SAPLING);
 
-		simpleBlock(ModBlocks.ACACIA_SAPLING, existingModel(Blocks.ACACIA_SAPLING));
+		simpleBlockWithExistingParent(ModBlocks.ACACIA_SAPLING, Blocks.ACACIA_SAPLING);
 
-		simpleBlock(ModBlocks.DARK_OAK_SAPLING, existingModel(Blocks.DARK_OAK_SAPLING));
+		simpleBlockWithExistingParent(ModBlocks.DARK_OAK_SAPLING, Blocks.DARK_OAK_SAPLING);
 
-		simpleBlock(ModBlocks.INVISIBLE, existingModel(Blocks.STONE));
+		simpleBlockWithExistingParent(ModBlocks.INVISIBLE, Blocks.STONE);
 
 		simpleBlock(ModBlocks.PLANKS);
 
@@ -368,7 +370,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 				.getBlocks()
 				.forEach(block -> {
 					final ModelFile modelFile = orientableSingle(
-							"colored_rotatable/" + name(block),
+							"block/colored_rotatable/" + name(block),
 							modLoc("block/colored_rotatable/" + block.getColor().getName()),
 							modLoc("block/colored_rotatable/" + block.getColor().getName() + "_front")
 					);
@@ -386,7 +388,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 					Arrays.stream(EnumFaceRotation.values())
 							.forEach(faceRotation -> {
-								String name = "colored_rotatable/" + name(block);
+								String name = "block/colored_rotatable/" + name(block);
 
 								if (faceRotation != EnumFaceRotation.UP) {
 									name += "_rotated_" + faceRotation.getName();
@@ -480,6 +482,18 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		return orientable(name, side, front, side);
 	}
 
+	private void simpleBlockWithExistingParent(final Block block, final Block parentBlock) {
+		simpleBlockWithExistingParent(block, existingModel(parentBlock));
+	}
+
+	private void simpleBlockWithExistingParent(final Block block, final ModelFile parentModel) {
+		simpleBlock(
+				block,
+				getBuilder(name(block))
+						.parent(parentModel)
+		);
+	}
+
 	protected void directionalBlockUvLock(final Block block, final ModelFile model) {
 		directionalBlockUvLock(block, $ -> model);
 	}
@@ -527,8 +541,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	}
 
 	private void commandBlock(final CommandBlockBlock commandBlock, final Block modelCommandBlock) {
-		final ModelFile normalModel = existingModel(modelCommandBlock);
-		final ModelFile conditionalModel = existingMcModel(name(modelCommandBlock) + "_conditional");
+		final ModelFile normalModel = withExistingParent(name(commandBlock), name(modelCommandBlock));
+		final ModelFile conditionalModel = withExistingParent(name(commandBlock) + "_conditional", name(modelCommandBlock) + "_conditional");
 
 		getVariantBuilder(commandBlock)
 				.forAllStates(state -> {

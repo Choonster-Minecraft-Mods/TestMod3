@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/grass"
+      "model": "testmod3:block/water_grass"
     }
   }
 }

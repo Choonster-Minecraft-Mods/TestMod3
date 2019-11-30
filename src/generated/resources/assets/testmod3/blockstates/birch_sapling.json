@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/birch_sapling"
+      "model": "testmod3:block/birch_sapling"
     }
   }
 }

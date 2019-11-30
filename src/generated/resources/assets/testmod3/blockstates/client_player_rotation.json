@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/light_weighted_pressure_plate_down"
+      "model": "testmod3:block/client_player_rotation"
     }
   }
 }
