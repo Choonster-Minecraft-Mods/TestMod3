@@ -1,0 +1,6 @@
+{
+  "parent": "testmod3:block/orientable_with_bottom_rotated_down",
+  "textures": {
+    "bottom": "#top"
+  }
+}

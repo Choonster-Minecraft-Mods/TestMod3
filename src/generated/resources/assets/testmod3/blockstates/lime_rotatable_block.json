@@ -1,28 +1,28 @@
 {
   "variants": {
     "facing=down": {
-      "model": "testmod3:block/lime_rotatable_block",
+      "model": "testmod3:colored_rotatable/lime_rotatable_block",
       "x": 180
     },
     "facing=up": {
-      "model": "testmod3:block/lime_rotatable_block"
+      "model": "testmod3:colored_rotatable/lime_rotatable_block"
     },
     "facing=north": {
-      "model": "testmod3:block/lime_rotatable_block",
+      "model": "testmod3:colored_rotatable/lime_rotatable_block",
       "x": 90,
       "y": 180
     },
     "facing=south": {
-      "model": "testmod3:block/lime_rotatable_block",
+      "model": "testmod3:colored_rotatable/lime_rotatable_block",
       "x": 90
     },
     "facing=west": {
-      "model": "testmod3:block/lime_rotatable_block",
+      "model": "testmod3:colored_rotatable/lime_rotatable_block",
       "x": 90,
       "y": 90
     },
     "facing=east": {
-      "model": "testmod3:block/lime_rotatable_block",
+      "model": "testmod3:colored_rotatable/lime_rotatable_block",
       "x": 90,
       "y": 270
     }

@@ -1,14 +1,13 @@
 package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.block.HiddenBlock;
-import choonster.testmod3.block.PlaneBlock;
-import choonster.testmod3.block.RightClickTestBlock;
-import choonster.testmod3.block.RotatableLampBlock;
+import choonster.testmod3.block.*;
 import choonster.testmod3.block.pipe.BasePipeBlock;
 import choonster.testmod3.init.ModBlocks;
+import choonster.testmod3.util.EnumFaceRotation;
 import choonster.testmod3.util.RegistryUtil;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import net.minecraft.block.*;
@@ -23,6 +22,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -58,6 +60,66 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 					.allFaces((direction, faceBuilder) -> faceBuilder.texture("#side"))
 					.end()
 	);
+
+	/**
+	 * Orientable models for each {@link EnumFaceRotation} value.
+	 */
+	private final LazyLoadBase<Map<EnumFaceRotation, ModelFile>> rotatedOrientables = new LazyLoadBase<>(() -> {
+		Map<EnumFaceRotation, ModelFile> map = new EnumMap<>(EnumFaceRotation.class);
+		map.put(EnumFaceRotation.UP, existingMcModel("orientable"));
+
+		Arrays.stream(EnumFaceRotation.values())
+				.filter(faceRotation -> faceRotation != EnumFaceRotation.UP)
+				.forEach(faceRotation -> {
+					final ModelFile cube = getBuilder("cube_rotated_" + faceRotation.getName())
+							.parent(existingMcModel("block"))
+							.element()
+							.allFaces((direction, faceBuilder) ->
+									faceBuilder
+											.texture("#" + direction.getName())
+											.cullface(direction)
+							)
+							.allFaces((direction, faceBuilder) -> {
+								switch (faceRotation) {
+									case LEFT:
+										faceBuilder.rotation(ModelBuilder.FaceRotation.COUNTERCLOCKWISE_90);
+									case RIGHT:
+										faceBuilder.rotation(ModelBuilder.FaceRotation.CLOCKWISE_90);
+									case DOWN:
+										faceBuilder.rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN);
+								}
+							})
+							.end();
+
+					final ModelFile orientableWithBottom = getBuilder("orientable_with_bottom_rotated_" + faceRotation.getName())
+							.parent(cube)
+
+							.transforms()
+
+							.transform(ModelBuilder.Perspective.FIRSTPERSON_RIGHT)
+							.rotation(0, 135, 0)
+							.scale(0.40f)
+							.end()
+
+							.end()
+
+							.texture("particle", "#front")
+							.texture("down", "#bottom")
+							.texture("up", "#top")
+							.texture("north", "#front")
+							.texture("east", "#side")
+							.texture("south", "#side")
+							.texture("west", "#side");
+
+					final ModelFile orientable = getBuilder("orientable_rotated_" + faceRotation.getName())
+							.parent(orientableWithBottom)
+							.texture("bottom", "#top");
+
+					map.put(faceRotation, orientable);
+				});
+
+		return ImmutableMap.copyOf(map);
+	});
 
 	public TestMod3BlockStateProvider(final DataGenerator gen, final ExistingFileHelper exFileHelper) {
 		super(gen, TestMod3.MODID, exFileHelper);
@@ -317,13 +379,29 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		ModBlocks.VariantGroups.COLORED_MULTI_ROTATABLE_BLOCKS
 				.getBlocks()
 				.forEach(block -> {
-					final ModelFile modelFile = orientableSingle(
-							name(block),
-							modLoc("block/colored_rotatable/" + block.getColor().getName()),
-							modLoc("block/colored_rotatable/" + block.getColor().getName() + "_front_multi")
-					);
+					final ResourceLocation side = modLoc("block/colored_rotatable/" + block.getColor().getName());
+					final ResourceLocation front = modLoc("block/colored_rotatable/" + block.getColor().getName() + "_front_multi");
 
-					directionalBlockUvLock(block, modelFile);
+					final EnumMap<EnumFaceRotation, ModelFile> models = new EnumMap<>(EnumFaceRotation.class);
+
+					Arrays.stream(EnumFaceRotation.values())
+							.forEach(faceRotation -> {
+								String name = "colored_rotatable/" + name(block);
+
+								if (faceRotation != EnumFaceRotation.UP) {
+									name += "_rotated_" + faceRotation.getName();
+								}
+
+								final ModelFile model = getBuilder(name)
+										.parent(rotatedOrientables.getValue().get(faceRotation))
+										.texture("side", side)
+										.texture("front", front)
+										.texture("top", side);
+
+								models.put(faceRotation, model);
+							});
+
+					directionalBlockUvLock(block, (state) -> models.get(state.get(ColoredMultiRotatableBlock.FACE_ROTATION)));
 				});
 
 
