@@ -368,7 +368,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 				.getBlocks()
 				.forEach(block -> {
 					final ModelFile modelFile = orientableSingle(
-							name(block),
+							"colored_rotatable/" + name(block),
 							modLoc("block/colored_rotatable/" + block.getColor().getName()),
 							modLoc("block/colored_rotatable/" + block.getColor().getName() + "_front")
 					);
