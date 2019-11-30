@@ -1,6 +1,0 @@
-{
-	"parent": "testmod3:item/slingshot",
-	"textures": {
-		"layer0": "testmod3:item/slingshot_pulled"
-	}
-}
