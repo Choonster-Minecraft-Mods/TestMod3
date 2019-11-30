@@ -197,21 +197,19 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 		getVariantBuilder(ModBlocks.MIRROR_PLANE)
 				// Set the rotation and default model for all states
-				.forAllStates(state ->
-						ConfiguredModel.builder()
+				.forAllStates(state -> {
+					if (state.get(PlaneBlock.HORIZONTAL_ROTATION) == Direction.NORTH && state.get(PlaneBlock.VERTICAL_ROTATION) == PlaneBlock.VerticalRotation.UP) {
+						return ConfiguredModel.builder()
+								.modelFile(mirrorPlaneT)
+								.build();
+					} else {
+						return ConfiguredModel.builder()
 								.modelFile(mirrorPlane)
 								.rotationX((int) state.get(PlaneBlock.HORIZONTAL_ROTATION).getHorizontalAngle())
 								.rotationY((int) state.get(PlaneBlock.VERTICAL_ROTATION).getAngleDegrees())
-								.build()
-				)
-
-//				// Set the model for the horizontal_rotation=north, vertical_rotation=up state
-//				.partialState() // TODO: How to special-case this state?
-//				.with(PlaneBlock.HORIZONTAL_ROTATION, Direction.NORTH)
-//				.with(PlaneBlock.VERTICAL_ROTATION, PlaneBlock.VerticalRotation.UP)
-//				.modelForState()
-//				.modelFile(mirrorPlaneT)
-//				.addModel()
+								.build();
+					}
+				})
 		;
 
 
