@@ -29,7 +29,6 @@ import java.util.stream.IntStream;
  *
  * @author Choonster
  */
-// TODO: Block item model generation
 public class TestMod3ItemModelProvider extends ItemModelProvider {
 	private static final String LAYER_0 = "layer0";
 
