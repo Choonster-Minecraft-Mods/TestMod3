@@ -26,8 +26,9 @@ public class ModDataProviders {
 		final ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
 		if (event.includeClient()) {
-			dataGenerator.addProvider(new TestMod3BlockStateProvider(dataGenerator, existingFileHelper));
-			dataGenerator.addProvider(new TestMod3ItemModelProvider(dataGenerator, existingFileHelper));
+			final TestMod3BlockStateProvider blockStateProvider = new TestMod3BlockStateProvider(dataGenerator, existingFileHelper);
+			dataGenerator.addProvider(blockStateProvider);
+			dataGenerator.addProvider(new TestMod3ItemModelProvider(dataGenerator, blockStateProvider.getExistingFileHelper()));
 		}
 
 		if (event.includeServer()) {

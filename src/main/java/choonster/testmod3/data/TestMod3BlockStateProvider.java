@@ -130,6 +130,10 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		return "TestMod3BlockStates";
 	}
 
+	public ExistingFileHelper getExistingFileHelper() {
+		return existingFileHelper;
+	}
+
 	@Override
 	protected void registerStatesAndModels() {
 		simpleBlockWithExistingParent(ModBlocks.WATER_GRASS, Blocks.GRASS);
