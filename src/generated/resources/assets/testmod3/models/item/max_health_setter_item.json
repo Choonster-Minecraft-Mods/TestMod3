@@ -1,3 +1,6 @@
 {
-  "parent": "item/generated"
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "testmod3:item/max_health_setter_item"
+  }
 }

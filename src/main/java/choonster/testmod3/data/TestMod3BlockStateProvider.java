@@ -121,6 +121,33 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		return ImmutableMap.copyOf(map);
 	});
 
+	/**
+	 * A copy of {@code minecraft:block/pressure_plate_down} that extends {@code minecraft:block/thin_block}
+	 * so that it has the same display transformations as {@code minecraft:block/pressure_plate_up}.
+	 */
+	private final LazyLoadBase<ModelFile> PRESSURE_PLATE_DOWN_WITH_TRANSFORMS = new LazyLoadBase<>(() ->
+			withExistingParent("block/pressure_plate_down_with_transforms", mcLoc("thin_block"))
+
+					.element()
+					.from(1, 0, 1)
+					.to(15, 0.5f, 15)
+					.textureAll("#texture")
+
+					.allFaces((direction, faceBuilder) -> {
+						if (direction.getAxis().isVertical()) {
+							faceBuilder.uvs(1, 1, 15, 15);
+						} else {
+							faceBuilder.uvs(1, 15, 15, 15.5f);
+						}
+					})
+
+					.face(Direction.DOWN)
+					.cullface(Direction.DOWN)
+					.end()
+
+					.end()
+	);
+
 	public TestMod3BlockStateProvider(final DataGenerator gen, final ExistingFileHelper exFileHelper) {
 		super(gen, TestMod3.MODID, exFileHelper);
 	}
@@ -157,7 +184,11 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 				.addModel();
 
 
-		simpleBlockWithExistingParent(ModBlocks.CLIENT_PLAYER_RIGHT_CLICK, existingMcModel(name(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE) + "_down"));
+		final ModelFile clientPlayerRightClick = getBuilder(name(ModBlocks.CLIENT_PLAYER_RIGHT_CLICK))
+				.parent(PRESSURE_PLATE_DOWN_WITH_TRANSFORMS.getValue())
+				.texture("texture", mcLoc("block/iron_block"));
+
+		simpleBlock(ModBlocks.CLIENT_PLAYER_RIGHT_CLICK, clientPlayerRightClick);
 
 
 		final ModelFile rotatableLampOn = orientableSingle(
@@ -208,7 +239,13 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 		simpleBlockWithExistingParent(ModBlocks.POTION_EFFECT, Blocks.COARSE_DIRT);
 
-		simpleBlockWithExistingParent(ModBlocks.CLIENT_PLAYER_ROTATION, existingMcModel(name(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE) + "_down"));
+
+		final ModelFile clientPlayerRotation = getBuilder(name(ModBlocks.CLIENT_PLAYER_ROTATION))
+				.parent(PRESSURE_PLATE_DOWN_WITH_TRANSFORMS.getValue())
+				.texture("texture", mcLoc("block/gold_block"));
+
+		simpleBlock(ModBlocks.CLIENT_PLAYER_ROTATION, clientPlayerRotation);
+
 
 		simpleBlock(ModBlocks.PIG_SPAWNER_REFILLER);
 

@@ -1,0 +1,62 @@
+{
+  "parent": "block/thin_block",
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        0.5,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#texture",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#texture"
+        },
+        "north": {
+          "texture": "#texture",
+          "uv": [
+            1.0,
+            15.0,
+            15.0,
+            15.5
+          ]
+        },
+        "south": {
+          "texture": "#texture",
+          "uv": [
+            1.0,
+            15.0,
+            15.0,
+            15.5
+          ]
+        },
+        "west": {
+          "texture": "#texture",
+          "uv": [
+            1.0,
+            15.0,
+            15.0,
+            15.5
+          ]
+        },
+        "east": {
+          "texture": "#texture",
+          "uv": [
+            1.0,
+            15.0,
+            15.0,
+            15.5
+          ]
+        }
+      }
+    }
+  ]
+}

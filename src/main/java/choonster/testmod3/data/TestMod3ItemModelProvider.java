@@ -110,9 +110,9 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 		withExistingParent(ModItems.BLOCK_DESTROYER, Items.TNT_MINECART);
 
-		withSimpleParent(ModItems.SUBSCRIPTS);
+		withSimpleParentAndDefaultTexture(ModItems.SUBSCRIPTS);
 
-		withSimpleParent(ModItems.SUPERSCRIPTS);
+		withSimpleParentAndDefaultTexture(ModItems.SUPERSCRIPTS);
 
 
 		// Create the parent model
@@ -146,7 +146,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 
 		// Create the parent model
-		final ItemModelBuilder slingshot = withSimpleParent(ModItems.SLINGSHOT);
+		final ItemModelBuilder slingshot = withSimpleParentAndDefaultTexture(ModItems.SLINGSHOT);
 
 		// Create the child model
 		final ItemModelBuilder slingshotPulled = getBuilder(name(ModItems.SLINGSHOT) + "_pulled")
@@ -183,7 +183,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 		bowItem(ModItems.BOW);
 
-		withGeneratedParent(name(ModItems.ARROW));
+		withGeneratedParentAndDefaultTexture(ModItems.ARROW);
 
 		withExistingParent(ModItems.HEIGHT_TESTER, Items.COMPASS);
 
@@ -197,13 +197,13 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 		withExistingParent(ModItems.LOOT_TABLE_TEST, Items.GOLD_INGOT);
 
-		withGeneratedParent(name(ModItems.MAX_HEALTH_GETTER_ITEM));
+		withGeneratedParentAndDefaultTexture(ModItems.MAX_HEALTH_GETTER_ITEM);
 
-		withGeneratedParent(name(ModItems.MAX_HEALTH_SETTER_ITEM));
+		withGeneratedParentAndDefaultTexture(ModItems.MAX_HEALTH_SETTER_ITEM);
 
-		withSimpleParent(ModItems.GUN);
+		withSimpleParentAndDefaultTexture(ModItems.GUN);
 
-		withSimpleParent(ModItems.DIMENSION_REPLACEMENT);
+		withSimpleParentAndDefaultTexture(ModItems.DIMENSION_REPLACEMENT);
 
 		withExistingParent(ModItems.SADDLE, Items.SADDLE);
 
@@ -216,7 +216,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 
 		// Create the parent model
-		final ItemModelBuilder hiddenBlockRevealer = withGeneratedParent(ModItems.HIDDEN_BLOCK_REVEALER);
+		final ItemModelBuilder hiddenBlockRevealer = withGeneratedParentAndDefaultTexture(ModItems.HIDDEN_BLOCK_REVEALER);
 
 		// Create the child model and add it as an override that's displayed when hidden blocks are being revealed
 		final ItemModelBuilder hiddenBlockRevealerActive = getBuilder(name(ModItems.HIDDEN_BLOCK_REVEALER) + "_active")
@@ -234,18 +234,18 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 		withExistingParent(name(ModItems.KEY), "handheld")
 				.texture(LAYER_0, itemTexture(ModItems.KEY));
 
-		withGeneratedParent(ModItems.BLOCK_DETECTION_ARROW);
+		withGeneratedParentAndDefaultTexture(ModItems.BLOCK_DETECTION_ARROW);
 
 		withGeneratedParent(name(ModItems.TRANSLUCENT_ITEM))
 				.texture(LAYER_0, mcLoc("block/ice"));
 
-		withGeneratedParent(ModItems.ENTITY_KILLER);
+		withGeneratedParentAndDefaultTexture(ModItems.ENTITY_KILLER);
 
-		withGeneratedParent(ModItems.CHUNK_ENERGY_SETTER);
+		withGeneratedParentAndDefaultTexture(ModItems.CHUNK_ENERGY_SETTER);
 
-		withGeneratedParent(ModItems.CHUNK_ENERGY_GETTER);
+		withGeneratedParentAndDefaultTexture(ModItems.CHUNK_ENERGY_GETTER);
 
-		withGeneratedParent(ModItems.CHUNK_ENERGY_DISPLAY);
+		withGeneratedParentAndDefaultTexture(ModItems.CHUNK_ENERGY_DISPLAY);
 
 		withExistingParent(name(ModItems.BEACON_ITEM), mcLoc("block/beacon"));
 
@@ -253,7 +253,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 		withExistingParent(ModItems.ENTITY_CHECKER, Items.BONE);
 
-		withGeneratedParent(ModItems.RUBBER);
+		withGeneratedParentAndDefaultTexture(ModItems.RUBBER);
 
 		withExistingParent(ModItems.REPLACEMENT_HELMET, Items.CHAINMAIL_HELMET);
 
@@ -265,7 +265,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 		ModItems.VariantGroups.VARIANTS_ITEMS
 				.getItems()
-				.forEach(this::withGeneratedParent);
+				.forEach(this::withGeneratedParentAndDefaultTexture);
 	}
 
 	private void registerBlockItemModels() {
@@ -391,7 +391,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 		return withExistingParent(name(item), registryName(modelItem));
 	}
 
-	private ItemModelBuilder withGeneratedParent(final Item item) {
+	private ItemModelBuilder withGeneratedParentAndDefaultTexture(final Item item) {
 		return withGeneratedParent(name(item))
 				.texture(LAYER_0, itemTexture(item));
 	}
@@ -400,7 +400,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 		return withExistingParent(name, mcLoc("generated"));
 	}
 
-	private ItemModelBuilder withSimpleParent(final Item item) {
+	private ItemModelBuilder withSimpleParentAndDefaultTexture(final Item item) {
 		return withSimpleParent(item, itemTexture(item));
 	}
 
