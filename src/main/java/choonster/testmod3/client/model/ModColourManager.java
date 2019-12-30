@@ -13,13 +13,14 @@ import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 /**
  * Registers {@link IBlockColor}/{@link IItemColor} handlers for this mod's blocks/items.
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber(modid = TestMod3.MODID)
+@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 public class ModColourManager {
 
 	/**
