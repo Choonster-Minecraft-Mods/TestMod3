@@ -1,6 +1,7 @@
 package choonster.testmod3.block;
 
 import choonster.testmod3.block.variantgroup.BlockVariantGroup;
+import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -36,7 +37,7 @@ public class VariantsBlock extends Block {
 	@Override
 	public boolean onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
 		final EnumType newType = variantGroup.cycleVariant(type);
-		final BlockState newState = variantGroup.getBlock(newType).getDefaultState();
+		final BlockState newState = RegistryUtil.getRequiredRegistryEntry(variantGroup.getBlock(newType)).getDefaultState();
 
 		world.setBlockState(pos, newState);
 

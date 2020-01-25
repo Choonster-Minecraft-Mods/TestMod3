@@ -1,17 +1,20 @@
 package choonster.testmod3.block.variantgroup;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.util.RegistryUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -20,32 +23,26 @@ import java.util.function.Function;
  * @author Choonster
  */
 public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializable, BLOCK extends Block> implements IBlockVariantGroup<VARIANT, BLOCK> {
-
 	private final String groupName;
-	private final boolean isSuffix;
 	private final Iterable<VARIANT> variants;
 
-	private final Function<VARIANT, Block.Properties> blockPropertiesFactory;
-	private final BlockFactory<VARIANT, BLOCK> blockFactory;
-
-	private final Function<VARIANT, Item.Properties> itemPropertiesFactory;
-	private final ItemFactory<VARIANT, BLOCK> itemFactory;
-
-	private Map<VARIANT, BLOCK> blocks;
-	private boolean registeredItems = false;
+	private final Map<VARIANT, RegistryObject<BLOCK>> blocks;
 
 	private BlockVariantGroup(
 			final String groupName, final boolean isSuffix, final Iterable<VARIANT> variants,
 			final Function<VARIANT, Block.Properties> blockPropertiesFactory, final BlockFactory<VARIANT, BLOCK> blockFactory,
-			final Function<VARIANT, Item.Properties> itemPropertiesFactory, final ItemFactory<VARIANT, BLOCK> itemFactory
+			final Function<VARIANT, Item.Properties> itemPropertiesFactory, final ItemFactory<VARIANT, BLOCK> itemFactory,
+			final DeferredRegister<Block> blocks, final DeferredRegister<Item> items
 	) {
 		this.groupName = groupName;
-		this.isSuffix = isSuffix;
 		this.variants = variants;
-		this.blockPropertiesFactory = blockPropertiesFactory;
-		this.blockFactory = blockFactory;
-		this.itemPropertiesFactory = itemPropertiesFactory;
-		this.itemFactory = itemFactory;
+
+		this.blocks = register(
+				groupName, isSuffix, variants,
+				blockPropertiesFactory, blockFactory,
+				itemPropertiesFactory, itemFactory,
+				blocks, items
+		);
 	}
 
 	/**
@@ -74,7 +71,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	 * @return The blocks
 	 */
 	@Override
-	public Collection<BLOCK> getBlocks() {
+	public Collection<RegistryObject<BLOCK>> getBlocks() {
 		return getBlocksMap().values();
 	}
 
@@ -83,7 +80,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	 *
 	 * @return The blocks map
 	 */
-	public Map<VARIANT, BLOCK> getBlocksMap() {
+	public Map<VARIANT, RegistryObject<BLOCK>> getBlocksMap() {
 		return blocks;
 	}
 
@@ -93,23 +90,24 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	 * @param variant The variant
 	 * @return The block
 	 */
-	public BLOCK getBlock(final VARIANT variant) {
+	public RegistryObject<BLOCK> getBlock(final VARIANT variant) {
 		return blocks.get(variant);
 	}
 
 	/**
-	 * Registers this group's blocks.
+	 * Registers the variant group's blocks and items using the provided DeferredRegister instance.
 	 *
-	 * @param registry The block registry
-	 * @throws IllegalStateException If the blocks have already been registered
+	 * @return A map of variants to their corresponding blocks
 	 */
-	@Override
-	public void registerBlocks(final IForgeRegistry<Block> registry) {
-		Preconditions.checkState(blocks == null, "Attempt to re-register Blocks for Variant Group %s", groupName);
+	private Map<VARIANT, RegistryObject<BLOCK>> register(
+			final String groupName, final boolean isSuffix, final Iterable<VARIANT> variants,
+			final Function<VARIANT, Block.Properties> blockPropertiesFactory, final BlockFactory<VARIANT, BLOCK> blockFactory,
+			final Function<VARIANT, Item.Properties> itemPropertiesFactory, final ItemFactory<VARIANT, BLOCK> itemFactory,
+			final DeferredRegister<Block> blocks, final DeferredRegister<Item> items
+	) {
+		final ImmutableMap.Builder<VARIANT, RegistryObject<BLOCK>> builder = ImmutableMap.builder();
 
-		final ImmutableMap.Builder<VARIANT, BLOCK> builder = ImmutableMap.builder();
-
-		getVariants().forEach(variant -> {
+		variants.forEach(variant -> {
 			final String registryName;
 			if (isSuffix) {
 				registryName = groupName + "_" + variant.getName();
@@ -117,58 +115,24 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 				registryName = variant.getName() + "_" + groupName;
 			}
 
-			final Block.Properties properties = blockPropertiesFactory.apply(variant);
+			final RegistryObject<BLOCK> block = blocks.register(registryName, () -> {
+				final Block.Properties properties = blockPropertiesFactory.apply(variant);
 
-			final BLOCK block = blockFactory.createBlock(variant, this, properties);
+				return blockFactory.createBlock(variant, this, properties);
+			});
 
-			block.setRegistryName(registryName);
-
-			registry.register(block);
 			builder.put(variant, block);
+
+			items.register(registryName, () -> {
+				final Item.Properties properties = itemPropertiesFactory.apply(variant);
+
+				return itemFactory.createItem(RegistryUtil.getRequiredRegistryEntry(block), properties, variant);
+			});
 		});
 
-		blocks = builder.build();
+		return builder.build();
 	}
 
-	/**
-	 * Registers this group's items.
-	 *
-	 * @param registry The item registry
-	 * @return The registered items
-	 * @throws IllegalStateException If the items have already been registered
-	 */
-	@Override
-	public List<BlockItem> registerItems(final IForgeRegistry<Item> registry) {
-		Preconditions.checkState(blocks != null, "Attempt to register Items before Blocks for Variant Group %s", groupName);
-		Preconditions.checkState(!registeredItems, "Attempt to re-register Items for Variant Group %s", groupName);
-
-		final List<BlockItem> items = new ArrayList<>();
-
-		getBlocksMap().forEach((variant, block) -> {
-			final ResourceLocation registryName = Preconditions.checkNotNull(block.getRegistryName(), "Block %s has null registry name", block);
-
-			final Item.Properties properties = itemPropertiesFactory.apply(variant);
-
-			final BlockItem item = itemFactory.createItem(block, properties, variant);
-
-			item.setRegistryName(registryName);
-
-			registry.register(item);
-
-			items.add(item);
-		});
-
-		registeredItems = true;
-
-		return items;
-	}
-
-	/**
-	 * A function that creates blocks for a variant group.
-	 *
-	 * @param <VARIANT> The variant type
-	 * @param <BLOCK>   The block type
-	 */
 	@FunctionalInterface
 	public interface BlockFactory<VARIANT extends Enum<VARIANT> & IStringSerializable, BLOCK extends Block> {
 		BLOCK createBlock(VARIANT variant, BlockVariantGroup<VARIANT, BLOCK> variantGroup, Block.Properties properties);
@@ -186,6 +150,9 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	}
 
 	public static class Builder<VARIANT extends Enum<VARIANT> & IStringSerializable, BLOCK extends Block> {
+		private final DeferredRegister<Block> blocks;
+		private final DeferredRegister<Item> items;
+
 		private String groupName;
 		private boolean isSuffix;
 		private Iterable<VARIANT> variants;
@@ -199,15 +166,19 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 		/**
 		 * Creates a new variant group builder.
 		 *
+		 * @param blocks    The DeferredRegister instance to register the group's blocks with
+		 * @param items     The DeferredRegister instance to register the group's block items with
 		 * @param <VARIANT> The variant type
 		 * @param <BLOCK>   The block type
 		 * @return A new Variant Group Builder
 		 */
-		public static <VARIANT extends Enum<VARIANT> & IStringSerializable, BLOCK extends Block> Builder<VARIANT, BLOCK> create() {
-			return new Builder<>();
+		public static <VARIANT extends Enum<VARIANT> & IStringSerializable, BLOCK extends Block> Builder<VARIANT, BLOCK> create(final DeferredRegister<Block> blocks, final DeferredRegister<Item> items) {
+			return new Builder<>(blocks, items);
 		}
 
-		private Builder() {
+		public Builder(final DeferredRegister<Block> blocks, final DeferredRegister<Item> items) {
+			this.blocks = blocks;
+			this.items = items;
 		}
 
 		/**
@@ -330,7 +301,12 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 			Preconditions.checkState(blockPropertiesFactory != null, "Block Properties Factory not provided");
 			Preconditions.checkState(blockFactory != null, "Block Factory not provided");
 
-			return new BlockVariantGroup<>(groupName, isSuffix, variants, blockPropertiesFactory, blockFactory, itemPropertiesFactory, itemFactory);
+			return new BlockVariantGroup<>(
+					groupName, isSuffix, variants,
+					blockPropertiesFactory, blockFactory,
+					itemPropertiesFactory, itemFactory,
+					blocks, items
+			);
 		}
 	}
 }

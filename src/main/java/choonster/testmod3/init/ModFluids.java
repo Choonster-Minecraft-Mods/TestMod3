@@ -7,6 +7,7 @@ import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.fluid.group.StandardFluidGroup;
 import choonster.testmod3.item.block.FluidTankItem;
 import choonster.testmod3.tileentity.FluidTankTileEntity;
+import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.fluid.FlowingFluid;
@@ -140,7 +141,7 @@ public class ModFluids {
 			final Fluid fluid1 = fluid.get();
 			final FluidStack fluidStack = new FluidStack(fluid1, FluidTankTileEntity.CAPACITY);
 
-			final Item item = ModBlocks.FLUID_TANK.asItem();
+			final Item item = RegistryUtil.getRequiredRegistryEntry(ModBlocks.FLUID_TANK).asItem();
 			assert item instanceof FluidTankItem;
 
 			((FluidTankItem) item).addFluid(fluidStack);

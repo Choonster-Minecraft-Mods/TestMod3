@@ -2,6 +2,7 @@ package choonster.testmod3.block;
 
 import choonster.testmod3.block.variantgroup.BlockVariantGroup;
 import choonster.testmod3.util.Constants;
+import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -60,7 +61,7 @@ public class ColoredRotatableBlock extends Block {
 
 	@Override
 	public final boolean recolorBlock(final BlockState currentState, final IWorld world, final BlockPos pos, final Direction facing, final DyeColor color) {
-		final BlockState newState = copyState(currentState, getVariantGroup().getBlock(color).getDefaultState());
+		final BlockState newState = copyState(currentState, RegistryUtil.getRequiredRegistryEntry(getVariantGroup().getBlock(color)).getDefaultState());
 
 		world.setBlockState(pos, newState, Constants.BlockFlags.DEFAULT_FLAGS);
 

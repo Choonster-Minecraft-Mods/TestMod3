@@ -3,6 +3,7 @@ package choonster.testmod3.data;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.*;
 import choonster.testmod3.block.pipe.BasePipeBlock;
+import choonster.testmod3.block.slab.ColouredSlabBlock;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.util.EnumFaceRotation;
 import choonster.testmod3.util.RegistryUtil;
@@ -18,6 +19,7 @@ import net.minecraft.util.LazyLoadBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.ValidationResults;
 import net.minecraftforge.client.model.generators.*;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -409,19 +411,23 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 		ModBlocks.VariantGroups.COLORED_ROTATABLE_BLOCKS
 				.getBlocks()
-				.forEach(block -> {
+				.forEach(blockRegistryObject -> {
+					final ColoredRotatableBlock block = RegistryUtil.getRequiredRegistryEntry(blockRegistryObject);
+
 					final ModelFile modelFile = orientableSingle(
-							"block/colored_rotatable/" + name(block),
+							"block/colored_rotatable/" + name(blockRegistryObject),
 							modLoc("block/colored_rotatable/" + block.getColor().getName()),
 							modLoc("block/colored_rotatable/" + block.getColor().getName() + "_front")
 					);
 
-					directionalBlockUvLock(block, modelFile);
+					directionalBlockUvLock(blockRegistryObject, modelFile);
 				});
 
 		ModBlocks.VariantGroups.COLORED_MULTI_ROTATABLE_BLOCKS
 				.getBlocks()
-				.forEach(block -> {
+				.forEach(blockRegistryObject -> {
+					final ColoredMultiRotatableBlock block = RegistryUtil.getRequiredRegistryEntry(blockRegistryObject);
+
 					final ResourceLocation side = modLoc("block/colored_rotatable/" + block.getColor().getName());
 					final ResourceLocation front = modLoc("block/colored_rotatable/" + block.getColor().getName() + "_front_multi");
 
@@ -429,7 +435,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 					Arrays.stream(EnumFaceRotation.values())
 							.forEach(faceRotation -> {
-								String name = "block/colored_rotatable/" + name(block);
+								String name = "block/colored_rotatable/" + name(blockRegistryObject);
 
 								if (faceRotation != EnumFaceRotation.UP) {
 									name += "_rotated_" + faceRotation.getName();
@@ -444,7 +450,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 								models.put(faceRotation, model);
 							});
 
-					directionalBlockUvLock(block, (state) -> models.get(state.get(ColoredMultiRotatableBlock.FACE_ROTATION)));
+					directionalBlockUvLock(blockRegistryObject, (state) -> models.get(state.get(ColoredMultiRotatableBlock.FACE_ROTATION)));
 				});
 
 
@@ -455,13 +461,14 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 		ModBlocks.VariantGroups.TERRACOTTA_SLABS
 				.getBlocks()
-				.forEach(block ->
-						slabBlock(
-								block,
-								mcLoc("block/" + block.getVariant().getName() + "_terracotta"),
-								mcLoc("block/" + block.getVariant().getName() + "_terracotta")
-						)
-				);
+				.forEach(blockRegistryObject -> {
+					final ColouredSlabBlock block = RegistryUtil.getRequiredRegistryEntry(blockRegistryObject);
+					slabBlock(
+							block,
+							mcLoc("block/" + block.getVariant().getName() + "_terracotta"),
+							mcLoc("block/" + block.getVariant().getName() + "_terracotta")
+					);
+				});
 
 
 		validate();
@@ -493,8 +500,16 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		return Preconditions.checkNotNull(block.getRegistryName(), "Block %s has a null registry name", block);
 	}
 
+	private String name(final RegistryObject<? extends Block> block) {
+		return name(RegistryUtil.getRequiredRegistryEntry(block));
+	}
+
 	private String name(final Block block) {
 		return registryName(block).getPath();
+	}
+
+	private ResourceLocation blockTexture(final RegistryObject<? extends Block> block) {
+		return blockTexture(RegistryUtil.getRequiredRegistryEntry(block));
 	}
 
 	/**
@@ -519,15 +534,31 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		return getExistingFile(new ResourceLocation("minecraft", name));
 	}
 
+	private ModelFile cubeAll(final RegistryObject<? extends Block> block) {
+		return cubeAll(RegistryUtil.getRequiredRegistryEntry(block));
+	}
+
 	private ModelFile orientableSingle(final String name, final ResourceLocation side, final ResourceLocation front) {
 		return orientable(name, side, front, side);
 	}
 
-	private void simpleBlockWithExistingParent(final Block block, final Block parentBlock) {
+	private VariantBlockStateBuilder getVariantBuilder(final RegistryObject<? extends Block> block) {
+		return getVariantBuilder(RegistryUtil.getRequiredRegistryEntry(block));
+	}
+
+	private MultiPartBlockStateBuilder getMultipartBuilder(final RegistryObject<? extends Block> block) {
+		return getMultipartBuilder(RegistryUtil.getRequiredRegistryEntry(block));
+	}
+
+	private void simpleBlock(final RegistryObject<? extends Block> block) {
+		simpleBlock(RegistryUtil.getRequiredRegistryEntry(block));
+	}
+
+	private void simpleBlockWithExistingParent(final RegistryObject<? extends Block> block, final Block parentBlock) {
 		simpleBlockWithExistingParent(block, existingModel(parentBlock));
 	}
 
-	private void simpleBlockWithExistingParent(final Block block, final ModelFile parentModel) {
+	private void simpleBlockWithExistingParent(final RegistryObject<? extends Block> block, final ModelFile parentModel) {
 		simpleBlock(
 				block,
 				getBuilder(name(block))
@@ -535,11 +566,11 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		);
 	}
 
-	protected void directionalBlockUvLock(final Block block, final ModelFile model) {
+	protected void directionalBlockUvLock(final RegistryObject<? extends Block> block, final ModelFile model) {
 		directionalBlockUvLock(block, $ -> model);
 	}
 
-	protected void directionalBlockUvLock(final Block block, final Function<BlockState, ModelFile> modelFunc) {
+	protected void directionalBlockUvLock(final RegistryObject<? extends Block> block, final Function<BlockState, ModelFile> modelFunc) {
 		getVariantBuilder(block)
 				.forAllStates(state -> {
 					final Direction direction = state.get(BlockStateProperties.FACING);
@@ -551,7 +582,11 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 				});
 	}
 
-	private void pipeBlock(final BasePipeBlock block, final ResourceLocation centre, final ResourceLocation side) {
+	private void simpleBlock(final RegistryObject<? extends Block> block, final ModelFile modelFile) {
+		simpleBlock(RegistryUtil.getRequiredRegistryEntry(block), modelFile);
+	}
+
+	private void pipeBlock(final RegistryObject<? extends BasePipeBlock> block, final ResourceLocation centre, final ResourceLocation side) {
 		final ModelFile centreModel = getBuilder(name(block) + "_centre")
 				.parent(pipeCentre.getValue())
 				.texture("centre", centre);
@@ -581,7 +616,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		}
 	}
 
-	private void commandBlock(final CommandBlockBlock commandBlock, final Block modelCommandBlock) {
+	private void commandBlock(final RegistryObject<? extends CommandBlockBlock> commandBlock, final Block modelCommandBlock) {
 		final ModelFile normalModel = withExistingParent(name(commandBlock), name(modelCommandBlock));
 		final ModelFile conditionalModel = withExistingParent(name(commandBlock) + "_conditional", name(modelCommandBlock) + "_conditional");
 

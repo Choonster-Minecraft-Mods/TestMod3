@@ -1,14 +1,11 @@
 package choonster.testmod3.block.variantgroup;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.BlockItem;
 import net.minecraft.util.IStringSerializable;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.fml.RegistryObject;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * A group consisting of a collection of variants with one or more blocks registered for each one.
@@ -62,22 +59,5 @@ public interface IBlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSeria
 	 *
 	 * @return The blocks
 	 */
-	Collection<BLOCK> getBlocks();
-
-	/**
-	 * Registers this group's blocks.
-	 *
-	 * @param registry The block registry
-	 * @throws IllegalStateException If the blocks have already been registered
-	 */
-	void registerBlocks(IForgeRegistry<Block> registry);
-
-	/**
-	 * Registers this group's items.
-	 *
-	 * @param registry The item registry
-	 * @return The registered items
-	 * @throws IllegalStateException If the items have already been registered
-	 */
-	List<? extends BlockItem> registerItems(IForgeRegistry<Item> registry);
+	Collection<RegistryObject<BLOCK>> getBlocks();
 }

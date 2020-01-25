@@ -9,7 +9,10 @@ import net.minecraft.item.Items;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.BlockStateProperty;
 import net.minecraft.world.storage.loot.conditions.SurvivesExplosion;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.function.Function;
 
 /**
  * Generates this mod's block loot tables.
@@ -97,6 +100,14 @@ public class TestMod3BlockLootTables extends BlockLootTables {
 	@Override
 	protected Iterable<Block> getKnownBlocks() {
 		return RegistryUtil.getModRegistryEntries(ForgeRegistries.BLOCKS);
+	}
+
+	private void registerLootTable(final RegistryObject<? extends Block> block, final Function<Block, LootTable.Builder> factory) {
+		registerLootTable(RegistryUtil.getRequiredRegistryEntry(block), factory);
+	}
+
+	private void registerDropSelfLootTable(final RegistryObject<? extends Block> block) {
+		registerDropSelfLootTable(RegistryUtil.getRequiredRegistryEntry(block)); // TODO: Why is this unchecked?
 	}
 
 	private static <T> T withSurvivesExplosion(final ILootConditionConsumer<T> lootConditionConsumer) {

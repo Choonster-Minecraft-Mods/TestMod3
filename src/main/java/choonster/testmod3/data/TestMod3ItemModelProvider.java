@@ -5,6 +5,7 @@ import choonster.testmod3.capability.hiddenblockrevealer.HiddenBlockRevealerCapa
 import choonster.testmod3.capability.lastusetime.LastUseTimeCapability;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.init.ModItems;
+import choonster.testmod3.util.RegistryUtil;
 import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -18,6 +19,7 @@ import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelBuilder.Perspective;
 import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.fml.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
@@ -293,7 +295,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 		blockItem(ModBlocks.PIG_SPAWNER_REFILLER);
 
-		withExistingParent(name(ModBlocks.MIRROR_PLANE), modLoc("block/" + name(ModBlocks.MIRROR_PLANE.asItem()) + "_t"));
+		withExistingParent(name(ModBlocks.MIRROR_PLANE), modLoc("block/" + name(RegistryUtil.getRequiredRegistryEntry(ModBlocks.MIRROR_PLANE).asItem()) + "_t"));
 
 		blockItem(ModBlocks.VANILLA_MODEL_TEST);
 
@@ -321,17 +323,17 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 		blockItem(ModBlocks.CHAIN_SURVIVAL_COMMAND_BLOCK);
 
-		withExistingParent(ModBlocks.OAK_SAPLING.asItem(), Blocks.OAK_SAPLING.asItem());
+		withExistingParent(RegistryUtil.getRequiredRegistryEntry(ModBlocks.OAK_SAPLING).asItem(), Blocks.OAK_SAPLING.asItem());
 
-		withExistingParent(ModBlocks.SPRUCE_SAPLING.asItem(), Blocks.SPRUCE_SAPLING.asItem());
+		withExistingParent(RegistryUtil.getRequiredRegistryEntry(ModBlocks.SPRUCE_SAPLING).asItem(), Blocks.SPRUCE_SAPLING.asItem());
 
-		withExistingParent(ModBlocks.BIRCH_SAPLING.asItem(), Blocks.BIRCH_SAPLING.asItem());
+		withExistingParent(RegistryUtil.getRequiredRegistryEntry(ModBlocks.BIRCH_SAPLING).asItem(), Blocks.BIRCH_SAPLING.asItem());
 
-		withExistingParent(ModBlocks.JUNGLE_SAPLING.asItem(), Blocks.JUNGLE_SAPLING.asItem());
+		withExistingParent(RegistryUtil.getRequiredRegistryEntry(ModBlocks.JUNGLE_SAPLING).asItem(), Blocks.JUNGLE_SAPLING.asItem());
 
-		withExistingParent(ModBlocks.ACACIA_SAPLING.asItem(), Blocks.ACACIA_SAPLING.asItem());
+		withExistingParent(RegistryUtil.getRequiredRegistryEntry(ModBlocks.ACACIA_SAPLING).asItem(), Blocks.ACACIA_SAPLING.asItem());
 
-		withExistingParent(ModBlocks.DARK_OAK_SAPLING.asItem(), Blocks.DARK_OAK_SAPLING.asItem());
+		withExistingParent(RegistryUtil.getRequiredRegistryEntry(ModBlocks.DARK_OAK_SAPLING).asItem(), Blocks.DARK_OAK_SAPLING.asItem());
 
 		blockItem(ModBlocks.INVISIBLE);
 
@@ -365,15 +367,15 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 		return Preconditions.checkNotNull(block.getRegistryName(), "Block %s has a null registry name", block);
 	}
 
-	private Item getBlockItem(final Block block) {
-		return Preconditions.checkNotNull(block.asItem(), "Block %s has no item", block);
+	private Item getBlockItem(final RegistryObject<? extends Block> block) {
+		return Preconditions.checkNotNull(RegistryUtil.getRequiredRegistryEntry(block).asItem(), "Block %s has no item", block);
 	}
 
 	private String name(final Item item) {
 		return registryName(item).getPath();
 	}
 
-	private String name(final Block block) {
+	private String name(final RegistryObject<? extends Block> block) {
 		return name(getBlockItem(block));
 	}
 
@@ -451,13 +453,13 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 				.end();
 	}
 
-	private void blockItem(final Block block) {
+	private void blockItem(final RegistryObject<? extends Block> block) {
 		final Item item = getBlockItem(block);
 
 		withExistingParent(name(item), modLoc("block/" + name(item)));
 	}
 
-	private void pipeBlockItem(final Block block, final ResourceLocation texture) {
+	private void pipeBlockItem(final RegistryObject<? extends Block> block, final ResourceLocation texture) {
 		getBuilder(name(block))
 				.parent(pipeInventory.getValue())
 				.texture("all", texture);

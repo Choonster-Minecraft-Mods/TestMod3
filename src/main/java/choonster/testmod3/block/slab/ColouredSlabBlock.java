@@ -1,6 +1,7 @@
 package choonster.testmod3.block.slab;
 
 import choonster.testmod3.block.variantgroup.BlockVariantGroup;
+import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -35,7 +36,7 @@ public class ColouredSlabBlock extends TestMod3SlabBlock<DyeColor, ColouredSlabB
 
 	@Override
 	public boolean recolorBlock(final BlockState state, final IWorld world, final BlockPos pos, final Direction facing, final DyeColor colour) {
-		final BlockState newState = variantGroup.getBlock(colour).getDefaultState()
+		final BlockState newState = RegistryUtil.getRequiredRegistryEntry(variantGroup.getBlock(colour)).getDefaultState()
 				.with(TYPE, state.get(TYPE));
 
 		return world.setBlockState(pos, newState, 3);

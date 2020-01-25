@@ -2,6 +2,7 @@ package choonster.testmod3.client.model;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModBlocks;
+import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.IBlockColor;
@@ -41,7 +42,7 @@ public class ModColourManager {
 			return GrassColors.get(0.5d, 1.0d);
 		};
 
-		blockColors.register(grassColourHandler, ModBlocks.WATER_GRASS);
+		blockColors.register(grassColourHandler, RegistryUtil.getRequiredRegistryEntry(ModBlocks.WATER_GRASS));
 	}
 
 	/**
@@ -60,6 +61,6 @@ public class ModColourManager {
 			return blockColors.getColor(state, null, null, tintIndex);
 		};
 
-		itemColors.register(itemBlockColourHandler, ModBlocks.WATER_GRASS);
+		itemColors.register(itemBlockColourHandler, RegistryUtil.getRequiredRegistryEntry(ModBlocks.WATER_GRASS));
 	}
 }
