@@ -41,7 +41,7 @@ public abstract class StaticPressurePlateBlock extends Block {
 	@Override
 	public boolean isValidPosition(final BlockState state, final IWorldReader world, final BlockPos pos) {
 		final BlockPos downPos = pos.down();
-		return func_220064_c(world, downPos) || func_220055_a(world, downPos, Direction.UP);
+		return hasSolidSideOnTop(world, downPos) || hasEnoughSolidSide(world, downPos, Direction.UP);
 	}
 
 	@SuppressWarnings("deprecation")

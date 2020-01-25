@@ -40,8 +40,9 @@ public class SurvivalCommandBlockTileEntity extends CommandBlockTileEntity {
 			getWorld().notifyBlockUpdate(pos, state, state, Constants.BlockFlags.DEFAULT_FLAGS);
 		}
 
+		// TODO: func_195043_d used to be called getWorld, but lost its name in the stable_58-1.14.4 MCP mappings; see ModCoderPack/MCPBot-Issues#867
 		@Override
-		public ServerWorld getWorld() {
+		public ServerWorld func_195043_d() {
 			return (ServerWorld) world;
 		}
 
@@ -67,7 +68,7 @@ public class SurvivalCommandBlockTileEntity extends CommandBlockTileEntity {
 					this,
 					new Vec3d(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5D),
 					Vec2f.ZERO,
-					getWorld(),
+					func_195043_d(),
 					2,
 					getName().getString(),
 					getName(),

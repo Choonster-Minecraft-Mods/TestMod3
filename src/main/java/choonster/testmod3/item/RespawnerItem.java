@@ -40,7 +40,8 @@ public class RespawnerItem extends Item {
 			}
 
 			final BlockPos bedLocation = playerMP.getBedLocation(dimension);
-			final ServerWorld worldServer = world.getServer() != null ? world.getServer().getWorld(dimension) : null;
+			// TODO: func_71218_a used to be called getWorld, but lost its name in the stable_58-1.14.4 MCP mappings; see ModCoderPack/MCPBot-Issues#867
+			final ServerWorld worldServer = world.getServer() != null ? world.getServer().func_71218_a(dimension) : null;
 
 			if (worldServer == null) {
 				return new ActionResult<>(ActionResultType.FAIL, heldItem);
