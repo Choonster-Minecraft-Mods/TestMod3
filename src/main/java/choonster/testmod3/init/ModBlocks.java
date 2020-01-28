@@ -19,6 +19,7 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.CommandBlockTileEntity;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -29,6 +30,8 @@ import java.util.function.Supplier;
 public class ModBlocks {
 	private static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, TestMod3.MODID);
 	private static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, TestMod3.MODID);
+
+	private static boolean isInitialised = false;
 
 	public static final RegistryObject<WaterGrassBlock> WATER_GRASS = registerBlock("water_grass",
 			() -> new WaterGrassBlock(Block.Properties.create(Material.WATER))
@@ -201,6 +204,24 @@ public class ModBlocks {
 				.blockPropertiesFactory(color -> Block.Properties.create(Material.ROCK, color))
 				.blockFactory(ColouredSlabBlock::new)
 				.build();
+	}
+
+	/**
+	 * Registers the {@link DeferredRegister} instances with the mod event bus.
+	 * <p>
+	 * This should be called during mod construction.
+	 *
+	 * @param modEventBus The mod event bus
+	 */
+	public static void initialise(final IEventBus modEventBus) {
+		if (isInitialised) {
+			throw new IllegalStateException("Already initialised");
+		}
+
+		BLOCKS.register(modEventBus);
+		ITEMS.register(modEventBus);
+
+		isInitialised = true;
 	}
 
 	/**
