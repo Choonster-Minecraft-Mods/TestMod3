@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.BlockItem;
 import net.minecraft.world.GrassColors;
 import net.minecraft.world.biome.BiomeColors;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -21,7 +22,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
+@Mod.EventBusSubscriber(modid = TestMod3.MODID, value = Dist.CLIENT, bus = Bus.MOD)
 public class ModColourManager {
 
 	/**
