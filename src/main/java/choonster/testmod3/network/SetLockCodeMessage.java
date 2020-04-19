@@ -1,7 +1,7 @@
 package choonster.testmod3.network;
 
 import choonster.testmod3.capability.lock.LockCapability;
-import choonster.testmod3.client.gui.LockSecreen;
+import choonster.testmod3.client.gui.LockScreen;
 import choonster.testmod3.util.NetworkUtil;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 /**
- * Sent to the server by {@link LockSecreen} to set the new lock code.
+ * Sent to the server by {@link LockScreen} to set the new lock code.
  *
  * @author Choonster
  */

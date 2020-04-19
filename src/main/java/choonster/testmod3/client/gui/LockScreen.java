@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
  *
  * @author Choonster
  */
-public class LockSecreen extends Screen {
+public class LockScreen extends Screen {
 	/**
 	 * The lock.
 	 */
@@ -42,7 +42,7 @@ public class LockSecreen extends Screen {
 	private Button doneButton;
 	private Button cancelButton;
 
-	public LockSecreen(final ILock lock, final BlockPos pos, @Nullable final Direction facing) {
+	public LockScreen(final ILock lock, final BlockPos pos, @Nullable final Direction facing) {
 		super(NarratorChatListener.EMPTY);
 		this.lock = lock;
 		this.pos = pos;

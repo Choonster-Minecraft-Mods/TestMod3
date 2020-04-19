@@ -4,7 +4,7 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.capability.lock.LockCapability;
 import choonster.testmod3.client.gui.GuiIDs;
 import choonster.testmod3.client.gui.GuiSurvivalCommandBlock;
-import choonster.testmod3.client.gui.LockSecreen;
+import choonster.testmod3.client.gui.LockScreen;
 import choonster.testmod3.network.OpenClientScreenMessage;
 import choonster.testmod3.tileentity.SurvivalCommandBlockTileEntity;
 import com.google.common.base.Preconditions;
@@ -72,7 +72,7 @@ public class ModGuiFactories {
 					}
 
 					return LockCapability.getLock(Minecraft.getInstance().world, pos, facing)
-							.<Screen>map(lock -> new LockSecreen(lock, pos, facing))
+							.<Screen>map(lock -> new LockScreen(lock, pos, facing))
 							.orElse(NULL_SCREEN);
 				})
 				.build();
