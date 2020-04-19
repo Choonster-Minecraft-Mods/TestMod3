@@ -3,7 +3,7 @@ package choonster.testmod3.network;
 import choonster.testmod3.block.FluidTankBlock;
 import choonster.testmod3.fluid.FluidTankSnapshot;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fluids.FluidStack;
@@ -52,7 +52,7 @@ public class FluidTankContentsMessage {
 
 	public static void handle(final FluidTankContentsMessage message, final Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() -> DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-			final PlayerEntity player = Minecraft.getInstance().player;
+			final ClientPlayerEntity player = Minecraft.getInstance().player;
 
 			FluidTankBlock.getFluidDataForDisplay(message.fluidTankSnapshots).forEach(player::sendMessage);
 		}));
