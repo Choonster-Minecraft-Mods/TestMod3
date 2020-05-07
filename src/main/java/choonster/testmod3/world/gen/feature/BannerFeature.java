@@ -74,6 +74,7 @@ public class BannerFeature extends Feature<NoFeatureConfig> {
 
 		final TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileEntity instanceof BannerTileEntity) {
+			// TODO: This method is client-only
 			((BannerTileEntity) tileEntity).loadFromItemStack(bannerStack, DyeColor.PINK);
 		}
 
