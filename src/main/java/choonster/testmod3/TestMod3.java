@@ -36,6 +36,7 @@ public class TestMod3 {
 
 		ModFluids.initialise(modEventBus);
 		ModBlocks.initialise(modEventBus);
+		ModTestRegistryEntries.initialise(modEventBus);
 
 		ModCrafting.Ingredients.register();
 		ModLootTables.registerLootTables();
