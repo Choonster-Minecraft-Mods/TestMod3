@@ -7,10 +7,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.Dimension;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
@@ -41,9 +43,10 @@ public class DimensionReplacementItem extends Item {
 	private static final String KEY_REPLACED = "Replaced";
 
 	/**
-	 * The replacement {@link ItemStack} for each {@link DimensionType}.
+	 * The replacement {@link ItemStack} for each {@link Dimension}.
 	 */
-	private final Map<DimensionType, ItemStack> replacements = new HashMap<>();
+	// TODO: Figure out how to get key for World's DimensionType
+	private final Map<RegistryKey<DimensionType>, ItemStack> replacements = new HashMap<>();
 
 	public DimensionReplacementItem(final Item.Properties properties) {
 		super(properties);
@@ -52,11 +55,11 @@ public class DimensionReplacementItem extends Item {
 	/**
 	 * Add a replacement for this item.
 	 *
-	 * @param dimensionType The dimension type
-	 * @param itemStack     The replacement
+	 * @param dimensionTypeKey The registry key of the dimension type
+	 * @param itemStack        The replacement
 	 */
-	public void addReplacement(final DimensionType dimensionType, final ItemStack itemStack) {
-		replacements.put(dimensionType, itemStack);
+	public void addReplacement(final RegistryKey<DimensionType> dimensionTypeKey, final ItemStack itemStack) {
+		replacements.put(dimensionTypeKey, itemStack);
 	}
 
 	/**
@@ -66,7 +69,7 @@ public class DimensionReplacementItem extends Item {
 	 * @return Does the World have a replacement?
 	 */
 	private boolean hasReplacement(@Nullable final World world) {
-		return world != null && replacements.containsKey(world.dimension.getType());
+		return world != null && replacements.containsKey(world.getDimensionKey());
 	}
 
 	/**
@@ -76,7 +79,7 @@ public class DimensionReplacementItem extends Item {
 	 * @return The replacement
 	 */
 	private ItemStack getReplacement(final World world) {
-		return replacements.get(world.dimension.getType());
+		return replacements.get(world.getDimensionType());
 	}
 
 	@Override

@@ -4,15 +4,15 @@ import choonster.testmod3.TestMod3;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.MobSpawnerTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -31,16 +31,17 @@ import java.util.Map;
  *
  * @author Choonster
  */
+// TODO: Convert to Global Loot Modifier
 @Mod.EventBusSubscriber(modid = TestMod3.MODID)
 public class SpawnerDrops {
 
 	/**
-	 * Stores the TileEntities of broken spawner blocks between {@link BlockEvent.BreakEvent} and {@link BlockEvent.HarvestDropsEvent}.
+	 * Stores the TileEntities of broken spawner blocks between {@link BlockEvent.BreakEvent} and BlockEvent.HarvestDropsEvent.
 	 * <p>
 	 * The outer map uses the dimension type as the key and the per-dimension map as the value.
 	 * The inner (per-dimension) maps use the broken block's position as the key and its {@link TileEntity} as the value.
 	 */
-	private static final Map<DimensionType, Map<BlockPos, TileEntity>> storedSpawners = new HashMap<>();
+	private static final Map<RegistryKey<DimensionType>, Map<BlockPos, TileEntity>> storedSpawners = new HashMap<>();
 
 	/**
 	 * Was the event fired on the server for a mob spawner broken by a player holding a pickaxe?
@@ -75,15 +76,16 @@ public class SpawnerDrops {
 		}
 
 		// Get this dimension's type
-		final DimensionType dimensionType = world.getDimension().getType();
+		final DimensionType dimensionType = world.getDimensionType();
 
 		// Get the map for this dimension
-		final Map<BlockPos, TileEntity> storedSpawnersInDimension = storedSpawners.computeIfAbsent(dimensionType, dimension -> new HashMap<>());
-		storedSpawnersInDimension.put(pos, world.getTileEntity(pos)); // Store the TileEntity in it
+//		final Map<BlockPos, TileEntity> storedSpawnersInDimension = storedSpawners.computeIfAbsent(dimensionType, dimension -> new HashMap<>());
+//		storedSpawnersInDimension.put(pos, world.getTileEntity(pos)); // Store the TileEntity in it
 
 		event.setExpToDrop(0); // Don't drop any XP
 	}
 
+	/*
 	@SubscribeEvent
 	public static void blockHarvested(final BlockEvent.HarvestDropsEvent event) {
 		final IWorld world = event.getWorld();
@@ -112,6 +114,7 @@ public class SpawnerDrops {
 		droppedItem.setTagInfo("BlockEntityTag", tileData); // Store the TileEntity data in the ItemStack
 		event.getDrops().add(droppedItem); // Add the ItemStack to the drops list
 	}
+	*/
 
 	@SubscribeEvent
 	public static void serverStopped(final FMLServerStoppedEvent event) {

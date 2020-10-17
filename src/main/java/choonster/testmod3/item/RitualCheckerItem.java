@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -46,13 +47,13 @@ public class RitualCheckerItem extends Item {
 			if (invalidPosition.isPresent()) {
 				final BlockPos pos = invalidPosition.get();
 				textComponent = new TranslationTextComponent("message.testmod3.ritual_checker.failure", pos.getX(), pos.getY(), pos.getZ());
-				textComponent.getStyle().setColor(TextFormatting.RED);
+				textComponent.getStyle().setFormatting(TextFormatting.RED);
 			} else {
 				textComponent = new TranslationTextComponent("message.testmod3.ritual_checker.success");
-				textComponent.getStyle().setColor(TextFormatting.GREEN);
+				textComponent.getStyle().setFormatting(TextFormatting.GREEN);
 			}
 
-			playerIn.sendMessage(textComponent);
+			playerIn.sendMessage(textComponent, Util.DUMMY_UUID);
 		}
 
 		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(hand));
@@ -66,7 +67,7 @@ public class RitualCheckerItem extends Item {
 	 */
 	private Optional<BlockPos> checkRitual(final PlayerEntity player) {
 		final World world = player.getEntityWorld();
-		final BlockPos playerPos = new BlockPos(player);
+		final BlockPos playerPos = player.getPosition();
 
 		// The block under the player must be obsidian
 		if (!(world.getBlockState(playerPos.down()).getBlock() == Blocks.OBSIDIAN))

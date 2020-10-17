@@ -5,8 +5,6 @@ import choonster.testmod3.api.capability.lastusetime.ILastUseTime;
 import choonster.testmod3.capability.CapabilityContainerListenerManager;
 import choonster.testmod3.capability.SerializableCapabilityProvider;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.LongNBT;
@@ -50,7 +48,7 @@ public final class LastUseTimeCapability {
 		CapabilityManager.INSTANCE.register(ILastUseTime.class, new Capability.IStorage<ILastUseTime>() {
 			@Override
 			public INBT writeNBT(final Capability<ILastUseTime> capability, final ILastUseTime instance, final Direction side) {
-				return new LongNBT(instance.get());
+				return LongNBT.valueOf(instance.get());
 			}
 
 			@Override
@@ -127,38 +125,4 @@ public final class LastUseTimeCapability {
 		}
 	}
 
-	/**
-	 * {@link IItemPropertyGetter} to get the ticks since the last use of the item. Returns {@link Float#MAX_VALUE} if the required information isn't available.
-	 */
-	public static class TicksSinceLastUseGetter {
-		/**
-		 * The ID of this getter.
-		 */
-		public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "ticks_since_last_use");
-
-		/**
-		 * The getter.
-		 */
-		private static final IItemPropertyGetter GETTER = (stack, worldIn, entityIn) ->
-		{
-			final World world = worldIn != null ? worldIn : entityIn != null ? entityIn.getEntityWorld() : null;
-
-			if (world == null) {
-				return Float.MAX_VALUE;
-			}
-
-			return getLastUseTime(stack)
-					.map(lastUseTime -> (float) world.getGameTime() - lastUseTime.get())
-					.orElse(Float.MAX_VALUE);
-		};
-
-		/**
-		 * Add this getter to an {@link Item}.
-		 *
-		 * @param item The item
-		 */
-		public static void addToItem(final Item item) {
-			item.addPropertyOverride(ID, GETTER);
-		}
-	}
 }

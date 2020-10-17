@@ -9,24 +9,23 @@ import choonster.testmod3.util.EnumFaceRotation;
 import choonster.testmod3.util.RegistryUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import net.minecraft.block.*;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DirectoryCache;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
-import net.minecraft.util.LazyLoadBase;
+import net.minecraft.util.LazyValue;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.ValidationResults;
 import net.minecraftforge.client.model.generators.*;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -37,11 +36,13 @@ import java.util.function.Function;
 public class TestMod3BlockStateProvider extends BlockStateProvider {
 	private static final Logger LOGGER = LogManager.getLogger();
 
+	private final List<String> errors = new ArrayList<>();
+
 	/**
 	 * Centre cube of the pipe model.
 	 */
-	private final LazyLoadBase<ModelFile> pipeCentre = new LazyLoadBase<>(() ->
-			withExistingParent("block/pipe/pipe_centre", mcLoc("block"))
+	private final LazyValue<ModelFile> pipeCentre = new LazyValue<>(() ->
+			models().withExistingParent("block/pipe/pipe_centre", mcLoc("block"))
 					.texture("particle", "#centre")
 					.element()
 					.from(4, 4, 4)
@@ -53,8 +54,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	/**
 	 * North side of the pipe model. Can be rotated for other sides.
 	 */
-	private final LazyLoadBase<ModelFile> pipePart = new LazyLoadBase<>(() ->
-			withExistingParent("block/pipe/pipe_part", mcLoc("block"))
+	private final LazyValue<ModelFile> pipePart = new LazyValue<>(() ->
+			models().withExistingParent("block/pipe/pipe_part", mcLoc("block"))
 					.texture("particle", "#side")
 					.element()
 					.from(4, 4, 0)
@@ -66,19 +67,19 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	/**
 	 * Orientable models for each {@link EnumFaceRotation} value.
 	 */
-	private final LazyLoadBase<Map<EnumFaceRotation, ModelFile>> rotatedOrientables = new LazyLoadBase<>(() -> {
+	private final LazyValue<Map<EnumFaceRotation, ModelFile>> rotatedOrientables = new LazyValue<>(() -> {
 		Map<EnumFaceRotation, ModelFile> map = new EnumMap<>(EnumFaceRotation.class);
 		map.put(EnumFaceRotation.UP, existingMcModel("orientable"));
 
 		Arrays.stream(EnumFaceRotation.values())
 				.filter(faceRotation -> faceRotation != EnumFaceRotation.UP)
 				.forEach(faceRotation -> {
-					final ModelFile cube = getBuilder("cube_rotated_" + faceRotation.getName())
+					final ModelFile cube = models().getBuilder("cube_rotated_" + faceRotation.getString())
 							.parent(existingMcModel("block"))
 							.element()
 							.allFaces((direction, faceBuilder) ->
 									faceBuilder
-											.texture("#" + direction.getName())
+											.texture("#" + direction.getString())
 											.cullface(direction)
 							)
 							.allFaces((direction, faceBuilder) -> {
@@ -93,7 +94,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 							})
 							.end();
 
-					final ModelFile orientableWithBottom = getBuilder("orientable_with_bottom_rotated_" + faceRotation.getName())
+					final ModelFile orientableWithBottom = models().getBuilder("orientable_with_bottom_rotated_" + faceRotation.getString())
 							.parent(cube)
 
 							.transforms()
@@ -113,7 +114,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 							.texture("south", "#side")
 							.texture("west", "#side");
 
-					final ModelFile orientable = getBuilder("orientable_rotated_" + faceRotation.getName())
+					final ModelFile orientable = models().getBuilder("orientable_rotated_" + faceRotation.getString())
 							.parent(orientableWithBottom)
 							.texture("bottom", "#top");
 
@@ -127,8 +128,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	 * A copy of {@code minecraft:block/pressure_plate_down} that extends {@code minecraft:block/thin_block}
 	 * so that it has the same display transformations as {@code minecraft:block/pressure_plate_up}.
 	 */
-	private final LazyLoadBase<ModelFile> PRESSURE_PLATE_DOWN_WITH_TRANSFORMS = new LazyLoadBase<>(() ->
-			withExistingParent("block/pressure_plate_down_with_transforms", mcLoc("thin_block"))
+	private final LazyValue<ModelFile> PRESSURE_PLATE_DOWN_WITH_TRANSFORMS = new LazyValue<>(() ->
+			models().withExistingParent("block/pressure_plate_down_with_transforms", mcLoc("thin_block"))
 
 					.element()
 					.from(1, 0, 1)
@@ -159,10 +160,6 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		return "TestMod3BlockStates";
 	}
 
-	public ExistingFileHelper getExistingFileHelper() {
-		return existingFileHelper;
-	}
-
 	@Override
 	protected void registerStatesAndModels() {
 		simpleBlockWithExistingParent(ModBlocks.WATER_GRASS, Blocks.GRASS);
@@ -174,19 +171,19 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 				.partialState()
 				.with(RightClickTestBlock.HAS_ENDER_EYE, true)
 				.modelForState()
-				.modelFile(getBuilder(name(ModBlocks.RIGHT_CLICK_TEST) + "_with_ender_eye")
+				.modelFile(models().getBuilder(name(ModBlocks.RIGHT_CLICK_TEST) + "_with_ender_eye")
 						.parent(existingModel(Blocks.WHITE_STAINED_GLASS)))
 				.addModel()
 
 				.partialState()
 				.with(RightClickTestBlock.HAS_ENDER_EYE, false)
 				.modelForState()
-				.modelFile(getBuilder(name(ModBlocks.RIGHT_CLICK_TEST) + "_without_ender_eye")
+				.modelFile(models().getBuilder(name(ModBlocks.RIGHT_CLICK_TEST) + "_without_ender_eye")
 						.parent(existingModel(Blocks.BLACK_STAINED_GLASS)))
 				.addModel();
 
 
-		final ModelFile clientPlayerRightClick = getBuilder(name(ModBlocks.CLIENT_PLAYER_RIGHT_CLICK))
+		final ModelFile clientPlayerRightClick = models().getBuilder(name(ModBlocks.CLIENT_PLAYER_RIGHT_CLICK))
 				.parent(PRESSURE_PLATE_DOWN_WITH_TRANSFORMS.getValue())
 				.texture("texture", mcLoc("block/iron_block"));
 
@@ -214,7 +211,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		simpleBlockWithExistingParent(ModBlocks.ITEM_COLLISION_TEST, Blocks.CYAN_WOOL);
 
 
-		final ModelFile fluidTank = cubeBottomTop(
+		final ModelFile fluidTank = models().cubeBottomTop(
 				name(ModBlocks.FLUID_TANK),
 				mcLoc("block/glass"),
 				mcLoc("block/iron_block"),
@@ -229,7 +226,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		simpleBlockWithExistingParent(ModBlocks.ITEM_DEBUGGER, Blocks.SEA_LANTERN);
 
 
-		final ModelFile endPortalFrameFull = cubeBottomTop(
+		final ModelFile endPortalFrameFull = models().cubeBottomTop(
 				name(ModBlocks.END_PORTAL_FRAME_FULL),
 				modLoc("block/end_portal_side_full"),
 				mcLoc("block/end_stone"),
@@ -242,7 +239,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		simpleBlockWithExistingParent(ModBlocks.POTION_EFFECT, Blocks.COARSE_DIRT);
 
 
-		final ModelFile clientPlayerRotation = getBuilder(name(ModBlocks.CLIENT_PLAYER_ROTATION))
+		final ModelFile clientPlayerRotation = models().getBuilder(name(ModBlocks.CLIENT_PLAYER_ROTATION))
 				.parent(PRESSURE_PLATE_DOWN_WITH_TRANSFORMS.getValue())
 				.texture("texture", mcLoc("block/gold_block"));
 
@@ -252,7 +249,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		simpleBlock(ModBlocks.PIG_SPAWNER_REFILLER);
 
 
-		final ModelFile plane = withExistingParent("plane", mcLoc("block"))
+		final ModelFile plane = models().withExistingParent("plane", mcLoc("block"))
 				// Base
 				.element()
 
@@ -280,7 +277,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 				.rotation()
 				.origin(0, 16, 0)
 				.axis(Direction.Axis.X)
-//				.angle(-45) // TODO: Angle validation is broken, see MinecraftForge/MinecraftForge#6323
+				.angle(-45)
 				.rescale(true)
 				.end()
 
@@ -290,13 +287,13 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 				.end();
 
-		final BlockModelBuilder mirrorPlane = getBuilder(name(ModBlocks.MIRROR_PLANE))
+		final BlockModelBuilder mirrorPlane = models().getBuilder(name(ModBlocks.MIRROR_PLANE))
 				.parent(plane)
 				.texture("side", modLoc("block/mirror_plane_side"))
 				.texture("base", modLoc("block/mirror_plane_base"))
 				.texture("plane", modLoc("block/mirror_plane_plane"));
 
-		final BlockModelBuilder mirrorPlaneT = getBuilder(name(ModBlocks.MIRROR_PLANE) + "_t")
+		final BlockModelBuilder mirrorPlaneT = models().getBuilder(name(ModBlocks.MIRROR_PLANE) + "_t")
 				.parent(plane)
 				.texture("side", modLoc("block/mirror_plane_side"))
 				.texture("base", modLoc("block/mirror_plane_base"))
@@ -320,7 +317,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		;
 
 
-		final ModelFile vanillaModelTest = cubeAll(
+		final ModelFile vanillaModelTest = models().cubeAll(
 				name(ModBlocks.VANILLA_MODEL_TEST),
 				mcLoc("block/acacia_log_top")
 		);
@@ -328,21 +325,21 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		simpleBlock(ModBlocks.VANILLA_MODEL_TEST, vanillaModelTest);
 
 
-		final ModelFile templateFullbright = withExistingParent("template_fullbright", mcLoc("block"))
+		final ModelFile templateFullbright = models().withExistingParent("template_fullbright", mcLoc("block"))
 				.texture("#particle", "#all")
 				.element()
 				.cube("#all")
 				.shade(false)
 				.end();
 
-		final ModelFile fullbright = getBuilder(name(ModBlocks.FULLBRIGHT))
+		final ModelFile fullbright = models().getBuilder(name(ModBlocks.FULLBRIGHT))
 				.parent(templateFullbright)
 				.texture("all", blockTexture(ModBlocks.FULLBRIGHT));
 
 		simpleBlock(ModBlocks.FULLBRIGHT, fullbright);
 
 
-		final ModelFile normalBrightness = cubeAll(
+		final ModelFile normalBrightness = models().cubeAll(
 				name(ModBlocks.NORMAL_BRIGHTNESS),
 				blockTexture(ModBlocks.FULLBRIGHT)
 		);
@@ -358,14 +355,14 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 
 		// I'm keeping template_chest as JSON since it's a relatively complex model
-		final ModelFile chest = withExistingParent(name(ModBlocks.CHEST), modLoc("template_chest"))
+		final ModelFile chest = models().withExistingParent(name(ModBlocks.CHEST), modLoc("template_chest"))
 				.texture("chest", modLoc("block/chest/wood"))
 				.texture("particle", blockTexture(Blocks.OAK_PLANKS));
 
 		simpleBlock(ModBlocks.CHEST, chest);
 
 
-		final ModelFile empty = getBuilder("empty");
+		final ModelFile empty = models().getBuilder("empty");
 		final ModelFile hidden = cubeAll(ModBlocks.HIDDEN);
 
 		getVariantBuilder(ModBlocks.HIDDEN)
@@ -412,12 +409,12 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		ModBlocks.VariantGroups.COLORED_ROTATABLE_BLOCKS
 				.getBlocks()
 				.forEach(blockRegistryObject -> {
-					final ColoredRotatableBlock block = RegistryUtil.getRequiredRegistryEntry(blockRegistryObject);
+					final ColoredRotatableBlock block = blockRegistryObject.get();
 
 					final ModelFile modelFile = orientableSingle(
 							"block/colored_rotatable/" + name(blockRegistryObject),
-							modLoc("block/colored_rotatable/" + block.getColor().getName()),
-							modLoc("block/colored_rotatable/" + block.getColor().getName() + "_front")
+							modLoc("block/colored_rotatable/" + block.getColor().getString()),
+							modLoc("block/colored_rotatable/" + block.getColor().getString() + "_front")
 					);
 
 					directionalBlockUvLock(blockRegistryObject, modelFile);
@@ -426,10 +423,10 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		ModBlocks.VariantGroups.COLORED_MULTI_ROTATABLE_BLOCKS
 				.getBlocks()
 				.forEach(blockRegistryObject -> {
-					final ColoredMultiRotatableBlock block = RegistryUtil.getRequiredRegistryEntry(blockRegistryObject);
+					final ColoredMultiRotatableBlock block = blockRegistryObject.get();
 
-					final ResourceLocation side = modLoc("block/colored_rotatable/" + block.getColor().getName());
-					final ResourceLocation front = modLoc("block/colored_rotatable/" + block.getColor().getName() + "_front_multi");
+					final ResourceLocation side = modLoc("block/colored_rotatable/" + block.getColor().getString());
+					final ResourceLocation front = modLoc("block/colored_rotatable/" + block.getColor().getString() + "_front_multi");
 
 					final EnumMap<EnumFaceRotation, ModelFile> models = new EnumMap<>(EnumFaceRotation.class);
 
@@ -438,10 +435,10 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 								String name = "block/colored_rotatable/" + name(blockRegistryObject);
 
 								if (faceRotation != EnumFaceRotation.UP) {
-									name += "_rotated_" + faceRotation.getName();
+									name += "_rotated_" + faceRotation.getString();
 								}
 
-								final ModelFile model = getBuilder(name)
+								final ModelFile model = models().getBuilder(name)
 										.parent(rotatedOrientables.getValue().get(faceRotation))
 										.texture("side", side)
 										.texture("front", front)
@@ -462,11 +459,11 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		ModBlocks.VariantGroups.TERRACOTTA_SLABS
 				.getBlocks()
 				.forEach(blockRegistryObject -> {
-					final ColouredSlabBlock block = RegistryUtil.getRequiredRegistryEntry(blockRegistryObject);
+					final ColouredSlabBlock block = blockRegistryObject.get();
 					slabBlock(
 							block,
-							mcLoc("block/" + block.getVariant().getName() + "_terracotta"),
-							mcLoc("block/" + block.getVariant().getName() + "_terracotta")
+							mcLoc("block/" + block.getVariant().getString() + "_terracotta"),
+							mcLoc("block/" + block.getVariant().getString() + "_terracotta")
 					);
 				});
 
@@ -474,26 +471,34 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		validate();
 	}
 
-	private void validate() {
-		final ValidationResults validationresults = new ValidationResults();
+	@Override
+	public void act(final DirectoryCache cache) throws IOException {
+		super.act(cache);
+	}
 
+	private void validate() {
 		for (final Block block : Sets.difference(RegistryUtil.getModRegistryEntries(ForgeRegistries.BLOCKS), registeredBlocks.keySet())) {
 			// Ignore fluids, since they don't need block state files
 			if (block instanceof FlowingFluidBlock) {
 				continue;
 			}
 
-			validationresults.addProblem("Missing block state file for: " + block.getRegistryName());
+			blockstateError(block, "Missing block state file");
 		}
 
-		final Multimap<String, String> problems = validationresults.getProblems();
-		if (!problems.isEmpty()) {
-			problems.forEach((path, message) -> {
-				LOGGER.warn("Found validation problem in " + path + ": " + message);
-			});
+		if (!errors.isEmpty()) {
+			LOGGER.error("Found {} errors while generating blockstates/block models: ", errors.size());
 
-			throw new IllegalStateException("Failed to validate block states/block models, see logs");
+			for (final String s : errors) {
+				LOGGER.error("    {}", s);
+			}
+
+			throw new IllegalStateException("Failed to validate blockstates/block models, see logs");
 		}
+	}
+
+	private void blockstateError(final Block block, final String fmt, final Object... args) {
+		errors.add("Generated blockstate for block " + block + " " + String.format(fmt, args));
 	}
 
 	private ResourceLocation registryName(final Block block) {
@@ -501,7 +506,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	}
 
 	private String name(final RegistryObject<? extends Block> block) {
-		return name(RegistryUtil.getRequiredRegistryEntry(block));
+		return name(block.get());
 	}
 
 	private String name(final Block block) {
@@ -509,7 +514,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	}
 
 	private ResourceLocation blockTexture(final RegistryObject<? extends Block> block) {
-		return blockTexture(RegistryUtil.getRequiredRegistryEntry(block));
+		return blockTexture(block.get());
 	}
 
 	/**
@@ -521,7 +526,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	 * @return The model
 	 */
 	private ModelFile existingModel(final Block block) {
-		return getExistingFile(registryName(block));
+		return models().getExistingFile(registryName(block));
 	}
 
 	/**
@@ -531,27 +536,27 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	 * @return The model
 	 */
 	private ModelFile existingMcModel(final String name) {
-		return getExistingFile(new ResourceLocation("minecraft", name));
+		return models().getExistingFile(new ResourceLocation("minecraft", name));
 	}
 
 	private ModelFile cubeAll(final RegistryObject<? extends Block> block) {
-		return cubeAll(RegistryUtil.getRequiredRegistryEntry(block));
+		return cubeAll(block.get());
 	}
 
 	private ModelFile orientableSingle(final String name, final ResourceLocation side, final ResourceLocation front) {
-		return orientable(name, side, front, side);
+		return models().orientable(name, side, front, side);
 	}
 
 	private VariantBlockStateBuilder getVariantBuilder(final RegistryObject<? extends Block> block) {
-		return getVariantBuilder(RegistryUtil.getRequiredRegistryEntry(block));
+		return getVariantBuilder(block.get());
 	}
 
 	private MultiPartBlockStateBuilder getMultipartBuilder(final RegistryObject<? extends Block> block) {
-		return getMultipartBuilder(RegistryUtil.getRequiredRegistryEntry(block));
+		return getMultipartBuilder(block.get());
 	}
 
 	private void simpleBlock(final RegistryObject<? extends Block> block) {
-		simpleBlock(RegistryUtil.getRequiredRegistryEntry(block));
+		simpleBlock(block.get());
 	}
 
 	private void simpleBlockWithExistingParent(final RegistryObject<? extends Block> block, final Block parentBlock) {
@@ -561,7 +566,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	private void simpleBlockWithExistingParent(final RegistryObject<? extends Block> block, final ModelFile parentModel) {
 		simpleBlock(
 				block,
-				getBuilder(name(block))
+				models().getBuilder(name(block))
 						.parent(parentModel)
 		);
 	}
@@ -583,15 +588,15 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	}
 
 	private void simpleBlock(final RegistryObject<? extends Block> block, final ModelFile modelFile) {
-		simpleBlock(RegistryUtil.getRequiredRegistryEntry(block), modelFile);
+		simpleBlock(block.get(), modelFile);
 	}
 
 	private void pipeBlock(final RegistryObject<? extends BasePipeBlock> block, final ResourceLocation centre, final ResourceLocation side) {
-		final ModelFile centreModel = getBuilder(name(block) + "_centre")
+		final ModelFile centreModel = models().getBuilder(name(block) + "_centre")
 				.parent(pipeCentre.getValue())
 				.texture("centre", centre);
 
-		final ModelFile sideModel = getBuilder(name(block) + "_side")
+		final ModelFile sideModel = models().getBuilder(name(block) + "_side")
 				.parent(pipePart.getValue())
 				.texture("side", side);
 
@@ -617,8 +622,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	}
 
 	private void commandBlock(final RegistryObject<? extends CommandBlockBlock> commandBlock, final Block modelCommandBlock) {
-		final ModelFile normalModel = withExistingParent(name(commandBlock), name(modelCommandBlock));
-		final ModelFile conditionalModel = withExistingParent(name(commandBlock) + "_conditional", name(modelCommandBlock) + "_conditional");
+		final ModelFile normalModel = models().withExistingParent(name(commandBlock), name(modelCommandBlock));
+		final ModelFile conditionalModel = models().withExistingParent(name(commandBlock) + "_conditional", name(modelCommandBlock) + "_conditional");
 
 		getVariantBuilder(commandBlock)
 				.forAllStates(state -> {

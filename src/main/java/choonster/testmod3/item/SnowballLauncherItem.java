@@ -58,6 +58,12 @@ public class SnowballLauncherItem extends ShootableItem {
 		return stack -> stack.getItem() == Items.SNOWBALL;
 	}
 
+	/* getRange */
+	@Override
+	public int func_230305_d_() {
+		return 15;
+	}
+
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World world, final PlayerEntity player, final Hand hand) {
 		final ItemStack heldItem = player.getHeldItem(hand);
@@ -72,11 +78,11 @@ public class SnowballLauncherItem extends ShootableItem {
 				player.getCooldownTracker().setCooldown(this, cooldown);
 			}
 
-			world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5f, 0.4f / (random.nextFloat() * 0.4f + 0.8f));
+			world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5f, 0.4f / (random.nextFloat() * 0.4f + 0.8f));
 
 			if (!world.isRemote) {
 				final SnowballEntity entitySnowball = new SnowballEntity(world, player);
-				entitySnowball.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.5F, 1.0F);
+				entitySnowball./* shoot */func_234612_a_(player, player.rotationPitch, player.rotationYaw, 0.0f, 1.5f, 1.0f);
 				world.addEntity(entitySnowball);
 			}
 

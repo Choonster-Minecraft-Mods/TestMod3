@@ -3,7 +3,7 @@ package choonster.testmod3.fluid;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -25,7 +25,7 @@ public abstract class PortalDisplacementFluid extends ForgeFlowingFluid {
 	}
 
 	@Override
-	protected boolean canDisplace(final IFluidState state, final IBlockReader world, final BlockPos pos, final Fluid fluidIn, final Direction direction) {
+	protected boolean canDisplace(final FluidState state, final IBlockReader world, final BlockPos pos, final Fluid fluidIn, final Direction direction) {
 		final BlockState blockState = world.getBlockState(pos);
 
 		if (blockState.getBlock() == Blocks.NETHER_PORTAL || blockState.getBlock() == Blocks.END_PORTAL || blockState.getBlock() == Blocks.END_GATEWAY) {
@@ -42,18 +42,18 @@ public abstract class PortalDisplacementFluid extends ForgeFlowingFluid {
 		}
 
 		@Override
-		protected void fillStateContainer(final StateContainer.Builder<Fluid, IFluidState> builder) {
+		protected void fillStateContainer(final StateContainer.Builder<Fluid, FluidState> builder) {
 			super.fillStateContainer(builder);
 			builder.add(LEVEL_1_8);
 		}
 
 		@Override
-		public int getLevel(final IFluidState state) {
+		public int getLevel(final FluidState state) {
 			return state.get(LEVEL_1_8);
 		}
 
 		@Override
-		public boolean isSource(final IFluidState state) {
+		public boolean isSource(final FluidState state) {
 			return false;
 		}
 	}
@@ -64,12 +64,12 @@ public abstract class PortalDisplacementFluid extends ForgeFlowingFluid {
 		}
 
 		@Override
-		public int getLevel(final IFluidState state) {
+		public int getLevel(final FluidState state) {
 			return 8;
 		}
 
 		@Override
-		public boolean isSource(final IFluidState state) {
+		public boolean isSource(final FluidState state) {
 			return true;
 		}
 	}

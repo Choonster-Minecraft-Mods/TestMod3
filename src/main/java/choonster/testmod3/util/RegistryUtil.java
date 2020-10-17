@@ -3,7 +3,6 @@ package choonster.testmod3.util;
 import choonster.testmod3.TestMod3;
 import com.google.common.base.Preconditions;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryManager;
@@ -60,15 +59,4 @@ public class RegistryUtil {
 				.collect(Collectors.toSet());
 	}
 
-	/**
-	 * Gets the registry entry from a {@link RegistryObject} or throws an exception if it's not present.
-	 *
-	 * @param registryObject The RegistryObject
-	 * @param <T>            The registry entry's type
-	 * @return The registry entry
-	 * @throws IllegalStateException If the registry entry isn't present
-	 */
-	public static <T extends IForgeRegistryEntry<? super T>> T getRequiredRegistryEntry(final RegistryObject<T> registryObject) {
-		return registryObject.orElseThrow(() -> new IllegalStateException(String.format("Required registry object %s not present", registryObject.getId())));
-	}
 }

@@ -5,24 +5,23 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameterSets;
+import net.minecraft.loot.LootParameters;
+import net.minecraft.loot.LootTable;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
+import net.minecraft.util.*;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameterSets;
-import net.minecraft.world.storage.loot.LootParameters;
-import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
+
 
 /**
  * Gives the player random loot from a {@link LootTable} when they right click.
@@ -49,7 +48,7 @@ public class LootTableTestItem extends Item {
 					.withParameter(LootParameters.DIRECT_KILLER_ENTITY, player)
 					.withParameter(LootParameters.DAMAGE_SOURCE, DamageSource.ANVIL)
 					.withParameter(LootParameters.TOOL, player.getHeldItemMainhand())
-					.withParameter(LootParameters.POSITION, player.getPosition())
+					.withParameter(LootParameters./* ORIGIN */field_237457_g_, player.getPositionVec())
 					.withParameter(LootParameters.BLOCK_STATE, Blocks.CHEST.getDefaultState())
 					.withParameter(LootParameters.BLOCK_ENTITY, Objects.requireNonNull(TileEntityType.CHEST.create()))
 					.withParameter(LootParameters.EXPLOSION_RADIUS, 99.0f)
@@ -63,18 +62,18 @@ public class LootTableTestItem extends Item {
 			player.container.detectAndSendChanges();
 
 			if (itemStacks.size() > 0) {
-				final ITextComponent lootMessage = getItemStackTextComponent(itemStacks.get(0));
+				final IFormattableTextComponent lootMessage = getItemStackTextComponent(itemStacks.get(0));
 
 				IntStream.range(1, itemStacks.size()).forEachOrdered(i -> {
-					lootMessage.appendText(", ");
-					lootMessage.appendSibling(getItemStackTextComponent(itemStacks.get(i)));
+					lootMessage.appendString(", ");
+					lootMessage.append(getItemStackTextComponent(itemStacks.get(i)));
 				});
 
 				final ITextComponent chatMessage = new TranslationTextComponent("message.testmod3.player_received_loot.base", lootMessage);
 
-				player.sendMessage(chatMessage);
+				player.sendMessage(chatMessage, Util.DUMMY_UUID);
 			} else {
-				player.sendMessage(new TranslationTextComponent("message.testmod3.player_received_loot.no_loot"));
+				player.sendMessage(new TranslationTextComponent("message.testmod3.player_received_loot.no_loot"), Util.DUMMY_UUID);
 			}
 		}
 
@@ -87,7 +86,7 @@ public class LootTableTestItem extends Item {
 	 * @param itemStack The ItemStack
 	 * @return The ITextComponent
 	 */
-	private ITextComponent getItemStackTextComponent(final ItemStack itemStack) {
+	private IFormattableTextComponent getItemStackTextComponent(final ItemStack itemStack) {
 		return new TranslationTextComponent("message.testmod3.player_received_loot.item", itemStack.getCount(), itemStack.getTextComponent());
 	}
 }

@@ -8,10 +8,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -64,8 +68,18 @@ public class ModEntities {
 					playerAvoidingCreeper
 			);
 
-			addSpawn(EntityType.GUARDIAN, 100, 5, 20, EntityClassification.WATER_CREATURE, getBiomes(BiomeDictionary.Type.OCEAN));
-			copySpawns(playerAvoidingCreeper, EntityClassification.MONSTER, EntityType.CREEPER, EntityClassification.MONSTER);
+
+		}
+
+		@SubscribeEvent(priority = EventPriority.LOW)
+		public static void registerEntitySpawns(final BiomeLoadingEvent event) {
+			final RegistryKey<Biome> biomeRegistryKey = RegistryKey.getOrCreateKey(ForgeRegistries.Keys.BIOMES, event.getName());
+
+			if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.OCEAN)) {
+				addSpawn(event, EntityType.GUARDIAN, 100, 5, 20, EntityClassification.WATER_CREATURE);
+			}
+
+			copySpawns(event, PLAYER_AVOIDING_CREEPER, EntityClassification.MONSTER, EntityType.CREEPER, EntityClassification.MONSTER);
 		}
 
 		/**
@@ -87,59 +101,50 @@ public class ModEntities {
 		}
 
 		/**
-		 * Add a spawn entry for the supplied entity in the supplied {@link Biome} list.
+		 * Add a spawn entry for the supplied entity to the biome being loaded in {@link BiomeLoadingEvent}.
 		 * <p>
 		 * Adapted from Forge's {@code EntityRegistry.addSpawn} method in 1.12.2.
 		 *
+		 * @param event          The event
 		 * @param entityType     The entity type
 		 * @param itemWeight     The weight of the spawn list entry (higher weights have a higher chance to be chosen)
 		 * @param minGroupCount  Min spawn count
 		 * @param maxGroupCount  Max spawn count
 		 * @param classification The entity classification
-		 * @param biomes         The biomes to add the spawn to
 		 */
-		private static void addSpawn(final EntityType<? extends MobEntity> entityType, final int itemWeight, final int minGroupCount, final int maxGroupCount, final EntityClassification classification, final Biome... biomes) {
-			for (final Biome biome : biomes) {
-				final List<Biome.SpawnListEntry> spawns = biome.getSpawns(classification);
+		private static void addSpawn(final BiomeLoadingEvent event, final EntityType<? extends MobEntity> entityType, final int itemWeight, final int minGroupCount, final int maxGroupCount, final EntityClassification classification) {
+			final List<MobSpawnInfo.Spawners> spawnersList = event.getSpawns()
+					.getSpawner(classification);
 
-				// Try to find an existing entry for the entity type
-				spawns.stream()
-						.filter(entry -> entry.entityType == entityType)
-						.findFirst()
-						.ifPresent(spawns::remove); // If there is one, remove it
+			// Try to find an existing entry for the entity type
+			spawnersList.stream()
+					.filter(spawners -> spawners.type == entityType)
+					.findFirst()
+					.ifPresent(spawnersList::remove); // If there is one, remove it
 
-				// Add a new one
-				spawns.add(new Biome.SpawnListEntry(entityType, itemWeight, minGroupCount, maxGroupCount));
-			}
+			// Add a new one
+			spawnersList.add(new MobSpawnInfo.Spawners(entityType, itemWeight, minGroupCount, maxGroupCount));
 		}
 
 		/**
-		 * Get an array of {@link Biome}s with the specified {@link BiomeDictionary.Type}.
+		 * Add a spawn list entry for {@code entityTypeToAdd} to the biome being loaded in {@link BiomeLoadingEvent} with an entry for {@code entityTypeToCopy} using the same weight and group count.
 		 *
-		 * @param type The Type
-		 * @return An array of Biomes
-		 */
-		private static Biome[] getBiomes(final BiomeDictionary.Type type) {
-			return BiomeDictionary.getBiomes(type).toArray(new Biome[0]);
-		}
-
-		/**
-		 * Add a spawn list entry for {@code entityTypeToAdd} in each {@link Biome} with an entry for {@code entityTypeToCopy} using the same weight and group count.
-		 *
+		 * @param event                The event
 		 * @param entityTypeToAdd      The entity type to add spawn entries for
 		 * @param classificationToAdd  The entity classification to add spawn entries for
 		 * @param entityTypeToCopy     The entity type to copy spawn entries from
 		 * @param classificationToCopy The entity classification to copy spawn entries from
 		 */
-		private static void copySpawns(final EntityType<? extends MobEntity> entityTypeToAdd, final EntityClassification classificationToAdd, final EntityType<? extends MobEntity> entityTypeToCopy, final EntityClassification classificationToCopy) {
-			for (final Biome biome : ForgeRegistries.BIOMES) {
-				biome.getSpawns(classificationToCopy).stream()
-						.filter(entry -> entry.entityType == entityTypeToCopy)
-						.findFirst()
-						.ifPresent(spawnListEntry ->
-								biome.getSpawns(classificationToAdd).add(new Biome.SpawnListEntry(entityTypeToAdd, spawnListEntry.itemWeight, spawnListEntry.minGroupCount, spawnListEntry.maxGroupCount))
-						);
-			}
+		private static void copySpawns(final BiomeLoadingEvent event, final EntityType<? extends MobEntity> entityTypeToAdd, final EntityClassification classificationToAdd, final EntityType<? extends MobEntity> entityTypeToCopy, final EntityClassification classificationToCopy) {
+			event.getSpawns()
+					.getSpawner(classificationToCopy)
+					.stream()
+					.filter(spawners -> spawners.type == entityTypeToCopy)
+					.findFirst()
+					.ifPresent(spawners ->
+							event.getSpawns().getSpawner(classificationToAdd)
+									.add(new MobSpawnInfo.Spawners(entityTypeToAdd, spawners.itemWeight, spawners.minCount, spawners.maxCount))
+					);
 		}
 	}
 }

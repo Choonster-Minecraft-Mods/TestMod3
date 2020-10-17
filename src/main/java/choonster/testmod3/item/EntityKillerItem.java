@@ -5,6 +5,7 @@ import net.minecraft.entity.boss.dragon.EnderDragonPartEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 
 /**
@@ -31,7 +32,7 @@ public class EntityKillerItem extends Item {
 			}
 
 			entityToKill.onKillCommand();
-			player.sendMessage(new TranslationTextComponent("commands.kill.success.single", entityToKill.getDisplayName()));
+			player.sendMessage(new TranslationTextComponent("commands.kill.success.single", entityToKill.getDisplayName()), Util.DUMMY_UUID);
 		}
 
 		return true;

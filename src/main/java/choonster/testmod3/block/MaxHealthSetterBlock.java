@@ -5,7 +5,9 @@ import choonster.testmod3.capability.maxhealth.MaxHealthCapability;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -23,17 +25,17 @@ public class MaxHealthSetterBlock extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
 		if (!world.isRemote) {
 			MaxHealthCapability.getMaxHealth(player).ifPresent(maxHealth -> {
 				final float healthToAdd = player.isSneaking() ? -1.0f : 1.0f;
 
 				maxHealth.addBonusMaxHealth(healthToAdd);
 
-				player.sendMessage(new TranslationTextComponent("message.testmod3.max_health.add", player.getDisplayName(), healthToAdd));
+				player.sendMessage(new TranslationTextComponent("message.testmod3.max_health.add", player.getDisplayName(), healthToAdd), Util.DUMMY_UUID);
 			});
 		}
 
-		return true;
+		return ActionResultType.SUCCESS;
 	}
 }

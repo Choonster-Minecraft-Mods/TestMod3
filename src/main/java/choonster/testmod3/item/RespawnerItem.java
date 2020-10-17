@@ -7,11 +7,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 
 /**
@@ -29,42 +28,32 @@ public class RespawnerItem extends Item {
 		final ItemStack heldItem = player.getHeldItem(hand);
 
 		if (!world.isRemote) {
-			final ServerPlayerEntity playerMP = (ServerPlayerEntity) player;
+			final ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
 
-			final DimensionType dimension;
-			if (!world.dimension.canRespawnHere()) {
-				dimension = world.dimension.getRespawnDimension(playerMP);
-				playerMP.changeDimension(dimension);
-			} else {
-				dimension = playerMP.dimension;
-			}
+			final BlockPos spawnPosition = serverPlayer.func_241140_K_();
+			final ServerWorld spawnWorld = serverPlayer.server.getWorld(serverPlayer.func_241141_L_());
+			final boolean spawnForced = serverPlayer.func_241142_M_();
+			final float spawnAngle = serverPlayer.func_242109_L();
 
-			final BlockPos bedLocation = playerMP.getBedLocation(dimension);
-			// TODO: func_71218_a used to be called getWorld, but lost its name in the stable_58-1.14.4 MCP mappings; see ModCoderPack/MCPBot-Issues#867
-			final ServerWorld worldServer = world.getServer() != null ? world.getServer().func_71218_a(dimension) : null;
-
-			if (worldServer == null) {
+			if (spawnPosition == null || spawnWorld == null) {
+				serverPlayer.sendMessage(new TranslationTextComponent("message.testmod3.respawner.no_spawn_location"), Util.DUMMY_UUID);
 				return new ActionResult<>(ActionResultType.FAIL, heldItem);
 			}
 
-			if (bedLocation == null) {
-				playerMP.sendMessage(new TranslationTextComponent("message.testmod3.respawner.no_spawn_location"));
-				return new ActionResult<>(ActionResultType.FAIL, heldItem);
+			if (spawnWorld != serverPlayer.getServerWorld()) {
+				player.changeDimension(spawnWorld);
 			}
 
-			final boolean spawnForced = playerMP.isSpawnForced(dimension);
-
-			return PlayerEntity.func_213822_a(worldServer, bedLocation, spawnForced)
+			return PlayerEntity./* getSpawnLocation */func_242374_a(spawnWorld, spawnPosition, spawnAngle, spawnForced, /* endConquered */false)
 					.map(spawnLocation -> {
-						playerMP.setLocationAndAngles(spawnLocation.x + 0.5, spawnLocation.getY() + 0.1, spawnLocation.getZ() + 0.5, 0, 0);
-						playerMP.connection.setPlayerLocation(playerMP.posX, playerMP.posY, playerMP.posZ, playerMP.rotationYaw, playerMP.rotationPitch);
-						worldServer.getChunkProvider().getChunk((int) playerMP.posX >> 4, (int) playerMP.posZ >> 4, ChunkStatus.FULL, true);
+						serverPlayer.setLocationAndAngles(spawnLocation.x + 0.5, spawnLocation.getY() + 0.1, spawnLocation.getZ() + 0.5, 0, 0);
+						serverPlayer.connection.setPlayerLocation(serverPlayer.getPosX(), serverPlayer.getPosY(), serverPlayer.getPosZ(), serverPlayer.rotationYaw, serverPlayer.rotationPitch);
 
-						while (!worldServer.isCollisionBoxesEmpty(playerMP, playerMP.getBoundingBox()) && playerMP.posY < 256.0D) {
-							playerMP.setPosition(playerMP.posX, playerMP.posY + 1.0D, playerMP.posZ);
+						while (!spawnWorld.hasNoCollisions(serverPlayer, serverPlayer.getBoundingBox()) && serverPlayer.getPosY() < 256) {
+							serverPlayer.setPosition(serverPlayer.getPosX(), serverPlayer.getPosY() + 1, serverPlayer.getPosZ());
 						}
 
-						player.sendMessage(new TranslationTextComponent("message.testmod3.respawner.teleporting", spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ(), dimension));
+						player.sendMessage(new TranslationTextComponent("message.testmod3.respawner.teleporting", spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ(), spawnWorld.getDimensionKey()), Util.DUMMY_UUID);
 
 						return new ActionResult<>(ActionResultType.SUCCESS, heldItem);
 					})

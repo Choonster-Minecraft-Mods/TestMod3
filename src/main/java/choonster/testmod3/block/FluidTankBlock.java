@@ -12,8 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.Direction;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -21,8 +20,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -91,7 +88,7 @@ public class FluidTankBlock<TE extends BaseFluidTankTileEntity> extends TileEnti
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
 		final ItemStack heldItem = player.getHeldItem(hand);
 		return getFluidHandler(world, pos)
 				.map(fluidHandler -> {
@@ -105,20 +102,8 @@ public class FluidTankBlock<TE extends BaseFluidTankTileEntity> extends TileEnti
 					}
 
 					// If the held item is a fluid container, stop processing here so it doesn't try to place its contents
-					return heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
+					return heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent() ? ActionResultType.SUCCESS : ActionResultType.PASS;
 				})
-				.orElse(false);
-	}
-
-	@SuppressWarnings("deprecation")
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public boolean isSideInvisible(final BlockState state, final BlockState adjacentBlockState, final Direction side) {
-		return false;
-	}
-
-	@Override
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.CUTOUT;
+				.orElse(ActionResultType.PASS);
 	}
 }

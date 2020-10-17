@@ -103,9 +103,9 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 		getVariants().forEach(variant -> {
 			final String registryName;
 			if (isSuffix) {
-				registryName = groupName + "_" + variant.getName();
+				registryName = groupName + "_" + variant.getString();
 			} else {
-				registryName = variant.getName() + "_" + groupName;
+				registryName = variant.getString() + "_" + groupName;
 			}
 
 			final Item.Properties properties = itemPropertiesFactory.apply(variant);

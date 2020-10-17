@@ -25,7 +25,6 @@ import javax.annotation.Nullable;
 public class SlingshotItem extends SnowballLauncherItem {
 	public SlingshotItem(final Item.Properties properties) {
 		super(properties);
-		LastUseTimeCapability.TicksSinceLastUseGetter.addToItem(this);
 	}
 
 	/**

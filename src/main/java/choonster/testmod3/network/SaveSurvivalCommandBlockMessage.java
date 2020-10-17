@@ -4,7 +4,6 @@ import choonster.testmod3.client.gui.GuiSurvivalCommandBlock;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.tileentity.SurvivalCommandBlockLogic;
 import choonster.testmod3.tileentity.SurvivalCommandBlockTileEntity;
-import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CommandBlockBlock;
@@ -15,6 +14,7 @@ import net.minecraft.tileentity.CommandBlockTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.StringUtils;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -129,9 +129,9 @@ public class SaveSurvivalCommandBlockMessage {
 			final MinecraftServer minecraftServer = world.getServer();
 
 			if (minecraftServer != null && !minecraftServer.isCommandBlockEnabled()) {
-				player.sendMessage(new TranslationTextComponent("advMode.notEnabled"));
+				player.sendMessage(new TranslationTextComponent("advMode.notEnabled"), Util.DUMMY_UUID);
 			} else if (!player.hasPermissionLevel(2)) {
-				player.sendMessage(new TranslationTextComponent("advMode.notAllowed"));
+				player.sendMessage(new TranslationTextComponent("advMode.notAllowed"), Util.DUMMY_UUID);
 			} else {
 				try {
 					SurvivalCommandBlockLogic survivalCommandBlockLogic = null;
@@ -154,7 +154,7 @@ public class SaveSurvivalCommandBlockMessage {
 						final TileEntity existingTileEntity = world.getTileEntity(message.blockPos);
 
 						final Direction facing = world.getBlockState(message.blockPos).get(CommandBlockBlock.FACING);
-						final BlockState newState = RegistryUtil.getRequiredRegistryEntry(newBlock).getDefaultState().with(CommandBlockBlock.FACING, facing).with(CommandBlockBlock.CONDITIONAL, message.conditional);
+						final BlockState newState = newBlock.get().getDefaultState().with(CommandBlockBlock.FACING, facing).with(CommandBlockBlock.CONDITIONAL, message.conditional);
 						world.setBlockState(message.blockPos, newState);
 
 						final TileEntity newTileEntity = world.getTileEntity(message.blockPos);
@@ -180,7 +180,7 @@ public class SaveSurvivalCommandBlockMessage {
 						survivalCommandBlockLogic.updateCommand();
 
 						if (!StringUtils.isNullOrEmpty(message.command)) {
-							player.sendMessage(new TranslationTextComponent("advMode.setCommand.success", message.command));
+							player.sendMessage(new TranslationTextComponent("advMode.setCommand.success", message.command), Util.DUMMY_UUID);
 						}
 					}
 				} catch (final Exception e) {

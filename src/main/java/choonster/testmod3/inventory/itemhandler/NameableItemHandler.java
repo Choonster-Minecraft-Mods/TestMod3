@@ -80,7 +80,7 @@ public class NameableItemHandler extends ItemStackHandler implements INameableIt
 		super.deserializeNBT(nbt);
 
 		if (nbt.contains("DisplayName")) {
-			final ITextComponent customName = Objects.requireNonNull(ITextComponent.Serializer.fromJson(nbt.getString("DisplayName")));
+			final ITextComponent customName = Objects.requireNonNull(ITextComponent.Serializer.getComponentFromJson(nbt.getString("DisplayName")));
 			setCustomName(customName);
 		}
 	}

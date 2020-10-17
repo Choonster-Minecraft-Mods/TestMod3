@@ -3,12 +3,15 @@ package choonster.testmod3.data.loot;
 import choonster.testmod3.block.RightClickTestBlock;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.util.RegistryUtil;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.data.loot.BlockLootTables;
 import net.minecraft.item.Items;
-import net.minecraft.world.storage.loot.*;
-import net.minecraft.world.storage.loot.conditions.BlockStateProperty;
-import net.minecraft.world.storage.loot.conditions.SurvivesExplosion;
+import net.minecraft.loot.ConstantRange;
+import net.minecraft.loot.ItemLootEntry;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.conditions.BlockStateProperty;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -26,20 +29,16 @@ public class TestMod3BlockLootTables extends BlockLootTables {
 		registerDropSelfLootTable(ModBlocks.LARGE_COLLISION_TEST);
 
 		registerLootTable(ModBlocks.RIGHT_CLICK_TEST, block -> (
-				LootTable.builder()
+				dropping(block)
 						.addLootPool(
-								withSurvivesExplosion(LootPool.builder()
-										.name("main")
-										.rolls(ConstantRange.of(1))
-										.addEntry(ItemLootEntry.builder(block))
-								)
-						)
-						.addLootPool(
-								withSurvivesExplosion(LootPool.builder()
+								withSurvivesExplosion(Items.ENDER_EYE, LootPool.builder()
 										.name("ender_eye")
 										.acceptCondition(
 												BlockStateProperty.builder(block)
-														.with(RightClickTestBlock.HAS_ENDER_EYE, true)
+														.fromProperties(
+																StatePropertiesPredicate.Builder.newBuilder()
+																		.withBoolProp(RightClickTestBlock.HAS_ENDER_EYE, true)
+														)
 										)
 										.rolls(ConstantRange.of(1))
 										.addEntry(ItemLootEntry.builder(Items.ENDER_EYE))
@@ -103,14 +102,11 @@ public class TestMod3BlockLootTables extends BlockLootTables {
 	}
 
 	private void registerLootTable(final RegistryObject<? extends Block> block, final Function<Block, LootTable.Builder> factory) {
-		registerLootTable(RegistryUtil.getRequiredRegistryEntry(block), factory);
+		registerLootTable(block.get(), factory);
 	}
 
 	private void registerDropSelfLootTable(final RegistryObject<? extends Block> block) {
-		registerDropSelfLootTable(RegistryUtil.getRequiredRegistryEntry(block)); // TODO: Why is this unchecked?
+		registerDropSelfLootTable(block.get()); // TODO: Why is this unchecked?
 	}
 
-	private static <T> T withSurvivesExplosion(final ILootConditionConsumer<T> lootConditionConsumer) {
-		return lootConditionConsumer.acceptCondition(SurvivesExplosion.builder());
-	}
 }

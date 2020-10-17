@@ -2,6 +2,7 @@ package choonster.testmod3.tileentity;
 
 import choonster.testmod3.api.capability.lock.ILock;
 import choonster.testmod3.capability.lock.LockCapability;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -50,9 +51,9 @@ public abstract class LockableItemHandlerTileEntity<
 	}
 
 	@Override
-	public void read(final CompoundNBT compound) {
-		super.read(compound);
-		lock.deserializeNBT(compound.getCompound("Lock"));
+	public void read(final BlockState state, final CompoundNBT nbt) {
+		super.read(state, nbt);
+		lock.deserializeNBT(nbt.getCompound("Lock"));
 	}
 
 	@Override

@@ -1,10 +1,10 @@
 package choonster.testmod3.block;
 
 import choonster.testmod3.block.variantgroup.BlockVariantGroup;
-import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
@@ -35,13 +35,13 @@ public class VariantsBlock extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
 		final EnumType newType = variantGroup.cycleVariant(type);
-		final BlockState newState = RegistryUtil.getRequiredRegistryEntry(variantGroup.getBlock(newType)).getDefaultState();
+		final BlockState newState = variantGroup.getBlock(newType).get().getDefaultState();
 
 		world.setBlockState(pos, newState);
 
-		return true;
+		return ActionResultType.SUCCESS;
 	}
 
 	public enum EnumType implements IStringSerializable {
@@ -55,7 +55,7 @@ public class VariantsBlock extends Block {
 		}
 
 		@Override
-		public String getName() {
+		public String getString() {
 			return name;
 		}
 	}

@@ -42,7 +42,7 @@ public class VariantsItem extends Item {
 		}
 
 		@Override
-		public String getName() {
+		public String getString() {
 			return name;
 		}
 	}

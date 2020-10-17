@@ -4,7 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.LazyLoadBase;
+import net.minecraft.util.LazyValue;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 
@@ -22,11 +22,11 @@ public class SoundEffectItem extends Item {
 	/**
 	 * The {@link SoundEvent} to play when left clicked.
 	 */
-	private final LazyLoadBase<SoundEvent> soundEvent;
+	private final LazyValue<SoundEvent> soundEvent;
 
 	public SoundEffectItem(final Supplier<SoundEvent> soundEvent, final Item.Properties properties) {
 		super(properties);
-		this.soundEvent = new LazyLoadBase<>(soundEvent);
+		this.soundEvent = new LazyValue<>(soundEvent);
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class SoundEffectItem extends Item {
 	@Override
 	public boolean onEntitySwing(final ItemStack stack, final LivingEntity entity) {
 		final PlayerEntity player = entity instanceof PlayerEntity ? ((PlayerEntity) entity) : null;
-		entity.world.playSound(player, entity.posX, entity.posY, entity.posZ, soundEvent.getValue(), SoundCategory.PLAYERS, 0.5F, 1.0f);
+		entity.world.playSound(player, entity.getPosX(), entity.getPosY(), entity.getPosZ(), soundEvent.getValue(), SoundCategory.PLAYERS, 0.5F, 1.0f);
 
 		return false;
 	}

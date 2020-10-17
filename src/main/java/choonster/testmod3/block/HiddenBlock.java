@@ -5,7 +5,7 @@ import choonster.testmod3.tileentity.HiddenTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockReader;
@@ -24,7 +24,7 @@ public class HiddenBlock extends TileEntityBlock<HiddenTileEntity> {
 	 * <p>
 	 * Only set from {_@link Block#getActualState} on the client side, do not query on the server.
 	 */
-	public static final IProperty<Boolean> HIDDEN = BooleanProperty.create("hidden");
+	public static final Property<Boolean> HIDDEN = BooleanProperty.create("hidden");
 
 	public HiddenBlock(final Block.Properties properties) {
 		super(false, properties);

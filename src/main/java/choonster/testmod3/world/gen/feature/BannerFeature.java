@@ -1,6 +1,6 @@
 package choonster.testmod3.world.gen.feature;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -11,15 +11,13 @@ import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.tileentity.BannerTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.Random;
-import java.util.function.Function;
 
 /**
  * Generates Banners with a specific pattern.
@@ -30,10 +28,8 @@ import java.util.function.Function;
  * @author Choonster
  */
 public class BannerFeature extends Feature<NoFeatureConfig> {
-	private final ItemStack bannerStack = createBannerStack();
-
-	public BannerFeature(final Function<Dynamic<?>, ? extends NoFeatureConfig> configFactory) {
-		super(configFactory);
+	public BannerFeature(final Codec<NoFeatureConfig> codec) {
+		super(codec);
 	}
 
 	/**
@@ -69,7 +65,9 @@ public class BannerFeature extends Feature<NoFeatureConfig> {
 	}
 
 	@Override
-	public boolean place(final IWorld world, final ChunkGenerator<? extends GenerationSettings> chunkGenerator, final Random random, final BlockPos pos, final NoFeatureConfig featureConfig) {
+	public boolean func_241855_a(final ISeedReader world, final ChunkGenerator chunkGenerator, final Random random, final BlockPos pos, final NoFeatureConfig featureConfig) {
+		final ItemStack bannerStack = createBannerStack();
+
 		world.setBlockState(pos, Blocks.PINK_BANNER.getDefaultState(), Constants.BlockFlags.DEFAULT);
 
 		final TileEntity tileEntity = world.getTileEntity(pos);

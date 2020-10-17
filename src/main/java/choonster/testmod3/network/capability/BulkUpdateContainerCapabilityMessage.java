@@ -1,10 +1,5 @@
 package choonster.testmod3.network.capability;
 
-import java.util.function.Supplier;
-import java.util.stream.IntStream;
-
-import javax.annotation.Nullable;
-
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -19,6 +14,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 /**
  * Base class for messages that update the capability data for each slot of a {@link Container}.
@@ -204,7 +203,7 @@ public abstract class BulkUpdateContainerCapabilityMessage<HANDLER, DATA> {
 			return;
 		}
 
-		ctx.get().enqueueWork(() -> DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+		ctx.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
 			final ClientPlayerEntity player = Minecraft.getInstance().player;
 
 			final Container container;

@@ -90,8 +90,8 @@ public class ModBowItem extends BowItem {
 					final ArrowItem arrowItem = (ArrowItem) (ammo.getItem() instanceof ArrowItem ? ammo.getItem() : Items.ARROW);
 
 					AbstractArrowEntity arrowEntity = arrowItem.createArrow(world, ammo, player);
-					arrowEntity = customeArrow(arrowEntity);
-					arrowEntity.shoot(player, player.rotationPitch, player.rotationYaw, 0.0f, arrowVelocity * 3.0f, 1.0f);
+					arrowEntity = customArrow(arrowEntity);
+					arrowEntity./* shoot */func_234612_a_(player, player.rotationPitch, player.rotationYaw, 0.0f, arrowVelocity * 3.0f, 1.0f);
 
 					if (arrowVelocity == 1.0f) {
 						arrowEntity.setIsCritical(true);
@@ -120,7 +120,7 @@ public class ModBowItem extends BowItem {
 					world.addEntity(arrowEntity);
 				}
 
-				world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0f, 1.0f / (random.nextFloat() * 0.4f + 1.2f) + arrowVelocity * 0.5f);
+				world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0f, 1.0f / (random.nextFloat() * 0.4f + 1.2f) + arrowVelocity * 0.5f);
 
 				if (!isInfinite && !player.abilities.isCreativeMode) {
 					ammo.shrink(1);

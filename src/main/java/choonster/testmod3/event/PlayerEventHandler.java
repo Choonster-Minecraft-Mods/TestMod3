@@ -6,6 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -54,8 +55,8 @@ public class PlayerEventHandler {
 		}
 
 		final ITextComponent textComponent = new TranslationTextComponent(message);
-		textComponent.getStyle().setColor(TextFormatting.LIGHT_PURPLE);
-		player.sendMessage(textComponent);
+		textComponent.getStyle().setFormatting(TextFormatting.LIGHT_PURPLE);
+		player.sendMessage(textComponent, Util.DUMMY_UUID);
 	}
 
 	/**
@@ -68,7 +69,7 @@ public class PlayerEventHandler {
 		if (event.getEntity() instanceof PlayerEntity && !event.getEntity().getEntityWorld().isRemote) {
 			final PlayerEntity player = (PlayerEntity) event.getEntity();
 			final BlockPos pos = player.getPosition();
-			player.sendMessage(new TranslationTextComponent("message.testmod3.death.coordinates", pos.getX(), pos.getY(), pos.getZ(), player.dimension, player.getEntityWorld().dimension.getType().getRegistryName()));
+			player.sendMessage(new TranslationTextComponent("message.testmod3.death.coordinates", pos.getX(), pos.getY(), pos.getZ(), player.world.getDimensionKey()), Util.DUMMY_UUID);
 		}
 	}
 }

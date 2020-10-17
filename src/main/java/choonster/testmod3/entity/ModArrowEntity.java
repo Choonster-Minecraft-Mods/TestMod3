@@ -22,10 +22,6 @@ public class ModArrowEntity extends ArrowEntity {
 		super(entityType, world);
 	}
 
-	public ModArrowEntity(final World world, final double x, final double y, final double z) {
-		super(world, x, y, z);
-	}
-
 	public ModArrowEntity(final World world, final LivingEntity shooter) {
 		super(world, shooter);
 	}

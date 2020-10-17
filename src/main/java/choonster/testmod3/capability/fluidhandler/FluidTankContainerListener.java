@@ -4,7 +4,6 @@ import choonster.testmod3.capability.CapabilityContainerListener;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.network.capability.fluidhandler.BulkUpdateContainerFluidTanksMessage;
 import choonster.testmod3.network.capability.fluidhandler.UpdateContainerFluidTankMessage;
-import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
@@ -32,7 +31,7 @@ public class FluidTankContainerListener extends CapabilityContainerListener<IFlu
 	 */
 	@Override
 	protected boolean shouldSyncItem(final ItemStack stack) {
-		return stack.getItem() == RegistryUtil.getRequiredRegistryEntry(ModBlocks.FLUID_TANK).asItem();
+		return stack.getItem() == ModBlocks.FLUID_TANK.get().asItem();
 	}
 
 	/**

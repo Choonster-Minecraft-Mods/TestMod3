@@ -4,12 +4,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
@@ -44,11 +41,5 @@ public class FluidPipeBlock extends BasePipeBlock {
 
 		// Connect if the neighbouring block is a fluid, FluidUtil.getFluidHandler will provide an IFluidHandler wrapper to drain from it
 		return neighbourBlock instanceof IFluidBlock || neighbourBlock instanceof FlowingFluidBlock;
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.CUTOUT;
 	}
 }

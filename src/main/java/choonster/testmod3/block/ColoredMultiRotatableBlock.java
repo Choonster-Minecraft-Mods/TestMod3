@@ -8,8 +8,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.state.EnumProperty;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 import net.minecraft.state.StateContainer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -24,7 +25,7 @@ import net.minecraft.world.World;
  * @author Choonster
  */
 public class ColoredMultiRotatableBlock extends ColoredRotatableBlock {
-	public static final IProperty<EnumFaceRotation> FACE_ROTATION = EnumProperty.create("face_rotation", EnumFaceRotation.class);
+	public static final Property<EnumFaceRotation> FACE_ROTATION = EnumProperty.create("face_rotation", EnumFaceRotation.class);
 
 	public ColoredMultiRotatableBlock(final DyeColor color, final BlockVariantGroup<DyeColor, ? extends ColoredMultiRotatableBlock> variantGroup, final Block.Properties properties) {
 		super(color, variantGroup, properties);
@@ -49,13 +50,12 @@ public class ColoredMultiRotatableBlock extends ColoredRotatableBlock {
 	}
 
 	@Override
-	public boolean onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
 		if (player.isSneaking()) { // If the player is sneaking, rotate the face
 			rotateFace(world, pos);
-			return true;
+			return ActionResultType.SUCCESS;
 		} else { // Else rotate or recolour the block
 			return super.onBlockActivated(state, world, pos, player, hand, rayTraceResult);
 		}
 	}
-
 }

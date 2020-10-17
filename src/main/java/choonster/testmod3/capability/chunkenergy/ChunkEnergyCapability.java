@@ -55,7 +55,7 @@ public class ChunkEnergyCapability {
 		CapabilityManager.INSTANCE.register(IChunkEnergy.class, new Capability.IStorage<IChunkEnergy>() {
 			@Override
 			public INBT writeNBT(final Capability<IChunkEnergy> capability, final IChunkEnergy instance, final Direction side) {
-				return new IntNBT(instance.getEnergyStored());
+				return IntNBT.valueOf(instance.getEnergyStored());
 			}
 
 			@Override

@@ -15,7 +15,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -40,10 +40,10 @@ public class EntityTestItem extends Item {
 		if (rayTraceResult.getType() == RayTraceResult.Type.MISS) {
 			return new ActionResult<>(ActionResultType.PASS, heldItem);
 		} else {
-			final Vec3d lookVector = player.getLook(1.0f);
+			final Vector3d lookVector = player.getLook(1.0f);
 			final List<Entity> entitiesInWay = world.getEntitiesInAABBexcluding(player, player.getBoundingBox().expand(lookVector.scale(5.0)).grow(1.0), ENTITY_PREDICATE);
 			if (!entitiesInWay.isEmpty()) {
-				final Vec3d eyePosition = player.getEyePosition(1.0f);
+				final Vector3d eyePosition = player.getEyePosition(1.0f);
 
 				for (final Entity entity : entitiesInWay) {
 					final AxisAlignedBB aabb = entity.getBoundingBox().grow(entity.getCollisionBorderSize());
@@ -61,7 +61,7 @@ public class EntityTestItem extends Item {
 
 				pig.rotationYaw = player.rotationYaw;
 
-				if (!world.isCollisionBoxesEmpty(pig, pig.getBoundingBox().grow(-0.1))) {
+				if (!world.hasNoCollisions(pig, pig.getBoundingBox().grow(-0.1))) {
 					return new ActionResult<>(ActionResultType.FAIL, heldItem);
 				} else {
 					if (!world.isRemote) {

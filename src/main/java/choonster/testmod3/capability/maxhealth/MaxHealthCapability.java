@@ -54,7 +54,7 @@ public final class MaxHealthCapability {
 		CapabilityManager.INSTANCE.register(IMaxHealth.class, new Capability.IStorage<IMaxHealth>() {
 			@Override
 			public INBT writeNBT(final Capability<IMaxHealth> capability, final IMaxHealth instance, final Direction side) {
-				return new FloatNBT(instance.getBonusMaxHealth());
+				return FloatNBT.valueOf(instance.getBonusMaxHealth());
 			}
 
 			@Override

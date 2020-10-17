@@ -2,13 +2,14 @@ package choonster.testmod3.inventory.itemhandler;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameter;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameter;
-import net.minecraft.world.storage.loot.LootParameters;
 
 import javax.annotation.Nullable;
 
@@ -45,6 +46,6 @@ public class TileEntityLootItemHandler extends LootItemHandler {
 	 */
 	@Override
 	protected void addAdditionalLootParameters(@Nullable final PlayerEntity player, final LootContext.Builder builder) {
-		builder.withParameter(LootParameters.POSITION, tileEntity.getPos());
+		builder.withParameter(LootParameters./*ORIGIN*/field_237457_g_, Vector3d.copyCentered(tileEntity.getPos()));
 	}
 }

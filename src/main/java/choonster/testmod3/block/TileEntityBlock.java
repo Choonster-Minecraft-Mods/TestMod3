@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -52,7 +52,7 @@ public abstract class TileEntityBlock<TE extends TileEntity> extends Block {
 	}
 
 	@Override
-	public boolean removedByPlayer(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final boolean willHarvest, final IFluidState fluid) {
+	public boolean removedByPlayer(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final boolean willHarvest, final FluidState fluid) {
 		// If it will harvest, delay deletion of the block until after getDrops
 		return preserveTileEntity && willHarvest || super.removedByPlayer(state, world, pos, player, willHarvest, fluid);
 	}

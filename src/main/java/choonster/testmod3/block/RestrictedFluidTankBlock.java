@@ -7,8 +7,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -37,7 +39,7 @@ public class RestrictedFluidTankBlock extends FluidTankBlock<RestrictedFluidTank
 	}
 
 	@Override
-	public boolean onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
 		final ItemStack heldItem = player.getHeldItem(hand);
 		final Direction face = rayTraceResult.getFace();
 
@@ -48,10 +50,10 @@ public class RestrictedFluidTankBlock extends FluidTankBlock<RestrictedFluidTank
 
 				if (!world.isRemote) {
 					final String message = enabled ? "message.testmod3.fluid_tank_restricted.facing_enabled" : "message.testmod3.fluid_tank_restricted.facing_disabled";
-					player.sendMessage(new TranslationTextComponent(message, face));
+					player.sendMessage(new TranslationTextComponent(message, face), Util.DUMMY_UUID);
 				}
 
-				return true;
+				return ActionResultType.SUCCESS;
 			}
 		}
 
@@ -63,7 +65,7 @@ public class RestrictedFluidTankBlock extends FluidTankBlock<RestrictedFluidTank
 	public void onBlockClicked(final BlockState state, final World worldIn, final BlockPos pos, final PlayerEntity player) {
 		if (!worldIn.isRemote) {
 			final String enabledFacingsString = getEnabledFacingsString(worldIn, pos);
-			player.sendMessage(new TranslationTextComponent("message.testmod3.fluid_tank_restricted.enabled_facings", enabledFacingsString));
+			player.sendMessage(new TranslationTextComponent("message.testmod3.fluid_tank_restricted.enabled_facings", enabledFacingsString), Util.DUMMY_UUID);
 		}
 	}
 
@@ -81,7 +83,7 @@ public class RestrictedFluidTankBlock extends FluidTankBlock<RestrictedFluidTank
 			final Set<Direction> enabledFacings = tileEntity.getEnabledFacings();
 			return enabledFacings.stream()
 					.sorted()
-					.map(Direction::getName)
+					.map(Direction::getString)
 					.collect(Collectors.joining(", "));
 		}
 

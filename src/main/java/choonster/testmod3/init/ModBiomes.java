@@ -1,20 +1,8 @@
 package choonster.testmod3.init;
 
-import choonster.testmod3.TestMod3;
-import choonster.testmod3.world.biome.DesertTestBiome;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeManager;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.ObjectHolder;
-
-import static choonster.testmod3.util.InjectionUtil.Null;
-import static net.minecraftforge.common.BiomeDictionary.Type.*;
-
+/*
+// TODO: Replace with JSON biomes. From data generator?
 @SuppressWarnings("WeakerAccess")
 @ObjectHolder(TestMod3.MODID)
 public class ModBiomes {
@@ -24,11 +12,13 @@ public class ModBiomes {
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 	public static class RegistrationHandler {
-		/**
-		 * Register this mod's {@link Biome}s.
-		 *
-		 * @param event The event
-		 */
+		*/
+/**
+ * Register this mod's {@link Biome}s.
+ *
+ * @param event The event
+ *//*
+
 		@SubscribeEvent
 		public static void registerBiomes(final RegistryEvent.Register<Biome> event) {
 			final IForgeRegistry<Biome> registry = event.getRegistry();
@@ -43,3 +33,4 @@ public class ModBiomes {
 		}
 	}
 }
+*/

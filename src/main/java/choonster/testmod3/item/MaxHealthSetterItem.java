@@ -6,7 +6,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 
 /**
@@ -20,17 +22,17 @@ public class MaxHealthSetterItem extends Item {
 	}
 
 	@Override
-	public boolean itemInteractionForEntity(final ItemStack stack, final PlayerEntity player, final LivingEntity target, final Hand hand) {
+	public ActionResultType itemInteractionForEntity(final ItemStack stack, final PlayerEntity player, final LivingEntity target, final Hand hand) {
 		if (!player.world.isRemote) {
 			MaxHealthCapability.getMaxHealth(target).ifPresent(maxHealth -> {
 				final float healthToAdd = player.isSneaking() ? -1.0f : 1.0f;
 
 				maxHealth.addBonusMaxHealth(healthToAdd);
 
-				player.sendMessage(new TranslationTextComponent("message.testmod3.max_health.add", target.getDisplayName(), healthToAdd));
+				player.sendMessage(new TranslationTextComponent("message.testmod3.max_health.add", target.getDisplayName(), healthToAdd), Util.DUMMY_UUID);
 			});
 		}
 
-		return true;
+		return ActionResultType.SUCCESS;
 	}
 }

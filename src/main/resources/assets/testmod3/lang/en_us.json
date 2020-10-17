@@ -215,7 +215,7 @@
 	"message.testmod3.respawner.no_spawn_location": "No spawn location set",
 	"message.testmod3.respawner.teleporting": "Teleporting to %d,%d,%d in dimension %d",
 	"message.testmod3.client_player_right_click.right_click": "Right click!!",
-	"message.testmod3.death.coordinates": "You died at %d %d %d in dimension %d (%s)!",
+	"message.testmod3.death.coordinates": "You died at %d %d %d in dimension %s!",
 	"message.testmod3.player_received_loot.base": "Received Loot: %s",
 	"message.testmod3.player_received_loot.item": "%d x %s",
 	"message.testmod3.player_received_loot.no_loot": "No loot received.",

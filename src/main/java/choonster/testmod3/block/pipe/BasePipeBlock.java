@@ -4,12 +4,12 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 
@@ -25,9 +25,9 @@ public class BasePipeBlock extends Block {
 	public static final float PIPE_MIN_POS = 0.25f;
 	public static final float PIPE_MAX_POS = 0.75f;
 
-	public static final ImmutableList<IProperty<Boolean>> CONNECTED_PROPERTIES = ImmutableList.copyOf(
+	public static final ImmutableList<Property<Boolean>> CONNECTED_PROPERTIES = ImmutableList.copyOf(
 			Stream.of(Direction.values())
-					.map(facing -> BooleanProperty.create(facing.getName()))
+					.map(facing -> BooleanProperty.create(facing.getString()))
 					.collect(Collectors.toList())
 	);
 
@@ -35,7 +35,7 @@ public class BasePipeBlock extends Block {
 	public static final ImmutableList<AxisAlignedBB> CONNECTED_BOUNDING_BOXES = ImmutableList.copyOf(
 			Stream.of(Direction.values())
 					.map(facing -> {
-						Vec3i directionVec = facing.getDirectionVec();
+						Vector3i directionVec = facing.getDirectionVec();
 						return new AxisAlignedBB(
 								getMinBound(directionVec.getX()), getMinBound(directionVec.getY()), getMinBound(directionVec.getZ()),
 								getMaxBound(directionVec.getX()), getMaxBound(directionVec.getY()), getMaxBound(directionVec.getZ())
@@ -58,7 +58,7 @@ public class BasePipeBlock extends Block {
 	 * @param direction The direction
 	 * @return The property
 	 */
-	public static IProperty<Boolean> getConnectedProperty(final Direction direction) {
+	public static Property<Boolean> getConnectedProperty(final Direction direction) {
 		return CONNECTED_PROPERTIES.get(direction.getIndex());
 	}
 

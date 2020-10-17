@@ -71,7 +71,7 @@ public class Lock implements ILock, INBTSerializable<CompoundNBT> {
 		code = LockCode.read(nbt);
 
 		if (nbt.contains("DisplayName")) {
-			final ITextComponent displayName = Objects.requireNonNull(ITextComponent.Serializer.fromJson(nbt.getString("DisplayName")));
+			final ITextComponent displayName = Objects.requireNonNull(ITextComponent.Serializer.getComponentFromJson(nbt.getString("DisplayName")));
 			setDisplayName(displayName);
 		}
 	}

@@ -215,7 +215,7 @@ public final class PigSpawnerCapability {
 			final World world = event.getPlayer().getEntityWorld();
 
 			final Entity target = event.getTarget();
-			final double x = target.posX, y = target.posY, z = target.posZ;
+			final double x = target.getPosX(), y = target.getPosY(), z = target.getPosZ();
 			final IPigSpawnerInteractable interactable = target instanceof IPigSpawnerInteractable ? (IPigSpawnerInteractable) target : null;
 
 			final Hand hand = event.getHand();
@@ -236,10 +236,10 @@ public final class PigSpawnerCapability {
 		@SubscribeEvent
 		public static void itemTooltip(final ItemTooltipEvent event) {
 			getPigSpawner(event.getItemStack()).ifPresent(pigSpawner -> {
-				final Style style = new Style().setColor(TextFormatting.LIGHT_PURPLE);
+				final Style style = Style.EMPTY.setFormatting(TextFormatting.LIGHT_PURPLE);
 
 				final List<ITextComponent> tooltipLines = pigSpawner.getTooltipLines().stream()
-						.map(iTextComponent -> iTextComponent.setStyle(style))
+						.map(textComponent -> textComponent.setStyle(style))
 						.collect(Collectors.toList());
 
 				event.getToolTip().add(new StringTextComponent(""));

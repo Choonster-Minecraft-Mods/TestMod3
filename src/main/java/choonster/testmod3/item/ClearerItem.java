@@ -10,12 +10,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * An item that clears all whitelisted blocks from the player's current chunk when used.
@@ -50,12 +49,12 @@ public class ClearerItem extends Item {
 			if (player.isSneaking()) {
 				final int newMode = currentMode == MODE_ALL ? MODE_WHITELIST : MODE_ALL;
 				setMode(heldItem, newMode);
-				player.sendMessage(new TranslationTextComponent("message.testmod3.clearer.mode.%s", newMode));
+				player.sendMessage(new TranslationTextComponent("message.testmod3.clearer.mode.%s", newMode), Util.DUMMY_UUID);
 			} else {
-				final int minX = MathHelper.floor(player.posX / 16) * 16;
-				final int minZ = MathHelper.floor(player.posZ / 16) * 16;
+				final int minX = MathHelper.floor(player.getPosX() / 16) * 16;
+				final int minZ = MathHelper.floor(player.getPosZ() / 16) * 16;
 
-				player.sendMessage(new TranslationTextComponent("message.testmod3.clearer.clearing", minX, minZ));
+				player.sendMessage(new TranslationTextComponent("message.testmod3.clearer.clearing", minX, minZ), Util.DUMMY_UUID);
 
 				for (int x = minX; x < minX + 16; x++) {
 					for (int z = minZ; z < minZ + 16; z++) {
@@ -73,16 +72,15 @@ public class ClearerItem extends Item {
 				final BlockState state = world.getBlockState(pos);
 				world.notifyBlockUpdate(pos, state, state, 3);
 
-				player.sendMessage(new TranslationTextComponent("message.testmod3.clearer.cleared"));
+				player.sendMessage(new TranslationTextComponent("message.testmod3.clearer.cleared"), Util.DUMMY_UUID);
 			}
 		}
 
 		return new ActionResult<>(ActionResultType.SUCCESS, heldItem);
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	@Override
 	public boolean hasEffect(final ItemStack stack) {
-		return getMode(stack) == MODE_ALL;
+		return getMode(stack) == MODE_ALL || super.hasEffect(stack);
 	}
 }

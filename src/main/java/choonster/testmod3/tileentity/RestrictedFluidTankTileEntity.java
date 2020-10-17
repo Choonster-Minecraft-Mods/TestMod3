@@ -1,6 +1,7 @@
 package choonster.testmod3.tileentity;
 
 import choonster.testmod3.init.ModTileEntities;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -64,8 +65,8 @@ public class RestrictedFluidTankTileEntity extends BaseFluidTankTileEntity {
 	}
 
 	@Override
-	public void read(final CompoundNBT tag) {
-		super.read(tag);
+	public void read(final BlockState state, final CompoundNBT tag) {
+		super.read(state, tag);
 
 		enabledFacings.clear();
 

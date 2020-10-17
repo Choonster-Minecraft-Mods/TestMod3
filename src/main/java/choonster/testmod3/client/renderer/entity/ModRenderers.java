@@ -1,8 +1,7 @@
 package choonster.testmod3.client.renderer.entity;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.entity.BlockDetectionArrowEntity;
-import choonster.testmod3.entity.ModArrowEntity;
+import choonster.testmod3.init.ModEntities;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -21,7 +20,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ModRenderers {
 	@SubscribeEvent
 	public static void register(final FMLClientSetupEvent event) {
-		RenderingRegistry.registerEntityRenderingHandler(ModArrowEntity.class, renderManager -> new RenderModArrow(renderManager, new ResourceLocation(TestMod3.MODID, "textures/entity/arrow.png")));
-		RenderingRegistry.registerEntityRenderingHandler(BlockDetectionArrowEntity.class, renderManager -> new RenderModArrow(renderManager, new ResourceLocation(TestMod3.MODID, "textures/entity/block_detection_arrow.png")));
+		RenderingRegistry.registerEntityRenderingHandler(ModEntities.MOD_ARROW, renderManager -> new RenderModArrow(renderManager, new ResourceLocation(TestMod3.MODID, "textures/entity/arrow.png")));
+		RenderingRegistry.registerEntityRenderingHandler(ModEntities.BLOCK_DETECTION_ARROW, renderManager -> new RenderModArrow(renderManager, new ResourceLocation(TestMod3.MODID, "textures/entity/block_detection_arrow.png")));
 	}
 }

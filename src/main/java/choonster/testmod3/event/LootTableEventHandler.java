@@ -2,7 +2,7 @@ package choonster.testmod3.event;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModLootTables;
-import net.minecraft.world.storage.loot.*;
+import net.minecraft.loot.*;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.Mod;
  */
 @Mod.EventBusSubscriber(modid = TestMod3.MODID)
 public class LootTableEventHandler {
+// TODO: Replace with Global Loot Modifier
 
 	/**
 	 * When the {@link LootTables#CHESTS_SIMPLE_DUNGEON} {@link LootTable} is loaded, add a new {@link LootPool} with

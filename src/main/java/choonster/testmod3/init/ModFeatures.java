@@ -23,7 +23,7 @@ public class ModFeatures {
 		@SubscribeEvent
 		public static void registerFeatures(final RegistryEvent.Register<Feature<?>> event) {
 			event.getRegistry().registerAll(
-					new BannerFeature(NoFeatureConfig::deserialize).setRegistryName("banner")
+					new BannerFeature(NoFeatureConfig.field_236558_a_).setRegistryName("banner")
 			);
 		}
 	}

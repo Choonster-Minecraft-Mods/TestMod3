@@ -1,26 +1,31 @@
 package choonster.testmod3.registry;
 
-import net.minecraft.util.LazyLoadBase;
+import net.minecraft.util.LazyValue;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * Implementation of {@link IForgeRegistry} that delegates to an {@link IForgeRegistry} instance that's lazily loaded
  * from {@link GameRegistry}.
  *
  * @author Choonster
+ * @deprecated Use {@link DeferredRegister#makeRegistry(String, Supplier)} instead.
  */
+@Deprecated()
 public class LazyForgeRegistry<V extends IForgeRegistryEntry<V>> implements IForgeRegistry<V> {
-	private final LazyLoadBase<IForgeRegistry<V>> registry;
+	private final LazyValue<IForgeRegistry<V>> registry;
 
 	protected LazyForgeRegistry(final Class<V> registryType) {
-		registry = new LazyLoadBase<>(() ->
+		registry = new LazyValue<>(() ->
 				Objects.requireNonNull(
 						GameRegistry.findRegistry(registryType),
 						() -> String.format("Registry of type %s not present", registryType.getName())
@@ -104,7 +109,7 @@ public class LazyForgeRegistry<V extends IForgeRegistryEntry<V>> implements IFor
 
 	@Override
 	@Nonnull
-	public Set<Map.Entry<ResourceLocation, V>> getEntries() {
+	public Set<Map.Entry<RegistryKey<V>, V>> getEntries() {
 		return getRegistry().getEntries();
 	}
 
@@ -112,7 +117,7 @@ public class LazyForgeRegistry<V extends IForgeRegistryEntry<V>> implements IFor
 	public <T> T getSlaveMap(final ResourceLocation slaveMapName, final Class<T> type) {
 		return getRegistry().getSlaveMap(slaveMapName, type);
 	}
-	
+
 	@Override
 	public Iterator<V> iterator() {
 		return getRegistry().iterator();

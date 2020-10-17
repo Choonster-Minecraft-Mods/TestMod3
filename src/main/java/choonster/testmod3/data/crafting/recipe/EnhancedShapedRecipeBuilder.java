@@ -14,7 +14,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -73,7 +73,7 @@ public class EnhancedShapedRecipeBuilder extends ShapedRecipeBuilder {
 	 * Adds a key to the recipe pattern.
 	 */
 	@Override
-	public EnhancedShapedRecipeBuilder key(final Character symbol, final Tag<Item> tagIn) {
+	public EnhancedShapedRecipeBuilder key(final Character symbol, final ITag<Item> tagIn) {
 		return (EnhancedShapedRecipeBuilder) super.key(symbol, tagIn);
 	}
 
@@ -165,7 +165,7 @@ public class EnhancedShapedRecipeBuilder extends ShapedRecipeBuilder {
 
 			final Advancement.Builder advancementBuilder = ((Advancement.Builder) ADVANCEMENT_BUILDER.get(this))
 					.withParentId(new ResourceLocation("minecraft", "recipes/root"))
-					.withCriterion("has_the_recipe", new RecipeUnlockedTrigger.Instance(id))
+					.withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
 					.withRewards(AdvancementRewards.Builder.recipe(id))
 					.withRequirementsStrategy(IRequirementsStrategy.OR);
 

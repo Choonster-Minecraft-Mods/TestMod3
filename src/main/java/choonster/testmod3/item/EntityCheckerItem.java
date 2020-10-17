@@ -10,6 +10,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -100,7 +101,7 @@ public class EntityCheckerItem extends Item {
 
 		if (!world.isRemote) {
 			final int newRadius = incrementRadius(heldItem, player.isSneaking() ? -1 : 1);
-			player.sendMessage(new TranslationTextComponent("message.testmod3.entity_checker.radius", newRadius));
+			player.sendMessage(new TranslationTextComponent("message.testmod3.entity_checker.radius", newRadius), Util.DUMMY_UUID);
 		}
 
 		return new ActionResult<>(ActionResultType.SUCCESS, heldItem);
@@ -111,7 +112,7 @@ public class EntityCheckerItem extends Item {
 		if (!player.getEntityWorld().isRemote) {
 			final boolean cornerModeEnabled = toggleCornerModeEnabled(stack);
 			final String message = cornerModeEnabled ? "message.testmod3.entity_checker.mode.corner" : "message.testmod3.entity_checker.mode.edge";
-			player.sendMessage(new TranslationTextComponent(message, cornerModeEnabled));
+			player.sendMessage(new TranslationTextComponent(message, cornerModeEnabled), Util.DUMMY_UUID);
 		}
 
 		return true;
@@ -141,8 +142,8 @@ public class EntityCheckerItem extends Item {
 
 			LOGGER.info("Bounding box: {}", boundingBox);
 			if (player != null) {
-				player.sendMessage(new TranslationTextComponent("message.testmod3.entity_checker.results", entities.size()));
-				entities.forEach(entity -> player.sendMessage(new StringTextComponent(entity.toString())));
+				player.sendMessage(new TranslationTextComponent("message.testmod3.entity_checker.results", entities.size()), Util.DUMMY_UUID);
+				entities.forEach(entity -> player.sendMessage(new StringTextComponent(entity.toString()), Util.DUMMY_UUID));
 			}
 		}
 

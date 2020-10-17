@@ -1,7 +1,7 @@
 package choonster.testmod3.capability.pigspawner;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -32,7 +32,7 @@ public class InfinitePigSpawner extends BasePigSpawner {
 	 * Add tooltip lines for this spawner. Can be called on the client or server.
 	 */
 	@Override
-	public List<ITextComponent> getTooltipLines() {
+	public List<IFormattableTextComponent> getTooltipLines() {
 		return ImmutableList.of(new TranslationTextComponent("testmod3.pig_spawner.infinite.desc"));
 	}
 }

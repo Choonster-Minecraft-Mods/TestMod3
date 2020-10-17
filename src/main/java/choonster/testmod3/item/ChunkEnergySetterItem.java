@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -33,24 +33,24 @@ public class ChunkEnergySetterItem extends Item {
 	 * @param amount The amount to add/remove
 	 */
 	private void addRemoveChunkEnergy(final World world, final PlayerEntity player, final int amount) {
-		final Chunk chunk = world.getChunkAt(new BlockPos(player));
+		final Chunk chunk = world.getChunkAt(player.getPosition());
 		final ChunkPos chunkPos = chunk.getPos();
 
 		ChunkEnergyCapability.getChunkEnergy(chunk)
 				.map(chunkEnergy -> {
 					if (player.isSneaking()) {
 						final int energyRemoved = chunkEnergy.extractEnergy(amount, false);
-						player.sendMessage(new TranslationTextComponent("message.testmod3.chunk_energy.remove", energyRemoved, chunkPos));
+						player.sendMessage(new TranslationTextComponent("message.testmod3.chunk_energy.remove", energyRemoved, chunkPos), Util.DUMMY_UUID);
 					} else {
 						final int energyAdded = chunkEnergy.receiveEnergy(amount, false);
-						player.sendMessage(new TranslationTextComponent("message.testmod3.chunk_energy.add", energyAdded, chunkPos));
+						player.sendMessage(new TranslationTextComponent("message.testmod3.chunk_energy.add", energyAdded, chunkPos), Util.DUMMY_UUID);
 
 					}
 
 					return true;
 				})
 				.orElseGet(() -> {
-					player.sendMessage(new TranslationTextComponent("message.testmod3.chunk_energy.not_found", chunkPos));
+					player.sendMessage(new TranslationTextComponent("message.testmod3.chunk_energy.not_found", chunkPos), Util.DUMMY_UUID);
 
 					return false;
 				});

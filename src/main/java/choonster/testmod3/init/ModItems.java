@@ -13,8 +13,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.DimensionType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -34,7 +33,7 @@ public class ModItems {
 
 	public static final EntityTestItem ENTITY_TEST = Null();
 
-	public static final ModMusicDiscItem RECORD_SOLARIS = Null();
+	public static final MusicDiscItem RECORD_SOLARIS = Null();
 
 	public static final HeavyItem HEAVY = Null();
 
@@ -176,7 +175,15 @@ public class ModItems {
 			final Item[] items = {
 					new CuttingAxeItem(ItemTier.WOOD, 6.0f, -3.2f, defaultItemProperties()).setRegistryName("wooden_axe"),
 					new EntityTestItem(defaultItemProperties()).setRegistryName("entity_test"),
-					new ModMusicDiscItem(13, ModSoundEvents.RegistrationHandler.getSoundEvent(new ResourceLocation(TestMod3.MODID, "record.solaris")), defaultItemProperties()).setRegistryName("record_solaris"),
+
+					/*
+					 * A music disc.
+					 * <p>
+					 * Test for this thread:
+					 * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2408066-try-creating-a-music-disc-in-my-1-8-mod-please
+					*/
+					new MusicDiscItem(13, () -> ModSoundEvents.RECORD_SOLARIS /* TODO: Convert to DeferredRegister/RegistryObject */, defaultItemProperties()).setRegistryName("record_solaris"),
+
 					new HeavyItem(defaultItemProperties()).setRegistryName("heavy"),
 					new EntityInteractionTestItem(defaultItemProperties()).setRegistryName("entity_interaction_test"),
 					new BlockDestroyerItem(defaultItemProperties()).setRegistryName("block_destroyer"),

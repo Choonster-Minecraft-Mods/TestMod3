@@ -1,7 +1,7 @@
 package choonster.testmod3.util;
 
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -47,7 +47,7 @@ public class SwordUpgrades {
 		final AttributeModifier attackDamageModifier = new AttributeModifier(MODIFIER_UUID, MODIFIER_NAME, MODIFIER_AMOUNT, AttributeModifier.Operation.ADDITION);
 
 		// Add it to the output ItemStack
-		outputStack.addAttributeModifier(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), attackDamageModifier, EquipmentSlotType.MAINHAND);
+		outputStack.addAttributeModifier(Attributes.ATTACK_DAMAGE, attackDamageModifier, EquipmentSlotType.MAINHAND);
 
 		return outputStack;
 	}

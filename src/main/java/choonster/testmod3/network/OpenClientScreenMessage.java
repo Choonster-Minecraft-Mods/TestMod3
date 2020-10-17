@@ -43,7 +43,7 @@ public class OpenClientScreenMessage {
 	}
 
 	public static void handle(final OpenClientScreenMessage message, final Supplier<NetworkEvent.Context> ctx) {
-		ctx.get().enqueueWork(() -> DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+		ctx.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
 			Minecraft.getInstance().displayGuiScreen(ModGuiFactories.getClientScreen(message));
 		}));
 		ctx.get().setPacketHandled(true);

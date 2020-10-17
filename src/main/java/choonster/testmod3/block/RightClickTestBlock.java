@@ -7,8 +7,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 import net.minecraft.state.StateContainer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -23,7 +24,7 @@ import net.minecraft.world.World;
  * @author Choonster
  */
 public class RightClickTestBlock extends GlassBlock {
-	public static final IProperty<Boolean> HAS_ENDER_EYE = BooleanProperty.create("has_ender_eye");
+	public static final Property<Boolean> HAS_ENDER_EYE = BooleanProperty.create("has_ender_eye");
 
 	public RightClickTestBlock(final Block.Properties properties) {
 		super(properties);
@@ -37,7 +38,7 @@ public class RightClickTestBlock extends GlassBlock {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
 		final ItemStack heldItem = player.getHeldItem(hand);
 
 		if (!heldItem.isEmpty() && heldItem.getItem() == Items.ENDER_EYE && !state.get(HAS_ENDER_EYE)) {
@@ -46,10 +47,10 @@ public class RightClickTestBlock extends GlassBlock {
 			}
 
 			world.setBlockState(pos, state.with(HAS_ENDER_EYE, true));
-			return true;
+			return ActionResultType.SUCCESS;
 		}
 
-		return false;
+		return ActionResultType.FAIL;
 	}
 
 	// TODO: Loot Tables

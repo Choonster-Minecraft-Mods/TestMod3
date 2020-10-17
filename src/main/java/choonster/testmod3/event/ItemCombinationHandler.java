@@ -104,7 +104,7 @@ public class ItemCombinationHandler {
 
 				if (remainingInputs.isEmpty()) { // If all inputs have been found,
 					// Spawn the output item at the first item's position
-					final double x = entityItem.posX, y = entityItem.posY, z = entityItem.posZ;
+					final double x = entityItem.getPosX(), y = entityItem.getPosY(), z = entityItem.getPosZ();
 					final ItemEntity outputEntityItem = new ItemEntity(world, x, y, z, OUTPUT.copy());
 					world.addEntity(outputEntityItem);
 

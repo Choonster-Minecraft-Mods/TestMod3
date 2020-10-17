@@ -1,14 +1,12 @@
 package choonster.testmod3.block;
 
-import choonster.testmod3.util.VectorUtils;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.EnumProperty;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -16,11 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
-import javax.vecmath.Matrix3d;
-import java.util.Map;
 
 /**
  * A diagonal half-cube block, like the Carpenter's Slope from Carpenter's Blocks.
@@ -34,12 +29,12 @@ public class PlaneBlock extends Block {
 	/**
 	 * The block's rotation around the y-axis.
 	 */
-	public static final IProperty<Direction> HORIZONTAL_ROTATION = DirectionProperty.create("horizontal_rotation", Direction.Plane.HORIZONTAL);
+	public static final Property<Direction> HORIZONTAL_ROTATION = DirectionProperty.create("horizontal_rotation", Direction.Plane.HORIZONTAL);
 
 	/**
 	 * The block's rotation around the x-axis.
 	 */
-	public static final IProperty<VerticalRotation> VERTICAL_ROTATION = EnumProperty.create("vertical_rotation", VerticalRotation.class);
+	public static final Property<VerticalRotation> VERTICAL_ROTATION = EnumProperty.create("vertical_rotation", VerticalRotation.class);
 
 	public PlaneBlock(final Block.Properties properties) {
 		super(properties);
@@ -53,7 +48,8 @@ public class PlaneBlock extends Block {
 	 * <li>Value: Left = Base Bounding Box, Right = Top Bounding Box</li>
 	 * </ul>
 	 */
-	// TODO: Convert this to VoxelShapes
+	// TODO: Convert this to VoxelShapes, replace Vecmath with Minecraft vectors?
+	/*
 	private static final Map<Pair<Direction, VerticalRotation>, Pair<AxisAlignedBB, AxisAlignedBB>> ROTATED_BOUNDING_BOXES = Util.make(() -> {
 		final ImmutableMap.Builder<Pair<Direction, VerticalRotation>, Pair<AxisAlignedBB, AxisAlignedBB>> builder = ImmutableMap.builder();
 
@@ -87,6 +83,7 @@ public class PlaneBlock extends Block {
 
 		return builder.build();
 	});
+	*/
 
 
 	/**
@@ -110,7 +107,7 @@ public class PlaneBlock extends Block {
 		return state.with(HORIZONTAL_ROTATION, mirror.mirror(state.get(HORIZONTAL_ROTATION)));
 	}
 
-	private static boolean rotateBlock(final World world, final BlockPos pos, final Direction axis) {
+	private static ActionResultType rotateBlock(final World world, final BlockPos pos, final Direction axis) {
 		final Direction.Axis axisToRotate = axis.getAxis();
 
 		BlockState state = world.getBlockState(pos);
@@ -118,7 +115,7 @@ public class PlaneBlock extends Block {
 		switch (axisToRotate) {
 			case X:
 			case Z:
-				state = state.cycle(VERTICAL_ROTATION);
+				state = state./* cycle */func_235896_a_(VERTICAL_ROTATION);
 				break;
 			case Y:
 				final Direction originalRotation = state.get(HORIZONTAL_ROTATION);
@@ -127,12 +124,12 @@ public class PlaneBlock extends Block {
 				break;
 		}
 
-		return world.setBlockState(pos, state);
+		return world.setBlockState(pos, state) ? ActionResultType.SUCCESS : ActionResultType.FAIL;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
 		return rotateBlock(world, pos, rayTraceResult.getFace());
 	}
 
@@ -145,11 +142,6 @@ public class PlaneBlock extends Block {
 		return getDefaultState()
 				.with(HORIZONTAL_ROTATION, horizontalRotation)
 				.with(VERTICAL_ROTATION, verticalRotation);
-	}
-
-	@Override
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.CUTOUT;
 	}
 
 	/*
@@ -226,7 +218,7 @@ public class PlaneBlock extends Block {
 		 * @return The name
 		 */
 		@Override
-		public String getName() {
+		public String getString() {
 			return name;
 		}
 

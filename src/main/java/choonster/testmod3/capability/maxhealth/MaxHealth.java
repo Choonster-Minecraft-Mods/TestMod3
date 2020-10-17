@@ -2,9 +2,9 @@ package choonster.testmod3.capability.maxhealth;
 
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.network.play.server.SEntityPropertiesPacket;
 import net.minecraft.world.server.ServerWorld;
 import org.apache.logging.log4j.LogManager;
@@ -84,7 +84,7 @@ public class MaxHealth implements IMaxHealth {
 	@Override
 	public void synchronise() {
 		if (entity != null && !entity.getEntityWorld().isRemote) {
-			final IAttributeInstance entityMaxHealthAttribute = entity.getAttribute(SharedMonsterAttributes.MAX_HEALTH);
+			final ModifiableAttributeInstance entityMaxHealthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
 			final SEntityPropertiesPacket packet = new SEntityPropertiesPacket(entity.getEntityId(), Collections.singleton(entityMaxHealthAttribute));
 
 			((ServerWorld) entity.getEntityWorld()).getChunkProvider().sendToTrackingAndSelf(entity, packet);
@@ -106,7 +106,7 @@ public class MaxHealth implements IMaxHealth {
 	protected void onBonusMaxHealthChanged() {
 		if (entity == null) return;
 
-		final IAttributeInstance entityMaxHealthAttribute = entity.getAttribute(SharedMonsterAttributes.MAX_HEALTH);
+		final ModifiableAttributeInstance entityMaxHealthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
 
 		final AttributeModifier modifier = createModifier();
 
@@ -126,7 +126,7 @@ public class MaxHealth implements IMaxHealth {
 			LOGGER.debug(MaxHealthCapability.LOG_MARKER, "Max Health Added! Entity: {} - New: {}", entity, MaxHealthCapability.formatMaxHealth(newAmount));
 		}
 
-		entityMaxHealthAttribute.applyModifier(modifier);
+		entityMaxHealthAttribute.applyNonPersistentModifier(modifier);
 
 		final float amountToHeal = newAmount - oldAmount;
 		if (amountToHeal > 0) {

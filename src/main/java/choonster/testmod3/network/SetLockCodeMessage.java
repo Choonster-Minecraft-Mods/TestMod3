@@ -6,6 +6,7 @@ import choonster.testmod3.util.NetworkUtil;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.LockCode;
@@ -56,7 +57,7 @@ public class SetLockCodeMessage {
 			if (world.isAreaLoaded(message.pos, 1)) {
 				LockCapability.getLock(world, message.pos, message.facing).ifPresent((lock) -> {
 					if (lock.isLocked()) {
-						player.sendMessage(new TranslationTextComponent("testmod3.lock.already_locked"));
+						player.sendMessage(new TranslationTextComponent("testmod3.lock.already_locked"), Util.DUMMY_UUID);
 					}
 
 					lock.setLockCode(new LockCode(message.lockCode));

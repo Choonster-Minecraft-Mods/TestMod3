@@ -2,14 +2,14 @@ package choonster.testmod3.item;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModItems;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.LazyLoadBase;
+import net.minecraft.util.LazyValue;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -24,7 +24,7 @@ public enum ModArmourMaterial implements IArmorMaterial {
 	REPLACEMENT(
 			"replacement", 15, new int[]{1, 4, 5, 2},
 			12, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0,
-			() -> Ingredient.fromItems(ModItems.ARROW)
+			0, () -> Ingredient.fromItems(ModItems.ARROW)
 	),
 
 	;
@@ -66,14 +66,19 @@ public enum ModArmourMaterial implements IArmorMaterial {
 	private final float toughness;
 
 	/**
+	 * The percentage of knockback resistance provided by armor of the material.
+	 */
+	private final float knockbackResistance;
+
+	/**
 	 * The repair material of the armour material.
 	 */
-	private final LazyLoadBase<Ingredient> repairMaterial;
+	private final LazyValue<Ingredient> repairMaterial;
 
 	ModArmourMaterial(
 			final String name, final int maxDamageFactor, final int[] damageReductionAmountArray,
 			final int enchantability, final SoundEvent soundEvent, final float toughness,
-			final Supplier<Ingredient> repairMaterial
+			final float knockbackResistance, final Supplier<Ingredient> repairMaterial
 	) {
 		this.name = new ResourceLocation(TestMod3.MODID, name).toString();
 		this.maxDamageFactor = maxDamageFactor;
@@ -81,35 +86,48 @@ public enum ModArmourMaterial implements IArmorMaterial {
 		this.enchantability = enchantability;
 		this.soundEvent = soundEvent;
 		this.toughness = toughness;
-		this.repairMaterial = new LazyLoadBase<>(repairMaterial);
+		this.knockbackResistance = knockbackResistance;
+		this.repairMaterial = new LazyValue<>(repairMaterial);
 	}
 
+	@Override
 	public int getDurability(final EquipmentSlotType slotIn) {
 		return MAX_DAMAGE_ARRAY[slotIn.getIndex()] * maxDamageFactor;
 	}
 
+	@Override
 	public int getDamageReductionAmount(final EquipmentSlotType slotIn) {
 		return damageReductionAmountArray[slotIn.getIndex()];
 	}
 
+	@Override
 	public int getEnchantability() {
 		return enchantability;
 	}
 
+	@Override
 	public SoundEvent getSoundEvent() {
 		return soundEvent;
 	}
 
+	@Override
 	public Ingredient getRepairMaterial() {
 		return repairMaterial.getValue();
 	}
 
+	@Override
 	@OnlyIn(Dist.CLIENT)
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public float getToughness() {
 		return toughness;
+	}
+
+	@Override
+	public float getKnockbackResistance() {
+		return knockbackResistance;
 	}
 }

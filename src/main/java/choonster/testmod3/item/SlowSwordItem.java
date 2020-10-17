@@ -1,9 +1,9 @@
 package choonster.testmod3.item;
 
 import com.google.common.collect.Multimap;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
@@ -28,12 +28,12 @@ public class SlowSwordItem extends SwordItem {
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(final EquipmentSlotType slot, final ItemStack stack) {
-		final Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(final EquipmentSlotType slot, final ItemStack stack) {
+		final Multimap<Attribute, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
 
 		if (slot == EquipmentSlotType.MAINHAND) {
-			replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_DAMAGE, ATTACK_DAMAGE_MODIFIER, 2);
-			replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, 1.5);
+			replaceModifier(modifiers, Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE_MODIFIER, 2);
+			replaceModifier(modifiers, Attributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, 1.5);
 		}
 
 		return modifiers;
@@ -42,14 +42,14 @@ public class SlowSwordItem extends SwordItem {
 	/**
 	 * Replace a modifier in the {@link Multimap} with a copy that's had {@code multiplier} applied to its value.
 	 *
-	 * @param modifierMultimap The MultiMap
+	 * @param modifierMultimap The Multimap
 	 * @param attribute        The attribute being modified
 	 * @param id               The ID of the modifier
 	 * @param multiplier       The multiplier to apply
 	 */
-	private void replaceModifier(final Multimap<String, AttributeModifier> modifierMultimap, final IAttribute attribute, final UUID id, final double multiplier) {
+	private void replaceModifier(final Multimap<Attribute, AttributeModifier> modifierMultimap, final Attribute attribute, final UUID id, final double multiplier) {
 		// Get the modifiers for the specified attribute
-		final Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
+		final Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute);
 
 		// Find the modifier with the specified ID, if any
 		final Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();

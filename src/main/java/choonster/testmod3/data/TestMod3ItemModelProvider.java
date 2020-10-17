@@ -1,24 +1,23 @@
 package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.capability.hiddenblockrevealer.HiddenBlockRevealerCapability;
-import choonster.testmod3.capability.lastusetime.LastUseTimeCapability;
+import choonster.testmod3.client.item.RevealHiddenBlocksItemPropertyGetter;
+import choonster.testmod3.client.item.TicksSinceLastUseItemPropertyGetter;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.init.ModItems;
-import choonster.testmod3.util.RegistryUtil;
 import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.util.LazyLoadBase;
+import net.minecraft.util.LazyValue;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.generators.ExistingFileHelper;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelBuilder.Perspective;
 import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.fml.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -37,7 +36,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 	/**
 	 * A model that extends item/generated and uses the same transforms as the Vanilla bow.
 	 */
-	private final LazyLoadBase<ModelFile> simpleModel = new LazyLoadBase<>(() ->
+	private final LazyValue<ModelFile> simpleModel = new LazyValue<>(() ->
 			withGeneratedParent("simple_model")
 					.transforms()
 
@@ -71,7 +70,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 	/**
 	 * Inventory model for pipe blocks.
 	 */
-	private final LazyLoadBase<ModelFile> pipeInventory = new LazyLoadBase<>(() ->
+	private final LazyValue<ModelFile> pipeInventory = new LazyValue<>(() ->
 			withExistingParent("item/pipe/inventory", "block/block")
 					.texture("particle", "#all")
 					.element()
@@ -131,7 +130,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 				.forEachOrdered(child -> {
 					modelTest
 							.override()
-							.predicate(LastUseTimeCapability.TicksSinceLastUseGetter.ID, child.getKey() * 20)
+							.predicate(TicksSinceLastUseItemPropertyGetter.ID, child.getKey() * 20)
 							.model(child.getValue())
 							.end();
 				});
@@ -139,7 +138,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 		// Add the parent as a fallback that displays when the ticks since last use is >= 60
 		modelTest
 				.override()
-				.predicate(LastUseTimeCapability.TicksSinceLastUseGetter.ID, 60)
+				.predicate(TicksSinceLastUseItemPropertyGetter.ID, 60)
 				.model(modelTest)
 				.end();
 
@@ -157,14 +156,14 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 		// Add the child as an override that displays when the ticks since last use is >= 0 and < 20
 		slingshot
 				.override()
-				.predicate(LastUseTimeCapability.TicksSinceLastUseGetter.ID, 0)
+				.predicate(TicksSinceLastUseItemPropertyGetter.ID, 0)
 				.model(slingshotPulled)
 				.end();
 
 		// Add the parent as a fallback that displays when the ticks since last use is >= 20
 		slingshot
 				.override()
-				.predicate(LastUseTimeCapability.TicksSinceLastUseGetter.ID, 20)
+				.predicate(TicksSinceLastUseItemPropertyGetter.ID, 20)
 				.model(slingshot)
 				.end();
 
@@ -227,7 +226,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 		hiddenBlockRevealer
 				.override()
-				.predicate(HiddenBlockRevealerCapability.RevealHiddenBlocksGetter.ID, 1)
+				.predicate(RevealHiddenBlocksItemPropertyGetter.ID, 1)
 				.model(hiddenBlockRevealerActive)
 				.end();
 
@@ -295,7 +294,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 		blockItem(ModBlocks.PIG_SPAWNER_REFILLER);
 
-		withExistingParent(name(ModBlocks.MIRROR_PLANE), modLoc("block/" + name(RegistryUtil.getRequiredRegistryEntry(ModBlocks.MIRROR_PLANE).asItem()) + "_t"));
+		withExistingParent(name(ModBlocks.MIRROR_PLANE), modLoc("block/" + name(ModBlocks.MIRROR_PLANE.get().asItem()) + "_t"));
 
 		blockItem(ModBlocks.VANILLA_MODEL_TEST);
 
@@ -323,17 +322,17 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 		blockItem(ModBlocks.CHAIN_SURVIVAL_COMMAND_BLOCK);
 
-		withExistingParent(RegistryUtil.getRequiredRegistryEntry(ModBlocks.OAK_SAPLING).asItem(), Blocks.OAK_SAPLING.asItem());
+		withExistingParent(ModBlocks.OAK_SAPLING.get().asItem(), Blocks.OAK_SAPLING.asItem());
 
-		withExistingParent(RegistryUtil.getRequiredRegistryEntry(ModBlocks.SPRUCE_SAPLING).asItem(), Blocks.SPRUCE_SAPLING.asItem());
+		withExistingParent(ModBlocks.SPRUCE_SAPLING.get().asItem(), Blocks.SPRUCE_SAPLING.asItem());
 
-		withExistingParent(RegistryUtil.getRequiredRegistryEntry(ModBlocks.BIRCH_SAPLING).asItem(), Blocks.BIRCH_SAPLING.asItem());
+		withExistingParent(ModBlocks.BIRCH_SAPLING.get().asItem(), Blocks.BIRCH_SAPLING.asItem());
 
-		withExistingParent(RegistryUtil.getRequiredRegistryEntry(ModBlocks.JUNGLE_SAPLING).asItem(), Blocks.JUNGLE_SAPLING.asItem());
+		withExistingParent(ModBlocks.JUNGLE_SAPLING.get().asItem(), Blocks.JUNGLE_SAPLING.asItem());
 
-		withExistingParent(RegistryUtil.getRequiredRegistryEntry(ModBlocks.ACACIA_SAPLING).asItem(), Blocks.ACACIA_SAPLING.asItem());
+		withExistingParent(ModBlocks.ACACIA_SAPLING.get().asItem(), Blocks.ACACIA_SAPLING.asItem());
 
-		withExistingParent(RegistryUtil.getRequiredRegistryEntry(ModBlocks.DARK_OAK_SAPLING).asItem(), Blocks.DARK_OAK_SAPLING.asItem());
+		withExistingParent(ModBlocks.DARK_OAK_SAPLING.get().asItem(), Blocks.DARK_OAK_SAPLING.asItem());
 
 		blockItem(ModBlocks.INVISIBLE);
 
@@ -368,7 +367,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 	}
 
 	private Item getBlockItem(final RegistryObject<? extends Block> block) {
-		return Preconditions.checkNotNull(RegistryUtil.getRequiredRegistryEntry(block).asItem(), "Block %s has no item", block);
+		return Preconditions.checkNotNull(block.get().asItem(), "Block %s has no item", block);
 	}
 
 	private String name(final Item item) {

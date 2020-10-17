@@ -11,7 +11,12 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.*;
+import net.minecraft.util.Util;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -63,8 +68,8 @@ public class KeyBindingHandler {
 			final ItemStack heldItem = clientPlayer.getHeldItem(hand);
 			final int heldItemCount = heldItem.getCount();
 
-			final BlockPos pos = new BlockPos(clientPlayer).down();
-			final BlockRayTraceResult rayTraceResult = new BlockRayTraceResult(new Vec3d(0, 0, 0), Direction.UP, pos, false);
+			final BlockPos pos = clientPlayer.getPosition().down();
+			final BlockRayTraceResult rayTraceResult = new BlockRayTraceResult(new Vector3d(0, 0, 0), Direction.UP, pos, false);
 
 			final ActionResultType actionResult = MINECRAFT.playerController.func_217292_a(clientPlayer, MINECRAFT.world, hand, rayTraceResult);
 
@@ -95,19 +100,19 @@ public class KeyBindingHandler {
 				final Collection<EffectInstance> activePotionEffects = ((LivingEntity) rayTraceResult.getEntity()).getActivePotionEffects();
 
 				if (activePotionEffects.isEmpty()) {
-					clientPlayer.sendMessage(new TranslationTextComponent("message.testmod3.print_potions.no_potions", rayTraceResult.getEntity().getDisplayName()));
+					clientPlayer.sendMessage(new TranslationTextComponent("message.testmod3.print_potions.no_potions", rayTraceResult.getEntity().getDisplayName()), Util.DUMMY_UUID);
 				} else {
-					clientPlayer.sendMessage(new TranslationTextComponent("message.testmod3.print_potions.potions", rayTraceResult.getEntity().getDisplayName()));
+					clientPlayer.sendMessage(new TranslationTextComponent("message.testmod3.print_potions.potions", rayTraceResult.getEntity().getDisplayName()), Util.DUMMY_UUID);
 
 					activePotionEffects.forEach(
-							potionEffect -> clientPlayer.sendMessage(new StringTextComponent(potionEffect.toString()))
+							potionEffect -> clientPlayer.sendMessage(new StringTextComponent(potionEffect.toString()), Util.DUMMY_UUID)
 					);
 				}
 			} else {
-				clientPlayer.sendMessage(new TranslationTextComponent("message.testmod3.print_potions.not_living", rayTraceResult.getEntity().getDisplayName()));
+				clientPlayer.sendMessage(new TranslationTextComponent("message.testmod3.print_potions.not_living", rayTraceResult.getEntity().getDisplayName()), Util.DUMMY_UUID);
 			}
 		} else {
-			clientPlayer.sendMessage(new TranslationTextComponent("message.testmod3.print_potions.no_entity"));
+			clientPlayer.sendMessage(new TranslationTextComponent("message.testmod3.print_potions.no_entity"), Util.DUMMY_UUID);
 		}
 	}
 }

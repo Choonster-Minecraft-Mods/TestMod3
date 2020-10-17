@@ -66,14 +66,14 @@ public class SnowBuildup {
 
 		// For each loaded chunk
 		loadedChunks.forEach(chunkHolder ->
-				chunkHolder.func_219297_b()
+				chunkHolder.getEntityTickingFuture()
 						.getNow(ChunkHolder.UNLOADED_CHUNK)
 						.left()
 						.ifPresent(chunk -> {
 							for (int x = 0; x < 16; x++) {
 								for (int z = 0; z < 16; z++) {
 									// Get the position of top block at the current x and z coordinates within the chunk
-									final BlockPos pos = world.getHeight(Heightmap.Type.WORLD_SURFACE, chunk.getPos().getBlock(x, 0, z));
+									final BlockPos pos = world.getHeight(Heightmap.Type.WORLD_SURFACE, chunk.getPos().asBlockPos().add(x, 0, z));
 
 									// Get the state of the block at that position
 									final BlockState state = world.getBlockState(pos);

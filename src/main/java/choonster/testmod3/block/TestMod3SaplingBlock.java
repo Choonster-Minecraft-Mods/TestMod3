@@ -5,7 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SaplingBlock;
 import net.minecraft.block.trees.Tree;
 import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 import net.minecraft.state.StateContainer;
 
 /**
@@ -20,7 +20,7 @@ public class TestMod3SaplingBlock extends SaplingBlock {
 	/**
 	 * A dummy property to allow for separate item models.
 	 */
-	public static final IProperty<Boolean> ITEM = BooleanProperty.create("item");
+	public static final Property<Boolean> ITEM = BooleanProperty.create("item");
 
 	public TestMod3SaplingBlock(final Tree tree, final Block.Properties properties) {
 		super(tree, properties);

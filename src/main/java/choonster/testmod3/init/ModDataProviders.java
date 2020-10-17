@@ -7,7 +7,7 @@ import choonster.testmod3.data.TestMod3LootTableProvider;
 import choonster.testmod3.data.TestMod3RecipeProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IDataProvider;
-import net.minecraftforge.client.model.generators.ExistingFileHelper;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -26,9 +26,11 @@ public class ModDataProviders {
 		final ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
 		if (event.includeClient()) {
-			final TestMod3BlockStateProvider blockStateProvider = new TestMod3BlockStateProvider(dataGenerator, existingFileHelper);
-			dataGenerator.addProvider(blockStateProvider);
-			dataGenerator.addProvider(new TestMod3ItemModelProvider(dataGenerator, blockStateProvider.getExistingFileHelper()));
+			final TestMod3ItemModelProvider itemModelProvider = new TestMod3ItemModelProvider(dataGenerator, existingFileHelper);
+			dataGenerator.addProvider(itemModelProvider);
+
+			// Let blockstate provider see generated item models by passing its existing file helper
+			dataGenerator.addProvider(new TestMod3BlockStateProvider(dataGenerator, itemModelProvider.existingFileHelper));
 		}
 
 		if (event.includeServer()) {

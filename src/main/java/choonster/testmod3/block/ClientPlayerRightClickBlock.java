@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -33,9 +34,9 @@ public class ClientPlayerRightClickBlock extends StaticPressurePlateBlock {
 		// If on the client side, the colliding Entity is the client player and the total world time is a multiple of 10
 		if (world.isRemote && entity == clientPlayer && world.getGameTime() % 10 == 0) {
 			// Make the player right click
-			entity.sendMessage(new TranslationTextComponent("message.testmod3.client_player_right_click.right_click"));
+			entity.sendMessage(new TranslationTextComponent("message.testmod3.client_player_right_click.right_click"), Util.DUMMY_UUID);
 
-			DistExecutor.runWhenOn(Dist.CLIENT, () -> () ->
+			DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () ->
 			{
 				// Press the Use Item keybinding
 				KeyBinding.onTick(Minecraft.getInstance().gameSettings.keyBindUseItem.getKey());

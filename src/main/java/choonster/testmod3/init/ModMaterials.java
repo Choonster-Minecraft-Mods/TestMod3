@@ -65,11 +65,6 @@ public class ModMaterials {
 		}
 
 		@Override
-		public MaterialBuilder requiresTool() {
-			return (MaterialBuilder) super.requiresTool();
-		}
-
-		@Override
 		public MaterialBuilder flammable() {
 			return (MaterialBuilder) super.flammable();
 		}

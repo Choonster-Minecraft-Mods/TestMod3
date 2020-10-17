@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -27,16 +27,16 @@ public class ChunkEnergyGetterItem extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final PlayerEntity playerIn, final Hand handIn) {
 		if (!worldIn.isRemote) {
-			final Chunk chunk = worldIn.getChunkAt(new BlockPos(playerIn));
+			final Chunk chunk = worldIn.getChunkAt(playerIn.getPosition());
 			final ChunkPos chunkPos = chunk.getPos();
 
 			ChunkEnergyCapability.getChunkEnergy(chunk)
 					.map(chunkEnergy -> {
-						playerIn.sendMessage(new TranslationTextComponent("message.testmod3.chunk_energy.get", chunkPos, chunkEnergy.getEnergyStored()));
+						playerIn.sendMessage(new TranslationTextComponent("message.testmod3.chunk_energy.get", chunkPos, chunkEnergy.getEnergyStored()), Util.DUMMY_UUID);
 						return true;
 					})
 					.orElseGet(() -> {
-						playerIn.sendMessage(new TranslationTextComponent("message.testmod3.chunk_energy.not_found", chunkPos));
+						playerIn.sendMessage(new TranslationTextComponent("message.testmod3.chunk_energy.not_found", chunkPos), Util.DUMMY_UUID);
 						return false;
 					});
 		}

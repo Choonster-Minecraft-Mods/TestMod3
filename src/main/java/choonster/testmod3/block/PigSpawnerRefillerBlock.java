@@ -5,6 +5,7 @@ import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerInteractable;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandSource;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -37,7 +38,7 @@ public class PigSpawnerRefillerBlock extends Block implements IPigSpawnerInterac
 			pigSpawnerFinite.setNumPigs(pigSpawnerFinite.getMaxNumPigs());
 
 			if (iCommandSender != null) {
-				iCommandSender.sendMessage(new TranslationTextComponent("message.testmod3.pig_spawner_refiller.refilled"));
+				iCommandSender.sendMessage(new TranslationTextComponent("message.testmod3.pig_spawner_refiller.refilled"), Util.DUMMY_UUID);
 			}
 		}
 

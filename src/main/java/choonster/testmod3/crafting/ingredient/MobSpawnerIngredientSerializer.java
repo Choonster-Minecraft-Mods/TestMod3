@@ -10,7 +10,7 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.minecraftforge.common.crafting.IngredientNBT;
+import net.minecraftforge.common.crafting.NBTIngredient;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -26,9 +26,9 @@ import net.minecraftforge.registries.ForgeRegistries;
  * @author Choonster
  */
 @SuppressWarnings("unused")
-public class MobSpawnerIngredientSerializer implements IIngredientSerializer<IngredientNBT> {
+public class MobSpawnerIngredientSerializer implements IIngredientSerializer<NBTIngredient> {
 	@Override
-	public IngredientNBT parse(final JsonObject json) {
+	public NBTIngredient parse(final JsonObject json) {
 		final ItemStack stack = CraftingHelper.getItemStack(json, true);
 
 		final ResourceLocation entityRegistryName = new ResourceLocation(JSONUtils.getString(json, "entity"));
@@ -44,16 +44,16 @@ public class MobSpawnerIngredientSerializer implements IIngredientSerializer<Ing
 
 		tileEntityData.put("SpawnPotentials", tileEntityData.getList("SpawnPotentials", Constants.NBT.TAG_COMPOUND));
 
-		return new IngredientNBTTestMod3(stack);
+		return new TestMod3NBTIngredient(stack);
 	}
 
 	@Override
-	public IngredientNBT parse(final PacketBuffer buffer) {
+	public NBTIngredient parse(final PacketBuffer buffer) {
 		throw new UnsupportedOperationException("Can't parse from PacketBuffer, use the Ingredient's own IIngredientSerializer instead");
 	}
 
 	@Override
-	public void write(final PacketBuffer buffer, final IngredientNBT ingredient) {
+	public void write(final PacketBuffer buffer, final NBTIngredient ingredient) {
 		throw new UnsupportedOperationException("Can't write to PacketBuffer, use the Ingredient's own IIngredientSerializer instead");
 	}
 }

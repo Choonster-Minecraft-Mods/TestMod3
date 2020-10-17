@@ -18,11 +18,11 @@ import net.minecraft.item.crafting.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionBrewing;
 import net.minecraft.potion.Potions;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.minecraftforge.common.crafting.IngredientNBT;
+import net.minecraftforge.common.crafting.NBTIngredient;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -90,8 +90,8 @@ public class ModCrafting {
 	@SuppressWarnings("unused")
 	public static class Ingredients {
 		public static final IIngredientSerializer<Ingredient> CONDITIONAL = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "conditional"), new ConditionalIngredientSerializer());
-		public static final IIngredientSerializer<IngredientNBT> FILLED_UNIVERSAL_BUCKET = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "filled_universal_bucket"), new FilledUniversalBucketIngredientSerializer());
-		public static final IIngredientSerializer<IngredientNBT> MOB_SPAWNER = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "mob_spawner"), new MobSpawnerIngredientSerializer());
+		public static final IIngredientSerializer<NBTIngredient> FILLED_UNIVERSAL_BUCKET = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "filled_universal_bucket"), new FilledUniversalBucketIngredientSerializer());
+		public static final IIngredientSerializer<NBTIngredient> MOB_SPAWNER = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "mob_spawner"), new MobSpawnerIngredientSerializer());
 		public static final IIngredientSerializer<IngredientNever> NEVER = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "never"), new IngredientNever.Serializer());
 
 		public static void register() {
@@ -142,13 +142,13 @@ public class ModCrafting {
 		 * @param recipeManager The recipe manager
 		 * @param tag           The tag
 		 */
-		private static void removeRecipes(final RecipeManager recipeManager, final Tag<Item> tag) {
+		private static void removeRecipes(final RecipeManager recipeManager, final ITag.INamedTag<Item> tag) {
 			final int recipesRemoved = removeRecipes(recipeManager, recipe -> {
 				final ItemStack recipeOutput = recipe.getRecipeOutput();
 				return !recipeOutput.isEmpty() && recipeOutput.getItem().isIn(tag);
 			});
 
-			LOGGER.info("Removed {} recipe(s) for tag {}", recipesRemoved, tag.getId());
+			LOGGER.info("Removed {} recipe(s) for tag {}", recipesRemoved, tag.getName());
 		}
 
 		/**

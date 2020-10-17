@@ -5,11 +5,8 @@ import it.unimi.dsi.fastutil.objects.Object2DoubleMaps;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 
-import javax.vecmath.AxisAngle4d;
-import javax.vecmath.Matrix3d;
-import javax.vecmath.Vector3d;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
@@ -23,16 +20,16 @@ public class VectorUtils {
 	/**
 	 * A cache of the positive facing's direction vector for each axis.
 	 */
-	private static final Map<Direction.Axis, Vec3i> AXIS_DIRECTION_VECTORS;
+	private static final Map<Direction.Axis, Vector3i> AXIS_DIRECTION_VECTORS;
 
 	private static final Object2DoubleMap<Direction> HORIZONTAL_ROTATIONS;
 
 	static {
-		final Map<Direction.Axis, Vec3i> axisVectors = new EnumMap<>(Direction.Axis.class);
+		final Map<Direction.Axis, Vector3i> axisVectors = new EnumMap<>(Direction.Axis.class);
 
 		for (final Direction.Axis axis : Direction.Axis.values()) { // For each axis,
 			// Get the direction vector of the positive facing of the axis
-			final Vec3i directionVec = Direction.getFacingFromAxis(Direction.AxisDirection.POSITIVE, axis).getDirectionVec();
+			final Vector3i directionVec = Direction.getFacingFromAxis(Direction.AxisDirection.POSITIVE, axis).getDirectionVec();
 			axisVectors.put(axis, directionVec); // Add it to the map
 		}
 
@@ -59,8 +56,10 @@ public class VectorUtils {
 	 * @param radians The angle in radians
 	 * @return The rotation matrix
 	 */
+	/*
+	// TODO: Vecmath isn't used any more, figure out how to do this with Minecraft's vectors
 	public static Matrix3d getRotationMatrix(final Direction.Axis axis, final double radians) {
-		final Vec3i axisDirectionVector = AXIS_DIRECTION_VECTORS.get(axis);
+		final Vector3i axisDirectionVector = AXIS_DIRECTION_VECTORS.get(axis);
 		final AxisAngle4d axisAngle = new AxisAngle4d(axisDirectionVector.getX(), axisDirectionVector.getY(), axisDirectionVector.getZ(), radians);
 
 		final Matrix3d rotationMatrix = new Matrix3d();
@@ -68,6 +67,7 @@ public class VectorUtils {
 
 		return rotationMatrix;
 	}
+	*/
 
 	/**
 	 * Rotate an {@link AxisAlignedBB} by the specified rotation matrix.
@@ -77,6 +77,8 @@ public class VectorUtils {
 	 * @param forcePositive  If true, set each coordinate of the rotated AABB to it absolute value
 	 * @return The rotated AABB
 	 */
+	/*
+	// TODO: Vecmath isn't used any more, figure out how to do this with Minecraft's vectors
 	public static AxisAlignedBB rotateAABB(final AxisAlignedBB axisAlignedBB, final Matrix3d rotationMatrix, final boolean forcePositive) {
 		// Extract the minimum and maximum coordinates of the AABB into vectors
 		final Vector3d minCoords = new Vector3d(axisAlignedBB.minX, axisAlignedBB.minY, axisAlignedBB.minZ);
@@ -95,6 +97,7 @@ public class VectorUtils {
 		// Return an AABB with the new coordinates
 		return new AxisAlignedBB(minCoords.getX(), minCoords.getY(), minCoords.getZ(), maxCoords.getX(), maxCoords.getY(), maxCoords.getZ());
 	}
+	*/
 
 	/**
 	 * Get the angle of the specified {@link Direction} relative to {@link Direction#NORTH} along the horizontal plane.

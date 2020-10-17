@@ -1,6 +1,6 @@
 package choonster.testmod3.api.capability.pigspawner;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -39,7 +39,7 @@ public interface IPigSpawner {
 	 *
 	 * @return The tooltip lines
 	 */
-	List<ITextComponent> getTooltipLines();
+	List<IFormattableTextComponent> getTooltipLines();
 
 	/**
 	 * {@inheritDoc}

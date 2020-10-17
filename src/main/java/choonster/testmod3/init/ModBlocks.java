@@ -8,7 +8,6 @@ import choonster.testmod3.block.slab.ColouredSlabBlock;
 import choonster.testmod3.block.variantgroup.BlockVariantGroup;
 import choonster.testmod3.item.block.FluidTankItem;
 import choonster.testmod3.tileentity.BaseFluidTankTileEntity;
-import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
@@ -28,8 +27,8 @@ import java.util.function.Supplier;
 
 @SuppressWarnings("WeakerAccess")
 public class ModBlocks {
-	private static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, TestMod3.MODID);
-	private static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, TestMod3.MODID);
+	private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TestMod3.MODID);
+	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TestMod3.MODID);
 
 	private static boolean isInitialised = false;
 
@@ -91,7 +90,7 @@ public class ModBlocks {
 	);
 
 	public static final RegistryObject<Block> FULLBRIGHT = registerBlock("fullbright",
-			() -> new Block(Block.Properties.create(Material.ROCK).lightValue(15))
+			() -> new Block(Block.Properties.create(Material.ROCK).setLightLevel((state) -> 15))
 	);
 
 	public static final RegistryObject<Block> NORMAL_BRIGHTNESS = registerBlock("normal_brightness",
@@ -248,7 +247,7 @@ public class ModBlocks {
 	private static <BLOCK extends Block> RegistryObject<BLOCK> registerBlock(final String name, final Supplier<BLOCK> blockFactory, final IBlockItemFactory<BLOCK> itemFactory) {
 		final RegistryObject<BLOCK> block = BLOCKS.register(name, blockFactory);
 
-		ITEMS.register(name, () -> itemFactory.create(RegistryUtil.getRequiredRegistryEntry(block)));
+		ITEMS.register(name, () -> itemFactory.create(block.get()));
 
 		return block;
 	}

@@ -1,12 +1,12 @@
 package choonster.testmod3.block.slab;
 
 import choonster.testmod3.block.variantgroup.BlockVariantGroup;
-import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -34,9 +34,8 @@ public class ColouredSlabBlock extends TestMod3SlabBlock<DyeColor, ColouredSlabB
 		super(variant, variantGroup, properties);
 	}
 
-	@Override
-	public boolean recolorBlock(final BlockState state, final IWorld world, final BlockPos pos, final Direction facing, final DyeColor colour) {
-		final BlockState newState = RegistryUtil.getRequiredRegistryEntry(variantGroup.getBlock(colour)).getDefaultState()
+	private boolean recolorBlock(final BlockState state, final IWorld world, final BlockPos pos, final Direction facing, final DyeColor colour) {
+		final BlockState newState = variantGroup.getBlock(colour).get().getDefaultState()
 				.with(TYPE, state.get(TYPE));
 
 		return world.setBlockState(pos, newState, 3);
@@ -44,7 +43,7 @@ public class ColouredSlabBlock extends TestMod3SlabBlock<DyeColor, ColouredSlabB
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
 		final ItemStack heldItem = player.getHeldItem(hand);
 
 		if (!heldItem.isEmpty()) {
@@ -54,11 +53,11 @@ public class ColouredSlabBlock extends TestMod3SlabBlock<DyeColor, ColouredSlabB
 				final boolean success = recolorBlock(state, world, pos, rayTraceResult.getFace(), dyeColour);
 				if (success) {
 					heldItem.shrink(1);
-					return true;
+					return ActionResultType.SUCCESS;
 				}
 			}
 		}
 
-		return false;
+		return ActionResultType.FAIL;
 	}
 }

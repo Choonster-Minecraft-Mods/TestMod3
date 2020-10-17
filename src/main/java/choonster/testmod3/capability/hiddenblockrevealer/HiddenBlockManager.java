@@ -50,7 +50,7 @@ public class HiddenBlockManager {
 	public static void clientTick(final TickEvent.ClientTickEvent event) {
 		if (event.phase != TickEvent.Phase.END) return;
 
-		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+		DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
 			final PlayerEntity player = Minecraft.getInstance().player;
 			if (player == null) return;
 

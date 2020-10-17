@@ -33,6 +33,6 @@ public class HUDEventHandler {
 		if (player.getHeldItemMainhand().getItem() != ModItems.CHUNK_ENERGY_DISPLAY && player.getHeldItemOffhand().getItem() != ModItems.CHUNK_ENERGY_DISPLAY)
 			return;
 
-		chunkEnergyHUD.drawHUD();
+		chunkEnergyHUD.drawHUD(event.getMatrixStack());
 	}
 }

@@ -1,5 +1,6 @@
 package choonster.testmod3.tileentity;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
@@ -51,9 +52,9 @@ public abstract class ItemHandlerTileEntity<INVENTORY extends IItemHandler & INB
 	}
 
 	@Override
-	public void read(final CompoundNBT compound) {
-		super.read(compound);
-		inventory.deserializeNBT(compound.getCompound("ItemHandler"));
+	public void read(final BlockState state, final CompoundNBT nbt) {
+		super.read(state, nbt);
+		inventory.deserializeNBT(nbt.getCompound("ItemHandler"));
 	}
 
 	@Override

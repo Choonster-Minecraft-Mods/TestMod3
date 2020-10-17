@@ -36,17 +36,19 @@ public class ModDispenseBehaviors {
 		DispenserBlock.registerDispenseBehavior(Items.BLACK_DYE, new OptionalDispenseBehavior() {
 			@Override
 			protected ItemStack dispenseStack(final IBlockSource source, final ItemStack stack) {
-				successful = true;
+				setSuccessful(true);
 
 				final Direction facing = source.getBlockState().get(DispenserBlock.FACING);
 				final BlockPos neighbourPos = source.getBlockPos().offset(facing);
 				final World world = source.getWorld();
 				final BlockState neighbourState = world.getBlockState(neighbourPos);
 
-				successful = neighbourState.getBlock().isAir(neighbourState, world, neighbourPos) &&
-						world.setBlockState(neighbourPos, Blocks.BLACK_WOOL.getDefaultState());
+				setSuccessful(
+						neighbourState.getBlock().isAir(neighbourState, world, neighbourPos) &&
+								world.setBlockState(neighbourPos, Blocks.BLACK_WOOL.getDefaultState())
+				);
 
-				if (successful) {
+				if (isSuccessful()) {
 					stack.shrink(1);
 				}
 

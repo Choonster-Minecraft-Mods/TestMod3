@@ -7,7 +7,6 @@ import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.fluid.group.StandardFluidGroup;
 import choonster.testmod3.item.block.FluidTankItem;
 import choonster.testmod3.tileentity.FluidTankTileEntity;
-import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.fluid.FlowingFluid;
@@ -29,9 +28,9 @@ import java.util.function.Supplier;
 
 @SuppressWarnings("WeakerAccess")
 public class ModFluids {
-	private static final DeferredRegister<Fluid> FLUIDS = new DeferredRegister<>(ForgeRegistries.FLUIDS, TestMod3.MODID);
-	private static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, TestMod3.MODID);
-	private static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, TestMod3.MODID);
+	private static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, TestMod3.MODID);
+	private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TestMod3.MODID);
+	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TestMod3.MODID);
 
 	private static boolean isInitialised = false;
 
@@ -141,7 +140,7 @@ public class ModFluids {
 			final Fluid fluid1 = fluid.get();
 			final FluidStack fluidStack = new FluidStack(fluid1, FluidTankTileEntity.CAPACITY);
 
-			final Item item = RegistryUtil.getRequiredRegistryEntry(ModBlocks.FLUID_TANK).asItem();
+			final Item item = ModBlocks.FLUID_TANK.get().asItem();
 			assert item instanceof FluidTankItem;
 
 			((FluidTankItem) item).addFluid(fluidStack);

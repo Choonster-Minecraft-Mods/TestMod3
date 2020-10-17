@@ -10,8 +10,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -52,7 +52,7 @@ public class ClientEventHandler {
 	public static void onClientTick(final TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.END && MINECRAFT.player != null && MINECRAFT.world != null) {
 			final PlayerEntity player = MINECRAFT.player;
-			if (MINECRAFT.world.getBlockState(new BlockPos(player).down()).getBlock() == Blocks.IRON_BLOCK) {
+			if (MINECRAFT.world.getBlockState(player.getPosition().down()).getBlock() == Blocks.IRON_BLOCK) {
 				player.rotateTowards(5, 0);
 			}
 		}
@@ -77,7 +77,7 @@ public class ClientEventHandler {
 			ScorePlayerTeam team = scoreboard.getTeam(TestMod3.MODID);
 			if (team == null) {
 				team = scoreboard.createTeam(TestMod3.MODID);
-				team.setPrefix(new StringTextComponent("").applyTextStyle(TextFormatting.DARK_AQUA));
+				team.setPrefix(new StringTextComponent("").setStyle(Style.EMPTY.setFormatting(TextFormatting.DARK_AQUA)));
 				team.setColor(TextFormatting.DARK_AQUA);
 			}
 

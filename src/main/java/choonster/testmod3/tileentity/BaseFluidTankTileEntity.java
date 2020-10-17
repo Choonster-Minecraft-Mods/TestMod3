@@ -30,6 +30,6 @@ public abstract class BaseFluidTankTileEntity extends TileFluidHandler {
 
 	@Override
 	public void onDataPacket(final NetworkManager net, final SUpdateTileEntityPacket pkt) {
-		read(pkt.getNbtCompound());
+		read(getBlockState(), pkt.getNbtCompound());
 	}
 }

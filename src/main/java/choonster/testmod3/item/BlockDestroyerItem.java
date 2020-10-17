@@ -6,6 +6,7 @@ import net.minecraft.block.CropsBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -24,7 +25,7 @@ public class BlockDestroyerItem extends Item {
 	public boolean onBlockDestroyed(final ItemStack stack, final World world, final BlockState state, final BlockPos pos, final LivingEntity entityLiving) {
 		if (!world.isRemote) {
 			if (state.getBlock() == Blocks.WHEAT && state.get(CropsBlock.AGE) >= 6) {
-				entityLiving.sendMessage(new TranslationTextComponent("message.testmod3.block_destroyer.destroy"));
+				entityLiving.sendMessage(new TranslationTextComponent("message.testmod3.block_destroyer.destroy"), Util.DUMMY_UUID);
 			}
 		}
 

@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -23,7 +24,7 @@ import javax.annotation.Nullable;
 public class HiddenBlockRevealerItem extends Item {
 	public HiddenBlockRevealerItem(final Item.Properties properties) {
 		super(properties);
-		HiddenBlockRevealerCapability.RevealHiddenBlocksGetter.addToItem(this);
+
 	}
 
 	@Override
@@ -32,7 +33,7 @@ public class HiddenBlockRevealerItem extends Item {
 		HiddenBlockRevealerCapability.toggleRevealHiddenBlocks(heldItem)
 				.ifPresent(revealHiddenBlocks -> {
 					final String message = revealHiddenBlocks ? "message.testmod3.hidden_block_revealer.reveal" : "message.testmod3.hidden_block_revealer.hide";
-					playerIn.sendMessage(new TranslationTextComponent(message));
+					playerIn.sendMessage(new TranslationTextComponent(message), Util.DUMMY_UUID);
 				});
 
 		return new ActionResult<>(ActionResultType.SUCCESS, heldItem);

@@ -1,9 +1,5 @@
 package choonster.testmod3.network.capability;
 
-import java.util.function.Supplier;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.inventory.container.Container;
@@ -13,6 +9,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * Base class for messages that update capability data for a single slot of a {@link Container}.
@@ -192,7 +191,7 @@ public abstract class UpdateContainerCapabilityMessage<HANDLER, DATA> {
 			return;
 		}
 
-		ctx.get().enqueueWork(() -> DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+		ctx.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
 			final ClientPlayerEntity player = Minecraft.getInstance().player;
 
 			final Container container;

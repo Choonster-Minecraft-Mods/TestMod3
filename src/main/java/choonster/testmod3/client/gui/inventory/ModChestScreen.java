@@ -3,7 +3,8 @@ package choonster.testmod3.client.gui.inventory;
 import choonster.testmod3.inventory.container.ModChestContainer;
 import choonster.testmod3.inventory.itemhandler.INameableItemHandler;
 import choonster.testmod3.tileentity.ModChestTileEntity;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ChestScreen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -52,35 +53,23 @@ public class ModChestScreen extends ContainerScreen<ModChestContainer> {
 		numRows = container.getNumRows();
 		ySize = 114 + numRows * 18;
 	}
-
-	/**
-	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
-	 *
-	 * @param mouseX Mouse x coordinate
-	 * @param mouseY Mouse y coordinate
-	 */
+ 
 	@Override
-	protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY) {
-		font.drawString(chestInventory.getDisplayName().getString(), 8, 6, TEXT_COLOUR);
-		font.drawString(playerInventory.getDisplayName().getString(), 8, ySize - 96 + 2, TEXT_COLOUR);
+	protected void drawGuiContainerForegroundLayer(final MatrixStack matrixStack, final int x, final int y) {
+		font.drawString(matrixStack, chestInventory.getDisplayName().getString(), 8, 6, TEXT_COLOUR);
+		font.drawString(matrixStack, playerInventory.getDisplayName().getString(), 8, ySize - 96 + 2, TEXT_COLOUR);
 	}
 
-	/**
-	 * Draws the background layer of this container (behind the items).
-	 *
-	 * @param partialTicks How far into the current tick the game is, with 0.0 being the start of the tick and 1.0 being the end.
-	 * @param mouseX       Mouse x coordinate
-	 * @param mouseY       Mouse y coordinate
-	 */
 	@Override
-	protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY) {
-		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+	protected void drawGuiContainerBackgroundLayer(final MatrixStack matrixStack, final float partialTicks, final int x, final int y) {
+		// TODO: Figure out how to render texture with colour without using this method
+		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
 
 		minecraft.getTextureManager().bindTexture(CHEST_GUI_TEXTURE);
 
-		final int x = (width - xSize) / 2;
-		final int y = (height - ySize) / 2;
-		blit(x, y, 0, 0, xSize, numRows * 18 + 17);
-		blit(x, y + numRows * 18 + 17, 0, 126, xSize, 96);
+		final int centreX = (width - xSize) / 2;
+		final int centreY = (height - ySize) / 2;
+		blit(matrixStack, centreX, centreY, 0, 0, xSize, numRows * 18 + 17);
+		blit(matrixStack, centreX, centreY + numRows * 18 + 17, 0, 126, xSize, 96);
 	}
 }

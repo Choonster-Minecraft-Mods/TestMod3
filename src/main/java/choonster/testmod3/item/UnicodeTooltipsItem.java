@@ -33,7 +33,7 @@ public class UnicodeTooltipsItem extends Item {
 		super.addInformation(stack, world, tooltip, flag);
 
 		tooltip.add(new TranslationTextComponent("item.testmod3.unicode_tooltips.1.desc"));
-		tooltip.add(new StringTextComponent("§a§o").appendSibling(new TranslationTextComponent("item.testmod3.unicode_tooltips.2.desc")).appendText("§r"));
-		tooltip.add(new StringTextComponent("" + TextFormatting.GREEN + TextFormatting.ITALIC).appendSibling(new TranslationTextComponent("item.testmod3.unicode_tooltips.3.desc")).appendText("" + TextFormatting.RESET));
+		tooltip.add(new StringTextComponent("§a§o").append(new TranslationTextComponent("item.testmod3.unicode_tooltips.2.desc")).appendString("§r"));
+		tooltip.add(new StringTextComponent("" + TextFormatting.GREEN + TextFormatting.ITALIC).append(new TranslationTextComponent("item.testmod3.unicode_tooltips.3.desc")).appendString("" + TextFormatting.RESET));
 	}
 }

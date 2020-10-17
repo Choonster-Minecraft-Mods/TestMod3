@@ -36,7 +36,7 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 
 	@Override
 	public IntNBT serializeNBT() {
-		return new IntNBT(getEnergyStored());
+		return IntNBT.valueOf(getEnergyStored());
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package choonster.testmod3.compat.waila;
 
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 import net.minecraft.util.Direction;
 
 /**
@@ -10,11 +10,11 @@ import net.minecraft.util.Direction;
  */
 public class RotatableHUDHandler extends EnumPropertyHUDHandler<Direction> {
 
-	public RotatableHUDHandler(final IProperty<Direction> property) {
+	public RotatableHUDHandler(final Property<Direction> property) {
 		this(property, "testmod3.rotatable.facing.desc");
 	}
 
-	public RotatableHUDHandler(final IProperty<Direction> property, final String tooltipTranslationKey) {
+	public RotatableHUDHandler(final Property<Direction> property, final String tooltipTranslationKey) {
 		super(property, tooltipTranslationKey, "testmod3.facing");
 	}
 }

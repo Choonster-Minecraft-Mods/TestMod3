@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
@@ -49,17 +50,17 @@ public class ItemDebuggerBlock extends Block {
 	}
 
 	private <T> void logCapability(final ItemStack stack, final Capability<T> capability, final Direction facing) {
-		stack.getCapability(capability).ifPresent(instance -> {
+		stack.getCapability(capability, facing).ifPresent(instance -> {
 			LOGGER.info("Capability: {} - {}", capability.getName(), instance);
 		});
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
 		logItem(player.getHeldItem(hand));
 
-		return true;
+		return ActionResultType.SUCCESS;
 	}
 
 	@SuppressWarnings("deprecation")

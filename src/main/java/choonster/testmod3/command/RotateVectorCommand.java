@@ -1,7 +1,6 @@
 package choonster.testmod3.command;
 
 import choonster.testmod3.command.arguments.AxisArgument;
-import choonster.testmod3.util.VectorUtils;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -9,11 +8,8 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.Vec3Argument;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.math.vector.Vector3d;
 
-import javax.vecmath.Matrix3d;
-import javax.vecmath.Vector3d;
 
 /**
  * A command that rotates a vector around the specified axis by the specified amount.
@@ -38,13 +34,16 @@ public class RotateVectorCommand {
 				);
 	}
 
-	private static int execute(final CommandContext<CommandSource> context, final Vec3d inputVector, final Direction.Axis axis, final int degrees) {
+	private static int execute(final CommandContext<CommandSource> context, final Vector3d inputVector, final Direction.Axis axis, final int degrees) {
+		/*
+		// TODO: Vecmath isn't used any more, figure out how to do this with Minecraft's vectors
 		final Matrix3d rotationMatrix = VectorUtils.getRotationMatrix(axis, Math.toRadians(degrees));
 
 		final Vector3d outputVector = new Vector3d(inputVector.x, inputVector.y, inputVector.z);
 		rotationMatrix.transform(outputVector);
 
 		context.getSource().sendFeedback(new TranslationTextComponent("commands.testmod3.rotatevector.result", outputVector.getX(), outputVector.getY(), outputVector.getZ()), true);
+		*/
 
 		return 0;
 	}

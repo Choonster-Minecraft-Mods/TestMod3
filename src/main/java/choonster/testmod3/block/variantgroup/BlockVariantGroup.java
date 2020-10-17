@@ -1,7 +1,6 @@
 package choonster.testmod3.block.variantgroup;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.util.RegistryUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
@@ -110,9 +109,9 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 		variants.forEach(variant -> {
 			final String registryName;
 			if (isSuffix) {
-				registryName = groupName + "_" + variant.getName();
+				registryName = groupName + "_" + variant.getString();
 			} else {
-				registryName = variant.getName() + "_" + groupName;
+				registryName = variant.getString() + "_" + groupName;
 			}
 
 			final RegistryObject<BLOCK> block = blocks.register(registryName, () -> {
@@ -126,7 +125,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 			items.register(registryName, () -> {
 				final Item.Properties properties = itemPropertiesFactory.apply(variant);
 
-				return itemFactory.createItem(RegistryUtil.getRequiredRegistryEntry(block), properties, variant);
+				return itemFactory.createItem(block.get(), properties, variant);
 			});
 		});
 

@@ -11,13 +11,10 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -41,7 +38,7 @@ public class ModChestBlock extends TileEntityBlock<ModChestTileEntity> {
 	 */
 	private static final VoxelShape SHAPE = makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
 
-	public static final IProperty<Direction> FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
+	public static final Property<Direction> FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
 
 	public ModChestBlock(final Block.Properties properties) {
 		super(true, properties);
@@ -81,7 +78,7 @@ public class ModChestBlock extends TileEntityBlock<ModChestTileEntity> {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
 		if (!world.isRemote && !isBlocked(world, pos)) {
 			final ModChestTileEntity tileEntity = getTileEntity(world, pos);
 			if (tileEntity != null) {
@@ -89,7 +86,7 @@ public class ModChestBlock extends TileEntityBlock<ModChestTileEntity> {
 			}
 		}
 
-		return true;
+		return ActionResultType.SUCCESS;
 	}
 
 	/**

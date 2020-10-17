@@ -22,7 +22,7 @@ public class EndNBTTests extends Test {
 	protected void runTest() {
 		final CompoundNBT originalCompound = new CompoundNBT();
 		originalCompound.putString("Tag1", "Test2");
-		originalCompound.put("EndTag", new EndNBT());
+		originalCompound.put("EndTag", EndNBT.INSTANCE);
 		originalCompound.putFloat("Tag2", 3.55f);
 
 		final File file = new File("./endTagTest.dat");

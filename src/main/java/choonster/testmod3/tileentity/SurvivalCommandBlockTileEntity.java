@@ -13,8 +13,9 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.CommandBlockTileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 
 /**
@@ -40,35 +41,34 @@ public class SurvivalCommandBlockTileEntity extends CommandBlockTileEntity {
 			getWorld().notifyBlockUpdate(pos, state, state, Constants.BlockFlags.DEFAULT_FLAGS);
 		}
 
-		// TODO: func_195043_d used to be called getWorld, but lost its name in the stable_58-1.14.4 MCP mappings; see ModCoderPack/MCPBot-Issues#867
 		@Override
-		public ServerWorld func_195043_d() {
+		public ServerWorld getWorld() {
 			return (ServerWorld) world;
 		}
 
 		@Override
-		public boolean tryOpenEditCommandBlock(final PlayerEntity player) {
+		public ActionResultType tryOpenEditCommandBlock(final PlayerEntity player) {
 			if (!player.getEntityWorld().isRemote) {
 				final ServerPlayerEntity playerMP = (ServerPlayerEntity) player;
 				NetworkUtil.openClientGui(playerMP, GuiIDs.Client.SURVIVAL_COMMAND_BLOCK, pos);
 				sendToClient(playerMP);
 			}
 
-			return true;
+			return ActionResultType.SUCCESS;
 		}
 
 		@Override
-		public Vec3d getPositionVector() {
-			return new Vec3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+		public Vector3d getPositionVector() {
+			return new Vector3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 		}
 
 		@Override
 		public CommandSource getCommandSource() {
 			return new CommandSource(
 					this,
-					new Vec3d(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5D),
-					Vec2f.ZERO,
-					func_195043_d(),
+					new Vector3d(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5D),
+					Vector2f.ZERO,
+					getWorld(),
 					2,
 					getName().getString(),
 					getName(),
@@ -89,10 +89,10 @@ public class SurvivalCommandBlockTileEntity extends CommandBlockTileEntity {
 	}
 
 	@Override
-	public void read(final CompoundNBT compound) {
-		super.read(compound);
+	public void read(final BlockState state, final CompoundNBT nbt) {
+		super.read(state, nbt);
 
-		getCommandBlockLogic().read(compound.getCompound("SurvivalCommandBlockLogic"));
+		getCommandBlockLogic().read(nbt.getCompound("SurvivalCommandBlockLogic"));
 	}
 
 	@Override

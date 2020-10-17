@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -28,15 +29,15 @@ public class EntityInteractionTestItem extends Item {
 	}
 
 	@Override
-	public boolean itemInteractionForEntity(final ItemStack stack, final PlayerEntity player, final LivingEntity target, final Hand hand) {
+	public ActionResultType itemInteractionForEntity(final ItemStack stack, final PlayerEntity player, final LivingEntity target, final Hand hand) {
 		if (!player.world.isRemote) {
 			final int count = getInteractCount(stack) + 1;
 			stack.getTag().putInt("Count", count);
 
-			player.sendMessage(new TranslationTextComponent("message.testmod3.entity_interact_count", count));
+			player.sendMessage(new TranslationTextComponent("message.testmod3.entity_interact_count", count), Util.DUMMY_UUID);
 		}
 
-		return true;
+		return ActionResultType.SUCCESS;
 	}
 
 	@Override
@@ -46,7 +47,7 @@ public class EntityInteractionTestItem extends Item {
 		if (!player.world.isRemote) {
 			final int count = getInteractCount(heldItem);
 
-			player.sendMessage(new TranslationTextComponent("message.testmod3.entity_interact_count", count));
+			player.sendMessage(new TranslationTextComponent("message.testmod3.entity_interact_count", count), Util.DUMMY_UUID);
 		}
 
 		return new ActionResult<>(ActionResultType.SUCCESS, heldItem);

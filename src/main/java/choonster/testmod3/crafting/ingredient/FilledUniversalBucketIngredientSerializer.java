@@ -5,7 +5,7 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.minecraftforge.common.crafting.IngredientNBT;
+import net.minecraftforge.common.crafting.NBTIngredient;
 
 /**
  * An ingredient factory that produces a {_@link UniversalBucket} filled with the specified {@link Fluid}.
@@ -18,10 +18,10 @@ import net.minecraftforge.common.crafting.IngredientNBT;
  * @author Choonster
  */
 // TODO: Update when fluids are re-implemented in 1.14
-public class FilledUniversalBucketIngredientSerializer implements IIngredientSerializer<IngredientNBT> {
+public class FilledUniversalBucketIngredientSerializer implements IIngredientSerializer<NBTIngredient> {
 
 	@Override
-	public IngredientNBTTestMod3 parse(final JsonObject json) {
+	public TestMod3NBTIngredient parse(final JsonObject json) {
 		/*
 		final String fluidName = JsonUtils.getString(json, "fluid");
 		final Fluid fluid = FluidRegistry.getFluid(fluidName);
@@ -36,19 +36,19 @@ public class FilledUniversalBucketIngredientSerializer implements IIngredientSer
 			throw new JsonSyntaxException("No bucket registered for fluid '" + fluidName + "'");
 		}
 
-		return new IngredientNBTTestMod3(filledBucket);
+		return new NBTIngredientTestMod3(filledBucket);
 		*/
 
 		throw new JsonSyntaxException("Fluids aren't implemented");
 	}
 
 	@Override
-	public IngredientNBTTestMod3 parse(final PacketBuffer buffer) {
+	public TestMod3NBTIngredient parse(final PacketBuffer buffer) {
 		throw new UnsupportedOperationException("Fluids aren't implemented");
 	}
 
 	@Override
-	public void write(final PacketBuffer buffer, final IngredientNBT ingredient) {
+	public void write(final PacketBuffer buffer, final NBTIngredient ingredient) {
 		throw new UnsupportedOperationException("Fluids aren't implemented");
 	}
 }

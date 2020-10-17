@@ -6,12 +6,12 @@ import net.minecraft.advancements.criterion.EntityPredicate;
 import net.minecraft.data.loot.EntityLootTables;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Items;
+import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.EntityHasProperty;
+import net.minecraft.loot.functions.LootingEnchantBonus;
+import net.minecraft.loot.functions.SetCount;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.storage.loot.*;
-import net.minecraft.world.storage.loot.conditions.EntityHasProperty;
-import net.minecraft.world.storage.loot.functions.LootingEnchantBonus;
-import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
@@ -34,7 +34,7 @@ public class TestMod3EntityLootTables extends EntityLootTables {
 						)
 						.addLootPool(
 								LootPool.builder()
-										.addEntry(TagLootEntry.func_216176_b(ItemTags.MUSIC_DISCS))
+										.addEntry(TagLootEntry.getBuilder(ItemTags.MUSIC_DISCS))
 										.acceptCondition(EntityHasProperty.builder(LootContext.EntityTarget.KILLER, EntityPredicate.Builder.create().type(EntityTypeTags.SKELETONS)))
 						)
 		);

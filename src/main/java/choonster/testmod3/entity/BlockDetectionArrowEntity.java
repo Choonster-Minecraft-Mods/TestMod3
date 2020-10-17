@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -26,10 +27,6 @@ public class BlockDetectionArrowEntity extends ModArrowEntity {
 		super(entityType, world);
 	}
 
-	public BlockDetectionArrowEntity(final World world, final double x, final double y, final double z) {
-		super(world, x, y, z);
-	}
-
 	public BlockDetectionArrowEntity(final World world, final LivingEntity shooter) {
 		super(world, shooter);
 	}
@@ -45,16 +42,16 @@ public class BlockDetectionArrowEntity extends ModArrowEntity {
 	}
 
 	@Override
-	protected void onHit(final RayTraceResult rayTraceResult) {
-		super.onHit(rayTraceResult);
+	protected void onImpact(final RayTraceResult result) {
+		super.onImpact(result);
 
-		final Entity shootingEntity = getShooter();
+		final Entity shootingEntity = /* getShooter */ func_234616_v_();
 
-		if (rayTraceResult.getType() == RayTraceResult.Type.BLOCK && shootingEntity != null) {
-			final BlockPos pos = ((BlockRayTraceResult) rayTraceResult).getPos();
+		if (result.getType() == RayTraceResult.Type.BLOCK && shootingEntity != null) {
+			final BlockPos pos = ((BlockRayTraceResult) result).getPos();
 			final BlockState state = world.getBlockState(pos);
 
-			shootingEntity.sendMessage(new TranslationTextComponent("[%s] Block at %s,%s,%s: %s", world.isRemote ? "CLIENT" : "SERVER", pos.getX(), pos.getY(), pos.getZ(), state));
+			shootingEntity.sendMessage(new TranslationTextComponent("[%s] Block at %s,%s,%s: %s", world.isRemote ? "CLIENT" : "SERVER", pos.getX(), pos.getY(), pos.getZ(), state), Util.DUMMY_UUID);
 		}
 	}
 }

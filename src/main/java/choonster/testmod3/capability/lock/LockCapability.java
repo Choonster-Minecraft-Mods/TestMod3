@@ -69,7 +69,7 @@ public final class LockCapability {
 				lock.setLockCode(LockCode.read(tagCompound));
 
 				if (tagCompound.contains("DisplayName")) {
-					final ITextComponent displayName = Objects.requireNonNull(ITextComponent.Serializer.fromJson(tagCompound.getString("DisplayName")));
+					final ITextComponent displayName = Objects.requireNonNull(ITextComponent.Serializer.getComponentFromJson(tagCompound.getString("DisplayName")));
 					lock.setDisplayName(displayName);
 				}
 			}

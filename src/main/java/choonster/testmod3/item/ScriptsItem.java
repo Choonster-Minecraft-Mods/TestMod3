@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -35,7 +36,7 @@ public abstract class ScriptsItem extends Item {
 
 	@Override
 	public ITextComponent getDisplayName(final ItemStack stack) {
-		return super.getDisplayName(stack).appendText(scriptFunction.apply(getNumber(stack)));
+		return super.getDisplayName(stack).deepCopy().appendString(scriptFunction.apply(getNumber(stack)));
 	}
 
 	@Override
@@ -43,7 +44,7 @@ public abstract class ScriptsItem extends Item {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);
 
 		if (!worldIn.isRemote) {
-			playerIn.sendMessage(new TranslationTextComponent("message." + getRegistryName() + ".right_click", scriptFunction.apply(getNumber(heldItem))));
+			playerIn.sendMessage(new TranslationTextComponent("message." + getRegistryName() + ".right_click", scriptFunction.apply(getNumber(heldItem))), Util.DUMMY_UUID);
 		}
 
 		return new ActionResult<>(ActionResultType.SUCCESS, heldItem);

@@ -3,6 +3,7 @@ package choonster.testmod3.client.gui;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.lock.ILock;
 import choonster.testmod3.network.SetLockCodeMessage;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.chat.NarratorChatListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -10,6 +11,7 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
@@ -59,11 +61,11 @@ public class LockScreen extends Screen {
 	protected void init() {
 		minecraft.keyboardListener.enableRepeatEvents(true);
 
-		doneButton = addButton(new Button(width / 2 - 4 - 150, height / 4 + 120 + 12, 150, 20, I18n.format("gui.done"), button -> done()));
+		doneButton = addButton(new Button(width / 2 - 4 - 150, height / 4 + 120 + 12, 150, 20, new TranslationTextComponent("gui.done"), button -> done()));
 
-		cancelButton = addButton(new Button(width / 2 + 4, height / 4 + 120 + 12, 150, 20, I18n.format("gui.cancel"), button -> onClose()));
+		cancelButton = addButton(new Button(width / 2 + 4, height / 4 + 120 + 12, 150, 20, new TranslationTextComponent("gui.cancel"), button -> onClose()));
 
-		lockCodeTextField = new TextFieldWidget(font, width / 2 - 150, 50, 300, 20, I18n.format("gui.testmod3.lock.lock_code"));
+		lockCodeTextField = new TextFieldWidget(font, width / 2 - 150, 50, 300, 20, new TranslationTextComponent("gui.testmod3.lock.lock_code"));
 		lockCodeTextField.setMaxStringLength(32500);
 		lockCodeTextField.setFocused2(true);
 		children.add(lockCodeTextField);
@@ -97,13 +99,13 @@ public class LockScreen extends Screen {
 	}
 
 	@Override
-	public void render(final int mouseX, final int mouseY, final float partialTicks) {
-		renderBackground();
-		drawCenteredString(font, I18n.format("testmod3.lock.set_lock_code"), width / 2, 20, 0xffffff);
-		drawString(font, I18n.format("testmod3.lock.lock_code"), width / 2 - 150, 37, 0xa0a0a0);
-		lockCodeTextField.render(mouseX, mouseY, partialTicks);
-		drawString(font, "", width / 2 - 150, 75 * font.FONT_HEIGHT, 0xa0a0a0);
+	public void render(final MatrixStack matrixStack, final int mouseX, final int mouseY, final float partialTicks) {
+		renderBackground(matrixStack);
+		drawCenteredString(matrixStack, font, I18n.format("testmod3.lock.set_lock_code"), width / 2, 20, 0xffffff);
+		drawString(matrixStack, font, I18n.format("testmod3.lock.lock_code"), width / 2 - 150, 37, 0xa0a0a0);
+		lockCodeTextField.render(matrixStack, mouseX, mouseY, partialTicks);
+		drawString(matrixStack, font, "", width / 2 - 150, 75 * font.FONT_HEIGHT, 0xa0a0a0);
 
-		super.render(mouseX, mouseY, partialTicks);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 }

@@ -2,7 +2,6 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.tileentity.*;
-import choonster.testmod3.util.RegistryUtil;
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 import net.minecraft.block.Block;
@@ -61,7 +60,7 @@ public class ModTileEntities {
 		private static <T extends TileEntity> TileEntityType.Builder<T> builder(final Supplier<? extends T> factory, final RegistryObject<? extends Block> validBlock) {
 			return TileEntityType.Builder.create(
 					factory,
-					RegistryUtil.getRequiredRegistryEntry(validBlock)
+					validBlock.get()
 			);
 		}
 
