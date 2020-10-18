@@ -20,9 +20,9 @@ import net.minecraftforge.fml.common.Mod;
 public class ItemTooltipModNameRemover {
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void itemTooltip(final ItemTooltipEvent event) {
-		if (event.getItemStack().getItem() == ModItems.NO_MOD_NAME) {
+		if (event.getItemStack().getItem() == ModItems.NO_MOD_NAME.get()) {
 			/*
-			// TODO: Full Hwyla JAT is runtime-only now
+			// TODO: Full Hwyla JAR is runtime-only now
 			final String name = String.format(Waila.CONFIG.get().getFormatting().getModName(), TestMod3.NAME);
 			event.getToolTip().remove(new StringTextComponent(name));
 			*/

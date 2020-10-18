@@ -70,7 +70,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	 * @return The blocks
 	 */
 	@Override
-	public Collection<RegistryObject<BLOCK>> getBlocks() {
+	public Collection<RegistryObject<BLOCK>> getEntries() {
 		return getBlocksMap().values();
 	}
 

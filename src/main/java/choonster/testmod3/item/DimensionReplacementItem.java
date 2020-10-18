@@ -3,6 +3,7 @@ package choonster.testmod3.item;
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import com.google.common.collect.ImmutableMap;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -13,6 +14,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * An item that's converted to another item when crafted in specific dimension types.
@@ -49,7 +52,13 @@ public class DimensionReplacementItem extends Item {
 	public DimensionReplacementItem(final Properties properties, final Map<RegistryKey<DimensionType>, Supplier<ItemStack>> replacements) {
 		super(properties);
 
-		this.replacements = ImmutableMap.copyOf(replacements);
+		this.replacements = ImmutableMap.copyOf(
+				replacements
+						.entrySet()
+						.stream()
+						.map(entry -> Pair.of(entry.getKey(), Lazy.of(entry.getValue())))
+						.collect(Collectors.toMap(Pair::getFirst, Pair::getSecond))
+		);
 	}
 
 	/**
@@ -79,15 +88,16 @@ public class DimensionReplacementItem extends Item {
 			stackTagCompound.putBoolean(KEY_REPLACED, true); // Mark it as run
 
 			getReplacement(world).ifPresent(replacement -> { // If there's a replacement for this dimension's type
-				replacement.setCount(stack.getCount()); // Copy the stack size from this item
+				final ItemStack replacementCopy = replacement.copy();
+				replacementCopy.setCount(stack.getCount()); // Copy the stack size from this item
 
 				// Try to replace this item
 				InventoryUtils.forEachEntityInventory(
 						entity,
-						inventory -> tryReplaceItem(inventory, itemSlot, stack, replacement),
+						inventory -> tryReplaceItem(inventory, itemSlot, stack, replacementCopy),
 						EntityInventoryType.MAIN, EntityInventoryType.HAND
 				).ifPresent(successfulInventoryType ->
-						LOGGER.info("Replaced item in slot {} of {}'s {} inventory with {}", itemSlot, entity.getName(), successfulInventoryType, replacement.getDisplayName())
+						LOGGER.info("Replaced item in slot {} of {}'s {} inventory with {}", itemSlot, entity.getName(), successfulInventoryType, replacementCopy.getDisplayName())
 				);
 			});
 		}

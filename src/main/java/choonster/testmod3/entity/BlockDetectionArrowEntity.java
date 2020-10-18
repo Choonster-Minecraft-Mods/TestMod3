@@ -38,7 +38,7 @@ public class BlockDetectionArrowEntity extends ModArrowEntity {
 
 	@Override
 	protected ItemStack getArrowStack() {
-		return new ItemStack(ModItems.BLOCK_DETECTION_ARROW);
+		return new ItemStack(ModItems.BLOCK_DETECTION_ARROW.get());
 	}
 
 	@Override

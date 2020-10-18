@@ -24,7 +24,7 @@ public enum ModArmourMaterial implements IArmorMaterial {
 	REPLACEMENT(
 			"replacement", 15, new int[]{1, 4, 5, 2},
 			12, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0,
-			0, () -> Ingredient.fromItems(ModItems.ARROW)
+			0, () -> Ingredient.fromItems(ModItems.ARROW.get())
 	),
 
 	;

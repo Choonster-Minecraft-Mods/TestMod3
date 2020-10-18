@@ -15,6 +15,7 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelBuilder.Perspective;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.fml.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
@@ -78,31 +79,31 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 	@Override
 	protected void registerModels() {
-		withExistingParent(ModItems.WOODEN_AXE, Items.WOODEN_AXE);
+		withExistingParent(ModItems.WOODEN_AXE.get(), Items.WOODEN_AXE);
 
-		withExistingParent(ModItems.ENTITY_TEST, Items.PORKCHOP);
+		withExistingParent(ModItems.ENTITY_TEST.get(), Items.PORKCHOP);
 
-		withExistingParent(ModItems.RECORD_SOLARIS, Items.MUSIC_DISC_13);
+		withExistingParent(ModItems.RECORD_SOLARIS.get(), Items.MUSIC_DISC_13);
 
-		withExistingParent(ModItems.HEAVY, Items.BRICK);
+		withExistingParent(ModItems.HEAVY.get(), Items.BRICK);
 
-		withExistingParent(ModItems.ENTITY_INTERACTION_TEST, Items.BEEF);
+		withExistingParent(ModItems.ENTITY_INTERACTION_TEST.get(), Items.BEEF);
 
-		withExistingParent(ModItems.BLOCK_DESTROYER, Items.TNT_MINECART);
+		withExistingParent(ModItems.BLOCK_DESTROYER.get(), Items.TNT_MINECART);
 
-		withSimpleParentAndDefaultTexture(ModItems.SUBSCRIPTS);
+		withSimpleParentAndDefaultTexture(ModItems.SUBSCRIPTS.get());
 
-		withSimpleParentAndDefaultTexture(ModItems.SUPERSCRIPTS);
+		withSimpleParentAndDefaultTexture(ModItems.SUPERSCRIPTS.get());
 
 
 		// Create the parent model
-		final ItemModelBuilder modelTest = withSimpleParent(ModItems.MODEL_TEST, itemTexture(ModItems.MODEL_TEST) + "_standby");
+		final ItemModelBuilder modelTest = withSimpleParent(ModItems.MODEL_TEST.get(), itemTexture(ModItems.MODEL_TEST.get()) + "_standby");
 
 		// Create three child models and add them as overrides that display when the ticks since last use is >= index * 20
 		IntStream.range(0, 3)
 				.mapToObj(index -> {
-					final ItemModelBuilder model = withSimpleParent(name(ModItems.MODEL_TEST) + "_" + index)
-							.texture(LAYER_0, itemTexture(ModItems.MODEL_TEST) + "_" + index);
+					final ItemModelBuilder model = withSimpleParent(name(ModItems.MODEL_TEST.get()) + "_" + index)
+							.texture(LAYER_0, itemTexture(ModItems.MODEL_TEST.get()) + "_" + index);
 
 					return Pair.of(index, model);
 				})
@@ -122,15 +123,15 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 				.end();
 
 
-		withExistingParent(ModItems.SNOWBALL_LAUNCHER, Items.FISHING_ROD);
+		withExistingParent(ModItems.SNOWBALL_LAUNCHER.get(), Items.FISHING_ROD);
 
 
 		// Create the parent model
-		final ItemModelBuilder slingshot = withSimpleParentAndDefaultTexture(ModItems.SLINGSHOT);
+		final ItemModelBuilder slingshot = withSimpleParentAndDefaultTexture(ModItems.SLINGSHOT.get());
 
 		// Create the child model
-		final ItemModelBuilder slingshotPulled = getBuilder(name(ModItems.SLINGSHOT) + "_pulled")
-				.texture(LAYER_0, itemTexture(ModItems.SLINGSHOT) + "_pulled");
+		final ItemModelBuilder slingshotPulled = getBuilder(name(ModItems.SLINGSHOT.get()) + "_pulled")
+				.texture(LAYER_0, itemTexture(ModItems.SLINGSHOT.get()) + "_pulled");
 
 		// Add the child as an override that displays when the ticks since last use is >= 0 and < 20
 		slingshot
@@ -147,61 +148,61 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 				.end();
 
 
-		withExistingParent(ModItems.UNICODE_TOOLTIPS, Items.RABBIT);
+		withExistingParent(ModItems.UNICODE_TOOLTIPS.get(), Items.RABBIT);
 
-		withExistingParent(ModItems.SWAP_TEST_A, Items.BRICK);
+		withExistingParent(ModItems.SWAP_TEST_A.get(), Items.BRICK);
 
-		withExistingParent(ModItems.SWAP_TEST_B, Items.NETHER_BRICK);
+		withExistingParent(ModItems.SWAP_TEST_B.get(), Items.NETHER_BRICK);
 
-		withExistingParent(ModItems.BLOCK_DEBUGGER, Items.NETHER_STAR);
+		withExistingParent(ModItems.BLOCK_DEBUGGER.get(), Items.NETHER_STAR);
 
-		withExistingParent(ModItems.WOODEN_HARVEST_SWORD, Items.WOODEN_SWORD);
+		withExistingParent(ModItems.WOODEN_HARVEST_SWORD.get(), Items.WOODEN_SWORD);
 
-		withExistingParent(ModItems.DIAMOND_HARVEST_SWORD, Items.DIAMOND_SWORD);
+		withExistingParent(ModItems.DIAMOND_HARVEST_SWORD.get(), Items.DIAMOND_SWORD);
 
-		withExistingParent(ModItems.CLEARER, Items.NETHER_STAR);
+		withExistingParent(ModItems.CLEARER.get(), Items.NETHER_STAR);
 
-		bowItem(ModItems.BOW);
+		bowItem(ModItems.BOW.get());
 
-		withGeneratedParentAndDefaultTexture(ModItems.ARROW);
+		withGeneratedParentAndDefaultTexture(ModItems.ARROW.get());
 
-		withExistingParent(ModItems.HEIGHT_TESTER, Items.COMPASS);
+		withExistingParent(ModItems.HEIGHT_TESTER.get(), Items.COMPASS);
 
-		withExistingParent(ModItems.PIG_SPAWNER_FINITE, Items.PORKCHOP);
+		withExistingParent(ModItems.PIG_SPAWNER_FINITE.get(), Items.PORKCHOP);
 
-		withExistingParent(ModItems.PIG_SPAWNER_INFINITE, Items.PORKCHOP);
+		withExistingParent(ModItems.PIG_SPAWNER_INFINITE.get(), Items.PORKCHOP);
 
-		bowItem(ModItems.CONTINUOUS_BOW);
+		bowItem(ModItems.CONTINUOUS_BOW.get());
 
-		withExistingParent(ModItems.RESPAWNER, Items.CLOCK);
+		withExistingParent(ModItems.RESPAWNER.get(), Items.CLOCK);
 
-		withExistingParent(ModItems.LOOT_TABLE_TEST, Items.GOLD_INGOT);
+		withExistingParent(ModItems.LOOT_TABLE_TEST.get(), Items.GOLD_INGOT);
 
-		withGeneratedParentAndDefaultTexture(ModItems.MAX_HEALTH_GETTER_ITEM);
+		withGeneratedParentAndDefaultTexture(ModItems.MAX_HEALTH_GETTER_ITEM.get());
 
-		withGeneratedParentAndDefaultTexture(ModItems.MAX_HEALTH_SETTER_ITEM);
+		withGeneratedParentAndDefaultTexture(ModItems.MAX_HEALTH_SETTER_ITEM.get());
 
-		withSimpleParentAndDefaultTexture(ModItems.GUN);
+		withSimpleParentAndDefaultTexture(ModItems.GUN.get());
 
-		withSimpleParentAndDefaultTexture(ModItems.DIMENSION_REPLACEMENT);
+		withSimpleParentAndDefaultTexture(ModItems.DIMENSION_REPLACEMENT.get());
 
-		withExistingParent(ModItems.SADDLE, Items.SADDLE);
+		withExistingParent(ModItems.SADDLE.get(), Items.SADDLE);
 
-		withExistingParent(ModItems.WOODEN_SLOW_SWORD, Items.WOODEN_SWORD);
+		withExistingParent(ModItems.WOODEN_SLOW_SWORD.get(), Items.WOODEN_SWORD);
 
-		withExistingParent(ModItems.DIAMOND_SLOW_SWORD, Items.DIAMOND_SWORD);
+		withExistingParent(ModItems.DIAMOND_SLOW_SWORD.get(), Items.DIAMOND_SWORD);
 
-		withExistingParent(name(ModItems.RITUAL_CHECKER), mcLoc("handheld"))
+		withExistingParent(name(ModItems.RITUAL_CHECKER.get()), mcLoc("handheld"))
 				.texture(LAYER_0, "item/banner_base");
 
 
 		// Create the parent model
-		final ItemModelBuilder hiddenBlockRevealer = withGeneratedParentAndDefaultTexture(ModItems.HIDDEN_BLOCK_REVEALER);
+		final ItemModelBuilder hiddenBlockRevealer = withGeneratedParentAndDefaultTexture(ModItems.HIDDEN_BLOCK_REVEALER.get());
 
 		// Create the child model and add it as an override that's displayed when hidden blocks are being revealed
-		final ItemModelBuilder hiddenBlockRevealerActive = getBuilder(name(ModItems.HIDDEN_BLOCK_REVEALER) + "_active")
+		final ItemModelBuilder hiddenBlockRevealerActive = getBuilder(name(ModItems.HIDDEN_BLOCK_REVEALER.get()) + "_active")
 				.parent(hiddenBlockRevealer)
-				.texture(LAYER_0, itemTexture(ModItems.HIDDEN_BLOCK_REVEALER) + "_active");
+				.texture(LAYER_0, itemTexture(ModItems.HIDDEN_BLOCK_REVEALER.get()) + "_active");
 
 		hiddenBlockRevealer
 				.override()
@@ -209,42 +210,44 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 				.model(hiddenBlockRevealerActive)
 				.end();
 
-		withExistingParent(ModItems.NO_MOD_NAME, Items.BREAD);
+		withExistingParent(ModItems.NO_MOD_NAME.get(), Items.BREAD);
 
-		withExistingParent(name(ModItems.KEY), "handheld")
-				.texture(LAYER_0, itemTexture(ModItems.KEY));
+		withExistingParent(name(ModItems.KEY.get()), "handheld")
+				.texture(LAYER_0, itemTexture(ModItems.KEY.get()));
 
-		withGeneratedParentAndDefaultTexture(ModItems.BLOCK_DETECTION_ARROW);
+		withGeneratedParentAndDefaultTexture(ModItems.BLOCK_DETECTION_ARROW.get());
 
-		withGeneratedParent(name(ModItems.TRANSLUCENT_ITEM))
+		withGeneratedParent(name(ModItems.TRANSLUCENT_ITEM.get()))
 				.texture(LAYER_0, mcLoc("block/ice"));
 
-		withGeneratedParentAndDefaultTexture(ModItems.ENTITY_KILLER);
+		withGeneratedParentAndDefaultTexture(ModItems.ENTITY_KILLER.get());
 
-		withGeneratedParentAndDefaultTexture(ModItems.CHUNK_ENERGY_SETTER);
+		withGeneratedParentAndDefaultTexture(ModItems.CHUNK_ENERGY_SETTER.get());
 
-		withGeneratedParentAndDefaultTexture(ModItems.CHUNK_ENERGY_GETTER);
+		withGeneratedParentAndDefaultTexture(ModItems.CHUNK_ENERGY_GETTER.get());
 
-		withGeneratedParentAndDefaultTexture(ModItems.CHUNK_ENERGY_DISPLAY);
+		withGeneratedParentAndDefaultTexture(ModItems.CHUNK_ENERGY_DISPLAY.get());
 
-		withExistingParent(ModItems.BEACON_ITEM, Items.BEACON);
+		withExistingParent(ModItems.BEACON_ITEM.get(), Items.BEACON);
 
-		withExistingParent(ModItems.SATURATION_HELMET, Items.CHAINMAIL_HELMET);
+		withExistingParent(ModItems.SATURATION_HELMET.get(), Items.CHAINMAIL_HELMET);
 
-		withExistingParent(ModItems.ENTITY_CHECKER, Items.BONE);
+		withExistingParent(ModItems.ENTITY_CHECKER.get(), Items.BONE);
 
-		withGeneratedParentAndDefaultTexture(ModItems.RUBBER);
+		withGeneratedParentAndDefaultTexture(ModItems.RUBBER.get());
 
-		withExistingParent(ModItems.REPLACEMENT_HELMET, Items.CHAINMAIL_HELMET);
+		withExistingParent(ModItems.REPLACEMENT_HELMET.get(), Items.CHAINMAIL_HELMET);
 
-		withExistingParent(ModItems.REPLACEMENT_CHESTPLATE, Items.CHAINMAIL_CHESTPLATE);
+		withExistingParent(ModItems.REPLACEMENT_CHESTPLATE.get(), Items.CHAINMAIL_CHESTPLATE);
 
-		withExistingParent(ModItems.REPLACEMENT_LEGGINGS, Items.CHAINMAIL_LEGGINGS);
+		withExistingParent(ModItems.REPLACEMENT_LEGGINGS.get(), Items.CHAINMAIL_LEGGINGS);
 
-		withExistingParent(ModItems.REPLACEMENT_BOOTS, Items.CHAINMAIL_BOOTS);
+		withExistingParent(ModItems.REPLACEMENT_BOOTS.get(), Items.CHAINMAIL_BOOTS);
 
-		ModItems.VariantGroups.VARIANTS_ITEMS
+		ModItems.VARIANTS_ITEMS
 				.getItems()
+				.stream()
+				.map(RegistryObject::get)
 				.forEach(this::withGeneratedParentAndDefaultTexture);
 	}
 

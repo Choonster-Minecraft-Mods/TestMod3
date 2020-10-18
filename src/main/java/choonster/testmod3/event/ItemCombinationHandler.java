@@ -12,6 +12,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -21,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -43,7 +45,7 @@ public class ItemCombinationHandler {
 	/**
 	 * The output item.
 	 */
-	private static final ItemStack OUTPUT = new ItemStack(ModItems.GUN);
+	private static final Supplier<ItemStack> OUTPUT = Lazy.of(() -> new ItemStack(ModItems.GUN.get()));
 
 	private ItemCombinationHandler() {
 	}
@@ -93,7 +95,7 @@ public class ItemCombinationHandler {
 				if (remainingInputs.isEmpty()) { // If all inputs have been found,
 					// Spawn the output item at the first item's position
 					final double x = entityItem.getPosX(), y = entityItem.getPosY(), z = entityItem.getPosZ();
-					final ItemEntity outputEntityItem = new ItemEntity(world, x, y, z, OUTPUT.copy());
+					final ItemEntity outputEntityItem = new ItemEntity(world, x, y, z, OUTPUT.get().copy());
 					world.addEntity(outputEntityItem);
 
 					((ServerWorld) world).spawnParticle(ParticleTypes.LARGE_SMOKE, x + 0.5, y + 1.0, z + 0.5, 1, 0.0, 0.0, 0.0, 0);

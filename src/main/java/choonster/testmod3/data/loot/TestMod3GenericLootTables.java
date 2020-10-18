@@ -48,7 +48,7 @@ public class TestMod3GenericLootTables implements Consumer<BiConsumer<ResourceLo
 														.acceptFunction(LootingEnchantBonus.builder(new RandomValueRange(0, 1)))
 										)
 										.addEntry(
-												ItemLootEntry.builder(ModItems.ARROW)
+												ItemLootEntry.builder(ModItems.ARROW.get())
 														.weight(2)
 														.acceptFunction(SetCount.builder(new RandomValueRange(1, 64)))
 										)

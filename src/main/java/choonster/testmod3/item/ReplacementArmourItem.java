@@ -11,25 +11,25 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static net.minecraftforge.common.util.Constants.NBT;
 
@@ -52,10 +52,17 @@ public class ReplacementArmourItem extends ArmorItem {
 	/**
 	 * The items to replace the other armour with.
 	 */
-	private Set<ItemStack> replacementItems;
+	private final Set<Supplier<ItemStack>> replacementItems;
 
-	public ReplacementArmourItem(final IArmorMaterial material, final EquipmentSlotType slot, final Item.Properties properties) {
+	public ReplacementArmourItem(final IArmorMaterial material, final EquipmentSlotType slot, final Properties properties, final Collection<Supplier<ItemStack>> replacementItems) {
 		super(material, slot, properties);
+
+		this.replacementItems = ImmutableSet.copyOf(
+				replacementItems
+						.stream()
+						.map(Lazy::of)
+						.collect(Collectors.toSet())
+		);
 	}
 
 	/**
@@ -63,21 +70,8 @@ public class ReplacementArmourItem extends ArmorItem {
 	 *
 	 * @return The items to replace the other armour with
 	 */
-	public Set<ItemStack> getReplacementItems() {
+	public Set<Supplier<ItemStack>> getReplacementItems() {
 		return replacementItems;
-	}
-
-	/**
-	 * Set the items to replace the other armour with.
-	 *
-	 * @param replacements The items to replace the other armour with
-	 */
-	public void setReplacementItems(final ItemStack... replacements) {
-		if (replacements.length > 3) {
-			throw new IllegalArgumentException("Must supply at most 3 replacement items");
-		}
-
-		replacementItems = ImmutableSet.copyOf(replacements);
 	}
 
 	/**
@@ -87,7 +81,7 @@ public class ReplacementArmourItem extends ArmorItem {
 	 * @return Has this item replaced the other armour?
 	 */
 	public boolean hasReplacedArmour(final ItemStack stack) {
-		return stack.hasTag() && stack.getTag().contains(KEY_REPLACED_ARMOUR, NBT.TAG_LIST);
+		return stack.getOrCreateTag().contains(KEY_REPLACED_ARMOUR, NBT.TAG_LIST);
 	}
 
 	/**
@@ -101,7 +95,10 @@ public class ReplacementArmourItem extends ArmorItem {
 		final ListNBT replacedArmour = new ListNBT();
 
 		// Create a mutable copy of the replacements
-		final Set<ItemStack> replacements = new HashSet<>(replacementItems);
+		final Set<ItemStack> replacements = replacementItems
+				.stream()
+				.map(Supplier::get)
+				.collect(Collectors.toSet());
 
 		Constants.ARMOUR_SLOTS.stream() // For each armour type,
 				.filter(equipmentSlot -> equipmentSlot != getEquipmentSlot()) // If it's not this item's equipment slot,
@@ -150,7 +147,10 @@ public class ReplacementArmourItem extends ArmorItem {
 			final ItemStack current = entity.getItemStackFromSlot(equipmentSlot);
 
 			// Is the item currently in the slot one of the replacements defined for this item?
-			final boolean isReplacement = replacementItems.stream().anyMatch(replacement -> ItemStack.areItemStacksEqual(replacement, current));
+			final boolean isReplacement = replacementItems
+					.stream()
+					.map(Supplier::get)
+					.anyMatch(replacement -> ItemStack.areItemStacksEqual(replacement, current));
 
 			if (original.isEmpty()) { // If the original item is empty,
 				if (isReplacement) { // If the current item is a replacement,
@@ -236,7 +236,6 @@ public class ReplacementArmourItem extends ArmorItem {
 		}
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(final ItemStack stack, @Nullable final World worldIn, final List<ITextComponent> tooltip, final ITooltipFlag flagIn) {
 		tooltip.add(new TranslationTextComponent("item.testmod3.armour_replacement.equip.desc"));

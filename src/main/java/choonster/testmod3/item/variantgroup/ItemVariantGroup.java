@@ -6,7 +6,8 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.IStringSerializable;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,23 +21,23 @@ import java.util.function.Function;
  */
 public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializable, ITEM extends Item> implements IItemVariantGroup<VARIANT, ITEM> {
 	private final String groupName;
-	private final boolean isSuffix;
 	private final Iterable<VARIANT> variants;
 
-	private final Function<VARIANT, Item.Properties> itemPropertiesFactory;
-	private final ItemFactory<VARIANT, ITEM> itemFactory;
-
-	private Map<VARIANT, ITEM> items;
+	private final Map<VARIANT, RegistryObject<ITEM>> items;
 
 	private ItemVariantGroup(
 			final String groupName, final boolean isSuffix, final Iterable<VARIANT> variants,
-			final Function<VARIANT, Item.Properties> itemPropertiesFactory, final ItemFactory<VARIANT, ITEM> itemFactory
+			final Function<VARIANT, Item.Properties> itemPropertiesFactory, final ItemFactory<VARIANT, ITEM> itemFactory,
+			final DeferredRegister<Item> items
 	) {
 		this.groupName = groupName;
-		this.isSuffix = isSuffix;
 		this.variants = variants;
-		this.itemPropertiesFactory = itemPropertiesFactory;
-		this.itemFactory = itemFactory;
+
+		this.items = register(
+				groupName, isSuffix, variants,
+				itemPropertiesFactory, itemFactory,
+				items
+		);
 	}
 
 	/**
@@ -65,7 +66,7 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 	 * @return The items
 	 */
 	@Override
-	public Collection<ITEM> getItems() {
+	public Collection<RegistryObject<ITEM>> getEntries() {
 		return getItemsMap().values();
 	}
 
@@ -74,7 +75,7 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 	 *
 	 * @return The items map
 	 */
-	public Map<VARIANT, ITEM> getItemsMap() {
+	public Map<VARIANT, RegistryObject<ITEM>> getItemsMap() {
 		return items;
 	}
 
@@ -84,23 +85,23 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 	 * @param variant The variant
 	 * @return The item
 	 */
-	public ITEM getItem(final VARIANT variant) {
+	public RegistryObject<ITEM> getItem(final VARIANT variant) {
 		return items.get(variant);
 	}
 
 	/**
-	 * Registers this group's items.
+	 * Registers the variant group's items using the provided DeferredRegister instance.
 	 *
-	 * @param registry The item registry
-	 * @throws IllegalStateException If the items have already been registered
+	 * @return A map of variants to their corresponding items
 	 */
-	@Override
-	public void registerItems(final IForgeRegistry<Item> registry) {
-		Preconditions.checkState(items == null, "Attempt to re-register Items for Variant Group %s", groupName);
+	private Map<VARIANT, RegistryObject<ITEM>> register(
+			final String groupName, final boolean isSuffix, final Iterable<VARIANT> variants,
+			final Function<VARIANT, Item.Properties> itemPropertiesFactory, final ItemFactory<VARIANT, ITEM> itemFactory,
+			final DeferredRegister<Item> items
+	) {
+		final ImmutableMap.Builder<VARIANT, RegistryObject<ITEM>> builder = ImmutableMap.builder();
 
-		final ImmutableMap.Builder<VARIANT, ITEM> builder = ImmutableMap.builder();
-
-		getVariants().forEach(variant -> {
+		variants.forEach(variant -> {
 			final String registryName;
 			if (isSuffix) {
 				registryName = groupName + "_" + variant.getString();
@@ -108,17 +109,16 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 				registryName = variant.getString() + "_" + groupName;
 			}
 
-			final Item.Properties properties = itemPropertiesFactory.apply(variant);
+			final RegistryObject<ITEM> item = items.register(registryName, () -> {
+				final Item.Properties properties = itemPropertiesFactory.apply(variant);
 
-			final ITEM item = itemFactory.createItem(variant, this, properties);
+				return itemFactory.createItem(variant, this, properties);
+			});
 
-			item.setRegistryName(registryName);
-
-			registry.register(item);
 			builder.put(variant, item);
 		});
 
-		items = builder.build();
+		return builder.build();
 	}
 
 	/**
@@ -133,6 +133,8 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 	}
 
 	public static class Builder<VARIANT extends Enum<VARIANT> & IStringSerializable, ITEM extends Item> {
+		private final DeferredRegister<Item> items;
+
 		private String groupName;
 		private boolean isSuffix;
 		private Iterable<VARIANT> variants;
@@ -147,11 +149,12 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 		 * @param <ITEM>    The item type
 		 * @return A new Variant Group Builder
 		 */
-		public static <VARIANT extends Enum<VARIANT> & IStringSerializable, ITEM extends Item> ItemVariantGroup.Builder<VARIANT, ITEM> create() {
-			return new ItemVariantGroup.Builder<>();
+		public static <VARIANT extends Enum<VARIANT> & IStringSerializable, ITEM extends Item> ItemVariantGroup.Builder<VARIANT, ITEM> create(final DeferredRegister<Item> items) {
+			return new ItemVariantGroup.Builder<>(items);
 		}
 
-		private Builder() {
+		private Builder(final DeferredRegister<Item> items) {
+			this.items = items;
 		}
 
 		/**
@@ -244,7 +247,7 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 			Preconditions.checkState(variants != null, "Variants not provided");
 			Preconditions.checkState(itemFactory != null, "Item Factory not provided");
 
-			return new ItemVariantGroup<>(groupName, isSuffix, variants, itemPropertiesFactory, itemFactory);
+			return new ItemVariantGroup<>(groupName, isSuffix, variants, itemPropertiesFactory, itemFactory, items);
 		}
 	}
 }

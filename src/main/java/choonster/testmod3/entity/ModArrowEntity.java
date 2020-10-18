@@ -38,6 +38,6 @@ public class ModArrowEntity extends ArrowEntity {
 
 	@Override
 	protected ItemStack getArrowStack() {
-		return new ItemStack(ModItems.ARROW);
+		return new ItemStack(ModItems.ARROW.get());
 	}
 }

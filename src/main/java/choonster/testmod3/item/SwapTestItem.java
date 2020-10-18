@@ -10,11 +10,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Lazy;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * An item that's converted to another when shift-right clicked.
@@ -25,35 +25,34 @@ import java.util.List;
  * @author Choonster
  */
 public class SwapTestItem extends Item {
-	private ItemStack otherItem;
+	private final Supplier<ItemStack> otherItem;
 
-	public SwapTestItem(final Item.Properties properties) {
+	public SwapTestItem(final Item.Properties properties, final Supplier<ItemStack> otherItem) {
 		super(properties);
+		this.otherItem = Lazy.of(otherItem);
 	}
 
-	public boolean hasOtherItem() {
-		return otherItem != null;
+	private ItemStack getOtherItem() {
+		return otherItem.get();
 	}
 
-	public void setOtherItem(final ItemStack otherItem) {
-		this.otherItem = otherItem;
-	}
-
-	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
-		super.addInformation(stack, world, tooltip, flag);
+		final ItemStack otherItem = getOtherItem();
 
-		if (hasOtherItem()) {
+		if (!otherItem.isEmpty()) {
 			tooltip.add(new TranslationTextComponent("item.testmod3.swap_test.with_item.desc", otherItem.getDisplayName()));
 		} else {
 			tooltip.add(new TranslationTextComponent("item.testmod3.swap_test.without_item.desc"));
 		}
 	}
 
+
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final PlayerEntity playerIn, final Hand hand) {
-		if (hasOtherItem() && playerIn.isSneaking()) {
+		final ItemStack otherItem = getOtherItem();
+
+		if (!otherItem.isEmpty() && playerIn.isSneaking()) {
 			return new ActionResult<>(ActionResultType.SUCCESS, otherItem.copy());
 		}
 

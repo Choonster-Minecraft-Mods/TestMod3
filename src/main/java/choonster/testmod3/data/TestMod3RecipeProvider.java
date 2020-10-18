@@ -35,18 +35,18 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 	protected void registerRecipes(final Consumer<IFinishedRecipe> recipeConsumer) {
 		// Craft a Dimension Replacement item from a Subscripts item and a Superscripts item
 		{
-			ShapelessRecipeBuilder.shapelessRecipe(ModItems.DIMENSION_REPLACEMENT)
-					.addIngredient(ModItems.SUBSCRIPTS)
-					.addIngredient(ModItems.SUPERSCRIPTS)
-					.addCriterion("has_subscripts", hasItem(ModItems.SUBSCRIPTS))
-					.addCriterion("has_superscripts", hasItem(ModItems.SUPERSCRIPTS))
+			ShapelessRecipeBuilder.shapelessRecipe(ModItems.DIMENSION_REPLACEMENT.get())
+					.addIngredient(ModItems.SUBSCRIPTS.get())
+					.addIngredient(ModItems.SUPERSCRIPTS.get())
+					.addCriterion("has_subscripts", hasItem(ModItems.SUBSCRIPTS.get()))
+					.addCriterion("has_superscripts", hasItem(ModItems.SUPERSCRIPTS.get()))
 					.build(recipeConsumer);
 		}
 
 		// Craft a Dimension Replacement item by smelting a Subscripts item
 		{
-			CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(ModItems.SUBSCRIPTS), ModItems.DIMENSION_REPLACEMENT, 0.35f, 200)
-					.addCriterion("has_subscripts", hasItem(ModItems.SUBSCRIPTS))
+			CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(ModItems.SUBSCRIPTS.get()), ModItems.DIMENSION_REPLACEMENT.get(), 0.35f, 200)
+					.addCriterion("has_subscripts", hasItem(ModItems.SUBSCRIPTS.get()))
 					.build(recipeConsumer, new ResourceLocation(TestMod3.MODID, "dimension_replacement_from_subscripts"));
 		}
 
@@ -123,9 +123,9 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 		{
 			ShapelessRecipeBuilder.shapelessRecipe(Blocks.OAK_PLANKS, 2)
 					.setGroup(new ResourceLocation("minecraft", "planks").toString())
-					.addIngredient(ModItems.WOODEN_AXE)
+					.addIngredient(ModItems.WOODEN_AXE.get())
 					.addIngredient(Blocks.OAK_LOG)
-					.addCriterion("has_axe", hasItem(ModItems.WOODEN_AXE))
+					.addCriterion("has_axe", hasItem(ModItems.WOODEN_AXE.get()))
 					.addCriterion("has_log", hasItem(Blocks.OAK_LOG))
 					.build(recipeConsumer, new ResourceLocation(TestMod3.MODID, "oak_planks_with_mod_axe"));
 		}

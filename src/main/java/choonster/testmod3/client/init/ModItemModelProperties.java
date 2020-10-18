@@ -20,9 +20,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ModItemModelProperties {
 	@SubscribeEvent
 	public static void registerItemModelProperties(final FMLClientSetupEvent event) {
-		RevealHiddenBlocksItemPropertyGetter.registerForItem(ModItems.HIDDEN_BLOCK_REVEALER);
-		TicksSinceLastUseItemPropertyGetter.registerForItem(ModItems.MODEL_TEST);
-		TicksSinceLastUseItemPropertyGetter.registerForItem(ModItems.SLINGSHOT);
+		RevealHiddenBlocksItemPropertyGetter.registerForItem(ModItems.HIDDEN_BLOCK_REVEALER.get());
+		TicksSinceLastUseItemPropertyGetter.registerForItem(ModItems.MODEL_TEST.get());
+		TicksSinceLastUseItemPropertyGetter.registerForItem(ModItems.SLINGSHOT.get());
 	}
 
 }
