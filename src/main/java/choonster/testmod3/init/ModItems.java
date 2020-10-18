@@ -18,22 +18,18 @@ import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.world.DimensionType;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ObjectHolder;
 
 import java.util.function.Supplier;
 
 @SuppressWarnings("WeakerAccess")
-@ObjectHolder(TestMod3.MODID)
 public class ModItems {
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TestMod3.MODID);
 
+	private static boolean isInitialised;
 
 	public static final RegistryObject<CuttingAxeItem> WOODEN_AXE = ITEMS.register("wooden_axe",
 			() -> new CuttingAxeItem(ItemTier.WOOD, 6.0f, -3.2f, defaultItemProperties())
@@ -50,7 +46,7 @@ public class ModItems {
 	 * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2408066-try-creating-a-music-disc-in-my-1-8-mod-please
 	 */
 	public static final RegistryObject<MusicDiscItem> RECORD_SOLARIS = ITEMS.register("record_solaris",
-			() -> new MusicDiscItem(13, () -> ModSoundEvents.RECORD_SOLARIS /* TODO: Convert to DeferredRegister/RegistryObject */, defaultItemProperties())
+			() -> new MusicDiscItem(13, ModSoundEvents.RECORD_SOLARIS, defaultItemProperties())
 	);
 
 	public static final RegistryObject<HeavyItem> HEAVY = ITEMS.register("heavy",
@@ -172,7 +168,7 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<SoundEffectItem> GUN = ITEMS.register("gun",
-			() -> new SoundEffectItem(() -> ModSoundEvents.NINE_MM_FIRE, defaultItemProperties())
+			() -> new SoundEffectItem(ModSoundEvents.NINE_MM_FIRE, defaultItemProperties())
 	);
 
 	public static final RegistryObject<DimensionReplacementItem> DIMENSION_REPLACEMENT = ITEMS.register("dimension_replacement",
@@ -190,7 +186,7 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<SoundEffectItem> SADDLE = ITEMS.register("saddle",
-			() -> new SoundEffectItem(() -> ModSoundEvents.ACTION_SADDLE, defaultItemProperties())
+			() -> new SoundEffectItem(ModSoundEvents.ACTION_SADDLE, defaultItemProperties())
 	);
 
 	public static final RegistryObject<SlowSwordItem> WOODEN_SLOW_SWORD = ITEMS.register("wooden_slow_sword",
@@ -298,7 +294,7 @@ public class ModItems {
 //	public static final TestMod3BucketItem STONE_BUCKET = Null();
 //  new TestMod3BucketItem(defaultItemProperties()).setRegistryName("stone_bucket"),
 
-	
+
 	public static final ItemVariantGroup<VariantsItem.Type, VariantsItem> VARIANTS_ITEMS = ItemVariantGroup.Builder.<VariantsItem.Type, VariantsItem>create(ITEMS)
 			.groupName("variants_item")
 			.suffix()
@@ -307,18 +303,21 @@ public class ModItems {
 			.build();
 
 
-	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
-	public static class RegistrationHandler {
-
-		/**
-		 * Register this mod's {@link Item}s.
-		 *
-		 * @param event The event
-		 */
-		@SubscribeEvent
-		public static void registerItems(final RegistryEvent.Register<Item> event) {
-			ModSoundEvents.RegistrationHandler.initialiseSoundEvents();
+	/**
+	 * Registers the {@link DeferredRegister} instance with the mod event bus.
+	 * <p>
+	 * This should be called during mod construction.
+	 *
+	 * @param modEventBus The mod event bus
+	 */
+	public static void initialise(final IEventBus modEventBus) {
+		if (isInitialised) {
+			throw new IllegalStateException("Already initialised");
 		}
+
+		ITEMS.register(modEventBus);
+
+		isInitialised = true;
 	}
 
 	/**
