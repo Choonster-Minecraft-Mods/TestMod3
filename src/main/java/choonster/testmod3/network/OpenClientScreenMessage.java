@@ -1,8 +1,7 @@
 package choonster.testmod3.network;
 
-import choonster.testmod3.client.init.ModGuiFactories;
+import choonster.testmod3.client.network.ClientOnlyNetworkMethods;
 import io.netty.buffer.Unpooled;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.network.PacketBuffer;
@@ -43,9 +42,9 @@ public class OpenClientScreenMessage {
 	}
 
 	public static void handle(final OpenClientScreenMessage message, final Supplier<NetworkEvent.Context> ctx) {
-		ctx.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
-			Minecraft.getInstance().displayGuiScreen(ModGuiFactories.getClientScreen(message));
-		}));
+		ctx.get().enqueueWork(() ->
+				DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientOnlyNetworkMethods.openClientScreen(message))
+		);
 		ctx.get().setPacketHandled(true);
 	}
 

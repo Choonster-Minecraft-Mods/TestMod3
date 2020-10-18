@@ -1,9 +1,11 @@
-package choonster.testmod3.capability.hiddenblockrevealer;
+package choonster.testmod3.client.capability;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockRevealer;
+import choonster.testmod3.capability.hiddenblockrevealer.HiddenBlockRevealerCapability;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -50,14 +52,12 @@ public class HiddenBlockManager {
 	public static void clientTick(final TickEvent.ClientTickEvent event) {
 		if (event.phase != TickEvent.Phase.END) return;
 
-		DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
-			final PlayerEntity player = Minecraft.getInstance().player;
-			if (player == null) return;
+		final ClientPlayerEntity player = Minecraft.getInstance().player;
+		if (player == null) return;
 
-			final boolean checkResult = shouldHeldItemRevealHiddenBlocks(player);
-			toggled = lastCheckResult != checkResult;
-			lastCheckResult = checkResult;
-		});
+		final boolean checkResult = shouldHeldItemRevealHiddenBlocks(player);
+		toggled = lastCheckResult != checkResult;
+		lastCheckResult = checkResult;
 	}
 
 	/**
@@ -77,10 +77,12 @@ public class HiddenBlockManager {
 	 * @param world The world
 	 * @param pos   The position of the hidden block to update
 	 */
-	public static void refresh(final World world, final BlockPos pos) {
-		if (toggled) {
-			final BlockState state = world.getBlockState(pos);
-			world.notifyBlockUpdate(pos, state, state, 3);
-		}
+	public static DistExecutor.SafeRunnable refresh(final World world, final BlockPos pos) {
+		return () -> {
+			if (toggled) {
+				final BlockState state = world.getBlockState(pos);
+				world.notifyBlockUpdate(pos, state, state, 3);
+			}
+		};
 	}
 }

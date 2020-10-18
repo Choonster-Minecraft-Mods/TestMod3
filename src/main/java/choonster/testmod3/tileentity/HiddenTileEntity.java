@@ -1,10 +1,12 @@
 package choonster.testmod3.tileentity;
 
 import choonster.testmod3.block.HiddenBlock;
-import choonster.testmod3.capability.hiddenblockrevealer.HiddenBlockManager;
+import choonster.testmod3.client.capability.HiddenBlockManager;
 import choonster.testmod3.init.ModTileEntities;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 
 /**
  * Runs client-side updates for {@link HiddenBlock}.
@@ -19,7 +21,7 @@ public class HiddenTileEntity extends TileEntity implements ITickableTileEntity 
 	@Override
 	public void tick() {
 		if (world.isRemote) {
-			HiddenBlockManager.refresh(world, pos);
+			DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> HiddenBlockManager.refresh(world, pos));
 		}
 	}
 }

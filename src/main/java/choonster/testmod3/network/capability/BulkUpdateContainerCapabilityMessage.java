@@ -1,18 +1,16 @@
 package choonster.testmod3.network.capability;
 
+import choonster.testmod3.client.util.ClientUtil;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nullable;
@@ -203,8 +201,12 @@ public abstract class BulkUpdateContainerCapabilityMessage<HANDLER, DATA> {
 			return;
 		}
 
-		ctx.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
-			final ClientPlayerEntity player = Minecraft.getInstance().player;
+		ctx.get().enqueueWork(() -> {
+			final PlayerEntity player = ClientUtil.getClientPlayer();
+
+			if (player == null) {
+				return;
+			}
 
 			final Container container;
 			if (message.windowID == 0) {
@@ -228,10 +230,11 @@ public abstract class BulkUpdateContainerCapabilityMessage<HANDLER, DATA> {
 						capabilityDataApplier
 				);
 			});
-		}));
+		});
 
 		ctx.get().setPacketHandled(true);
 	}
+
 
 	/**
 	 * A function that creates bulk update message instances from network data.

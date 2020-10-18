@@ -1,9 +1,9 @@
 package choonster.testmod3.block;
 
+import choonster.testmod3.client.block.ClientOnlyBlockMethods;
+import choonster.testmod3.client.util.ClientUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Util;
@@ -29,18 +29,14 @@ public class ClientPlayerRightClickBlock extends StaticPressurePlateBlock {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onEntityCollision(final BlockState state, final World world, final BlockPos pos, final Entity entity) {
-		final PlayerEntity clientPlayer = DistExecutor.callWhenOn(Dist.CLIENT, () -> () -> Minecraft.getInstance().player);
+		final PlayerEntity clientPlayer = ClientUtil.getClientPlayer();
 
 		// If on the client side, the colliding Entity is the client player and the total world time is a multiple of 10
 		if (world.isRemote && entity == clientPlayer && world.getGameTime() % 10 == 0) {
 			// Make the player right click
 			entity.sendMessage(new TranslationTextComponent("message.testmod3.client_player_right_click.right_click"), Util.DUMMY_UUID);
 
-			DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () ->
-			{
-				// Press the Use Item keybinding
-				KeyBinding.onTick(Minecraft.getInstance().gameSettings.keyBindUseItem.getKey());
-			});
+			DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientOnlyBlockMethods::pressUseItemKeyBinding);
 		}
 	}
 }

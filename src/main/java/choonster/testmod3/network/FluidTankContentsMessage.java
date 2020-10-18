@@ -1,14 +1,12 @@
 package choonster.testmod3.network;
 
 import choonster.testmod3.block.FluidTankBlock;
+import choonster.testmod3.client.util.ClientUtil;
 import choonster.testmod3.fluid.FluidTankSnapshot;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Util;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -52,12 +50,16 @@ public class FluidTankContentsMessage {
 	}
 
 	public static void handle(final FluidTankContentsMessage message, final Supplier<NetworkEvent.Context> ctx) {
-		ctx.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
-			final ClientPlayerEntity player = Minecraft.getInstance().player;
+		ctx.get().enqueueWork(() -> {
+			final PlayerEntity player = ClientUtil.getClientPlayer();
+
+			if (player == null) {
+				return;
+			}
 
 			FluidTankBlock.getFluidDataForDisplay(message.fluidTankSnapshots)
 					.forEach((textComponent) -> player.sendMessage(textComponent, Util.DUMMY_UUID));
-		}));
+		});
 
 		ctx.get().setPacketHandled(true);
 	}

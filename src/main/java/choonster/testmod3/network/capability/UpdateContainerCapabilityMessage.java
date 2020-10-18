@@ -1,13 +1,11 @@
 package choonster.testmod3.network.capability;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
+import choonster.testmod3.client.util.ClientUtil;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nullable;
@@ -191,8 +189,12 @@ public abstract class UpdateContainerCapabilityMessage<HANDLER, DATA> {
 			return;
 		}
 
-		ctx.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
-			final ClientPlayerEntity player = Minecraft.getInstance().player;
+		ctx.get().enqueueWork(() -> {
+			final PlayerEntity player = ClientUtil.getClientPlayer();
+
+			if (player == null) {
+				return;
+			}
 
 			final Container container;
 			if (message.windowID == 0) {
@@ -211,7 +213,7 @@ public abstract class UpdateContainerCapabilityMessage<HANDLER, DATA> {
 					message.capabilityData,
 					capabilityDataApplier
 			);
-		}));
+		});
 
 		ctx.get().setPacketHandled(true);
 	}

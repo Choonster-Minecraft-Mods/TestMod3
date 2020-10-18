@@ -1,8 +1,9 @@
 package choonster.testmod3.block;
 
+import choonster.testmod3.client.block.ClientOnlyBlockMethods;
+import choonster.testmod3.client.util.ClientUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -50,7 +51,7 @@ public class ClientPlayerRotationBlock extends StaticPressurePlateBlock {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onEntityCollision(final BlockState state, final World world, final BlockPos pos, final Entity entity) {
-		final PlayerEntity clientPlayer = DistExecutor.callWhenOn(Dist.CLIENT, () -> () -> Minecraft.getInstance().player);
+		final PlayerEntity clientPlayer = ClientUtil.getClientPlayer();
 
 		if (world.isRemote && entity == clientPlayer) {
 			if (MathHelper.epsilonEquals(Math.abs(entity.rotationPitch), 90.0f)) {
@@ -58,7 +59,9 @@ public class ClientPlayerRotationBlock extends StaticPressurePlateBlock {
 				LOGGER.info("Switching pitch direction! Now pitching {}.", isPitchingUp ? "up" : "down");
 			}
 
-			DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> entity.rotateTowards(ROTATION_YAW, isPitchingUp ? ROTATION_PITCH : -ROTATION_PITCH));
+			DistExecutor.runWhenOn(Dist.CLIENT, () -> ClientOnlyBlockMethods.rotateEntityTowards(entity, ROTATION_YAW, isPitchingUp ? ROTATION_PITCH : -ROTATION_PITCH));
 		}
 	}
+
+
 }
