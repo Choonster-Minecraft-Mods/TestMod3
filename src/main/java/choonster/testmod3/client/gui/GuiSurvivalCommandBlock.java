@@ -4,10 +4,10 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.network.SaveSurvivalCommandBlockMessage;
 import choonster.testmod3.tileentity.SurvivalCommandBlockLogic;
 import choonster.testmod3.tileentity.SurvivalCommandBlockTileEntity;
-import choonster.testmod3.util.ReflectionUtil;
 import net.minecraft.client.gui.screen.CommandBlockScreen;
 import net.minecraft.tileentity.CommandBlockLogic;
 import net.minecraft.tileentity.CommandBlockTileEntity;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,9 +16,9 @@ import java.lang.reflect.Field;
 public class GuiSurvivalCommandBlock extends CommandBlockScreen {
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	private static final Field COMMAND_BLOCK_MODE = ReflectionUtil.findField(CommandBlockScreen.class, "field_184082_w" /* commandBlockMode */);
-	private static final Field CONDITIONAL = ReflectionUtil.findField(CommandBlockScreen.class, "field_184084_y" /* conditional */);
-	private static final Field AUTOMATIC = ReflectionUtil.findField(CommandBlockScreen.class, "field_184085_z" /* automatic */);
+	private static final Field COMMAND_BLOCK_MODE = ObfuscationReflectionHelper.findField(CommandBlockScreen.class, "field_184082_w");
+	private static final Field CONDITIONAL = ObfuscationReflectionHelper.findField(CommandBlockScreen.class, "field_184084_y");
+	private static final Field AUTOMATIC = ObfuscationReflectionHelper.findField(CommandBlockScreen.class, "field_184085_z");
 
 	private final SurvivalCommandBlockLogic survivalCommandBlockLogic;
 

@@ -1,11 +1,11 @@
 package choonster.testmod3.capability.lock.wrapper;
 
 import choonster.testmod3.api.capability.lock.ILock;
-import choonster.testmod3.util.ReflectionUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.LockCode;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
@@ -16,7 +16,7 @@ import java.lang.reflect.Field;
  * @author Choonster
  */
 public class LockableTileEntityWrapper implements ILock {
-	private static final Field CODE = ReflectionUtil.findField(LockableTileEntity.class, "field_174901_a" /* code */);
+	private static final Field CODE = ObfuscationReflectionHelper.findField(LockableTileEntity.class, "field_174901_a");
 
 	private final LockableTileEntity lockableTileEntity;
 
