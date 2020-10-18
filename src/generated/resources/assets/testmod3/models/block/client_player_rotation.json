@@ -1,6 +1,6 @@
 {
   "parent": "testmod3:block/pressure_plate_down_with_transforms",
   "textures": {
-    "texture": "block/gold_block"
+    "texture": "minecraft:block/gold_block"
   }
 }

@@ -2,6 +2,6 @@
   "parent": "testmod3:block/template_chest",
   "textures": {
     "chest": "testmod3:block/chest/wood",
-    "particle": "block/oak_planks"
+    "particle": "minecraft:block/oak_planks"
   }
 }

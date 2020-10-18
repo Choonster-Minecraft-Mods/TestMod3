@@ -1,5 +1,5 @@
 {
-  "parent": "block/orientable",
+  "parent": "minecraft:block/orientable",
   "textures": {
     "side": "testmod3:block/colored_rotatable/light_gray",
     "front": "testmod3:block/colored_rotatable/light_gray_front_multi",

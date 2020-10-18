@@ -1,5 +1,5 @@
 {
-  "parent": "block/block",
+  "parent": "minecraft:block/block",
   "elements": [
     {
       "from": [
@@ -45,7 +45,7 @@
           0
         ],
         "axis": "x",
-        "angle": 0.0,
+        "angle": -45.0,
         "rescale": true
       },
       "faces": {

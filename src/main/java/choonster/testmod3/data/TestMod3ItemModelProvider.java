@@ -3,11 +3,8 @@ package choonster.testmod3.data;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.client.item.RevealHiddenBlocksItemPropertyGetter;
 import choonster.testmod3.client.item.TicksSinceLastUseItemPropertyGetter;
-import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.init.ModItems;
 import com.google.common.base.Preconditions;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -18,7 +15,6 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelBuilder.Perspective;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fml.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
@@ -67,18 +63,6 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 					.end()
 	);
 
-	/**
-	 * Inventory model for pipe blocks.
-	 */
-	private final LazyValue<ModelFile> pipeInventory = new LazyValue<>(() ->
-			withExistingParent("item/pipe/inventory", "block/block")
-					.texture("particle", "#all")
-					.element()
-					.from(4, 4, 0) // TODO: Confirm that these are correct
-					.to(12, 12, 16)
-					.allFaces((direction, faceBuilder) -> faceBuilder.texture("#all"))
-					.end()
-	);
 
 	public TestMod3ItemModelProvider(final DataGenerator generator, final ExistingFileHelper existingFileHelper) {
 		super(generator, TestMod3.MODID, existingFileHelper);
@@ -94,11 +78,6 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 	@Override
 	protected void registerModels() {
-		registerItemModels();
-		registerBlockItemModels();
-	}
-
-	private void registerItemModels() {
 		withExistingParent(ModItems.WOODEN_AXE, Items.WOODEN_AXE);
 
 		withExistingParent(ModItems.ENTITY_TEST, Items.PORKCHOP);
@@ -127,13 +106,13 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 					return Pair.of(index, model);
 				})
-				.forEachOrdered(child -> {
-					modelTest
-							.override()
-							.predicate(TicksSinceLastUseItemPropertyGetter.ID, child.getKey() * 20)
-							.model(child.getValue())
-							.end();
-				});
+				.forEachOrdered(child ->
+						modelTest
+								.override()
+								.predicate(TicksSinceLastUseItemPropertyGetter.ID, child.getKey() * 20)
+								.model(child.getValue())
+								.end()
+				);
 
 		// Add the parent as a fallback that displays when the ticks since last use is >= 60
 		modelTest
@@ -248,7 +227,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 		withGeneratedParentAndDefaultTexture(ModItems.CHUNK_ENERGY_DISPLAY);
 
-		withExistingParent(name(ModItems.BEACON_ITEM), mcLoc("block/beacon"));
+		withExistingParent(ModItems.BEACON_ITEM, Items.BEACON);
 
 		withExistingParent(ModItems.SATURATION_HELMET, Items.CHAINMAIL_HELMET);
 
@@ -269,123 +248,18 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 				.forEach(this::withGeneratedParentAndDefaultTexture);
 	}
 
-	private void registerBlockItemModels() {
-		blockItem(ModBlocks.WATER_GRASS);
-
-		blockItem(ModBlocks.LARGE_COLLISION_TEST);
-
-		withExistingParent(name(ModBlocks.RIGHT_CLICK_TEST), modLoc("block/" + name(ModBlocks.RIGHT_CLICK_TEST) + "_without_ender_eye"));
-
-		blockItem(ModBlocks.CLIENT_PLAYER_RIGHT_CLICK);
-
-		withExistingParent(name(ModBlocks.ROTATABLE_LAMP), modLoc("block/" + name(ModBlocks.ROTATABLE_LAMP) + "_off"));
-
-		blockItem(ModBlocks.ITEM_COLLISION_TEST);
-
-		blockItem(ModBlocks.FLUID_TANK);
-
-		blockItem(ModBlocks.ITEM_DEBUGGER);
-
-		blockItem(ModBlocks.END_PORTAL_FRAME_FULL);
-
-		blockItem(ModBlocks.POTION_EFFECT);
-
-		blockItem(ModBlocks.CLIENT_PLAYER_ROTATION);
-
-		blockItem(ModBlocks.PIG_SPAWNER_REFILLER);
-
-		withExistingParent(name(ModBlocks.MIRROR_PLANE), modLoc("block/" + name(ModBlocks.MIRROR_PLANE.get().asItem()) + "_t"));
-
-		blockItem(ModBlocks.VANILLA_MODEL_TEST);
-
-		blockItem(ModBlocks.FULLBRIGHT);
-
-		blockItem(ModBlocks.NORMAL_BRIGHTNESS);
-
-		blockItem(ModBlocks.MAX_HEALTH_SETTER);
-
-		blockItem(ModBlocks.MAX_HEALTH_GETTER);
-
-		blockItem(ModBlocks.SMALL_COLLISION_TEST);
-
-		blockItem(ModBlocks.CHEST);
-
-		blockItem(ModBlocks.HIDDEN);
-
-		pipeBlockItem(ModBlocks.BASIC_PIPE, blockTexture(Blocks.BRICKS));
-
-		pipeBlockItem(ModBlocks.FLUID_PIPE, blockTexture(Blocks.GLASS));
-
-		blockItem(ModBlocks.SURVIVAL_COMMAND_BLOCK);
-
-		blockItem(ModBlocks.REPEATING_SURVIVAL_COMMAND_BLOCK);
-
-		blockItem(ModBlocks.CHAIN_SURVIVAL_COMMAND_BLOCK);
-
-		withExistingParent(ModBlocks.OAK_SAPLING.get().asItem(), Blocks.OAK_SAPLING.asItem());
-
-		withExistingParent(ModBlocks.SPRUCE_SAPLING.get().asItem(), Blocks.SPRUCE_SAPLING.asItem());
-
-		withExistingParent(ModBlocks.BIRCH_SAPLING.get().asItem(), Blocks.BIRCH_SAPLING.asItem());
-
-		withExistingParent(ModBlocks.JUNGLE_SAPLING.get().asItem(), Blocks.JUNGLE_SAPLING.asItem());
-
-		withExistingParent(ModBlocks.ACACIA_SAPLING.get().asItem(), Blocks.ACACIA_SAPLING.asItem());
-
-		withExistingParent(ModBlocks.DARK_OAK_SAPLING.get().asItem(), Blocks.DARK_OAK_SAPLING.asItem());
-
-		blockItem(ModBlocks.INVISIBLE);
-
-		blockItem(ModBlocks.FLUID_TANK_RESTRICTED);
-
-		blockItem(ModBlocks.PLANKS);
-
-
-		ModBlocks.VariantGroups.COLORED_ROTATABLE_BLOCKS
-				.getBlocks()
-				.forEach(block -> withExistingParent(name(block), modLoc("block/colored_rotatable/" + name(block))));
-
-		ModBlocks.VariantGroups.COLORED_MULTI_ROTATABLE_BLOCKS
-				.getBlocks()
-				.forEach(block -> withExistingParent(name(block), modLoc("block/colored_rotatable/" + name(block))));
-
-		ModBlocks.VariantGroups.VARIANTS_BLOCKS
-				.getBlocks()
-				.forEach(this::blockItem);
-
-		ModBlocks.VariantGroups.TERRACOTTA_SLABS
-				.getBlocks()
-				.forEach(this::blockItem);
-	}
 
 	private ResourceLocation registryName(final Item item) {
 		return Preconditions.checkNotNull(item.getRegistryName(), "Item %s has a null registry name", item);
-	}
-
-	private ResourceLocation registryName(final Block block) {
-		return Preconditions.checkNotNull(block.getRegistryName(), "Block %s has a null registry name", block);
-	}
-
-	private Item getBlockItem(final RegistryObject<? extends Block> block) {
-		return Preconditions.checkNotNull(block.get().asItem(), "Block %s has no item", block);
 	}
 
 	private String name(final Item item) {
 		return registryName(item).getPath();
 	}
 
-	private String name(final RegistryObject<? extends Block> block) {
-		return name(getBlockItem(block));
-	}
-
 	private ResourceLocation itemTexture(final Item item) {
 		final ResourceLocation name = registryName(item);
 		return new ResourceLocation(name.getNamespace(), ITEM_FOLDER + "/" + name.getPath());
-	}
-
-	private ResourceLocation blockTexture(final Block block) {
-		final ResourceLocation name = registryName(block);
-		return new ResourceLocation(name.getNamespace(), BLOCK_FOLDER + "/" + name.getPath());
 	}
 
 	private ItemModelBuilder withExistingParent(final Item item, final Item modelItem) {
@@ -450,17 +324,5 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 				.predicate(mcLoc("pull"), 0.9f)
 				.model(bowPullingModels.get(2))
 				.end();
-	}
-
-	private void blockItem(final RegistryObject<? extends Block> block) {
-		final Item item = getBlockItem(block);
-
-		withExistingParent(name(item), modLoc("block/" + name(item)));
-	}
-
-	private void pipeBlockItem(final RegistryObject<? extends Block> block, final ResourceLocation texture) {
-		getBuilder(name(block))
-				.parent(pipeInventory.getValue())
-				.texture("all", texture);
 	}
 }

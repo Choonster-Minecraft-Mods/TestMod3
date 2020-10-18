@@ -1,6 +1,6 @@
 {
   "parent": "testmod3:item/pipe/inventory",
   "textures": {
-    "all": "block/bricks"
+    "all": "minecraft:block/bricks"
   }
 }

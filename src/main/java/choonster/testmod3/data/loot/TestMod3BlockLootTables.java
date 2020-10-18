@@ -79,19 +79,19 @@ public class TestMod3BlockLootTables extends BlockLootTables {
 		registerDropSelfLootTable(ModBlocks.FLUID_TANK_RESTRICTED);
 		registerDropSelfLootTable(ModBlocks.PLANKS);
 
-		ModBlocks.VariantGroups.COLORED_ROTATABLE_BLOCKS
+		ModBlocks.COLORED_ROTATABLE_BLOCKS
 				.getBlocks()
 				.forEach(this::registerDropSelfLootTable);
 
-		ModBlocks.VariantGroups.COLORED_MULTI_ROTATABLE_BLOCKS
+		ModBlocks.COLORED_MULTI_ROTATABLE_BLOCKS
 				.getBlocks()
 				.forEach(this::registerDropSelfLootTable);
 
-		ModBlocks.VariantGroups.VARIANTS_BLOCKS
+		ModBlocks.VARIANTS_BLOCKS
 				.getBlocks()
 				.forEach(this::registerDropSelfLootTable);
 
-		ModBlocks.VariantGroups.TERRACOTTA_SLABS
+		ModBlocks.TERRACOTTA_SLABS
 				.getBlocks()
 				.forEach(slab -> registerLootTable(slab, BlockLootTables::droppingSlab));
 	}

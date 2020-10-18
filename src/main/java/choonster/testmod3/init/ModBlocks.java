@@ -174,36 +174,35 @@ public class ModBlocks {
 			() -> new Block(Block.Properties.create(Material.WOOD))
 	);
 
-	public static class VariantGroups {
-		public static final BlockVariantGroup<DyeColor, ColoredRotatableBlock> COLORED_ROTATABLE_BLOCKS = BlockVariantGroup.Builder.<DyeColor, ColoredRotatableBlock>create(BLOCKS, ITEMS)
-				.groupName("rotatable_block")
-				.variants(DyeColor.values())
-				.blockPropertiesFactory(color -> Block.Properties.create(Material.WOOL, color))
-				.blockFactory(ColoredRotatableBlock::new)
-				.build();
 
-		public static final BlockVariantGroup<DyeColor, ColoredMultiRotatableBlock> COLORED_MULTI_ROTATABLE_BLOCKS = BlockVariantGroup.Builder.<DyeColor, ColoredMultiRotatableBlock>create(BLOCKS, ITEMS)
-				.groupName("multi_rotatable_block")
-				.variants(DyeColor.values())
-				.blockPropertiesFactory(color -> Block.Properties.create(Material.WOOL, color))
-				.blockFactory(ColoredMultiRotatableBlock::new)
-				.build();
+	public static final BlockVariantGroup<DyeColor, ColoredRotatableBlock> COLORED_ROTATABLE_BLOCKS = BlockVariantGroup.Builder.<DyeColor, ColoredRotatableBlock>create(BLOCKS, ITEMS)
+			.groupName("rotatable_block")
+			.variants(DyeColor.values())
+			.blockPropertiesFactory(color -> Block.Properties.create(Material.WOOL, color))
+			.blockFactory(ColoredRotatableBlock::new)
+			.build();
 
-		public static final BlockVariantGroup<VariantsBlock.EnumType, VariantsBlock> VARIANTS_BLOCKS = BlockVariantGroup.Builder.<VariantsBlock.EnumType, VariantsBlock>create(BLOCKS, ITEMS)
-				.groupName("variants_block")
-				.suffix()
-				.variants(VariantsBlock.EnumType.values())
-				.blockPropertiesFactory(type -> Block.Properties.create(Material.IRON))
-				.blockFactory(VariantsBlock::new)
-				.build();
+	public static final BlockVariantGroup<DyeColor, ColoredMultiRotatableBlock> COLORED_MULTI_ROTATABLE_BLOCKS = BlockVariantGroup.Builder.<DyeColor, ColoredMultiRotatableBlock>create(BLOCKS, ITEMS)
+			.groupName("multi_rotatable_block")
+			.variants(DyeColor.values())
+			.blockPropertiesFactory(color -> Block.Properties.create(Material.WOOL, color))
+			.blockFactory(ColoredMultiRotatableBlock::new)
+			.build();
 
-		public static final BlockVariantGroup<DyeColor, ColouredSlabBlock> TERRACOTTA_SLABS = BlockVariantGroup.Builder.<DyeColor, ColouredSlabBlock>create(BLOCKS, ITEMS)
-				.groupName("terracotta_slab")
-				.variants(DyeColor.values())
-				.blockPropertiesFactory(color -> Block.Properties.create(Material.ROCK, color))
-				.blockFactory(ColouredSlabBlock::new)
-				.build();
-	}
+	public static final BlockVariantGroup<VariantsBlock.EnumType, VariantsBlock> VARIANTS_BLOCKS = BlockVariantGroup.Builder.<VariantsBlock.EnumType, VariantsBlock>create(BLOCKS, ITEMS)
+			.groupName("variants_block")
+			.suffix()
+			.variants(VariantsBlock.EnumType.values())
+			.blockPropertiesFactory(type -> Block.Properties.create(Material.IRON))
+			.blockFactory(VariantsBlock::new)
+			.build();
+
+	public static final BlockVariantGroup<DyeColor, ColouredSlabBlock> TERRACOTTA_SLABS = BlockVariantGroup.Builder.<DyeColor, ColouredSlabBlock>create(BLOCKS, ITEMS)
+			.groupName("terracotta_slab")
+			.variants(DyeColor.values())
+			.blockPropertiesFactory(color -> Block.Properties.create(Material.ROCK, color))
+			.blockFactory(ColouredSlabBlock::new)
+			.build();
 
 	/**
 	 * Registers the {@link DeferredRegister} instances with the mod event bus.

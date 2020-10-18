@@ -1,6 +1,6 @@
 {
   "parent": "testmod3:item/pipe/inventory",
   "textures": {
-    "all": "block/glass"
+    "all": "minecraft:block/glass"
   }
 }

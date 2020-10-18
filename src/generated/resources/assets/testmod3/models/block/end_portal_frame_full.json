@@ -1,8 +1,8 @@
 {
-  "parent": "block/cube_bottom_top",
+  "parent": "minecraft:block/cube_bottom_top",
   "textures": {
     "side": "testmod3:block/end_portal_side_full",
-    "bottom": "block/end_stone",
-    "top": "block/end_portal_frame_top"
+    "bottom": "minecraft:block/end_stone",
+    "top": "minecraft:block/end_portal_frame_top"
   }
 }

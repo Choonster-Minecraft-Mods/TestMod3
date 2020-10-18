@@ -1,8 +1,8 @@
 {
-  "parent": "block/orientable",
+  "parent": "minecraft:block/orientable",
   "textures": {
-    "side": "block/redstone_lamp",
+    "side": "minecraft:block/redstone_lamp",
     "front": "testmod3:block/rotatable_lamp_off",
-    "top": "block/redstone_lamp"
+    "top": "minecraft:block/redstone_lamp"
   }
 }
