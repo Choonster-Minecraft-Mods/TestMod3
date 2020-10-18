@@ -36,7 +36,7 @@ public class ModChestTileEntity extends LootItemHandlerTileEntity implements ICo
 	private static final ITextComponent DEFAULT_NAME = new TranslationTextComponent("container.testmod3.chest");
 
 	public ModChestTileEntity() {
-		super(ModTileEntities.MOD_CHEST);
+		super(ModTileEntities.MOD_CHEST.get());
 	}
 
 	/**

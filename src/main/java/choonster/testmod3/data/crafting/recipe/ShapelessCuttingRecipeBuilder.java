@@ -96,7 +96,7 @@ public class ShapelessCuttingRecipeBuilder extends ShapelessRecipeBuilder {
 
 		@Override
 		public IRecipeSerializer<?> getSerializer() {
-			return ModCrafting.Recipes.CUTTING_SHAPELESS;
+			return ModCrafting.Recipes.CUTTING_SHAPELESS.get();
 		}
 	}
 }

@@ -58,7 +58,7 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 
 	@Override
 	public IRecipeSerializer<?> getSerializer() {
-		return ModCrafting.Recipes.CUTTING_SHAPELESS;
+		return ModCrafting.Recipes.CUTTING_SHAPELESS.get();
 	}
 
 	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<ShapelessCuttingRecipe> {

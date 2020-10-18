@@ -54,7 +54,7 @@ public class ModChestContainer extends Container {
 	}
 
 	public ModChestContainer(final int windowID, final PlayerInventory playerInventory, final INameableItemHandler chestInventory, final IContainerCallbacks containerCallbacks) {
-		super(ModContainerTypes.CHEST, windowID);
+		super(ModContainerTypes.CHEST.get(), windowID);
 		this.playerInventory = new NameableCombinedInvWrapper(playerInventory, new PlayerMainInvWrapper(playerInventory));
 		this.chestInventory = chestInventory;
 

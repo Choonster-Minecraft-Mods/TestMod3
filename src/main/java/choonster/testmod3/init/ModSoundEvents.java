@@ -13,7 +13,6 @@ import net.minecraftforge.registries.ForgeRegistries;
  *
  * @author Choonster
  */
-@SuppressWarnings("WeakerAccess")
 public class ModSoundEvents {
 	private static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, TestMod3.MODID);
 

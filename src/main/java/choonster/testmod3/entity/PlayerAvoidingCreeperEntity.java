@@ -27,7 +27,7 @@ public class PlayerAvoidingCreeperEntity extends CreeperEntity {
 
 	@Override
 	public EntityType<?> getType() {
-		return ModEntities.PLAYER_AVOIDING_CREEPER;
+		return ModEntities.PLAYER_AVOIDING_CREEPER.get();
 	}
 
 	@Override

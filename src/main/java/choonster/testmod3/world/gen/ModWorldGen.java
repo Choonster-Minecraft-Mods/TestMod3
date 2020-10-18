@@ -40,9 +40,9 @@ public class ModWorldGen {
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.OVERWORLD)) {
 			generation.getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES)
 					.add(() ->
-							ModFeatures.BANNER
+							ModFeatures.BANNER.get()
 									.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
-									.withPlacement(ModPlacements.AT_SURFACE_IN_CHUNKS_DIVISIBLE_BY_16.configure(new FeatureSpreadConfig(1)))
+									.withPlacement(ModPlacements.AT_SURFACE_IN_CHUNKS_DIVISIBLE_BY_16.get().configure(new FeatureSpreadConfig(1)))
 					);
 		}
 
@@ -57,7 +57,6 @@ public class ModWorldGen {
 		}
 
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.END)) {
-			// TODO: End Oregen
 			generation.getFeatures(GenerationStage.Decoration.UNDERGROUND_ORES)
 					.add(() -> Feature.ORE
 							.withConfiguration(new OreFeatureConfig(FillerBlockType.END_STONE, Blocks.IRON_ORE.getDefaultState(), 20))

@@ -1,100 +1,100 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import com.google.common.base.Preconditions;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-
-import static choonster.testmod3.util.InjectionUtil.Null;
+import java.util.function.Supplier;
 
 /**
  * Registers this mod's {@link Potion}s.
  *
  * @author Choonster
  */
-@SuppressWarnings("WeakerAccess")
-@ObjectHolder(TestMod3.MODID)
 public class ModPotions {
+	private static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTION_TYPES, TestMod3.MODID);
 
-	public static final Potion TEST = Null();
+	private static boolean isInitialised;
 
-	public static final Potion LONG_TEST = Null();
+	private static final String LONG_PREFIX = "long_";
+	private static final String STRONG_PREFIX = "strong_";
 
-	public static final Potion STRONG_TEST = Null();
+	private static final int HELPFUL_DURATION_STANDARD = 3600;
+	private static final int HELPFUL_DURATION_LONG = 9600;
+	private static final int HELPFUL_DURATION_STRONG = 1800;
 
-	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
-	public static class RegistrationHandler {
-		/**
-		 * Register this mod's {@link Potion}s.
-		 *
-		 * @param event The event
-		 */
-		@SubscribeEvent
-		public static void registerPotionTypes(final RegistryEvent.Register<Potion> event) {
-			final String LONG_PREFIX = "long_";
-			final String STRONG_PREFIX = "strong_";
+	private static final int HARMFUL_DURATION_STANDARD = 1800;
+	private static final int HARMFUL_DURATION_LONG = 4800;
+	private static final int HARMFUL_DURATION_STRONG = 900;
 
-			final int HELPFUL_DURATION_STANDARD = 3600;
-			final int HELPFUL_DURATION_LONG = 9600;
-			final int HELPFUL_DURATION_STRONG = 1800;
+	public static final RegistryObject<Potion> TEST = registerPotion("test",
+			() -> new EffectInstance(ModEffects.TEST.get(), HELPFUL_DURATION_STANDARD)
+	);
 
-			final int HARMFUL_DURATION_STANDARD = 1800;
-			final int HARMFUL_DURATION_LONG = 4800;
-			final int HARMFUL_DURATION_STRONG = 900;
+	public static final RegistryObject<Potion> LONG_TEST = registerPotion("test",
+			() -> new EffectInstance(ModEffects.TEST.get(), HELPFUL_DURATION_LONG),
+			LONG_PREFIX
+	);
 
-			final Potion[] potions = new Potion[]{
-					createPotion(new EffectInstance(ModEffects.TEST, HELPFUL_DURATION_STANDARD)),
-					createPotion(new EffectInstance(ModEffects.TEST, HELPFUL_DURATION_LONG), LONG_PREFIX),
-					createPotion(new EffectInstance(ModEffects.TEST, HELPFUL_DURATION_STRONG, 1), STRONG_PREFIX),
-			};
+	public static final RegistryObject<Potion> STRONG_TEST = registerPotion("test",
+			() -> new EffectInstance(ModEffects.TEST.get(), HELPFUL_DURATION_STRONG, 1),
+			STRONG_PREFIX
+	);
 
-			event.getRegistry().registerAll(potions);
+	/**
+	 * Registers the {@link DeferredRegister} instance with the mod event bus.
+	 * <p>
+	 * This should be called during mod construction.
+	 *
+	 * @param modEventBus The mod event bus
+	 */
+	public static void initialise(final IEventBus modEventBus) {
+		if (isInitialised) {
+			throw new IllegalStateException("Already initialised");
 		}
 
-		/**
-		 * Create a {@link Potion} from the specified {@link EffectInstance}.
-		 * <p>
-		 * Uses the {@link Effect}'s registry name as the {@link Potion}'s registry name and base name.
-		 *
-		 * @param effectInstance The effect instance
-		 * @return The potion
-		 */
-		private static Potion createPotion(final EffectInstance effectInstance) {
-			return createPotion(effectInstance, null);
-		}
+		POTIONS.register(modEventBus);
 
-		/**
-		 * Create a {@link Potion} from the specified {@link EffectInstance}
-		 * <p>
-		 * Uses the {@link Effect}'s registry name as the {@link Potion}'s registry name (with an optional prefix) and base name (with no prefix).
-		 *
-		 * @param effectInstance The effect instance
-		 * @param namePrefix     The name prefix, if any
-		 * @return The PotionType
-		 */
-		private static Potion createPotion(final EffectInstance effectInstance, @Nullable final String namePrefix) {
-			final ResourceLocation effectName = Preconditions.checkNotNull(effectInstance.getPotion().getRegistryName());
+		isInitialised = true;
+	}
 
-			final ResourceLocation potionName;
-			if (namePrefix != null) {
-				potionName = new ResourceLocation(effectName.getNamespace(), namePrefix + effectName.getPath());
-			} else {
-				potionName = effectName;
-			}
+	/**
+	 * Registers a {@link Potion} from the specified {@link EffectInstance}.
+	 * <p>
+	 * Uses the specified name as the {@link Potion}'s registry name and base name.
+	 *
+	 * @param name                  The base name of the potion
+	 * @param effectInstanceFactory The factory used to create the potion's effect instance
+	 * @return A RegistryObject reference to the potion
+	 */
+	private static RegistryObject<Potion> registerPotion(final String name, final Supplier<EffectInstance> effectInstanceFactory) {
+		return registerPotion(name, effectInstanceFactory, null);
+	}
 
+	/**
+	 * Registers a {@link Potion} from the specified {@link EffectInstance}
+	 * <p>
+	 * Uses the {@link Effect}'s registry name as the {@link Potion}'s registry name (with an optional prefix) and base name (with no prefix).
+	 *
+	 * @param name                  The base name of the potion
+	 * @param effectInstanceFactory The factory used to create the potion's effect instance
+	 * @param namePrefix            The name prefix, if any
+	 * @return The PotionType
+	 */
+	private static RegistryObject<Potion> registerPotion(final String name, final Supplier<EffectInstance> effectInstanceFactory, @Nullable final String namePrefix) {
+		final String fullName = namePrefix != null ? namePrefix + name : name;
+
+		return POTIONS.register(fullName, () -> {
 			// Based on net.minecraft.util.Util.makeTranslationKey. This ensures that the base name is valid in ResourceLocation paths.
-			final String potionBaseName = effectName.getNamespace() + "." + effectName.getPath().replace('/', '.');
+			final String potionBaseName = TestMod3.MODID + "." + name.replace('/', '.');
 
-			return new Potion(potionBaseName, effectInstance).setRegistryName(potionName);
-		}
+			return new Potion(potionBaseName, effectInstanceFactory.get());
+		});
 	}
 }

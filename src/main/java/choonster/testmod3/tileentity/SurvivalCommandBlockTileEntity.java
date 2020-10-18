@@ -80,7 +80,7 @@ public class SurvivalCommandBlockTileEntity extends CommandBlockTileEntity {
 
 	@Override
 	public TileEntityType<?> getType() {
-		return ModTileEntities.SURVIVAL_COMMAND_BLOCK;
+		return ModTileEntities.SURVIVAL_COMMAND_BLOCK.get();
 	}
 
 	@Override

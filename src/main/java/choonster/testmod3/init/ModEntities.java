@@ -13,78 +13,66 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ObjectHolder;
 
 import java.util.List;
+import java.util.function.Supplier;
 
-import static choonster.testmod3.util.InjectionUtil.Null;
-
-@ObjectHolder(TestMod3.MODID)
 public class ModEntities {
-	public static final EntityType<ModArrowEntity> MOD_ARROW = Null();
+	private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, TestMod3.MODID);
 
-	public static final EntityType<BlockDetectionArrowEntity> BLOCK_DETECTION_ARROW = Null();
+	private static boolean isInitialised;
 
-	public static final EntityType<PlayerAvoidingCreeperEntity> PLAYER_AVOIDING_CREEPER = Null();
-	
-	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
-	public static class RegistrationHandler {
-		/**
-		 * Register this mod's {@link Entity} types.
-		 *
-		 * @param event The event
-		 */
-		@SubscribeEvent
-		public static void registerEntities(final RegistryEvent.Register<EntityType<?>> event) {
-			final EntityType<ModArrowEntity> modArrow = build(
-					"mod_arrow",
-					EntityType.Builder.<ModArrowEntity>create((ModArrowEntity::new), EntityClassification.MISC)
-							.size(0.5f, 0.5f)
-			);
+	public static final RegistryObject<EntityType<ModArrowEntity>> MOD_ARROW = registerEntityType("mod_arrow",
+			() -> EntityType.Builder.<ModArrowEntity>create((ModArrowEntity::new), EntityClassification.MISC)
+					.size(0.5f, 0.5f)
+	);
 
-			final EntityType<BlockDetectionArrowEntity> blockDetectionArrow = build(
-					"block_detection_arrow",
-					EntityType.Builder.<BlockDetectionArrowEntity>create(BlockDetectionArrowEntity::new, EntityClassification.MISC)
-							.size(0.5f, 0.5f)
+	public static final RegistryObject<EntityType<BlockDetectionArrowEntity>> BLOCK_DETECTION_ARROW = registerEntityType("block_detection_arrow",
+			() -> EntityType.Builder.<BlockDetectionArrowEntity>create(BlockDetectionArrowEntity::new, EntityClassification.MISC)
+					.size(0.5f, 0.5f)
+	);
 
-			);
-			final EntityType<PlayerAvoidingCreeperEntity> playerAvoidingCreeper = build(
-					"player_avoiding_creeper",
-					EntityType.Builder.create(PlayerAvoidingCreeperEntity::new, EntityClassification.MONSTER)
-							.size(0.6f, 1.7f)
-			);
+	public static final RegistryObject<EntityType<PlayerAvoidingCreeperEntity>> PLAYER_AVOIDING_CREEPER = registerEntityType("player_avoiding_creeper",
+			() -> EntityType.Builder.create(PlayerAvoidingCreeperEntity::new, EntityClassification.MONSTER)
+					.size(0.6f, 1.7f)
+	);
 
-			event.getRegistry().registerAll(
-					modArrow,
-					blockDetectionArrow,
-					playerAvoidingCreeper
-			);
+	/**
+	 * Registers the {@link DeferredRegister} instance with the mod event bus.
+	 * <p>
+	 * This should be called during mod construction.
+	 *
+	 * @param modEventBus The mod event bus
+	 */
+	public static void initialise(final IEventBus modEventBus) {
+		if (isInitialised) {
+			throw new IllegalStateException("Already initialised");
 		}
 
-		/**
-		 * Build an {@link EntityType} from a {@link EntityType.Builder} using the specified name.
-		 *
-		 * @param name    The entity type name
-		 * @param builder The entity type builder to build
-		 * @return The built entity type
-		 */
-		private static <T extends Entity> EntityType<T> build(final String name, final EntityType.Builder<T> builder) {
-			final ResourceLocation registryName = new ResourceLocation(TestMod3.MODID, name);
+		ENTITIES.register(modEventBus);
 
-			final EntityType<T> entityType = builder
-					.build(registryName.toString());
+		isInitialised = true;
+	}
 
-			entityType.setRegistryName(registryName);
-
-			return entityType;
-		}
+	/**
+	 * Registers an entity type.
+	 *
+	 * @param name    The registry name of the entity type
+	 * @param factory The factory used to create the entity type builder
+	 * @return A RegistryObject reference to the entity type
+	 */
+	private static <T extends Entity> RegistryObject<EntityType<T>> registerEntityType(final String name, final Supplier<EntityType.Builder<T>> factory) {
+		return ENTITIES.register(name,
+				() -> factory.get().build(new ResourceLocation(TestMod3.MODID, name).toString())
+		);
 	}
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
@@ -97,7 +85,7 @@ public class ModEntities {
 				addSpawn(event, EntityType.GUARDIAN, 100, 5, 20, EntityClassification.WATER_CREATURE);
 			}
 
-			copySpawns(event, PLAYER_AVOIDING_CREEPER, EntityClassification.MONSTER, EntityType.CREEPER, EntityClassification.MONSTER);
+			copySpawns(event, PLAYER_AVOIDING_CREEPER.get(), EntityClassification.MONSTER, EntityType.CREEPER, EntityClassification.MONSTER);
 		}
 
 		/**

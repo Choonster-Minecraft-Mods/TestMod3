@@ -13,7 +13,7 @@ public class FluidTankTileEntity extends BaseFluidTankTileEntity {
 	public static final int CAPACITY = 10 * FluidAttributes.BUCKET_VOLUME;
 
 	public FluidTankTileEntity() {
-		super(ModTileEntities.FLUID_TANK);
+		super(ModTileEntities.FLUID_TANK.get());
 		tank = new FluidTank(CAPACITY);
 	}
 }

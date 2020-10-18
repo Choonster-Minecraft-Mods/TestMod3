@@ -4,29 +4,39 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.gen.placement.AtSurfaceInChunksDivisibleBy16;
 import net.minecraft.world.gen.feature.FeatureSpreadConfig;
 import net.minecraft.world.gen.placement.Placement;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ObjectHolder;
-
-import static choonster.testmod3.util.InjectionUtil.Null;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * Registers this mod's {@link Placement}s.
  *
  * @author Choonster
  */
-@ObjectHolder(TestMod3.MODID)
 public class ModPlacements {
-	public static final Placement<FeatureSpreadConfig> AT_SURFACE_IN_CHUNKS_DIVISIBLE_BY_16 = Null();
+	private static final DeferredRegister<Placement<?>> PLACEMENTS = DeferredRegister.create(ForgeRegistries.DECORATORS, TestMod3.MODID);
 
-	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-	public static class RegistrationHandler {
-		@SubscribeEvent
-		public static void registerPlacements(final RegistryEvent.Register<Placement<?>> event) {
-			event.getRegistry().registerAll(
-					new AtSurfaceInChunksDivisibleBy16(FeatureSpreadConfig.field_242797_a).setRegistryName("at_surface_in_surface_world_chunks_divisible_by_16")
-			);
+	private static boolean isInitialised;
+
+	public static final RegistryObject<AtSurfaceInChunksDivisibleBy16> AT_SURFACE_IN_CHUNKS_DIVISIBLE_BY_16 = PLACEMENTS.register("at_surface_in_chunks_divisible_by_16",
+			() -> new AtSurfaceInChunksDivisibleBy16(FeatureSpreadConfig.field_242797_a)
+	);
+
+	/**
+	 * Registers the {@link DeferredRegister} instance with the mod event bus.
+	 * <p>
+	 * This should be called during mod construction.
+	 *
+	 * @param modEventBus The mod event bus
+	 */
+	public static void initialise(final IEventBus modEventBus) {
+		if (isInitialised) {
+			throw new IllegalStateException("Already initialised");
 		}
+
+		PLACEMENTS.register(modEventBus);
+
+		isInitialised = true;
 	}
 }

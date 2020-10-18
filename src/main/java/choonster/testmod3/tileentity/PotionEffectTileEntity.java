@@ -23,7 +23,7 @@ public class PotionEffectTileEntity extends TileEntity implements ITickableTileE
 	private static final int RADIUS = 2;
 
 	public PotionEffectTileEntity() {
-		super(ModTileEntities.POTION_EFFECT);
+		super(ModTileEntities.POTION_EFFECT.get());
 	}
 
 	@Override

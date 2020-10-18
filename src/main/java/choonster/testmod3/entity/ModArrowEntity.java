@@ -28,7 +28,7 @@ public class ModArrowEntity extends ArrowEntity {
 
 	@Override
 	public EntityType<?> getType() {
-		return ModEntities.MOD_ARROW;
+		return ModEntities.MOD_ARROW.get();
 	}
 
 	@Override

@@ -33,7 +33,7 @@ public class BlockDetectionArrowEntity extends ModArrowEntity {
 
 	@Override
 	public EntityType<?> getType() {
-		return ModEntities.BLOCK_DETECTION_ARROW;
+		return ModEntities.BLOCK_DETECTION_ARROW.get();
 	}
 
 	@Override

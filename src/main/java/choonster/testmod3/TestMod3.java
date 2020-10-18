@@ -37,7 +37,15 @@ public class TestMod3 {
 		ModFluids.initialise(modEventBus);
 		ModBlocks.initialise(modEventBus);
 		ModItems.initialise(modEventBus);
+		ModContainerTypes.initialise(modEventBus);
+		ModEffects.initialise(modEventBus);
+		ModEntities.initialise(modEventBus);
+		ModFeatures.initialise(modEventBus);
+		ModPlacements.initialise(modEventBus);
+		ModPotions.initialise(modEventBus);
+		ModCrafting.Recipes.initialise(modEventBus);
 		ModSoundEvents.initialise(modEventBus);
+		ModTileEntities.initialise(modEventBus);
 		ModTestRegistryEntries.initialise(modEventBus);
 
 		ModCrafting.Ingredients.register();

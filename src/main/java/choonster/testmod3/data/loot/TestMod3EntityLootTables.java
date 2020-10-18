@@ -22,7 +22,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class TestMod3EntityLootTables extends EntityLootTables {
 	@Override
 	protected void addTables() {
-		registerLootTable(ModEntities.PLAYER_AVOIDING_CREEPER,
+		registerLootTable(ModEntities.PLAYER_AVOIDING_CREEPER.get(),
 				LootTable.builder()
 						.addLootPool(
 								LootPool.builder()

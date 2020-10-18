@@ -13,7 +13,7 @@ import net.minecraft.tileentity.TileEntity;
  */
 public class HiddenTileEntity extends TileEntity implements ITickableTileEntity {
 	public HiddenTileEntity() {
-		super(ModTileEntities.HIDDEN);
+		super(ModTileEntities.HIDDEN.get());
 	}
 
 	@Override

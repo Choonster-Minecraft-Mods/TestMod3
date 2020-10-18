@@ -23,14 +23,16 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.common.crafting.NBTIngredient;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,8 +41,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.function.Predicate;
-
-import static choonster.testmod3.util.InjectionUtil.Null;
 
 /**
  * Manages this mod's recipes and ingredients and removes recipes.
@@ -60,7 +60,7 @@ public class ModCrafting {
 		 */
 		@SubscribeEvent
 		public static void registerBrewingRecipes(final FMLCommonSetupEvent event) {
-			addStandardConversionRecipes(ModPotions.TEST, ModPotions.LONG_TEST, ModPotions.STRONG_TEST, ModItems.ARROW.get());
+			addStandardConversionRecipes(ModPotions.TEST.get(), ModPotions.LONG_TEST.get(), ModPotions.STRONG_TEST.get(), ModItems.ARROW.get());
 		}
 
 		/**
@@ -99,19 +99,34 @@ public class ModCrafting {
 		}
 	}
 
-	@SuppressWarnings("unused")
-	@ObjectHolder(TestMod3.MODID)
-	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 	public static class Recipes {
-		public static final IRecipeSerializer<ShapedArmourUpgradeRecipe> ARMOUR_UPGRADE_SHAPED = Null();
-		public static final IRecipeSerializer<ShapelessCuttingRecipe> CUTTING_SHAPELESS = Null();
+		private static final DeferredRegister<IRecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, TestMod3.MODID);
 
-		@SubscribeEvent
-		public static void register(final RegistryEvent.Register<IRecipeSerializer<?>> event) {
-			event.getRegistry().registerAll(
-					new ShapedArmourUpgradeRecipe.Serializer().setRegistryName(new ResourceLocation(TestMod3.MODID, "armour_upgrade_shaped")),
-					new ShapelessCuttingRecipe.Serializer().setRegistryName(new ResourceLocation(TestMod3.MODID, "cutting_shapeless"))
-			);
+		private static boolean isInitialised;
+
+		public static final RegistryObject<ShapedArmourUpgradeRecipe.Serializer> ARMOUR_UPGRADE_SHAPED = RECIPE_SERIALIZERS.register("armour_upgrade_shaped",
+				ShapedArmourUpgradeRecipe.Serializer::new
+		);
+
+		public static final RegistryObject<ShapelessCuttingRecipe.Serializer> CUTTING_SHAPELESS = RECIPE_SERIALIZERS.register("cutting_shapeless",
+				ShapelessCuttingRecipe.Serializer::new
+		);
+
+		/**
+		 * Registers the {@link DeferredRegister} instance with the mod event bus.
+		 * <p>
+		 * This should be called during mod construction.
+		 *
+		 * @param modEventBus The mod event bus
+		 */
+		public static void initialise(final IEventBus modEventBus) {
+			if (isInitialised) {
+				throw new IllegalStateException("Already initialised");
+			}
+
+			RECIPE_SERIALIZERS.register(modEventBus);
+
+			isInitialised = true;
 		}
 	}
 

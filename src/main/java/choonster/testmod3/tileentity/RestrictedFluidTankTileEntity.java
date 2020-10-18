@@ -26,7 +26,7 @@ public class RestrictedFluidTankTileEntity extends BaseFluidTankTileEntity {
 	private final Set<Direction> enabledFacings = EnumSet.allOf(Direction.class);
 
 	public RestrictedFluidTankTileEntity() {
-		super(ModTileEntities.FLUID_TANK_RESTRICTED);
+		super(ModTileEntities.FLUID_TANK_RESTRICTED.get());
 	}
 
 	/**
