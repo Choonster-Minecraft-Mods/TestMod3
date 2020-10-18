@@ -1,5 +1,7 @@
 package choonster.testmod3.item;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -29,14 +31,14 @@ public class SlowSwordItem extends SwordItem {
 
 	@Override
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(final EquipmentSlotType slot, final ItemStack stack) {
-		final Multimap<Attribute, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
+		final Multimap<Attribute, AttributeModifier> modifiers = ArrayListMultimap.create(super.getAttributeModifiers(slot, stack));
 
 		if (slot == EquipmentSlotType.MAINHAND) {
 			replaceModifier(modifiers, Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE_MODIFIER, 2);
 			replaceModifier(modifiers, Attributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, 1.5);
 		}
 
-		return modifiers;
+		return ImmutableMultimap.copyOf(modifiers);
 	}
 
 	/**
