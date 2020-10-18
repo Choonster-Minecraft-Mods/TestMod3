@@ -58,7 +58,9 @@ public class TestMod3 {
 		LOGGER.warn("Random UUID: {}", UUID.randomUUID().toString());
 		LOGGER.warn("****************************************");
 
-		BlockDumper.dump();
-		Tests.runTests();
+		event.enqueueWork(() -> {
+			BlockDumper.dump();
+			Tests.runTests();
+		});
 	}
 }

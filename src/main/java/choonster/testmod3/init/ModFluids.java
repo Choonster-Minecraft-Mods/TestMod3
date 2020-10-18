@@ -122,7 +122,7 @@ public class ModFluids {
 
 		@SubscribeEvent
 		public static void commonSetup(final FMLCommonSetupEvent event) {
-			registerFluidContainers();
+			event.enqueueWork(RegistrationHandler::registerFluidContainers);
 		}
 
 		/**

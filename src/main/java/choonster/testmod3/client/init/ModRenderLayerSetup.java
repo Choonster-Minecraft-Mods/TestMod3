@@ -19,9 +19,11 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ModRenderLayerSetup {
 	@SubscribeEvent
 	public static void setRenderLayers(final FMLClientSetupEvent event) {
-		RenderTypeLookup.setRenderLayer(ModBlocks.FLUID_TANK.get(), RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(ModBlocks.FLUID_TANK_RESTRICTED.get(), RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(ModBlocks.FLUID_PIPE.get(), RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(ModBlocks.MIRROR_PLANE.get(), RenderType.getCutout());
+		event.enqueueWork(() -> {
+			RenderTypeLookup.setRenderLayer(ModBlocks.FLUID_TANK.get(), RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.FLUID_TANK_RESTRICTED.get(), RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.FLUID_PIPE.get(), RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.MIRROR_PLANE.get(), RenderType.getCutout());
+		});
 	}
 }

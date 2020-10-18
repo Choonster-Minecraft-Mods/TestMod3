@@ -24,6 +24,8 @@ public class ModArgumentTypes {
 	 */
 	@SubscribeEvent
 	public static void registerArgumentTypes(final FMLCommonSetupEvent event) {
-		ArgumentTypes.register(new ResourceLocation(TestMod3.MODID, "axis").toString(), AxisArgument.class, new ArgumentSerializer<>(AxisArgument::axis));
+		event.enqueueWork(() ->
+				ArgumentTypes.register(new ResourceLocation(TestMod3.MODID, "axis").toString(), AxisArgument.class, new ArgumentSerializer<>(AxisArgument::axis))
+		);
 	}
 }

@@ -31,29 +31,31 @@ public class ModDispenseBehaviors {
 	 */
 	@SubscribeEvent
 	public static void registerDispenseBehaviors(final FMLCommonSetupEvent event) {
-		// Add a dispense behaviour that causes Black Dye to place Black Wool.
-		// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2789286-override-dispenser-dispense-only-for-a-certain
-		DispenserBlock.registerDispenseBehavior(Items.BLACK_DYE, new OptionalDispenseBehavior() {
-			@Override
-			protected ItemStack dispenseStack(final IBlockSource source, final ItemStack stack) {
-				setSuccessful(true);
+		event.enqueueWork(() ->
+				// Add a dispense behaviour that causes Black Dye to place Black Wool.
+				// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2789286-override-dispenser-dispense-only-for-a-certain
+				DispenserBlock.registerDispenseBehavior(Items.BLACK_DYE, new OptionalDispenseBehavior() {
+					@Override
+					protected ItemStack dispenseStack(final IBlockSource source, final ItemStack stack) {
+						setSuccessful(true);
 
-				final Direction facing = source.getBlockState().get(DispenserBlock.FACING);
-				final BlockPos neighbourPos = source.getBlockPos().offset(facing);
-				final World world = source.getWorld();
-				final BlockState neighbourState = world.getBlockState(neighbourPos);
+						final Direction facing = source.getBlockState().get(DispenserBlock.FACING);
+						final BlockPos neighbourPos = source.getBlockPos().offset(facing);
+						final World world = source.getWorld();
+						final BlockState neighbourState = world.getBlockState(neighbourPos);
 
-				setSuccessful(
-						neighbourState.getBlock().isAir(neighbourState, world, neighbourPos) &&
-								world.setBlockState(neighbourPos, Blocks.BLACK_WOOL.getDefaultState())
-				);
+						setSuccessful(
+								neighbourState.getBlock().isAir(neighbourState, world, neighbourPos) &&
+										world.setBlockState(neighbourPos, Blocks.BLACK_WOOL.getDefaultState())
+						);
 
-				if (isSuccessful()) {
-					stack.shrink(1);
-				}
+						if (isSuccessful()) {
+							stack.shrink(1);
+						}
 
-				return stack;
-			}
-		});
+						return stack;
+					}
+				})
+		);
 	}
 }
