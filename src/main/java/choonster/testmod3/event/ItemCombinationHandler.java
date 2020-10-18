@@ -2,7 +2,6 @@ package choonster.testmod3.event;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModItems;
-import choonster.testmod3.util.ReflectionUtil;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
@@ -17,7 +16,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -28,7 +26,7 @@ import java.util.stream.Collectors;
 /**
  * Combines items in the world.
  * <p>
- * Uses {@link TickEvent.WorldTickEvent} and iterates through {@link ServerWorld#globalEntities} to allow for all input items to be from vanilla or other mods. Creating a dedicated item with a custom entity to act as the controller of this effect would be more efficient.
+ * Uses {@link TickEvent.WorldTickEvent} and iterates through {@link ServerWorld#getEntities()} to allow for all input items to be from vanilla or other mods. Creating a dedicated item with a custom entity to act as the controller of this effect would be more efficient.
  * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2728653-better-way-to-check-for-entities-in-world
@@ -37,8 +35,6 @@ import java.util.stream.Collectors;
  */
 @Mod.EventBusSubscriber(modid = TestMod3.MODID)
 public class ItemCombinationHandler {
-	private static final Field GLOBAL_ENTITIES = ReflectionUtil.findField(ServerWorld.class, "field_217497_w" /* globalEntities */);
-
 	/**
 	 * The input items.
 	 */
@@ -58,20 +54,12 @@ public class ItemCombinationHandler {
 
 		// If this is the END phase on the server,
 		if (event.phase == TickEvent.Phase.END && !world.isRemote) {
-			try {
-				// Handle each loaded EntityItem with an input item
-
-				@SuppressWarnings("unchecked")
-				final List<Entity> entities = (List<Entity>) GLOBAL_ENTITIES.get(world);
-
-				entities.stream()
-						.filter(isMatchingItemEntity(INPUTS))
-						.map(entity -> (ItemEntity) entity)
-						.collect(Collectors.toList())
-						.forEach(ItemCombinationHandler::handleEntity);
-			} catch (final IllegalAccessException e) {
-				throw new RuntimeException("Couldn't access ServerWorld.globalEntities to handle item combinations");
-			}
+			// Handle each loaded EntityItem with an input item
+			((ServerWorld) world).getEntities()
+					.filter(isMatchingItemEntity(INPUTS))
+					.map(entity -> (ItemEntity) entity)
+					.collect(Collectors.toList())
+					.forEach(ItemCombinationHandler::handleEntity);
 		}
 	}
 
