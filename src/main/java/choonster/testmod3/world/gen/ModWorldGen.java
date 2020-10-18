@@ -19,12 +19,10 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.registries.ForgeRegistries;
 
-@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
+@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 public class ModWorldGen {
-
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void addFeaturesToBiomes(final BiomeLoadingEvent event) {
 		final BiomeGenerationSettingsBuilder generation = event.getGeneration();

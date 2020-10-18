@@ -33,8 +33,7 @@ public class ModEntities {
 	public static final EntityType<BlockDetectionArrowEntity> BLOCK_DETECTION_ARROW = Null();
 
 	public static final EntityType<PlayerAvoidingCreeperEntity> PLAYER_AVOIDING_CREEPER = Null();
-
-
+	
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 	public static class RegistrationHandler {
 		/**
@@ -67,19 +66,6 @@ public class ModEntities {
 					blockDetectionArrow,
 					playerAvoidingCreeper
 			);
-
-
-		}
-
-		@SubscribeEvent(priority = EventPriority.LOW)
-		public static void registerEntitySpawns(final BiomeLoadingEvent event) {
-			final RegistryKey<Biome> biomeRegistryKey = RegistryKey.getOrCreateKey(ForgeRegistries.Keys.BIOMES, event.getName());
-
-			if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.OCEAN)) {
-				addSpawn(event, EntityType.GUARDIAN, 100, 5, 20, EntityClassification.WATER_CREATURE);
-			}
-
-			copySpawns(event, PLAYER_AVOIDING_CREEPER, EntityClassification.MONSTER, EntityType.CREEPER, EntityClassification.MONSTER);
 		}
 
 		/**
@@ -98,6 +84,20 @@ public class ModEntities {
 			entityType.setRegistryName(registryName);
 
 			return entityType;
+		}
+	}
+
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
+	public static class SpawnHandler {
+		@SubscribeEvent(priority = EventPriority.LOW)
+		public static void registerEntitySpawns(final BiomeLoadingEvent event) {
+			final RegistryKey<Biome> biomeRegistryKey = RegistryKey.getOrCreateKey(ForgeRegistries.Keys.BIOMES, event.getName());
+
+			if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.OCEAN)) {
+				addSpawn(event, EntityType.GUARDIAN, 100, 5, 20, EntityClassification.WATER_CREATURE);
+			}
+
+			copySpawns(event, PLAYER_AVOIDING_CREEPER, EntityClassification.MONSTER, EntityType.CREEPER, EntityClassification.MONSTER);
 		}
 
 		/**
