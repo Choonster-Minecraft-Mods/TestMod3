@@ -2,6 +2,7 @@ package choonster.testmod3.item;
 
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -10,19 +11,17 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.Dimension;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * An item that's converted to another item when crafted in specific dimension types.
@@ -43,54 +42,43 @@ public class DimensionReplacementItem extends Item {
 	private static final String KEY_REPLACED = "Replaced";
 
 	/**
-	 * The replacement {@link ItemStack} for each {@link Dimension}.
+	 * The replacement {@link ItemStack} for each {@link DimensionType}.
 	 */
-	// TODO: Figure out how to get key for World's DimensionType
-	private final Map<RegistryKey<DimensionType>, ItemStack> replacements = new HashMap<>();
+	private final Map<RegistryKey<DimensionType>, Supplier<ItemStack>> replacements;
 
-	public DimensionReplacementItem(final Item.Properties properties) {
+	public DimensionReplacementItem(final Properties properties, final Map<RegistryKey<DimensionType>, Supplier<ItemStack>> replacements) {
 		super(properties);
+
+		this.replacements = ImmutableMap.copyOf(replacements);
 	}
 
 	/**
-	 * Add a replacement for this item.
-	 *
-	 * @param dimensionTypeKey The registry key of the dimension type
-	 * @param itemStack        The replacement
-	 */
-	public void addReplacement(final RegistryKey<DimensionType> dimensionTypeKey, final ItemStack itemStack) {
-		replacements.put(dimensionTypeKey, itemStack);
-	}
-
-	/**
-	 * Does the specified {@link World} have a replacement?
+	 * Get the replacement for the specified {@link World}, if any.
 	 *
 	 * @param world The World
-	 * @return Does the World have a replacement?
+	 * @return The optional replacement
 	 */
-	private boolean hasReplacement(@Nullable final World world) {
-		return world != null && replacements.containsKey(world.getDimensionKey());
-	}
-
-	/**
-	 * Get the replacement for the specified {@link World}.
-	 *
-	 * @param world The World
-	 * @return The replacement
-	 */
-	private ItemStack getReplacement(final World world) {
-		return replacements.get(world.getDimensionType());
+	private Optional<ItemStack> getReplacement(final World world) {
+		return world
+				./* getDynamicRegistries */func_241828_r()
+				./* getDimensionTypeRegistry */func_230520_a_()
+				.getOptionalKey(world.getDimensionType())
+				.map(replacements::get)
+				.map(Supplier::get);
 	}
 
 	@Override
 	public void inventoryTick(final ItemStack stack, final World world, final Entity entity, final int itemSlot, final boolean isSelected) {
+		if (world.isRemote) {
+			return;
+		}
+
 		final CompoundNBT stackTagCompound = stack.getOrCreateTag();
 
 		if (!stackTagCompound.getBoolean(KEY_REPLACED)) { // If the replacement logic hasn't been run,
 			stackTagCompound.putBoolean(KEY_REPLACED, true); // Mark it as run
 
-			if (hasReplacement(world)) { // If there's a replacement for this dimension
-				final ItemStack replacement = getReplacement(world).copy(); // Get it
+			getReplacement(world).ifPresent(replacement -> { // If there's a replacement for this dimension's type
 				replacement.setCount(stack.getCount()); // Copy the stack size from this item
 
 				// Try to replace this item
@@ -101,7 +89,7 @@ public class DimensionReplacementItem extends Item {
 				).ifPresent(successfulInventoryType ->
 						LOGGER.info("Replaced item in slot {} of {}'s {} inventory with {}", itemSlot, entity.getName(), successfulInventoryType, replacement.getDisplayName())
 				);
-			}
+			});
 		}
 	}
 
@@ -124,13 +112,16 @@ public class DimensionReplacementItem extends Item {
 		return false;
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
-		if (hasReplacement(world)) {
-			tooltip.add(new TranslationTextComponent("item.testmod3.dimension_replacement.replacement.desc", getReplacement(world).getDisplayName()));
-		} else {
-			tooltip.add(new TranslationTextComponent("item.testmod3.dimension_replacement.no_replacement.desc"));
+		if (world == null) {
+			return;
 		}
+
+		tooltip.add(
+				getReplacement(world)
+						.map(replacement -> new TranslationTextComponent("item.testmod3.dimension_replacement.replacement.desc", replacement.getDisplayName()))
+						.orElseGet(() -> new TranslationTextComponent("item.testmod3.dimension_replacement.no_replacement.desc"))
+		);
 	}
 }

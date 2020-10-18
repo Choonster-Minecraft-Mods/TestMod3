@@ -8,11 +8,14 @@ import choonster.testmod3.entity.ModArrowEntity;
 import choonster.testmod3.item.*;
 import choonster.testmod3.item.variantgroup.IItemVariantGroup;
 import choonster.testmod3.item.variantgroup.ItemVariantGroup;
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.Util;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,6 +26,7 @@ import net.minecraftforge.registries.ObjectHolder;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import static choonster.testmod3.util.InjectionUtil.Null;
 
@@ -162,7 +166,17 @@ public class ModItems {
 			final SwapTestItem swapTestA = new SwapTestItem(defaultItemProperties());
 			final SwapTestItem swapTestB = new SwapTestItem(defaultItemProperties());
 
-			final DimensionReplacementItem dimensionReplacement = new DimensionReplacementItem(defaultItemProperties());
+			final DimensionReplacementItem dimensionReplacement = new DimensionReplacementItem(
+					defaultItemProperties(),
+					Util.make(() -> {
+						final ImmutableMap.Builder<RegistryKey<DimensionType>, Supplier<ItemStack>> builder = ImmutableMap.builder();
+
+						builder.put(DimensionType.THE_NETHER, () -> new ItemStack(Items.NETHER_STAR));
+						builder.put(DimensionType.THE_END, () -> new ItemStack(Items.ENDER_PEARL));
+
+						return builder.build();
+					})
+			);
 
 			final ReplacementArmourItem replacementHelmet = new ReplacementArmourItem(ModArmourMaterial.REPLACEMENT, EquipmentSlotType.HEAD, defaultItemProperties());
 			final RestrictedArmourItem replacementChestplate = new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, EquipmentSlotType.CHEST, defaultItemProperties());
@@ -253,9 +267,6 @@ public class ModItems {
 			final ItemStack chest = new ItemStack(replacementChestplate);
 			chest.addEnchantment(Enchantments.SHARPNESS, 1);
 			replacementHelmet.setReplacementItems(chest, new ItemStack(replacementLeggings), new ItemStack(replacementBoots));
-
-			dimensionReplacement.addReplacement(DimensionType.THE_NETHER, new ItemStack(Items.NETHER_STAR));
-			dimensionReplacement.addReplacement(DimensionType.THE_END, new ItemStack(Items.ENDER_PEARL));
 		}
 
 		/**
