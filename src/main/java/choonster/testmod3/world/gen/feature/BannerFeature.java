@@ -3,8 +3,6 @@ package choonster.testmod3.world.gen.feature;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.BannerPattern;
@@ -16,7 +14,9 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
+import java.lang.reflect.Field;
 import java.util.Random;
 
 /**
@@ -28,30 +28,31 @@ import java.util.Random;
  * @author Choonster
  */
 public class BannerFeature extends Feature<NoFeatureConfig> {
+	private static final Field PATTERNS = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* patterns */"field_175118_f");
+	private static final Field BASE_COLOR = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* baseColor */"field_175120_a");
+	private static final Field PATTERN_LIST = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* patternList */ "field_175122_h");
+	private static final Field PATTERN_DATA_SET = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* patternDataSet */"field_175119_g");
+	private static final Field NAME = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* name */"field_190617_a");
+
 	public BannerFeature(final Codec<NoFeatureConfig> codec) {
 		super(codec);
 	}
 
 	/**
-	 * Create the Banner ItemStack used as a template for the generated banners.
+	 * Creates a list of pattern tags to apply to the generated banners.
 	 *
-	 * @return A Banner ItemStack with the appropriate NBT data
+	 * @return A list tag containing the patterns
 	 */
-	protected ItemStack createBannerStack() {
-		final ItemStack bannerStack = new ItemStack(Items.PINK_BANNER);
+	protected ListNBT createPatternList() {
+		final ListNBT patternList = new ListNBT();
+		patternList.add(createPatternTag(BannerPattern.GRADIENT_UP, DyeColor.MAGENTA));
+		patternList.add(createPatternTag(BannerPattern.FLOWER, DyeColor.BLACK));
 
-		final CompoundNBT bannerData = bannerStack.getOrCreateChildTag("BlockEntityTag");
-
-		final ListNBT patternsList = new ListNBT();
-		bannerData.put("Patterns", patternsList);
-		patternsList.add(createPatternTag(BannerPattern.GRADIENT_UP, DyeColor.MAGENTA));
-		patternsList.add(createPatternTag(BannerPattern.FLOWER, DyeColor.BLACK));
-
-		return bannerStack;
+		return patternList;
 	}
 
 	/**
-	 * Create a compound tag for the specified pattern and colour.
+	 * Creates a compound tag for the specified pattern and colour.
 	 *
 	 * @param pattern The pattern
 	 * @param color   The colour
@@ -66,16 +67,26 @@ public class BannerFeature extends Feature<NoFeatureConfig> {
 
 	@Override
 	public boolean func_241855_a(final ISeedReader world, final ChunkGenerator chunkGenerator, final Random random, final BlockPos pos, final NoFeatureConfig featureConfig) {
-		final ItemStack bannerStack = createBannerStack();
-
 		world.setBlockState(pos, Blocks.PINK_BANNER.getDefaultState(), Constants.BlockFlags.DEFAULT);
 
 		final TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileEntity instanceof BannerTileEntity) {
-			// TODO: This method is client-only
-			((BannerTileEntity) tileEntity).loadFromItemStack(bannerStack, DyeColor.PINK);
+			loadFromItemStack((BannerTileEntity) tileEntity, createPatternList(), DyeColor.PINK);
 		}
 
 		return true;
+	}
+
+	// Adapted from BannerTileEntity.loadFromItemStack, which is client-only
+	private static void loadFromItemStack(final BannerTileEntity tileEntity, final ListNBT patterns, final DyeColor color) {
+		try {
+			PATTERNS.set(tileEntity, patterns);
+			BASE_COLOR.set(tileEntity, color);
+			PATTERN_LIST.set(tileEntity, null);
+			PATTERN_DATA_SET.set(tileEntity, true);
+			NAME.set(tileEntity, null);
+		} catch (final IllegalAccessException e) {
+			throw new RuntimeException("Unable to add banner data to TileEntity", e);
+		}
 	}
 }
