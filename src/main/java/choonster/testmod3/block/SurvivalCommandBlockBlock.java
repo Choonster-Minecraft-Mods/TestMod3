@@ -94,7 +94,7 @@ public class SurvivalCommandBlockBlock extends CommandBlockBlock {
 	 * @param random The World's RNG
 	 */
 	@Override
-	public void tick(final BlockState state, final ServerWorld world, final BlockPos pos, final Random rand) {
+	public void tick(final BlockState state, final ServerWorld world, final BlockPos pos, final Random random) {
 
 		final TileEntity tileentity = world.getTileEntity(pos);
 

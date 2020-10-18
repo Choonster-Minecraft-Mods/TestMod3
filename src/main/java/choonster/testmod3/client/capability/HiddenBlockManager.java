@@ -76,6 +76,7 @@ public class HiddenBlockManager {
 	 *
 	 * @param world The world
 	 * @param pos   The position of the hidden block to update
+	 * @return A SafeRunnable that updates the chunk when run
 	 */
 	public static DistExecutor.SafeRunnable refresh(final World world, final BlockPos pos) {
 		return () -> {

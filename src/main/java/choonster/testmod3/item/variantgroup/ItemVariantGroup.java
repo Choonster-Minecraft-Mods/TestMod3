@@ -145,6 +145,7 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 		/**
 		 * Creates a new variant group builder.
 		 *
+		 * @param items     The DeferredRegister instance to register the group's items with
 		 * @param <VARIANT> The variant type
 		 * @param <ITEM>    The item type
 		 * @return A new Variant Group Builder
