@@ -24,6 +24,12 @@ public class ModRenderLayerSetup {
 			RenderTypeLookup.setRenderLayer(ModBlocks.FLUID_TANK_RESTRICTED.get(), RenderType.getCutout());
 			RenderTypeLookup.setRenderLayer(ModBlocks.FLUID_PIPE.get(), RenderType.getCutout());
 			RenderTypeLookup.setRenderLayer(ModBlocks.MIRROR_PLANE.get(), RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.OAK_SAPLING.get(), RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.SPRUCE_SAPLING.get(), RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.BIRCH_SAPLING.get(), RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.JUNGLE_SAPLING.get(), RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.ACACIA_SAPLING.get(), RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.DARK_OAK_SAPLING.get(), RenderType.getCutout());
 		});
 	}
 }
