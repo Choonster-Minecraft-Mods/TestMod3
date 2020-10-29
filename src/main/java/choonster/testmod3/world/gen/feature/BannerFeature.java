@@ -66,7 +66,7 @@ public class BannerFeature extends Feature<NoFeatureConfig> {
 	}
 
 	@Override
-	public boolean func_241855_a(final ISeedReader world, final ChunkGenerator chunkGenerator, final Random random, final BlockPos pos, final NoFeatureConfig featureConfig) {
+	public boolean generate(final ISeedReader world, final ChunkGenerator generator, final Random rand, final BlockPos pos, final NoFeatureConfig config) {
 		world.setBlockState(pos, Blocks.PINK_BANNER.getDefaultState(), Constants.BlockFlags.DEFAULT);
 
 		final TileEntity tileEntity = world.getTileEntity(pos);

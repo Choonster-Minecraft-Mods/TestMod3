@@ -20,28 +20,28 @@ import java.util.stream.Stream;
  *
  * @author Choonster
  */
+// TODO: Figure out how to chain this with HEIGHTMAP?
 public class AtSurfaceInChunksDivisibleBy16 extends Placement<FeatureSpreadConfig> {
 	public AtSurfaceInChunksDivisibleBy16(final Codec<FeatureSpreadConfig> codec) {
 		super(codec);
 	}
 
 	@Override
-	public Stream<BlockPos> func_241857_a(final WorldDecoratingHelper worldDecoratingHelper, final Random random, final FeatureSpreadConfig config, final BlockPos pos) {
-
+	public Stream<BlockPos> getPositions(final WorldDecoratingHelper helper, final Random rand, final FeatureSpreadConfig config, final BlockPos pos) {
 		final ChunkPos chunkPos = new ChunkPos(pos);
 
 		if (chunkPos.x % 16 != 0 || chunkPos.z % 16 != 0) {
 			return Stream.empty();
 		}
 
-		return IntStream.range(0, config.func_242799_a().func_242259_a(random)).mapToObj(i -> {
-			final int x = random.nextInt(16);
-			final int z = random.nextInt(16);
+		return IntStream.range(0, config.func_242799_a().func_242259_a(rand)).mapToObj(i -> {
+			final int x = rand.nextInt(16);
+			final int z = rand.nextInt(16);
 
 			final BlockPos.Mutable mutablePos = pos.toMutable();
 			mutablePos.add(x, 0, z);
 
-			mutablePos.setY(worldDecoratingHelper.func_242893_a(Heightmap.Type.MOTION_BLOCKING, mutablePos.getX(), mutablePos.getZ()));
+			mutablePos.setY(helper.func_242893_a(Heightmap.Type.MOTION_BLOCKING, mutablePos.getX(), mutablePos.getZ()));
 
 			return mutablePos;
 		});

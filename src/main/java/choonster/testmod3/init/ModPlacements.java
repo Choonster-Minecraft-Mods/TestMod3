@@ -20,7 +20,7 @@ public class ModPlacements {
 	private static boolean isInitialised;
 
 	public static final RegistryObject<AtSurfaceInChunksDivisibleBy16> AT_SURFACE_IN_CHUNKS_DIVISIBLE_BY_16 = PLACEMENTS.register("at_surface_in_chunks_divisible_by_16",
-			() -> new AtSurfaceInChunksDivisibleBy16(FeatureSpreadConfig.field_242797_a)
+			() -> new AtSurfaceInChunksDivisibleBy16(FeatureSpreadConfig.CODEC)
 	);
 
 	/**

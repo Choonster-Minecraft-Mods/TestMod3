@@ -49,9 +49,9 @@ public class ModWorldGen {
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.NETHER)) {
 			generation.getFeatures(GenerationStage.Decoration.UNDERGROUND_ORES)
 					.add(() -> Feature.ORE
-							.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.field_241883_b, Blocks.IRON_ORE.getDefaultState(), 20))
-							.func_242733_d(118) // maximum Y?
-							.func_242728_a() // square
+							.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NETHERRACK, Blocks.IRON_ORE.getDefaultState(), 20))
+							.range(118)
+							.square()
 							.func_242731_b(16) // count?
 					);
 		}
@@ -60,8 +60,8 @@ public class ModWorldGen {
 			generation.getFeatures(GenerationStage.Decoration.UNDERGROUND_ORES)
 					.add(() -> Feature.ORE
 							.withConfiguration(new OreFeatureConfig(FillerBlockType.END_STONE, Blocks.IRON_ORE.getDefaultState(), 20))
-							.func_242733_d(128) // maximum Y?
-							.func_242728_a() // square
+							.range(128)
+							.square()
 							.func_242731_b(16) // count?
 					);
 		}
