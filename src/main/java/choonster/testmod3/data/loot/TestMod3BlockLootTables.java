@@ -1,21 +1,17 @@
 package choonster.testmod3.data.loot;
 
+import choonster.testmod3.block.FluidTankBlock;
 import choonster.testmod3.block.RightClickTestBlock;
 import choonster.testmod3.init.ModBlocks;
+import choonster.testmod3.loot.functions.SetFluidTankContents;
 import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.data.loot.BlockLootTables;
 import net.minecraft.item.Items;
-import net.minecraft.loot.ConstantRange;
-import net.minecraft.loot.ItemLootEntry;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTable;
+import net.minecraft.loot.*;
 import net.minecraft.loot.conditions.BlockStateProperty;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.function.Function;
 
 /**
  * Generates this mod's block loot tables.
@@ -25,10 +21,10 @@ import java.util.function.Function;
 public class TestMod3BlockLootTables extends BlockLootTables {
 	@Override
 	protected void addTables() {
-		registerDropSelfLootTable(ModBlocks.WATER_GRASS);
-		registerDropSelfLootTable(ModBlocks.LARGE_COLLISION_TEST);
+		registerDropSelfLootTable(ModBlocks.WATER_GRASS.get());
+		registerDropSelfLootTable(ModBlocks.LARGE_COLLISION_TEST.get());
 
-		registerLootTable(ModBlocks.RIGHT_CLICK_TEST, block -> (
+		registerLootTable(ModBlocks.RIGHT_CLICK_TEST.get(), block -> (
 				dropping(block)
 						.addLootPool(
 								withSurvivesExplosion(Items.ENDER_EYE, LootPool.builder()
@@ -46,54 +42,54 @@ public class TestMod3BlockLootTables extends BlockLootTables {
 						)
 		));
 
-		registerDropSelfLootTable(ModBlocks.CLIENT_PLAYER_RIGHT_CLICK);
-		registerDropSelfLootTable(ModBlocks.ROTATABLE_LAMP);
-		registerDropSelfLootTable(ModBlocks.ITEM_COLLISION_TEST);
-		registerDropSelfLootTable(ModBlocks.FLUID_TANK);
-		registerDropSelfLootTable(ModBlocks.ITEM_DEBUGGER);
-		registerDropSelfLootTable(ModBlocks.END_PORTAL_FRAME_FULL);
-		registerDropSelfLootTable(ModBlocks.POTION_EFFECT);
-		registerDropSelfLootTable(ModBlocks.CLIENT_PLAYER_ROTATION);
-		registerDropSelfLootTable(ModBlocks.PIG_SPAWNER_REFILLER);
-		registerDropSelfLootTable(ModBlocks.MIRROR_PLANE);
-		registerDropSelfLootTable(ModBlocks.VANILLA_MODEL_TEST);
-		registerDropSelfLootTable(ModBlocks.FULLBRIGHT);
-		registerDropSelfLootTable(ModBlocks.NORMAL_BRIGHTNESS);
-		registerDropSelfLootTable(ModBlocks.MAX_HEALTH_SETTER);
-		registerDropSelfLootTable(ModBlocks.MAX_HEALTH_GETTER);
-		registerDropSelfLootTable(ModBlocks.SMALL_COLLISION_TEST);
-		registerDropSelfLootTable(ModBlocks.CHEST);
-		registerDropSelfLootTable(ModBlocks.HIDDEN);
-		registerDropSelfLootTable(ModBlocks.BASIC_PIPE);
-		registerDropSelfLootTable(ModBlocks.FLUID_PIPE);
-		registerDropSelfLootTable(ModBlocks.SURVIVAL_COMMAND_BLOCK);
-		registerDropSelfLootTable(ModBlocks.REPEATING_SURVIVAL_COMMAND_BLOCK);
-		registerDropSelfLootTable(ModBlocks.CHAIN_SURVIVAL_COMMAND_BLOCK);
-		registerDropSelfLootTable(ModBlocks.OAK_SAPLING);
-		registerDropSelfLootTable(ModBlocks.SPRUCE_SAPLING);
-		registerDropSelfLootTable(ModBlocks.BIRCH_SAPLING);
-		registerDropSelfLootTable(ModBlocks.JUNGLE_SAPLING);
-		registerDropSelfLootTable(ModBlocks.ACACIA_SAPLING);
-		registerDropSelfLootTable(ModBlocks.DARK_OAK_SAPLING);
-		registerDropSelfLootTable(ModBlocks.INVISIBLE);
-		registerDropSelfLootTable(ModBlocks.FLUID_TANK_RESTRICTED);
-		registerDropSelfLootTable(ModBlocks.PLANKS);
+		registerDropSelfLootTable(ModBlocks.CLIENT_PLAYER_RIGHT_CLICK.get());
+		registerDropSelfLootTable(ModBlocks.ROTATABLE_LAMP.get());
+		registerDropSelfLootTable(ModBlocks.ITEM_COLLISION_TEST.get());
+		registerLootTable(ModBlocks.FLUID_TANK.get(), TestMod3BlockLootTables::droppingWithFluidTankContents);
+		registerDropSelfLootTable(ModBlocks.ITEM_DEBUGGER.get());
+		registerDropSelfLootTable(ModBlocks.END_PORTAL_FRAME_FULL.get());
+		registerDropSelfLootTable(ModBlocks.POTION_EFFECT.get());
+		registerDropSelfLootTable(ModBlocks.CLIENT_PLAYER_ROTATION.get());
+		registerDropSelfLootTable(ModBlocks.PIG_SPAWNER_REFILLER.get());
+		registerDropSelfLootTable(ModBlocks.MIRROR_PLANE.get());
+		registerDropSelfLootTable(ModBlocks.VANILLA_MODEL_TEST.get());
+		registerDropSelfLootTable(ModBlocks.FULLBRIGHT.get());
+		registerDropSelfLootTable(ModBlocks.NORMAL_BRIGHTNESS.get());
+		registerDropSelfLootTable(ModBlocks.MAX_HEALTH_SETTER.get());
+		registerDropSelfLootTable(ModBlocks.MAX_HEALTH_GETTER.get());
+		registerDropSelfLootTable(ModBlocks.SMALL_COLLISION_TEST.get());
+		registerDropSelfLootTable(ModBlocks.CHEST.get());
+		registerDropSelfLootTable(ModBlocks.HIDDEN.get());
+		registerDropSelfLootTable(ModBlocks.BASIC_PIPE.get());
+		registerDropSelfLootTable(ModBlocks.FLUID_PIPE.get());
+		registerDropSelfLootTable(ModBlocks.SURVIVAL_COMMAND_BLOCK.get());
+		registerDropSelfLootTable(ModBlocks.REPEATING_SURVIVAL_COMMAND_BLOCK.get());
+		registerDropSelfLootTable(ModBlocks.CHAIN_SURVIVAL_COMMAND_BLOCK.get());
+		registerDropSelfLootTable(ModBlocks.OAK_SAPLING.get());
+		registerDropSelfLootTable(ModBlocks.SPRUCE_SAPLING.get());
+		registerDropSelfLootTable(ModBlocks.BIRCH_SAPLING.get());
+		registerDropSelfLootTable(ModBlocks.JUNGLE_SAPLING.get());
+		registerDropSelfLootTable(ModBlocks.ACACIA_SAPLING.get());
+		registerDropSelfLootTable(ModBlocks.DARK_OAK_SAPLING.get());
+		registerDropSelfLootTable(ModBlocks.INVISIBLE.get());
+		registerLootTable(ModBlocks.FLUID_TANK_RESTRICTED.get(), TestMod3BlockLootTables::droppingWithFluidTankContents);
+		registerDropSelfLootTable(ModBlocks.PLANKS.get());
 
 		ModBlocks.COLORED_ROTATABLE_BLOCKS
 				.getBlocks()
-				.forEach(this::registerDropSelfLootTable);
+				.forEach(block -> registerDropSelfLootTable(block.get()));
 
 		ModBlocks.COLORED_MULTI_ROTATABLE_BLOCKS
 				.getBlocks()
-				.forEach(this::registerDropSelfLootTable);
+				.forEach(block -> registerDropSelfLootTable(block.get()));
 
 		ModBlocks.VARIANTS_BLOCKS
 				.getBlocks()
-				.forEach(this::registerDropSelfLootTable);
+				.forEach(block -> registerDropSelfLootTable(block.get()));
 
 		ModBlocks.TERRACOTTA_SLABS
 				.getBlocks()
-				.forEach(slab -> registerLootTable(slab, BlockLootTables::droppingSlab));
+				.forEach(slab -> registerLootTable(slab.get(), BlockLootTables::droppingSlab));
 	}
 
 	@Override
@@ -101,12 +97,20 @@ public class TestMod3BlockLootTables extends BlockLootTables {
 		return RegistryUtil.getModRegistryEntries(ForgeRegistries.BLOCKS);
 	}
 
-	private void registerLootTable(final RegistryObject<? extends Block> block, final Function<Block, LootTable.Builder> factory) {
-		registerLootTable(block.get(), factory);
+	protected static LootTable.Builder droppingWithFluidTankContents(final Block block) {
+		return LootTable.builder()
+				.addLootPool(
+						withSurvivesExplosion(block,
+								LootPool.builder()
+										.rolls(ConstantRange.of(1))
+										.addEntry(
+												ItemLootEntry.builder(block)
+														.acceptFunction(
+																SetFluidTankContents.builder()
+																		.addLootEntry(DynamicLootEntry.func_216162_a(FluidTankBlock.FLUID_TANK_CONTENTS))
+														)
+										)
+						)
+				);
 	}
-
-	private void registerDropSelfLootTable(final RegistryObject<? extends Block> block) {
-		registerDropSelfLootTable(block.get()); // TODO: Why is this unchecked?
-	}
-
 }

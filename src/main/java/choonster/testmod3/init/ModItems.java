@@ -286,6 +286,9 @@ public class ModItems {
 		);
 	}
 
+	public static RegistryObject<FluidStackItem> FLUID_STACK_ITEM = ITEMS.register("fluid_stack_item",
+			() -> new FluidStackItem(new Item.Properties())
+	);
 
 //	public static final TestMod3BucketItem WOODEN_BUCKET = Null();
 //  new TestMod3BucketItem(defaultItemProperties()).setRegistryName("wooden_bucket"),

@@ -47,9 +47,6 @@ public class TestMod3 {
 		ModSoundEvents.initialise(modEventBus);
 		ModTileEntities.initialise(modEventBus);
 		ModTestRegistryEntries.initialise(modEventBus);
-
-		ModCrafting.Ingredients.register();
-		ModLootTables.registerLootTables();
 	}
 
 	@SubscribeEvent
@@ -59,6 +56,10 @@ public class TestMod3 {
 		LOGGER.warn("****************************************");
 
 		event.enqueueWork(() -> {
+			ModCrafting.Ingredients.register();
+			ModLootTables.registerLootTables();
+			ModLootFunctionTypes.register();
+
 			BlockDumper.dump();
 			Tests.runTests();
 		});

@@ -6,6 +6,17 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "testmod3:set_fluid_tank_contents",
+              "entries": [
+                {
+                  "type": "minecraft:dynamic",
+                  "name": "testmod3:fluid_tank_contents"
+                }
+              ]
+            }
+          ],
           "name": "testmod3:fluid_tank_restricted"
         }
       ],

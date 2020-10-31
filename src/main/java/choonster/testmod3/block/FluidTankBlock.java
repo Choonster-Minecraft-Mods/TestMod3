@@ -2,6 +2,7 @@ package choonster.testmod3.block;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.fluid.FluidTankSnapshot;
+import choonster.testmod3.init.ModItems;
 import choonster.testmod3.network.FluidTankContentsMessage;
 import choonster.testmod3.tileentity.BaseFluidTankTileEntity;
 import choonster.testmod3.tileentity.FluidTankTileEntity;
@@ -11,9 +12,12 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
@@ -30,6 +34,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * A Fluid Tank block.
@@ -37,11 +42,30 @@ import java.util.List;
  * @author Choonster
  */
 public class FluidTankBlock<TE extends BaseFluidTankTileEntity> extends TileEntityBlock<TE> {
+	public static final ResourceLocation FLUID_TANK_CONTENTS = new ResourceLocation(TestMod3.MODID, "fluid_tank_contents");
+
 	public FluidTankBlock(final Block.Properties properties) {
 		super(true, properties);
 	}
 
-	// TODO: Loot Tables
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<ItemStack> getDrops(final BlockState state, final LootContext.Builder builder) {
+		final TileEntity tileentity = builder.get(LootParameters.BLOCK_ENTITY);
+
+		if (tileentity != null) {
+			tileentity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)
+					.ifPresent(fluidHandler ->
+							builder.withDynamicDrop(FLUID_TANK_CONTENTS, (context, stackConsumer) ->
+									Stream.of(FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler))
+											.map(fluidTankSnapshot -> ModItems.FLUID_STACK_ITEM.get().withFluidStack(fluidTankSnapshot.getContents()))
+											.forEach(stackConsumer)
+							)
+					);
+		}
+
+		return super.getDrops(state, builder);
+	}
 
 	/**
 	 * Get the {@link IFluidHandler} from the {@link TileEntity} at the specified position.
@@ -56,9 +80,9 @@ public class FluidTankBlock<TE extends BaseFluidTankTileEntity> extends TileEnti
 
 	@Override
 	public void onBlockPlacedBy(final World worldIn, final BlockPos pos, final BlockState state, @Nullable final LivingEntity placer, final ItemStack stack) {
-		getFluidHandler(worldIn, pos).ifPresent(fluidHandler -> {
-			FluidUtil.tryEmptyContainer(stack, fluidHandler, Integer.MAX_VALUE, null, true);
-		});
+		getFluidHandler(worldIn, pos).ifPresent(fluidHandler ->
+				FluidUtil.tryEmptyContainer(stack, fluidHandler, Integer.MAX_VALUE, null, true)
+		);
 	}
 
 	@Override

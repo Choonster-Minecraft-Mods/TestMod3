@@ -14,8 +14,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -47,7 +45,6 @@ public class FluidTankItem extends BlockItem {
 		tankItems.add(filledTank);
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
 		FluidUtil.getFluidHandler(stack).ifPresent(fluidHandler -> {

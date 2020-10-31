@@ -52,6 +52,4 @@ public class RightClickTestBlock extends GlassBlock {
 
 		return ActionResultType.FAIL;
 	}
-
-	// TODO: Loot Tables
 }
