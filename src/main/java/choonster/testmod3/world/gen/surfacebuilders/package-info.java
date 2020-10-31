@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package choonster.testmod3.world.biome;
+package choonster.testmod3.world.gen.surfacebuilders;
 
 import mcp.MethodsReturnNonnullByDefault;
 

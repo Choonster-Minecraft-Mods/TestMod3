@@ -4,6 +4,9 @@ import choonster.testmod3.config.TestMod3Config;
 import choonster.testmod3.init.*;
 import choonster.testmod3.tests.Tests;
 import choonster.testmod3.util.BlockDumper;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -47,6 +50,13 @@ public class TestMod3 {
 		ModSoundEvents.initialise(modEventBus);
 		ModTileEntities.initialise(modEventBus);
 		ModTestRegistryEntries.initialise(modEventBus);
+	}
+
+	@SubscribeEvent(priority = EventPriority.HIGH) // Ensure this is run before the Biome DeferredRegister in ModBiomes
+	public static void registerBiomes(final RegistryEvent.Register<Biome> event) {
+		// TODO: This runs before Features are registered, crashing the game
+		ModConfiguredFeatures.register();
+		ModConfiguredSurfaceBuilders.register();
 	}
 
 	@SubscribeEvent
