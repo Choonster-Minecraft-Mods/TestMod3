@@ -40,6 +40,7 @@ public class TestMod3 {
 		ModFluids.initialise(modEventBus);
 		ModBlocks.initialise(modEventBus);
 		ModItems.initialise(modEventBus);
+		ModBiomes.initialise(modEventBus);
 		ModContainerTypes.initialise(modEventBus);
 		ModEffects.initialise(modEventBus);
 		ModEntities.initialise(modEventBus);
