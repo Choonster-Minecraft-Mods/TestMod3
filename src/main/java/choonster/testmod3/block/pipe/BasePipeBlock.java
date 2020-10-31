@@ -1,56 +1,32 @@
 package choonster.testmod3.block.pipe;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.state.BooleanProperty;
+import net.minecraft.block.SixWayBlock;
 import net.minecraft.state.Property;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.function.BiFunction;
 
 /**
  * Base class for pipe blocks that connect to adjacent pipes and blocks.
  *
  * @author Choonster
  */
-public class BasePipeBlock extends Block {
-	public static final float PIPE_MIN_POS = 0.25f;
-	public static final float PIPE_MAX_POS = 0.75f;
+public class BasePipeBlock extends SixWayBlock {
+	private static final Direction[] FACING_VALUES = Direction.values();
 
-	public static final ImmutableList<Property<Boolean>> CONNECTED_PROPERTIES = ImmutableList.copyOf(
-			Stream.of(Direction.values())
-					.map(facing -> BooleanProperty.create(facing.getString()))
-					.collect(Collectors.toList())
-	);
-
-	// TODO: Convert this to VoxelShapes
-	public static final ImmutableList<AxisAlignedBB> CONNECTED_BOUNDING_BOXES = ImmutableList.copyOf(
-			Stream.of(Direction.values())
-					.map(facing -> {
-						Vector3i directionVec = facing.getDirectionVec();
-						return new AxisAlignedBB(
-								getMinBound(directionVec.getX()), getMinBound(directionVec.getY()), getMinBound(directionVec.getZ()),
-								getMaxBound(directionVec.getX()), getMaxBound(directionVec.getY()), getMaxBound(directionVec.getZ())
-						);
-					})
-					.collect(Collectors.toList())
-	);
-
-	private static float getMinBound(final int dir) {
-		return dir == -1 ? 0 : PIPE_MIN_POS;
-	}
-
-	private static float getMaxBound(final int dir) {
-		return dir == 1 ? 1 : PIPE_MAX_POS;
-	}
+	protected final ImmutableList<VoxelShape> shapes;
 
 	/**
 	 * Gets the connected property for the specified direction.
@@ -59,16 +35,22 @@ public class BasePipeBlock extends Block {
 	 * @return The property
 	 */
 	public static Property<Boolean> getConnectedProperty(final Direction direction) {
-		return CONNECTED_PROPERTIES.get(direction.getIndex());
+		return FACING_TO_PROPERTY_MAP.get(direction);
 	}
 
-	public BasePipeBlock(final Block.Properties properties) {
-		super(properties);
+	public BasePipeBlock(final AbstractBlock.Properties properties) {
+		this(4, 4, properties);
+	}
+
+	public BasePipeBlock(final float coreSize, final float extensionWidth, final AbstractBlock.Properties properties) {
+		super(0, properties);
+
+		shapes = makeShapes(coreSize, extensionWidth);
 	}
 
 	@Override
 	protected void fillStateContainer(final StateContainer.Builder<Block, BlockState> builder) {
-		CONNECTED_PROPERTIES.forEach(builder::add);
+		FACING_TO_PROPERTY_MAP.values().forEach(builder::add);
 	}
 
 	/**
@@ -109,33 +91,84 @@ public class BasePipeBlock extends Block {
 	@Override
 	public BlockState updatePostPlacement(BlockState state, final Direction facing, final BlockState facingState, final IWorld world, final BlockPos currentPos, final BlockPos facingPos) {
 		for (final Direction neighbourFacing : Direction.values()) {
-			state = state.with(CONNECTED_PROPERTIES.get(facing.getIndex()), canConnectTo(state, world, currentPos, neighbourFacing));
+			state = state.with(FACING_TO_PROPERTY_MAP.get(facing), canConnectTo(state, world, currentPos, neighbourFacing));
 		}
 
 		return state;
 	}
 
 	public final boolean isConnected(final BlockState state, final Direction facing) {
-		return state.get(CONNECTED_PROPERTIES.get(facing.getIndex()));
+		return state.get(FACING_TO_PROPERTY_MAP.get(facing));
 	}
 
-	/*
-	// TODO: Convert this to VoxelShapes
-	@SuppressWarnings("deprecation")
 	@Override
-	public void addCollisionBoxToList(IBlockState state, final World worldIn, final BlockPos pos, final AxisAlignedBB entityBox, final List<AxisAlignedBB> collidingBoxes, @Nullable final Entity entityIn, final boolean p_185477_7_) {
-		final AxisAlignedBB bb = new AxisAlignedBB(PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MIN_POS, PIPE_MAX_POS, PIPE_MAX_POS, PIPE_MAX_POS);
-		addCollisionBoxToList(pos, entityBox, collidingBoxes, bb);
+	public VoxelShape getShape(final BlockState state, final IBlockReader worldIn, final BlockPos pos, final ISelectionContext context) {
+		return shapes.get(getShapeIndex(state));
+	}
 
-		if (!p_185477_7_) {
-			state = state.getActualState(worldIn, pos);
-		}
+	/**
+	 * Creates a list containing a VoxelShape for every possible combination of facing properties.
+	 * <p>
+	 * Adapted from {@link SixWayBlock#makeShapes}.
+	 *
+	 * @param coreSize       Half the core cube's width, height and length
+	 * @param extensionWidth Half the extension's face width and height
+	 * @return The list of VoxelShapes
+	 */
+	private ImmutableList<VoxelShape> makeShapes(final float coreSize, final float extensionWidth) {
+		final float coreMin = 8 - coreSize;
+		final float coreMax = 8 + coreSize;
 
-		for (final Direction facing : Direction.VALUES) {
-			if (isConnected(state, facing)) {
-				final AxisAlignedBB axisAlignedBB = CONNECTED_BOUNDING_BOXES.get(facing.getIndex());
-				addCollisionBoxToList(pos, entityBox, collidingBoxes, axisAlignedBB);
+		final float extensionFaceMin = 8 - extensionWidth;
+		final float extensionFaceMax = 8 + extensionWidth;
+
+		final VoxelShape coreShape = makeCuboidShape(coreMin, coreMin, coreMin, coreMax, coreMax, coreMax);
+
+		final BiFunction<Direction.Axis, Direction, Float> getMinCoordinate = (axis, direction) -> {
+			if (axis == direction.getAxis()) {
+				return direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE ? 0 : coreMax;
 			}
+
+			return extensionFaceMin;
+		};
+
+		final BiFunction<Direction.Axis, Direction, Float> getMaxCoordinate = (axis, direction) -> {
+			if (axis == direction.getAxis()) {
+				return direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE ? coreMin : 16;
+			}
+
+			return extensionFaceMax;
+		};
+
+		final VoxelShape[] extensionShapes = new VoxelShape[FACING_VALUES.length];
+
+		for (int facingIndex = 0; facingIndex < FACING_VALUES.length; ++facingIndex) {
+			final Direction direction = FACING_VALUES[facingIndex];
+
+			extensionShapes[facingIndex] = makeCuboidShape(
+					getMinCoordinate.apply(Direction.Axis.X, direction),
+					getMinCoordinate.apply(Direction.Axis.Y, direction),
+					getMinCoordinate.apply(Direction.Axis.Z, direction),
+					getMaxCoordinate.apply(Direction.Axis.X, direction),
+					getMaxCoordinate.apply(Direction.Axis.Y, direction),
+					getMaxCoordinate.apply(Direction.Axis.Z, direction)
+			);
 		}
-	}*/
+
+		final VoxelShape[] combinedShapes = new VoxelShape[64];
+
+		for (int shapeIndex = 0; shapeIndex < 64; ++shapeIndex) {
+			VoxelShape shape = coreShape;
+
+			for (int facingIndex = 0; facingIndex < FACING_VALUES.length; ++facingIndex) {
+				if ((shapeIndex & 1 << facingIndex) != 0) {
+					shape = VoxelShapes.or(shape, extensionShapes[facingIndex]);
+				}
+			}
+
+			combinedShapes[shapeIndex] = shape;
+		}
+
+		return ImmutableList.copyOf(combinedShapes);
+	}
 }
