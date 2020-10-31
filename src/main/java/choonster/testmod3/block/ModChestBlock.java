@@ -36,7 +36,7 @@ public class ModChestBlock extends TileEntityBlock<ModChestTileEntity> {
 	/**
 	 * The chest's shape.
 	 */
-	private static final VoxelShape SHAPE = makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
+	private static final VoxelShape SHAPE = makeCuboidShape(1, 0, 1, 15, 14, 15);
 
 	public static final Property<Direction> FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
 
