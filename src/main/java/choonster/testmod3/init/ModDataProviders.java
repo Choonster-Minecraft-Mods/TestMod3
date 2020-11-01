@@ -1,10 +1,7 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.data.TestMod3BlockStateProvider;
-import choonster.testmod3.data.TestMod3ItemModelProvider;
-import choonster.testmod3.data.TestMod3LootTableProvider;
-import choonster.testmod3.data.TestMod3RecipeProvider;
+import choonster.testmod3.data.*;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IDataProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -36,6 +33,7 @@ public class ModDataProviders {
 		if (event.includeServer()) {
 			dataGenerator.addProvider(new TestMod3RecipeProvider(dataGenerator));
 			dataGenerator.addProvider(new TestMod3LootTableProvider(dataGenerator));
+			dataGenerator.addProvider(new TestMod3BiomeProvider(dataGenerator));
 		}
 	}
 }
