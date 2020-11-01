@@ -1,0 +1,43 @@
+package choonster.testmod3.init;
+
+import choonster.testmod3.TestMod3;
+import choonster.testmod3.world.gen.surfacebuilders.LoggingSurfaceBuilder;
+import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
+import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+
+/**
+ * Registers this mod's {@link SurfaceBuilder}s.
+ *
+ * @author Choonster
+ */
+public class ModSurfaceBuilders {
+	private static final DeferredRegister<SurfaceBuilder<?>> SURFACE_BUILDERS = DeferredRegister.create(ForgeRegistries.SURFACE_BUILDERS, TestMod3.MODID);
+
+	private static boolean isInitialised;
+
+	public static final RegistryObject<SurfaceBuilder<SurfaceBuilderConfig>> LOGGING_DEFAULT = SURFACE_BUILDERS.register(
+			"logging_default",
+			() -> new LoggingSurfaceBuilder<>(() -> SurfaceBuilder.DEFAULT, SurfaceBuilderConfig.field_237203_a_)
+	);
+
+	/**
+	 * Registers the {@link DeferredRegister} instance with the mod event bus.
+	 * <p>
+	 * This should be called during mod construction.
+	 *
+	 * @param modEventBus The mod event bus
+	 */
+	public static void initialise(final IEventBus modEventBus) {
+		if (isInitialised) {
+			throw new IllegalStateException("Already initialised");
+		}
+
+		SURFACE_BUILDERS.register(modEventBus);
+
+		isInitialised = true;
+	}
+}

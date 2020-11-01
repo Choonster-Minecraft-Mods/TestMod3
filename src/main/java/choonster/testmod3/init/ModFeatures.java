@@ -10,6 +10,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
+ * Registers this mod's {@link Feature}s.
+ *
  * @author Choonster
  */
 public class ModFeatures {

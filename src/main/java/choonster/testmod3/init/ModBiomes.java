@@ -20,6 +20,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
@@ -36,7 +37,7 @@ public class ModBiomes {
 	 */
 	public static final RegistryObject<Biome> DESERT_TEST = BIOMES.register("desert_test",
 			() -> Utils.makeDesertBiome(
-					Utils.getSurfaceBuilder(ModConfiguredSurfaceBuilders.DESERT_TEST),
+					Utils.surfaceBuilder(ModConfiguredSurfaceBuilders.DESERT_TEST),
 					0.125f, 0.05f, true, true, true
 			)
 	);
@@ -78,10 +79,10 @@ public class ModBiomes {
 	}
 
 	private static class Utils {
-		private static final Method GET_SKY_COLOR_WITH_TEMPERATURE_MODIFIER = ObfuscationReflectionHelper.findMethod(BiomeMaker.class, /* getSkyColorWithTemperatureModifier */"func_244206_a", float.class);
+		private static final Method GET_SKY_COLOR_WITH_TEMPERATURE_MODIFIER = ObfuscationReflectionHelper.findMethod(BiomeMaker.class, /* getSkyColorWithTemperatureModifier */ "func_244206_a", float.class);
 
-		public static ConfiguredSurfaceBuilder<?> getSurfaceBuilder(final RegistryKey<ConfiguredSurfaceBuilder<?>> key) {
-			return WorldGenRegistries.CONFIGURED_SURFACE_BUILDER.getOrThrow(key);
+		public static Supplier<ConfiguredSurfaceBuilder<?>> surfaceBuilder(final RegistryKey<ConfiguredSurfaceBuilder<?>> key) {
+			return () -> WorldGenRegistries.CONFIGURED_SURFACE_BUILDER.getOrThrow(key);
 		}
 
 		/**
@@ -92,7 +93,7 @@ public class ModBiomes {
 		 * @return The biome
 		 */
 		public static Biome makeDesertBiome(
-				final ConfiguredSurfaceBuilder<?> surfaceBuilder,
+				final Supplier<ConfiguredSurfaceBuilder<?>> surfaceBuilder,
 				final float depth,
 				final float scale,
 				final boolean hasVillageAndOutpost,
@@ -137,7 +138,7 @@ public class ModBiomes {
 
 			final int skyColour;
 			try {
-				skyColour = (int) GET_SKY_COLOR_WITH_TEMPERATURE_MODIFIER.invoke(2);
+				skyColour = (int) GET_SKY_COLOR_WITH_TEMPERATURE_MODIFIER.invoke(null, 2);
 			} catch (final IllegalAccessException | InvocationTargetException e) {
 				throw new RuntimeException("Unable to get sky colour", e);
 			}
