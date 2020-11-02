@@ -45,7 +45,7 @@ public class FluidTankBlock<TE extends BaseFluidTankTileEntity> extends TileEnti
 	public static final ResourceLocation FLUID_TANK_CONTENTS = new ResourceLocation(TestMod3.MODID, "fluid_tank_contents");
 
 	public FluidTankBlock(final Block.Properties properties) {
-		super(true, properties);
+		super(properties);
 	}
 
 	@SuppressWarnings("deprecation")

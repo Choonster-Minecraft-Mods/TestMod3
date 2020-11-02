@@ -41,7 +41,7 @@ public class ModChestBlock extends TileEntityBlock<ModChestTileEntity> {
 	public static final Property<Direction> FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
 
 	public ModChestBlock(final Block.Properties properties) {
-		super(true, properties);
+		super(properties);
 	}
 
 	@Override

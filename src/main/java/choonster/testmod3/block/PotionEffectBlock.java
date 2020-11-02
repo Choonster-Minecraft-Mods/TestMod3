@@ -16,7 +16,7 @@ import net.minecraft.world.IBlockReader;
  */
 public class PotionEffectBlock extends TileEntityBlock<PotionEffectTileEntity> {
 	public PotionEffectBlock(final Block.Properties properties) {
-		super(false, properties);
+		super(properties);
 	}
 
 	@Override

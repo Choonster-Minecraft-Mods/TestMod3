@@ -27,7 +27,7 @@ public class HiddenBlock extends TileEntityBlock<HiddenTileEntity> {
 	public static final Property<Boolean> HIDDEN = BooleanProperty.create("hidden");
 
 	public HiddenBlock(final Block.Properties properties) {
-		super(false, properties);
+		super(properties);
 		setDefaultState(getStateContainer().getBaseState().with(HIDDEN, true));
 	}
 
