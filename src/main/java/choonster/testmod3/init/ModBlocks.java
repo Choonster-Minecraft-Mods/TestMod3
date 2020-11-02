@@ -56,7 +56,7 @@ public class ModBlocks {
 	);
 
 	public static final RegistryObject<FluidTankBlock<BaseFluidTankTileEntity>> FLUID_TANK = registerBlock("fluid_tank",
-			() -> new FluidTankBlock<>(Block.Properties.create(Material.GLASS).sound(SoundType.GLASS).hardnessAndResistance(0.3f)),
+			() -> new FluidTankBlock<>(Block.Properties.create(Material.GLASS).sound(SoundType.GLASS).hardnessAndResistance(0.3f).notSolid()),
 			(block) -> new FluidTankItem(block, defaultItemProperties().maxStackSize(1))
 	);
 
@@ -165,7 +165,7 @@ public class ModBlocks {
 	);
 
 	public static final RegistryObject<RestrictedFluidTankBlock> FLUID_TANK_RESTRICTED = registerBlock("fluid_tank_restricted",
-			() -> new RestrictedFluidTankBlock(Block.Properties.create(Material.GLASS).sound(SoundType.GLASS).hardnessAndResistance(0.3f)),
+			() -> new RestrictedFluidTankBlock(Block.Properties.create(Material.GLASS).sound(SoundType.GLASS).hardnessAndResistance(0.3f).notSolid()),
 			(block) -> new FluidTankItem(block, defaultItemProperties())
 	);
 
