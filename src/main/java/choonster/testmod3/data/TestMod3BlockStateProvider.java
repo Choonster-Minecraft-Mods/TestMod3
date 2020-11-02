@@ -70,7 +70,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 			itemModels().withExistingParent("item/pipe/inventory", "block/block")
 					.texture("particle", "#all")
 					.element()
-					.from(4, 4, 0) // TODO: Confirm that these are correct
+					.from(4, 4, 0)
 					.to(12, 12, 16)
 					.allFaces((direction, faceBuilder) -> faceBuilder.texture("#all"))
 					.end()
