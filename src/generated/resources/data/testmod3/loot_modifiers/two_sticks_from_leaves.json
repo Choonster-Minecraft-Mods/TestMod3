@@ -1,0 +1,16 @@
+{
+  "conditions": [
+    {
+      "condition": "testmod3:match_block_tag",
+      "tag": "minecraft:leaves"
+    }
+  ],
+  "name": "minecraft:stick",
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": 2
+    }
+  ],
+  "type": "testmod3:item"
+}

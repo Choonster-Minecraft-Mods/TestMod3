@@ -1,0 +1,13 @@
+{
+  "conditions": [
+    {
+      "condition": "minecraft:random_chance",
+      "chance": 0.5
+    },
+    {
+      "condition": "testmod3:is_chest_loot"
+    }
+  ],
+  "loot_table": "testmod3:loot_table_test",
+  "type": "testmod3:loot_table"
+}

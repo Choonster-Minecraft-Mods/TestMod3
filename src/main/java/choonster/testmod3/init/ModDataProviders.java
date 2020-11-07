@@ -34,6 +34,7 @@ public class ModDataProviders {
 			dataGenerator.addProvider(new TestMod3RecipeProvider(dataGenerator));
 			dataGenerator.addProvider(new TestMod3LootTableProvider(dataGenerator));
 			dataGenerator.addProvider(new TestMod3BiomeProvider(dataGenerator));
+			dataGenerator.addProvider(new TestMod3LootModifierProvider(dataGenerator));
 		}
 	}
 }

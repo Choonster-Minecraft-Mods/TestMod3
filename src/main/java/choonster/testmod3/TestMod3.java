@@ -42,6 +42,7 @@ public class TestMod3 {
 		ModEffects.initialise(modEventBus);
 		ModEntities.initialise(modEventBus);
 		ModFeatures.initialise(modEventBus);
+		ModLootModifierSerializers.initialise(modEventBus);
 		ModPlacements.initialise(modEventBus);
 		ModPotions.initialise(modEventBus);
 		ModCrafting.Recipes.initialise(modEventBus);
@@ -60,6 +61,7 @@ public class TestMod3 {
 		event.enqueueWork(() -> {
 			ModCrafting.Ingredients.register();
 			ModLootTables.registerLootTables();
+			ModLootConditionTypes.register();
 			ModLootFunctionTypes.register();
 
 			BlockDumper.dump();

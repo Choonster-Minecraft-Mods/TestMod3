@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "entries": [
+    "testmod3:two_sticks_from_leaves",
+    "testmod3:loot_table_test",
+    "testmod3:spawner_drops"
+  ]
+}

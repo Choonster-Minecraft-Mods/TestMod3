@@ -1,0 +1,22 @@
+{
+  "conditions": [
+    {
+      "condition": "minecraft:block_state_property",
+      "block": "minecraft:spawner"
+    },
+    {
+      "condition": "minecraft:match_tool",
+      "predicate": {
+        "enchantments": [
+          {
+            "enchantment": "minecraft:silk_touch",
+            "levels": {
+              "min": 1
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "type": "testmod3:tile_entity_nbt"
+}

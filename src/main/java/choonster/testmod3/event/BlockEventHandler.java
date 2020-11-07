@@ -45,18 +45,6 @@ public class BlockEventHandler {
 				&& !canToolHarvestBlock(state, player.getHeldItemMainhand(), player);
 	}
 
-	/* TODO: Convert to Global Loot Modifier
-	 * If the player harvested leaves, add two sticks to the drops list.
-	 *
-	 * @param event The event
-	 */
-//	@SubscribeEvent
-//	public static void harvestDrops(final BlockEvent.HarvestDropsEvent event) {
-//		if (event.getState().isIn(BlockTags.LEAVES)) {
-//			event.getDrops().add(new ItemStack(Items.STICK, 2));
-//		}
-//	}
-
 	/**
 	 * Stop players from breaking logs without the correct tool.
 	 *
