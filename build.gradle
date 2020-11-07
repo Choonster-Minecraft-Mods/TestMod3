@@ -161,7 +161,13 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 artifacts {
-    archives javadocJar
+    /*
+     TODO: Uncomment when Hwyla fixes its Javadoc errors or I find a way to ignore them
+     https://forums.minecraftforge.net/topic/92633-ignoring-javadoc-errors-in-dependencies/
+     https://github.com/TehNut/HWYLA/issues/303
+     https://stackoverflow.com/questions/64619620/ignoring-javadoc-errors-in-dependencies
+     */
+//    archives javadocJar
 }
 
 jar {
