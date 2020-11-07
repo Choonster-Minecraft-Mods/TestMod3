@@ -81,7 +81,7 @@ public class LootTableTestItem extends Item {
 	}
 
 	/**
-	 * Get an {@link ITextComponent} with the quantity and display name of the {@link ItemStack}.
+	 * Get an {@link IFormattableTextComponent} with the quantity and display name of the {@link ItemStack}.
 	 *
 	 * @param itemStack The ItemStack
 	 * @return The ITextComponent
