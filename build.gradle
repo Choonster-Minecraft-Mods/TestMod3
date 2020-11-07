@@ -133,8 +133,8 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
-    compileOnly fg.deobf("mezz.jei:jei-1.16.3:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.16.3:${jei_version}")
+//    compileOnly fg.deobf("mezz.jei:jei-1.16.3:${jei_version}:api")
+//    runtimeOnly fg.deobf("mezz.jei:jei-1.16.3:${jei_version}")
     embed "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
     //https://maven.tehnut.info/mcp/mobius/waila/Hwyla/1.8.26-B41_1.12.2/Hwyla-1.8.26-B41_1.12.2.pom
     //https://maven.tehnut.info/mcp/mobius/waila/Hwyla/1.10.11-B78-1.16.2/Hwyla-1.10.11-B78-1.16.2.pom
