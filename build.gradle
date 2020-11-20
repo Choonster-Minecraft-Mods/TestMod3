@@ -117,6 +117,11 @@ repositories {
     maven { url = "http://dvs1.progwml6.com/files/maven/" }
     maven { url = "https://maven.tehnut.info" }
     maven { url = 'https://jitpack.io/' }
+
+    maven { // TOP
+        name 'tterrag maven'
+        url "https://maven.tterrag.com/"
+    }
 }
 
 configurations {
@@ -142,6 +147,9 @@ dependencies {
     compileOnly fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}:api")
     // At runtime, use the full Hwyla jar
     runtimeOnly fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}")
+
+    compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
+    runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
 
 //    deobfCompile "com.github.azanor:Baubles:${baubles_version}"
 }
