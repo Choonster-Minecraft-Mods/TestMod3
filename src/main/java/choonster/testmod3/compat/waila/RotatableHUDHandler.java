@@ -4,7 +4,7 @@ import net.minecraft.state.Property;
 import net.minecraft.util.Direction;
 
 /**
- * Adds a line to the Waila tooltip body displaying the current value of an {@link Direction} property.
+ * Adds a line to the Waila tooltip body displaying the current value of a {@link Direction} property.
  *
  * @author Choonster
  */
