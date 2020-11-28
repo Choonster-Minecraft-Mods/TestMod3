@@ -3,6 +3,7 @@ package choonster.testmod3.entity;
 import choonster.testmod3.init.ModEntities;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.CreeperEntity;
@@ -23,6 +24,10 @@ public class PlayerAvoidingCreeperEntity extends CreeperEntity {
 
 	public PlayerAvoidingCreeperEntity(final EntityType<? extends CreeperEntity> p_i50213_1_, final World p_i50213_2_) {
 		super(p_i50213_1_, p_i50213_2_);
+	}
+
+	public static AttributeModifierMap.MutableAttribute registerAttributes() {
+		return CreeperEntity.registerAttributes();
 	}
 
 	@Override

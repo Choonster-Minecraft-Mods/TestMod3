@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
@@ -19,6 +20,8 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -73,6 +76,14 @@ public class ModEntities {
 		return ENTITIES.register(name,
 				() -> factory.get().build(new ResourceLocation(TestMod3.MODID, name).toString())
 		);
+	}
+
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
+	public static class RegistrationHandler {
+		@SubscribeEvent
+		public static void registerAttributes(final FMLCommonSetupEvent event) {
+			GlobalEntityTypeAttributes.put(PLAYER_AVOIDING_CREEPER.get(), PlayerAvoidingCreeperEntity.registerAttributes().create());
+		}
 	}
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)

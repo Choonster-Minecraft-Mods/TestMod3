@@ -2,6 +2,7 @@ package choonster.testmod3.client.renderer.entity;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModEntities;
+import net.minecraft.client.renderer.entity.CreeperRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -22,5 +23,6 @@ public class ModRenderers {
 	public static void register(final FMLClientSetupEvent event) {
 		RenderingRegistry.registerEntityRenderingHandler(ModEntities.MOD_ARROW.get(), renderManager -> new RenderModArrow(renderManager, new ResourceLocation(TestMod3.MODID, "textures/entity/arrow.png")));
 		RenderingRegistry.registerEntityRenderingHandler(ModEntities.BLOCK_DETECTION_ARROW.get(), renderManager -> new RenderModArrow(renderManager, new ResourceLocation(TestMod3.MODID, "textures/entity/block_detection_arrow.png")));
+		RenderingRegistry.registerEntityRenderingHandler(ModEntities.PLAYER_AVOIDING_CREEPER.get(), CreeperRenderer::new);
 	}
 }
