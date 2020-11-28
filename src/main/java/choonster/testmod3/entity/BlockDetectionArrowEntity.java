@@ -18,7 +18,7 @@ import net.minecraft.world.World;
  * An arrow entity that tells its shooter which block it hit.
  * <p>
  * Test for this thread:
- * http://www.minecraftforge.net/forum/index.php?topic=42677.0
+ * https://forums.minecraftforge.net/topic/42456-where-can-i-find-the-phantom-block/
  *
  * @author Choonster
  */
@@ -45,13 +45,13 @@ public class BlockDetectionArrowEntity extends ModArrowEntity {
 	protected void onImpact(final RayTraceResult result) {
 		super.onImpact(result);
 
-		final Entity shootingEntity = /* getShooter */ func_234616_v_();
+		final Entity shooter = /* getShooter */ func_234616_v_();
 
-		if (result.getType() == RayTraceResult.Type.BLOCK && shootingEntity != null) {
+		if (result.getType() == RayTraceResult.Type.BLOCK && shooter != null) {
 			final BlockPos pos = ((BlockRayTraceResult) result).getPos();
 			final BlockState state = world.getBlockState(pos);
 
-			shootingEntity.sendMessage(new TranslationTextComponent("[%s] Block at %s,%s,%s: %s", world.isRemote ? "CLIENT" : "SERVER", pos.getX(), pos.getY(), pos.getZ(), state), Util.DUMMY_UUID);
+			shooter.sendMessage(new TranslationTextComponent("[%s] Block at %s,%s,%s: %s", world.isRemote ? "CLIENT" : "SERVER", pos.getX(), pos.getY(), pos.getZ(), state), Util.DUMMY_UUID);
 		}
 	}
 }

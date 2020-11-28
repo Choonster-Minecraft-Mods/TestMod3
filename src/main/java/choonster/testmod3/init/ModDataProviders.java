@@ -35,6 +35,10 @@ public class ModDataProviders {
 			dataGenerator.addProvider(new TestMod3LootTableProvider(dataGenerator));
 			dataGenerator.addProvider(new TestMod3BiomeProvider(dataGenerator));
 			dataGenerator.addProvider(new TestMod3LootModifierProvider(dataGenerator));
+
+			final TestMod3BlockTagsProvider blockTagsProvider = new TestMod3BlockTagsProvider(dataGenerator, existingFileHelper);
+			dataGenerator.addProvider(blockTagsProvider);
+			dataGenerator.addProvider(new TestMod3ItemTagsProvider(dataGenerator, blockTagsProvider, existingFileHelper));
 		}
 	}
 }

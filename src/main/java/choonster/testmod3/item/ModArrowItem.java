@@ -1,5 +1,7 @@
 package choonster.testmod3.item;
 
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -12,7 +14,7 @@ import net.minecraft.world.World;
 import java.util.function.BiFunction;
 
 /**
- * An arrow fired from this mod's bows.
+ * An arrow item that spawns the arrow entity specified in the constructor.
  *
  * @author Choonster
  */
@@ -36,6 +38,6 @@ public class ModArrowItem extends ArrowItem {
 
 	@Override
 	public boolean isInfinite(final ItemStack stack, final ItemStack bow, final PlayerEntity player) {
-		return true;
+		return EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bow) > 0;
 	}
 }
