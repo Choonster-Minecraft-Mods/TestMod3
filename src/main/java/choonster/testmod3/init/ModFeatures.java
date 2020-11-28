@@ -2,8 +2,8 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.gen.feature.BannerFeature;
+import choonster.testmod3.world.gen.feature.BannerFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -20,7 +20,7 @@ public class ModFeatures {
 	private static boolean isInitialised;
 
 	public static final RegistryObject<BannerFeature> BANNER = FEATURES.register("banner",
-			() -> new BannerFeature(NoFeatureConfig.field_236558_a_)
+			() -> new BannerFeature(BannerFeatureConfig.CODEC)
 	);
 
 	/**

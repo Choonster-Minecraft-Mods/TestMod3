@@ -1,7 +1,8 @@
 package choonster.testmod3.world.gen.feature;
 
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.BannerBlock;
 import net.minecraft.item.DyeColor;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -12,11 +13,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -27,14 +28,14 @@ import java.util.Random;
  *
  * @author Choonster
  */
-public class BannerFeature extends Feature<NoFeatureConfig> {
+public class BannerFeature extends Feature<BannerFeatureConfig> {
 	private static final Field PATTERNS = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* patterns */"field_175118_f");
 	private static final Field BASE_COLOR = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* baseColor */"field_175120_a");
 	private static final Field PATTERN_LIST = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* patternList */ "field_175122_h");
 	private static final Field PATTERN_DATA_SET = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* patternDataSet */"field_175119_g");
 	private static final Field NAME = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* name */"field_190617_a");
 
-	public BannerFeature(final Codec<NoFeatureConfig> codec) {
+	public BannerFeature(final Codec<BannerFeatureConfig> codec) {
 		super(codec);
 	}
 
@@ -43,10 +44,12 @@ public class BannerFeature extends Feature<NoFeatureConfig> {
 	 *
 	 * @return A list tag containing the patterns
 	 */
-	protected ListNBT createPatternList() {
+	protected ListNBT createPatternList(final List<Pair<BannerPattern, DyeColor>> patterns) {
 		final ListNBT patternList = new ListNBT();
-		patternList.add(createPatternTag(BannerPattern.GRADIENT_UP, DyeColor.MAGENTA));
-		patternList.add(createPatternTag(BannerPattern.FLOWER, DyeColor.BLACK));
+
+		for (final Pair<BannerPattern, DyeColor> pattern : patterns) {
+			patternList.add(createPatternTag(pattern.getFirst(), pattern.getSecond()));
+		}
 
 		return patternList;
 	}
@@ -66,12 +69,12 @@ public class BannerFeature extends Feature<NoFeatureConfig> {
 	}
 
 	@Override
-	public boolean generate(final ISeedReader world, final ChunkGenerator generator, final Random rand, final BlockPos pos, final NoFeatureConfig config) {
-		world.setBlockState(pos, Blocks.PINK_BANNER.getDefaultState(), Constants.BlockFlags.DEFAULT);
+	public boolean generate(final ISeedReader world, final ChunkGenerator generator, final Random rand, final BlockPos pos, final BannerFeatureConfig config) {
+		world.setBlockState(pos, BannerBlock.forColor(config.getColor()).getDefaultState(), Constants.BlockFlags.DEFAULT);
 
 		final TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileEntity instanceof BannerTileEntity) {
-			loadFromItemStack((BannerTileEntity) tileEntity, createPatternList(), DyeColor.PINK);
+			loadFromItemStack((BannerTileEntity) tileEntity, createPatternList(config.getPatterns()), DyeColor.PINK);
 		}
 
 		return true;

@@ -1,8 +1,8 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.world.gen.placement.AtSurfaceInChunksDivisibleBy16;
-import net.minecraft.world.gen.feature.FeatureSpreadConfig;
+import choonster.testmod3.world.gen.placement.InChunksDivisibleBy16;
+import net.minecraft.world.gen.placement.NoPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
@@ -19,8 +19,8 @@ public class ModPlacements {
 
 	private static boolean isInitialised;
 
-	public static final RegistryObject<AtSurfaceInChunksDivisibleBy16> AT_SURFACE_IN_CHUNKS_DIVISIBLE_BY_16 = PLACEMENTS.register("at_surface_in_chunks_divisible_by_16",
-			() -> new AtSurfaceInChunksDivisibleBy16(FeatureSpreadConfig.CODEC)
+	public static final RegistryObject<InChunksDivisibleBy16> IN_CHUNKS_DIVISIBLE_BY_16 = PLACEMENTS.register("in_chunks_divisible_by_16",
+			() -> new InChunksDivisibleBy16(NoPlacementConfig.CODEC)
 	);
 
 	/**

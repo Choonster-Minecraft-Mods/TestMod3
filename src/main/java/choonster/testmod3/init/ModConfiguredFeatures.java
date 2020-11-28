@@ -1,12 +1,19 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.world.gen.feature.BannerFeatureConfig;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.DyeColor;
+import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.Features;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
 import net.minecraft.world.gen.feature.template.BlockMatchRuleTest;
 import net.minecraft.world.gen.feature.template.RuleTest;
 import net.minecraftforge.event.RegistryEvent;
@@ -34,10 +41,19 @@ public class ModConfiguredFeatures {
 		// Ensure this is run after the Feature DeferredRegister in ModFeatures
 		@SubscribeEvent(priority = EventPriority.LOW)
 		public static void register(final RegistryEvent.Register<Feature<?>> event) {
+			// Places a banner at the surface, but only in chunks with coordinates divisible by 16.
+			// Test for this thread:
+			// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2535868-banner-nbt-tags
 			register(BANNER,
 					ModFeatures.BANNER.get()
-							.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
-							.withPlacement(ModPlacements.AT_SURFACE_IN_CHUNKS_DIVISIBLE_BY_16.get().configure(new FeatureSpreadConfig(1)))
+							.withConfiguration(BannerFeatureConfig.create(
+									DyeColor.PINK,
+									Pair.of(BannerPattern.GRADIENT_UP, DyeColor.MAGENTA),
+									Pair.of(BannerPattern.FLOWER, DyeColor.BLACK)
+							))
+							.withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT)
+							.withPlacement(ModConfiguredPlacements.IN_CHUNKS_DIVISIBLE_BY_16.get())
+							.func_242731_b(1) // count?
 			);
 
 			register(NETHER_IRON_ORE,
