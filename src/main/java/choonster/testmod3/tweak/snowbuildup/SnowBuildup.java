@@ -61,7 +61,7 @@ public class SnowBuildup {
 			final Iterable<ChunkHolder> chunks = (Iterable<ChunkHolder>) GET_LOADED_CHUNKS.invoke(world.getChunkProvider().chunkManager);
 			loadedChunks = chunks;
 		} catch (final IllegalAccessException | InvocationTargetException e) {
-			throw new RuntimeException("Couldn't get loaded chunks for Snow Buildup");
+			throw new RuntimeException("Couldn't get loaded chunks for Snow Buildup", e);
 		}
 
 		// For each loaded chunk
