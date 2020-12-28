@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
  * @author Choonster
  */
 public class ModConfiguredSurfaceBuilders {
-	public static RegistryKey<ConfiguredSurfaceBuilder<?>> DESERT_TEST = key("desert_test");
+	public static final RegistryKey<ConfiguredSurfaceBuilder<?>> DESERT_TEST = key("desert_test");
 
 	private static RegistryKey<ConfiguredSurfaceBuilder<?>> key(final String name) {
 		return RegistryKey.getOrCreateKey(Registry.CONFIGURED_SURFACE_BUILDER_KEY, new ResourceLocation(TestMod3.MODID, name));

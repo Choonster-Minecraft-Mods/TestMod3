@@ -15,7 +15,7 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class ModConfiguredPlacements {
-	public static Supplier<ConfiguredPlacement<NoPlacementConfig>> IN_CHUNKS_DIVISIBLE_BY_16 = Lazy.of(() ->
+	public static final Supplier<ConfiguredPlacement<NoPlacementConfig>> IN_CHUNKS_DIVISIBLE_BY_16 = Lazy.of(() ->
 			ModPlacements.IN_CHUNKS_DIVISIBLE_BY_16.get()
 					.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)
 	);

@@ -19,32 +19,32 @@ public class ModTileEntities {
 
 	private static boolean isInitialised;
 
-	public static RegistryObject<TileEntityType<SurvivalCommandBlockTileEntity>> SURVIVAL_COMMAND_BLOCK = registerTileEntityType("survival_command_block",
+	public static final RegistryObject<TileEntityType<SurvivalCommandBlockTileEntity>> SURVIVAL_COMMAND_BLOCK = registerTileEntityType("survival_command_block",
 			SurvivalCommandBlockTileEntity::new,
 			ModBlocks.SURVIVAL_COMMAND_BLOCK
 	);
 
-	public static RegistryObject<TileEntityType<FluidTankTileEntity>> FLUID_TANK = registerTileEntityType("fluid_tank",
+	public static final RegistryObject<TileEntityType<FluidTankTileEntity>> FLUID_TANK = registerTileEntityType("fluid_tank",
 			FluidTankTileEntity::new,
 			ModBlocks.FLUID_TANK
 	);
 
-	public static RegistryObject<TileEntityType<RestrictedFluidTankTileEntity>> FLUID_TANK_RESTRICTED = registerTileEntityType("fluid_tank_restricted",
+	public static final RegistryObject<TileEntityType<RestrictedFluidTankTileEntity>> FLUID_TANK_RESTRICTED = registerTileEntityType("fluid_tank_restricted",
 			RestrictedFluidTankTileEntity::new,
 			ModBlocks.FLUID_TANK_RESTRICTED
 	);
 
-	public static RegistryObject<TileEntityType<PotionEffectTileEntity>> POTION_EFFECT = registerTileEntityType("potion_effect",
+	public static final RegistryObject<TileEntityType<PotionEffectTileEntity>> POTION_EFFECT = registerTileEntityType("potion_effect",
 			PotionEffectTileEntity::new,
 			ModBlocks.POTION_EFFECT
 	);
 
-	public static RegistryObject<TileEntityType<ModChestTileEntity>> MOD_CHEST = registerTileEntityType("mod_chest",
+	public static final RegistryObject<TileEntityType<ModChestTileEntity>> MOD_CHEST = registerTileEntityType("mod_chest",
 			ModChestTileEntity::new,
 			ModBlocks.CHEST
 	);
 
-	public static RegistryObject<TileEntityType<HiddenTileEntity>> HIDDEN = registerTileEntityType("hidden",
+	public static final RegistryObject<TileEntityType<HiddenTileEntity>> HIDDEN = registerTileEntityType("hidden",
 			HiddenTileEntity::new,
 			ModBlocks.HIDDEN
 	);
