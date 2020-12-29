@@ -78,7 +78,7 @@ public class ModBlocks {
 	);
 
 	public static final RegistryObject<PlaneBlock> MIRROR_PLANE = registerBlock("mirror_plane",
-			() -> new PlaneBlock(Block.Properties.create(Material.IRON))
+			() -> new PlaneBlock(Block.Properties.create(Material.IRON).notSolid())
 	);
 
 	public static final RegistryObject<Block> VANILLA_MODEL_TEST = registerBlock("vanilla_model_test",

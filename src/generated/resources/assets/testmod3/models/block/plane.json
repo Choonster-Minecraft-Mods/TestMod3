@@ -20,7 +20,13 @@
           "texture": "#base"
         },
         "west": {
-          "texture": "#side"
+          "texture": "#side",
+          "uv": [
+            16.0,
+            0.0,
+            0.0,
+            16.0
+          ]
         },
         "east": {
           "texture": "#side"
@@ -36,7 +42,7 @@
       "to": [
         16,
         16,
-        16
+        0
       ],
       "rotation": {
         "origin": [

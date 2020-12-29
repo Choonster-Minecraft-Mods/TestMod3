@@ -297,6 +297,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 				.face(Direction.WEST)
 				.texture("#side")
+				.uvs(16, 0, 0, 16)
 				.end()
 
 				.face(Direction.DOWN)
@@ -307,6 +308,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 				// Plane
 				.element()
+				.from(0, 0, 0)
+				.to(16, 16, 0)
 
 				.rotation()
 				.origin(0, 16, 0)
