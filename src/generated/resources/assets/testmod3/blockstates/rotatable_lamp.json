@@ -2,55 +2,49 @@
   "variants": {
     "facing=down,lit=false": {
       "model": "testmod3:block/rotatable_lamp_off",
-      "x": 180
+      "x": 90
     },
     "facing=up,lit=false": {
-      "model": "testmod3:block/rotatable_lamp_off"
+      "model": "testmod3:block/rotatable_lamp_off",
+      "x": -90
     },
     "facing=north,lit=false": {
-      "model": "testmod3:block/rotatable_lamp_off",
-      "x": 90,
-      "y": 180
+      "model": "testmod3:block/rotatable_lamp_off"
     },
     "facing=south,lit=false": {
       "model": "testmod3:block/rotatable_lamp_off",
-      "x": 90
+      "y": 180
     },
     "facing=west,lit=false": {
       "model": "testmod3:block/rotatable_lamp_off",
-      "x": 90,
-      "y": 90
+      "y": 270
     },
     "facing=east,lit=false": {
       "model": "testmod3:block/rotatable_lamp_off",
-      "x": 90,
-      "y": 270
+      "y": 90
     },
     "facing=down,lit=true": {
       "model": "testmod3:block/rotatable_lamp_on",
-      "x": 180
+      "x": 90
     },
     "facing=up,lit=true": {
-      "model": "testmod3:block/rotatable_lamp_on"
+      "model": "testmod3:block/rotatable_lamp_on",
+      "x": -90
     },
     "facing=north,lit=true": {
-      "model": "testmod3:block/rotatable_lamp_on",
-      "x": 90,
-      "y": 180
+      "model": "testmod3:block/rotatable_lamp_on"
     },
     "facing=south,lit=true": {
       "model": "testmod3:block/rotatable_lamp_on",
-      "x": 90
+      "y": 180
     },
     "facing=west,lit=true": {
       "model": "testmod3:block/rotatable_lamp_on",
-      "x": 90,
-      "y": 90
+      "y": 270
     },
     "facing=east,lit=true": {
       "model": "testmod3:block/rotatable_lamp_on",
-      "x": 90,
-      "y": 270
+      "y": 90
     }
   }
 }

@@ -2,55 +2,49 @@
   "variants": {
     "conditional=false,facing=down": {
       "model": "testmod3:block/chain_survival_command_block",
-      "x": 180
+      "x": 90
     },
     "conditional=true,facing=down": {
       "model": "testmod3:block/chain_survival_command_block_conditional",
-      "x": 180
+      "x": 90
     },
     "conditional=false,facing=up": {
-      "model": "testmod3:block/chain_survival_command_block"
+      "model": "testmod3:block/chain_survival_command_block",
+      "x": -90
     },
     "conditional=true,facing=up": {
-      "model": "testmod3:block/chain_survival_command_block_conditional"
+      "model": "testmod3:block/chain_survival_command_block_conditional",
+      "x": -90
     },
     "conditional=false,facing=north": {
-      "model": "testmod3:block/chain_survival_command_block",
-      "x": 90,
-      "y": 180
+      "model": "testmod3:block/chain_survival_command_block"
     },
     "conditional=true,facing=north": {
-      "model": "testmod3:block/chain_survival_command_block_conditional",
-      "x": 90,
-      "y": 180
+      "model": "testmod3:block/chain_survival_command_block_conditional"
     },
     "conditional=false,facing=south": {
       "model": "testmod3:block/chain_survival_command_block",
-      "x": 90
+      "y": 180
     },
     "conditional=true,facing=south": {
       "model": "testmod3:block/chain_survival_command_block_conditional",
-      "x": 90
+      "y": 180
     },
     "conditional=false,facing=west": {
       "model": "testmod3:block/chain_survival_command_block",
-      "x": 90,
-      "y": 90
+      "y": 270
     },
     "conditional=true,facing=west": {
       "model": "testmod3:block/chain_survival_command_block_conditional",
-      "x": 90,
-      "y": 90
+      "y": 270
     },
     "conditional=false,facing=east": {
       "model": "testmod3:block/chain_survival_command_block",
-      "x": 90,
-      "y": 270
+      "y": 90
     },
     "conditional=true,facing=east": {
       "model": "testmod3:block/chain_survival_command_block_conditional",
-      "x": 90,
-      "y": 270
+      "y": 90
     }
   }
 }

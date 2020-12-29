@@ -2,107 +2,95 @@
   "variants": {
     "face_rotation=up,facing=down": {
       "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block",
-      "x": 180
+      "x": 90
     },
     "face_rotation=right,facing=down": {
       "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_right",
-      "x": 180
+      "x": 90
     },
     "face_rotation=down,facing=down": {
       "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_down",
-      "x": 180
+      "x": 90
     },
     "face_rotation=left,facing=down": {
       "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_left",
-      "x": 180
+      "x": 90
     },
     "face_rotation=up,facing=up": {
-      "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block"
+      "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block",
+      "x": -90
     },
     "face_rotation=right,facing=up": {
-      "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_right"
+      "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_right",
+      "x": -90
     },
     "face_rotation=down,facing=up": {
-      "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_down"
+      "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_down",
+      "x": -90
     },
     "face_rotation=left,facing=up": {
-      "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_left"
+      "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_left",
+      "x": -90
     },
     "face_rotation=up,facing=north": {
-      "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block",
-      "x": 90,
-      "y": 180
+      "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block"
     },
     "face_rotation=right,facing=north": {
-      "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_right",
-      "x": 90,
-      "y": 180
+      "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_right"
     },
     "face_rotation=down,facing=north": {
-      "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_down",
-      "x": 90,
-      "y": 180
+      "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_down"
     },
     "face_rotation=left,facing=north": {
-      "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_left",
-      "x": 90,
-      "y": 180
+      "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_left"
     },
     "face_rotation=up,facing=south": {
       "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block",
-      "x": 90
+      "y": 180
     },
     "face_rotation=right,facing=south": {
       "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_right",
-      "x": 90
+      "y": 180
     },
     "face_rotation=down,facing=south": {
       "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_down",
-      "x": 90
+      "y": 180
     },
     "face_rotation=left,facing=south": {
       "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_left",
-      "x": 90
+      "y": 180
     },
     "face_rotation=up,facing=west": {
       "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block",
-      "x": 90,
-      "y": 90
+      "y": 270
     },
     "face_rotation=right,facing=west": {
       "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_right",
-      "x": 90,
-      "y": 90
+      "y": 270
     },
     "face_rotation=down,facing=west": {
       "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_down",
-      "x": 90,
-      "y": 90
+      "y": 270
     },
     "face_rotation=left,facing=west": {
       "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_left",
-      "x": 90,
-      "y": 90
+      "y": 270
     },
     "face_rotation=up,facing=east": {
       "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block",
-      "x": 90,
-      "y": 270
+      "y": 90
     },
     "face_rotation=right,facing=east": {
       "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_right",
-      "x": 90,
-      "y": 270
+      "y": 90
     },
     "face_rotation=down,facing=east": {
       "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_down",
-      "x": 90,
-      "y": 270
+      "y": 90
     },
     "face_rotation=left,facing=east": {
       "model": "testmod3:block/colored_rotatable/cyan_multi_rotatable_block_rotated_left",
-      "x": 90,
-      "y": 270
+      "y": 90
     }
   }
 }

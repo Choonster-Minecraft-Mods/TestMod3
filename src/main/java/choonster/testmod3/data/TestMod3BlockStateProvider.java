@@ -35,6 +35,8 @@ import java.util.function.Function;
 public class TestMod3BlockStateProvider extends BlockStateProvider {
 	private static final Logger LOGGER = LogManager.getLogger();
 
+	private static final int DEFAULT_ANGLE_OFFSET = 180;
+
 	private final List<String> errors = new ArrayList<>();
 
 	/**
@@ -98,10 +100,13 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 								switch (faceRotation) {
 									case LEFT:
 										faceBuilder.rotation(ModelBuilder.FaceRotation.COUNTERCLOCKWISE_90);
+										break;
 									case RIGHT:
 										faceBuilder.rotation(ModelBuilder.FaceRotation.CLOCKWISE_90);
+										break;
 									case DOWN:
 										faceBuilder.rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN);
+										break;
 								}
 							})
 							.end();
@@ -397,7 +402,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 				.texture("chest", modLoc("block/chest/wood"))
 				.texture("particle", blockTexture(Blocks.OAK_PLANKS));
 
-		simpleBlock(ModBlocks.CHEST.get(), chest);
+		horizontalBlock(ModBlocks.CHEST.get(), chest);
 		simpleBlockItem(ModBlocks.CHEST.get(), chest);
 
 
@@ -665,8 +670,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 					.part()
 					.modelFile(sideModel)
 					.uvLock(true)
-					.rotationX(direction == Direction.DOWN ? 90 : direction.getAxis().isHorizontal() ? 0 : -90)
-					.rotationY(getRotationY(direction.getOpposite()))
+					.rotationX(getRotationX(direction))
+					.rotationY(getRotationY(direction))
 					.addModel()
 					.condition(BasePipeBlock.getConnectedProperty(direction), true);
 		}
@@ -698,10 +703,10 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	}
 
 	private int getRotationX(final Direction direction) {
-		return direction == Direction.DOWN ? 180 : direction.getAxis().isHorizontal() ? 90 : 0;
+		return direction == Direction.DOWN ? 90 : direction.getAxis().isHorizontal() ? 0 : -90;
 	}
 
 	private int getRotationY(final Direction direction) {
-		return direction.getAxis().isVertical() ? 0 : (int) direction.getHorizontalAngle();
+		return direction.getAxis().isVertical() ? 0 : (((int) direction.getHorizontalAngle()) + DEFAULT_ANGLE_OFFSET) % 360;
 	}
 }
