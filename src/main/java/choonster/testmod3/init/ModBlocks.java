@@ -13,10 +13,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.trees.*;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.item.*;
 import net.minecraft.tileentity.CommandBlockTileEntity;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
@@ -125,15 +122,18 @@ public class ModBlocks {
 	);
 
 	public static final RegistryObject<SurvivalCommandBlockBlock> SURVIVAL_COMMAND_BLOCK = registerBlock("survival_command_block",
-			() -> new SurvivalCommandBlockBlock(CommandBlockTileEntity.Mode.REDSTONE, Block.Properties.from(Blocks.COMMAND_BLOCK))
+			() -> new SurvivalCommandBlockBlock(CommandBlockTileEntity.Mode.REDSTONE, Block.Properties.from(Blocks.COMMAND_BLOCK)),
+			(block) -> new BlockItem(block, defaultItemProperties().rarity(Rarity.EPIC))
 	);
 
 	public static final RegistryObject<SurvivalCommandBlockBlock> REPEATING_SURVIVAL_COMMAND_BLOCK = registerBlock("repeating_survival_command_block",
-			() -> new SurvivalCommandBlockBlock(CommandBlockTileEntity.Mode.AUTO, Block.Properties.from(Blocks.REPEATING_COMMAND_BLOCK))
+			() -> new SurvivalCommandBlockBlock(CommandBlockTileEntity.Mode.AUTO, Block.Properties.from(Blocks.REPEATING_COMMAND_BLOCK)),
+			(block) -> new BlockItem(block, defaultItemProperties().rarity(Rarity.EPIC))
 	);
 
 	public static final RegistryObject<SurvivalCommandBlockBlock> CHAIN_SURVIVAL_COMMAND_BLOCK = registerBlock("chain_survival_command_block",
-			() -> new SurvivalCommandBlockBlock(CommandBlockTileEntity.Mode.SEQUENCE, Block.Properties.from(Blocks.CHAIN_COMMAND_BLOCK))
+			() -> new SurvivalCommandBlockBlock(CommandBlockTileEntity.Mode.SEQUENCE, Block.Properties.from(Blocks.CHAIN_COMMAND_BLOCK)),
+			(block) -> new BlockItem(block, defaultItemProperties().rarity(Rarity.EPIC))
 	);
 
 	public static final RegistryObject<TestMod3SaplingBlock> OAK_SAPLING = registerBlock("oak_sapling",
