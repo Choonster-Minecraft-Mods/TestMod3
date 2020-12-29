@@ -2,54 +2,51 @@
   "variants": {
     "horizontal_rotation=north,vertical_rotation=down": {
       "model": "testmod3:block/mirror_plane",
-      "x": 180,
-      "y": 180
+      "x": 180
     },
     "horizontal_rotation=south,vertical_rotation=down": {
       "model": "testmod3:block/mirror_plane",
+      "x": 180,
       "y": 180
     },
     "horizontal_rotation=west,vertical_rotation=down": {
       "model": "testmod3:block/mirror_plane",
-      "x": 90,
-      "y": 180
+      "x": 180,
+      "y": 270
     },
     "horizontal_rotation=east,vertical_rotation=down": {
       "model": "testmod3:block/mirror_plane",
-      "x": 270,
-      "y": 180
+      "x": 180,
+      "y": 90
     },
     "horizontal_rotation=north,vertical_rotation=up": {
       "model": "testmod3:block/mirror_plane_t"
     },
     "horizontal_rotation=south,vertical_rotation=up": {
-      "model": "testmod3:block/mirror_plane"
+      "model": "testmod3:block/mirror_plane",
+      "y": 180
     },
     "horizontal_rotation=west,vertical_rotation=up": {
       "model": "testmod3:block/mirror_plane",
-      "x": 90
+      "y": 270
     },
     "horizontal_rotation=east,vertical_rotation=up": {
       "model": "testmod3:block/mirror_plane",
-      "x": 270
+      "y": 90
     },
     "horizontal_rotation=north,vertical_rotation=side": {
-      "model": "testmod3:block/mirror_plane",
-      "x": 180,
-      "y": 90
+      "model": "testmod3:block/mirror_plane_side"
     },
     "horizontal_rotation=south,vertical_rotation=side": {
-      "model": "testmod3:block/mirror_plane",
-      "y": 90
+      "model": "testmod3:block/mirror_plane_side",
+      "y": 180
     },
     "horizontal_rotation=west,vertical_rotation=side": {
-      "model": "testmod3:block/mirror_plane",
-      "x": 90,
-      "y": 90
+      "model": "testmod3:block/mirror_plane_side",
+      "y": 270
     },
     "horizontal_rotation=east,vertical_rotation=side": {
-      "model": "testmod3:block/mirror_plane",
-      "x": 270,
+      "model": "testmod3:block/mirror_plane_side",
       "y": 90
     }
   }

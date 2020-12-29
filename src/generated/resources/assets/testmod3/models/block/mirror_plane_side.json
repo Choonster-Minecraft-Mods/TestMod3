@@ -1,0 +1,8 @@
+{
+  "parent": "testmod3:block/plane_side",
+  "textures": {
+    "side": "testmod3:block/mirror_plane_side",
+    "base": "testmod3:block/mirror_plane_base",
+    "plane": "testmod3:block/mirror_plane_plane"
+  }
+}

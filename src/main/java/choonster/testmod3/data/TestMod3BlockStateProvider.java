@@ -283,46 +283,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		simpleBlockItem(ModBlocks.PIG_SPAWNER_REFILLER.get());
 
 
-		final ModelFile plane = models().withExistingParent("plane", mcLoc("block"))
-				// Base
-				.element()
-
-				.face(Direction.EAST)
-				.texture("#side")
-				.end()
-
-				.face(Direction.NORTH)
-				.texture("#base")
-				.end()
-
-				.face(Direction.WEST)
-				.texture("#side")
-				.uvs(16, 0, 0, 16)
-				.end()
-
-				.face(Direction.DOWN)
-				.texture("#base")
-				.end()
-
-				.end()
-
-				// Plane
-				.element()
-				.from(0, 0, 0)
-				.to(16, 16, 0)
-
-				.rotation()
-				.origin(0, 16, 0)
-				.axis(Direction.Axis.X)
-				.angle(-45)
-				.rescale(true)
-				.end()
-
-				.face(Direction.SOUTH)
-				.texture("#plane")
-				.end()
-
-				.end();
+		final ModelFile plane = models().getExistingFile(modLoc("plane"));
+		final ModelFile planeSide = models().getExistingFile(modLoc("plane_side"));
 
 		final BlockModelBuilder mirrorPlane = models().getBuilder(name(ModBlocks.MIRROR_PLANE.get()))
 				.parent(plane)
@@ -336,6 +298,12 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 				.texture("base", modLoc("block/mirror_plane_base"))
 				.texture("plane", modLoc("block/mirror_plane_plane_t"));
 
+		final BlockModelBuilder mirrorPlaneSide = models().getBuilder(name(ModBlocks.MIRROR_PLANE.get()) + "_side")
+				.parent(planeSide)
+				.texture("side", modLoc("block/mirror_plane_side"))
+				.texture("base", modLoc("block/mirror_plane_base"))
+				.texture("plane", modLoc("block/mirror_plane_plane"));
+
 		getVariantBuilder(ModBlocks.MIRROR_PLANE.get())
 				// Set the rotation and default model for all states
 				.forAllStates(state -> {
@@ -343,11 +311,16 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 						return ConfiguredModel.builder()
 								.modelFile(mirrorPlaneT)
 								.build();
+					} else if (state.get(PlaneBlock.VERTICAL_ROTATION) == PlaneBlock.VerticalRotation.SIDE) {
+						return ConfiguredModel.builder()
+								.modelFile(mirrorPlaneSide)
+								.rotationY(getRotationY(state.get(PlaneBlock.HORIZONTAL_ROTATION)))
+								.build();
 					} else {
 						return ConfiguredModel.builder()
 								.modelFile(mirrorPlane)
-								.rotationX((int) state.get(PlaneBlock.HORIZONTAL_ROTATION).getHorizontalAngle())
-								.rotationY((int) state.get(PlaneBlock.VERTICAL_ROTATION).getAngleDegrees())
+								.rotationX((int) state.get(PlaneBlock.VERTICAL_ROTATION).getAngleDegrees())
+								.rotationY(getRotationY(state.get(PlaneBlock.HORIZONTAL_ROTATION)))
 								.build();
 					}
 				});
