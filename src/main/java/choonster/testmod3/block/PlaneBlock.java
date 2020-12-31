@@ -1,5 +1,6 @@
 package choonster.testmod3.block;
 
+import choonster.testmod3.util.VectorUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,10 +13,16 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 
 /**
  * A diagonal half-cube block, like the Carpenter's Slope from Carpenter's Blocks.
@@ -42,54 +49,44 @@ public class PlaneBlock extends Block {
 	}
 
 	/**
-	 * The bounding boxes for each rotation.
-	 * <ul>
-	 * <li>Key: Left = Horizontal Rotation, Right = Vertical Rotation</li>
-	 * <li>Value: Left = Base Bounding Box, Right = Top Bounding Box</li>
-	 * </ul>
+	 * The VoxelShapes for each possible rotation.
 	 */
-	// TODO: Convert this to VoxelShapes, replace Vecmath with Minecraft vectors?
-	/*
-	private static final Map<Pair<Direction, VerticalRotation>, Pair<AxisAlignedBB, AxisAlignedBB>> ROTATED_BOUNDING_BOXES = Util.make(() -> {
-		final ImmutableMap.Builder<Pair<Direction, VerticalRotation>, Pair<AxisAlignedBB, AxisAlignedBB>> builder = ImmutableMap.builder();
+	private static final VoxelShape[] SHAPES = Util.make(() -> {
+		final Collection<Direction> horizontalRotations = HORIZONTAL_ROTATION.getAllowedValues();
+		final Collection<VerticalRotation> verticalRotations = VERTICAL_ROTATION.getAllowedValues();
+
+		final VoxelShape[] combinedShapes = new VoxelShape[12];
 
 		// The base and top AABBs for the default rotation pair
 		final AxisAlignedBB baseBoundingBox = new AxisAlignedBB(0, 0, 0, 1, 0.5, 1);
 		final AxisAlignedBB topBoundingBox = new AxisAlignedBB(0, 0.5, 0, 1, 1, 0.5);
 
 		// For each horizontal and vertical rotation pair,
-		for (final Direction horizontalRotation : HORIZONTAL_ROTATION.getAllowedValues()) {
-			for (final VerticalRotation verticalRotation : VERTICAL_ROTATION.getAllowedValues()) {
+		for (final Direction horizontalRotation : horizontalRotations) {
+			for (final VerticalRotation verticalRotation : verticalRotations) {
 				// Get the horizontal (around the y axis) rotation angle and matrix
 				final double horizontalRotationAngle = VectorUtils.getHorizontalRotation(horizontalRotation);
-				final Matrix3d horizontalRotationMatrix = VectorUtils.getRotationMatrix(Direction.Axis.Y, verticalRotation == VerticalRotation.DOWN ? horizontalRotationAngle + Math.PI : horizontalRotationAngle);
+				final Quaternion horizontalRotationQuaternion = VectorUtils.getRotationQuaternion(Direction.Axis.Y, (float) (verticalRotation == VerticalRotation.DOWN ? horizontalRotationAngle + Math.PI : horizontalRotationAngle));
 
 				// Get the vertical (around the x axis) rotation angle and matrix
 				final double verticalRotationAngle = verticalRotation.getAngle();
-				final Matrix3d verticalRotationMatrix = VectorUtils.getRotationMatrix(Direction.Axis.X, verticalRotationAngle);
+				final Quaternion verticalRotationQuaternion = VectorUtils.getRotationQuaternion(Direction.Axis.X, (float) verticalRotationAngle);
 
-				// Multiply the rotation matrices to combine them
-				final Matrix3d combinedRotationMatrix = new Matrix3d();
-				combinedRotationMatrix.mul(verticalRotationMatrix, horizontalRotationMatrix);
+				final Quaternion combinedRotationQuaternion = new Quaternion(horizontalRotationQuaternion);
+				combinedRotationQuaternion.multiply(verticalRotationQuaternion);
 
 				// Rotate the AABBs
-				final AxisAlignedBB rotatedBaseBoundingBox = VectorUtils.rotateAABB(baseBoundingBox, combinedRotationMatrix, true);
-				final AxisAlignedBB rotatedTopBoundingBox = VectorUtils.rotateAABB(topBoundingBox, combinedRotationMatrix, true);
+				final AxisAlignedBB rotatedBaseBoundingBox = VectorUtils.adjustAABBForVoxelShape(VectorUtils.rotateAABB(baseBoundingBox, combinedRotationQuaternion));
+				final AxisAlignedBB rotatedTopBoundingBox = VectorUtils.adjustAABBForVoxelShape(VectorUtils.rotateAABB(topBoundingBox, combinedRotationQuaternion));
 
-				// Add them to the map
-				builder.put(Pair.of(horizontalRotation, verticalRotation), Pair.of(rotatedBaseBoundingBox, rotatedTopBoundingBox));
+				// Combine them into a single VoxelShape and add it to the array
+				final VoxelShape combinedShape = VoxelShapes.or(VoxelShapes.create(rotatedBaseBoundingBox), VoxelShapes.create(rotatedTopBoundingBox));
+				combinedShapes[getShapeIndex(horizontalRotation, verticalRotation)] = combinedShape;
 			}
 		}
 
-		return builder.build();
+		return combinedShapes;
 	});
-	*/
-
-
-	/**
-	 * The default bounding box.
-	 */
-	private static final AxisAlignedBB DEFAULT_BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 
 	@Override
 	protected void fillStateContainer(final StateContainer.Builder<Block, BlockState> builder) {
@@ -144,20 +141,16 @@ public class PlaneBlock extends Block {
 				.with(VERTICAL_ROTATION, verticalRotation);
 	}
 
-	/*
-	// TODO: Convert this to VoxelShapes
+
 	@SuppressWarnings("deprecation")
-	public void addCollisionBoxToList(final IBlockState state, final World worldIn, final BlockPos pos, final AxisAlignedBB entityBox, final List<AxisAlignedBB> collidingBoxes, @Nullable final Entity entityIn, final boolean p_185477_7_) {
-		final Pair<Direction, EnumVerticalRotation> key = Pair.of(state.getValue(HORIZONTAL_ROTATION), state.getValue(VERTICAL_ROTATION));
-		final Pair<AxisAlignedBB, AxisAlignedBB> boundingBoxes = ROTATED_BOUNDING_BOXES.get(key);
-
-		final AxisAlignedBB baseBoundingBox = boundingBoxes.getLeft();
-		addCollisionBoxToList(pos, entityBox, collidingBoxes, baseBoundingBox);
-
-		final AxisAlignedBB topBoundingBox = boundingBoxes.getRight();
-		addCollisionBoxToList(pos, entityBox, collidingBoxes, topBoundingBox);
+	@Override
+	public VoxelShape getShape(final BlockState state, final IBlockReader worldIn, final BlockPos pos, final ISelectionContext context) {
+		return SHAPES[getShapeIndex(state.get(HORIZONTAL_ROTATION), state.get(VERTICAL_ROTATION))];
 	}
-	*/
+
+	private static int getShapeIndex(final Direction horizontalRotation, final VerticalRotation verticalRotation) {
+		return verticalRotation.ordinal() * 4 + horizontalRotation.getHorizontalIndex();
+	}
 
 	/**
 	 * A rotation around the x-axis.
