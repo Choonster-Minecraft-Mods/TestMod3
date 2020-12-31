@@ -307,20 +307,23 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		getVariantBuilder(ModBlocks.MIRROR_PLANE.get())
 				// Set the rotation and default model for all states
 				.forAllStates(state -> {
-					if (state.get(PlaneBlock.HORIZONTAL_ROTATION) == Direction.NORTH && state.get(PlaneBlock.VERTICAL_ROTATION) == PlaneBlock.VerticalRotation.UP) {
+					final Direction horizontalRotation = state.get(PlaneBlock.HORIZONTAL_ROTATION);
+					final PlaneBlock.VerticalRotation verticalRotation = state.get(PlaneBlock.VERTICAL_ROTATION);
+
+					if (horizontalRotation == Direction.NORTH && verticalRotation == PlaneBlock.VerticalRotation.UP) {
 						return ConfiguredModel.builder()
 								.modelFile(mirrorPlaneT)
 								.build();
-					} else if (state.get(PlaneBlock.VERTICAL_ROTATION) == PlaneBlock.VerticalRotation.SIDE) {
+					} else if (verticalRotation == PlaneBlock.VerticalRotation.SIDE) {
 						return ConfiguredModel.builder()
 								.modelFile(mirrorPlaneSide)
-								.rotationY(getRotationY(state.get(PlaneBlock.HORIZONTAL_ROTATION)))
+								.rotationY(getRotationY(horizontalRotation))
 								.build();
 					} else {
 						return ConfiguredModel.builder()
 								.modelFile(mirrorPlane)
-								.rotationX((int) state.get(PlaneBlock.VERTICAL_ROTATION).getAngleDegrees())
-								.rotationY(getRotationY(state.get(PlaneBlock.HORIZONTAL_ROTATION)))
+								.rotationX((int) verticalRotation.getAngleDegrees())
+								.rotationY(getRotationY(horizontalRotation, verticalRotation == PlaneBlock.VerticalRotation.UP ? DEFAULT_ANGLE_OFFSET : 0))
 								.build();
 					}
 				});
@@ -683,6 +686,10 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	}
 
 	private int getRotationY(final Direction direction) {
-		return direction.getAxis().isVertical() ? 0 : (((int) direction.getHorizontalAngle()) + DEFAULT_ANGLE_OFFSET) % 360;
+		return getRotationY(direction, DEFAULT_ANGLE_OFFSET);
+	}
+
+	private int getRotationY(final Direction direction, final int offset) {
+		return direction.getAxis().isVertical() ? 0 : (((int) direction.getHorizontalAngle()) + offset) % 360;
 	}
 }
