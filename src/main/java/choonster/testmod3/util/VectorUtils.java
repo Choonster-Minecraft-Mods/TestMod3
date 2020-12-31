@@ -68,7 +68,7 @@ public class VectorUtils {
 	}
 
 	/**
-	 * Rotate an {@link AxisAlignedBB} by the specified quaternions.
+	 * Rotate an {@link AxisAlignedBB} by the specified quaternion.
 	 *
 	 * @param axisAlignedBB      The AABB
 	 * @param rotationQuaternion The rotation quaternion to apply
