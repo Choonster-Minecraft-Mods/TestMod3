@@ -1,6 +1,7 @@
 package choonster.testmod3.command;
 
 import choonster.testmod3.command.arguments.AxisArgument;
+import choonster.testmod3.util.VectorUtils;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -8,7 +9,10 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.Vec3Argument;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.TranslationTextComponent;
 
 
 /**
@@ -35,15 +39,12 @@ public class RotateVectorCommand {
 	}
 
 	private static int execute(final CommandContext<CommandSource> context, final Vector3d inputVector, final Direction.Axis axis, final int degrees) {
-		/*
-		// TODO: Vecmath isn't used any more, figure out how to do this with Minecraft's vectors
-		final Matrix3d rotationMatrix = VectorUtils.getRotationMatrix(axis, Math.toRadians(degrees));
+		final Quaternion rotationQuaternion = VectorUtils.getRotationQuaternion(axis, (float) Math.toRadians(degrees));
 
-		final Vector3d outputVector = new Vector3d(inputVector.x, inputVector.y, inputVector.z);
-		rotationMatrix.transform(outputVector);
+		final Vector3f outputVector = new Vector3f((float) inputVector.x, (float) inputVector.y, (float) inputVector.z);
+		outputVector.transform(rotationQuaternion);
 
 		context.getSource().sendFeedback(new TranslationTextComponent("commands.testmod3.rotatevector.result", outputVector.getX(), outputVector.getY(), outputVector.getZ()), true);
-		*/
 
 		return 0;
 	}
