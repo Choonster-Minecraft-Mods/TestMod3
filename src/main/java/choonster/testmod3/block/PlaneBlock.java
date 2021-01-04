@@ -64,11 +64,13 @@ public class PlaneBlock extends Block {
 		// For each horizontal and vertical rotation pair,
 		for (final Direction horizontalRotation : horizontalRotations) {
 			for (final VerticalRotation verticalRotation : verticalRotations) {
-				// Get the horizontal (around the y axis) rotation angle and matrix
-				final double horizontalRotationAngle = VectorUtils.getHorizontalRotation(horizontalRotation);
+				// Get the horizontal (around the y axis) rotation angle and quaternion
+				// Needs to be negated to perform correct rotation.
+				// Vertical rotation = DOWN requires a further 180 degrees (PI radians) of rotation.
+				final double horizontalRotationAngle = -VectorUtils.getHorizontalRotation(horizontalRotation);
 				final Quaternion horizontalRotationQuaternion = VectorUtils.getRotationQuaternion(Direction.Axis.Y, (float) (verticalRotation == VerticalRotation.DOWN ? horizontalRotationAngle + Math.PI : horizontalRotationAngle));
 
-				// Get the vertical (around the x axis) rotation angle and matrix
+				// Get the vertical (around the x axis) rotation angle and quaternion
 				final double verticalRotationAngle = verticalRotation.getAngle();
 				final Quaternion verticalRotationQuaternion = VectorUtils.getRotationQuaternion(Direction.Axis.X, (float) verticalRotationAngle);
 

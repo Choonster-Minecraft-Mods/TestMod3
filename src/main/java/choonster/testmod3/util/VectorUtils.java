@@ -55,11 +55,11 @@ public class VectorUtils {
 	});
 
 	/**
-	 * Create a matrix that rotates around the specified axis by the specified angle.
+	 * Create a quaternion that rotates around the specified axis by the specified angle.
 	 *
 	 * @param axis    The axis
 	 * @param radians The angle in radians
-	 * @return The rotation matrix
+	 * @return The rotation quaternion
 	 */
 	public static Quaternion getRotationQuaternion(final Direction.Axis axis, final float radians) {
 		final Vector3f axisDirectionVector = AXIS_DIRECTION_VECTORS.get(axis);
