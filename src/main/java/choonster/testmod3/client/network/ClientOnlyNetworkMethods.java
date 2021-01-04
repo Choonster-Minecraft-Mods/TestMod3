@@ -11,8 +11,6 @@ import net.minecraftforge.fml.DistExecutor;
  * @author Choonster
  */
 public class ClientOnlyNetworkMethods {
-	
-
 	public static DistExecutor.SafeRunnable openClientScreen(final OpenClientScreenMessage message) {
 		return () -> Minecraft.getInstance().displayGuiScreen(ModGuiFactories.getClientScreen(message));
 	}

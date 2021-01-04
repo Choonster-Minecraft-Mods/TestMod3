@@ -24,7 +24,6 @@ import javax.annotation.Nullable;
 public class HiddenBlockRevealerItem extends Item {
 	public HiddenBlockRevealerItem(final Item.Properties properties) {
 		super(properties);
-
 	}
 
 	@Override
