@@ -34,12 +34,12 @@ import java.util.Collection;
  */
 public class PlaneBlock extends Block {
 	/**
-	 * The block's rotation around the y-axis.
+	 * The block's rotation around the y axis.
 	 */
 	public static final Property<Direction> HORIZONTAL_ROTATION = DirectionProperty.create("horizontal_rotation", Direction.Plane.HORIZONTAL);
 
 	/**
-	 * The block's rotation around the x-axis.
+	 * The block's rotation around the z axis.
 	 */
 	public static final Property<VerticalRotation> VERTICAL_ROTATION = EnumProperty.create("vertical_rotation", VerticalRotation.class);
 
@@ -66,13 +66,13 @@ public class PlaneBlock extends Block {
 			for (final VerticalRotation verticalRotation : verticalRotations) {
 				// Get the horizontal (around the y axis) rotation angle and quaternion
 				// Needs to be negated to perform correct rotation.
-				// Vertical rotation = DOWN requires a further 180 degrees (PI radians) of rotation.
 				final double horizontalRotationAngle = -VectorUtils.getHorizontalRotation(horizontalRotation);
-				final Quaternion horizontalRotationQuaternion = VectorUtils.getRotationQuaternion(Direction.Axis.Y, (float) (verticalRotation == VerticalRotation.DOWN ? horizontalRotationAngle + Math.PI : horizontalRotationAngle));
+				final Quaternion horizontalRotationQuaternion = VectorUtils.getRotationQuaternion(Direction.Axis.Y, (float) horizontalRotationAngle);
 
-				// Get the vertical (around the x axis) rotation angle and quaternion
-				final double verticalRotationAngle = verticalRotation.getAngle();
-				final Quaternion verticalRotationQuaternion = VectorUtils.getRotationQuaternion(Direction.Axis.X, (float) verticalRotationAngle);
+				// Get the vertical (around the z axis) rotation angle and quaternion
+				// Needs to be negated to perform correct rotation.
+				final double verticalRotationAngle = -verticalRotation.getAngle();
+				final Quaternion verticalRotationQuaternion = VectorUtils.getRotationQuaternion(Direction.Axis.Z, (float) verticalRotationAngle);
 
 				final Quaternion combinedRotationQuaternion = new Quaternion(horizontalRotationQuaternion);
 				combinedRotationQuaternion.multiply(verticalRotationQuaternion);
@@ -155,7 +155,7 @@ public class PlaneBlock extends Block {
 	}
 
 	/**
-	 * A rotation around the x-axis.
+	 * A rotation around the z axis.
 	 */
 	public enum VerticalRotation implements IStringSerializable {
 		DOWN("down", Direction.DOWN, 2),
