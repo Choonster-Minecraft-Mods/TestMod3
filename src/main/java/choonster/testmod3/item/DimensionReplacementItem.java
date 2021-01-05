@@ -1,5 +1,6 @@
 package choonster.testmod3.item;
 
+import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import com.google.common.collect.ImmutableMap;
@@ -130,8 +131,8 @@ public class DimensionReplacementItem extends Item {
 
 		tooltip.add(
 				getReplacement(world)
-						.map(replacement -> new TranslationTextComponent("item.testmod3.dimension_replacement.replacement.desc", replacement.getDisplayName()))
-						.orElseGet(() -> new TranslationTextComponent("item.testmod3.dimension_replacement.no_replacement.desc"))
+						.map(replacement -> new TranslationTextComponent(TestMod3Lang.ITEM_DESC_DIMENSION_REPLACEMENT_REPLACEMENT.getTranslationKey(), replacement.getDisplayName()))
+						.orElseGet(() -> new TranslationTextComponent(TestMod3Lang.ITEM_DESC_DIMENSION_REPLACEMENT_NO_REPLACEMENT.getTranslationKey()))
 		);
 	}
 }

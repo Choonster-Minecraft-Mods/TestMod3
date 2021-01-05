@@ -4,6 +4,7 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.fluid.FluidTankSnapshot;
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.network.FluidTankContentsMessage;
+import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.tileentity.BaseFluidTankTileEntity;
 import choonster.testmod3.tileentity.FluidTankTileEntity;
 import net.minecraft.block.Block;
@@ -99,12 +100,12 @@ public class FluidTankBlock<TE extends BaseFluidTankTileEntity> extends TileEnti
 			final FluidStack contents = snapshot.getContents();
 			if (!contents.isEmpty()) {
 				hasFluid = true;
-				data.add(new TranslationTextComponent("block.testmod3.fluid_tank.fluid.desc", contents.getDisplayName(), contents.getAmount(), snapshot.getCapacity()));
+				data.add(new TranslationTextComponent(TestMod3Lang.BLOCK_DESC_FLUID_TANK_FLUID.getTranslationKey(), contents.getDisplayName(), contents.getAmount(), snapshot.getCapacity()));
 			}
 		}
 
 		if (!hasFluid) {
-			data.add(new TranslationTextComponent("block.testmod3.fluid_tank.empty.desc"));
+			data.add(new TranslationTextComponent(TestMod3Lang.BLOCK_DESC_FLUID_TANK_EMPTY.getTranslationKey()));
 		}
 
 		return data;

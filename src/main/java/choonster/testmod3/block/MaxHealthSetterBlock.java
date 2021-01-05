@@ -2,6 +2,7 @@ package choonster.testmod3.block;
 
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.maxhealth.MaxHealthCapability;
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,7 +33,7 @@ public class MaxHealthSetterBlock extends Block {
 
 				maxHealth.addBonusMaxHealth(healthToAdd);
 
-				player.sendMessage(new TranslationTextComponent("message.testmod3.max_health.add", player.getDisplayName(), healthToAdd), Util.DUMMY_UUID);
+				player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_MAX_HEALTH_ADD.getTranslationKey(), player.getDisplayName(), healthToAdd), Util.DUMMY_UUID);
 			});
 		}
 

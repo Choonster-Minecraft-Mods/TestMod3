@@ -1,6 +1,7 @@
 package choonster.testmod3.command.maxhealth;
 
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
+import choonster.testmod3.text.TestMod3Lang;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -16,7 +17,7 @@ class SetMaxHealthCommand {
 		return MaxHealthCommand.create(
 				Commands.literal("set"),
 				SetMaxHealthCommand::processEntity,
-				"message.testmod3.max_health.set"
+				TestMod3Lang.MESSAGE_MAX_HEALTH_SET.getTranslationKey()
 		);
 	}
 

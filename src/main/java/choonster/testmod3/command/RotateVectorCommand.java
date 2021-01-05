@@ -1,6 +1,7 @@
 package choonster.testmod3.command;
 
 import choonster.testmod3.command.arguments.AxisArgument;
+import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.VectorUtils;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -45,7 +46,7 @@ public class RotateVectorCommand {
 		final Vector3f outputVector = new Vector3f((float) inputVector.x, (float) inputVector.y, (float) inputVector.z);
 		outputVector.transform(rotationQuaternion);
 
-		context.getSource().sendFeedback(new TranslationTextComponent("commands.testmod3.rotatevector.result", outputVector.getX(), outputVector.getY(), outputVector.getZ()), true);
+		context.getSource().sendFeedback(new TranslationTextComponent(TestMod3Lang.COMMAND_ROTATE_VECTOR_RESULT.getTranslationKey(), outputVector.getX(), outputVector.getY(), outputVector.getZ()), true);
 
 		return 0;
 	}

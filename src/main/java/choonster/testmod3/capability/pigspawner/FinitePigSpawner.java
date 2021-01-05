@@ -1,6 +1,7 @@
 package choonster.testmod3.capability.pigspawner;
 
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
+import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.DebugUtil;
 import choonster.testmod3.util.LogUtil;
 import com.google.common.base.Preconditions;
@@ -103,7 +104,7 @@ public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinit
 	 */
 	@Override
 	public List<IFormattableTextComponent> getTooltipLines() {
-		return ImmutableList.of(new TranslationTextComponent("testmod3.pig_spawner.finite.desc", getNumPigs(), getMaxNumPigs()));
+		return ImmutableList.of(new TranslationTextComponent(TestMod3Lang.PIG_SPAWNER_FINITE_DESC.getTranslationKey(), getNumPigs(), getMaxNumPigs()));
 	}
 
 	@Override

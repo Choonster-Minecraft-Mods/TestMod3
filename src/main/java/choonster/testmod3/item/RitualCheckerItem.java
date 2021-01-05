@@ -1,5 +1,6 @@
 package choonster.testmod3.item;
 
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -46,10 +47,10 @@ public class RitualCheckerItem extends Item {
 			final Optional<BlockPos> invalidPosition = checkRitual(playerIn);
 			if (invalidPosition.isPresent()) {
 				final BlockPos pos = invalidPosition.get();
-				textComponent = new TranslationTextComponent("message.testmod3.ritual_checker.failure", pos.getX(), pos.getY(), pos.getZ());
+				textComponent = new TranslationTextComponent(TestMod3Lang.MESSAGE_RITUAL_CHECKER_FAILURE.getTranslationKey(), pos.getX(), pos.getY(), pos.getZ());
 				textComponent.getStyle().setFormatting(TextFormatting.RED);
 			} else {
-				textComponent = new TranslationTextComponent("message.testmod3.ritual_checker.success");
+				textComponent = new TranslationTextComponent(TestMod3Lang.MESSAGE_RITUAL_CHECKER_SUCCESS.getTranslationKey());
 				textComponent.getStyle().setFormatting(TextFormatting.GREEN);
 			}
 

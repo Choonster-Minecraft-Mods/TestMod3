@@ -2,6 +2,7 @@ package choonster.testmod3.item;
 
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.maxhealth.MaxHealthCapability;
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -25,7 +26,7 @@ public class MaxHealthGetterItem extends Item {
 	public ActionResultType itemInteractionForEntity(final ItemStack stack, final PlayerEntity player, final LivingEntity target, final Hand hand) {
 		if (!player.world.isRemote) {
 			MaxHealthCapability.getMaxHealth(target).ifPresent(maxHealth -> {
-				player.sendMessage(new TranslationTextComponent("message.testmod3.max_health.get", target.getDisplayName(), target.getMaxHealth(), maxHealth.getBonusMaxHealth()), Util.DUMMY_UUID);
+				player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_MAX_HEALTH_GET.getTranslationKey(), target.getDisplayName(), target.getMaxHealth(), maxHealth.getBonusMaxHealth()), Util.DUMMY_UUID);
 			});
 		}
 

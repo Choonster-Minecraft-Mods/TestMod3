@@ -1,6 +1,7 @@
 package choonster.testmod3.event;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.Constants;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -42,19 +43,19 @@ public class PlayerEventHandler {
 		entityData.put(PlayerEntity.PERSISTED_NBT_TAG, persistedData);
 
 		final String key = Constants.RESOURCE_PREFIX + "ReceivedItems";
-		final String message;
+		final TestMod3Lang message;
 
 		if (persistedData.getBoolean(key)) {
-			message = "message.testmod3.login.already_received";
+			message = TestMod3Lang.MESSAGE_LOGIN_ALREADY_RECEIVED;
 		} else {
 			persistedData.putBoolean(key, true);
 
 			ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(Items.APPLE));
 
-			message = "message.testmod3.login.free_apple";
+			message = TestMod3Lang.MESSAGE_LOGIN_FREE_APPLE;
 		}
 
-		final ITextComponent textComponent = new TranslationTextComponent(message);
+		final ITextComponent textComponent = new TranslationTextComponent(message.getTranslationKey());
 		textComponent.getStyle().setFormatting(TextFormatting.LIGHT_PURPLE);
 		player.sendMessage(textComponent, Util.DUMMY_UUID);
 	}
@@ -69,7 +70,7 @@ public class PlayerEventHandler {
 		if (event.getEntity() instanceof PlayerEntity && !event.getEntity().getEntityWorld().isRemote) {
 			final PlayerEntity player = (PlayerEntity) event.getEntity();
 			final BlockPos pos = player.getPosition();
-			player.sendMessage(new TranslationTextComponent("message.testmod3.death.coordinates", pos.getX(), pos.getY(), pos.getZ(), player.world.getDimensionKey()), Util.DUMMY_UUID);
+			player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_DEATH_COORDINATES.getTranslationKey(), pos.getX(), pos.getY(), pos.getZ(), player.world.getDimensionKey()), Util.DUMMY_UUID);
 		}
 	}
 }

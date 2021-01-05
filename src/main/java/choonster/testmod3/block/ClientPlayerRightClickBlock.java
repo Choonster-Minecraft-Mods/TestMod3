@@ -2,6 +2,7 @@ package choonster.testmod3.block;
 
 import choonster.testmod3.client.block.ClientOnlyBlockMethods;
 import choonster.testmod3.client.util.ClientUtil;
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -34,7 +35,7 @@ public class ClientPlayerRightClickBlock extends StaticPressurePlateBlock {
 		// If on the client side, the colliding Entity is the client player and the total world time is a multiple of 10
 		if (world.isRemote && entity == clientPlayer && world.getGameTime() % 10 == 0) {
 			// Make the player right click
-			entity.sendMessage(new TranslationTextComponent("message.testmod3.client_player_right_click.right_click"), Util.DUMMY_UUID);
+			entity.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CLIENT_PLAYER_RIGHT_CLICK_RIGHT_CLICK.getTranslationKey()), Util.DUMMY_UUID);
 
 			DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientOnlyBlockMethods::pressUseItemKeyBinding);
 		}

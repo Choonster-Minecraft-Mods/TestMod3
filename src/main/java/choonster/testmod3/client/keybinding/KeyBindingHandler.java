@@ -2,6 +2,7 @@ package choonster.testmod3.client.keybinding;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.client.init.ModKeyBindings;
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.settings.KeyBinding;
@@ -100,19 +101,19 @@ public class KeyBindingHandler {
 				final Collection<EffectInstance> activePotionEffects = ((LivingEntity) rayTraceResult.getEntity()).getActivePotionEffects();
 
 				if (activePotionEffects.isEmpty()) {
-					clientPlayer.sendMessage(new TranslationTextComponent("message.testmod3.print_potions.no_potions", rayTraceResult.getEntity().getDisplayName()), Util.DUMMY_UUID);
+					clientPlayer.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_POTIONS.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()), Util.DUMMY_UUID);
 				} else {
-					clientPlayer.sendMessage(new TranslationTextComponent("message.testmod3.print_potions.potions", rayTraceResult.getEntity().getDisplayName()), Util.DUMMY_UUID);
+					clientPlayer.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_PRINT_POTIONS_POTIONS.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()), Util.DUMMY_UUID);
 
 					activePotionEffects.forEach(
 							potionEffect -> clientPlayer.sendMessage(new StringTextComponent(potionEffect.toString()), Util.DUMMY_UUID)
 					);
 				}
 			} else {
-				clientPlayer.sendMessage(new TranslationTextComponent("message.testmod3.print_potions.not_living", rayTraceResult.getEntity().getDisplayName()), Util.DUMMY_UUID);
+				clientPlayer.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_PRINT_POTIONS_NOT_LIVING.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()), Util.DUMMY_UUID);
 			}
 		} else {
-			clientPlayer.sendMessage(new TranslationTextComponent("message.testmod3.print_potions.no_entity"), Util.DUMMY_UUID);
+			clientPlayer.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_ENTITY.getTranslationKey()), Util.DUMMY_UUID);
 		}
 	}
 }

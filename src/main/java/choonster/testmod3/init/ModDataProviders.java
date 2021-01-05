@@ -23,6 +23,8 @@ public class ModDataProviders {
 		final ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
 		if (event.includeClient()) {
+			dataGenerator.addProvider(new TestMod3LanguageProvider(dataGenerator));
+
 			final TestMod3ItemModelProvider itemModelProvider = new TestMod3ItemModelProvider(dataGenerator, existingFileHelper);
 			dataGenerator.addProvider(itemModelProvider);
 

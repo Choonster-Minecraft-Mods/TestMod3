@@ -2,6 +2,7 @@ package choonster.testmod3.item;
 
 import choonster.testmod3.capability.SerializableCapabilityProvider;
 import choonster.testmod3.capability.hiddenblockrevealer.HiddenBlockRevealerCapability;
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -31,8 +32,8 @@ public class HiddenBlockRevealerItem extends Item {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);
 		HiddenBlockRevealerCapability.toggleRevealHiddenBlocks(heldItem)
 				.ifPresent(revealHiddenBlocks -> {
-					final String message = revealHiddenBlocks ? "message.testmod3.hidden_block_revealer.reveal" : "message.testmod3.hidden_block_revealer.hide";
-					playerIn.sendMessage(new TranslationTextComponent(message), Util.DUMMY_UUID);
+					final TestMod3Lang message = revealHiddenBlocks ? TestMod3Lang.MESSAGE_HIDDEN_BLOCK_REVEALER_REVEAL : TestMod3Lang.MESSAGE_HIDDEN_BLOCK_REVEALER_HIDE;
+					playerIn.sendMessage(new TranslationTextComponent(message.getTranslationKey()), Util.DUMMY_UUID);
 				});
 
 		return new ActionResult<>(ActionResultType.SUCCESS, heldItem);

@@ -1,5 +1,6 @@
 package choonster.testmod3.item;
 
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -44,7 +45,7 @@ public abstract class ScriptsItem extends Item {
 		final ItemStack heldItem = playerIn.getHeldItem(hand);
 
 		if (!worldIn.isRemote) {
-			playerIn.sendMessage(new TranslationTextComponent("message." + getRegistryName() + ".right_click", scriptFunction.apply(getNumber(heldItem))), Util.DUMMY_UUID);
+			playerIn.sendMessage(new TranslationTextComponent(String.format(TestMod3Lang.MESSAGE_SCRIPTS_RIGHT_CLICK.getTranslationKey(), getTranslationKey()), scriptFunction.apply(getNumber(heldItem))), Util.DUMMY_UUID);
 		}
 
 		return new ActionResult<>(ActionResultType.SUCCESS, heldItem);

@@ -1,6 +1,7 @@
 package choonster.testmod3.compat.waila;
 
 import choonster.testmod3.block.RestrictedFluidTankBlock;
+import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.tileentity.RestrictedFluidTankTileEntity;
 import mcp.mobius.waila.api.IComponentProvider;
 import mcp.mobius.waila.api.IDataAccessor;
@@ -25,7 +26,7 @@ public class RestrictedFluidTankEnabledFacingsHUDHandler implements IComponentPr
 			final String enabledFacingsString = ((RestrictedFluidTankBlock) accessor.getBlock())
 					.getEnabledFacingsString(accessor.getWorld(), accessor.getPosition());
 
-			tooltip.add(new TranslationTextComponent("block.testmod3.fluid_tank_restricted.enabled_facings", enabledFacingsString));
+			tooltip.add(new TranslationTextComponent(TestMod3Lang.BLOCK_DESC_FLUID_TANK_RESTRICTED_ENABLED_FACINGS.getTranslationKey(), enabledFacingsString));
 		}
 	}
 }

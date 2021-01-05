@@ -1,5 +1,6 @@
 package choonster.testmod3.item;
 
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -34,7 +35,7 @@ public class EntityInteractionTestItem extends Item {
 			final int count = getInteractCount(stack) + 1;
 			stack.getTag().putInt("Count", count);
 
-			player.sendMessage(new TranslationTextComponent("message.testmod3.entity_interact_count", count), Util.DUMMY_UUID);
+			player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_ENTITY_INTERACT_COUNT.getTranslationKey(), count), Util.DUMMY_UUID);
 		}
 
 		return ActionResultType.SUCCESS;
@@ -47,7 +48,7 @@ public class EntityInteractionTestItem extends Item {
 		if (!player.world.isRemote) {
 			final int count = getInteractCount(heldItem);
 
-			player.sendMessage(new TranslationTextComponent("message.testmod3.entity_interact_count", count), Util.DUMMY_UUID);
+			player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_ENTITY_INTERACT_COUNT.getTranslationKey(), count), Util.DUMMY_UUID);
 		}
 
 		return new ActionResult<>(ActionResultType.SUCCESS, heldItem);

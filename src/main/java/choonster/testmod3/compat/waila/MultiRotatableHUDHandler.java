@@ -1,5 +1,6 @@
 package choonster.testmod3.compat.waila;
 
+import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.EnumFaceRotation;
 import net.minecraft.state.Property;
 
@@ -10,6 +11,6 @@ import net.minecraft.state.Property;
  */
 public class MultiRotatableHUDHandler extends EnumPropertyHUDHandler<EnumFaceRotation> {
 	public MultiRotatableHUDHandler(final Property<EnumFaceRotation> property) {
-		super(property, "testmod3.multi_rotatable.face_rotation.desc", "testmod3.face_rotation");
+		super(property, TestMod3Lang.DESC_MULTI_ROTATABLE_FACE_ROTATION.getTranslationKey(), TestMod3Lang.PREFIX_FACE_ROTATION.getTranslationKey());
 	}
 }

@@ -2,6 +2,7 @@ package choonster.testmod3.item;
 
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.capability.chunkenergy.ChunkEnergyCapability;
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,11 +33,11 @@ public class ChunkEnergyGetterItem extends Item {
 
 			ChunkEnergyCapability.getChunkEnergy(chunk)
 					.map(chunkEnergy -> {
-						playerIn.sendMessage(new TranslationTextComponent("message.testmod3.chunk_energy.get", chunkPos, chunkEnergy.getEnergyStored()), Util.DUMMY_UUID);
+						playerIn.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_GET.getTranslationKey(), chunkPos, chunkEnergy.getEnergyStored()), Util.DUMMY_UUID);
 						return true;
 					})
 					.orElseGet(() -> {
-						playerIn.sendMessage(new TranslationTextComponent("message.testmod3.chunk_energy.not_found", chunkPos), Util.DUMMY_UUID);
+						playerIn.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_NOT_FOUND.getTranslationKey(), chunkPos), Util.DUMMY_UUID);
 						return false;
 					});
 		}

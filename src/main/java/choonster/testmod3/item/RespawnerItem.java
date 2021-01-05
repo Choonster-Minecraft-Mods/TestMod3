@@ -1,5 +1,6 @@
 package choonster.testmod3.item;
 
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
@@ -36,7 +37,7 @@ public class RespawnerItem extends Item {
 			final float spawnAngle = serverPlayer.func_242109_L();
 
 			if (spawnPosition == null || spawnWorld == null) {
-				serverPlayer.sendMessage(new TranslationTextComponent("message.testmod3.respawner.no_spawn_location"), Util.DUMMY_UUID);
+				serverPlayer.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_RESPAWNER_NO_SPAWN_LOCATION.getTranslationKey()), Util.DUMMY_UUID);
 				return new ActionResult<>(ActionResultType.FAIL, heldItem);
 			}
 
@@ -53,7 +54,7 @@ public class RespawnerItem extends Item {
 							serverPlayer.setPosition(serverPlayer.getPosX(), serverPlayer.getPosY() + 1, serverPlayer.getPosZ());
 						}
 
-						player.sendMessage(new TranslationTextComponent("message.testmod3.respawner.teleporting", spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ(), spawnWorld.getDimensionKey()), Util.DUMMY_UUID);
+						player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_RESPAWNER_TELEPORTING.getTranslationKey(), spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ(), spawnWorld.getDimensionKey()), Util.DUMMY_UUID);
 
 						return new ActionResult<>(ActionResultType.SUCCESS, heldItem);
 					})

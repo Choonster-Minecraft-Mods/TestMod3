@@ -1,5 +1,6 @@
 package choonster.testmod3.item;
 
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -41,9 +42,9 @@ public class SwapTestItem extends Item {
 		final ItemStack otherItem = getOtherItem();
 
 		if (!otherItem.isEmpty()) {
-			tooltip.add(new TranslationTextComponent("item.testmod3.swap_test.with_item.desc", otherItem.getDisplayName()));
+			tooltip.add(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_SWAP_TEST_WITH_ITEM.getTranslationKey(), otherItem.getDisplayName()));
 		} else {
-			tooltip.add(new TranslationTextComponent("item.testmod3.swap_test.without_item.desc"));
+			tooltip.add(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_SWAP_TEST_WITHOUT_ITEM.getTranslationKey()));
 		}
 	}
 

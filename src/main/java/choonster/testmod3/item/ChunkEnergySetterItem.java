@@ -2,6 +2,7 @@ package choonster.testmod3.item;
 
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.capability.chunkenergy.ChunkEnergyCapability;
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -40,17 +41,16 @@ public class ChunkEnergySetterItem extends Item {
 				.map(chunkEnergy -> {
 					if (player.isSneaking()) {
 						final int energyRemoved = chunkEnergy.extractEnergy(amount, false);
-						player.sendMessage(new TranslationTextComponent("message.testmod3.chunk_energy.remove", energyRemoved, chunkPos), Util.DUMMY_UUID);
+						player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_REMOVE.getTranslationKey(), energyRemoved, chunkPos), Util.DUMMY_UUID);
 					} else {
 						final int energyAdded = chunkEnergy.receiveEnergy(amount, false);
-						player.sendMessage(new TranslationTextComponent("message.testmod3.chunk_energy.add", energyAdded, chunkPos), Util.DUMMY_UUID);
-
+						player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_ADD.getTranslationKey(), energyAdded, chunkPos), Util.DUMMY_UUID);
 					}
 
 					return true;
 				})
 				.orElseGet(() -> {
-					player.sendMessage(new TranslationTextComponent("message.testmod3.chunk_energy.not_found", chunkPos), Util.DUMMY_UUID);
+					player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_NOT_FOUND.getTranslationKey(), chunkPos), Util.DUMMY_UUID);
 
 					return false;
 				});

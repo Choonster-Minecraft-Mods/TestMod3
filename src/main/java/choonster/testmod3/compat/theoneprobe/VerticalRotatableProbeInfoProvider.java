@@ -1,6 +1,7 @@
 package choonster.testmod3.compat.theoneprobe;
 
 import choonster.testmod3.block.PlaneBlock;
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.block.Block;
 import net.minecraft.state.Property;
 import net.minecraft.util.ResourceLocation;
@@ -17,8 +18,8 @@ public class VerticalRotatableProbeInfoProvider<BLOCK extends Block> extends Enu
 	) {
 		super(
 				id, blockClass, property,
-				"block.testmod3.plane.vertical_rotation.desc",
-				"testmod3.vertical_rotation"
+				TestMod3Lang.BLOCK_DESC_PLANE_VERTICAL_ROTATION.getTranslationKey(),
+				TestMod3Lang.PREFIX_VERTICAL_ROTATION.getTranslationKey()
 		);
 	}
 }

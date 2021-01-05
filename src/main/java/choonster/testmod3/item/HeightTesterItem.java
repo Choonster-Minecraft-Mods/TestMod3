@@ -1,5 +1,6 @@
 package choonster.testmod3.item;
 
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,7 +28,7 @@ public class HeightTesterItem extends Item {
 		if (!world.isRemote) {
 			final BlockPos pos = player.getPosition();
 
-			player.sendMessage(new TranslationTextComponent("message.testmod3.height_tester.height", pos.getX(), pos.getZ(), world.getHeight(Heightmap.Type.WORLD_SURFACE, pos).getY()), Util.DUMMY_UUID);
+			player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_HEIGHT_TESTER_HEIGHT.getTranslationKey(), pos.getX(), pos.getZ(), world.getHeight(Heightmap.Type.WORLD_SURFACE, pos).getY()), Util.DUMMY_UUID);
 		}
 
 		return new ActionResult<>(ActionResultType.SUCCESS, player.getHeldItem(hand));

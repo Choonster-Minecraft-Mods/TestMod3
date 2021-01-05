@@ -2,6 +2,7 @@ package choonster.testmod3.command.maxhealth;
 
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.maxhealth.MaxHealthCapability;
+import choonster.testmod3.text.TestMod3Lang;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -20,7 +21,9 @@ import net.minecraft.util.text.TranslationTextComponent;
  * @author Choonster
  */
 public class MaxHealthCommand {
-	private static final SimpleCommandExceptionType INVALID_ENTITY_EXCEPTION = new SimpleCommandExceptionType(new TranslationTextComponent("commands.testmod3.maxhealth.invalid_entity"));
+	private static final SimpleCommandExceptionType INVALID_ENTITY_EXCEPTION = new SimpleCommandExceptionType(
+			new TranslationTextComponent(TestMod3Lang.COMMAND_MAX_HEALTH_INVALID_ENTITY.getTranslationKey())
+	);
 
 	public static ArgumentBuilder<CommandSource, ?> register() {
 		return Commands.literal("maxhealth")

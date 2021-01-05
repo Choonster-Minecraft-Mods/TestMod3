@@ -1,5 +1,6 @@
 package choonster.testmod3.item;
 
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CropsBlock;
@@ -25,7 +26,7 @@ public class BlockDestroyerItem extends Item {
 	public boolean onBlockDestroyed(final ItemStack stack, final World world, final BlockState state, final BlockPos pos, final LivingEntity entityLiving) {
 		if (!world.isRemote) {
 			if (state.getBlock() == Blocks.WHEAT && state.get(CropsBlock.AGE) >= 6) {
-				entityLiving.sendMessage(new TranslationTextComponent("message.testmod3.block_destroyer.destroy"), Util.DUMMY_UUID);
+				entityLiving.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_BLOCK_DESTROYER_DESTROY.getTranslationKey()), Util.DUMMY_UUID);
 			}
 		}
 

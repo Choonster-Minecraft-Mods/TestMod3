@@ -1,5 +1,6 @@
 package choonster.testmod3.item;
 
+import choonster.testmod3.text.TestMod3Lang;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -49,12 +50,12 @@ public class ClearerItem extends Item {
 			if (player.isSneaking()) {
 				final int newMode = currentMode == MODE_ALL ? MODE_WHITELIST : MODE_ALL;
 				setMode(heldItem, newMode);
-				player.sendMessage(new TranslationTextComponent("message.testmod3.clearer.mode.%s", newMode), Util.DUMMY_UUID);
+				player.sendMessage(new TranslationTextComponent(String.format(TestMod3Lang.MESSAGE_CLEARER_MODE_S.getTranslationKey(), newMode)), Util.DUMMY_UUID);
 			} else {
 				final int minX = MathHelper.floor(player.getPosX() / 16) * 16;
 				final int minZ = MathHelper.floor(player.getPosZ() / 16) * 16;
 
-				player.sendMessage(new TranslationTextComponent("message.testmod3.clearer.clearing", minX, minZ), Util.DUMMY_UUID);
+				player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CLEARER_CLEARING.getTranslationKey(), minX, minZ), Util.DUMMY_UUID);
 
 				for (int x = minX; x < minX + 16; x++) {
 					for (int z = minZ; z < minZ + 16; z++) {
@@ -72,7 +73,7 @@ public class ClearerItem extends Item {
 				final BlockState state = world.getBlockState(pos);
 				world.notifyBlockUpdate(pos, state, state, 3);
 
-				player.sendMessage(new TranslationTextComponent("message.testmod3.clearer.cleared"), Util.DUMMY_UUID);
+				player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CLEARER_CLEARED.getTranslationKey()), Util.DUMMY_UUID);
 			}
 		}
 

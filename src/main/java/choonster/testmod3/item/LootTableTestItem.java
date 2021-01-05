@@ -1,6 +1,7 @@
 package choonster.testmod3.item;
 
 import choonster.testmod3.init.ModLootTables;
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -69,11 +70,11 @@ public class LootTableTestItem extends Item {
 					lootMessage.append(getItemStackTextComponent(itemStacks.get(i)));
 				});
 
-				final ITextComponent chatMessage = new TranslationTextComponent("message.testmod3.player_received_loot.base", lootMessage);
+				final ITextComponent chatMessage = new TranslationTextComponent(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_BASE.getTranslationKey(), lootMessage);
 
 				player.sendMessage(chatMessage, Util.DUMMY_UUID);
 			} else {
-				player.sendMessage(new TranslationTextComponent("message.testmod3.player_received_loot.no_loot"), Util.DUMMY_UUID);
+				player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_NO_LOOT.getTranslationKey()), Util.DUMMY_UUID);
 			}
 		}
 
@@ -87,6 +88,6 @@ public class LootTableTestItem extends Item {
 	 * @return The ITextComponent
 	 */
 	private IFormattableTextComponent getItemStackTextComponent(final ItemStack itemStack) {
-		return new TranslationTextComponent("message.testmod3.player_received_loot.item", itemStack.getCount(), itemStack.getTextComponent());
+		return new TranslationTextComponent(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_ITEM.getTranslationKey(), itemStack.getCount(), itemStack.getTextComponent());
 	}
 }

@@ -1,6 +1,7 @@
 package choonster.testmod3.command;
 
 import choonster.testmod3.tests.Tests;
+import choonster.testmod3.text.TestMod3Lang;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -16,9 +17,9 @@ class RunTestsCommand {
 		return Commands.literal("runtests")
 				.executes(context -> {
 					if (Tests.runTests()) {
-						context.getSource().sendFeedback(new TranslationTextComponent("commands.testmod3.runtests.tests_passed"), true);
+						context.getSource().sendFeedback(new TranslationTextComponent(TestMod3Lang.COMMAND_RUN_TESTS_TESTS_PASSED.getTranslationKey()), true);
 					} else {
-						context.getSource().sendFeedback(new TranslationTextComponent("commands.testmod3.runtests.tests_failed"), true);
+						context.getSource().sendFeedback(new TranslationTextComponent(TestMod3Lang.COMMAND_RUN_TESTS_TESTS_FAILED.getTranslationKey()), true);
 					}
 
 					return 0;

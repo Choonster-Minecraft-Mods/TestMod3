@@ -1,5 +1,6 @@
 package choonster.testmod3.command.arguments;
 
+import choonster.testmod3.text.TestMod3Lang;
 import com.google.common.collect.ImmutableList;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -19,7 +20,9 @@ import java.util.Collection;
  */
 public class AxisArgument implements ArgumentType<Direction.Axis> {
 	private static final Collection<String> EXAMPLES = ImmutableList.of("x", "y", "z");
-	private static final SimpleCommandExceptionType INVALID_AXIS_EXCEPTION = new SimpleCommandExceptionType(new TranslationTextComponent("arguments.testmod3.axis.invalid"));
+	private static final SimpleCommandExceptionType INVALID_AXIS_EXCEPTION = new SimpleCommandExceptionType(
+			new TranslationTextComponent(TestMod3Lang.ARGUMENT_AXIS_INVALID.getTranslationKey())
+	);
 
 	public static AxisArgument axis() {
 		return new AxisArgument();

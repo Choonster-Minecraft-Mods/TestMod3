@@ -1,5 +1,6 @@
 package choonster.testmod3.compat.theoneprobe;
 
+import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.EnumFaceRotation;
 import net.minecraft.block.Block;
 import net.minecraft.state.Property;
@@ -16,8 +17,8 @@ public class MultiRotatableProbeInfoProvider<BLOCK extends Block> extends EnumPr
 	) {
 		super(
 				id, blockClass, property,
-				"testmod3.multi_rotatable.face_rotation.desc",
-				"testmod3.face_rotation"
+				TestMod3Lang.DESC_MULTI_ROTATABLE_FACE_ROTATION.getTranslationKey(),
+				TestMod3Lang.PREFIX_FACE_ROTATION.getTranslationKey()
 		);
 	}
 }

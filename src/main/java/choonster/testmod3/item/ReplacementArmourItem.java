@@ -1,5 +1,6 @@
 package choonster.testmod3.item;
 
+import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.Constants;
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
@@ -238,7 +239,7 @@ public class ReplacementArmourItem extends ArmorItem {
 
 	@Override
 	public void addInformation(final ItemStack stack, @Nullable final World worldIn, final List<ITextComponent> tooltip, final ITooltipFlag flagIn) {
-		tooltip.add(new TranslationTextComponent("item.testmod3.armour_replacement.equip.desc"));
-		tooltip.add(new TranslationTextComponent("item.testmod3.armour_replacement.unequip.desc"));
+		tooltip.add(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_ARMOUR_REPLACEMENT_EQUIP.getTranslationKey()));
+		tooltip.add(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_ARMOUR_REPLACEMENT_UNEQUIP.getTranslationKey()));
 	}
 }

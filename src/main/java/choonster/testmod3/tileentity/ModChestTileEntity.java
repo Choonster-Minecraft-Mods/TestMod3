@@ -6,6 +6,7 @@ import choonster.testmod3.inventory.IContainerCallbacks;
 import choonster.testmod3.inventory.container.ModChestContainer;
 import choonster.testmod3.inventory.itemhandler.LootItemHandler;
 import choonster.testmod3.inventory.itemhandler.TileEntityLootItemHandler;
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -33,7 +34,7 @@ public class ModChestTileEntity extends LootItemHandlerTileEntity implements ICo
 	/**
 	 * The default name of this chest's inventory.
 	 */
-	private static final ITextComponent DEFAULT_NAME = new TranslationTextComponent("container.testmod3.chest");
+	private static final ITextComponent DEFAULT_NAME = new TranslationTextComponent(TestMod3Lang.CONTAINER_CHEST.getTranslationKey());
 
 	public ModChestTileEntity() {
 		super(ModTileEntities.MOD_CHEST.get());

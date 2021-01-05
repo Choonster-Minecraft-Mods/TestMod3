@@ -3,6 +3,7 @@ package choonster.testmod3.client.gui;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.lock.ILock;
 import choonster.testmod3.network.SetLockCodeMessage;
+import choonster.testmod3.text.TestMod3Lang;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.chat.NarratorChatListener;
 import net.minecraft.client.gui.screen.Screen;
@@ -101,8 +102,8 @@ public class LockScreen extends Screen {
 	@Override
 	public void render(final MatrixStack matrixStack, final int mouseX, final int mouseY, final float partialTicks) {
 		renderBackground(matrixStack);
-		drawCenteredString(matrixStack, font, I18n.format("testmod3.lock.set_lock_code"), width / 2, 20, 0xffffff);
-		drawString(matrixStack, font, I18n.format("testmod3.lock.lock_code"), width / 2 - 150, 37, 0xa0a0a0);
+		drawCenteredString(matrixStack, font, I18n.format(TestMod3Lang.LOCK_SET_LOCK_CODE.getTranslationKey()), width / 2, 20, 0xffffff);
+		drawString(matrixStack, font, I18n.format(TestMod3Lang.LOCK_LOCK_CODE.getTranslationKey()), width / 2 - 150, 37, 0xa0a0a0);
 		lockCodeTextField.render(matrixStack, mouseX, mouseY, partialTicks);
 		drawString(matrixStack, font, "", width / 2 - 150, 75 * font.FONT_HEIGHT, 0xa0a0a0);
 

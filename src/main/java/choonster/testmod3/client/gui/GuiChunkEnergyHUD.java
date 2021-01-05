@@ -2,6 +2,7 @@ package choonster.testmod3.client.gui;
 
 import choonster.testmod3.capability.chunkenergy.ChunkEnergyCapability;
 import choonster.testmod3.config.TestMod3Config;
+import choonster.testmod3.text.TestMod3Lang;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -18,7 +19,7 @@ public class GuiChunkEnergyHUD extends AbstractGui {
 	public void drawHUD(final MatrixStack matrixStack) {
 		ChunkEnergyCapability.getChunkEnergy(minecraft.world.getChunkAt(minecraft.player.getPosition()))
 				.ifPresent(chunkEnergy -> {
-					final String text = I18n.format("testmod3.chunk_energy.hud", chunkEnergy.getEnergyStored(), chunkEnergy.getMaxEnergyStored());
+					final String text = I18n.format(TestMod3Lang.CHUNK_ENERGY_HUD.getTranslationKey(), chunkEnergy.getEnergyStored(), chunkEnergy.getMaxEnergyStored());
 					final TestMod3Config.Client.HUDPos hudPos = TestMod3Config.CLIENT.chunkEnergyHUDPos;
 					drawString(matrixStack, minecraft.fontRenderer, text, hudPos.x.get(), hudPos.y.get(), 0xFFFFFF);
 				});

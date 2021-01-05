@@ -1,6 +1,7 @@
 package choonster.testmod3.compat.theoneprobe;
 
 import choonster.testmod3.block.RestrictedFluidTankBlock;
+import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.tileentity.RestrictedFluidTankTileEntity;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
@@ -38,7 +39,7 @@ public class RestrictedFluidTankEnabledFacingsProbeInfoProvider<BLOCK extends Re
 					.getEnabledFacingsString(world, pos);
 
 			probeInfo.text(new TranslationTextComponent(
-					"block.testmod3.fluid_tank_restricted.enabled_facings",
+					TestMod3Lang.BLOCK_DESC_FLUID_TANK_RESTRICTED_ENABLED_FACINGS.getTranslationKey(),
 					enabledFacingsString
 			));
 		}

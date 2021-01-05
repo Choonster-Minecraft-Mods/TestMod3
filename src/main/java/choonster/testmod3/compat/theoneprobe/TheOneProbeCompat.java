@@ -2,6 +2,7 @@ package choonster.testmod3.compat.theoneprobe;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.*;
+import choonster.testmod3.text.TestMod3Lang;
 import mcjty.theoneprobe.api.ITheOneProbe;
 import net.minecraft.util.ResourceLocation;
 
@@ -43,7 +44,7 @@ public class TheOneProbeCompat implements Function<ITheOneProbe, Void> {
 				new ResourceLocation(TestMod3.MODID, "plane_horizontal"),
 				PlaneBlock.class,
 				PlaneBlock.HORIZONTAL_ROTATION,
-				"block.testmod3.plane.horizontal_rotation.desc"
+				TestMod3Lang.BLOCK_DESC_PLANE_HORIZONTAL_ROTATION.getTranslationKey()
 		));
 
 		theOneProbe.registerProvider(new VerticalRotatableProbeInfoProvider<>(

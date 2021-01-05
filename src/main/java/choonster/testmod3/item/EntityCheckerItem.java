@@ -1,5 +1,6 @@
 package choonster.testmod3.item;
 
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -101,7 +102,7 @@ public class EntityCheckerItem extends Item {
 
 		if (!world.isRemote) {
 			final int newRadius = incrementRadius(heldItem, player.isSneaking() ? -1 : 1);
-			player.sendMessage(new TranslationTextComponent("message.testmod3.entity_checker.radius", newRadius), Util.DUMMY_UUID);
+			player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_ENTITY_CHECKER_RADIUS.getTranslationKey(), newRadius), Util.DUMMY_UUID);
 		}
 
 		return new ActionResult<>(ActionResultType.SUCCESS, heldItem);
@@ -111,8 +112,8 @@ public class EntityCheckerItem extends Item {
 	public boolean onLeftClickEntity(final ItemStack stack, final PlayerEntity player, final Entity entity) {
 		if (!player.getEntityWorld().isRemote) {
 			final boolean cornerModeEnabled = toggleCornerModeEnabled(stack);
-			final String message = cornerModeEnabled ? "message.testmod3.entity_checker.mode.corner" : "message.testmod3.entity_checker.mode.edge";
-			player.sendMessage(new TranslationTextComponent(message, cornerModeEnabled), Util.DUMMY_UUID);
+			final TestMod3Lang message = cornerModeEnabled ? TestMod3Lang.MESSAGE_ENTITY_CHECKER_MODE_CORNER : TestMod3Lang.MESSAGE_ENTITY_CHECKER_MODE_EDGE;
+			player.sendMessage(new TranslationTextComponent(message.getTranslationKey(), cornerModeEnabled), Util.DUMMY_UUID);
 		}
 
 		return true;
@@ -142,7 +143,7 @@ public class EntityCheckerItem extends Item {
 
 			LOGGER.info("Bounding box: {}", boundingBox);
 			if (player != null) {
-				player.sendMessage(new TranslationTextComponent("message.testmod3.entity_checker.results", entities.size()), Util.DUMMY_UUID);
+				player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_ENTITY_CHECKER_RESULTS.getTranslationKey(), entities.size()), Util.DUMMY_UUID);
 				entities.forEach(entity -> player.sendMessage(new StringTextComponent(entity.toString()), Util.DUMMY_UUID));
 			}
 		}
@@ -153,9 +154,9 @@ public class EntityCheckerItem extends Item {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(final ItemStack stack, @Nullable final World worldIn, final List<ITextComponent> tooltip, final ITooltipFlag flagIn) {
-		tooltip.add(new TranslationTextComponent("item.testmod3.entity_checker.radius.desc", getRadius(stack)));
+		tooltip.add(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_RADIUS.getTranslationKey(), getRadius(stack)));
 
-		final String cornerModeTranslationKey = isCornerModeEnabled(stack) ? "item.testmod3.entity_checker.mode.corner.desc" : "item.testmod3.entity_checker.mode.edge.desc";
-		tooltip.add(new TranslationTextComponent(cornerModeTranslationKey));
+		final TestMod3Lang cornerMode = isCornerModeEnabled(stack) ? TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_MODE_CORNER : TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_MODE_EDGE;
+		tooltip.add(new TranslationTextComponent(cornerMode.getTranslationKey()));
 	}
 }

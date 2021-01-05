@@ -1,6 +1,7 @@
 package choonster.testmod3.compat.waila;
 
 import choonster.testmod3.block.*;
+import choonster.testmod3.text.TestMod3Lang;
 import mcp.mobius.waila.api.IRegistrar;
 import mcp.mobius.waila.api.IWailaPlugin;
 import mcp.mobius.waila.api.TooltipPosition;
@@ -22,7 +23,7 @@ public class WailaCompat implements IWailaPlugin {
 		registrar.registerComponentProvider(new RotatableHUDHandler(RotatableLampBlock.FACING), TooltipPosition.BODY, RotatableLampBlock.class);
 		registrar.registerComponentProvider(new RotatableHUDHandler(ModChestBlock.FACING), TooltipPosition.BODY, ModChestBlock.class);
 
-		registrar.registerComponentProvider(new RotatableHUDHandler(PlaneBlock.HORIZONTAL_ROTATION, "block.testmod3.plane.horizontal_rotation.desc"), TooltipPosition.BODY, PlaneBlock.class);
+		registrar.registerComponentProvider(new RotatableHUDHandler(PlaneBlock.HORIZONTAL_ROTATION, TestMod3Lang.BLOCK_DESC_PLANE_HORIZONTAL_ROTATION.getTranslationKey()), TooltipPosition.BODY, PlaneBlock.class);
 		registrar.registerComponentProvider(new VerticalRotatableHUDHandler(PlaneBlock.VERTICAL_ROTATION), TooltipPosition.BODY, PlaneBlock.class);
 
 		registrar.registerComponentProvider(new RestrictedFluidTankEnabledFacingsHUDHandler(), TooltipPosition.BODY, RestrictedFluidTankBlock.class);

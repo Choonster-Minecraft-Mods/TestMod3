@@ -2,6 +2,7 @@ package choonster.testmod3.item;
 
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.maxhealth.MaxHealthCapability;
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -29,7 +30,7 @@ public class MaxHealthSetterItem extends Item {
 
 				maxHealth.addBonusMaxHealth(healthToAdd);
 
-				player.sendMessage(new TranslationTextComponent("message.testmod3.max_health.add", target.getDisplayName(), healthToAdd), Util.DUMMY_UUID);
+				player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_MAX_HEALTH_ADD.getTranslationKey(), target.getDisplayName(), healthToAdd), Util.DUMMY_UUID);
 			});
 		}
 

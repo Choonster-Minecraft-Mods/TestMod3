@@ -1,5 +1,6 @@
 package choonster.testmod3.block;
 
+import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.tileentity.RestrictedFluidTankTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -49,8 +50,8 @@ public class RestrictedFluidTankBlock extends FluidTankBlock<RestrictedFluidTank
 				final boolean enabled = tileEntity.toggleFacing(face);
 
 				if (!world.isRemote) {
-					final String message = enabled ? "message.testmod3.fluid_tank_restricted.facing_enabled" : "message.testmod3.fluid_tank_restricted.facing_disabled";
-					player.sendMessage(new TranslationTextComponent(message, face), Util.DUMMY_UUID);
+					final TestMod3Lang message = enabled ? TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_FACING_ENABLED : TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_FACING_DISABLED;
+					player.sendMessage(new TranslationTextComponent(message.getTranslationKey(), face), Util.DUMMY_UUID);
 				}
 
 				return ActionResultType.SUCCESS;
@@ -65,7 +66,7 @@ public class RestrictedFluidTankBlock extends FluidTankBlock<RestrictedFluidTank
 	public void onBlockClicked(final BlockState state, final World worldIn, final BlockPos pos, final PlayerEntity player) {
 		if (!worldIn.isRemote) {
 			final String enabledFacingsString = getEnabledFacingsString(worldIn, pos);
-			player.sendMessage(new TranslationTextComponent("message.testmod3.fluid_tank_restricted.enabled_facings", enabledFacingsString), Util.DUMMY_UUID);
+			player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_ENABLED_FACINGS.getTranslationKey(), enabledFacingsString), Util.DUMMY_UUID);
 		}
 	}
 

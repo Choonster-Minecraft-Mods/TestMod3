@@ -1,5 +1,6 @@
 package choonster.testmod3.item;
 
+import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import net.minecraft.client.util.ITooltipFlag;
@@ -94,6 +95,6 @@ public class RestrictedArmourItem extends ArmorItem {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
-		tooltip.add(new TranslationTextComponent("item.testmod3.armour_restricted.desc"));
+		tooltip.add(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_ARMOUR_RESTRICTED.getTranslationKey()));
 	}
 }

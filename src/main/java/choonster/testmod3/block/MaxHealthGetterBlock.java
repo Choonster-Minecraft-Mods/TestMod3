@@ -2,6 +2,7 @@ package choonster.testmod3.block;
 
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.maxhealth.MaxHealthCapability;
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,7 +29,7 @@ public class MaxHealthGetterBlock extends Block {
 	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
 		if (!world.isRemote) {
 			MaxHealthCapability.getMaxHealth(player).ifPresent(maxHealth ->
-					player.sendMessage(new TranslationTextComponent("message.testmod3.max_health.get", player.getDisplayName(), player.getMaxHealth(), maxHealth.getBonusMaxHealth()), Util.DUMMY_UUID)
+					player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_MAX_HEALTH_GET.getTranslationKey(), player.getDisplayName(), player.getMaxHealth(), maxHealth.getBonusMaxHealth()), Util.DUMMY_UUID)
 			);
 		}
 

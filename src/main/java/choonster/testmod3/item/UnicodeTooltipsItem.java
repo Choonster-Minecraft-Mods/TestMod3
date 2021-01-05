@@ -1,5 +1,6 @@
 package choonster.testmod3.item;
 
+import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,8 +33,18 @@ public class UnicodeTooltipsItem extends Item {
 	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
 		super.addInformation(stack, world, tooltip, flag);
 
-		tooltip.add(new TranslationTextComponent("item.testmod3.unicode_tooltips.1.desc"));
-		tooltip.add(new StringTextComponent("§a§o").append(new TranslationTextComponent("item.testmod3.unicode_tooltips.2.desc")).appendString("§r"));
-		tooltip.add(new StringTextComponent("" + TextFormatting.GREEN + TextFormatting.ITALIC).append(new TranslationTextComponent("item.testmod3.unicode_tooltips.3.desc")).appendString("" + TextFormatting.RESET));
+		tooltip.add(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_UNICODE_TOOLTIPS_1.getTranslationKey()));
+
+		tooltip.add(
+				new StringTextComponent("§a§o")
+						.append(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_UNICODE_TOOLTIPS_2.getTranslationKey()))
+						.appendString("§r")
+		);
+
+		tooltip.add(
+				new StringTextComponent("" + TextFormatting.GREEN + TextFormatting.ITALIC)
+						.append(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_UNICODE_TOOLTIPS_3.getTranslationKey()))
+						.appendString("" + TextFormatting.RESET)
+		);
 	}
 }
