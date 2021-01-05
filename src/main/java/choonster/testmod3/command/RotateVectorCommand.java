@@ -25,13 +25,14 @@ public class RotateVectorCommand {
 		return Commands.literal("rotatevector")
 				.then(Commands.argument("vector", Vec3Argument.vec3())
 						.then(Commands.argument("axis", AxisArgument.axis())
-								.then(Commands.argument("degrees", IntegerArgumentType.integer()))
-								.executes(context ->
-										execute(
-												context,
-												Vec3Argument.getVec3(context, "vector"),
-												AxisArgument.getAxis(context, "axis"),
-												IntegerArgumentType.getInteger(context, "degrees")
+								.then(Commands.argument("degrees", IntegerArgumentType.integer())
+										.executes(context ->
+												execute(
+														context,
+														Vec3Argument.getVec3(context, "vector"),
+														AxisArgument.getAxis(context, "axis"),
+														IntegerArgumentType.getInteger(context, "degrees")
+												)
 										)
 								)
 						)

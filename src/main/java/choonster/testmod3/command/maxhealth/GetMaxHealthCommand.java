@@ -23,11 +23,14 @@ public class GetMaxHealthCommand {
 
 	static ArgumentBuilder<CommandSource, ?> register() {
 		return Commands.literal("get")
-				.then(Commands.argument("entity", EntityArgument.entity()))
-				.executes(context -> execute(
-						context,
-						EntityArgument.getEntity(context, "entity")
-				));
+				.then(Commands.argument("entity", EntityArgument.entity())
+						.executes(context ->
+								execute(
+										context,
+										EntityArgument.getEntity(context, "entity")
+								)
+						)
+				);
 	}
 
 	private static int execute(final CommandContext<CommandSource> context, final Entity entity) throws CommandSyntaxException {
@@ -35,13 +38,14 @@ public class GetMaxHealthCommand {
 			throw INVALID_ENTITY_EXCEPTION.create();
 		}
 
-		final LivingEntity entityLivingBase = (LivingEntity) entity;
+		final LivingEntity livingEntity = (LivingEntity) entity;
 
-		MaxHealthCapability.getMaxHealth(entityLivingBase).ifPresent(maxHealth ->
+		MaxHealthCapability.getMaxHealth(livingEntity).ifPresent(maxHealth ->
 				context.getSource().sendFeedback(
 						new TranslationTextComponent(
 								"message.testmod3.max_health.get",
 								entity.getDisplayName(),
+								MaxHealthCapability.formatMaxHealth(livingEntity.getMaxHealth()),
 								MaxHealthCapability.formatMaxHealth(maxHealth.getBonusMaxHealth())
 						),
 						true
