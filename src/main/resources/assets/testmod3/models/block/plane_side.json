@@ -1,8 +1,13 @@
 {
 	"credit": "Made with Blockbench",
 	"parent": "minecraft:block/block",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "#plane"
+	},
 	"elements": [
 		{
+			"name": "Base",
 			"from": [ 0, 0, 0 ],
 			"to": [ 16, 16, 16 ],
 			"faces": {
@@ -13,8 +18,10 @@
 			}
 		},
 		{
+			"name": "Plane",
 			"from": [ 0, 0, 16 ],
 			"to": [ 16, 16, 16 ],
+			"shade": false,
 			"rotation": { "angle": 45, "axis": "y", "origin": [ 0, 16, 16 ], "rescale": true },
 			"faces": {
 				"south": { "uv": [ 0, 0, 16, 16 ], "rotation": 90, "texture": "#plane" }
