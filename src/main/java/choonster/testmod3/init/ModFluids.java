@@ -46,7 +46,7 @@ public class ModFluids {
 			.build();
 
 	// TODO: Implement gases
-	public static final FluidGroup<FlowingFluid, FlowingFluid, FlowingFluidBlock, Item> STATIC_GAX = new StandardFluidGroup.Builder("static_gas", FLUIDS, BLOCKS, ITEMS)
+	public static final FluidGroup<FlowingFluid, FlowingFluid, FlowingFluidBlock, Item> STATIC_GAS = new StandardFluidGroup.Builder("static_gas", FLUIDS, BLOCKS, ITEMS)
 			.stillFactory(StaticFluid.Source::new)
 			.flowingFactory(StaticFluid.Flowing::new)
 			.attributes(
