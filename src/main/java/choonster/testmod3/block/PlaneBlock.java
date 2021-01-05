@@ -22,7 +22,9 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * A diagonal half-cube block, like the Carpenter's Slope from Carpenter's Blocks.
@@ -52,18 +54,20 @@ public class PlaneBlock extends Block {
 	 * The VoxelShapes for each possible rotation.
 	 */
 	private static final VoxelShape[] SHAPES = Util.make(() -> {
-		final Collection<Direction> horizontalRotations = HORIZONTAL_ROTATION.getAllowedValues();
-		final Collection<VerticalRotation> verticalRotations = VERTICAL_ROTATION.getAllowedValues();
-
 		final VoxelShape[] combinedShapes = new VoxelShape[12];
 
-		// The base and top AABBs for the default rotation pair
-		final AxisAlignedBB baseBoundingBox = new AxisAlignedBB(0, 0, 0, 1, 0.5, 1);
-		final AxisAlignedBB topBoundingBox = new AxisAlignedBB(0, 0.5, 0, 1, 1, 0.5);
+		// The number of bounding boxes to create
+		final int numBoundingBoxes = 8;
+		final double increment = 1.0 / numBoundingBoxes;
+
+		// Create the bounding boxes for the default rotation pair (horizontal = north, vertical = up)
+		final List<AxisAlignedBB> boundingBoxes = IntStream.range(0, numBoundingBoxes)
+				.mapToObj(i -> new AxisAlignedBB(0, i * increment, 0, 1, (i + 1) * increment, 1 - (i * increment)))
+				.collect(Collectors.toList());
 
 		// For each horizontal and vertical rotation pair,
-		for (final Direction horizontalRotation : horizontalRotations) {
-			for (final VerticalRotation verticalRotation : verticalRotations) {
+		for (final Direction horizontalRotation : HORIZONTAL_ROTATION.getAllowedValues()) {
+			for (final VerticalRotation verticalRotation : VERTICAL_ROTATION.getAllowedValues()) {
 				// Get the horizontal (around the y axis) rotation angle and quaternion
 				// Needs to be negated to perform correct rotation.
 				final double horizontalRotationAngle = -VectorUtils.getHorizontalRotation(horizontalRotation);
@@ -77,12 +81,14 @@ public class PlaneBlock extends Block {
 				final Quaternion combinedRotationQuaternion = new Quaternion(horizontalRotationQuaternion);
 				combinedRotationQuaternion.multiply(verticalRotationQuaternion);
 
-				// Rotate the AABBs
-				final AxisAlignedBB rotatedBaseBoundingBox = VectorUtils.adjustAABBForVoxelShape(VectorUtils.rotateAABB(baseBoundingBox, combinedRotationQuaternion));
-				final AxisAlignedBB rotatedTopBoundingBox = VectorUtils.adjustAABBForVoxelShape(VectorUtils.rotateAABB(topBoundingBox, combinedRotationQuaternion));
+				final VoxelShape combinedShape = boundingBoxes
+						.stream()
+						.map(aabb -> VectorUtils.rotateAABB(aabb, combinedRotationQuaternion)) // Rotate the AABBs
+						.map(VectorUtils::adjustAABBForVoxelShape) // Round/offset them
+						.map(VoxelShapes::create) // Convert them to VoxelShapes
+						.reduce(VoxelShapes.empty(), VoxelShapes::or); // Combine them into a single VoxelShape
 
-				// Combine them into a single VoxelShape and add it to the array
-				final VoxelShape combinedShape = VoxelShapes.or(VoxelShapes.create(rotatedBaseBoundingBox), VoxelShapes.create(rotatedTopBoundingBox));
+				// Add the combined VoxelShape to the array
 				combinedShapes[getShapeIndex(horizontalRotation, verticalRotation)] = combinedShape;
 			}
 		}
