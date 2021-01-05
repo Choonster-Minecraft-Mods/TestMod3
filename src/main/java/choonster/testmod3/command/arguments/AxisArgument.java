@@ -32,6 +32,7 @@ public class AxisArgument implements ArgumentType<Direction.Axis> {
 		return context.getArgument(name, Direction.Axis.class);
 	}
 
+	@Override
 	public Direction.Axis parse(final StringReader reader) throws CommandSyntaxException {
 		final Direction.Axis axis = Direction.Axis.byName(reader.readString());
 
@@ -42,6 +43,7 @@ public class AxisArgument implements ArgumentType<Direction.Axis> {
 		return axis;
 	}
 
+	@Override
 	public Collection<String> getExamples() {
 		return EXAMPLES;
 	}
