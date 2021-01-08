@@ -244,6 +244,8 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 		withExistingParent(ModItems.REPLACEMENT_BOOTS.get(), Items.CHAINMAIL_BOOTS);
 
+		spawnEggItem(ModItems.PLAYER_AVOIDING_CREEPER_SPAWN_EGG.get());
+
 		ModItems.VARIANTS_ITEMS
 				.getItems()
 				.stream()
@@ -327,5 +329,9 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 				.predicate(mcLoc("pull"), 0.9f)
 				.model(bowPullingModels.get(2))
 				.end();
+	}
+
+	private void spawnEggItem(final Item item) {
+		withExistingParent(name(item), mcLoc("template_spawn_egg"));
 	}
 }

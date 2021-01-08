@@ -19,7 +19,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -290,6 +294,10 @@ public class ModItems {
 			() -> new FluidStackItem(new Item.Properties())
 	);
 
+	public static RegistryObject<ModSpawnEggItem> PLAYER_AVOIDING_CREEPER_SPAWN_EGG = ITEMS.register("player_avoiding_creeper_spawn_egg",
+			() -> new ModSpawnEggItem(ModEntities.PLAYER_AVOIDING_CREEPER, 0xda70b, 0, new Item.Properties().group(ItemGroup.MISC))
+	);
+
 //	public static final TestMod3BucketItem WOODEN_BUCKET = Null();
 //  new TestMod3BucketItem(defaultItemProperties()).setRegistryName("wooden_bucket"),
 //
@@ -329,5 +337,13 @@ public class ModItems {
 	 */
 	private static Item.Properties defaultItemProperties() {
 		return new Item.Properties().group(TestMod3.ITEM_GROUP);
+	}
+
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
+	public static class EventHandler {
+		@SubscribeEvent
+		public static void commonSetup(final FMLCommonSetupEvent event) {
+			event.enqueueWork(ModSpawnEggItem::addEggsToEggsMap);
+		}
 	}
 }
