@@ -30,6 +30,7 @@ public class ModRenderLayerSetup {
 			RenderTypeLookup.setRenderLayer(ModBlocks.JUNGLE_SAPLING.get(), RenderType.getCutout());
 			RenderTypeLookup.setRenderLayer(ModBlocks.ACACIA_SAPLING.get(), RenderType.getCutout());
 			RenderTypeLookup.setRenderLayer(ModBlocks.DARK_OAK_SAPLING.get(), RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.WATER_GRASS.get(), RenderType.getCutout());
 		});
 	}
 }

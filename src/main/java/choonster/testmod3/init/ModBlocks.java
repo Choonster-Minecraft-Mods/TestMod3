@@ -29,7 +29,7 @@ public class ModBlocks {
 	private static boolean isInitialised = false;
 
 	public static final RegistryObject<WaterGrassBlock> WATER_GRASS = registerBlock("water_grass",
-			() -> new WaterGrassBlock(Block.Properties.create(Material.WATER))
+			() -> new WaterGrassBlock(Block.Properties.create(Material.SEA_GRASS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.WET_GRASS))
 	);
 
 	public static final RegistryObject<LargeCollisionTestBlock> LARGE_COLLISION_TEST = registerBlock("large_collision_test",

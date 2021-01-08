@@ -180,7 +180,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	@Override
 	protected void registerStatesAndModels() {
 		simpleBlockWithExistingParent(ModBlocks.WATER_GRASS.get(), Blocks.GRASS);
-		simpleBlockItem(ModBlocks.WATER_GRASS.get());
+		simpleBlockItemWithExistingParent(ModBlocks.WATER_GRASS.get(), Items.GRASS);
 
 		simpleBlockWithExistingParent(ModBlocks.LARGE_COLLISION_TEST.get(), Blocks.WHITE_WOOL);
 		simpleBlockItem(ModBlocks.LARGE_COLLISION_TEST.get());
