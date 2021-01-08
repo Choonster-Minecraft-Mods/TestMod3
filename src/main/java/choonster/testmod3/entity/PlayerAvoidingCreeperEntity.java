@@ -1,16 +1,20 @@
 package choonster.testmod3.entity;
 
-import choonster.testmod3.init.ModEntities;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Field;
+import java.util.Set;
 
 /**
  * A creeper that avoids players holding an item in their off hand.
@@ -21,9 +25,10 @@ import javax.annotation.Nullable;
  * @author Choonster
  */
 public class PlayerAvoidingCreeperEntity extends CreeperEntity {
+	private static final Field GOALS = ObfuscationReflectionHelper.findField(GoalSelector.class, /* goals */ "field_220892_d");
 
-	public PlayerAvoidingCreeperEntity(final EntityType<? extends CreeperEntity> p_i50213_1_, final World p_i50213_2_) {
-		super(p_i50213_1_, p_i50213_2_);
+	public PlayerAvoidingCreeperEntity(final EntityType<? extends CreeperEntity> entityType, final World world) {
+		super(entityType, world);
 	}
 
 	public static AttributeModifierMap.MutableAttribute registerAttributes() {
@@ -31,26 +36,32 @@ public class PlayerAvoidingCreeperEntity extends CreeperEntity {
 	}
 
 	@Override
-	public EntityType<?> getType() {
-		return ModEntities.PLAYER_AVOIDING_CREEPER.get();
-	}
-
-	@Override
 	protected void registerGoals() {
 		super.registerGoals();
 
-		// Remove the EntityAINearestAttackableTarget task added by EntityCreeper so it can be replaced
-		// TODO: Check if the replacement NearestAttackableTargetGoal overrides this
-//		targetSelector.taskEntries.stream()
-//				.filter(taskEntry -> taskEntry.action instanceof NearestAttackableTargetGoal)
-//				.findFirst()
-//				.ifPresent(taskEntry -> targetTasks.removeTask(taskEntry.action));
+		final Set<PrioritizedGoal> targetSelectorGoals;
+
+		try {
+			@SuppressWarnings("unchecked")
+			final Set<PrioritizedGoal> goals = (Set<PrioritizedGoal>) GOALS.get(targetSelector);
+			targetSelectorGoals = goals;
+		} catch (final IllegalAccessException e) {
+			throw new RuntimeException("Unable to access target goals", e);
+		}
+
+		// Remove the NearestAttackableTargetGoal added by CreeperEntity so it can be replaced
+		targetSelectorGoals
+				.stream()
+				.map(PrioritizedGoal::getGoal)
+				.filter(goal -> goal instanceof NearestAttackableTargetGoal)
+				.findFirst()
+				.ifPresent(targetSelector::removeGoal);
 
 		// Avoid players if they have an item in their off hand
 		goalSelector.addGoal(3, new AvoidEntityGoal<>(this, PlayerEntity.class, 6.0F, 1.0D, 1.2D, this::shouldAvoidEntity));
 
 		// Only attack players without an item in their off hand
-		targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, (player) -> !shouldAvoidEntity(player)));
+		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, (player) -> !shouldAvoidEntity(player)));
 	}
 
 	/**
