@@ -10,6 +10,7 @@ import choonster.testmod3.item.variantgroup.ItemVariantGroup;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.potion.EffectInstance;
@@ -27,10 +28,16 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class ModItems {
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TestMod3.MODID);
+
+	private static final Set<RegistryObject<ModSpawnEggItem>> SPAWN_EGGS = new HashSet<>();
 
 	private static boolean isInitialised;
 
@@ -294,9 +301,10 @@ public class ModItems {
 			() -> new FluidStackItem(new Item.Properties())
 	);
 
-	public static RegistryObject<ModSpawnEggItem> PLAYER_AVOIDING_CREEPER_SPAWN_EGG = ITEMS.register("player_avoiding_creeper_spawn_egg",
-			() -> new ModSpawnEggItem(ModEntities.PLAYER_AVOIDING_CREEPER, 0xda70b, 0, new Item.Properties().group(ItemGroup.MISC))
+	public static RegistryObject<ModSpawnEggItem> PLAYER_AVOIDING_CREEPER_SPAWN_EGG = registerSpawnEgg("player_avoiding_creeper_spawn_egg",
+			ModEntities.PLAYER_AVOIDING_CREEPER, 0xda70b, 0
 	);
+
 
 //	public static final TestMod3BucketItem WOODEN_BUCKET = Null();
 //  new TestMod3BucketItem(defaultItemProperties()).setRegistryName("wooden_bucket"),
@@ -331,6 +339,37 @@ public class ModItems {
 	}
 
 	/**
+	 * Gets the registered mod spawn eggs.
+	 *
+	 * @return The spawn egg items
+	 */
+	public static Collection<? extends Supplier<ModSpawnEggItem>> getSpawnEggs() {
+		return Collections.unmodifiableCollection(SPAWN_EGGS);
+	}
+
+	/**
+	 * Registers a spawn egg item.
+	 *
+	 * @param name           The registry name of the item
+	 * @param entityType     The entity type to spawn
+	 * @param primaryColor   The primary colour of the spawn egg
+	 * @param secondaryColor The secondary colour of the spawn egg
+	 * @return A RegistryObject reference to the item
+	 */
+	private static RegistryObject<ModSpawnEggItem> registerSpawnEgg(
+			final String name, final RegistryObject<? extends EntityType<?>> entityType,
+			final int primaryColor, final int secondaryColor
+	) {
+		final RegistryObject<ModSpawnEggItem> spawnEgg = ITEMS.register(name,
+				() -> new ModSpawnEggItem(entityType, primaryColor, secondaryColor, new Item.Properties().group(TestMod3.ITEM_GROUP))
+		);
+
+		SPAWN_EGGS.add(spawnEgg);
+
+		return spawnEgg;
+	}
+
+	/**
 	 * Gets an {@link Item.Properties} instance with the {@link ItemGroup} set to {@link TestMod3#ITEM_GROUP}.
 	 *
 	 * @return The item properties
@@ -343,7 +382,9 @@ public class ModItems {
 	public static class EventHandler {
 		@SubscribeEvent
 		public static void commonSetup(final FMLCommonSetupEvent event) {
-			event.enqueueWork(ModSpawnEggItem::addEggsToEggsMap);
+			event.enqueueWork(() ->
+					ModSpawnEggItem.addEggsToEggsMap(getSpawnEggs())
+			);
 		}
 	}
 }
