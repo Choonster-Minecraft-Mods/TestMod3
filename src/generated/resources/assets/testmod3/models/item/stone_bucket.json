@@ -1,0 +1,9 @@
+{
+  "parent": "forge:item/bucket_drip",
+  "textures": {
+    "base": "testmod3:item/stone_bucket_base"
+  },
+  "loader": "forge:bucket",
+  "fluid": "minecraft:empty",
+  "flipGas": true
+}

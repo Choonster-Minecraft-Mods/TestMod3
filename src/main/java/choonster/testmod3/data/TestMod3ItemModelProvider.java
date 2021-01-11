@@ -6,6 +6,7 @@ import choonster.testmod3.client.item.TicksSinceLastUseItemPropertyGetter;
 import choonster.testmod3.init.ModItems;
 import com.google.common.base.Preconditions;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.LazyValue;
@@ -14,6 +15,7 @@ import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelBuilder.Perspective;
 import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.client.model.generators.loaders.DynamicBucketModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.fml.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
@@ -246,6 +248,10 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 		spawnEggItem(ModItems.PLAYER_AVOIDING_CREEPER_SPAWN_EGG.get());
 
+		bucketItem(ModItems.WOODEN_BUCKET.get());
+
+		bucketItem(ModItems.STONE_BUCKET.get());
+
 		ModItems.VARIANTS_ITEMS
 				.getItems()
 				.stream()
@@ -333,5 +339,16 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 	private void spawnEggItem(final Item item) {
 		withExistingParent(name(item), mcLoc("template_spawn_egg"));
+	}
+
+	private void bucketItem(final Item item) {
+		getBuilder(name(item))
+				.parent(getExistingFile(new ResourceLocation("forge", "bucket_drip")))
+				.texture("base", itemTexture(item) + "_base")
+//				.texture("cover", itemTexture(item) + "_cover") // TODO: Is this required?
+				.customLoader(DynamicBucketModelBuilder::begin)
+				.fluid(Fluids.EMPTY)
+				.flipGas(true)
+				.end();
 	}
 }

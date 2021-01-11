@@ -297,22 +297,23 @@ public class ModItems {
 		);
 	}
 
-	public static RegistryObject<FluidStackItem> FLUID_STACK_ITEM = ITEMS.register("fluid_stack_item",
+	public static final RegistryObject<FluidStackItem> FLUID_STACK_ITEM = ITEMS.register("fluid_stack_item",
 			() -> new FluidStackItem(new Item.Properties())
 	);
 
-	public static RegistryObject<ModSpawnEggItem> PLAYER_AVOIDING_CREEPER_SPAWN_EGG = registerSpawnEgg("player_avoiding_creeper_spawn_egg",
+	public static final RegistryObject<ModSpawnEggItem> PLAYER_AVOIDING_CREEPER_SPAWN_EGG = registerSpawnEgg("player_avoiding_creeper_spawn_egg",
 			ModEntities.PLAYER_AVOIDING_CREEPER, 0xda70b, 0
 	);
 
+	public static final RegistryObject<ModBucketItem> WOODEN_BUCKET = ITEMS.register("wooden_bucket",
+			() -> new ModBucketItem(defaultItemProperties().maxStackSize(16))
+	);
 
-//	public static final TestMod3BucketItem WOODEN_BUCKET = Null();
-//  new TestMod3BucketItem(defaultItemProperties()).setRegistryName("wooden_bucket"),
-//
-//	public static final TestMod3BucketItem STONE_BUCKET = Null();
-//  new TestMod3BucketItem(defaultItemProperties()).setRegistryName("stone_bucket"),
+	public static final RegistryObject<ModBucketItem> STONE_BUCKET = ITEMS.register("stone_bucket",
+			() -> new ModBucketItem(defaultItemProperties().maxStackSize(16))
+	);
 
-
+	
 	public static final ItemVariantGroup<VariantsItem.Type, VariantsItem> VARIANTS_ITEMS = ItemVariantGroup.Builder.<VariantsItem.Type, VariantsItem>create(ITEMS)
 			.groupName("variants_item")
 			.suffix()

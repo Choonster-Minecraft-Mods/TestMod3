@@ -9,6 +9,7 @@ import net.minecraftforge.registries.RegistryManager;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
@@ -54,9 +55,19 @@ public class RegistryUtil {
 	 * @return A Set containing the registry entries
 	 */
 	public static <T extends IForgeRegistryEntry<T>> Set<T> getModRegistryEntries(final IForgeRegistry<T> registry) {
-		return StreamSupport.stream(registry.spliterator(), false)
+		return stream(registry)
 				.filter(entry -> entry.getRegistryName() != null && entry.getRegistryName().getNamespace().equals(TestMod3.MODID))
 				.collect(Collectors.toSet());
 	}
 
+	/**
+	 * Gets a {@link Stream} of the registry's entries.
+	 *
+	 * @param registry The registry
+	 * @param <T>      The registry type
+	 * @return A Stream of the registry's entries
+	 */
+	public static <T extends IForgeRegistryEntry<T>> Stream<T> stream(final IForgeRegistry<T> registry) {
+		return StreamSupport.stream(registry.spliterator(), false);
+	}
 }

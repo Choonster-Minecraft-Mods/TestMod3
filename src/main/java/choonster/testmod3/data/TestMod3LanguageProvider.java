@@ -4,6 +4,7 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.block.PlaneBlock;
 import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.init.*;
+import choonster.testmod3.item.ModBucketItem;
 import choonster.testmod3.item.ModSpawnEggItem;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.EnumFaceRotation;
@@ -205,6 +206,8 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 
 		addItem(ModItems.FLUID_STACK_ITEM, "FluidStack Item");
 		addSpawnEgg(ModItems.PLAYER_AVOIDING_CREEPER_SPAWN_EGG);
+		addBucket(ModItems.WOODEN_BUCKET, "Wooden Bucket");
+		addBucket(ModItems.STONE_BUCKET, "Stone Bucket");
 
 		ModItems.VARIANTS_ITEMS
 				.getItems()
@@ -350,6 +353,13 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		final ModSpawnEggItem item = spawnEggItem.get();
 		final EntityType<?> entityType = item.getType(null);
 		add(item, String.format("%s Spawn Egg", ENTITY_TYPE_NAMES.get(entityType)));
+	}
+
+	private void addBucket(final Supplier<? extends ModBucketItem> bucketItem, final String name) {
+		final ModBucketItem item = bucketItem.get();
+
+		add(item, name);
+		add(item.getTranslationKey() + ".filled", "%s " + name);
 	}
 
 	private <
