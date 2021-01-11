@@ -365,9 +365,8 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 	private void bucketItem(final Item item) {
 		getBuilder(name(item))
-				.parent(getExistingFile(new ResourceLocation("forge", "bucket_drip")))
+				.parent(getExistingFile(new ResourceLocation("forge", "bucket")))
 				.texture("base", itemTexture(item) + "_base")
-//				.texture("cover", itemTexture(item) + "_cover") // TODO: Is this required?
 				.customLoader(DynamicBucketModelBuilder::begin)
 				.fluid(Fluids.EMPTY)
 				.flipGas(true)

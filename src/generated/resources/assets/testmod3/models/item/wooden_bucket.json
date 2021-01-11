@@ -1,5 +1,5 @@
 {
-  "parent": "forge:item/bucket_drip",
+  "parent": "forge:item/bucket",
   "textures": {
     "base": "testmod3:item/wooden_bucket_base"
   },
