@@ -3,6 +3,7 @@ package choonster.testmod3.item;
 import choonster.testmod3.capability.SerializableCapabilityProvider;
 import choonster.testmod3.fluid.UniversalBucketFluidHandler;
 import choonster.testmod3.util.CapabilityNotPresentException;
+import choonster.testmod3.util.ModFluidUtil;
 import choonster.testmod3.util.RegistryUtil;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
@@ -92,8 +93,8 @@ public class ModBucketItem extends Item {
 
 		// Add all fluids that the bucket can be filled with
 		RegistryUtil.stream(ForgeRegistries.FLUIDS)
-				.filter(fluid -> !fluid.getAttributes().getBucket(new FluidStack(fluid, capacity)).isEmpty())
 				.map(fluid -> new FluidStack(fluid, capacity))
+				.filter(ModFluidUtil::hasBucket)
 				.map(this::getFilledBucket)
 				.filter(stack -> !stack.isEmpty())
 				.forEach(items::add);
