@@ -13,9 +13,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.ModList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.annotation.Nullable;
 
 /**
  * A Block that prints the current state of the player's held {@link ItemStack}s on the client and server when left or right clicked.
@@ -33,6 +36,7 @@ public class ItemDebuggerBlock extends Block {
 		if (!stack.isEmpty()) {
 			LOGGER.info("ItemStack: {}", stack.serializeNBT());
 			logCapability(stack, PigSpawnerCapability.PIG_SPAWNER_CAPABILITY, Direction.NORTH);
+			logFluidHandler(stack);
 
 			final String modName;
 			final ResourceLocation registryName = stack.getItem().getRegistryName();
@@ -49,10 +53,16 @@ public class ItemDebuggerBlock extends Block {
 		}
 	}
 
-	private <T> void logCapability(final ItemStack stack, final Capability<T> capability, final Direction facing) {
-		stack.getCapability(capability, facing).ifPresent(instance -> {
-			LOGGER.info("Capability: {} - {}", capability.getName(), instance);
-		});
+	private <T> void logCapability(final ItemStack stack, final Capability<T> capability, @Nullable final Direction facing) {
+		stack.getCapability(capability, facing).ifPresent(instance ->
+				LOGGER.info("Capability: {} - {}", capability.getName(), instance)
+		);
+	}
+
+	private void logFluidHandler(final ItemStack stack) {
+		FluidUtil.getFluidContained(stack).ifPresent(fluidStack ->
+				LOGGER.info("Fluid: {} - {}", fluidStack.getFluid().getRegistryName(), fluidStack.getAmount())
+		);
 	}
 
 	@SuppressWarnings("deprecation")
