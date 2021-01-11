@@ -3,6 +3,7 @@ package choonster.testmod3.item.block;
 import choonster.testmod3.block.FluidTankBlock;
 import choonster.testmod3.capability.SerializableCapabilityProvider;
 import choonster.testmod3.fluid.FluidTankSnapshot;
+import choonster.testmod3.fluid.ItemFluidTank;
 import choonster.testmod3.tileentity.FluidTankTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
@@ -66,6 +67,6 @@ public class FluidTankItem extends BlockItem {
 	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final CompoundNBT nbt) {
 		if (CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY == null) return null;
 
-		return new SerializableCapabilityProvider<>(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null, new choonster.testmod3.fluid.ItemFluidTank(stack, FluidTankTileEntity.CAPACITY));
+		return new SerializableCapabilityProvider<>(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null, new ItemFluidTank(stack, FluidTankTileEntity.CAPACITY));
 	}
 }
