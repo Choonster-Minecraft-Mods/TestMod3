@@ -164,9 +164,12 @@ public class ModBucketItem extends Item {
 			// Add the filled bucket to the player's inventory, or replace this stack if this was the last empty bucket
 			result = DrinkHelper.fill(heldItem, player, filledBucket);
 		} else {
+			final BlockState destState = world.getBlockState(pos);
+			final BlockPos destPos = canBlockContainFluid(world, pos, direction, destState, fluidStack) ? pos : adjacentPos;
+
 			final Pair<FluidActionResult, BlockPos> placeResultPair = tryPlaceContainedFluid(
 					player, hand, heldItem, fluidStack,
-					world, pos, direction, true
+					world, destPos, pos, direction, true
 			);
 
 			final FluidActionResult placeResult = placeResultPair.getFirst();
@@ -239,17 +242,18 @@ public class ModBucketItem extends Item {
 
 	private Pair<FluidActionResult, BlockPos> tryPlaceContainedFluid(
 			@Nullable final PlayerEntity player, final Hand hand, final ItemStack container, final FluidStack fluidStack,
-			final World world, final BlockPos pos, final Direction direction, final boolean tryAdjacentBlock
+			final World world, final BlockPos pos, final BlockPos originalPos, final Direction direction, final boolean tryAdjacentBlock
 	) {
-		// Try place the fluid in world or in an IFluidHandler block
-		final FluidActionResult placeResult = FluidUtil.tryPlaceFluid(player, world, hand, pos, container, fluidStack);
+		final Fluid fluid = fluidStack.getFluid();
 
-		if (placeResult.isSuccess()) {
-			return Pair.of(placeResult, pos);
+		if (world.getDimensionType().isUltrawarm() && fluid.getAttributes().doesVaporize(world, pos, fluidStack)) {
+
+			fluid.getAttributes().vaporize(player, world, pos, fluidStack);
+
+			return Pair.of(new FluidActionResult(empty.copy()), pos);
 		}
 
 		// If the fluid is a flowing fluid,
-		final Fluid fluid = fluidStack.getFluid();
 		if (fluid instanceof FlowingFluid) {
 			final BlockState destState = world.getBlockState(pos);
 			final Block destBlock = destState.getBlock();
@@ -265,9 +269,19 @@ public class ModBucketItem extends Item {
 			}
 		}
 
+		// Try place the fluid in world or in an IFluidHandler block
+		final FluidActionResult placeResult = FluidUtil.tryPlaceFluid(player, world, hand, pos, container, fluidStack);
+
+		if (placeResult.isSuccess()) {
+			return Pair.of(placeResult, pos);
+		}
+
 		// If this is the first attempt, try to place the fluid in the adjacent block space
 		if (tryAdjacentBlock) {
-			return tryPlaceContainedFluid(player, hand, container, fluidStack, world, pos.offset(direction), direction, false);
+			return tryPlaceContainedFluid(
+					player, hand, container, fluidStack,
+					world, originalPos.offset(direction), originalPos, direction, false
+			);
 		}
 
 		return Pair.of(FluidActionResult.FAILURE, pos);
@@ -291,6 +305,21 @@ public class ModBucketItem extends Item {
 		}
 
 		return new FluidActionResult(fluidHandler.getContainer());
+	}
+
+	private boolean canBlockContainFluid(
+			final World worldIn, final BlockPos posIn, final Direction direction,
+			final BlockState blockState, final FluidStack fluidStack
+	) {
+		// If the block implements ILiquidContainer, check if it can contain the fluid
+		if (blockState.getBlock() instanceof ILiquidContainer) {
+			return ((ILiquidContainer) blockState.getBlock()).canContainFluid(worldIn, posIn, blockState, fluidStack.getFluid());
+		}
+
+		// Otherwise check if there's an IFluidHandler that can be filled with the entire FluidStack
+		return FluidUtil.getFluidHandler(worldIn, posIn, direction)
+				.map(fluidHandler -> fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) == fluidStack.getAmount())
+				.orElse(false);
 	}
 
 	@Nullable
