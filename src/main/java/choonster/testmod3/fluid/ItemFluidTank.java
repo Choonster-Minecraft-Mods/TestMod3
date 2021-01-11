@@ -5,6 +5,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -30,6 +31,34 @@ public class ItemFluidTank extends FluidTank implements IFluidHandlerItem {
 	@Override
 	public ItemStack getContainer() {
 		return container;
+	}
+
+	@Override
+	public int fill(final FluidStack resource, final FluidAction action) {
+		if (container.getCount() != 1) {
+			return 0;
+		}
+
+		return super.fill(resource, action);
+	}
+
+	@Override
+	public FluidStack drain(final FluidStack resource, final FluidAction action) {
+		if (container.getCount() != 1) {
+			return FluidStack.EMPTY;
+		}
+
+		return super.drain(resource, action);
+	}
+
+	@Nonnull
+	@Override
+	public FluidStack drain(final int maxDrain, final FluidAction action) {
+		if (container.getCount() != 1 || maxDrain <= 0) {
+			return FluidStack.EMPTY;
+		}
+
+		return super.drain(maxDrain, action);
 	}
 
 	@Override
