@@ -1,0 +1,6 @@
+{
+  "parent": "forge:item/bucket",
+  "loader": "forge:bucket",
+  "fluid": "testmod3:static_gas",
+  "flipGas": true
+}

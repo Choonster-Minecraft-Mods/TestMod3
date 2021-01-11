@@ -3,10 +3,14 @@ package choonster.testmod3.data;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.client.item.RevealHiddenBlocksItemPropertyGetter;
 import choonster.testmod3.client.item.TicksSinceLastUseItemPropertyGetter;
+import choonster.testmod3.fluid.group.FluidGroup;
+import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
 import com.google.common.base.Preconditions;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.LazyValue;
@@ -257,6 +261,12 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 				.stream()
 				.map(RegistryObject::get)
 				.forEach(this::withGeneratedParentAndDefaultTexture);
+
+		bucketItem(ModFluids.STATIC);
+		bucketItem(ModFluids.STATIC_GAS);
+		bucketItem(ModFluids.NORMAL);
+		bucketItem(ModFluids.NORMAL_GAS);
+		bucketItem(ModFluids.PORTAL_DISPLACEMENT);
 	}
 
 
@@ -339,6 +349,18 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 	private void spawnEggItem(final Item item) {
 		withExistingParent(name(item), mcLoc("template_spawn_egg"));
+	}
+
+	private void bucketItem(final FluidGroup<?, ?, ?, ?> fluidGroup) {
+		final Item item = fluidGroup.getBucket().get();
+		final Fluid fluid = item instanceof BucketItem ? ((BucketItem) item).getFluid() : Fluids.EMPTY;
+
+		getBuilder(name(item))
+				.parent(getExistingFile(new ResourceLocation("forge", "bucket")))
+				.customLoader(DynamicBucketModelBuilder::begin)
+				.fluid(fluid)
+				.flipGas(true)
+				.end();
 	}
 
 	private void bucketItem(final Item item) {
