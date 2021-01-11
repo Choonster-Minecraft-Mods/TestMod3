@@ -41,6 +41,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -220,15 +221,29 @@ public class ModBucketItem extends Item {
 			if (fluid != Fluids.EMPTY) {
 				final FluidStack fluidStack = new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME);
 
-				final FluidActionResult fillResult = fill(container.copy(), fluidStack);
+				final FluidActionResult fillResult = fill(ItemHandlerHelper.copyStackWithSize(container, 1), fluidStack);
 				if (fillResult.isSuccess()) {
 					final SoundEvent soundEvent = fluid.getAttributes().getFillSound(fluidStack);
 					world.playSound(player, pos, soundEvent, SoundCategory.BLOCKS, 1, 1);
 
+					// If the bucket was filled, update the modified block(s)
+					for (final BlockSnapshot snapshot : blockSnapshots) {
+						final int updateFlag = snapshot.getFlag();
+						final BlockState oldState = snapshot.getReplacedBlock();
+						final BlockState newState = world.getBlockState(snapshot.getPos());
+
+						if (!newState.hasTileEntity()) // Containers get placed automatically
+						{
+							newState.onBlockAdded(world, snapshot.getPos(), oldState, false);
+						}
+
+						world.markAndNotifyBlock(snapshot.getPos(), world.getChunkAt(snapshot.getPos()), oldState, newState, updateFlag, 512);
+					}
+
 					return fillResult;
 				}
 
-				// If the bucket wasn't filled, restore the original state
+				// If the bucket wasn't filled, restore the original block(s)
 				for (final BlockSnapshot blockSnapshot : Lists.reverse(blockSnapshots)) {
 					world.restoringBlockSnapshots = true;
 					blockSnapshot.restore(true, false);
