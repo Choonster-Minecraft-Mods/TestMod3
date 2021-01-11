@@ -1,13 +1,11 @@
 buildscript {
     repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        maven {
-            name = "forge"
-            url = "https://files.minecraftforge.net/maven"
-        }
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
     }
 }
 
@@ -16,7 +14,10 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '1.2.4'
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'net.minecraftforge.gradle'
+// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
 
 final commitId
 
@@ -30,26 +31,79 @@ version = "${mc_version}-${mod_version}-${commitId}"
 group = "${package_group}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${mod_name}"
 
-minecraft {
-    version = "${mc_version}-${forge_version}"
-    runDir = "run"
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
-    if (project.hasProperty('mappings_version'))
-        mappings = project.mappings_version
+minecraft {
+    // The mappings can be changed at any time, and must be in the following format.
+    // snapshot_YYYYMMDD   Snapshot are built nightly.
+    // stable_#            Stables are built at the discretion of the MCP team.
+    // Use non-default mappings at your own risk. they may not always work.
+    // Simply re-run your setup task after changing the mappings to update your workspace.
+//    mappings channel: 'snapshot', version: '20171003-1.12'
+    mappings channel: project.mappings_channel, version: project.mappings_version
+
+    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+
+    accessTransformer = file('src/main/resources/META-INF/jei_at.cfg')
+
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
+    runs {
+        client {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+        }
+
+        server {
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+        }
+    }
 }
 
 repositories {
     maven { url = "http://dvs1.progwml6.com/files/maven" }
-    maven { url = "http://tehnut.info/maven" }
+    maven {
+        url = "https://maven.tehnut.info"
+    }
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    deobfProvided "mezz.jei:jei_${mc_version}:${jei_version}:api"
-    runtime "mezz.jei:jei_${mc_version}:${jei_version}"
+    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
+    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
+    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+
+    compileOnly fg.deobf("mezz.jei:jei_1.12.2:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei_1.12.2:${jei_version}")
+
     compile "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
-    deobfProvided "mcp.mobius.waila:Hwyla:${hwyla_version}_${mc_version}"
+    compile fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}_${mc_version}")
+
 //    deobfCompile "com.github.azanor:Baubles:${baubles_version}"
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : "Test Mod 3",
+                "Specification-Vendor"    : "Choonster",
+                "Specification-Version"   : "${mc_version}-${mod_version}",
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : "${version}",
+                "Implementation-Vendor"   : "Choonster",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+        ])
+    }
 }
 
 shadowJar {
@@ -68,25 +122,25 @@ reobf {
     shadowJar {} // Reobfuscate the shadowed JAR
 }
 
-processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-
-        // replace version and mcversion
-        expand 'version': project.version, 'mcversion': project.minecraft.version
-    }
-
-    // copy everything else, that's not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-        exclude 'log4j2.xml'
-    }
-}
+//processResources {
+//    // this will ensure that this task is redone when the versions change.
+//    inputs.property "version", project.version
+//    inputs.property "mcversion", mc_version
+//
+//    // replace stuff in mcmod.info, nothing else
+//    from(sourceSets.main.resources.srcDirs) {
+//        include 'mcmod.info'
+//
+//        // replace version and mcversion
+//        expand 'version': project.version, 'mcversion': mc_version
+//    }
+//
+//    // copy everything else, that's not the mcmod.info
+//    from(sourceSets.main.resources.srcDirs) {
+//        exclude 'mcmod.info'
+//        exclude 'log4j2.xml'
+//    }
+//}
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
@@ -105,4 +159,9 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 artifacts {
     archives javadocJar
     archives shadowJar
+}
+
+// Fix resources not loading in IDEA. There may be a better way to do this.
+sourceSets {
+    main { output.resourcesDir = output.classesDirs.first() }
 }
