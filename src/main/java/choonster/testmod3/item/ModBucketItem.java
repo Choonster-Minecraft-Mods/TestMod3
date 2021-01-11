@@ -1,5 +1,6 @@
 package choonster.testmod3.item;
 
+import choonster.testmod3.capability.SerializableCapabilityProvider;
 import choonster.testmod3.fluid.UniversalBucketFluidHandler;
 import choonster.testmod3.util.CapabilityNotPresentException;
 import choonster.testmod3.util.RegistryUtil;
@@ -293,12 +294,15 @@ public class ModBucketItem extends Item {
 
 	@Nullable
 	@Override
-	public ICapabilityProvider initCapabilities(final ItemStack stack,
-												@Nullable final CompoundNBT nbt) {
+	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final CompoundNBT nbt) {
 		if (CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY == null) {
 			return null;
 		}
 
-		return new UniversalBucketFluidHandler(stack, capacity);
+		return new SerializableCapabilityProvider<>(
+				CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
+				null,
+				new UniversalBucketFluidHandler(stack, capacity)
+		);
 	}
 }
