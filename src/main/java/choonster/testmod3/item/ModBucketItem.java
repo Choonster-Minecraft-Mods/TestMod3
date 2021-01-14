@@ -2,7 +2,6 @@ package choonster.testmod3.item;
 
 import choonster.testmod3.capability.SerializableCapabilityProvider;
 import choonster.testmod3.fluid.UniversalBucketFluidHandler;
-import choonster.testmod3.util.CapabilityNotPresentException;
 import choonster.testmod3.util.ModFluidUtil;
 import choonster.testmod3.util.RegistryUtil;
 import com.google.common.collect.Lists;
@@ -40,8 +39,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -73,7 +70,7 @@ public class ModBucketItem extends Item {
 
 	public ItemStack getFilledBucket(final FluidStack fluidStack) {
 		final ItemStack stack = new ItemStack(this);
-		final FluidActionResult fillResult = fill(stack, fluidStack);
+		final FluidActionResult fillResult = ModFluidUtil.fillContainer(stack, fluidStack);
 		return fillResult.isSuccess() ? fillResult.getResult() : ItemStack.EMPTY;
 	}
 
@@ -231,7 +228,7 @@ public class ModBucketItem extends Item {
 			if (fluid != Fluids.EMPTY) {
 				final FluidStack fluidStack = new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME);
 
-				final FluidActionResult fillResult = fill(ItemHandlerHelper.copyStackWithSize(container, 1), fluidStack);
+				final FluidActionResult fillResult = ModFluidUtil.fillContainer(container, fluidStack);
 				if (fillResult.isSuccess()) {
 					final SoundEvent soundEvent = fluid.getAttributes().getFillSound(fluidStack);
 					world.playSound(player, pos, soundEvent, SoundCategory.BLOCKS, 1, 1);
@@ -314,22 +311,6 @@ public class ModBucketItem extends Item {
 
 	protected FluidStack getFluid(final ItemStack container) {
 		return FluidUtil.getFluidContained(container).orElse(FluidStack.EMPTY);
-	}
-
-	private FluidActionResult fill(final ItemStack container, final FluidStack fluidStack) {
-		final IFluidHandlerItem fluidHandler = FluidUtil
-				.getFluidHandler(container)
-				.orElseThrow(CapabilityNotPresentException::new);
-
-		final int originalAmount = fluidStack.getAmount();
-
-		final int amountFilled = fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
-
-		if (amountFilled != originalAmount) {
-			return FluidActionResult.FAILURE;
-		}
-
-		return new FluidActionResult(fluidHandler.getContainer());
 	}
 
 	private boolean canBlockContainFluid(
