@@ -123,6 +123,16 @@ public class ModBucketItem extends Item {
 	}
 
 	@Override
+	public boolean hasContainerItem(final ItemStack stack) {
+		return !getFluid(stack).isEmpty();
+	}
+
+	@Override
+	public ItemStack getContainerItem(final ItemStack stack) {
+		return empty.copy();
+	}
+
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(final World world, final PlayerEntity player, final Hand hand) {
 		final ItemStack heldItem = player.getHeldItem(hand);
 		final FluidStack fluidStack = getFluid(heldItem);
