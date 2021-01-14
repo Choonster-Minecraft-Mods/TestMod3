@@ -39,7 +39,6 @@ public enum TestMod3Lang {
 
 	// Commands
 	ARGUMENT_AXIS_INVALID("arguments", "axis.invalid"),
-	COMMAND_LIST_PLAYERS_PLAYERS("commands", "listplayers.players"), // TODO: This command doesn't exist
 	COMMAND_MAX_HEALTH_INVALID_ENTITY("commands", "maxhealth.invalid_entity"),
 	COMMAND_ROTATE_VECTOR_RESULT("commands", "rotatevector.result"),
 	COMMAND_RUN_TESTS_TESTS_FAILED("commands", "runtests.tests_failed"),

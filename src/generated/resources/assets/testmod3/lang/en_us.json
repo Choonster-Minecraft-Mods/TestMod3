@@ -95,7 +95,6 @@
   "block.testmod3.yellow_multi_rotatable_block": "Yellow Multi Rotatable Block",
   "block.testmod3.yellow_rotatable_block": "Yellow Rotatable Block",
   "block.testmod3.yellow_terracotta_slab": "Yellow Terracotta Slab",
-  "commands.testmod3.listplayers.players": "Players:",
   "commands.testmod3.maxhealth.invalid_entity": "Invalid entity, only living entities (e.g. players, animals, monsters) are supported",
   "commands.testmod3.rotatevector.result": "Rotated vector: [%s, %s, %s]",
   "commands.testmod3.runtests.tests_failed": "Tests failed. See log for more details.",

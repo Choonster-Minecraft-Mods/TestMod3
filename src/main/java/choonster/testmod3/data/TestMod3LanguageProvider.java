@@ -245,7 +245,6 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		add(TestMod3Lang.COMMAND_ROTATE_VECTOR_RESULT, "Rotated vector: [%s, %s, %s]");
 		add(TestMod3Lang.COMMAND_RUN_TESTS_TESTS_PASSED, "All tests passed.");
 		add(TestMod3Lang.COMMAND_RUN_TESTS_TESTS_FAILED, "Tests failed. See log for more details.");
-		add(TestMod3Lang.COMMAND_LIST_PLAYERS_PLAYERS, "Players:");
 	}
 
 	private void addCapabilities() {
