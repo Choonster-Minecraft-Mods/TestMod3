@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "type": "testmod3:fluid_container",
+      "fluid": "testmod3:static_gas",
+      "amount": 1000
+    },
+    {
+      "type": "testmod3:fluid_container",
+      "fluid": "testmod3:static_gas",
+      "amount": 1000
+    },
+    {
+      "type": "testmod3:fluid_container",
+      "fluid": "testmod3:static_gas",
+      "amount": 1000
+    }
+  ],
+  "result": {
+    "item": "minecraft:cobblestone"
+  }
+}

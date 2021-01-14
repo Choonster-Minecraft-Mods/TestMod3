@@ -1,13 +1,17 @@
 package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.advancements.criterion.FluidContainerItemPredicate;
+import choonster.testmod3.crafting.ingredient.FluidContainerIngredient;
 import choonster.testmod3.data.crafting.ingredient.ConditionalIngredientBuilder;
 import choonster.testmod3.data.crafting.ingredient.MobSpawnerIngredientBuilder;
 import choonster.testmod3.data.crafting.recipe.EnhancedShapedRecipeBuilder;
 import choonster.testmod3.data.crafting.recipe.ShapedArmourUpgradeRecipeBuilder;
 import choonster.testmod3.data.crafting.recipe.ShapelessCuttingRecipeBuilder;
+import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
 import com.google.common.base.Preconditions;
+import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
 import net.minecraft.entity.EntityType;
@@ -18,6 +22,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.function.Consumer;
 
@@ -139,6 +145,24 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.addCriterion("has_axe", hasItem(Items.WOODEN_AXE))
 					.addCriterion("has_log", hasItem(Blocks.OAK_LOG))
 					.build(recipeConsumer, new ResourceLocation(TestMod3.MODID, "oak_planks_with_vanilla_axe"));
+		}
+
+		// Craft Cobblestone from three Buckets of Static Gas
+		{
+			final FluidStack staticGas = new FluidStack(ModFluids.STATIC_GAS.getStill().get(), FluidAttributes.BUCKET_VOLUME);
+			final FluidContainerIngredient staticGasContainer = FluidContainerIngredient.fromFluidStack(staticGas);
+
+			ShapelessRecipeBuilder.shapelessRecipe(Blocks.COBBLESTONE)
+					.addIngredient(staticGasContainer)
+					.addIngredient(staticGasContainer)
+					.addIngredient(staticGasContainer)
+					.addCriterion("has_static_gas_container", hasItem(
+							FluidContainerItemPredicate.Builder.create()
+									.fluid(staticGas.getFluid())
+									.amount(MinMaxBounds.IntBound.atLeast(staticGas.getAmount()))
+									.build()
+					))
+					.build(recipeConsumer, new ResourceLocation(TestMod3.MODID, "cobblestone_from_static_gas"));
 		}
 	}
 

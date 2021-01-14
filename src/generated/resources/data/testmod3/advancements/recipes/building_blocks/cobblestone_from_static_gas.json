@@ -1,0 +1,36 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "testmod3:cobblestone_from_static_gas"
+    ]
+  },
+  "criteria": {
+    "has_static_gas_container": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "type": "testmod3:fluid_container",
+            "fluid": "testmod3:static_gas",
+            "amount": {
+              "min": 1000
+            }
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "testmod3:cobblestone_from_static_gas"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_static_gas_container",
+      "has_the_recipe"
+    ]
+  ]
+}
