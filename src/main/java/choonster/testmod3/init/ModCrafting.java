@@ -2,7 +2,7 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.crafting.ingredient.ConditionalIngredientSerializer;
-import choonster.testmod3.crafting.ingredient.FilledUniversalBucketIngredientSerializer;
+import choonster.testmod3.crafting.ingredient.FluidContainerIngredient;
 import choonster.testmod3.crafting.ingredient.IngredientNever;
 import choonster.testmod3.crafting.ingredient.MobSpawnerIngredientSerializer;
 import choonster.testmod3.crafting.recipe.ShapedArmourUpgradeRecipe;
@@ -92,7 +92,7 @@ public class ModCrafting {
 	@SuppressWarnings("unused")
 	public static class Ingredients {
 		public static final IIngredientSerializer<Ingredient> CONDITIONAL = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "conditional"), new ConditionalIngredientSerializer());
-		public static final IIngredientSerializer<NBTIngredient> FILLED_UNIVERSAL_BUCKET = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "filled_universal_bucket"), new FilledUniversalBucketIngredientSerializer());
+		public static final IIngredientSerializer<FluidContainerIngredient> FLUID_CONTAINER = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "fluid_container"), new FluidContainerIngredient.Serializer());
 		public static final IIngredientSerializer<NBTIngredient> MOB_SPAWNER = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "mob_spawner"), new MobSpawnerIngredientSerializer());
 		public static final IIngredientSerializer<IngredientNever> NEVER = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "never"), new IngredientNever.Serializer());
 
