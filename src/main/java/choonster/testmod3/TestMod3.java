@@ -64,6 +64,7 @@ public class TestMod3 {
 
 		event.enqueueWork(() -> {
 			ModCrafting.Ingredients.register();
+			ModCriterion.register();
 			ModLootTables.registerLootTables();
 			ModLootConditionTypes.register();
 			ModLootFunctionTypes.register();

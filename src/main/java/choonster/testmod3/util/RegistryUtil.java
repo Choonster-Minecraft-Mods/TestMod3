@@ -70,4 +70,15 @@ public class RegistryUtil {
 	public static <T extends IForgeRegistryEntry<T>> Stream<T> stream(final IForgeRegistry<T> registry) {
 		return StreamSupport.stream(registry.spliterator(), false);
 	}
+
+	/**
+	 * Gets the registry name of the {@link IForgeRegistryEntry}, throwing an exception if it's not set.
+	 *
+	 * @param entry The registry entry
+	 * @return The registry name
+	 * @throws NullPointerException If the registry name is null
+	 */
+	public static ResourceLocation getRequiredRegistryName(final IForgeRegistryEntry<?> entry) {
+		return Preconditions.checkNotNull(entry.getRegistryName(), "%s has a null registry name", entry);
+	}
 }
