@@ -99,7 +99,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 			final ListNBT spawnPotentials = new ListNBT();
 			blockEntityTag.put("SpawnPotentials", spawnPotentials);
 
-			EnhancedShapedRecipeBuilder.shapedRecipe(guardianSpawner)
+			EnhancedShapedRecipeBuilder.Vanilla.shapedRecipe(guardianSpawner)
 					.patternLine("SSS")
 					.patternLine("SCS")
 					.patternLine("SSS")

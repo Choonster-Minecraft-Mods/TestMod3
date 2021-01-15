@@ -15,6 +15,13 @@
   },
   "result": {
     "item": "minecraft:spawner",
-    "nbt": "{BlockEntityTag:{SpawnData:{id:\"minecraft:guardian\"},SpawnPotentials:[]}}"
+    "nbt": {
+      "BlockEntityTag": {
+        "SpawnData": {
+          "id": "minecraft:guardian"
+        },
+        "SpawnPotentials": []
+      }
+    }
   }
 }

@@ -12,10 +12,10 @@ import javax.annotation.Nullable;
  *
  * @author Choonster
  */
-public class FinishedRecipeDelegate implements IFinishedRecipe {
+public class DelegateFinishedRecipe implements IFinishedRecipe {
 	protected final IFinishedRecipe baseRecipe;
 
-	public FinishedRecipeDelegate(final IFinishedRecipe baseRecipe) {
+	public DelegateFinishedRecipe(final IFinishedRecipe baseRecipe) {
 		this.baseRecipe = baseRecipe;
 	}
 
