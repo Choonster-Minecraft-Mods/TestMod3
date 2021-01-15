@@ -8,6 +8,7 @@ import choonster.testmod3.data.crafting.ingredient.MobSpawnerIngredientBuilder;
 import choonster.testmod3.data.crafting.recipe.EnhancedShapedRecipeBuilder;
 import choonster.testmod3.data.crafting.recipe.ShapedArmourUpgradeRecipeBuilder;
 import choonster.testmod3.data.crafting.recipe.ShapelessCuttingRecipeBuilder;
+import choonster.testmod3.data.crafting.recipe.ShapelessFluidContainerRecipeBuilder;
 import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
 import com.google.common.base.Preconditions;
@@ -152,7 +153,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 			final FluidStack staticGas = new FluidStack(ModFluids.STATIC_GAS.getStill().get(), FluidAttributes.BUCKET_VOLUME);
 			final FluidContainerIngredient staticGasContainer = FluidContainerIngredient.fromFluidStack(staticGas);
 
-			ShapelessRecipeBuilder.shapelessRecipe(Blocks.COBBLESTONE)
+			ShapelessFluidContainerRecipeBuilder.shapelessFluidContainerRecipe(Blocks.COBBLESTONE)
 					.addIngredient(staticGasContainer)
 					.addIngredient(staticGasContainer)
 					.addIngredient(staticGasContainer)

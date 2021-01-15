@@ -7,6 +7,7 @@ import choonster.testmod3.crafting.ingredient.IngredientNever;
 import choonster.testmod3.crafting.ingredient.MobSpawnerIngredientSerializer;
 import choonster.testmod3.crafting.recipe.ShapedArmourUpgradeRecipe;
 import choonster.testmod3.crafting.recipe.ShapelessCuttingRecipe;
+import choonster.testmod3.crafting.recipe.ShapelessFluidContainerRecipe;
 import choonster.testmod3.util.LogUtil;
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -112,6 +113,10 @@ public class ModCrafting {
 
 		public static final RegistryObject<ShapelessCuttingRecipe.Serializer> CUTTING_SHAPELESS = RECIPE_SERIALIZERS.register("cutting_shapeless",
 				ShapelessCuttingRecipe.Serializer::new
+		);
+
+		public static final RegistryObject<ShapelessFluidContainerRecipe.Serializer> FLUID_CONTAINER_SHAPELESS = RECIPE_SERIALIZERS.register("fluid_container_shapeless",
+				ShapelessFluidContainerRecipe.Serializer::new
 		);
 
 		/**

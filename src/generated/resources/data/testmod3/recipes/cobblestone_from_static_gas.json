@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "testmod3:fluid_container_shapeless",
   "ingredients": [
     {
       "type": "testmod3:fluid_container",

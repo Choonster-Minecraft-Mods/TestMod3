@@ -53,4 +53,32 @@ public class ModFluidUtil {
 
 		return new FluidActionResult(fluidHandler.getContainer());
 	}
+
+	/**
+	 * Drains a fluid container item of the specified fluid.
+	 * <p>
+	 * The entire {@code fluidStack} must be transferred from the fluid container for the operation to succeed,
+	 * partial or zero transfers will fail.
+	 *
+	 * @param container  The container to be drained, will not be modified
+	 * @param fluidStack The fluid to drain from the container
+	 * @return A FluidActionResult holding the drained container if successful
+	 */
+	public static FluidActionResult drainContainer(final ItemStack container, final FluidStack fluidStack) {
+		final ItemStack containerCopy = ItemHandlerHelper.copyStackWithSize(container, 1); // Don't modify the input
+
+		final IFluidHandlerItem fluidHandler = FluidUtil
+				.getFluidHandler(containerCopy)
+				.orElseThrow(CapabilityNotPresentException::new);
+
+		final int originalAmount = fluidStack.getAmount();
+
+		final FluidStack fluidDrained = fluidHandler.drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+
+		if (fluidDrained.getAmount() != originalAmount) {
+			return FluidActionResult.FAILURE;
+		}
+
+		return new FluidActionResult(fluidHandler.getContainer());
+	}
 }
