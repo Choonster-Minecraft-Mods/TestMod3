@@ -50,9 +50,9 @@ public class InventoryUtils {
 	}
 
 	/**
-	 * A reference to {@link LootTable#shuffleItems}.
+	 * A reference to {@code LootTable#shuffleItems}.
 	 */
-	private static final Method SHUFFLE_ITEMS = ObfuscationReflectionHelper.findMethod(LootTable.class, "func_186463_a" /* shuffleItems */, List.class, int.class, Random.class);
+	private static final Method SHUFFLE_ITEMS = ObfuscationReflectionHelper.findMethod(LootTable.class, /* shuffleItems */ "func_186463_a", List.class, int.class, Random.class);
 
 	/**
 	 * Fill an {@link IItemHandler} with random loot from a {@link LootTable}.

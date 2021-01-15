@@ -16,9 +16,9 @@ import java.lang.reflect.Field;
 public class GuiSurvivalCommandBlock extends CommandBlockScreen {
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	private static final Field COMMAND_BLOCK_MODE = ObfuscationReflectionHelper.findField(CommandBlockScreen.class, "field_184082_w");
-	private static final Field CONDITIONAL = ObfuscationReflectionHelper.findField(CommandBlockScreen.class, "field_184084_y");
-	private static final Field AUTOMATIC = ObfuscationReflectionHelper.findField(CommandBlockScreen.class, "field_184085_z");
+	private static final Field COMMAND_BLOCK_MODE = ObfuscationReflectionHelper.findField(CommandBlockScreen.class, /* commandBlockMode */ "field_184082_w");
+	private static final Field CONDITIONAL = ObfuscationReflectionHelper.findField(CommandBlockScreen.class, /* conditional */ "field_184084_y");
+	private static final Field AUTOMATIC = ObfuscationReflectionHelper.findField(CommandBlockScreen.class, /* automatic */ "field_184085_z");
 
 	private final SurvivalCommandBlockLogic survivalCommandBlockLogic;
 

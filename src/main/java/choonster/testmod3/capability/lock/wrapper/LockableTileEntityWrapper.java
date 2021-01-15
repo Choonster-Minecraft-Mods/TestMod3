@@ -16,7 +16,7 @@ import java.lang.reflect.Field;
  * @author Choonster
  */
 public class LockableTileEntityWrapper implements ILock {
-	private static final Field CODE = ObfuscationReflectionHelper.findField(LockableTileEntity.class, "field_174901_a");
+	private static final Field CODE = ObfuscationReflectionHelper.findField(LockableTileEntity.class, /* code */ "field_174901_a");
 
 	private final LockableTileEntity lockableTileEntity;
 

@@ -52,7 +52,7 @@ public class ModCrafting {
 	public static class Brewing {
 		private static final Logger LOGGER = LogManager.getLogger();
 
-		private static final Method ADD_MIX = ObfuscationReflectionHelper.findMethod(PotionBrewing.class, "func_193357_a" /* addMix */, Potion.class, Item.class, Potion.class);
+		private static final Method ADD_MIX = ObfuscationReflectionHelper.findMethod(PotionBrewing.class, /* addMix */ "func_193357_a", Potion.class, Item.class, Potion.class);
 
 		/**
 		 * Add this mod's brewing recipes.
@@ -141,7 +141,7 @@ public class ModCrafting {
 	public static class RecipeRemover {
 		private static final Logger LOGGER = LogManager.getLogger();
 
-		private static final Field RECIPES = ObfuscationReflectionHelper.findField(RecipeManager.class, "field_199522_d" /* recipes */);
+		private static final Field RECIPES = ObfuscationReflectionHelper.findField(RecipeManager.class,  /* recipes */ "field_199522_d");
 
 		/**
 		 * Removes recipes from the server's recipe manager when it starts up.

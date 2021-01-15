@@ -23,11 +23,10 @@ import java.util.Map;
  * @author Choonster
  */
 public class RecipeUtil {
-
-	private static final Method DESERIALIZE_KEY = ObfuscationReflectionHelper.findMethod(ShapedRecipe.class, "func_192408_a" /* deserializeKey */, JsonObject.class);
-	private static final Method SHRINK = ObfuscationReflectionHelper.findMethod(ShapedRecipe.class, "func_194134_a" /* shrink */, String[].class);
-	private static final Method PATTERN_FROM_JSON = ObfuscationReflectionHelper.findMethod(ShapedRecipe.class, "func_192407_a" /* patternFromJson*/, JsonArray.class);
-	private static final Method DESERIALIZE_INGREDIENTS = ObfuscationReflectionHelper.findMethod(ShapedRecipe.class, "func_192402_a" /* deserializeIngredients */, String[].class, Map.class, int.class, int.class);
+	private static final Method DESERIALIZE_KEY = ObfuscationReflectionHelper.findMethod(ShapedRecipe.class, /* deserializeKey */ "func_192408_a", JsonObject.class);
+	private static final Method SHRINK = ObfuscationReflectionHelper.findMethod(ShapedRecipe.class, /* shrink */ "func_194134_a", String[].class);
+	private static final Method PATTERN_FROM_JSON = ObfuscationReflectionHelper.findMethod(ShapedRecipe.class, /* patternFromJson*/ "func_192407_a", JsonArray.class);
+	private static final Method DESERIALIZE_INGREDIENTS = ObfuscationReflectionHelper.findMethod(ShapedRecipe.class, /* deserializeIngredients */ "func_192402_a", String[].class, Map.class, int.class, int.class);
 
 	/**
 	 * Parse the ingredients of a shaped recipe.
