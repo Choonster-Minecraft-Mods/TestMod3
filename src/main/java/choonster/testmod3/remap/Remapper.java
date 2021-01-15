@@ -122,12 +122,12 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 
 		@SubscribeEvent
 		public static void missingBlockMappings(final RegistryEvent.MissingMappings<Block> event) {
-			blockRemapper.remapAll(event.getMappings());
+			blockRemapper.remapAll(event.getMappings(TestMod3.MODID));
 		}
 
 		@SubscribeEvent
 		public static void missingItemMappings(final RegistryEvent.MissingMappings<Item> event) {
-			itemRemapper.remapAll(event.getMappings());
+			itemRemapper.remapAll(event.getMappings(TestMod3.MODID));
 		}
 	}
 }
