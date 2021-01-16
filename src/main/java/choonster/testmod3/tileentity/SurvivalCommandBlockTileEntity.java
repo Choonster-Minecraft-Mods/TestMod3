@@ -3,7 +3,6 @@ package choonster.testmod3.tileentity;
 import choonster.testmod3.block.SurvivalCommandBlockBlock;
 import choonster.testmod3.client.gui.GuiIDs;
 import choonster.testmod3.init.ModTileEntities;
-import choonster.testmod3.util.Constants;
 import choonster.testmod3.util.NetworkUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.command.CommandSource;
@@ -17,6 +16,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 
 /**
  * A Command Block that's accessible outside of Creative Mode.
@@ -38,7 +38,7 @@ public class SurvivalCommandBlockTileEntity extends CommandBlockTileEntity {
 		@Override
 		public void updateCommand() {
 			final BlockState state = getWorld().getBlockState(pos);
-			getWorld().notifyBlockUpdate(pos, state, state, Constants.BlockFlags.DEFAULT_FLAGS);
+			getWorld().notifyBlockUpdate(pos, state, state, Constants.BlockFlags.DEFAULT);
 		}
 
 		@Override

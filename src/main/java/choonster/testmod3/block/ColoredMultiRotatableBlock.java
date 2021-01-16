@@ -1,7 +1,6 @@
 package choonster.testmod3.block;
 
 import choonster.testmod3.block.variantgroup.BlockVariantGroup;
-import choonster.testmod3.util.Constants;
 import choonster.testmod3.util.EnumFaceRotation;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -15,6 +14,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 /**
  * A block with 16 colours, 6 facings and 4 face rotations.
@@ -46,7 +46,7 @@ public class ColoredMultiRotatableBlock extends ColoredRotatableBlock {
 		final EnumFaceRotation faceRotation = world.getBlockState(pos).get(FACE_ROTATION);
 		final BlockState newState = world.getBlockState(pos).with(FACE_ROTATION, faceRotation.rotateClockwise());
 
-		world.setBlockState(pos, newState, Constants.BlockFlags.DEFAULT_FLAGS);
+		world.setBlockState(pos, newState, Constants.BlockFlags.DEFAULT);
 	}
 
 	@Override
