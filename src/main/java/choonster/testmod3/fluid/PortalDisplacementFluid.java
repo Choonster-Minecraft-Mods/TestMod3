@@ -35,7 +35,7 @@ public abstract class PortalDisplacementFluid extends ForgeFlowingFluid {
 		return super.canDisplace(state, world, pos, fluidIn, direction);
 	}
 
-	public static class Flowing extends ForgeFlowingFluid {
+	public static class Flowing extends PortalDisplacementFluid {
 		public Flowing(final Properties properties) {
 			super(properties);
 			setDefaultState(getStateContainer().getBaseState().with(LEVEL_1_8, 7));
@@ -58,7 +58,7 @@ public abstract class PortalDisplacementFluid extends ForgeFlowingFluid {
 		}
 	}
 
-	public static class Source extends ForgeFlowingFluid {
+	public static class Source extends PortalDisplacementFluid {
 		public Source(final Properties properties) {
 			super(properties);
 		}
