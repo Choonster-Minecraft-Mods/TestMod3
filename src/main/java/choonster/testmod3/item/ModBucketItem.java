@@ -239,10 +239,7 @@ public class ModBucketItem extends Item {
 						final BlockState oldState = snapshot.getReplacedBlock();
 						final BlockState newState = world.getBlockState(snapshot.getPos());
 
-						if (!newState.hasTileEntity()) // Containers get placed automatically
-						{
-							newState.onBlockAdded(world, snapshot.getPos(), oldState, false);
-						}
+						newState.onBlockAdded(world, snapshot.getPos(), oldState, false);
 
 						world.markAndNotifyBlock(snapshot.getPos(), world.getChunkAt(snapshot.getPos()), oldState, newState, updateFlag, 512);
 					}
