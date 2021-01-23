@@ -12,6 +12,11 @@ import net.minecraftforge.fml.DistExecutor;
  */
 public class ClientOnlyNetworkMethods {
 	public static DistExecutor.SafeRunnable openClientScreen(final OpenClientScreenMessage message) {
-		return () -> ClientScreenManager.openScreen(message.getId(), message.getAdditionalData(), Minecraft.getInstance());
+		return new DistExecutor.SafeRunnable() {
+			@Override
+			public void run() {
+				ClientScreenManager.openScreen(message.getId(), message.getAdditionalData(), Minecraft.getInstance());
+			}
+		};
 	}
 }
