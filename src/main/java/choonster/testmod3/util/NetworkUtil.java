@@ -1,7 +1,8 @@
 package choonster.testmod3.util;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.client.init.ModGuiFactories;
+import choonster.testmod3.client.gui.ClientScreenManager;
+import choonster.testmod3.client.init.ModScreenFactories;
 import choonster.testmod3.network.OpenClientScreenMessage;
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -26,7 +27,7 @@ public class NetworkUtil {
 	/**
 	 * Requests to open a GUI on the client, from the server
 	 * <p>
-	 * The factories are registered in {@link ModGuiFactories}.
+	 * The factories are registered with {@link ClientScreenManager} in {@link ModScreenFactories}.
 	 * <p>
 	 * This is similar to {@link NetworkHooks#openGui} for GUIs without a {@link Container}.
 	 *
@@ -41,7 +42,7 @@ public class NetworkUtil {
 	/**
 	 * Requests to open a GUI on the client, from the server
 	 * <p>
-	 * The factories are registered in {@link ModGuiFactories}.
+	 * The factories are registered with {@link ClientScreenManager} in {@link ModScreenFactories}.
 	 * <p>
 	 * This is similar to {@link NetworkHooks#openGui} for GUIs without a {@link Container}.
 	 *
@@ -56,7 +57,7 @@ public class NetworkUtil {
 	/**
 	 * Requests to open a GUI on the client, from the server
 	 * <p>
-	 * The factories are registered in {@link ModGuiFactories}.
+	 * The factories are registered with {@link ClientScreenManager} in {@link ModScreenFactories}.
 	 * <p>
 	 * This is similar to {@link NetworkHooks#openGui} for GUIs without a {@link Container}.
 	 * <p>

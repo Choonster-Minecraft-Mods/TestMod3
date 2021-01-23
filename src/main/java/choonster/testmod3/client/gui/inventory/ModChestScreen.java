@@ -1,7 +1,6 @@
 package choonster.testmod3.client.gui.inventory;
 
 import choonster.testmod3.inventory.container.ModChestContainer;
-import choonster.testmod3.inventory.itemhandler.INameableItemHandler;
 import choonster.testmod3.tileentity.ModChestTileEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -22,22 +21,7 @@ public class ModChestScreen extends ContainerScreen<ModChestContainer> {
 	/**
 	 * The ResourceLocation containing the chest GUI texture.
 	 */
-	private static final ResourceLocation CHEST_GUI_TEXTURE = new ResourceLocation("minecraft:textures/gui/container/generic_54.png");
-
-	/**
-	 * The colour of the inventory names.
-	 */
-	private static final int TEXT_COLOUR = 0x404040;
-
-	/**
-	 * The player inventory.
-	 */
-	private final INameableItemHandler playerInventory;
-
-	/**
-	 * The chest inventory.
-	 */
-	private final INameableItemHandler chestInventory;
+	private static final ResourceLocation CHEST_GUI_TEXTURE = new ResourceLocation("minecraft", "textures/gui/container/generic_54.png");
 
 	/**
 	 * The number of rows in the chest inventory, used to calculate the window height.
@@ -46,18 +30,18 @@ public class ModChestScreen extends ContainerScreen<ModChestContainer> {
 
 	public ModChestScreen(final ModChestContainer container, final PlayerInventory playerInventory, final ITextComponent title) {
 		super(container, playerInventory, title);
-		this.playerInventory = container.getPlayerInventory();
-		chestInventory = container.getChestInventory();
 
 		passEvents = false;
 		numRows = container.getNumRows();
 		ySize = 114 + numRows * 18;
+		playerInventoryTitleY = ySize - 94;
 	}
- 
+
 	@Override
-	protected void drawGuiContainerForegroundLayer(final MatrixStack matrixStack, final int x, final int y) {
-		font.drawString(matrixStack, chestInventory.getDisplayName().getString(), 8, 6, TEXT_COLOUR);
-		font.drawString(matrixStack, playerInventory.getDisplayName().getString(), 8, ySize - 96 + 2, TEXT_COLOUR);
+	public void render(final MatrixStack matrixStack, final int mouseX, final int mouseY, final float partialTicks) {
+		renderBackground(matrixStack);
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
+		renderHoveredTooltip(matrixStack, mouseX, mouseY);
 	}
 
 	@Override

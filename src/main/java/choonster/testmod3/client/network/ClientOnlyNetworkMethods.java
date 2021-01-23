@@ -1,6 +1,6 @@
 package choonster.testmod3.client.network;
 
-import choonster.testmod3.client.init.ModGuiFactories;
+import choonster.testmod3.client.gui.ClientScreenManager;
 import choonster.testmod3.network.OpenClientScreenMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.DistExecutor;
@@ -12,6 +12,6 @@ import net.minecraftforge.fml.DistExecutor;
  */
 public class ClientOnlyNetworkMethods {
 	public static DistExecutor.SafeRunnable openClientScreen(final OpenClientScreenMessage message) {
-		return () -> Minecraft.getInstance().displayGuiScreen(ModGuiFactories.getClientScreen(message));
+		return () -> ClientScreenManager.openScreen(message.getId(), message.getAdditionalData(), Minecraft.getInstance());
 	}
 }

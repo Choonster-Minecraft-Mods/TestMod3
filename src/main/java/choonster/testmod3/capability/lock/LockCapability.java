@@ -11,7 +11,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.LockCode;
@@ -21,7 +20,6 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 
 import static choonster.testmod3.util.InjectionUtil.Null;
 
@@ -51,10 +49,6 @@ public final class LockCapability {
 				final LockCode lockCode = instance.getLockCode();
 				lockCode.write(tagCompound);
 
-				if (instance.hasCustomName()) {
-					tagCompound.putString("DisplayName", ITextComponent.Serializer.toJson(instance.getDisplayName()));
-				}
-
 				return tagCompound;
 			}
 
@@ -67,13 +61,8 @@ public final class LockCapability {
 				final CompoundNBT tagCompound = (CompoundNBT) nbt;
 
 				lock.setLockCode(LockCode.read(tagCompound));
-
-				if (tagCompound.contains("DisplayName")) {
-					final ITextComponent displayName = Objects.requireNonNull(ITextComponent.Serializer.getComponentFromJson(tagCompound.getString("DisplayName")));
-					lock.setDisplayName(displayName);
-				}
 			}
-		}, () -> new Lock(new TranslationTextComponent("container.inventory")));
+		}, () -> new Lock(() -> new TranslationTextComponent("container.inventory")));
 	}
 
 	/**

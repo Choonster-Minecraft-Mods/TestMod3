@@ -47,7 +47,12 @@ public class ModChestTileEntity extends LootItemHandlerTileEntity implements ICo
 	 */
 	@Override
 	protected LootItemHandler createInventory() {
-		return new TileEntityLootItemHandler(INVENTORY_SIZE, DEFAULT_NAME, this);
+		return new TileEntityLootItemHandler(INVENTORY_SIZE, this);
+	}
+
+	@Override
+	protected ITextComponent getDefaultName() {
+		return DEFAULT_NAME;
 	}
 
 	/**
@@ -57,7 +62,7 @@ public class ModChestTileEntity extends LootItemHandlerTileEntity implements ICo
 	 */
 	@Override
 	protected Lock createLock() {
-		return new Lock(DEFAULT_NAME);
+		return new Lock(getNameHolder());
 	}
 
 	@Nullable
@@ -65,7 +70,7 @@ public class ModChestTileEntity extends LootItemHandlerTileEntity implements ICo
 	public Container createMenu(final int windowID, final PlayerInventory playerInventory, final PlayerEntity player) {
 		inventory.fillWithLoot(player);
 
-		return new ModChestContainer(windowID, playerInventory, inventory, this);
+		return new ModChestContainer(windowID, playerInventory, this);
 	}
 
 	/**
@@ -97,15 +102,5 @@ public class ModChestTileEntity extends LootItemHandlerTileEntity implements ICo
 	@Override
 	public boolean isUsableByPlayer(final PlayerEntity player) {
 		return world.getTileEntity(pos) == this && player.getDistanceSq(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64;
-	}
-
-	/**
-	 * Set the display name of this chest's inventory.
-	 *
-	 * @param displayName The display name
-	 */
-	public void setDisplayName(final ITextComponent displayName) {
-		inventory.setCustomName(displayName);
-		lock.setDisplayName(displayName);
 	}
 }

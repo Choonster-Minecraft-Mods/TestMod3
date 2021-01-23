@@ -1,5 +1,6 @@
 package choonster.testmod3.tileentity;
 
+import choonster.testmod3.util.NameHolder;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -7,6 +8,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.INameable;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -29,6 +32,8 @@ public abstract class ItemHandlerTileEntity<INVENTORY extends IItemHandler & INB
 
 	private final LazyOptional<INVENTORY> holder = LazyOptional.of(() -> inventory);
 
+	protected final NameHolder nameHolder = new NameHolder(getDefaultName());
+
 	public ItemHandlerTileEntity(final TileEntityType<?> tileEntityType) {
 		super(tileEntityType);
 	}
@@ -41,6 +46,13 @@ public abstract class ItemHandlerTileEntity<INVENTORY extends IItemHandler & INB
 	protected abstract INVENTORY createInventory();
 
 	/**
+	 * Gets the default name of this TileEntity.
+	 *
+	 * @return The default name
+	 */
+	protected abstract ITextComponent getDefaultName();
+
+	/**
 	 * Open the GUI for the specified player.
 	 *
 	 * @param player The player
@@ -51,16 +63,37 @@ public abstract class ItemHandlerTileEntity<INVENTORY extends IItemHandler & INB
 		}
 	}
 
+	public INVENTORY getInventory() {
+		return inventory;
+	}
+
+	public INameable getNameHolder() {
+		return nameHolder;
+	}
+
+	public void setDisplayName(final ITextComponent displayName) {
+		nameHolder.setCustomName(displayName);
+	}
+
+	@Override
+	public ITextComponent getDisplayName() {
+		return nameHolder.getDisplayName();
+	}
+
 	@Override
 	public void read(final BlockState state, final CompoundNBT nbt) {
 		super.read(state, nbt);
 		inventory.deserializeNBT(nbt.getCompound("ItemHandler"));
+		nameHolder.deserializeNBT(nbt.getCompound("NameHolder"));
 	}
 
 	@Override
 	public CompoundNBT write(final CompoundNBT compound) {
 		super.write(compound);
+
 		compound.put("ItemHandler", inventory.serializeNBT());
+		compound.put("NameHolder", nameHolder.serializeNBT());
+
 		return compound;
 	}
 

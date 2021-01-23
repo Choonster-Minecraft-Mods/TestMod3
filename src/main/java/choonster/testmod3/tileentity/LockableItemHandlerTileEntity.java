@@ -63,13 +63,6 @@ public abstract class LockableItemHandlerTileEntity<
 		return compound;
 	}
 
-	@Override
-	public CompoundNBT getUpdateTag() {
-		final CompoundNBT updateTag = super.getUpdateTag();
-		updateTag.put("Lock", lock.serializeNBT());
-		return updateTag;
-	}
-
 	@Nullable
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {

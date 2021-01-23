@@ -2,9 +2,6 @@ package choonster.testmod3.inventory.container;
 
 import choonster.testmod3.init.ModContainerTypes;
 import choonster.testmod3.inventory.IContainerCallbacks;
-import choonster.testmod3.inventory.itemhandler.INameableItemHandler;
-import choonster.testmod3.inventory.itemhandler.NameableItemHandler;
-import choonster.testmod3.inventory.itemhandler.wrapper.NameableCombinedInvWrapper;
 import choonster.testmod3.tileentity.ModChestTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -12,7 +9,12 @@ import net.minecraft.inventory.container.ChestContainer;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.network.IContainerFactory;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
 
@@ -35,31 +37,18 @@ public class ModChestContainer extends Container {
 	private final IContainerCallbacks callbacks;
 
 	/**
-	 * The player inventory.
-	 */
-	private final INameableItemHandler playerInventory;
-
-	/**
-	 * The chest inventory.
-	 */
-	private final INameableItemHandler chestInventory;
-
-	/**
 	 * The number of rows in the chest inventory.
 	 */
 	private final int numRows;
 
-	public ModChestContainer(final int windowID, final PlayerInventory playerInventory) {
-		this(windowID, playerInventory, new NameableItemHandler(27, new StringTextComponent("")), IContainerCallbacks.NOOP);
-	}
-
-	public ModChestContainer(final int windowID, final PlayerInventory playerInventory, final INameableItemHandler chestInventory, final IContainerCallbacks containerCallbacks) {
+	public ModChestContainer(final int windowID, final PlayerInventory playerInventory, final ModChestTileEntity tileEntity) {
 		super(ModContainerTypes.CHEST.get(), windowID);
-		this.playerInventory = new NameableCombinedInvWrapper(playerInventory, new PlayerMainInvWrapper(playerInventory));
-		this.chestInventory = chestInventory;
 
-		callbacks = containerCallbacks;
+		callbacks = tileEntity;
 		callbacks.onContainerOpened(playerInventory.player);
+
+		final IItemHandler playerInventoryItemHandler = new PlayerMainInvWrapper(playerInventory);
+		final IItemHandler chestInventory = tileEntity.getInventory();
 
 		numRows = chestInventory.getSlots() / SLOTS_PER_ROW;
 
@@ -73,21 +62,20 @@ public class ModChestContainer extends Container {
 
 		for (int row = 0; row < 3; ++row) {
 			for (int col = 0; col < SLOTS_PER_ROW; ++col) {
-				addSlot(new SlotItemHandler(this.playerInventory, col + row * SLOTS_PER_ROW + SLOTS_PER_ROW, 8 + col * 18, 103 + row * 18 + chestOffset));
+				addSlot(new SlotItemHandler(playerInventoryItemHandler, col + row * SLOTS_PER_ROW + SLOTS_PER_ROW, 8 + col * 18, 103 + row * 18 + chestOffset));
 			}
 		}
 
 		for (int col = 0; col < SLOTS_PER_ROW; ++col) {
-			addSlot(new SlotItemHandler(this.playerInventory, col, 8 + col * 18, 161 + chestOffset));
+			addSlot(new SlotItemHandler(playerInventoryItemHandler, col, 8 + col * 18, 161 + chestOffset));
 		}
-
 	}
 
 	@Override
 	public ItemStack transferStackInSlot(final PlayerEntity player, final int index) {
 		final Slot slot = inventorySlots.get(index);
 
-		if (slot != null && !slot.getStack().isEmpty()) {
+		if (slot != null && slot.getHasStack()) {
 			final ItemStack stack = slot.getStack();
 			final ItemStack originalStack = stack.copy();
 
@@ -124,29 +112,26 @@ public class ModChestContainer extends Container {
 	}
 
 	/**
-	 * Get the player inventory.
-	 *
-	 * @return The player inventory
-	 */
-	public INameableItemHandler getPlayerInventory() {
-		return playerInventory;
-	}
-
-	/**
-	 * Get the chest inventory.
-	 *
-	 * @return The chest inventory
-	 */
-	public INameableItemHandler getChestInventory() {
-		return chestInventory;
-	}
-
-	/**
 	 * Get the number of rows in the chest inventory.
 	 *
 	 * @return The number of rows in the chest inventory
 	 */
 	public int getNumRows() {
 		return numRows;
+	}
+
+	public static class Factory implements IContainerFactory<ModChestContainer> {
+		@Override
+		public ModChestContainer create(final int windowId, final PlayerInventory inv, final PacketBuffer data) {
+			final BlockPos pos = data.readBlockPos();
+			final World world = inv.player.getEntityWorld();
+			final TileEntity tileEntity = world.getTileEntity(pos);
+
+			if (!(tileEntity instanceof ModChestTileEntity)) {
+				throw new IllegalStateException("Invalid block at " + pos);
+			}
+
+			return new ModChestContainer(windowId, inv, (ModChestTileEntity) tileEntity);
+		}
 	}
 }

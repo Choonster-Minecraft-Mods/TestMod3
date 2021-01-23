@@ -3,7 +3,7 @@ package choonster.testmod3.api.capability.lock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.INameable;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.LockCode;
 
 /**
@@ -13,7 +13,7 @@ import net.minecraft.world.LockCode;
  *
  * @author Choonster
  */
-public interface ILock extends INameable {
+public interface ILock {
 
 	/**
 	 * @return Is this locked?
@@ -33,6 +33,13 @@ public interface ILock extends INameable {
 	 * @return The lock code
 	 */
 	LockCode getLockCode();
+
+	/**
+	 * Get the display name.
+	 *
+	 * @return The display name.
+	 */
+	ITextComponent getDisplayName();
 
 	/**
 	 * Try to open this lock, notifying the player if they can't.

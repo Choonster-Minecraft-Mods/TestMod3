@@ -7,7 +7,6 @@ import net.minecraft.loot.LootTable;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -24,11 +23,6 @@ public abstract class LootItemHandlerTileEntity extends LockableItemHandlerTileE
 
 	public LootItemHandlerTileEntity(final TileEntityType<?> tileEntityType) {
 		super(tileEntityType);
-	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-		return inventory.getDisplayName();
 	}
 
 	@Override

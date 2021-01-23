@@ -8,7 +8,6 @@ import net.minecraft.loot.LootParameters;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -23,18 +22,18 @@ import javax.annotation.Nullable;
 public class TileEntityLootItemHandler extends LootItemHandler {
 	private final TileEntity tileEntity;
 
-	public TileEntityLootItemHandler(final ITextComponent defaultName, final TileEntity tileEntity) {
-		super(defaultName, tileEntity::getWorld);
+	public TileEntityLootItemHandler(final TileEntity tileEntity) {
+		super(tileEntity::getWorld);
 		this.tileEntity = tileEntity;
 	}
 
-	public TileEntityLootItemHandler(final int size, final ITextComponent defaultName, final TileEntity tileEntity) {
-		super(size, defaultName, tileEntity::getWorld);
+	public TileEntityLootItemHandler(final int size, final TileEntity tileEntity) {
+		super(size, tileEntity::getWorld);
 		this.tileEntity = tileEntity;
 	}
 
-	public TileEntityLootItemHandler(final NonNullList<ItemStack> stacks, final ITextComponent defaultName, final TileEntity tileEntity) {
-		super(stacks, defaultName, tileEntity::getWorld);
+	public TileEntityLootItemHandler(final NonNullList<ItemStack> stacks, final TileEntity tileEntity) {
+		super(stacks, tileEntity::getWorld);
 		this.tileEntity = tileEntity;
 	}
 

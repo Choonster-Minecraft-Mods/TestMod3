@@ -7,7 +7,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.LockCode;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
-import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 
 /**
@@ -61,31 +60,8 @@ public class LockableTileEntityWrapper implements ILock {
 		}
 	}
 
-
-	@Override
-	public ITextComponent getName() {
-		return lockableTileEntity.getName();
-	}
-
-	/**
-	 * Returns true if this thing is named
-	 */
-	@Override
-	public boolean hasCustomName() {
-		return lockableTileEntity.hasCustomName();
-	}
-
-	/**
-	 * Get the formatted ITextComponent that will be used for the sender's username in chat
-	 */
 	@Override
 	public ITextComponent getDisplayName() {
 		return lockableTileEntity.getDisplayName();
-	}
-
-	@Nullable
-	@Override
-	public ITextComponent getCustomName() {
-		return lockableTileEntity.getCustomName();
 	}
 }

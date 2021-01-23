@@ -13,10 +13,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -28,7 +28,7 @@ import java.util.function.Supplier;
  *
  * @author Choonster
  */
-public class LootItemHandler extends NameableItemHandler {
+public class LootItemHandler extends ItemStackHandler {
 	/**
 	 * The {@link Supplier} to get the {@link World} from.
 	 */
@@ -46,18 +46,17 @@ public class LootItemHandler extends NameableItemHandler {
 	 */
 	protected long lootTableSeed;
 
-	public LootItemHandler(final ITextComponent defaultName, final Supplier<World> worldSupplier) {
-		super(defaultName);
+	public LootItemHandler(final Supplier<World> worldSupplier) {
 		this.worldSupplier = worldSupplier;
 	}
 
-	public LootItemHandler(final int size, final ITextComponent defaultName, final Supplier<World> worldSupplier) {
-		super(size, defaultName);
+	public LootItemHandler(final int size, final Supplier<World> worldSupplier) {
+		super(size);
 		this.worldSupplier = worldSupplier;
 	}
 
-	public LootItemHandler(final NonNullList<ItemStack> stacks, final ITextComponent defaultName, final Supplier<World> worldSupplier) {
-		super(stacks, defaultName);
+	public LootItemHandler(final NonNullList<ItemStack> stacks, final Supplier<World> worldSupplier) {
+		super(stacks);
 		this.worldSupplier = worldSupplier;
 	}
 

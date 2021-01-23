@@ -2,7 +2,6 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.inventory.container.ModChestContainer;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
@@ -19,8 +18,8 @@ public class ModContainerTypes {
 
 	private static boolean isInitialised;
 
-	public static final RegistryObject<ContainerType<Container>> CHEST = CONTAINER_TYPES.register("chest",
-			() -> new ContainerType<>(ModChestContainer::new)
+	public static final RegistryObject<ContainerType<ModChestContainer>> CHEST = CONTAINER_TYPES.register("chest",
+			() -> new ContainerType<>(new ModChestContainer.Factory())
 	);
 
 	/**
