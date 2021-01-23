@@ -84,7 +84,7 @@ public class NetworkUtil {
 			throw new IllegalArgumentException("Invalid PacketBuffer for openClientGui, found " + output.readableBytes() + " bytes");
 		}
 
-		final OpenClientScreenMessage message = new OpenClientScreenMessage(id, extraData);
+		final OpenClientScreenMessage message = new OpenClientScreenMessage(id, output);
 		TestMod3.network.send(PacketDistributor.PLAYER.with(() -> player), message);
 	}
 
