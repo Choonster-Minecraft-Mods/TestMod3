@@ -13,7 +13,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 
 /**
@@ -78,12 +77,10 @@ public class HiddenBlockManager {
 	 * @param pos   The position of the hidden block to update
 	 * @return A SafeRunnable that updates the chunk when run
 	 */
-	public static DistExecutor.SafeRunnable refresh(final World world, final BlockPos pos) {
-		return () -> {
-			if (toggled) {
-				final BlockState state = world.getBlockState(pos);
-				world.notifyBlockUpdate(pos, state, state, 3);
-			}
-		};
+	public static void refresh(final World world, final BlockPos pos) {
+		if (toggled) {
+			final BlockState state = world.getBlockState(pos);
+			world.notifyBlockUpdate(pos, state, state, 3);
+		}
 	}
 }

@@ -1,6 +1,5 @@
 package choonster.testmod3.block;
 
-import choonster.testmod3.client.block.ClientOnlyBlockMethods;
 import choonster.testmod3.client.util.ClientUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -63,7 +62,7 @@ public class ClientPlayerRotationBlock extends StaticPressurePlateBlock {
 				LOGGER.info("Switching pitch direction! Now pitching {}.", isPitchingUp ? "up" : "down");
 			}
 
-			DistExecutor.runWhenOn(Dist.CLIENT, () -> ClientOnlyBlockMethods.rotateEntityTowards(entity, ROTATION_YAW, isPitchingUp ? ROTATION_PITCH : -ROTATION_PITCH));
+			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> entity.rotateTowards(ROTATION_YAW, isPitchingUp ? ROTATION_PITCH : -ROTATION_PITCH));
 		}
 	}
 }
