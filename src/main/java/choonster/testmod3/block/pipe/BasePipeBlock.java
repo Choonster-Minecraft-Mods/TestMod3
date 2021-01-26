@@ -90,6 +90,7 @@ public class BasePipeBlock extends SixWayBlock {
 	@SuppressWarnings("deprecation")
 	@Override
 	public BlockState updatePostPlacement(BlockState state, final Direction facing, final BlockState facingState, final IWorld world, final BlockPos currentPos, final BlockPos facingPos) {
+		// TODO: This may be incorrect
 		for (final Direction neighbourFacing : Direction.values()) {
 			state = state.with(FACING_TO_PROPERTY_MAP.get(facing), canConnectTo(state, world, currentPos, neighbourFacing));
 		}
