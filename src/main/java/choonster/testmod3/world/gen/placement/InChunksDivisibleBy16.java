@@ -11,7 +11,7 @@ import java.util.Random;
 import java.util.stream.Stream;
 
 /**
- * Places a only in chunks with coordinates divisible by 16.
+ * Only generates positions in chunks with coordinates divisible by 16.
  * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2535868-banner-nbt-tags
