@@ -2,7 +2,6 @@ package choonster.testmod3.network;
 
 import choonster.testmod3.client.gui.ClientScreenManager;
 import io.netty.buffer.Unpooled;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.network.PacketBuffer;
@@ -44,7 +43,7 @@ public class OpenClientScreenMessage {
 
 	public static void handle(final OpenClientScreenMessage message, final Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() ->
-				DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientScreenManager.openScreen(message.getId(), message.getAdditionalData(), Minecraft.getInstance()))
+				DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientScreenManager.openScreen(message.getId(), message.getAdditionalData()))
 		);
 		ctx.get().setPacketHandled(true);
 	}

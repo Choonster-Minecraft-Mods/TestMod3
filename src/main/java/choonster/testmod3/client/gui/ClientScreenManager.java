@@ -27,8 +27,8 @@ public class ClientScreenManager {
 
 	private static final Map<ResourceLocation, IScreenFactory<?>> FACTORIES = new HashMap<>();
 
-	public static void openScreen(final ResourceLocation id, final PacketBuffer additionalData, final Minecraft mc) {
-		getScreenFactory(id).ifPresent(f -> f.createAndOpenScreen(id, additionalData, mc));
+	public static void openScreen(final ResourceLocation id, final PacketBuffer additionalData) {
+		getScreenFactory(id).ifPresent(f -> f.createAndOpenScreen(id, additionalData, Minecraft.getInstance()));
 	}
 
 	public static <T extends Container> Optional<IScreenFactory<?>> getScreenFactory(final ResourceLocation id) {
