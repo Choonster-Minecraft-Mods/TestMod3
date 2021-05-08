@@ -22,7 +22,7 @@ public class IsChestLoot implements ILootCondition {
 	}
 
 	@Override
-	public LootConditionType func_230419_b_() {
+	public LootConditionType getConditionType() {
 		return ModLootConditionTypes.IS_CHEST_LOOT;
 	}
 
@@ -31,7 +31,7 @@ public class IsChestLoot implements ILootCondition {
 		// TileEntityLockableLoot#fillWithLoot always provides the ORIGIN parameter, sometimes provides THIS_ENTITY and
 		// never provides any other parameter.
 
-		return lootContext.has(LootParameters./* ORIGIN */field_237457_g_) &&
+		return lootContext.has(LootParameters.ORIGIN) &&
 				!lootContext.has(LootParameters.DAMAGE_SOURCE) &&
 				!lootContext.has(LootParameters.KILLER_ENTITY) &&
 				!lootContext.has(LootParameters.DIRECT_KILLER_ENTITY) &&

@@ -120,7 +120,7 @@ public class PlaneBlock extends Block {
 		switch (axisToRotate) {
 			case X:
 			case Z:
-				state = state./* cycle */func_235896_a_(VERTICAL_ROTATION);
+				state = state.cycleValue(VERTICAL_ROTATION);
 				break;
 			case Y:
 				final Direction originalRotation = state.get(HORIZONTAL_ROTATION);

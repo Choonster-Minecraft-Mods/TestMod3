@@ -91,7 +91,7 @@ public class ModBowItem extends BowItem {
 
 					AbstractArrowEntity arrowEntity = arrowItem.createArrow(world, ammo, player);
 					arrowEntity = customArrow(arrowEntity);
-					arrowEntity./* shoot */func_234612_a_(player, player.rotationPitch, player.rotationYaw, 0.0f, arrowVelocity * 3.0f, 1.0f);
+					arrowEntity.setDirectionAndMovement(player, player.rotationPitch, player.rotationYaw, 0.0f, arrowVelocity * 3.0f, 1.0f);
 
 					if (arrowVelocity == 1.0f) {
 						arrowEntity.setIsCritical(true);

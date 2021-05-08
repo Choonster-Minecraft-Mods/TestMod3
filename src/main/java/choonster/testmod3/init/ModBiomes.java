@@ -159,7 +159,7 @@ public class ModBiomes {
 									.setMoodSound(MoodSoundAmbience.DEFAULT_CAVE)
 									.build()
 					)
-					.withMobSpawnSettings(mobSpawnInfoBuilder.copy())
+					.withMobSpawnSettings(mobSpawnInfoBuilder.build())
 					.withGenerationSettings(biomeGenerationSettingBuilder.build())
 					.build();
 		}

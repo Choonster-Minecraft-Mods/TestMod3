@@ -52,9 +52,9 @@ public class RotatableLampBlock extends Block {
 		final BlockState newState;
 
 		if (player.isSneaking()) {
-			newState = state./* cycle */func_235896_a_(FACING); // Cycle the facing (down -> up -> north -> south -> west -> east -> down)
+			newState = state.cycleValue(FACING); // Cycle the facing (down -> up -> north -> south -> west -> east -> down)
 		} else {
-			newState = state./* cycle */func_235896_a_(LIT); // Cycle the lit state (true -> false -> true)
+			newState = state.cycleValue(LIT); // Cycle the lit state (true -> false -> true)
 		}
 
 		world.setBlockState(pos, newState);

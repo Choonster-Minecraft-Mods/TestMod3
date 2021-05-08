@@ -45,6 +45,6 @@ public class TileEntityLootItemHandler extends LootItemHandler {
 	 */
 	@Override
 	protected void addAdditionalLootParameters(@Nullable final PlayerEntity player, final LootContext.Builder builder) {
-		builder.withParameter(LootParameters./*ORIGIN*/field_237457_g_, Vector3d.copyCentered(tileEntity.getPos()));
+		builder.withParameter(LootParameters.ORIGIN, Vector3d.copyCentered(tileEntity.getPos()));
 	}
 }

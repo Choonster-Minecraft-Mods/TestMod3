@@ -82,7 +82,7 @@ public class SnowballLauncherItem extends ShootableItem {
 
 			if (!world.isRemote) {
 				final SnowballEntity entitySnowball = new SnowballEntity(world, player);
-				entitySnowball./* shoot */func_234612_a_(player, player.rotationPitch, player.rotationYaw, 0.0f, 1.5f, 1.0f);
+				entitySnowball.setDirectionAndMovement(player, player.rotationPitch, player.rotationYaw, 0.0f, 1.5f, 1.0f);
 				world.addEntity(entitySnowball);
 			}
 

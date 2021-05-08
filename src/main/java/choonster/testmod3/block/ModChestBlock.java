@@ -120,7 +120,7 @@ public class ModChestBlock extends TileEntityBlock<ModChestTileEntity> {
 	 */
 	private boolean isCatSittingOnChest(final World world, final BlockPos pos) {
 		for (final CatEntity cat : world.getEntitiesWithinAABB(CatEntity.class, new AxisAlignedBB(pos.getX(), pos.getY() + 1, pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1))) {
-			if (cat.isSitting()) {
+			if (cat.isEntitySleeping()) {
 				return true;
 			}
 		}

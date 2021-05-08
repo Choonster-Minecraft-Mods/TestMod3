@@ -37,13 +37,13 @@ public class UnicodeTooltipsItem extends Item {
 
 		tooltip.add(
 				new StringTextComponent("§a§o")
-						.append(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_UNICODE_TOOLTIPS_2.getTranslationKey()))
+						.appendSibling(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_UNICODE_TOOLTIPS_2.getTranslationKey()))
 						.appendString("§r")
 		);
 
 		tooltip.add(
 				new StringTextComponent("" + TextFormatting.GREEN + TextFormatting.ITALIC)
-						.append(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_UNICODE_TOOLTIPS_3.getTranslationKey()))
+						.appendSibling(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_UNICODE_TOOLTIPS_3.getTranslationKey()))
 						.appendString("" + TextFormatting.RESET)
 		);
 	}

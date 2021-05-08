@@ -21,7 +21,7 @@ public class ModSurfaceBuilders {
 
 	public static final RegistryObject<SurfaceBuilder<SurfaceBuilderConfig>> LOGGING_DEFAULT = SURFACE_BUILDERS.register(
 			"logging_default",
-			() -> new LoggingSurfaceBuilder<>(() -> SurfaceBuilder.DEFAULT, SurfaceBuilderConfig.field_237203_a_)
+			() -> new LoggingSurfaceBuilder<>(() -> SurfaceBuilder.DEFAULT, SurfaceBuilderConfig.CODEC)
 	);
 
 	/**

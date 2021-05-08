@@ -53,7 +53,7 @@ public class ModConfiguredFeatures {
 							))
 							.withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT)
 							.withPlacement(ModConfiguredPlacements.IN_CHUNKS_DIVISIBLE_BY_16.get())
-							.func_242731_b(1) // count?
+							.count(1)
 			);
 
 			register(NETHER_IRON_ORE,
@@ -61,7 +61,7 @@ public class ModConfiguredFeatures {
 							.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NETHERRACK, Blocks.IRON_ORE.getDefaultState(), 20))
 							.range(118)
 							.square()
-							.func_242731_b(16) // count?
+							.count(16)
 			);
 
 			register(END_IRON_ORE,
@@ -69,7 +69,7 @@ public class ModConfiguredFeatures {
 							.withConfiguration(new OreFeatureConfig(FillerBlockType.END_STONE, Blocks.IRON_ORE.getDefaultState(), 20))
 							.range(128)
 							.square()
-							.func_242731_b(16) // count?
+							.count(16)
 			);
 		}
 

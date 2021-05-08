@@ -53,7 +53,7 @@ public class ModArrowEntity extends ArrowEntity implements IEntityAdditionalSpaw
 
 	@Override
 	public void writeSpawnData(final PacketBuffer buffer) {
-		final Entity shooter = /* getShooter */ func_234616_v_();
+		final Entity shooter = getShooter();
 		buffer.writeVarInt(shooter == null ? 0 : shooter.getEntityId());
 	}
 

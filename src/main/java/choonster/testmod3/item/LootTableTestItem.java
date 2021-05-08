@@ -49,7 +49,7 @@ public class LootTableTestItem extends Item {
 					.withParameter(LootParameters.DIRECT_KILLER_ENTITY, player)
 					.withParameter(LootParameters.DAMAGE_SOURCE, DamageSource.ANVIL)
 					.withParameter(LootParameters.TOOL, player.getHeldItemMainhand())
-					.withParameter(LootParameters./* ORIGIN */field_237457_g_, player.getPositionVec())
+					.withParameter(LootParameters.ORIGIN, player.getPositionVec())
 					.withParameter(LootParameters.BLOCK_STATE, Blocks.CHEST.getDefaultState())
 					.withParameter(LootParameters.BLOCK_ENTITY, Objects.requireNonNull(TileEntityType.CHEST.create()))
 					.withParameter(LootParameters.EXPLOSION_RADIUS, 99.0f)
@@ -67,7 +67,7 @@ public class LootTableTestItem extends Item {
 
 				IntStream.range(1, itemStacks.size()).forEachOrdered(i -> {
 					lootMessage.appendString(", ");
-					lootMessage.append(getItemStackTextComponent(itemStacks.get(i)));
+					lootMessage.appendSibling(getItemStackTextComponent(itemStacks.get(i)));
 				});
 
 				final ITextComponent chatMessage = new TranslationTextComponent(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_BASE.getTranslationKey(), lootMessage);
