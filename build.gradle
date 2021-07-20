@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.+', changing: true
     }
 }
 
@@ -105,7 +105,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     mavenCentral()
-    maven { url = "http://dvs1.progwml6.com/files/maven/" }
+    maven { url = "https://dvs1.progwml6.com/files/maven/" }
     maven { url = "https://maven.tehnut.info" }
     maven { url = 'https://jitpack.io/' }
 
@@ -120,7 +120,7 @@ configurations {
         transitive = false
     }
 
-    compile.extendsFrom embed
+    implementation.extendsFrom embed
 }
 
 dependencies {
