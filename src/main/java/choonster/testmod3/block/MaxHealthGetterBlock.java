@@ -26,10 +26,10 @@ public class MaxHealthGetterBlock extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
-		if (!world.isRemote) {
+	public ActionResultType use(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+		if (!world.isClientSide) {
 			MaxHealthCapability.getMaxHealth(player).ifPresent(maxHealth ->
-					player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_MAX_HEALTH_GET.getTranslationKey(), player.getDisplayName(), player.getMaxHealth(), maxHealth.getBonusMaxHealth()), Util.DUMMY_UUID)
+					player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_MAX_HEALTH_GET.getTranslationKey(), player.getDisplayName(), player.getMaxHealth(), maxHealth.getBonusMaxHealth()), Util.NIL_UUID)
 			);
 		}
 

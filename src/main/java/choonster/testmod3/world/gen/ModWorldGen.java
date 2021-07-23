@@ -23,7 +23,7 @@ public class ModWorldGen {
 	public static void addFeaturesToBiomes(final BiomeLoadingEvent event) {
 		final BiomeGenerationSettingsBuilder generation = event.getGeneration();
 
-		final RegistryKey<Biome> biomeRegistryKey = RegistryKey.getOrCreateKey(ForgeRegistries.Keys.BIOMES, Objects.requireNonNull(event.getName(), "Biome registry name was null"));
+		final RegistryKey<Biome> biomeRegistryKey = RegistryKey.create(ForgeRegistries.Keys.BIOMES, Objects.requireNonNull(event.getName(), "Biome registry name was null"));
 
 		/*
 			Generates Banners with a specific pattern in chunks with coordinates divisible by 16.
@@ -34,17 +34,17 @@ public class ModWorldGen {
 		*/
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.OVERWORLD)) {
 			generation
-					.withFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, getFeature(ModConfiguredFeatures.BANNER));
+					.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, getFeature(ModConfiguredFeatures.BANNER));
 		}
 
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.NETHER)) {
 			generation
-					.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, getFeature(ModConfiguredFeatures.NETHER_IRON_ORE));
+					.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, getFeature(ModConfiguredFeatures.NETHER_IRON_ORE));
 		}
 
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.END)) {
 			generation
-					.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, getFeature(ModConfiguredFeatures.END_IRON_ORE));
+					.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, getFeature(ModConfiguredFeatures.END_IRON_ORE));
 		}
 	}
 

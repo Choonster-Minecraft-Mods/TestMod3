@@ -24,7 +24,7 @@ public class ModConfiguredSurfaceBuilders {
 	public static final RegistryKey<ConfiguredSurfaceBuilder<?>> DESERT_TEST = key("desert_test");
 
 	private static RegistryKey<ConfiguredSurfaceBuilder<?>> key(final String name) {
-		return RegistryKey.getOrCreateKey(Registry.CONFIGURED_SURFACE_BUILDER_KEY, new ResourceLocation(TestMod3.MODID, name));
+		return RegistryKey.create(Registry.CONFIGURED_SURFACE_BUILDER_REGISTRY, new ResourceLocation(TestMod3.MODID, name));
 	}
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
@@ -34,12 +34,12 @@ public class ModConfiguredSurfaceBuilders {
 		public static void register(final RegistryEvent.Register<SurfaceBuilder<?>> event) {
 			register(DESERT_TEST,
 					ModSurfaceBuilders.LOGGING_DEFAULT.get()
-							.func_242929_a(new SurfaceBuilderConfig(Blocks.RED_SAND.getDefaultState(), Blocks.BRICKS.getDefaultState(), Blocks.GRAVEL.getDefaultState()))
+							.configured(new SurfaceBuilderConfig(Blocks.RED_SAND.defaultBlockState(), Blocks.BRICKS.defaultBlockState(), Blocks.GRAVEL.defaultBlockState()))
 			);
 		}
 
 		private static void register(final RegistryKey<ConfiguredSurfaceBuilder<?>> key, final ConfiguredSurfaceBuilder<?> configuredSurfaceBuilder) {
-			Registry.register(WorldGenRegistries.CONFIGURED_SURFACE_BUILDER, key.getLocation(), configuredSurfaceBuilder);
+			Registry.register(WorldGenRegistries.CONFIGURED_SURFACE_BUILDER, key.location(), configuredSurfaceBuilder);
 		}
 	}
 }

@@ -40,22 +40,22 @@ public class ModDispenseBehaviors {
 		event.enqueueWork(() -> {
 			// Add a dispense behaviour that causes Black Dye to place Black Wool.
 			// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2789286-override-dispenser-dispense-only-for-a-certain
-			DispenserBlock.registerDispenseBehavior(Items.BLACK_DYE, new OptionalDispenseBehavior() {
+			DispenserBlock.registerBehavior(Items.BLACK_DYE, new OptionalDispenseBehavior() {
 				@Override
-				protected ItemStack dispenseStack(final IBlockSource source, final ItemStack stack) {
-					setSuccessful(true);
+				protected ItemStack execute(final IBlockSource source, final ItemStack stack) {
+					setSuccess(true);
 
-					final Direction facing = source.getBlockState().get(DispenserBlock.FACING);
-					final BlockPos neighbourPos = source.getBlockPos().offset(facing);
-					final World world = source.getWorld();
+					final Direction facing = source.getBlockState().getValue(DispenserBlock.FACING);
+					final BlockPos neighbourPos = source.getPos().relative(facing);
+					final World world = source.getLevel();
 					final BlockState neighbourState = world.getBlockState(neighbourPos);
 
-					setSuccessful(
+					setSuccess(
 							neighbourState.getBlock().isAir(neighbourState, world, neighbourPos) &&
-									world.setBlockState(neighbourPos, Blocks.BLACK_WOOL.getDefaultState())
+									world.setBlockAndUpdate(neighbourPos, Blocks.BLACK_WOOL.defaultBlockState())
 					);
 
-					if (isSuccessful()) {
+					if (isSuccess()) {
 						stack.shrink(1);
 					}
 
@@ -66,13 +66,13 @@ public class ModDispenseBehaviors {
 			// Add a copy of the Vanilla spawn egg dispense behaviour for all our spawn eggs
 			final DefaultDispenseItemBehavior spawnEggDispenseBehavior = new DefaultDispenseItemBehavior() {
 				@Override
-				public ItemStack dispenseStack(final IBlockSource source, final ItemStack stack) {
-					final Direction direction = source.getBlockState().get(DispenserBlock.FACING);
+				public ItemStack execute(final IBlockSource source, final ItemStack stack) {
+					final Direction direction = source.getBlockState().getValue(DispenserBlock.FACING);
 					final EntityType<?> entityType = ((SpawnEggItem) stack.getItem()).getType(stack.getTag());
 
 					entityType.spawn(
-							source.getWorld(), stack, null,
-							source.getBlockPos().offset(direction), SpawnReason.DISPENSER,
+							source.getLevel(), stack, null,
+							source.getPos().relative(direction), SpawnReason.DISPENSER,
 							direction != Direction.UP, false
 					);
 
@@ -85,7 +85,7 @@ public class ModDispenseBehaviors {
 			ModItems.getSpawnEggs()
 					.stream()
 					.map(Supplier::get)
-					.forEach(egg -> DispenserBlock.registerDispenseBehavior(egg, spawnEggDispenseBehavior));
+					.forEach(egg -> DispenserBlock.registerBehavior(egg, spawnEggDispenseBehavior));
 		});
 	}
 }

@@ -120,7 +120,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 
 		ModBlocks.VARIANTS_BLOCKS
 				.getBlocks()
-				.forEach(block -> addBlock(block, String.format("Variants Block - %s", StringUtils.capitalize(block.get().getType().getString()))));
+				.forEach(block -> addBlock(block, String.format("Variants Block - %s", StringUtils.capitalize(block.get().getType().getSerializedName()))));
 
 		ModBlocks.TERRACOTTA_SLABS
 				.getBlocks()
@@ -132,7 +132,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		addItem(ModItems.ENTITY_TEST, "Entity Test");
 
 		addItem(ModItems.RECORD_SOLARIS, "Music Disc");
-		add(ModItems.RECORD_SOLARIS.get().getTranslationKey() + ".desc", "Solaris (Path of Exile)");
+		add(ModItems.RECORD_SOLARIS.get().getDescriptionId() + ".desc", "Solaris (Path of Exile)");
 
 		addItem(ModItems.HEAVY, "Heavy Item");
 		addItem(ModItems.ENTITY_INTERACTION_TEST, "Entity Interaction Test");
@@ -211,7 +211,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 
 		ModItems.VARIANTS_ITEMS
 				.getItems()
-				.forEach(item -> addItem(item, String.format("Variants Item - %s", StringUtils.capitalize(item.get().getType().getString()))));
+				.forEach(item -> addItem(item, String.format("Variants Item - %s", StringUtils.capitalize(item.get().getType().getSerializedName()))));
 	}
 
 	private void addFluids() {
@@ -261,8 +261,8 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 	private void addChatMessages() {
 		add(TestMod3Lang.MESSAGE_ENTITY_INTERACT_COUNT, "Interact count: %s");
 		add(TestMod3Lang.MESSAGE_BLOCK_DESTROYER_DESTROY, "Destroyed Wheat with Age >= 6");
-		add(String.format(TestMod3Lang.MESSAGE_SCRIPTS_RIGHT_CLICK.getTranslationKey(), ModItems.SUBSCRIPTS.get().getTranslationKey()), "Subscripts: %s");
-		add(String.format(TestMod3Lang.MESSAGE_SCRIPTS_RIGHT_CLICK.getTranslationKey(), ModItems.SUPERSCRIPTS.get().getTranslationKey()), "Superscripts: %s");
+		add(String.format(TestMod3Lang.MESSAGE_SCRIPTS_RIGHT_CLICK.getTranslationKey(), ModItems.SUBSCRIPTS.get().getDescriptionId()), "Subscripts: %s");
+		add(String.format(TestMod3Lang.MESSAGE_SCRIPTS_RIGHT_CLICK.getTranslationKey(), ModItems.SUPERSCRIPTS.get().getDescriptionId()), "Superscripts: %s");
 		add(TestMod3Lang.MESSAGE_CLEARER_CLEARING, "Clearing the chunk at %s, %s");
 		add(TestMod3Lang.MESSAGE_CLEARER_CLEARED, "Chunk cleared");
 		add(String.format(TestMod3Lang.MESSAGE_CLEARER_MODE_S.getTranslationKey(), 0), "Switched to Whitelist Mode");
@@ -330,15 +330,15 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		add(TestMod3Lang.DESC_MULTI_ROTATABLE_FACE_ROTATION, "Face Rotation: %s");
 
 		for (final Direction direction : Direction.values()) {
-			add(TestMod3Lang.PREFIX_FACING, direction, StringUtils.capitalize(direction.getString()));
+			add(TestMod3Lang.PREFIX_FACING, direction, StringUtils.capitalize(direction.getSerializedName()));
 		}
 
 		for (final EnumFaceRotation faceRotation : EnumFaceRotation.values()) {
-			add(TestMod3Lang.PREFIX_FACE_ROTATION, faceRotation, StringUtils.capitalize(faceRotation.getString()));
+			add(TestMod3Lang.PREFIX_FACE_ROTATION, faceRotation, StringUtils.capitalize(faceRotation.getSerializedName()));
 		}
 
 		for (final PlaneBlock.VerticalRotation verticalRotation : PlaneBlock.VerticalRotation.values()) {
-			add(TestMod3Lang.PREFIX_VERTICAL_ROTATION, verticalRotation, StringUtils.capitalize(verticalRotation.getString()));
+			add(TestMod3Lang.PREFIX_VERTICAL_ROTATION, verticalRotation, StringUtils.capitalize(verticalRotation.getSerializedName()));
 		}
 	}
 
@@ -358,7 +358,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		final ModBucketItem item = bucketItem.get();
 
 		add(item, name);
-		add(item.getTranslationKey() + ".filled", "%s " + name);
+		add(item.getDescriptionId() + ".filled", "%s " + name);
 	}
 
 	private <
@@ -381,8 +381,8 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 	}
 
 	private String getPotionItemTranslationKey(final Supplier<? extends Potion> potion, final Item item) {
-		final ItemStack stack = PotionUtils.addPotionToItemStack(new ItemStack(item), potion.get());
-		return stack.getItem().getTranslationKey(stack);
+		final ItemStack stack = PotionUtils.setPotion(new ItemStack(item), potion.get());
+		return stack.getItem().getDescriptionId(stack);
 	}
 
 	private void add(final TestMod3Lang lang, final String value) {
@@ -390,14 +390,14 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 	}
 
 	private void add(final TestMod3Lang prefix, final IStringSerializable enumValue, final String name) {
-		add(prefix.getTranslationKey() + "." + enumValue.getString(), name);
+		add(prefix.getTranslationKey() + "." + enumValue.getSerializedName(), name);
 	}
 
 	private String translate(final DyeColor colour) {
-		return translate("color.minecraft." + colour.getTranslationKey());
+		return translate("color.minecraft." + colour.getName());
 	}
 
 	private String translate(final String key) {
-		return I18n.format(key);
+		return I18n.get(key);
 	}
 }

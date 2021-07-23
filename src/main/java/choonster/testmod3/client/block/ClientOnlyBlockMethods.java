@@ -10,6 +10,6 @@ import net.minecraft.client.settings.KeyBinding;
  */
 public class ClientOnlyBlockMethods {
 	public static void pressUseItemKeyBinding() {
-		KeyBinding.onTick(Minecraft.getInstance().gameSettings.keyBindUseItem.getKey());
+		KeyBinding.click(Minecraft.getInstance().options.keyUse.getKey());
 	}
 }

@@ -58,7 +58,7 @@ public class FluidTankContentsMessage {
 			}
 
 			FluidTankBlock.getFluidDataForDisplay(message.fluidTankSnapshots)
-					.forEach((textComponent) -> player.sendMessage(textComponent, Util.DUMMY_UUID));
+					.forEach((textComponent) -> player.sendMessage(textComponent, Util.NIL_UUID));
 		});
 
 		ctx.get().setPacketHandled(true);

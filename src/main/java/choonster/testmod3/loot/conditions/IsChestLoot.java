@@ -22,7 +22,7 @@ public class IsChestLoot implements ILootCondition {
 	}
 
 	@Override
-	public LootConditionType getConditionType() {
+	public LootConditionType getType() {
 		return ModLootConditionTypes.IS_CHEST_LOOT;
 	}
 
@@ -31,14 +31,14 @@ public class IsChestLoot implements ILootCondition {
 		// TileEntityLockableLoot#fillWithLoot always provides the ORIGIN parameter, sometimes provides THIS_ENTITY and
 		// never provides any other parameter.
 
-		return lootContext.has(LootParameters.ORIGIN) &&
-				!lootContext.has(LootParameters.DAMAGE_SOURCE) &&
-				!lootContext.has(LootParameters.KILLER_ENTITY) &&
-				!lootContext.has(LootParameters.DIRECT_KILLER_ENTITY) &&
-				!lootContext.has(LootParameters.BLOCK_STATE) &&
-				!lootContext.has(LootParameters.BLOCK_ENTITY) &&
-				!lootContext.has(LootParameters.TOOL) &&
-				!lootContext.has(LootParameters.EXPLOSION_RADIUS);
+		return lootContext.hasParam(LootParameters.ORIGIN) &&
+				!lootContext.hasParam(LootParameters.DAMAGE_SOURCE) &&
+				!lootContext.hasParam(LootParameters.KILLER_ENTITY) &&
+				!lootContext.hasParam(LootParameters.DIRECT_KILLER_ENTITY) &&
+				!lootContext.hasParam(LootParameters.BLOCK_STATE) &&
+				!lootContext.hasParam(LootParameters.BLOCK_ENTITY) &&
+				!lootContext.hasParam(LootParameters.TOOL) &&
+				!lootContext.hasParam(LootParameters.EXPLOSION_RADIUS);
 	}
 
 	public static ILootCondition.IBuilder builder() {

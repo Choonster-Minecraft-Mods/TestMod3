@@ -28,11 +28,11 @@ public class HiddenBlock extends TileEntityBlock<HiddenTileEntity> {
 
 	public HiddenBlock(final Block.Properties properties) {
 		super(properties);
-		setDefaultState(getStateContainer().getBaseState().with(HIDDEN, true));
+		registerDefaultState(getStateDefinition().any().setValue(HIDDEN, true));
 	}
 
 	@Override
-	protected void fillStateContainer(final StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(final StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(HIDDEN);
 	}
 

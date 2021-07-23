@@ -37,8 +37,8 @@ public class EnumPropertyProbeInfoProvider<BLOCK extends Block, ENUM extends Enu
 			final ProbeMode mode, final IProbeInfo probeInfo, final PlayerEntity player,
 			final World world, final BlockState blockState, final IProbeHitData data
 	) {
-		final ENUM value = blockState.get(property);
-		final String valueTranslationKey = valueTranslationKeyPrefix + "." + value.getString();
+		final ENUM value = blockState.getValue(property);
+		final String valueTranslationKey = valueTranslationKeyPrefix + "." + value.getSerializedName();
 
 		probeInfo.text(new TranslationTextComponent(tooltipTranslationKey, new TranslationTextComponent(valueTranslationKey)));
 	}

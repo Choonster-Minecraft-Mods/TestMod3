@@ -30,8 +30,8 @@ public class LastUseTimeModelItem extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final PlayerEntity playerIn, final Hand hand) {
-		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(hand));
+	public ActionResult<ItemStack> use(final World worldIn, final PlayerEntity playerIn, final Hand hand) {
+		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(hand));
 	}
 
 	@Override

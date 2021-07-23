@@ -52,7 +52,7 @@ public class EntityCheckerItem extends Item {
 	 * @param stack The ItemStack
 	 * @return The search radius
 	 */
-	private int getRadius(final ItemStack stack) {
+	private static int getRadius(final ItemStack stack) {
 		return stack.getOrCreateTag().getInt("Radius");
 	}
 
@@ -62,7 +62,7 @@ public class EntityCheckerItem extends Item {
 	 * @param stack The ItemStack
 	 * @return The new radius
 	 */
-	private int incrementRadius(final ItemStack stack, final int amount) {
+	private static int incrementRadius(final ItemStack stack, final int amount) {
 		final CompoundNBT tag = stack.getOrCreateTag();
 
 		final int newRadius = Math.max(tag.getInt("Radius") + amount, 0); // Don't allow negative values
@@ -77,7 +77,7 @@ public class EntityCheckerItem extends Item {
 	 * @param stack The ItemStack
 	 * @return Is corner mode enabled?
 	 */
-	private boolean isCornerModeEnabled(final ItemStack stack) {
+	private static boolean isCornerModeEnabled(final ItemStack stack) {
 		return stack.getOrCreateTag().getBoolean("CornerMode");
 	}
 
@@ -87,7 +87,7 @@ public class EntityCheckerItem extends Item {
 	 * @param stack The ItemStack
 	 * @return The new corner mode setting
 	 */
-	private boolean toggleCornerModeEnabled(final ItemStack stack) {
+	private static boolean toggleCornerModeEnabled(final ItemStack stack) {
 		final CompoundNBT tag = stack.getOrCreateTag();
 
 		final boolean cornerModeEnabled = !tag.getBoolean("CornerMode");
@@ -97,12 +97,12 @@ public class EntityCheckerItem extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World world, final PlayerEntity player, final Hand hand) {
-		final ItemStack heldItem = player.getHeldItem(hand);
+	public ActionResult<ItemStack> use(final World world, final PlayerEntity player, final Hand hand) {
+		final ItemStack heldItem = player.getItemInHand(hand);
 
-		if (!world.isRemote) {
-			final int newRadius = incrementRadius(heldItem, player.isSneaking() ? -1 : 1);
-			player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_ENTITY_CHECKER_RADIUS.getTranslationKey(), newRadius), Util.DUMMY_UUID);
+		if (!world.isClientSide) {
+			final int newRadius = incrementRadius(heldItem, player.isShiftKeyDown() ? -1 : 1);
+			player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_ENTITY_CHECKER_RADIUS.getTranslationKey(), newRadius), Util.NIL_UUID);
 		}
 
 		return new ActionResult<>(ActionResultType.SUCCESS, heldItem);
@@ -110,21 +110,21 @@ public class EntityCheckerItem extends Item {
 
 	@Override
 	public boolean onLeftClickEntity(final ItemStack stack, final PlayerEntity player, final Entity entity) {
-		if (!player.getEntityWorld().isRemote) {
+		if (!player.getCommandSenderWorld().isClientSide) {
 			final boolean cornerModeEnabled = toggleCornerModeEnabled(stack);
 			final TestMod3Lang message = cornerModeEnabled ? TestMod3Lang.MESSAGE_ENTITY_CHECKER_MODE_CORNER : TestMod3Lang.MESSAGE_ENTITY_CHECKER_MODE_EDGE;
-			player.sendMessage(new TranslationTextComponent(message.getTranslationKey(), cornerModeEnabled), Util.DUMMY_UUID);
+			player.sendMessage(new TranslationTextComponent(message.getTranslationKey(), cornerModeEnabled), Util.NIL_UUID);
 		}
 
 		return true;
 	}
 
 	@Override
-	public ActionResultType onItemUse(final ItemUseContext context) {
-		if (!context.getWorld().isRemote) {
+	public ActionResultType useOn(final ItemUseContext context) {
+		if (!context.getLevel().isClientSide) {
 			final PlayerEntity player = context.getPlayer();
-			final ItemStack heldItem = context.getItem();
-			final BlockPos pos = context.getPos();
+			final ItemStack heldItem = context.getItemInHand();
+			final BlockPos clickedPos = context.getClickedPos();
 
 			final int radius = getRadius(heldItem);
 			final AxisAlignedBB boundingBox;
@@ -133,18 +133,18 @@ public class EntityCheckerItem extends Item {
 			// The AABB will always have the block's y coordinate minus 1 as the minimum coordinate and the block's y coordinate plus 2 as the maximum coordinate.
 			if (isCornerModeEnabled(heldItem)) {
 				// In corner mode, use the block's x and z coordinates as both the minimum and maximum coordinates of the AABB.
-				boundingBox = new AxisAlignedBB(pos.getX(), pos.getY() - 1, pos.getZ(), pos.getX(), pos.getY() + 2, pos.getZ()).expand(radius, 0, radius);
+				boundingBox = new AxisAlignedBB(clickedPos.getX(), clickedPos.getY() - 1, clickedPos.getZ(), clickedPos.getX(), clickedPos.getY() + 2, clickedPos.getZ()).expandTowards(radius, 0, radius);
 			} else {
 				// In edge mode, use the block's x and z coordinates as the minimum coordinates of the AABB and the block's x and z coordinates plus 1 as the maximum coordinates.
-				boundingBox = new AxisAlignedBB(pos).expand(radius, 1, radius);
+				boundingBox = new AxisAlignedBB(clickedPos).expandTowards(radius, 1, radius);
 			}
 
-			final List<Entity> entities = context.getWorld().getEntitiesWithinAABBExcludingEntity(player, boundingBox);
+			final List<Entity> entities = context.getLevel().getEntities(player, boundingBox);
 
 			LOGGER.info("Bounding box: {}", boundingBox);
 			if (player != null) {
-				player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_ENTITY_CHECKER_RESULTS.getTranslationKey(), entities.size()), Util.DUMMY_UUID);
-				entities.forEach(entity -> player.sendMessage(new StringTextComponent(entity.toString()), Util.DUMMY_UUID));
+				player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_ENTITY_CHECKER_RESULTS.getTranslationKey(), entities.size()), Util.NIL_UUID);
+				entities.forEach(entity -> player.sendMessage(new StringTextComponent(entity.toString()), Util.NIL_UUID));
 			}
 		}
 
@@ -153,7 +153,7 @@ public class EntityCheckerItem extends Item {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(final ItemStack stack, @Nullable final World worldIn, final List<ITextComponent> tooltip, final ITooltipFlag flagIn) {
+	public void appendHoverText(final ItemStack stack, @Nullable final World worldIn, final List<ITextComponent> tooltip, final ITooltipFlag flagIn) {
 		tooltip.add(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_RADIUS.getTranslationKey(), getRadius(stack)));
 
 		final TestMod3Lang cornerMode = isCornerModeEnabled(stack) ? TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_MODE_CORNER : TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_MODE_EDGE;

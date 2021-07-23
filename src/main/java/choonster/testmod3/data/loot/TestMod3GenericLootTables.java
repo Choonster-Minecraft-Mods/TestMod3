@@ -26,36 +26,36 @@ public class TestMod3GenericLootTables implements Consumer<BiConsumer<ResourceLo
 	public void accept(final BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
 		consumer.accept(
 				ModLootTables.LOOT_TABLE_TEST,
-				LootTable.builder()
-						.addLootPool(
-								LootPool.builder()
+				LootTable.lootTable()
+						.withPool(
+								LootPool.lootPool()
 										.name("main")
-										.rolls(new RandomValueRange(1, 4))
-										.addEntry(
-												ItemLootEntry.builder(Items.PORKCHOP)
-														.weight(1)
-														.acceptFunction(SetCount.builder(new RandomValueRange(1, 3)))
-														.acceptFunction(
-																Smelt.func_215953_b()
-																		.acceptCondition(
-																				EntityHasProperty.builder(
+										.setRolls(new RandomValueRange(1, 4))
+										.add(
+												ItemLootEntry.lootTableItem(Items.PORKCHOP)
+														.setWeight(1)
+														.apply(SetCount.setCount(new RandomValueRange(1, 3)))
+														.apply(
+																Smelt.smelted()
+																		.when(
+																				EntityHasProperty.hasProperties(
 																						LootContext.EntityTarget.THIS,
-																						EntityPredicate.Builder.create()
-																								.flags(EntityFlagsPredicate.Builder.create().onFire(true).build())
+																						EntityPredicate.Builder.entity()
+																								.flags(EntityFlagsPredicate.Builder.flags().setOnFire(true).build())
 																				)
 																		)
 														)
-														.acceptFunction(LootingEnchantBonus.builder(new RandomValueRange(0, 1)))
+														.apply(LootingEnchantBonus.lootingMultiplier(new RandomValueRange(0, 1)))
 										)
-										.addEntry(
-												ItemLootEntry.builder(ModItems.ARROW.get())
-														.weight(2)
-														.acceptFunction(SetCount.builder(new RandomValueRange(1, 64)))
+										.add(
+												ItemLootEntry.lootTableItem(ModItems.ARROW.get())
+														.setWeight(2)
+														.apply(SetCount.setCount(new RandomValueRange(1, 64)))
 										)
-										.addEntry(
-												ItemLootEntry.builder(Items.WOODEN_AXE)
-														.weight(1)
-														.acceptFunction(SetDamage.func_215931_a(new RandomValueRange(0.28f, 0.28f)))
+										.add(
+												ItemLootEntry.lootTableItem(Items.WOODEN_AXE)
+														.setWeight(1)
+														.apply(SetDamage.setDamage(new RandomValueRange(0.28f, 0.28f)))
 										)
 						)
 		);

@@ -20,7 +20,7 @@ public class Lock implements ILock, INBTSerializable<CompoundNBT> {
 	 * The lock code.
 	 */
 	@Nonnull
-	private LockCode code = LockCode.EMPTY_CODE;
+	private LockCode code = LockCode.NO_LOCK;
 
 	private final INameable nameProvider;
 
@@ -31,7 +31,7 @@ public class Lock implements ILock, INBTSerializable<CompoundNBT> {
 	@Override
 	public boolean isLocked() {
 		// An empty ItemStack can only unlock an empty lock code
-		return !getLockCode().func_219964_a(ItemStack.EMPTY);
+		return !getLockCode().unlocksWith(ItemStack.EMPTY);
 	}
 
 	@Override
@@ -48,14 +48,14 @@ public class Lock implements ILock, INBTSerializable<CompoundNBT> {
 	public CompoundNBT serializeNBT() {
 		final CompoundNBT tagCompound = new CompoundNBT();
 
-		code.write(tagCompound);
+		code.addToTag(tagCompound);
 
 		return tagCompound;
 	}
 
 	@Override
 	public void deserializeNBT(final CompoundNBT nbt) {
-		code = LockCode.read(nbt);
+		code = LockCode.fromTag(nbt);
 	}
 
 	@Override

@@ -20,8 +20,8 @@ public class HiddenTileEntity extends TileEntity implements ITickableTileEntity 
 
 	@Override
 	public void tick() {
-		if (world.isRemote) {
-			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> HiddenBlockManager.refresh(world, pos));
+		if (level.isClientSide) {
+			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> HiddenBlockManager.refresh(level, worldPosition));
 		}
 	}
 }

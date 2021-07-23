@@ -36,7 +36,7 @@ public class ModChestBlock extends TileEntityBlock<ModChestTileEntity> {
 	/**
 	 * The chest's shape.
 	 */
-	private static final VoxelShape SHAPE = makeCuboidShape(1, 0, 1, 15, 14, 15);
+	private static final VoxelShape SHAPE = box(1, 0, 1, 15, 14, 15);
 
 	public static final Property<Direction> FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
 
@@ -45,7 +45,7 @@ public class ModChestBlock extends TileEntityBlock<ModChestTileEntity> {
 	}
 
 	@Override
-	protected void fillStateContainer(final StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(final StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(FACING);
 	}
 
@@ -61,11 +61,11 @@ public class ModChestBlock extends TileEntityBlock<ModChestTileEntity> {
 	}
 
 	@Override
-	public void onBlockPlacedBy(final World worldIn, final BlockPos pos, final BlockState state, @Nullable final LivingEntity placer, final ItemStack stack) {
-		if (stack.hasDisplayName()) {
+	public void setPlacedBy(final World worldIn, final BlockPos pos, final BlockState state, @Nullable final LivingEntity placer, final ItemStack stack) {
+		if (stack.hasCustomHoverName()) {
 			final ModChestTileEntity tileEntity = getTileEntity(worldIn, pos);
 			if (tileEntity != null) {
-				tileEntity.setDisplayName(stack.getDisplayName());
+				tileEntity.setDisplayName(stack.getHoverName());
 			}
 		}
 	}
@@ -73,13 +73,13 @@ public class ModChestBlock extends TileEntityBlock<ModChestTileEntity> {
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(final BlockItemUseContext context) {
-		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+		return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
-		if (!world.isRemote && !isBlocked(world, pos)) {
+	public ActionResultType use(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+		if (!world.isClientSide && !isBlocked(world, pos)) {
 			final ModChestTileEntity tileEntity = getTileEntity(world, pos);
 			if (tileEntity != null) {
 				tileEntity.openGUI((ServerPlayerEntity) player);
@@ -108,7 +108,7 @@ public class ModChestBlock extends TileEntityBlock<ModChestTileEntity> {
 	 * @return Is the chest below a solid block?
 	 */
 	private boolean isBelowSolidBlock(final World world, final BlockPos pos) {
-		return world.getBlockState(pos.up()).isNormalCube(world, pos.up());
+		return world.getBlockState(pos.above()).isRedstoneConductor(world, pos.above());
 	}
 
 	/**
@@ -119,8 +119,8 @@ public class ModChestBlock extends TileEntityBlock<ModChestTileEntity> {
 	 * @return Is a Cat sitting on the chest?
 	 */
 	private boolean isCatSittingOnChest(final World world, final BlockPos pos) {
-		for (final CatEntity cat : world.getEntitiesWithinAABB(CatEntity.class, new AxisAlignedBB(pos.getX(), pos.getY() + 1, pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1))) {
-			if (cat.isEntitySleeping()) {
+		for (final CatEntity cat : world.getEntitiesOfClass(CatEntity.class, new AxisAlignedBB(pos.getX(), pos.getY() + 1, pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1))) {
+			if (cat.isInSittingPose()) {
 				return true;
 			}
 		}
@@ -130,28 +130,28 @@ public class ModChestBlock extends TileEntityBlock<ModChestTileEntity> {
 
 	@Override
 	public BlockState rotate(final BlockState state, final IWorld world, final BlockPos pos, final Rotation direction) {
-		return state.with(FACING, direction.rotate(state.get(FACING)));
+		return state.setValue(FACING, direction.rotate(state.getValue(FACING)));
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public BlockState mirror(final BlockState state, final Mirror mirror) {
-		return state.with(FACING, mirror.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirror.mirror(state.getValue(FACING)));
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onReplaced(final BlockState state, final World world, final BlockPos pos, final BlockState newState, final boolean isMoving) {
+	public void onRemove(final BlockState state, final World world, final BlockPos pos, final BlockState newState, final boolean isMoving) {
 		if (state.getBlock() != newState.getBlock()) {
 			final ModChestTileEntity tileEntity = getTileEntity(world, pos);
 			if (tileEntity != null) {
 				tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent(itemHandler -> {
 					InventoryUtils.dropItemHandlerContents(world, pos, itemHandler);
-					world.updateComparatorOutputLevel(pos, this);
+					world.updateNeighbourForOutputSignal(pos, this);
 				});
 			}
 
-			super.onReplaced(state, world, pos, newState, isMoving);
+			super.onRemove(state, world, pos, newState, isMoving);
 		}
 	}
 }

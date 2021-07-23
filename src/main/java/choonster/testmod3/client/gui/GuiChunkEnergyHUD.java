@@ -17,11 +17,11 @@ public class GuiChunkEnergyHUD extends AbstractGui {
 	private static final Minecraft minecraft = Minecraft.getInstance();
 
 	public void drawHUD(final MatrixStack matrixStack) {
-		ChunkEnergyCapability.getChunkEnergy(minecraft.world.getChunkAt(minecraft.player.getPosition()))
+		ChunkEnergyCapability.getChunkEnergy(minecraft.level.getChunkAt(minecraft.player.blockPosition()))
 				.ifPresent(chunkEnergy -> {
-					final String text = I18n.format(TestMod3Lang.CHUNK_ENERGY_HUD.getTranslationKey(), chunkEnergy.getEnergyStored(), chunkEnergy.getMaxEnergyStored());
+					final String text = I18n.get(TestMod3Lang.CHUNK_ENERGY_HUD.getTranslationKey(), chunkEnergy.getEnergyStored(), chunkEnergy.getMaxEnergyStored());
 					final TestMod3Config.Client.HUDPos hudPos = TestMod3Config.CLIENT.chunkEnergyHUDPos;
-					drawString(matrixStack, minecraft.fontRenderer, text, hudPos.x.get(), hudPos.y.get(), 0xFFFFFF);
+					drawString(matrixStack, minecraft.font, text, hudPos.x.get(), hudPos.y.get(), 0xFFFFFF);
 				});
 	}
 }

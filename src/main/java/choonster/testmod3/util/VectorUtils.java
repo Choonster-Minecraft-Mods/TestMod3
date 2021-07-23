@@ -33,7 +33,7 @@ public class VectorUtils {
 
 		for (final Direction.Axis axis : Direction.Axis.values()) { // For each axis,
 			// Get the direction vector of the positive facing of the axis
-			final Vector3i directionVec = Direction.getFacingFromAxis(Direction.AxisDirection.POSITIVE, axis).getDirectionVec();
+			final Vector3i directionVec = Direction.get(Direction.AxisDirection.POSITIVE, axis).getNormal();
 			axisVectors.put(axis, new Vector3f(directionVec.getX(), directionVec.getY(), directionVec.getZ())); // Add it to the map
 		}
 
@@ -84,7 +84,7 @@ public class VectorUtils {
 		maxCoords.transform(rotationQuaternion);
 
 		// Return an AABB with the new coordinates
-		return new AxisAlignedBB(minCoords.getX(), minCoords.getY(), minCoords.getZ(), maxCoords.getX(), maxCoords.getY(), maxCoords.getZ());
+		return new AxisAlignedBB(minCoords.x(), minCoords.y(), minCoords.z(), maxCoords.x(), maxCoords.y(), maxCoords.z());
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class VectorUtils {
 		final double offsetY = roundedAABB.minY < 0 ? 1 : 0;
 		final double offsetZ = roundedAABB.minZ < 0 ? 1 : 0;
 
-		return roundedAABB.offset(offsetX, offsetY, offsetZ);
+		return roundedAABB.move(offsetX, offsetY, offsetZ);
 	}
 
 	private static double epsilonRound(final double value) {

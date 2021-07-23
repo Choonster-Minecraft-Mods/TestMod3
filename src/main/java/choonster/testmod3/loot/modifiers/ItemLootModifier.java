@@ -35,7 +35,7 @@ public class ItemLootModifier extends LootModifier {
 		super(conditions);
 		this.item = item;
 		this.functions = functions;
-		combinedFunctions = LootFunctionManager.combine(functions);
+		combinedFunctions = LootFunctionManager.compose(functions);
 	}
 
 	@Override
@@ -53,16 +53,16 @@ public class ItemLootModifier extends LootModifier {
 		/**
 		 * Gson instance used to serialise/deserialise {@link ILootFunction}s.
 		 */
-		private static final Gson LOOT_FUNCTION_GSON = LootSerializers.func_237387_b_().create();
+		private static final Gson LOOT_FUNCTION_GSON = LootSerializers.createFunctionSerializer().create();
 
 		@Override
 		public ItemLootModifier read(final ResourceLocation location, final JsonObject object, final ILootCondition[] conditions) {
-			final Item item = JSONUtils.getItem(object, "name");
+			final Item item = JSONUtils.getAsItem(object, "name");
 
 			// Can't use JSONUtils.deserializeClass because we don't have a JsonDeserializationContext
 			final ILootFunction[] functions;
 			if (object.has("functions")) {
-				final JsonArray functionsJsonArray = JSONUtils.getJsonArray(object, "functions");
+				final JsonArray functionsJsonArray = JSONUtils.getAsJsonArray(object, "functions");
 				functions = LOOT_FUNCTION_GSON.fromJson(functionsJsonArray, ILootFunction[].class);
 			} else {
 				functions = new ILootFunction[0];

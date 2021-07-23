@@ -40,9 +40,9 @@ public class BlockEventHandler {
 	 * @return True if the block is a log, the player isn't in creative mode and the player doesn't have the correct tool equipped
 	 */
 	private static boolean isPlayerHarvestingLogWithoutCorrectTool(final BlockState state, final PlayerEntity player) {
-		return !player.abilities.isCreativeMode
-				&& state.isIn(BlockTags.LOGS)
-				&& !canToolHarvestBlock(state, player.getHeldItemMainhand(), player);
+		return !player.abilities.instabuild
+				&& state.is(BlockTags.LOGS)
+				&& !canToolHarvestBlock(state, player.getMainHandItem(), player);
 	}
 
 	/**

@@ -24,13 +24,13 @@ public class HeightTesterItem extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World world, final PlayerEntity player, final Hand hand) {
-		if (!world.isRemote) {
-			final BlockPos pos = player.getPosition();
+	public ActionResult<ItemStack> use(final World world, final PlayerEntity player, final Hand hand) {
+		if (!world.isClientSide) {
+			final BlockPos pos = player.blockPosition();
 
-			player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_HEIGHT_TESTER_HEIGHT.getTranslationKey(), pos.getX(), pos.getZ(), world.getHeight(Heightmap.Type.WORLD_SURFACE, pos).getY()), Util.DUMMY_UUID);
+			player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_HEIGHT_TESTER_HEIGHT.getTranslationKey(), pos.getX(), pos.getZ(), world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE, pos).getY()), Util.NIL_UUID);
 		}
 
-		return new ActionResult<>(ActionResultType.SUCCESS, player.getHeldItem(hand));
+		return new ActionResult<>(ActionResultType.SUCCESS, player.getItemInHand(hand));
 	}
 }

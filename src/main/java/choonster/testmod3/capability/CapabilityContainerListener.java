@@ -44,7 +44,7 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 	}
 
 	@Override
-	public final void sendAllContents(final Container containerToSend, final NonNullList<ItemStack> itemsList) {
+	public final void refreshContainer(final Container containerToSend, final NonNullList<ItemStack> itemsList) {
 		// Filter out any items from the list that shouldn't be synced
 		final NonNullList<ItemStack> syncableItemsList = NonNullList.withSize(itemsList.size(), ItemStack.EMPTY);
 		for (int index = 0; index < syncableItemsList.size(); index++) {
@@ -54,18 +54,18 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 			}
 		}
 
-		final BulkUpdateContainerCapabilityMessage<HANDLER, ?> message = createBulkUpdateMessage(containerToSend.windowId, syncableItemsList);
+		final BulkUpdateContainerCapabilityMessage<HANDLER, ?> message = createBulkUpdateMessage(containerToSend.containerId, syncableItemsList);
 		if (message.hasData()) { // Don't send the message if there's nothing to update
 			TestMod3.network.send(PacketDistributor.PLAYER.with(() -> player), message);
 		}
 	}
 
 	@Override
-	public final void sendSlotContents(final Container containerToSend, final int slotInd, final ItemStack stack) {
+	public final void slotChanged(final Container containerToSend, final int slotInd, final ItemStack stack) {
 		if (!shouldSyncItem(stack)) return;
 
 		stack.getCapability(capability, facing).ifPresent(handler -> {
-			final UpdateContainerCapabilityMessage<HANDLER, ?> message = createSingleUpdateMessage(containerToSend.windowId, slotInd, handler);
+			final UpdateContainerCapabilityMessage<HANDLER, ?> message = createSingleUpdateMessage(containerToSend.containerId, slotInd, handler);
 			if (message.hasData()) { // Don't send the message if there's nothing to update
 				TestMod3.network.send(PacketDistributor.PLAYER.with(() -> player), message);
 			}
@@ -73,7 +73,7 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 	}
 
 	@Override
-	public final void sendWindowProperty(final Container containerIn, final int varToUpdate, final int newValue) {
+	public final void setContainerData(final Container containerIn, final int varToUpdate, final int newValue) {
 		// No-op
 	}
 
@@ -90,19 +90,19 @@ public abstract class CapabilityContainerListener<HANDLER> implements IContainer
 	/**
 	 * Create an instance of the bulk update message.
 	 *
-	 * @param windowID The window ID of the Container
+	 * @param containerID The ID of the Container
 	 * @param items    The items list
 	 * @return The bulk update message
 	 */
-	protected abstract BulkUpdateContainerCapabilityMessage<HANDLER, ?> createBulkUpdateMessage(final int windowID, final NonNullList<ItemStack> items);
+	protected abstract BulkUpdateContainerCapabilityMessage<HANDLER, ?> createBulkUpdateMessage(final int containerID, final NonNullList<ItemStack> items);
 
 	/**
 	 * Create an instance of the single update message.
 	 *
-	 * @param windowID   The window ID of the Container
+	 * @param containerID   The ID of the Container
 	 * @param slotNumber The slot's index in the Container
 	 * @param handler    The capability handler instance
 	 * @return The single update message
 	 */
-	protected abstract UpdateContainerCapabilityMessage<HANDLER, ?> createSingleUpdateMessage(final int windowID, final int slotNumber, final HANDLER handler);
+	protected abstract UpdateContainerCapabilityMessage<HANDLER, ?> createSingleUpdateMessage(final int containerID, final int slotNumber, final HANDLER handler);
 }

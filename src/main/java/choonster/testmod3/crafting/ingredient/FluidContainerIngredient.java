@@ -56,12 +56,12 @@ public class FluidContainerIngredient extends Ingredient {
 	}
 
 	@Override
-	public boolean hasNoMatchingItems() {
-		return getMatchingStacks().length == 0;
+	public boolean isEmpty() {
+		return getItems().length == 0;
 	}
 
 	@Override
-	public ItemStack[] getMatchingStacks() {
+	public ItemStack[] getItems() {
 		if (matchingStacks == null) {
 			matchingStacks = RegistryUtil.stream(ForgeRegistries.ITEMS)
 					.map(ItemStack::new)
@@ -76,10 +76,10 @@ public class FluidContainerIngredient extends Ingredient {
 	}
 
 	@Override
-	public IntList getValidItemStacksPacked() {
-		getMatchingStacks();
+	public IntList getStackingIds() {
+		getItems();
 
-		return super.getValidItemStacksPacked();
+		return super.getStackingIds();
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class FluidContainerIngredient extends Ingredient {
 	}
 
 	@Override
-	public JsonElement serialize() {
+	public JsonElement toJson() {
 		final JsonObject object = new JsonObject();
 
 		object.addProperty("type", new ResourceLocation(TestMod3.MODID, "fluid_container").toString());
@@ -130,7 +130,7 @@ public class FluidContainerIngredient extends Ingredient {
 		public FluidContainerIngredient parse(final JsonObject json) {
 			final Fluid fluid = ModJsonUtil.getFluid(json, "fluid");
 
-			final int amount = JSONUtils.getInt(json, "amount");
+			final int amount = JSONUtils.getAsInt(json, "amount");
 
 			if (amount <= 0) {
 				throw new JsonSyntaxException("amount must be positive");

@@ -23,17 +23,17 @@ public class TileEntityLootItemHandler extends LootItemHandler {
 	private final TileEntity tileEntity;
 
 	public TileEntityLootItemHandler(final TileEntity tileEntity) {
-		super(tileEntity::getWorld);
+		super(tileEntity::getLevel);
 		this.tileEntity = tileEntity;
 	}
 
 	public TileEntityLootItemHandler(final int size, final TileEntity tileEntity) {
-		super(size, tileEntity::getWorld);
+		super(size, tileEntity::getLevel);
 		this.tileEntity = tileEntity;
 	}
 
 	public TileEntityLootItemHandler(final NonNullList<ItemStack> stacks, final TileEntity tileEntity) {
-		super(stacks, tileEntity::getWorld);
+		super(stacks, tileEntity::getLevel);
 		this.tileEntity = tileEntity;
 	}
 
@@ -45,6 +45,6 @@ public class TileEntityLootItemHandler extends LootItemHandler {
 	 */
 	@Override
 	protected void addAdditionalLootParameters(@Nullable final PlayerEntity player, final LootContext.Builder builder) {
-		builder.withParameter(LootParameters.ORIGIN, Vector3d.copyCentered(tileEntity.getPos()));
+		builder.withParameter(LootParameters.ORIGIN, Vector3d.atCenterOf(tileEntity.getBlockPos()));
 	}
 }

@@ -19,7 +19,7 @@ public class InvisibleBlock extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isSideInvisible(final BlockState state, final BlockState adjacentBlockState, final Direction side) {
+	public boolean skipRendering(final BlockState state, final BlockState adjacentBlockState, final Direction side) {
 		return true;
 	}
 }

@@ -25,7 +25,7 @@ public class TicksSinceLastUseItemPropertyGetter {
 	 */
 	private static final IItemPropertyGetter GETTER = (stack, worldIn, entityIn) ->
 	{
-		final World world = worldIn != null ? worldIn : entityIn != null ? entityIn.getEntityWorld() : null;
+		final World world = worldIn != null ? worldIn : entityIn != null ? entityIn.getCommandSenderWorld() : null;
 
 		if (world == null) {
 			return Float.MAX_VALUE;
@@ -42,6 +42,6 @@ public class TicksSinceLastUseItemPropertyGetter {
 	 * @param item The item
 	 */
 	public static void registerForItem(final Item item) {
-		ItemModelsProperties.registerProperty(item, ID, GETTER);
+		ItemModelsProperties.register(item, ID, GETTER);
 	}
 }

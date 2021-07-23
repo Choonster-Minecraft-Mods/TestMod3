@@ -21,75 +21,75 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class TestMod3BlockLootTables extends BlockLootTables {
 	@Override
 	protected void addTables() {
-		registerDropSelfLootTable(ModBlocks.WATER_GRASS.get());
-		registerDropSelfLootTable(ModBlocks.LARGE_COLLISION_TEST.get());
+		dropSelf(ModBlocks.WATER_GRASS.get());
+		dropSelf(ModBlocks.LARGE_COLLISION_TEST.get());
 
-		registerLootTable(ModBlocks.RIGHT_CLICK_TEST.get(), block -> (
-				dropping(block)
-						.addLootPool(
-								withSurvivesExplosion(Items.ENDER_EYE, LootPool.builder()
+		add(ModBlocks.RIGHT_CLICK_TEST.get(), block -> (
+				createSingleItemTable(block)
+						.withPool(
+								applyExplosionCondition(Items.ENDER_EYE, LootPool.lootPool()
 										.name("ender_eye")
-										.acceptCondition(
-												BlockStateProperty.builder(block)
-														.fromProperties(
-																StatePropertiesPredicate.Builder.newBuilder()
-																		.withBoolProp(RightClickTestBlock.HAS_ENDER_EYE, true)
+										.when(
+												BlockStateProperty.hasBlockStateProperties(block)
+														.setProperties(
+																StatePropertiesPredicate.Builder.properties()
+																		.hasProperty(RightClickTestBlock.HAS_ENDER_EYE, true)
 														)
 										)
-										.rolls(ConstantRange.of(1))
-										.addEntry(ItemLootEntry.builder(Items.ENDER_EYE))
+										.setRolls(ConstantRange.exactly(1))
+										.add(ItemLootEntry.lootTableItem(Items.ENDER_EYE))
 								)
 						)
 		));
 
-		registerDropSelfLootTable(ModBlocks.CLIENT_PLAYER_RIGHT_CLICK.get());
-		registerDropSelfLootTable(ModBlocks.ROTATABLE_LAMP.get());
-		registerDropSelfLootTable(ModBlocks.ITEM_COLLISION_TEST.get());
-		registerLootTable(ModBlocks.FLUID_TANK.get(), TestMod3BlockLootTables::droppingWithFluidTankContents);
-		registerDropSelfLootTable(ModBlocks.ITEM_DEBUGGER.get());
-		registerDropSelfLootTable(ModBlocks.END_PORTAL_FRAME_FULL.get());
-		registerDropSelfLootTable(ModBlocks.POTION_EFFECT.get());
-		registerDropSelfLootTable(ModBlocks.CLIENT_PLAYER_ROTATION.get());
-		registerDropSelfLootTable(ModBlocks.PIG_SPAWNER_REFILLER.get());
-		registerDropSelfLootTable(ModBlocks.MIRROR_PLANE.get());
-		registerDropSelfLootTable(ModBlocks.VANILLA_MODEL_TEST.get());
-		registerDropSelfLootTable(ModBlocks.FULLBRIGHT.get());
-		registerDropSelfLootTable(ModBlocks.NORMAL_BRIGHTNESS.get());
-		registerDropSelfLootTable(ModBlocks.MAX_HEALTH_SETTER.get());
-		registerDropSelfLootTable(ModBlocks.MAX_HEALTH_GETTER.get());
-		registerDropSelfLootTable(ModBlocks.SMALL_COLLISION_TEST.get());
-		registerDropSelfLootTable(ModBlocks.CHEST.get());
-		registerDropSelfLootTable(ModBlocks.HIDDEN.get());
-		registerDropSelfLootTable(ModBlocks.BASIC_PIPE.get());
-		registerDropSelfLootTable(ModBlocks.FLUID_PIPE.get());
-		registerDropSelfLootTable(ModBlocks.SURVIVAL_COMMAND_BLOCK.get());
-		registerDropSelfLootTable(ModBlocks.REPEATING_SURVIVAL_COMMAND_BLOCK.get());
-		registerDropSelfLootTable(ModBlocks.CHAIN_SURVIVAL_COMMAND_BLOCK.get());
-		registerDropSelfLootTable(ModBlocks.OAK_SAPLING.get());
-		registerDropSelfLootTable(ModBlocks.SPRUCE_SAPLING.get());
-		registerDropSelfLootTable(ModBlocks.BIRCH_SAPLING.get());
-		registerDropSelfLootTable(ModBlocks.JUNGLE_SAPLING.get());
-		registerDropSelfLootTable(ModBlocks.ACACIA_SAPLING.get());
-		registerDropSelfLootTable(ModBlocks.DARK_OAK_SAPLING.get());
-		registerDropSelfLootTable(ModBlocks.INVISIBLE.get());
-		registerLootTable(ModBlocks.FLUID_TANK_RESTRICTED.get(), TestMod3BlockLootTables::droppingWithFluidTankContents);
-		registerDropSelfLootTable(ModBlocks.PLANKS.get());
+		dropSelf(ModBlocks.CLIENT_PLAYER_RIGHT_CLICK.get());
+		dropSelf(ModBlocks.ROTATABLE_LAMP.get());
+		dropSelf(ModBlocks.ITEM_COLLISION_TEST.get());
+		add(ModBlocks.FLUID_TANK.get(), TestMod3BlockLootTables::droppingWithFluidTankContents);
+		dropSelf(ModBlocks.ITEM_DEBUGGER.get());
+		dropSelf(ModBlocks.END_PORTAL_FRAME_FULL.get());
+		dropSelf(ModBlocks.POTION_EFFECT.get());
+		dropSelf(ModBlocks.CLIENT_PLAYER_ROTATION.get());
+		dropSelf(ModBlocks.PIG_SPAWNER_REFILLER.get());
+		dropSelf(ModBlocks.MIRROR_PLANE.get());
+		dropSelf(ModBlocks.VANILLA_MODEL_TEST.get());
+		dropSelf(ModBlocks.FULLBRIGHT.get());
+		dropSelf(ModBlocks.NORMAL_BRIGHTNESS.get());
+		dropSelf(ModBlocks.MAX_HEALTH_SETTER.get());
+		dropSelf(ModBlocks.MAX_HEALTH_GETTER.get());
+		dropSelf(ModBlocks.SMALL_COLLISION_TEST.get());
+		dropSelf(ModBlocks.CHEST.get());
+		dropSelf(ModBlocks.HIDDEN.get());
+		dropSelf(ModBlocks.BASIC_PIPE.get());
+		dropSelf(ModBlocks.FLUID_PIPE.get());
+		dropSelf(ModBlocks.SURVIVAL_COMMAND_BLOCK.get());
+		dropSelf(ModBlocks.REPEATING_SURVIVAL_COMMAND_BLOCK.get());
+		dropSelf(ModBlocks.CHAIN_SURVIVAL_COMMAND_BLOCK.get());
+		dropSelf(ModBlocks.OAK_SAPLING.get());
+		dropSelf(ModBlocks.SPRUCE_SAPLING.get());
+		dropSelf(ModBlocks.BIRCH_SAPLING.get());
+		dropSelf(ModBlocks.JUNGLE_SAPLING.get());
+		dropSelf(ModBlocks.ACACIA_SAPLING.get());
+		dropSelf(ModBlocks.DARK_OAK_SAPLING.get());
+		dropSelf(ModBlocks.INVISIBLE.get());
+		add(ModBlocks.FLUID_TANK_RESTRICTED.get(), TestMod3BlockLootTables::droppingWithFluidTankContents);
+		dropSelf(ModBlocks.PLANKS.get());
 
 		ModBlocks.COLORED_ROTATABLE_BLOCKS
 				.getBlocks()
-				.forEach(block -> registerDropSelfLootTable(block.get()));
+				.forEach(block -> dropSelf(block.get()));
 
 		ModBlocks.COLORED_MULTI_ROTATABLE_BLOCKS
 				.getBlocks()
-				.forEach(block -> registerDropSelfLootTable(block.get()));
+				.forEach(block -> dropSelf(block.get()));
 
 		ModBlocks.VARIANTS_BLOCKS
 				.getBlocks()
-				.forEach(block -> registerDropSelfLootTable(block.get()));
+				.forEach(block -> dropSelf(block.get()));
 
 		ModBlocks.TERRACOTTA_SLABS
 				.getBlocks()
-				.forEach(slab -> registerLootTable(slab.get(), BlockLootTables::droppingSlab));
+				.forEach(slab -> add(slab.get(), BlockLootTables::createSlabItemTable));
 	}
 
 	@Override
@@ -98,16 +98,16 @@ public class TestMod3BlockLootTables extends BlockLootTables {
 	}
 
 	protected static LootTable.Builder droppingWithFluidTankContents(final Block block) {
-		return LootTable.builder()
-				.addLootPool(
-						withSurvivesExplosion(block,
-								LootPool.builder()
-										.rolls(ConstantRange.of(1))
-										.addEntry(
-												ItemLootEntry.builder(block)
-														.acceptFunction(
+		return LootTable.lootTable()
+				.withPool(
+						applyExplosionCondition(block,
+								LootPool.lootPool()
+										.setRolls(ConstantRange.exactly(1))
+										.add(
+												ItemLootEntry.lootTableItem(block)
+														.apply(
 																SetFluidTankContents.builder()
-																		.addLootEntry(DynamicLootEntry.func_216162_a(FluidTankBlock.FLUID_TANK_CONTENTS))
+																		.addLootEntry(DynamicLootEntry.dynamicEntry(FluidTankBlock.FLUID_TANK_CONTENTS))
 														)
 										)
 						)

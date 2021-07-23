@@ -31,6 +31,6 @@ public class RevealHiddenBlocksItemPropertyGetter {
 	 * @param item The item
 	 */
 	public static void registerForItem(final Item item) {
-		ItemModelsProperties.registerProperty(item, ID, GETTER);
+		ItemModelsProperties.register(item, ID, GETTER);
 	}
 }

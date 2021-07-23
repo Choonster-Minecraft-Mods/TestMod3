@@ -37,31 +37,31 @@ public class ModArrowEntity extends ArrowEntity implements IEntityAdditionalSpaw
 	}
 
 	@Override
-	public void setPotionEffect(final ItemStack stack) {
-		super.setPotionEffect(new ItemStack(Items.ARROW)); // Mod arrows can't have potion effects
+	public void setEffectsFromItem(final ItemStack stack) {
+		super.setEffectsFromItem(new ItemStack(Items.ARROW)); // Mod arrows can't have potion effects
 	}
 
 	@Override
-	protected ItemStack getArrowStack() {
+	protected ItemStack getPickupItem() {
 		return new ItemStack(ModItems.ARROW.get());
 	}
 
 	@Override
-	public IPacket<?> createSpawnPacket() {
+	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 	@Override
 	public void writeSpawnData(final PacketBuffer buffer) {
-		final Entity shooter = getShooter();
-		buffer.writeVarInt(shooter == null ? 0 : shooter.getEntityId());
+		final Entity shooter = getOwner();
+		buffer.writeVarInt(shooter == null ? 0 : shooter.getId());
 	}
 
 	@Override
 	public void readSpawnData(final PacketBuffer additionalData) {
-		final Entity shooter = world.getEntityByID(additionalData.readVarInt());
+		final Entity shooter = level.getEntity(additionalData.readVarInt());
 		if (shooter != null) {
-			setShooter(shooter);
+			setOwner(shooter);
 		}
 	}
 }

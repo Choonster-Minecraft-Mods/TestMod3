@@ -14,7 +14,7 @@ public class RenderModArrow extends TippedArrowRenderer {
 	}
 
 	@Override
-	public ResourceLocation getEntityTexture(final ArrowEntity entity) {
+	public ResourceLocation getTextureLocation(final ArrowEntity entity) {
 		return entityTexture;
 	}
 }

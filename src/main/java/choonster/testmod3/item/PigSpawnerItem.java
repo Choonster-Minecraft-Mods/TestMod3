@@ -36,7 +36,7 @@ public class PigSpawnerItem extends Item {
 	}
 
 	@Override
-	public boolean isDamageable() {
+	public boolean canBeDepleted() {
 		return true;
 	}
 

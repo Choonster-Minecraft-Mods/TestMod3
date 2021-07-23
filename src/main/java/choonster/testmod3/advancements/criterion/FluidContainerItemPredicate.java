@@ -44,7 +44,7 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 	}
 
 	@Override
-	public boolean test(final ItemStack item) {
+	public boolean matches(final ItemStack item) {
 		final Optional<FluidStack> fluidContained = FluidUtil.getFluidContained(item);
 
 		if (!fluidContained.isPresent()) {
@@ -53,7 +53,7 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 
 		final FluidStack fluidStack = fluidContained.get();
 
-		if (tag != null && !fluidStack.getFluid().isIn(tag)) {
+		if (tag != null && !fluidStack.getFluid().is(tag)) {
 			return false;
 		}
 
@@ -61,11 +61,11 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 			return false;
 		}
 
-		if (!amount.test(fluidStack.getAmount())) {
+		if (!amount.matches(fluidStack.getAmount())) {
 			return false;
 		}
 
-		return nbt.test(fluidStack.getTag());
+		return nbt.matches(fluidStack.getTag());
 	}
 
 	public static ItemPredicate deserialize(@Nullable final JsonElement element) {
@@ -73,11 +73,11 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 			return ANY;
 		}
 
-		final JsonObject object = JSONUtils.getJsonObject(element, "item");
+		final JsonObject object = JSONUtils.convertToJsonObject(element, "item");
 
 		final MinMaxBounds.IntBound amount = MinMaxBounds.IntBound.fromJson(object.get("amount"));
 
-		final NBTPredicate nbt = NBTPredicate.deserialize(object.get("nbt"));
+		final NBTPredicate nbt = NBTPredicate.fromJson(object.get("nbt"));
 
 		Fluid fluid = null;
 		if (object.has("fluid")) {
@@ -86,8 +86,8 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 
 		ITag<Fluid> tag = null;
 		if (object.has("tag")) {
-			final ResourceLocation tagName = new ResourceLocation(JSONUtils.getString(object, "tag"));
-			tag = TagCollectionManager.getManager().getFluidTags().get(tagName);
+			final ResourceLocation tagName = new ResourceLocation(JSONUtils.getAsString(object, "tag"));
+			tag = TagCollectionManager.getInstance().getFluids().getTag(tagName);
 			if (tag == null) {
 				throw new JsonSyntaxException("Unknown fluid tag '" + tagName + "'");
 			}
@@ -97,7 +97,7 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 	}
 
 	@Override
-	public JsonElement serialize() {
+	public JsonElement serializeToJson() {
 		if (this == ANY) {
 			return JsonNull.INSTANCE;
 		}
@@ -111,8 +111,8 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 			object.addProperty("fluid", registryName);
 		}
 
-		object.add("amount", amount.serialize());
-		object.add("nbt", nbt.serialize());
+		object.add("amount", amount.serializeToJson());
+		object.add("nbt", nbt.serializeToJson());
 
 		return object;
 	}
@@ -120,7 +120,7 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 	public static class Builder {
 		private Fluid fluid;
 		private ITag<Fluid> tag;
-		private MinMaxBounds.IntBound amount = MinMaxBounds.IntBound.UNBOUNDED;
+		private MinMaxBounds.IntBound amount = MinMaxBounds.IntBound.ANY;
 		private NBTPredicate nbt = NBTPredicate.ANY;
 
 		private Builder() {

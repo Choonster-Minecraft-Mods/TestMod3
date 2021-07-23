@@ -34,14 +34,14 @@ public class InventoryUtils {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	/**
-	 * Get the {@link EquipmentSlotType} with the specified index (as returned by {@link EquipmentSlotType#getSlotIndex()}.
+	 * Get the {@link EquipmentSlotType} with the specified index (as returned by {@link EquipmentSlotType#getIndex()}.
 	 *
 	 * @param index The index
 	 * @return The equipment slot
 	 */
 	public static EquipmentSlotType getEquipmentSlotFromIndex(final int index) {
 		for (final EquipmentSlotType equipmentSlot : EquipmentSlotType.values()) {
-			if (equipmentSlot.getSlotIndex() == index) {
+			if (equipmentSlot.getIndex() == index) {
 				return equipmentSlot;
 			}
 		}
@@ -50,14 +50,14 @@ public class InventoryUtils {
 	}
 
 	/**
-	 * A reference to {@code LootTable#shuffleItems}.
+	 * A reference to {@code LootTable#shuffleAndSplitItems}.
 	 */
-	private static final Method SHUFFLE_ITEMS = ObfuscationReflectionHelper.findMethod(LootTable.class, /* shuffleItems */ "func_186463_a", List.class, int.class, Random.class);
+	private static final Method SHUFFLE_AND_SPLIT_ITEMS = ObfuscationReflectionHelper.findMethod(LootTable.class, /* shuffleAndSplitItems */ "func_186463_a", List.class, int.class, Random.class);
 
 	/**
 	 * Fill an {@link IItemHandler} with random loot from a {@link LootTable}.
 	 * <p>
-	 * Adapted from {@link LootTable#fillInventory}.
+	 * Adapted from {@link LootTable#fill}.
 	 *
 	 * @param itemHandler The inventory to fill with loot
 	 * @param lootTable   The LootTable to generate loot from
@@ -65,11 +65,11 @@ public class InventoryUtils {
 	 */
 	public static void fillItemHandlerWithLoot(final IItemHandler itemHandler, final LootTable lootTable, final LootContext context) {
 		final Random random = context.getRandom();
-		final List<ItemStack> items = lootTable.generate(context);
-		final List<Integer> emptySlots = getEmptySlotsRandomized(itemHandler, random);
+		final List<ItemStack> items = lootTable.getRandomItems(context);
+		final List<Integer> emptySlots = getAvailableSlots(itemHandler, random);
 
 		try {
-			SHUFFLE_ITEMS.invoke(lootTable, items, emptySlots.size(), random);
+			SHUFFLE_AND_SPLIT_ITEMS.invoke(lootTable, items, emptySlots.size(), random);
 		} catch (final Throwable throwable) {
 			throw new RuntimeException("Failed to shuffle items while generating loot", throwable);
 		}
@@ -91,13 +91,13 @@ public class InventoryUtils {
 	/**
 	 * Get a list containing the indices of the empty slots in an {@link IItemHandler} in random order.
 	 * <p>
-	 * Adapted from {@link LootTable#getEmptySlotsRandomized}.
+	 * Adapted from {@link LootTable#getAvailableSlots}.
 	 *
 	 * @param itemHandler The inventory
 	 * @param random      The Random object
 	 * @return The slot indices
 	 */
-	private static List<Integer> getEmptySlotsRandomized(final IItemHandler itemHandler, final Random random) {
+	private static List<Integer> getAvailableSlots(final IItemHandler itemHandler, final Random random) {
 		final List<Integer> emptySlots = new ArrayList<>();
 
 		for (int slot = 0; slot < itemHandler.getSlots(); ++slot) {
@@ -114,7 +114,7 @@ public class InventoryUtils {
 	/**
 	 * Drops the contents of the {@link IItemHandler} in the world.
 	 * <p>
-	 * Adapted from {@link InventoryHelper#dropInventoryItems(World, BlockPos, IInventory)}.
+	 * Adapted from {@link InventoryHelper#dropContents(World, BlockPos, IInventory)}.
 	 *
 	 * @param world       The World
 	 * @param pos         The position to drop the items around
@@ -123,7 +123,7 @@ public class InventoryUtils {
 	public static void dropItemHandlerContents(final World world, final BlockPos pos, final IItemHandler itemHandler) {
 		for (int slot = 0; slot < itemHandler.getSlots(); slot++) {
 			final ItemStack stack = itemHandler.extractItem(slot, Integer.MAX_VALUE, false);
-			InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
+			InventoryHelper.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
 		}
 	}
 

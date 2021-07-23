@@ -24,25 +24,25 @@ public class LastUseTimeContainerListener extends CapabilityContainerListener<IL
 	/**
 	 * Create an instance of the bulk update message.
 	 *
-	 * @param windowID The window ID of the Container
-	 * @param items    The items list
+	 * @param containerID The ID of the Container
+	 * @param items       The items list
 	 * @return The bulk update message
 	 */
 	@Override
-	protected BulkUpdateContainerLastUseTimesMessage createBulkUpdateMessage(final int windowID, final NonNullList<ItemStack> items) {
-		return new BulkUpdateContainerLastUseTimesMessage(LastUseTimeCapability.DEFAULT_FACING, windowID, items);
+	protected BulkUpdateContainerLastUseTimesMessage createBulkUpdateMessage(final int containerID, final NonNullList<ItemStack> items) {
+		return new BulkUpdateContainerLastUseTimesMessage(LastUseTimeCapability.DEFAULT_FACING, containerID, items);
 	}
 
 	/**
 	 * Create an instance of the single update message.
 	 *
-	 * @param windowID    The window ID of the Container
+	 * @param containerID The ID of the Container
 	 * @param slotNumber  The slot's index in the Container
 	 * @param lastUseTime The capability handler instance
 	 * @return The single update message
 	 */
 	@Override
-	protected UpdateContainerLastUseTimeMessage createSingleUpdateMessage(final int windowID, final int slotNumber, final ILastUseTime lastUseTime) {
-		return new UpdateContainerLastUseTimeMessage(LastUseTimeCapability.DEFAULT_FACING, windowID, slotNumber, lastUseTime);
+	protected UpdateContainerLastUseTimeMessage createSingleUpdateMessage(final int containerID, final int slotNumber, final ILastUseTime lastUseTime) {
+		return new UpdateContainerLastUseTimeMessage(LastUseTimeCapability.DEFAULT_FACING, containerID, slotNumber, lastUseTime);
 	}
 }

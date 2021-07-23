@@ -63,7 +63,7 @@ public class ChunkEnergyCapability {
 				if (!(instance instanceof ChunkEnergy))
 					throw new IllegalArgumentException("Can not deserialize to an instance that isn't the default implementation");
 
-				((ChunkEnergy) instance).setEnergy(((IntNBT) nbt).getInt());
+				((ChunkEnergy) instance).setEnergy(((IntNBT) nbt).getAsInt());
 			}
 		}, () -> null);
 	}
@@ -95,7 +95,7 @@ public class ChunkEnergyCapability {
 		@SubscribeEvent
 		public static void attachChunkCapabilities(final AttachCapabilitiesEvent<Chunk> event) {
 			final Chunk chunk = event.getObject();
-			final IChunkEnergy chunkEnergy = new ChunkEnergy(DEFAULT_CAPACITY, chunk.getWorld(), chunk.getPos());
+			final IChunkEnergy chunkEnergy = new ChunkEnergy(DEFAULT_CAPACITY, chunk.getLevel(), chunk.getPos());
 			event.addCapability(ID, new SerializableCapabilityProvider<>(CHUNK_ENERGY_CHUNK_CAPABILITY, DEFAULT_FACING, chunkEnergy));
 		}
 

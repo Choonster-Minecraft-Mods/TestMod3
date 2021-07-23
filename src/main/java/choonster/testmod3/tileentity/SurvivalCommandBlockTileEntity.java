@@ -32,25 +32,25 @@ public class SurvivalCommandBlockTileEntity extends CommandBlockTileEntity {
 		@Override
 		public void setCommand(final String command) {
 			super.setCommand(command);
-			markDirty();
+			setChanged();
 		}
 
 		@Override
-		public void updateCommand() {
-			final BlockState state = getWorld().getBlockState(pos);
-			getWorld().notifyBlockUpdate(pos, state, state, Constants.BlockFlags.DEFAULT);
+		public void onUpdated() {
+			final BlockState state = getLevel().getBlockState(worldPosition);
+			getLevel().sendBlockUpdated(worldPosition, state, state, Constants.BlockFlags.DEFAULT);
 		}
 
 		@Override
-		public ServerWorld getWorld() {
-			return (ServerWorld) world;
+		public ServerWorld getLevel() {
+			return (ServerWorld) level;
 		}
 
 		@Override
-		public ActionResultType tryOpenEditCommandBlock(final PlayerEntity player) {
-			if (!player.getEntityWorld().isRemote) {
+		public ActionResultType usedBy(final PlayerEntity player) {
+			if (!player.getCommandSenderWorld().isClientSide) {
 				final ServerPlayerEntity playerMP = (ServerPlayerEntity) player;
-				NetworkUtil.openClientGui(playerMP, GuiIDs.Client.SURVIVAL_COMMAND_BLOCK, pos);
+				NetworkUtil.openClientGui(playerMP, GuiIDs.Client.SURVIVAL_COMMAND_BLOCK, worldPosition);
 				sendToClient(playerMP);
 			}
 
@@ -58,21 +58,21 @@ public class SurvivalCommandBlockTileEntity extends CommandBlockTileEntity {
 		}
 
 		@Override
-		public Vector3d getPositionVector() {
-			return new Vector3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+		public Vector3d getPosition() {
+			return new Vector3d(worldPosition.getX() + 0.5D, worldPosition.getY() + 0.5D, worldPosition.getZ() + 0.5D);
 		}
 
 		@Override
-		public CommandSource getCommandSource() {
+		public CommandSource createCommandSourceStack() {
 			return new CommandSource(
 					this,
-					new Vector3d(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5D),
+					new Vector3d(worldPosition.getX() + 0.5d, worldPosition.getY() + 0.5d, worldPosition.getZ() + 0.5D),
 					Vector2f.ZERO,
-					getWorld(),
+					getLevel(),
 					2,
 					getName().getString(),
 					getName(),
-					getWorld().getServer(),
+					getLevel().getServer(),
 					null
 			);
 		}
@@ -84,22 +84,22 @@ public class SurvivalCommandBlockTileEntity extends CommandBlockTileEntity {
 	}
 
 	@Override
-	public SurvivalCommandBlockLogic getCommandBlockLogic() {
+	public SurvivalCommandBlockLogic getCommandBlock() {
 		return survivalCommandBlockLogic;
 	}
 
 	@Override
-	public void read(final BlockState state, final CompoundNBT nbt) {
-		super.read(state, nbt);
+	public void load(final BlockState state, final CompoundNBT nbt) {
+		super.load(state, nbt);
 
-		getCommandBlockLogic().read(nbt.getCompound("SurvivalCommandBlockLogic"));
+		getCommandBlock().load(nbt.getCompound("SurvivalCommandBlockLogic"));
 	}
 
 	@Override
-	public CompoundNBT write(final CompoundNBT compound) {
-		super.write(compound);
+	public CompoundNBT save(final CompoundNBT compound) {
+		super.save(compound);
 
-		compound.put("SurvivalCommandBlockLogic", getCommandBlockLogic().write(new CompoundNBT()));
+		compound.put("SurvivalCommandBlockLogic", getCommandBlock().save(new CompoundNBT()));
 
 		return compound;
 	}
@@ -114,7 +114,7 @@ public class SurvivalCommandBlockTileEntity extends CommandBlockTileEntity {
 
 		final SUpdateTileEntityPacket updatePacket = getUpdatePacket();
 		if (updatePacket != null) {
-			player.connection.sendPacket(updatePacket);
+			player.connection.send(updatePacket);
 		}
 	}
 

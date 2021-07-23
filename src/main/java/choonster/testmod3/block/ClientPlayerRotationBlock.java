@@ -49,20 +49,20 @@ public class ClientPlayerRotationBlock extends StaticPressurePlateBlock {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onEntityCollision(final BlockState state, final World world, final BlockPos pos, final Entity entity) {
-		if (!world.isRemote) {
+	public void entityInside(final BlockState state, final World world, final BlockPos pos, final Entity entity) {
+		if (!world.isClientSide) {
 			return;
 		}
 
 		final PlayerEntity clientPlayer = ClientUtil.getClientPlayer();
 
 		if (entity == clientPlayer) {
-			if (MathHelper.epsilonEquals(Math.abs(entity.rotationPitch), 90.0f)) {
+			if (MathHelper.equal(Math.abs(entity.xRot), 90.0f)) {
 				isPitchingUp = !isPitchingUp;
 				LOGGER.info("Switching pitch direction! Now pitching {}.", isPitchingUp ? "up" : "down");
 			}
 
-			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> entity.rotateTowards(ROTATION_YAW, isPitchingUp ? ROTATION_PITCH : -ROTATION_PITCH));
+			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> entity.turn(ROTATION_YAW, isPitchingUp ? ROTATION_PITCH : -ROTATION_PITCH));
 		}
 	}
 }

@@ -32,12 +32,12 @@ public class ModArrowItem extends ArrowItem {
 	@Override
 	public AbstractArrowEntity createArrow(final World worldIn, final ItemStack stack, final LivingEntity shooter) {
 		final ArrowEntity entityModArrow = entityFactory.apply(worldIn, shooter);
-		entityModArrow.setPotionEffect(stack);
+		entityModArrow.setEffectsFromItem(stack);
 		return entityModArrow;
 	}
 
 	@Override
 	public boolean isInfinite(final ItemStack stack, final ItemStack bow, final PlayerEntity player) {
-		return EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bow) > 0;
+		return EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, bow) > 0;
 	}
 }

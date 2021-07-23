@@ -28,12 +28,12 @@ public class HiddenBlockRevealerItem extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final PlayerEntity playerIn, final Hand hand) {
-		final ItemStack heldItem = playerIn.getHeldItem(hand);
+	public ActionResult<ItemStack> use(final World worldIn, final PlayerEntity playerIn, final Hand hand) {
+		final ItemStack heldItem = playerIn.getItemInHand(hand);
 		HiddenBlockRevealerCapability.toggleRevealHiddenBlocks(heldItem)
 				.ifPresent(revealHiddenBlocks -> {
 					final TestMod3Lang message = revealHiddenBlocks ? TestMod3Lang.MESSAGE_HIDDEN_BLOCK_REVEALER_REVEAL : TestMod3Lang.MESSAGE_HIDDEN_BLOCK_REVEALER_HIDE;
-					playerIn.sendMessage(new TranslationTextComponent(message.getTranslationKey()), Util.DUMMY_UUID);
+					playerIn.sendMessage(new TranslationTextComponent(message.getTranslationKey()), Util.NIL_UUID);
 				});
 
 		return new ActionResult<>(ActionResultType.SUCCESS, heldItem);

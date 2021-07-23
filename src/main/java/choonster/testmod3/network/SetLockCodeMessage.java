@@ -34,31 +34,31 @@ public class SetLockCodeMessage {
 	}
 
 	public static SetLockCodeMessage decode(final PacketBuffer buffer) {
-		final BlockPos pos = BlockPos.fromLong(buffer.readLong());
+		final BlockPos pos = BlockPos.of(buffer.readLong());
 		final Direction facing = NetworkUtil.readNullableFacing(buffer);
-		final String lockCode = buffer.readString(Short.MAX_VALUE);
+		final String lockCode = buffer.readUtf(Short.MAX_VALUE);
 
 		return new SetLockCodeMessage(pos, facing, lockCode);
 	}
 
 	public static void encode(final SetLockCodeMessage message, final PacketBuffer buffer) {
-		buffer.writeLong(message.pos.toLong());
+		buffer.writeLong(message.pos.asLong());
 		NetworkUtil.writeNullableFacing(message.facing, buffer);
-		buffer.writeString(message.lockCode);
+		buffer.writeUtf(message.lockCode);
 	}
 
 
 	public static void handle(final SetLockCodeMessage message, final Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() -> {
 			final ServerPlayerEntity player = ctx.get().getSender();
-			final World world = player.world;
+			final World world = player.level;
 
-			player.markPlayerActive();
+			player.resetLastActionTime();
 
 			if (world.isAreaLoaded(message.pos, 1)) {
 				LockCapability.getLock(world, message.pos, message.facing).ifPresent((lock) -> {
 					if (lock.isLocked()) {
-						player.sendMessage(new TranslationTextComponent(TestMod3Lang.LOCK_ALREADY_LOCKED.getTranslationKey()), Util.DUMMY_UUID);
+						player.sendMessage(new TranslationTextComponent(TestMod3Lang.LOCK_ALREADY_LOCKED.getTranslationKey()), Util.NIL_UUID);
 					}
 
 					lock.setLockCode(new LockCode(message.lockCode));

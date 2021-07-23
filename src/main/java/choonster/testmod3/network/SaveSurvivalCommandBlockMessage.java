@@ -59,7 +59,7 @@ public class SaveSurvivalCommandBlockMessage {
 	public SaveSurvivalCommandBlockMessage(final SurvivalCommandBlockLogic survivalCommandBlockLogic, final String command, final CommandBlockTileEntity.Mode commandBlockMode, final boolean conditional, final boolean automatic) {
 		type = survivalCommandBlockLogic.getType();
 		this.command = command;
-		shouldTrackOutput = survivalCommandBlockLogic.shouldTrackOutput();
+		shouldTrackOutput = survivalCommandBlockLogic.isTrackOutput();
 		this.commandBlockMode = commandBlockMode;
 		this.conditional = conditional;
 		this.automatic = automatic;
@@ -77,7 +77,7 @@ public class SaveSurvivalCommandBlockMessage {
 	}
 
 	public static SaveSurvivalCommandBlockMessage decode(final PacketBuffer buffer) {
-		final SurvivalCommandBlockLogic.Type type = buffer.readEnumValue(SurvivalCommandBlockLogic.Type.class);
+		final SurvivalCommandBlockLogic.Type type = buffer.readEnum(SurvivalCommandBlockLogic.Type.class);
 
 		BlockPos blockPos = null;
 		int minecartEntityID = -1;
@@ -95,16 +95,16 @@ public class SaveSurvivalCommandBlockMessage {
 				type,
 				blockPos,
 				minecartEntityID,
-				buffer.readString(Short.MAX_VALUE),
+				buffer.readUtf(Short.MAX_VALUE),
 				buffer.readBoolean(),
-				buffer.readEnumValue(CommandBlockTileEntity.Mode.class),
+				buffer.readEnum(CommandBlockTileEntity.Mode.class),
 				buffer.readBoolean(),
 				buffer.readBoolean()
 		);
 	}
 
 	public static void encode(final SaveSurvivalCommandBlockMessage message, final PacketBuffer buffer) {
-		buffer.writeEnumValue(message.type);
+		buffer.writeEnum(message.type);
 
 		switch (message.type) {
 			case BLOCK:
@@ -115,9 +115,9 @@ public class SaveSurvivalCommandBlockMessage {
 				break;
 		}
 
-		buffer.writeString(message.command);
+		buffer.writeUtf(message.command);
 		buffer.writeBoolean(message.shouldTrackOutput);
-		buffer.writeEnumValue(message.commandBlockMode);
+		buffer.writeEnum(message.commandBlockMode);
 		buffer.writeBoolean(message.conditional);
 		buffer.writeBoolean(message.automatic);
 	}
@@ -125,13 +125,13 @@ public class SaveSurvivalCommandBlockMessage {
 	public static void handle(final SaveSurvivalCommandBlockMessage message, final Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() -> {
 			final PlayerEntity player = ctx.get().getSender();
-			final World world = player.world;
+			final World world = player.level;
 			final MinecraftServer minecraftServer = world.getServer();
 
 			if (minecraftServer != null && !minecraftServer.isCommandBlockEnabled()) {
-				player.sendMessage(new TranslationTextComponent("advMode.notEnabled"), Util.DUMMY_UUID);
-			} else if (!player.hasPermissionLevel(2)) {
-				player.sendMessage(new TranslationTextComponent("advMode.notAllowed"), Util.DUMMY_UUID);
+				player.sendMessage(new TranslationTextComponent("advMode.notEnabled"), Util.NIL_UUID);
+			} else if (!player.hasPermissions(2)) {
+				player.sendMessage(new TranslationTextComponent("advMode.notAllowed"), Util.NIL_UUID);
 			} else {
 				try {
 					SurvivalCommandBlockLogic survivalCommandBlockLogic = null;
@@ -151,19 +151,19 @@ public class SaveSurvivalCommandBlockMessage {
 								break;
 						}
 
-						final TileEntity existingTileEntity = world.getTileEntity(message.blockPos);
+						final TileEntity existingTileEntity = world.getBlockEntity(message.blockPos);
 
-						final Direction facing = world.getBlockState(message.blockPos).get(CommandBlockBlock.FACING);
-						final BlockState newState = newBlock.get().getDefaultState().with(CommandBlockBlock.FACING, facing).with(CommandBlockBlock.CONDITIONAL, message.conditional);
-						world.setBlockState(message.blockPos, newState);
+						final Direction facing = world.getBlockState(message.blockPos).getValue(CommandBlockBlock.FACING);
+						final BlockState newState = newBlock.get().defaultBlockState().setValue(CommandBlockBlock.FACING, facing).setValue(CommandBlockBlock.CONDITIONAL, message.conditional);
+						world.setBlockAndUpdate(message.blockPos, newState);
 
-						final TileEntity newTileEntity = world.getTileEntity(message.blockPos);
+						final TileEntity newTileEntity = world.getBlockEntity(message.blockPos);
 						if (existingTileEntity instanceof SurvivalCommandBlockTileEntity && newTileEntity instanceof SurvivalCommandBlockTileEntity) {
 							final SurvivalCommandBlockTileEntity newSurvivalCommandBlockTileEntity = (SurvivalCommandBlockTileEntity) newTileEntity;
 
 							newSurvivalCommandBlockTileEntity.deserializeNBT(existingTileEntity.serializeNBT());
-							survivalCommandBlockLogic = newSurvivalCommandBlockTileEntity.getCommandBlockLogic();
-							newSurvivalCommandBlockTileEntity.setAuto(message.automatic);
+							survivalCommandBlockLogic = newSurvivalCommandBlockTileEntity.getCommandBlock();
+							newSurvivalCommandBlockTileEntity.setAutomatic(message.automatic);
 						}
 					} else if (message.type == SurvivalCommandBlockLogic.Type.MINECART) {
 						// no-op
@@ -177,10 +177,10 @@ public class SaveSurvivalCommandBlockMessage {
 							survivalCommandBlockLogic.setLastOutput(null);
 						}
 
-						survivalCommandBlockLogic.updateCommand();
+						survivalCommandBlockLogic.onUpdated();
 
 						if (!StringUtils.isNullOrEmpty(message.command)) {
-							player.sendMessage(new TranslationTextComponent("advMode.setCommand.success", message.command), Util.DUMMY_UUID);
+							player.sendMessage(new TranslationTextComponent("advMode.setCommand.success", message.command), Util.NIL_UUID);
 						}
 					}
 				} catch (final Exception e) {

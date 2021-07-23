@@ -28,14 +28,14 @@ public class PotionEffectTileEntity extends TileEntity implements ITickableTileE
 
 	@Override
 	public void tick() {
-		if (!getWorld().isRemote) {
-			final BlockPos pos = getPos();
-			final AxisAlignedBB areaToSearch = new AxisAlignedBB(pos.add(-RADIUS, -RADIUS, -RADIUS), pos.add(RADIUS, RADIUS, RADIUS));
-			final List<LivingEntity> entities = getWorld().getEntitiesWithinAABB(LivingEntity.class, areaToSearch);
+		if (!getLevel().isClientSide) {
+			final BlockPos pos = getBlockPos();
+			final AxisAlignedBB areaToSearch = new AxisAlignedBB(pos.offset(-RADIUS, -RADIUS, -RADIUS), pos.offset(RADIUS, RADIUS, RADIUS));
+			final List<LivingEntity> entities = getLevel().getEntitiesOfClass(LivingEntity.class, areaToSearch);
 
 			entities.stream()
-					.filter(entity -> !entity.isPotionActive(Effects.POISON))
-					.forEach(entity -> entity.addPotionEffect(new EffectInstance(Effects.POISON, 200, 1)));
+					.filter(entity -> !entity.hasEffect(Effects.POISON))
+					.forEach(entity -> entity.addEffect(new EffectInstance(Effects.POISON, 200, 1)));
 		}
 	}
 }

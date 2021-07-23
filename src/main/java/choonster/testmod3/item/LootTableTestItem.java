@@ -38,9 +38,9 @@ public class LootTableTestItem extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World world, final PlayerEntity player, final Hand hand) {
-		if (!world.isRemote) {
-			final LootTable lootTable = Objects.requireNonNull(world.getServer()).getLootTableManager().getLootTableFromLocation(ModLootTables.LOOT_TABLE_TEST);
+	public ActionResult<ItemStack> use(final World world, final PlayerEntity player, final Hand hand) {
+		if (!world.isClientSide) {
+			final LootTable lootTable = Objects.requireNonNull(world.getServer()).getLootTables().get(ModLootTables.LOOT_TABLE_TEST);
 
 			final LootContext lootContext = new LootContext.Builder((ServerWorld) world)
 					.withParameter(LootParameters.THIS_ENTITY, player)
@@ -48,37 +48,37 @@ public class LootTableTestItem extends Item {
 					.withParameter(LootParameters.KILLER_ENTITY, player)
 					.withParameter(LootParameters.DIRECT_KILLER_ENTITY, player)
 					.withParameter(LootParameters.DAMAGE_SOURCE, DamageSource.ANVIL)
-					.withParameter(LootParameters.TOOL, player.getHeldItemMainhand())
-					.withParameter(LootParameters.ORIGIN, player.getPositionVec())
-					.withParameter(LootParameters.BLOCK_STATE, Blocks.CHEST.getDefaultState())
+					.withParameter(LootParameters.TOOL, player.getMainHandItem())
+					.withParameter(LootParameters.ORIGIN, player.position())
+					.withParameter(LootParameters.BLOCK_STATE, Blocks.CHEST.defaultBlockState())
 					.withParameter(LootParameters.BLOCK_ENTITY, Objects.requireNonNull(TileEntityType.CHEST.create()))
 					.withParameter(LootParameters.EXPLOSION_RADIUS, 99.0f)
-					.build(LootParameterSets.GENERIC);
+					.create(LootParameterSets.ALL_PARAMS);
 
-			final List<ItemStack> itemStacks = lootTable.generate(lootContext);
+			final List<ItemStack> itemStacks = lootTable.getRandomItems(lootContext);
 			for (final ItemStack itemStack : itemStacks) {
 				ItemHandlerHelper.giveItemToPlayer(player, itemStack);
 			}
 
-			player.container.detectAndSendChanges();
+			player.inventoryMenu.broadcastChanges();
 
 			if (itemStacks.size() > 0) {
 				final IFormattableTextComponent lootMessage = getItemStackTextComponent(itemStacks.get(0));
 
 				IntStream.range(1, itemStacks.size()).forEachOrdered(i -> {
-					lootMessage.appendString(", ");
-					lootMessage.appendSibling(getItemStackTextComponent(itemStacks.get(i)));
+					lootMessage.append(", ");
+					lootMessage.append(getItemStackTextComponent(itemStacks.get(i)));
 				});
 
 				final ITextComponent chatMessage = new TranslationTextComponent(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_BASE.getTranslationKey(), lootMessage);
 
-				player.sendMessage(chatMessage, Util.DUMMY_UUID);
+				player.sendMessage(chatMessage, Util.NIL_UUID);
 			} else {
-				player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_NO_LOOT.getTranslationKey()), Util.DUMMY_UUID);
+				player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_NO_LOOT.getTranslationKey()), Util.NIL_UUID);
 			}
 		}
 
-		return new ActionResult<>(ActionResultType.SUCCESS, player.getHeldItem(hand));
+		return new ActionResult<>(ActionResultType.SUCCESS, player.getItemInHand(hand));
 	}
 
 	/**
@@ -88,6 +88,6 @@ public class LootTableTestItem extends Item {
 	 * @return The ITextComponent
 	 */
 	private IFormattableTextComponent getItemStackTextComponent(final ItemStack itemStack) {
-		return new TranslationTextComponent(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_ITEM.getTranslationKey(), itemStack.getCount(), itemStack.getTextComponent());
+		return new TranslationTextComponent(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_ITEM.getTranslationKey(), itemStack.getCount(), itemStack.getDisplayName());
 	}
 }

@@ -31,7 +31,7 @@ public class LootTableLootModifier extends LootModifier {
 
 		// Generate additional loot without applying loot modifiers, otherwise each modifier would run multiple times
 		// for the same loot generation.
-		lootTable.recursiveGenerate(context, generatedLoot::add);
+		lootTable.getRandomItemsRaw(context, generatedLoot::add);
 
 		return generatedLoot;
 	}
@@ -39,7 +39,7 @@ public class LootTableLootModifier extends LootModifier {
 	public static class Serializer extends GlobalLootModifierSerializer<LootTableLootModifier> {
 		@Override
 		public LootTableLootModifier read(final ResourceLocation location, final JsonObject object, final ILootCondition[] lootConditions) {
-			final ResourceLocation lootTableID = new ResourceLocation(JSONUtils.getString(object, "loot_table"));
+			final ResourceLocation lootTableID = new ResourceLocation(JSONUtils.getAsString(object, "loot_table"));
 			return new LootTableLootModifier(lootConditions, lootTableID);
 		}
 

@@ -34,7 +34,7 @@ public class CapabilityContainerUpdateMessageUtils {
 			final DATA data,
 			final CapabilityDataApplier<HANDLER, DATA> capabilityDataApplier
 	) {
-		final ItemStack originalStack = container.getSlot(slotNumber).getStack();
+		final ItemStack originalStack = container.getSlot(slotNumber).getItem();
 
 		originalStack.getCapability(capability, facing).ifPresent(originalHandler -> {
 			final ItemStack newStack = originalStack.copy();
@@ -43,7 +43,7 @@ public class CapabilityContainerUpdateMessageUtils {
 				capabilityDataApplier.apply(newHandler, data);
 
 				if (!originalHandler.equals(newHandler)) {
-					container.putStackInSlot(slotNumber, newStack);
+					container.setItem(slotNumber, newStack);
 				}
 			});
 		});

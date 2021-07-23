@@ -30,7 +30,7 @@ public class ItemCollisionTestBlock extends Block {
 		final float minBound = 0.16f;
 		final float maxBound = 16 - minBound;
 
-		return makeCuboidShape(minBound, minBound, minBound, maxBound, maxBound, maxBound);
+		return box(minBound, minBound, minBound, maxBound, maxBound, maxBound);
 	});
 
 	public ItemCollisionTestBlock(final Block.Properties properties) {
@@ -39,10 +39,10 @@ public class ItemCollisionTestBlock extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onEntityCollision(final BlockState state, final World world, final BlockPos pos, final Entity entityIn) {
-		super.onEntityCollision(state, world, pos, entityIn);
+	public void entityInside(final BlockState state, final World world, final BlockPos pos, final Entity entityIn) {
+		super.entityInside(state, world, pos, entityIn);
 
-		if (!world.isRemote && entityIn instanceof ItemEntity) {
+		if (!world.isClientSide && entityIn instanceof ItemEntity) {
 			LOGGER.info("Collision at {}: {}", pos, entityIn);
 		}
 	}

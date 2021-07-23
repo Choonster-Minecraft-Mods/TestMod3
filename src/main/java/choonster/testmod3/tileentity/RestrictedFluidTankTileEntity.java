@@ -65,26 +65,26 @@ public class RestrictedFluidTankTileEntity extends BaseFluidTankTileEntity {
 	}
 
 	@Override
-	public void read(final BlockState state, final CompoundNBT tag) {
-		super.read(state, tag);
+	public void load(final BlockState state, final CompoundNBT tag) {
+		super.load(state, tag);
 
 		enabledFacings.clear();
 
 		final int[] enabledFacingIndices = tag.getIntArray("EnabledFacings");
 		for (final int index : enabledFacingIndices) {
-			enabledFacings.add(Direction.byIndex(index));
+			enabledFacings.add(Direction.from3DDataValue(index));
 		}
 	}
 
 	@Override
-	public CompoundNBT write(final CompoundNBT tag) {
+	public CompoundNBT save(final CompoundNBT tag) {
 		final int[] enabledFacingIndices = enabledFacings.stream()
-				.mapToInt(Direction::getIndex)
+				.mapToInt(Direction::get3DDataValue)
 				.toArray();
 
 		tag.putIntArray("EnabledFacings", enabledFacingIndices);
 
-		return super.write(tag);
+		return super.save(tag);
 	}
 
 	@Override

@@ -27,8 +27,8 @@ public class TileEntityNBTLootModifier extends LootModifier {
 
 	@Override
 	protected List<ItemStack> doApply(final List<ItemStack> generatedLoot, final LootContext context) {
-		final BlockState state = context.get(LootParameters.BLOCK_STATE);
-		final TileEntity tileEntity = context.get(LootParameters.BLOCK_ENTITY);
+		final BlockState state = context.getParamOrNull(LootParameters.BLOCK_STATE);
+		final TileEntity tileEntity = context.getParamOrNull(LootParameters.BLOCK_ENTITY);
 
 		if (state != null && tileEntity != null) {
 			final ItemStack stack = new ItemStack(state.getBlock());
@@ -42,7 +42,7 @@ public class TileEntityNBTLootModifier extends LootModifier {
 			tileData.remove("z");
 
 			// Store the TileEntity data in the ItemStack
-			stack.setTagInfo("BlockEntityTag", tileData);
+			stack.addTagElement("BlockEntityTag", tileData);
 
 			generatedLoot.add(stack);
 		}

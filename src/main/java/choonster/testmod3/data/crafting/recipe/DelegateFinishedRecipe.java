@@ -20,21 +20,21 @@ public class DelegateFinishedRecipe implements IFinishedRecipe {
 	}
 
 	@Override
-	public void serialize(final JsonObject json) {
-		baseRecipe.serialize(json);
+	public void serializeRecipeData(final JsonObject json) {
+		baseRecipe.serializeRecipeData(json);
 	}
 
 	/**
 	 * Gets the ID for the recipe.
 	 */
 	@Override
-	public ResourceLocation getID() {
-		return baseRecipe.getID();
+	public ResourceLocation getId() {
+		return baseRecipe.getId();
 	}
 
 	@Override
-	public IRecipeSerializer<?> getSerializer() {
-		return baseRecipe.getSerializer();
+	public IRecipeSerializer<?> getType() {
+		return baseRecipe.getType();
 	}
 
 	/**
@@ -42,8 +42,8 @@ public class DelegateFinishedRecipe implements IFinishedRecipe {
 	 */
 	@Override
 	@Nullable
-	public JsonObject getAdvancementJson() {
-		return baseRecipe.getAdvancementJson();
+	public JsonObject serializeAdvancement() {
+		return baseRecipe.serializeAdvancement();
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class DelegateFinishedRecipe implements IFinishedRecipe {
 	 */
 	@Override
 	@Nullable
-	public ResourceLocation getAdvancementID() {
-		return baseRecipe.getAdvancementID();
+	public ResourceLocation getAdvancementId() {
+		return baseRecipe.getAdvancementId();
 	}
 }

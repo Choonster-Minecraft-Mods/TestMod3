@@ -26,22 +26,22 @@ public class ChunkEnergyGetterItem extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final PlayerEntity playerIn, final Hand handIn) {
-		if (!worldIn.isRemote) {
-			final Chunk chunk = worldIn.getChunkAt(playerIn.getPosition());
+	public ActionResult<ItemStack> use(final World worldIn, final PlayerEntity playerIn, final Hand handIn) {
+		if (!worldIn.isClientSide) {
+			final Chunk chunk = worldIn.getChunkAt(playerIn.blockPosition());
 			final ChunkPos chunkPos = chunk.getPos();
 
 			ChunkEnergyCapability.getChunkEnergy(chunk)
 					.map(chunkEnergy -> {
-						playerIn.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_GET.getTranslationKey(), chunkPos, chunkEnergy.getEnergyStored()), Util.DUMMY_UUID);
+						playerIn.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_GET.getTranslationKey(), chunkPos, chunkEnergy.getEnergyStored()), Util.NIL_UUID);
 						return true;
 					})
 					.orElseGet(() -> {
-						playerIn.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_NOT_FOUND.getTranslationKey(), chunkPos), Util.DUMMY_UUID);
+						playerIn.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_NOT_FOUND.getTranslationKey(), chunkPos), Util.NIL_UUID);
 						return false;
 					});
 		}
 
-		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(handIn));
 	}
 }

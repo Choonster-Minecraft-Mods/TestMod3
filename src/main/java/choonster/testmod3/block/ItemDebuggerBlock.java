@@ -67,17 +67,17 @@ public class ItemDebuggerBlock extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
-		logItem(player.getHeldItem(hand));
+	public ActionResultType use(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+		logItem(player.getItemInHand(hand));
 
 		return ActionResultType.SUCCESS;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onBlockClicked(final BlockState state, final World worldIn, final BlockPos pos, final PlayerEntity player) {
+	public void attack(final BlockState state, final World worldIn, final BlockPos pos, final PlayerEntity player) {
 		for (final Hand hand : Hand.values()) {
-			logItem(player.getHeldItem(hand));
+			logItem(player.getItemInHand(hand));
 		}
 	}
 }

@@ -35,7 +35,7 @@ public class SetFluidTankContents extends LootFunction {
 	}
 
 	@Override
-	protected ItemStack doApply(final ItemStack stack, final LootContext context) {
+	protected ItemStack run(final ItemStack stack, final LootContext context) {
 		if (stack.isEmpty()) {
 			return stack;
 		}
@@ -44,7 +44,7 @@ public class SetFluidTankContents extends LootFunction {
 
 		lootEntries.forEach(lootEntry ->
 				lootEntry.expand(context, lootGenerator ->
-						lootGenerator.func_216188_a(LootTable.capStackSizes(itemStacks::add), context)
+						lootGenerator.createItemStack(LootTable.createStackSplitter(itemStacks::add), context)
 				)
 		);
 
@@ -60,7 +60,7 @@ public class SetFluidTankContents extends LootFunction {
 	}
 
 	@Override
-	public LootFunctionType getFunctionType() {
+	public LootFunctionType getType() {
 		return ModLootFunctionTypes.SET_FLUID_TANK_CONTENTS;
 	}
 
@@ -72,7 +72,7 @@ public class SetFluidTankContents extends LootFunction {
 		private final List<LootEntry> lootEntries = Lists.newArrayList();
 
 		@Override
-		protected Builder doCast() {
+		protected Builder getThis() {
 			return this;
 		}
 
@@ -96,7 +96,7 @@ public class SetFluidTankContents extends LootFunction {
 
 		@Override
 		public SetFluidTankContents deserialize(final JsonObject object, final JsonDeserializationContext deserializationContext, final ILootCondition[] conditions) {
-			final LootEntry[] lootEntries = JSONUtils.deserializeClass(object, "entries", deserializationContext, LootEntry[].class);
+			final LootEntry[] lootEntries = JSONUtils.convertToObject(object, "entries", deserializationContext, LootEntry[].class);
 			return new SetFluidTankContents(conditions, Arrays.asList(lootEntries));
 		}
 	}

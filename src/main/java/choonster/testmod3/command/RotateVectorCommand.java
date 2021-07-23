@@ -46,7 +46,7 @@ public class RotateVectorCommand {
 		final Vector3f outputVector = new Vector3f((float) inputVector.x, (float) inputVector.y, (float) inputVector.z);
 		outputVector.transform(rotationQuaternion);
 
-		context.getSource().sendFeedback(new TranslationTextComponent(TestMod3Lang.COMMAND_ROTATE_VECTOR_RESULT.getTranslationKey(), outputVector.getX(), outputVector.getY(), outputVector.getZ()), true);
+		context.getSource().sendSuccess(new TranslationTextComponent(TestMod3Lang.COMMAND_ROTATE_VECTOR_RESULT.getTranslationKey(), outputVector.x(), outputVector.y(), outputVector.z()), true);
 
 		return 0;
 	}

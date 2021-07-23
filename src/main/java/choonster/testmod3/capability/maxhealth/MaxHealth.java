@@ -83,11 +83,11 @@ public class MaxHealth implements IMaxHealth {
 	 */
 	@Override
 	public void synchronise() {
-		if (entity != null && !entity.getEntityWorld().isRemote) {
+		if (entity != null && !entity.getCommandSenderWorld().isClientSide) {
 			final ModifiableAttributeInstance entityMaxHealthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
-			final SEntityPropertiesPacket packet = new SEntityPropertiesPacket(entity.getEntityId(), Collections.singleton(entityMaxHealthAttribute));
+			final SEntityPropertiesPacket packet = new SEntityPropertiesPacket(entity.getId(), Collections.singleton(entityMaxHealthAttribute));
 
-			((ServerWorld) entity.getEntityWorld()).getChunkProvider().sendToTrackingAndSelf(entity, packet);
+			((ServerWorld) entity.getCommandSenderWorld()).getChunkSource().broadcastAndSend(entity, packet);
 		}
 	}
 
@@ -126,7 +126,7 @@ public class MaxHealth implements IMaxHealth {
 			LOGGER.debug(MaxHealthCapability.LOG_MARKER, "Max Health Added! Entity: {} - New: {}", entity, MaxHealthCapability.formatMaxHealth(newAmount));
 		}
 
-		entityMaxHealthAttribute.applyNonPersistentModifier(modifier);
+		entityMaxHealthAttribute.addTransientModifier(modifier);
 
 		final float amountToHeal = newAmount - oldAmount;
 		if (amountToHeal > 0) {

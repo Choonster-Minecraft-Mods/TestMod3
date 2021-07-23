@@ -26,7 +26,7 @@ public class HeavyItem extends Item {
 		super.inventoryTick(stack, world, entity, itemSlot, isSelected);
 
 		if (entity instanceof LivingEntity) { // If the Entity is an instance of EntityLivingBase,
-			((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, 1)); // Apply Slowness II (amplifier = 1) for 10 ticks (0.5 seconds)
+			((LivingEntity) entity).addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 10, 1)); // Apply Slowness II (amplifier = 1) for 10 ticks (0.5 seconds)
 		}
 	}
 }

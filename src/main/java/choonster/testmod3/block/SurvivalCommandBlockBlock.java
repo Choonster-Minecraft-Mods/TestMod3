@@ -53,34 +53,34 @@ public class SurvivalCommandBlockBlock extends CommandBlockBlock {
 	@Override
 	public TileEntity createTileEntity(final BlockState state, final IBlockReader world) {
 		final SurvivalCommandBlockTileEntity tileEntity = new SurvivalCommandBlockTileEntity();
-		tileEntity.setAuto(getCommandBlockMode() == CommandBlockTileEntity.Mode.SEQUENCE);
+		tileEntity.setAutomatic(getCommandBlockMode() == CommandBlockTileEntity.Mode.SEQUENCE);
 		return tileEntity;
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult hit) {
-		final TileEntity tileEntity = world.getTileEntity(pos);
+	public ActionResultType use(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult hit) {
+		final TileEntity tileEntity = world.getBlockEntity(pos);
 
 		if (tileEntity instanceof SurvivalCommandBlockTileEntity) {
-			return ((SurvivalCommandBlockTileEntity) tileEntity).getCommandBlockLogic().tryOpenEditCommandBlock(player);
+			return ((SurvivalCommandBlockTileEntity) tileEntity).getCommandBlock().usedBy(player);
 		}
 
 		return ActionResultType.FAIL;
 	}
 
 	@Override
-	public void onBlockPlacedBy(final World worldIn, final BlockPos pos, final BlockState state, final LivingEntity placer, final ItemStack stack) {
-		final TileEntity tileEntity = worldIn.getTileEntity(pos);
-		if (tileEntity instanceof SurvivalCommandBlockTileEntity && !worldIn.isRemote) {
+	public void setPlacedBy(final World worldIn, final BlockPos pos, final BlockState state, final LivingEntity placer, final ItemStack stack) {
+		final TileEntity tileEntity = worldIn.getBlockEntity(pos);
+		if (tileEntity instanceof SurvivalCommandBlockTileEntity && !worldIn.isClientSide) {
 			final SurvivalCommandBlockTileEntity survivalCommandBlockTileEntity = (SurvivalCommandBlockTileEntity) tileEntity;
 
 			final CompoundNBT tagCompound = stack.getTag();
 			if (tagCompound == null || !tagCompound.contains("BlockEntityTag", Constants.NBT.TAG_COMPOUND)) {
-				survivalCommandBlockTileEntity.setAuto(getCommandBlockMode() == CommandBlockTileEntity.Mode.SEQUENCE);
+				survivalCommandBlockTileEntity.setAutomatic(getCommandBlockMode() == CommandBlockTileEntity.Mode.SEQUENCE);
 			}
 		}
 
-		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+		super.setPlacedBy(worldIn, pos, state, placer, stack);
 	}
 
 	/**
@@ -96,17 +96,17 @@ public class SurvivalCommandBlockBlock extends CommandBlockBlock {
 	@Override
 	public void tick(final BlockState state, final ServerWorld world, final BlockPos pos, final Random random) {
 
-		final TileEntity tileentity = world.getTileEntity(pos);
+		final TileEntity tileentity = world.getBlockEntity(pos);
 
 		if (tileentity instanceof CommandBlockTileEntity) {
 			final CommandBlockTileEntity tileEntityCommandBlock = (CommandBlockTileEntity) tileentity;
-			final CommandBlockLogic commandBlockLogic = tileEntityCommandBlock.getCommandBlockLogic();
+			final CommandBlockLogic commandBlockLogic = tileEntityCommandBlock.getCommandBlock();
 			final boolean hasCommand = !StringUtils.isNullOrEmpty(commandBlockLogic.getCommand());
 			final CommandBlockTileEntity.Mode mode = tileEntityCommandBlock.getMode();
-			final boolean conditionMet = tileEntityCommandBlock.isConditionMet();
+			final boolean conditionMet = tileEntityCommandBlock.wasConditionMet();
 
 			if (mode == CommandBlockTileEntity.Mode.AUTO) {
-				tileEntityCommandBlock.setConditionMet();
+				tileEntityCommandBlock.markConditionMet();
 
 				if (conditionMet) {
 					execute(state, world, pos, commandBlockLogic, hasCommand);
@@ -114,8 +114,8 @@ public class SurvivalCommandBlockBlock extends CommandBlockBlock {
 					commandBlockLogic.setSuccessCount(0);
 				}
 
-				if (tileEntityCommandBlock.isPowered() || tileEntityCommandBlock.isAuto()) {
-					world.getPendingBlockTicks().scheduleTick(pos, this, 1);
+				if (tileEntityCommandBlock.isPowered() || tileEntityCommandBlock.isAutomatic()) {
+					world.getBlockTicks().scheduleTick(pos, this, 1);
 				}
 			} else if (mode == CommandBlockTileEntity.Mode.REDSTONE) {
 				if (conditionMet) {
@@ -125,7 +125,7 @@ public class SurvivalCommandBlockBlock extends CommandBlockBlock {
 				}
 			}
 
-			world.updateComparatorOutputLevel(pos, this);
+			world.updateNeighbourForOutputSignal(pos, this);
 		}
 	}
 
@@ -143,12 +143,12 @@ public class SurvivalCommandBlockBlock extends CommandBlockBlock {
 	 */
 	private void execute(final BlockState state, final World world, final BlockPos pos, final CommandBlockLogic commandBlockLogic, final boolean canTrigger) {
 		if (canTrigger) {
-			commandBlockLogic.trigger(world);
+			commandBlockLogic.performCommand(world);
 		} else {
 			commandBlockLogic.setSuccessCount(0);
 		}
 
-		executeChain(world, pos, state.get(FACING));
+		executeChain(world, pos, state.getValue(FACING));
 	}
 
 	/**
@@ -159,18 +159,18 @@ public class SurvivalCommandBlockBlock extends CommandBlockBlock {
 	 * @param facing The direction of the neighbour to update
 	 */
 	private static void executeChain(final World world, final BlockPos pos, Direction facing) {
-		final BlockPos.Mutable neighbourPos = pos.toMutable();
+		final BlockPos.Mutable neighbourPos = pos.mutable();
 		final GameRules gameRules = world.getGameRules();
 
 		int i;
 		BlockState neighbourState;
 
-		for (i = gameRules.getInt(GameRules.MAX_COMMAND_CHAIN_LENGTH); i-- > 0; facing = neighbourState.get(FACING)) {
+		for (i = gameRules.getInt(GameRules.RULE_MAX_COMMAND_CHAIN_LENGTH); i-- > 0; facing = neighbourState.getValue(FACING)) {
 			neighbourPos.move(facing);
 			neighbourState = world.getBlockState(neighbourPos);
 
 			final Block block = neighbourState.getBlock();
-			final TileEntity neighbourTileEntity = world.getTileEntity(neighbourPos);
+			final TileEntity neighbourTileEntity = world.getBlockEntity(neighbourPos);
 
 			if (!(neighbourTileEntity instanceof CommandBlockTileEntity)) {
 				break;
@@ -182,15 +182,15 @@ public class SurvivalCommandBlockBlock extends CommandBlockBlock {
 				break;
 			}
 
-			if (neighbourTileEntityCommandBlock.isPowered() || neighbourTileEntityCommandBlock.isAuto()) {
-				final CommandBlockLogic neighbourCommandBlockLogic = neighbourTileEntityCommandBlock.getCommandBlockLogic();
+			if (neighbourTileEntityCommandBlock.isPowered() || neighbourTileEntityCommandBlock.isAutomatic()) {
+				final CommandBlockLogic neighbourCommandBlockLogic = neighbourTileEntityCommandBlock.getCommandBlock();
 
-				if (neighbourTileEntityCommandBlock.setConditionMet()) {
-					if (!neighbourCommandBlockLogic.trigger(world)) {
+				if (neighbourTileEntityCommandBlock.markConditionMet()) {
+					if (!neighbourCommandBlockLogic.performCommand(world)) {
 						break;
 					}
 
-					world.updateComparatorOutputLevel(neighbourPos, block);
+					world.updateNeighbourForOutputSignal(neighbourPos, block);
 				} else if (neighbourTileEntityCommandBlock.isConditional()) {
 					neighbourCommandBlockLogic.setSuccessCount(0);
 				}
@@ -198,7 +198,7 @@ public class SurvivalCommandBlockBlock extends CommandBlockBlock {
 		}
 
 		if (i <= 0) {
-			final int maxCommandChainLength = Math.max(gameRules.getInt(GameRules.MAX_COMMAND_CHAIN_LENGTH), 0);
+			final int maxCommandChainLength = Math.max(gameRules.getInt(GameRules.RULE_MAX_COMMAND_CHAIN_LENGTH), 0);
 			LOGGER.warn("Command Block chain tried to execute more than {} steps!", maxCommandChainLength);
 		}
 	}

@@ -42,10 +42,10 @@ public class ShapedArmourUpgradeRecipeBuilder extends EnhancedShapedRecipeBuilde
 	 * @param id The recipe ID
 	 */
 	@Override
-	protected void validate(final ResourceLocation id) {
-		super.validate(id);
+	protected void ensureValid(final ResourceLocation id) {
+		super.ensureValid(id);
 
-		if (!result.isDamageable()) {
+		if (!result.isDamageableItem()) {
 			throw new IllegalStateException("Shaped Armour Upgrade Recipe " + id + " must have damageable result");
 		}
 	}

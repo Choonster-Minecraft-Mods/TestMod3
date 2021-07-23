@@ -16,7 +16,7 @@ import net.minecraft.world.IBlockReader;
  * @author Choonster
  */
 public class LargeCollisionTestBlock extends Block {
-	private static final VoxelShape SHAPE = makeCuboidShape(-16, -16, -16, 32, 32, 32);
+	private static final VoxelShape SHAPE = box(-16, -16, -16, 32, 32, 32);
 
 	public LargeCollisionTestBlock(final Block.Properties properties) {
 		super(properties);

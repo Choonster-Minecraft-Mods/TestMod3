@@ -109,9 +109,9 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 		variants.forEach(variant -> {
 			final String registryName;
 			if (isSuffix) {
-				registryName = groupName + "_" + variant.getString();
+				registryName = groupName + "_" + variant.getSerializedName();
 			} else {
-				registryName = variant.getString() + "_" + groupName;
+				registryName = variant.getSerializedName() + "_" + groupName;
 			}
 
 			final RegistryObject<BLOCK> block = blocks.register(registryName, () -> {
@@ -159,7 +159,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 		private Function<VARIANT, Block.Properties> blockPropertiesFactory;
 		private BlockFactory<VARIANT, BLOCK> blockFactory;
 
-		private Function<VARIANT, Item.Properties> itemPropertiesFactory = variant -> new Item.Properties().group(TestMod3.ITEM_GROUP);
+		private Function<VARIANT, Item.Properties> itemPropertiesFactory = variant -> new Item.Properties().tab(TestMod3.ITEM_GROUP);
 		private ItemFactory<VARIANT, BLOCK> itemFactory = (block, properties, variant) -> new BlockItem(block, properties);
 
 		/**

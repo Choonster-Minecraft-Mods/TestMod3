@@ -27,8 +27,8 @@ public class ClientEventHandler {
 
 	@SubscribeEvent
 	public static void onFOVUpdate(final FOVUpdateEvent event) {
-		if (event.getEntity().isHandActive() && event.getEntity().getActiveItemStack().getItem() instanceof ModBowItem) {
-			float fovModifier = event.getEntity().getItemInUseMaxCount() / 20.0f;
+		if (event.getEntity().isUsingItem() && event.getEntity().getUseItem().getItem() instanceof ModBowItem) {
+			float fovModifier = event.getEntity().getTicksUsingItem() / 20.0f;
 
 			if (fovModifier > 1.0f) {
 				fovModifier = 1.0f;
@@ -50,10 +50,10 @@ public class ClientEventHandler {
 	 */
 	@SubscribeEvent
 	public static void onClientTick(final TickEvent.ClientTickEvent event) {
-		if (event.phase == TickEvent.Phase.END && MINECRAFT.player != null && MINECRAFT.world != null) {
+		if (event.phase == TickEvent.Phase.END && MINECRAFT.player != null && MINECRAFT.level != null) {
 			final PlayerEntity player = MINECRAFT.player;
-			if (MINECRAFT.world.getBlockState(player.getPosition().down()).getBlock() == Blocks.IRON_BLOCK) {
-				player.rotateTowards(5, 0);
+			if (MINECRAFT.level.getBlockState(player.blockPosition().below()).getBlock() == Blocks.IRON_BLOCK) {
+				player.turn(5, 0);
 			}
 		}
 	}
@@ -71,17 +71,17 @@ public class ClientEventHandler {
 		final World world = event.getWorld();
 		final Entity entity = event.getEntity();
 
-		if (world.isRemote && entity instanceof AbstractMinecartEntity) {
+		if (world.isClientSide && entity instanceof AbstractMinecartEntity) {
 			final Scoreboard scoreboard = world.getScoreboard();
 
-			ScorePlayerTeam team = scoreboard.getTeam(TestMod3.MODID);
+			ScorePlayerTeam team = scoreboard.getPlayerTeam(TestMod3.MODID);
 			if (team == null) {
-				team = scoreboard.createTeam(TestMod3.MODID);
-				team.setPrefix(new StringTextComponent("").setStyle(Style.EMPTY.setFormatting(TextFormatting.DARK_AQUA)));
+				team = scoreboard.addPlayerTeam(TestMod3.MODID);
+				team.setPlayerPrefix(new StringTextComponent("").setStyle(Style.EMPTY.withColor(TextFormatting.DARK_AQUA)));
 				team.setColor(TextFormatting.DARK_AQUA);
 			}
 
-			scoreboard.addPlayerToTeam(entity.getCachedUniqueIdString(), team);
+			scoreboard.addPlayerToTeam(entity.getStringUUID(), team);
 			entity.setGlowing(true);
 		}
 	}

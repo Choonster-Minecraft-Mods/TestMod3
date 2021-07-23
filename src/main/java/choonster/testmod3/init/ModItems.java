@@ -135,7 +135,7 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<ModBowItem> BOW = ITEMS.register("bow",
-			() -> new ModBowItem(defaultItemProperties().defaultMaxDamage(384))
+			() -> new ModBowItem(defaultItemProperties().defaultDurability(384))
 	);
 
 	public static final RegistryObject<ModArrowItem> ARROW = ITEMS.register("arrow",
@@ -187,8 +187,8 @@ public class ModItems {
 					Util.make(() -> {
 						final ImmutableMap.Builder<RegistryKey<DimensionType>, Supplier<ItemStack>> builder = ImmutableMap.builder();
 
-						builder.put(DimensionType.THE_NETHER, () -> new ItemStack(Items.NETHER_STAR));
-						builder.put(DimensionType.THE_END, () -> new ItemStack(Items.ENDER_PEARL));
+						builder.put(DimensionType.NETHER_LOCATION, () -> new ItemStack(Items.NETHER_STAR));
+						builder.put(DimensionType.END_LOCATION, () -> new ItemStack(Items.ENDER_PEARL));
 
 						return builder.build();
 					})
@@ -287,7 +287,7 @@ public class ModItems {
 						ImmutableSet.of(
 								() -> {
 									final ItemStack chest = new ItemStack(REPLACEMENT_CHESTPLATE.get());
-									chest.addEnchantment(Enchantments.SHARPNESS, 1);
+									chest.enchant(Enchantments.SHARPNESS, 1);
 									return chest;
 								},
 								() -> new ItemStack(REPLACEMENT_LEGGINGS.get()),
@@ -306,11 +306,11 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<ModBucketItem> WOODEN_BUCKET = ITEMS.register("wooden_bucket",
-			() -> new ModBucketItem(defaultItemProperties().maxStackSize(16))
+			() -> new ModBucketItem(defaultItemProperties().stacksTo(16))
 	);
 
 	public static final RegistryObject<ModBucketItem> STONE_BUCKET = ITEMS.register("stone_bucket",
-			() -> new ModBucketItem(defaultItemProperties().maxStackSize(16))
+			() -> new ModBucketItem(defaultItemProperties().stacksTo(16))
 	);
 
 	
@@ -362,7 +362,7 @@ public class ModItems {
 			final int primaryColor, final int secondaryColor
 	) {
 		final RegistryObject<ModSpawnEggItem> spawnEgg = ITEMS.register(name,
-				() -> new ModSpawnEggItem(entityType, primaryColor, secondaryColor, new Item.Properties().group(TestMod3.ITEM_GROUP))
+				() -> new ModSpawnEggItem(entityType, primaryColor, secondaryColor, new Item.Properties().tab(TestMod3.ITEM_GROUP))
 		);
 
 		SPAWN_EGGS.add(spawnEgg);
@@ -376,7 +376,7 @@ public class ModItems {
 	 * @return The item properties
 	 */
 	private static Item.Properties defaultItemProperties() {
-		return new Item.Properties().group(TestMod3.ITEM_GROUP);
+		return new Item.Properties().tab(TestMod3.ITEM_GROUP);
 	}
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)

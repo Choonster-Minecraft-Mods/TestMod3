@@ -37,7 +37,7 @@ public class ModScreenFactories {
 	}
 
 	private static void registerContainerScreenFactories() {
-		ScreenManager.registerFactory(ModContainerTypes.CHEST.get(), ModChestScreen::new);
+		ScreenManager.register(ModContainerTypes.CHEST.get(), ModChestScreen::new);
 	}
 
 	private static void registerClientScreenFactories() {
@@ -56,7 +56,7 @@ public class ModScreenFactories {
 
 			final Direction facing;
 			if (hasFacing) {
-				facing = additionalData.readEnumValue(Direction.class);
+				facing = additionalData.readEnum(Direction.class);
 			} else {
 				facing = null;
 			}
@@ -72,7 +72,7 @@ public class ModScreenFactories {
 	private static <T extends TileEntity> T getTileEntity(final BlockPos pos, final Class<T> tileEntityClass) {
 		final ClientWorld world = getClientWorld();
 
-		final TileEntity tileEntity = world.getTileEntity(pos);
+		final TileEntity tileEntity = world.getBlockEntity(pos);
 
 		Preconditions.checkNotNull(tileEntity, "No TileEntity found at %s", pos);
 		Preconditions.checkState(tileEntityClass.isInstance(tileEntity), "Invalid TileEntity at %s: expected %s, got %s", pos, tileEntityClass, tileEntity.getClass());
@@ -81,6 +81,6 @@ public class ModScreenFactories {
 	}
 
 	private static ClientWorld getClientWorld() {
-		return Preconditions.checkNotNull(Minecraft.getInstance().world, "Client world is null");
+		return Preconditions.checkNotNull(Minecraft.getInstance().level, "Client world is null");
 	}
 }

@@ -32,7 +32,7 @@ public class RestrictedFluidTankEnabledFacingsProbeInfoProvider<BLOCK extends Re
 			final World world, final BlockState blockState, final IProbeHitData data
 	) {
 		final BlockPos pos = data.getPos();
-		final TileEntity tileEntity = world.getTileEntity(pos);
+		final TileEntity tileEntity = world.getBlockEntity(pos);
 
 		if (tileEntity instanceof RestrictedFluidTankTileEntity) {
 			final String enabledFacingsString = ((RestrictedFluidTankBlock) blockState.getBlock())

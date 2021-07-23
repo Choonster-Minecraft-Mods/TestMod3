@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 public class WaterGrassBlock extends BushBlock implements ILiquidContainer {
 	private static final VoxelShape SHAPE = Util.make(() -> {
 		final float size = 6.4f;
-		return makeCuboidShape(8 - size, 0, 8 - size, 8 + size, 12.8, 8 + size);
+		return box(8 - size, 0, 8 - size, 8 + size, 12.8, 8 + size);
 	});
 
 	public WaterGrassBlock(final Properties properties) {
@@ -45,18 +45,18 @@ public class WaterGrassBlock extends BushBlock implements ILiquidContainer {
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(final BlockItemUseContext context) {
-		final FluidState fluidState = context.getWorld().getFluidState(context.getPos());
+		final FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
 
-		return fluidState.isTagged(FluidTags.WATER) && fluidState.getLevel() == 8 ? super.getStateForPlacement(context) : null;
+		return fluidState.is(FluidTags.WATER) && fluidState.getAmount() == 8 ? super.getStateForPlacement(context) : null;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public BlockState updatePostPlacement(final BlockState state, final Direction facing, final BlockState facingState, final IWorld world, final BlockPos currentPos, final BlockPos facingPos) {
-		final BlockState newState = super.updatePostPlacement(state, facing, facingState, world, currentPos, facingPos);
+	public BlockState updateShape(final BlockState state, final Direction facing, final BlockState facingState, final IWorld world, final BlockPos currentPos, final BlockPos facingPos) {
+		final BlockState newState = super.updateShape(state, facing, facingState, world, currentPos, facingPos);
 
 		if (!newState.isAir(world, currentPos)) {
-			world.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+			world.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
 		}
 
 		return newState;
@@ -65,16 +65,16 @@ public class WaterGrassBlock extends BushBlock implements ILiquidContainer {
 	@SuppressWarnings("deprecation")
 	@Override
 	public FluidState getFluidState(final BlockState state) {
-		return Fluids.WATER.getStillFluidState(false);
+		return Fluids.WATER.getSource(false);
 	}
 
 	@Override
-	public boolean canContainFluid(final IBlockReader world, final BlockPos pos, final BlockState state, final Fluid fluid) {
+	public boolean canPlaceLiquid(final IBlockReader world, final BlockPos pos, final BlockState state, final Fluid fluid) {
 		return false;
 	}
 
 	@Override
-	public boolean receiveFluid(final IWorld world, final BlockPos pos, final BlockState state, final FluidState fluidState) {
+	public boolean placeLiquid(final IWorld world, final BlockPos pos, final BlockState state, final FluidState fluidState) {
 		return false;
 	}
 }

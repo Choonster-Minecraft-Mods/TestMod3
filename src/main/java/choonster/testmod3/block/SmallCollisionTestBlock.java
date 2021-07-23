@@ -29,7 +29,7 @@ public class SmallCollisionTestBlock extends Block {
 		final double offset = 0.0176;
 		final double min = 0 + offset;
 		final double max = 1 - offset;
-		return makeCuboidShape(min, min, min, max, max, max);
+		return box(min, min, min, max, max, max);
 	});
 
 	public SmallCollisionTestBlock(final Block.Properties properties) {
@@ -44,9 +44,9 @@ public class SmallCollisionTestBlock extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onEntityCollision(final BlockState state, final World world, final BlockPos pos, final Entity entity) {
+	public void entityInside(final BlockState state, final World world, final BlockPos pos, final Entity entity) {
 		if (entity instanceof LivingEntity) {
-			((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.ABSORPTION, 10, 0));
+			((LivingEntity) entity).addEffect(new EffectInstance(Effects.ABSORPTION, 10, 0));
 		}
 	}
 }

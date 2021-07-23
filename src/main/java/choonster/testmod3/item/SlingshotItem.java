@@ -47,11 +47,11 @@ public class SlingshotItem extends SnowballLauncherItem {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World world, final PlayerEntity player, final Hand hand) {
-		final ActionResult<ItemStack> result = super.onItemRightClick(world, player, hand);
+	public ActionResult<ItemStack> use(final World world, final PlayerEntity player, final Hand hand) {
+		final ActionResult<ItemStack> result = super.use(world, player, hand);
 
-		if (result.getType() == ActionResultType.SUCCESS) {
-			LastUseTimeCapability.updateLastUseTime(player, player.getHeldItem(hand));
+		if (result.getResult() == ActionResultType.SUCCESS) {
+			LastUseTimeCapability.updateLastUseTime(player, player.getItemInHand(hand));
 		}
 
 		return result;

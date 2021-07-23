@@ -23,8 +23,8 @@ import java.util.function.Supplier;
 public enum ModArmourMaterial implements IArmorMaterial {
 	REPLACEMENT(
 			"replacement", 15, new int[]{1, 4, 5, 2},
-			12, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0,
-			0, () -> Ingredient.fromItems(ModItems.ARROW.get())
+			12, SoundEvents.ARMOR_EQUIP_CHAIN, 0,
+			0, () -> Ingredient.of(ModItems.ARROW.get())
 	),
 
 	;
@@ -91,28 +91,28 @@ public enum ModArmourMaterial implements IArmorMaterial {
 	}
 
 	@Override
-	public int getDurability(final EquipmentSlotType slotIn) {
+	public int getDurabilityForSlot(final EquipmentSlotType slotIn) {
 		return MAX_DAMAGE_ARRAY[slotIn.getIndex()] * maxDamageFactor;
 	}
 
 	@Override
-	public int getDamageReductionAmount(final EquipmentSlotType slotIn) {
+	public int getDefenseForSlot(final EquipmentSlotType slotIn) {
 		return damageReductionAmountArray[slotIn.getIndex()];
 	}
 
 	@Override
-	public int getEnchantability() {
+	public int getEnchantmentValue() {
 		return enchantability;
 	}
 
 	@Override
-	public SoundEvent getSoundEvent() {
+	public SoundEvent getEquipSound() {
 		return soundEvent;
 	}
 
 	@Override
-	public Ingredient getRepairMaterial() {
-		return repairMaterial.getValue();
+	public Ingredient getRepairIngredient() {
+		return repairMaterial.get();
 	}
 
 	@Override

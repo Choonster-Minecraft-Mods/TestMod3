@@ -58,8 +58,8 @@ public abstract class ItemHandlerTileEntity<INVENTORY extends IItemHandler & INB
 	 * @param player The player
 	 */
 	public void openGUI(final ServerPlayerEntity player) {
-		if (!world.isRemote) {
-			NetworkHooks.openGui(player, this, getPos());
+		if (!level.isClientSide) {
+			NetworkHooks.openGui(player, this, getBlockPos());
 		}
 	}
 
@@ -81,15 +81,15 @@ public abstract class ItemHandlerTileEntity<INVENTORY extends IItemHandler & INB
 	}
 
 	@Override
-	public void read(final BlockState state, final CompoundNBT nbt) {
-		super.read(state, nbt);
+	public void load(final BlockState state, final CompoundNBT nbt) {
+		super.load(state, nbt);
 		inventory.deserializeNBT(nbt.getCompound("ItemHandler"));
 		nameHolder.deserializeNBT(nbt.getCompound("NameHolder"));
 	}
 
 	@Override
-	public CompoundNBT write(final CompoundNBT compound) {
-		super.write(compound);
+	public CompoundNBT save(final CompoundNBT compound) {
+		super.save(compound);
 
 		compound.put("ItemHandler", inventory.serializeNBT());
 		compound.put("NameHolder", nameHolder.serializeNBT());

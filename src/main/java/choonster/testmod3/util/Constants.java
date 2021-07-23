@@ -16,7 +16,7 @@ public class Constants {
 	 */
 	public static final Set<EquipmentSlotType> ARMOUR_SLOTS = ImmutableSet.copyOf(
 			Stream.of(EquipmentSlotType.values())
-					.filter(equipmentSlot -> equipmentSlot.getSlotType() == EquipmentSlotType.Group.ARMOR)
+					.filter(equipmentSlot -> equipmentSlot.getType() == EquipmentSlotType.Group.ARMOR)
 					.collect(Collectors.toList())
 	);
 }

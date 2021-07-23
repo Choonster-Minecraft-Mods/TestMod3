@@ -37,21 +37,21 @@ public class BlockDetectionArrowEntity extends ModArrowEntity {
 	}
 
 	@Override
-	protected ItemStack getArrowStack() {
+	protected ItemStack getPickupItem() {
 		return new ItemStack(ModItems.BLOCK_DETECTION_ARROW.get());
 	}
 
 	@Override
-	protected void onImpact(final RayTraceResult result) {
-		super.onImpact(result);
+	protected void onHit(final RayTraceResult result) {
+		super.onHit(result);
 
-		final Entity shooter = getShooter();
+		final Entity shooter = getOwner();
 
 		if (result.getType() == RayTraceResult.Type.BLOCK && shooter != null) {
-			final BlockPos pos = ((BlockRayTraceResult) result).getPos();
-			final BlockState state = world.getBlockState(pos);
+			final BlockPos pos = ((BlockRayTraceResult) result).getBlockPos();
+			final BlockState state = level.getBlockState(pos);
 
-			shooter.sendMessage(new TranslationTextComponent("[%s] Block at %s,%s,%s: %s", world.isRemote ? "CLIENT" : "SERVER", pos.getX(), pos.getY(), pos.getZ(), state), Util.DUMMY_UUID);
+			shooter.sendMessage(new TranslationTextComponent("[%s] Block at %s,%s,%s: %s", level.isClientSide ? "CLIENT" : "SERVER", pos.getX(), pos.getY(), pos.getZ(), state), Util.NIL_UUID);
 		}
 	}
 }

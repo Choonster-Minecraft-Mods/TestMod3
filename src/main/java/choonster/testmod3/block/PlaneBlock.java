@@ -47,7 +47,7 @@ public class PlaneBlock extends Block {
 
 	public PlaneBlock(final Block.Properties properties) {
 		super(properties);
-		setDefaultState(getStateContainer().getBaseState().with(HORIZONTAL_ROTATION, Direction.NORTH).with(VERTICAL_ROTATION, VerticalRotation.UP));
+		registerDefaultState(getStateDefinition().any().setValue(HORIZONTAL_ROTATION, Direction.NORTH).setValue(VERTICAL_ROTATION, VerticalRotation.UP));
 	}
 
 	/**
@@ -66,8 +66,8 @@ public class PlaneBlock extends Block {
 				.collect(Collectors.toList());
 
 		// For each horizontal and vertical rotation pair,
-		for (final Direction horizontalRotation : HORIZONTAL_ROTATION.getAllowedValues()) {
-			for (final VerticalRotation verticalRotation : VERTICAL_ROTATION.getAllowedValues()) {
+		for (final Direction horizontalRotation : HORIZONTAL_ROTATION.getPossibleValues()) {
+			for (final VerticalRotation verticalRotation : VERTICAL_ROTATION.getPossibleValues()) {
 				// Get the horizontal (around the y axis) rotation angle and quaternion
 				// Needs to be negated to perform correct rotation.
 				final double horizontalRotationAngle = -VectorUtils.getHorizontalRotation(horizontalRotation);
@@ -79,7 +79,7 @@ public class PlaneBlock extends Block {
 				final Quaternion verticalRotationQuaternion = VectorUtils.getRotationQuaternion(Direction.Axis.Z, (float) verticalRotationAngle);
 
 				final Quaternion combinedRotationQuaternion = new Quaternion(horizontalRotationQuaternion);
-				combinedRotationQuaternion.multiply(verticalRotationQuaternion);
+				combinedRotationQuaternion.mul(verticalRotationQuaternion);
 
 				final VoxelShape combinedShape = boundingBoxes
 						.stream()
@@ -97,19 +97,19 @@ public class PlaneBlock extends Block {
 	});
 
 	@Override
-	protected void fillStateContainer(final StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(final StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(HORIZONTAL_ROTATION, VERTICAL_ROTATION);
 	}
 
 	@Override
 	public BlockState rotate(final BlockState state, final IWorld world, final BlockPos pos, final Rotation direction) {
-		return state.with(HORIZONTAL_ROTATION, direction.rotate(state.get(HORIZONTAL_ROTATION)));
+		return state.setValue(HORIZONTAL_ROTATION, direction.rotate(state.getValue(HORIZONTAL_ROTATION)));
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public BlockState mirror(final BlockState state, final Mirror mirror) {
-		return state.with(HORIZONTAL_ROTATION, mirror.mirror(state.get(HORIZONTAL_ROTATION)));
+		return state.setValue(HORIZONTAL_ROTATION, mirror.mirror(state.getValue(HORIZONTAL_ROTATION)));
 	}
 
 	private static ActionResultType rotateBlock(final World world, final BlockPos pos, final Direction axis) {
@@ -120,44 +120,44 @@ public class PlaneBlock extends Block {
 		switch (axisToRotate) {
 			case X:
 			case Z:
-				state = state.cycleValue(VERTICAL_ROTATION);
+				state = state.cycle(VERTICAL_ROTATION);
 				break;
 			case Y:
-				final Direction originalRotation = state.get(HORIZONTAL_ROTATION);
-				final Direction newRotation = axis.getAxisDirection() == Direction.AxisDirection.POSITIVE ? originalRotation.rotateY() : originalRotation.rotateYCCW();
-				state = state.with(HORIZONTAL_ROTATION, newRotation);
+				final Direction originalRotation = state.getValue(HORIZONTAL_ROTATION);
+				final Direction newRotation = axis.getAxisDirection() == Direction.AxisDirection.POSITIVE ? originalRotation.getClockWise() : originalRotation.getCounterClockWise();
+				state = state.setValue(HORIZONTAL_ROTATION, newRotation);
 				break;
 		}
 
-		return world.setBlockState(pos, state) ? ActionResultType.SUCCESS : ActionResultType.FAIL;
+		return world.setBlockAndUpdate(pos, state) ? ActionResultType.SUCCESS : ActionResultType.FAIL;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
-		return rotateBlock(world, pos, rayTraceResult.getFace());
+	public ActionResultType use(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+		return rotateBlock(world, pos, rayTraceResult.getDirection());
 	}
 
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(final BlockItemUseContext context) {
-		final Direction horizontalRotation = context.getPlacementHorizontalFacing();
-		final VerticalRotation verticalRotation = VerticalRotation.fromDirection(context.getFace());
+		final Direction horizontalRotation = context.getHorizontalDirection();
+		final VerticalRotation verticalRotation = VerticalRotation.fromDirection(context.getClickedFace());
 
-		return getDefaultState()
-				.with(HORIZONTAL_ROTATION, horizontalRotation)
-				.with(VERTICAL_ROTATION, verticalRotation);
+		return defaultBlockState()
+				.setValue(HORIZONTAL_ROTATION, horizontalRotation)
+				.setValue(VERTICAL_ROTATION, verticalRotation);
 	}
 
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public VoxelShape getShape(final BlockState state, final IBlockReader worldIn, final BlockPos pos, final ISelectionContext context) {
-		return SHAPES[getShapeIndex(state.get(HORIZONTAL_ROTATION), state.get(VERTICAL_ROTATION))];
+		return SHAPES[getShapeIndex(state.getValue(HORIZONTAL_ROTATION), state.getValue(VERTICAL_ROTATION))];
 	}
 
 	private static int getShapeIndex(final Direction horizontalRotation, final VerticalRotation verticalRotation) {
-		return verticalRotation.ordinal() * 4 + horizontalRotation.getHorizontalIndex();
+		return verticalRotation.ordinal() * 4 + horizontalRotation.get2DDataValue();
 	}
 
 	/**
@@ -219,7 +219,7 @@ public class PlaneBlock extends Block {
 		 * @return The name
 		 */
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return name;
 		}
 

@@ -72,25 +72,25 @@ public class ModChestContainer extends Container {
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(final PlayerEntity player, final int index) {
-		final Slot slot = inventorySlots.get(index);
+	public ItemStack quickMoveStack(final PlayerEntity player, final int index) {
+		final Slot slot = slots.get(index);
 
-		if (slot != null && slot.getHasStack()) {
-			final ItemStack stack = slot.getStack();
+		if (slot != null && slot.hasItem()) {
+			final ItemStack stack = slot.getItem();
 			final ItemStack originalStack = stack.copy();
 
 			if (index < numRows * SLOTS_PER_ROW) {
-				if (!mergeItemStack(stack, numRows * SLOTS_PER_ROW, inventorySlots.size(), true)) {
+				if (!moveItemStackTo(stack, numRows * SLOTS_PER_ROW, slots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!mergeItemStack(stack, 0, numRows * SLOTS_PER_ROW, false)) {
+			} else if (!moveItemStackTo(stack, 0, numRows * SLOTS_PER_ROW, false)) {
 				return ItemStack.EMPTY;
 			}
 
 			if (stack.isEmpty()) {
-				slot.putStack(ItemStack.EMPTY);
+				slot.set(ItemStack.EMPTY);
 			} else {
-				slot.onSlotChanged();
+				slot.setChanged();
 			}
 
 			return originalStack;
@@ -100,13 +100,13 @@ public class ModChestContainer extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(final PlayerEntity playerIn) {
+	public boolean stillValid(final PlayerEntity playerIn) {
 		return callbacks.isUsableByPlayer(playerIn);
 	}
 
 	@Override
-	public void onContainerClosed(final PlayerEntity playerIn) {
-		super.onContainerClosed(playerIn);
+	public void removed(final PlayerEntity playerIn) {
+		super.removed(playerIn);
 
 		callbacks.onContainerClosed(playerIn);
 	}
@@ -124,8 +124,8 @@ public class ModChestContainer extends Container {
 		@Override
 		public ModChestContainer create(final int windowId, final PlayerInventory inv, final PacketBuffer data) {
 			final BlockPos pos = data.readBlockPos();
-			final World world = inv.player.getEntityWorld();
-			final TileEntity tileEntity = world.getTileEntity(pos);
+			final World world = inv.player.getCommandSenderWorld();
+			final TileEntity tileEntity = world.getBlockEntity(pos);
 
 			if (!(tileEntity instanceof ModChestTileEntity)) {
 				throw new IllegalStateException("Invalid block at " + pos);

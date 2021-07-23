@@ -22,12 +22,12 @@ public class BlockDebuggerItem extends Item {
 	}
 
 	@Override
-	public ActionResultType onItemUse(final ItemUseContext context) {
-		final BlockPos pos = context.getPos();
-		final BlockState state = context.getWorld().getBlockState(pos);
+	public ActionResultType useOn(final ItemUseContext context) {
+		final BlockPos pos = context.getClickedPos();
+		final BlockState state = context.getLevel().getBlockState(pos);
 		LOGGER.info("Block at {},{},{}: {}", pos.getX(), pos.getY(), pos.getZ(), state);
 
-		final TileEntity tileEntity = context.getWorld().getTileEntity(pos);
+		final TileEntity tileEntity = context.getLevel().getBlockEntity(pos);
 		if (tileEntity != null) {
 			LOGGER.info("TileEntity data: {}", tileEntity.serializeNBT());
 		}

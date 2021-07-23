@@ -31,9 +31,9 @@ import net.minecraftforge.common.data.GlobalLootModifierProvider;
  * @author Choonster
  */
 public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
-	private final ILootCondition.IBuilder SILK_TOUCH = MatchTool.builder(
-			ItemPredicate.Builder.create()
-					.enchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntBound.atLeast(1)))
+	private final ILootCondition.IBuilder SILK_TOUCH = MatchTool.toolMatches(
+			ItemPredicate.Builder.item()
+					.hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntBound.atLeast(1)))
 	);
 
 	public TestMod3LootModifierProvider(final DataGenerator gen) {
@@ -46,7 +46,7 @@ public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
 		// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2781780-chest-loot
 		add("loot_table_test", ModLootModifierSerializers.LOOT_TABLE.get(), new LootTableLootModifier(
 				new ILootCondition[]{
-						RandomChance.builder(0.5f).build(),
+						RandomChance.randomChance(0.5f).build(),
 						/*
 						 TODO: Replace with loot table ID condition for minecraft:chests/simple_dungeon once
 						  https://github.com/MinecraftForge/MinecraftForge/pull/7428 is merged
@@ -61,7 +61,7 @@ public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
 		// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2677402-unable-to-get-current-blocks-tile-entity-metadata
 		add("spawner_drops", ModLootModifierSerializers.TILE_ENTITY_NBT.get(), new TileEntityNBTLootModifier(
 				new ILootCondition[]{
-						BlockStateProperty.builder(Blocks.SPAWNER).build(),
+						BlockStateProperty.hasBlockStateProperties(Blocks.SPAWNER).build(),
 						SILK_TOUCH.build(),
 				}
 		));
@@ -73,7 +73,7 @@ public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
 				},
 				Items.STICK,
 				new ILootFunction[]{
-						SetCount.builder(ConstantRange.of(2)).build(),
+						SetCount.setCount(ConstantRange.exactly(2)).build(),
 				}
 		));
 	}

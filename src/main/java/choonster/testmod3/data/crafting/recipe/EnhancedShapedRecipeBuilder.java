@@ -37,10 +37,10 @@ public class EnhancedShapedRecipeBuilder<
 		RECIPE extends ShapedRecipe,
 		BUILDER extends EnhancedShapedRecipeBuilder<RECIPE, BUILDER>
 		> extends ShapedRecipeBuilder {
-	private static final Method VALIDATE = ObfuscationReflectionHelper.findMethod(ShapedRecipeBuilder.class, /* validate */ "func_200463_a", ResourceLocation.class);
-	private static final Field ADVANCEMENT_BUILDER = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* advancementBuilder */ "field_200479_f");
+	private static final Method ENSURE_VALID = ObfuscationReflectionHelper.findMethod(ShapedRecipeBuilder.class, /* ensureValid */ "func_200463_a", ResourceLocation.class);
+	private static final Field ADVANCEMENT = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* advancement */ "field_200479_f");
 	private static final Field GROUP = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* group */ "field_200480_g");
-	private static final Field PATTERN = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* pattern */ "field_200477_d");
+	private static final Field ROWS = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* rows */ "field_200477_d");
 	private static final Field KEY = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* key */ "field_200478_e");
 
 	protected final ItemStack result;
@@ -60,8 +60,7 @@ public class EnhancedShapedRecipeBuilder<
 	 * @param group The group name
 	 * @return This builder
 	 */
-	@SuppressWarnings("unchecked")
-	public BUILDER setItemGroup(final String group) {
+	public BUILDER itemGroup(final String group) {
 		itemGroup = group;
 		return (BUILDER) this;
 	}
@@ -69,73 +68,67 @@ public class EnhancedShapedRecipeBuilder<
 	/**
 	 * Adds a key to the recipe pattern.
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER key(final Character symbol, final ITag<Item> tagIn) {
-		return (BUILDER) super.key(symbol, tagIn);
+	public BUILDER define(final Character symbol, final ITag<Item> tagIn) {
+		return (BUILDER) super.define(symbol, tagIn);
 	}
 
 	/**
 	 * Adds a key to the recipe pattern.
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER key(final Character symbol, final IItemProvider itemIn) {
-		return (BUILDER) super.key(symbol, itemIn);
+	public BUILDER define(final Character symbol, final IItemProvider itemIn) {
+		return (BUILDER) super.define(symbol, itemIn);
 	}
 
 	/**
 	 * Adds a key to the recipe pattern.
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER key(final Character symbol, final Ingredient ingredientIn) {
-		return (BUILDER) super.key(symbol, ingredientIn);
+	public BUILDER define(final Character symbol, final Ingredient ingredientIn) {
+		return (BUILDER) super.define(symbol, ingredientIn);
 	}
 
 	/**
 	 * Adds a new entry to the patterns for this recipe.
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER patternLine(final String pattern) {
-		return (BUILDER) super.patternLine(pattern);
+	public BUILDER pattern(final String pattern) {
+		return (BUILDER) super.pattern(pattern);
 	}
 
 	/**
 	 * Adds a criterion needed to unlock the recipe.
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER addCriterion(final String name, final ICriterionInstance criterion) {
-		return (BUILDER) super.addCriterion(name, criterion);
+	public BUILDER unlockedBy(final String name, final ICriterionInstance criterion) {
+		return (BUILDER) super.unlockedBy(name, criterion);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER setGroup(final String group) {
-		return (BUILDER) super.setGroup(group);
+	public BUILDER group(final String group) {
+		return (BUILDER) super.group(group);
 	}
 
 	/**
 	 * Builds this recipe into an {@link IFinishedRecipe}.
 	 */
 	@Override
-	public void build(final Consumer<IFinishedRecipe> consumer) {
-		build(consumer, RegistryUtil.getRequiredRegistryName(result.getItem()));
+	public void save(final Consumer<IFinishedRecipe> consumer) {
+		save(consumer, RegistryUtil.getRequiredRegistryName(result.getItem()));
 	}
 
 	/**
-	 * Builds this recipe into an {@link IFinishedRecipe}. Use {@link #build(Consumer)} if save is the same as the ID for
+	 * Builds this recipe into an {@link IFinishedRecipe}. Use {@link #save(Consumer)} if save is the same as the ID for
 	 * the result.
 	 */
 	@Override
-	public void build(final Consumer<IFinishedRecipe> consumer, final String save) {
+	public void save(final Consumer<IFinishedRecipe> consumer, final String save) {
 		final ResourceLocation registryName = result.getItem().getRegistryName();
 		if (new ResourceLocation(save).equals(registryName)) {
 			throw new IllegalStateException("Shaped Recipe " + save + " should remove its 'save' argument");
 		} else {
-			build(consumer, new ResourceLocation(save));
+			save(consumer, new ResourceLocation(save));
 		}
 	}
 
@@ -144,8 +137,8 @@ public class EnhancedShapedRecipeBuilder<
 	 *
 	 * @param id The recipe ID
 	 */
-	protected void validate(final ResourceLocation id) {
-		if (itemGroup == null && result.getItem().getGroup() == null) {
+	protected void ensureValid(final ResourceLocation id) {
+		if (itemGroup == null && result.getItem().getItemCategory() == null) {
 			throw new IllegalStateException("Enhanced Shaped Recipe " + id + " has result " + result + " with no item group - use EnhancedShapedRecipeBuilder.itemGroup to specify one");
 		}
 	}
@@ -154,43 +147,41 @@ public class EnhancedShapedRecipeBuilder<
 	 * Builds this recipe into an {@link IFinishedRecipe}.
 	 */
 	@Override
-	public void build(final Consumer<IFinishedRecipe> consumer, final ResourceLocation id) {
+	public void save(final Consumer<IFinishedRecipe> consumer, final ResourceLocation id) {
 		try {
 			// Perform the super class's validation
-			VALIDATE.invoke(this, id);
+			ENSURE_VALID.invoke(this, id);
 
 			// Perform our validation
-			validate(id);
+			ensureValid(id);
 
 			// We can't call the super method directly because it throws an exception when the result is an item that
 			// doesn't belong to an item group (e.g. Mob Spawners).
 
-			final Advancement.Builder advancementBuilder = ((Advancement.Builder) ADVANCEMENT_BUILDER.get(this))
-					.withParentId(new ResourceLocation("minecraft", "recipes/root"))
-					.withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
-					.withRewards(AdvancementRewards.Builder.recipe(id))
-					.withRequirementsStrategy(IRequirementsStrategy.OR);
+			final Advancement.Builder advancementBuilder = ((Advancement.Builder) ADVANCEMENT.get(this))
+					.parent(new ResourceLocation("minecraft", "recipes/root"))
+					.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
+					.rewards(AdvancementRewards.Builder.recipe(id))
+					.requirements(IRequirementsStrategy.OR);
 
 			String group = (String) GROUP.get(this);
 			if (group == null) {
 				group = "";
 			}
 
-			@SuppressWarnings("unchecked")
-			final List<String> pattern = (List<String>) PATTERN.get(this);
+			final List<String> rows = (List<String>) ROWS.get(this);
 
-			@SuppressWarnings("unchecked")
 			final Map<Character, Ingredient> key = (Map<Character, Ingredient>) KEY.get(this);
 
 			String itemGroupName = itemGroup;
 			if (itemGroupName == null) {
-				final ItemGroup itemGroup = Preconditions.checkNotNull(result.getItem().getGroup());
-				itemGroupName = itemGroup.getPath();
+				final ItemGroup itemGroup = Preconditions.checkNotNull(result.getItem().getItemCategory());
+				itemGroupName = itemGroup.getRecipeFolderName();
 			}
 
 			final ResourceLocation advancementID = new ResourceLocation(id.getNamespace(), "recipes/" + itemGroupName + "/" + id.getPath());
 
-			final Result baseRecipe = new Result(id, result.getItem(), result.getCount(), group, pattern, key, advancementBuilder, advancementID);
+			final Result baseRecipe = new Result(id, result.getItem(), result.getCount(), group, rows, key, advancementBuilder, advancementID);
 
 			consumer.accept(new SimpleFinishedRecipe(baseRecipe, result, serializer));
 		} catch (final IllegalAccessException | InvocationTargetException e) {
@@ -200,7 +191,7 @@ public class EnhancedShapedRecipeBuilder<
 
 	public static class Vanilla extends EnhancedShapedRecipeBuilder<ShapedRecipe, Vanilla> {
 		private Vanilla(final ItemStack result) {
-			super(result, IRecipeSerializer.CRAFTING_SHAPED);
+			super(result, IRecipeSerializer.SHAPED_RECIPE);
 		}
 
 		/**
@@ -214,8 +205,8 @@ public class EnhancedShapedRecipeBuilder<
 		}
 
 		@Override
-		protected void validate(final ResourceLocation id) {
-			super.validate(id);
+		protected void ensureValid(final ResourceLocation id) {
+			super.ensureValid(id);
 
 			if (!result.hasTag() && itemGroup == null) {
 				throw new IllegalStateException("Vanilla Shaped Recipe " + id + " has no NBT and no custom item group - use ShapedRecipeBuilder instead");

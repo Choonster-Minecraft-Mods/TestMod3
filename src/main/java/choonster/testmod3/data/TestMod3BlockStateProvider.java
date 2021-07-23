@@ -88,12 +88,12 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		Arrays.stream(EnumFaceRotation.values())
 				.filter(faceRotation -> faceRotation != EnumFaceRotation.UP)
 				.forEach(faceRotation -> {
-					final ModelFile cube = models().getBuilder("cube_rotated_" + faceRotation.getString())
+					final ModelFile cube = models().getBuilder("cube_rotated_" + faceRotation.getSerializedName())
 							.parent(existingMcModel("block"))
 							.element()
 							.allFaces((direction, faceBuilder) ->
 									faceBuilder
-											.texture("#" + direction.getString())
+											.texture("#" + direction.getSerializedName())
 											.cullface(direction)
 							)
 							.allFaces((direction, faceBuilder) -> {
@@ -111,7 +111,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 							})
 							.end();
 
-					final ModelFile orientableWithBottom = models().getBuilder("orientable_with_bottom_rotated_" + faceRotation.getString())
+					final ModelFile orientableWithBottom = models().getBuilder("orientable_with_bottom_rotated_" + faceRotation.getSerializedName())
 							.parent(cube)
 
 							.transforms()
@@ -131,7 +131,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 							.texture("south", "#side")
 							.texture("west", "#side");
 
-					final ModelFile orientable = models().getBuilder("orientable_rotated_" + faceRotation.getString())
+					final ModelFile orientable = models().getBuilder("orientable_rotated_" + faceRotation.getSerializedName())
 							.parent(orientableWithBottom)
 							.texture("bottom", "#top");
 
@@ -211,7 +211,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 
 		final ModelFile clientPlayerRightClick = models().getBuilder(name(ModBlocks.CLIENT_PLAYER_RIGHT_CLICK.get()))
-				.parent(PRESSURE_PLATE_DOWN_WITH_TRANSFORMS.getValue())
+				.parent(PRESSURE_PLATE_DOWN_WITH_TRANSFORMS.get())
 				.texture("texture", mcLoc("block/iron_block"));
 
 		simpleBlock(ModBlocks.CLIENT_PLAYER_RIGHT_CLICK.get(), clientPlayerRightClick);
@@ -229,7 +229,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 				modLoc("block/rotatable_lamp_off")
 		);
 
-		directionalBlockUvLock(ModBlocks.ROTATABLE_LAMP.get(), state1 -> state1.get(RotatableLampBlock.LIT) ? rotatableLampOn : rotatableLampOff);
+		directionalBlockUvLock(ModBlocks.ROTATABLE_LAMP.get(), state -> state.getValue(RotatableLampBlock.LIT) ? rotatableLampOn : rotatableLampOff);
 		simpleBlockItem(ModBlocks.ROTATABLE_LAMP.get(), rotatableLampOff);
 
 
@@ -272,7 +272,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 
 		final ModelFile clientPlayerRotation = models().getBuilder(name(ModBlocks.CLIENT_PLAYER_ROTATION.get()))
-				.parent(PRESSURE_PLATE_DOWN_WITH_TRANSFORMS.getValue())
+				.parent(PRESSURE_PLATE_DOWN_WITH_TRANSFORMS.get())
 				.texture("texture", mcLoc("block/gold_block"));
 
 		simpleBlock(ModBlocks.CLIENT_PLAYER_ROTATION.get(), clientPlayerRotation);
@@ -307,8 +307,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		getVariantBuilder(ModBlocks.MIRROR_PLANE.get())
 				// Set the rotation and default model for all states
 				.forAllStates(state -> {
-					final Direction horizontalRotation = state.get(PlaneBlock.HORIZONTAL_ROTATION);
-					final PlaneBlock.VerticalRotation verticalRotation = state.get(PlaneBlock.VERTICAL_ROTATION);
+					final Direction horizontalRotation = state.getValue(PlaneBlock.HORIZONTAL_ROTATION);
+					final PlaneBlock.VerticalRotation verticalRotation = state.getValue(PlaneBlock.VERTICAL_ROTATION);
 
 					if (horizontalRotation == Direction.NORTH && verticalRotation == PlaneBlock.VerticalRotation.UP) {
 						return ConfiguredModel.builder()
@@ -451,8 +451,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 					final ModelFile modelFile = orientableSingle(
 							"block/colored_rotatable/" + name(blockRegistryObject.get()),
-							modLoc("block/colored_rotatable/" + block.getColor().getString()),
-							modLoc("block/colored_rotatable/" + block.getColor().getString() + "_front")
+							modLoc("block/colored_rotatable/" + block.getColor().getSerializedName()),
+							modLoc("block/colored_rotatable/" + block.getColor().getSerializedName() + "_front")
 					);
 
 					directionalBlockUvLock(blockRegistryObject.get(), modelFile);
@@ -464,8 +464,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 				.forEach(blockRegistryObject -> {
 					final ColoredMultiRotatableBlock block = blockRegistryObject.get();
 
-					final ResourceLocation side = modLoc("block/colored_rotatable/" + block.getColor().getString());
-					final ResourceLocation front = modLoc("block/colored_rotatable/" + block.getColor().getString() + "_front_multi");
+					final ResourceLocation side = modLoc("block/colored_rotatable/" + block.getColor().getSerializedName());
+					final ResourceLocation front = modLoc("block/colored_rotatable/" + block.getColor().getSerializedName() + "_front_multi");
 
 					final EnumMap<EnumFaceRotation, ModelFile> models = new EnumMap<>(EnumFaceRotation.class);
 
@@ -474,11 +474,11 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 								String name = "block/colored_rotatable/" + name(blockRegistryObject.get());
 
 								if (faceRotation != EnumFaceRotation.UP) {
-									name += "_rotated_" + faceRotation.getString();
+									name += "_rotated_" + faceRotation.getSerializedName();
 								}
 
 								final ModelFile model = models().getBuilder(name)
-										.parent(rotatedOrientables.getValue().get(faceRotation))
+										.parent(rotatedOrientables.get().get(faceRotation))
 										.texture("side", side)
 										.texture("front", front)
 										.texture("top", side);
@@ -486,7 +486,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 								models.put(faceRotation, model);
 							});
 
-					directionalBlockUvLock(blockRegistryObject.get(), (state) -> models.get(state.get(ColoredMultiRotatableBlock.FACE_ROTATION)));
+					directionalBlockUvLock(blockRegistryObject.get(), (state) -> models.get(state.getValue(ColoredMultiRotatableBlock.FACE_ROTATION)));
 					simpleBlockItem(block, models.get(EnumFaceRotation.UP));
 				});
 
@@ -505,8 +505,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 					final ColouredSlabBlock block = blockRegistryObject.get();
 					slabBlock(
 							block,
-							mcLoc("block/" + block.getVariant().getString() + "_terracotta"),
-							mcLoc("block/" + block.getVariant().getString() + "_terracotta")
+							mcLoc("block/" + block.getVariant().getSerializedName() + "_terracotta"),
+							mcLoc("block/" + block.getVariant().getSerializedName() + "_terracotta")
 					);
 					simpleBlockItem(block);
 				});
@@ -617,7 +617,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	protected void directionalBlockUvLock(final Block block, final Function<BlockState, ModelFile> modelFunc) {
 		getVariantBuilder(block)
 				.forAllStates(state -> {
-					final Direction direction = state.get(BlockStateProperties.FACING);
+					final Direction direction = state.getValue(BlockStateProperties.FACING);
 					return ConfiguredModel.builder()
 							.modelFile(modelFunc.apply(state))
 							.rotationX(getRotationX(direction))
@@ -628,11 +628,11 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 	private void pipeBlock(final BasePipeBlock block, final ResourceLocation centre, final ResourceLocation side) {
 		final ModelFile centreModel = models().getBuilder(name(block) + "_centre")
-				.parent(pipeCentre.getValue())
+				.parent(pipeCentre.get())
 				.texture("centre", centre);
 
 		final ModelFile sideModel = models().getBuilder(name(block) + "_side")
-				.parent(pipePart.getValue())
+				.parent(pipePart.get())
 				.texture("side", side);
 
 		final MultiPartBlockStateBuilder multiPartBuilder = getMultipartBuilder(block);
@@ -658,7 +658,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 	private void pipeBlockItem(final Block block, final ResourceLocation texture) {
 		itemModels().getBuilder(name(block))
-				.parent(pipeInventory.getValue())
+				.parent(pipeInventory.get())
 				.texture("all", texture);
 	}
 
@@ -668,8 +668,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 		getVariantBuilder(commandBlock)
 				.forAllStates(state -> {
-					final Direction direction = state.get(CommandBlockBlock.FACING);
-					final boolean conditional = state.get(CommandBlockBlock.CONDITIONAL);
+					final Direction direction = state.getValue(CommandBlockBlock.FACING);
+					final boolean conditional = state.getValue(CommandBlockBlock.CONDITIONAL);
 
 					final ModelFile modelFile = conditional ? conditionalModel : normalModel;
 
@@ -690,6 +690,6 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	}
 
 	private int getRotationY(final Direction direction, final int offset) {
-		return direction.getAxis().isVertical() ? 0 : (((int) direction.getHorizontalAngle()) + offset) % 360;
+		return direction.getAxis().isVertical() ? 0 : (((int) direction.toYRot()) + offset) % 360;
 	}
 }

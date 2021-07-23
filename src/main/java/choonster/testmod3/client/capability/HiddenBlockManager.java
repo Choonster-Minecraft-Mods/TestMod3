@@ -35,7 +35,7 @@ public class HiddenBlockManager {
 	 */
 	private static boolean shouldHeldItemRevealHiddenBlocks(final PlayerEntity player) {
 		for (final Hand hand : Hand.values()) {
-			final boolean revealHiddenBlocks = HiddenBlockRevealerCapability.getHiddenBlockRevealer(player.getHeldItem(hand))
+			final boolean revealHiddenBlocks = HiddenBlockRevealerCapability.getHiddenBlockRevealer(player.getItemInHand(hand))
 					.map(IHiddenBlockRevealer::revealHiddenBlocks)
 					.orElse(false);
 
@@ -80,7 +80,7 @@ public class HiddenBlockManager {
 	public static void refresh(final World world, final BlockPos pos) {
 		if (toggled) {
 			final BlockState state = world.getBlockState(pos);
-			world.notifyBlockUpdate(pos, state, state, 3);
+			world.sendBlockUpdated(pos, state, state, 3);
 		}
 	}
 }

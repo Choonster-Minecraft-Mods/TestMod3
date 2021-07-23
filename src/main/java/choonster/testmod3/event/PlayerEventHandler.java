@@ -56,8 +56,8 @@ public class PlayerEventHandler {
 		}
 
 		final ITextComponent textComponent = new TranslationTextComponent(message.getTranslationKey());
-		textComponent.getStyle().setFormatting(TextFormatting.LIGHT_PURPLE);
-		player.sendMessage(textComponent, Util.DUMMY_UUID);
+		textComponent.getStyle().withColor(TextFormatting.LIGHT_PURPLE);
+		player.sendMessage(textComponent, Util.NIL_UUID);
 	}
 
 	/**
@@ -67,10 +67,10 @@ public class PlayerEventHandler {
 	 */
 	@SubscribeEvent
 	public static void livingDeath(final LivingDeathEvent event) {
-		if (event.getEntity() instanceof PlayerEntity && !event.getEntity().getEntityWorld().isRemote) {
+		if (event.getEntity() instanceof PlayerEntity && !event.getEntity().getCommandSenderWorld().isClientSide) {
 			final PlayerEntity player = (PlayerEntity) event.getEntity();
-			final BlockPos pos = player.getPosition();
-			player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_DEATH_COORDINATES.getTranslationKey(), pos.getX(), pos.getY(), pos.getZ(), player.world.getDimensionKey()), Util.DUMMY_UUID);
+			final BlockPos pos = player.blockPosition();
+			player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_DEATH_COORDINATES.getTranslationKey(), pos.getX(), pos.getY(), pos.getZ(), player.level.dimension()), Util.NIL_UUID);
 		}
 	}
 }

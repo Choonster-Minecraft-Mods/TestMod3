@@ -24,8 +24,8 @@ public class SimpleFinishedRecipe extends DelegateFinishedRecipe {
 	}
 
 	@Override
-	public void serialize(final JsonObject json) {
-		super.serialize(json);
+	public void serializeRecipeData(final JsonObject json) {
+		super.serializeRecipeData(json);
 
 		if (resultNBT != null) {
 			ModJsonUtil.setCompoundTag(json.getAsJsonObject("result"), "nbt", resultNBT);
@@ -33,7 +33,7 @@ public class SimpleFinishedRecipe extends DelegateFinishedRecipe {
 	}
 
 	@Override
-	public IRecipeSerializer<?> getSerializer() {
+	public IRecipeSerializer<?> getType() {
 		return serializer;
 	}
 }

@@ -37,7 +37,7 @@ public class ConditionalIngredientBuilder {
 	 * @return The builder
 	 */
 	public static ConditionalIngredientBuilder conditionalIngredient(final IItemProvider... items) {
-		return conditionalIngredient(Ingredient.fromItems(items));
+		return conditionalIngredient(Ingredient.of(items));
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class ConditionalIngredientBuilder {
 	 */
 	private void validate() {
 		if (conditions.isEmpty()) {
-			final String stacks = Arrays.stream(ingredient.getMatchingStacks())
+			final String stacks = Arrays.stream(ingredient.getItems())
 					.map(ItemStack::toString)
 					.collect(Collectors.joining(","));
 
@@ -129,7 +129,7 @@ public class ConditionalIngredientBuilder {
 		}
 
 		@Override
-		public JsonElement serialize() {
+		public JsonElement toJson() {
 			final JsonObject rootObject = new JsonObject();
 			rootObject.addProperty("type", new ResourceLocation(TestMod3.MODID, "conditional").toString());
 
@@ -137,7 +137,7 @@ public class ConditionalIngredientBuilder {
 			conditions.forEach(condition -> conditionsArray.add(condition.serialize()));
 			rootObject.add("conditions", conditionsArray);
 
-			final JsonElement ingredientObject = ingredient.serialize();
+			final JsonElement ingredientObject = ingredient.toJson();
 			rootObject.add("ingredient", ingredientObject);
 
 			return rootObject;

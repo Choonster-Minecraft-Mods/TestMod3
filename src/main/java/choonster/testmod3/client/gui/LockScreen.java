@@ -46,7 +46,7 @@ public class LockScreen extends Screen {
 	private Button cancelButton;
 
 	public LockScreen(final ILock lock, final BlockPos pos, @Nullable final Direction facing) {
-		super(NarratorChatListener.EMPTY);
+		super(NarratorChatListener.NO_TITLE);
 		this.lock = lock;
 		this.pos = pos;
 		this.facing = facing;
@@ -60,26 +60,26 @@ public class LockScreen extends Screen {
 
 	@Override
 	protected void init() {
-		minecraft.keyboardListener.enableRepeatEvents(true);
+		minecraft.keyboardHandler.setSendRepeatsToGui(true);
 
 		doneButton = addButton(new Button(width / 2 - 4 - 150, height / 4 + 120 + 12, 150, 20, new TranslationTextComponent("gui.done"), button -> done()));
 
-		cancelButton = addButton(new Button(width / 2 + 4, height / 4 + 120 + 12, 150, 20, new TranslationTextComponent("gui.cancel"), button -> onClose()));
+		cancelButton = addButton(new Button(width / 2 + 4, height / 4 + 120 + 12, 150, 20, new TranslationTextComponent("gui.cancel"), button -> removed()));
 
 		lockCodeTextField = new TextFieldWidget(font, width / 2 - 150, 50, 300, 20, new TranslationTextComponent("gui.testmod3.lock.lock_code"));
-		lockCodeTextField.setMaxStringLength(32500);
-		lockCodeTextField.setFocused2(true);
+		lockCodeTextField.setMaxLength(32500);
+		lockCodeTextField.setFocus(true);
 		children.add(lockCodeTextField);
 	}
 
 	private void done() {
-		TestMod3.network.sendToServer(new SetLockCodeMessage(pos, facing, lockCodeTextField.getText()));
-		minecraft.displayGuiScreen(null);
+		TestMod3.network.sendToServer(new SetLockCodeMessage(pos, facing, lockCodeTextField.getValue()));
+		minecraft.setScreen(null);
 	}
 
 	@Override
-	public void onClose() {
-		minecraft.keyboardListener.enableRepeatEvents(false);
+	public void removed() {
+		minecraft.keyboardHandler.setSendRepeatsToGui(false);
 	}
 
 	@Override
@@ -102,10 +102,10 @@ public class LockScreen extends Screen {
 	@Override
 	public void render(final MatrixStack matrixStack, final int mouseX, final int mouseY, final float partialTicks) {
 		renderBackground(matrixStack);
-		drawCenteredString(matrixStack, font, I18n.format(TestMod3Lang.LOCK_SET_LOCK_CODE.getTranslationKey()), width / 2, 20, 0xffffff);
-		drawString(matrixStack, font, I18n.format(TestMod3Lang.LOCK_LOCK_CODE.getTranslationKey()), width / 2 - 150, 37, 0xa0a0a0);
+		drawCenteredString(matrixStack, font, I18n.get(TestMod3Lang.LOCK_SET_LOCK_CODE.getTranslationKey()), width / 2, 20, 0xffffff);
+		drawString(matrixStack, font, I18n.get(TestMod3Lang.LOCK_LOCK_CODE.getTranslationKey()), width / 2 - 150, 37, 0xa0a0a0);
 		lockCodeTextField.render(matrixStack, mouseX, mouseY, partialTicks);
-		drawString(matrixStack, font, "", width / 2 - 150, 75 * font.FONT_HEIGHT, 0xa0a0a0);
+		drawString(matrixStack, font, "", width / 2 - 150, 75 * font.lineHeight, 0xa0a0a0);
 
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}

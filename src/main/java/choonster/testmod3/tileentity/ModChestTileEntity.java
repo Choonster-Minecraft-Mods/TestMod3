@@ -101,6 +101,6 @@ public class ModChestTileEntity extends LootItemHandlerTileEntity implements ICo
 	 */
 	@Override
 	public boolean isUsableByPlayer(final PlayerEntity player) {
-		return world.getTileEntity(pos) == this && player.getDistanceSq(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64;
+		return level.getBlockEntity(worldPosition) == this && player.distanceToSqr(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5) <= 64;
 	}
 }

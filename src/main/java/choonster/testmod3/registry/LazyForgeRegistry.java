@@ -38,7 +38,7 @@ public class LazyForgeRegistry<V extends IForgeRegistryEntry<V>> implements IFor
 	}
 
 	private IForgeRegistry<V> getRegistry() {
-		return registry.getValue();
+		return registry.get();
 	}
 
 	@Override

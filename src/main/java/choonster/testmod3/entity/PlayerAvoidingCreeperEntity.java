@@ -25,14 +25,14 @@ import java.util.Set;
  * @author Choonster
  */
 public class PlayerAvoidingCreeperEntity extends CreeperEntity {
-	private static final Field GOALS = ObfuscationReflectionHelper.findField(GoalSelector.class, /* goals */ "field_220892_d");
+	private static final Field AVAILABLE_GOALS = ObfuscationReflectionHelper.findField(GoalSelector.class, /* availableGoals */ "field_220892_d");
 
 	public PlayerAvoidingCreeperEntity(final EntityType<? extends CreeperEntity> entityType, final World world) {
 		super(entityType, world);
 	}
 
 	public static AttributeModifierMap.MutableAttribute registerAttributes() {
-		return CreeperEntity.registerAttributes();
+		return CreeperEntity.createAttributes();
 	}
 
 	@Override
@@ -43,8 +43,8 @@ public class PlayerAvoidingCreeperEntity extends CreeperEntity {
 
 		try {
 			@SuppressWarnings("unchecked")
-			final Set<PrioritizedGoal> goals = (Set<PrioritizedGoal>) GOALS.get(targetSelector);
-			targetSelectorGoals = goals;
+			final Set<PrioritizedGoal> availableGoals = (Set<PrioritizedGoal>) AVAILABLE_GOALS.get(targetSelector);
+			targetSelectorGoals = availableGoals;
 		} catch (final IllegalAccessException e) {
 			throw new RuntimeException("Unable to access target goals", e);
 		}
@@ -58,7 +58,7 @@ public class PlayerAvoidingCreeperEntity extends CreeperEntity {
 				.ifPresent(targetSelector::removeGoal);
 
 		// Avoid players if they have an item in their off hand
-		goalSelector.addGoal(3, new AvoidEntityGoal<>(this, PlayerEntity.class, 6.0F, 1.0D, 1.2D, this::shouldAvoidEntity));
+		goalSelector.addGoal(3, new AvoidEntityGoal<>(this, PlayerEntity.class, 6.0F, 1.0D, 1.2D, PlayerAvoidingCreeperEntity::shouldAvoidEntity));
 
 		// Only attack players without an item in their off hand
 		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, (player) -> !shouldAvoidEntity(player)));
@@ -70,7 +70,7 @@ public class PlayerAvoidingCreeperEntity extends CreeperEntity {
 	 * @param entity The entity
 	 * @return True if the entity is a player with an item in their off hand
 	 */
-	private boolean shouldAvoidEntity(@Nullable final Entity entity) {
-		return entity instanceof PlayerEntity && !((PlayerEntity) entity).getHeldItemOffhand().isEmpty();
+	private static boolean shouldAvoidEntity(@Nullable final Entity entity) {
+		return entity instanceof PlayerEntity && !((PlayerEntity) entity).getOffhandItem().isEmpty();
 	}
 }

@@ -28,7 +28,7 @@ import java.util.Random;
  */
 @Mod.EventBusSubscriber(modid = TestMod3.MODID)
 public class SnowBuildup {
-	private static final Method GET_LOADED_CHUNKS = ObfuscationReflectionHelper.findMethod(ChunkManager.class, /* getLoadedChunksIterable */"func_223491_f");
+	private static final Method GET_CHUNKS = ObfuscationReflectionHelper.findMethod(ChunkManager.class, /* getChunks */ "func_223491_f");
 
 	/**
 	 * The number of ticks between each buildup.
@@ -47,7 +47,7 @@ public class SnowBuildup {
 
 	@SubscribeEvent
 	public static void onWorldTick(final TickEvent.WorldTickEvent event) {
-		if (event.world.isRemote) return;
+		if (event.world.isClientSide) return;
 
 		final ServerWorld world = (ServerWorld) event.world;
 
@@ -58,7 +58,7 @@ public class SnowBuildup {
 		final Iterable<ChunkHolder> loadedChunks;
 		try {
 			@SuppressWarnings("unchecked")
-			final Iterable<ChunkHolder> chunks = (Iterable<ChunkHolder>) GET_LOADED_CHUNKS.invoke(world.getChunkProvider().chunkManager);
+			final Iterable<ChunkHolder> chunks = (Iterable<ChunkHolder>) GET_CHUNKS.invoke(world.getChunkSource().chunkMap);
 			loadedChunks = chunks;
 		} catch (final IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException("Couldn't get loaded chunks for Snow Buildup", e);
@@ -66,25 +66,25 @@ public class SnowBuildup {
 
 		// For each loaded chunk
 		loadedChunks.forEach(chunkHolder ->
-				chunkHolder.getEntityTickingFuture()
-						.getNow(ChunkHolder.UNLOADED_CHUNK)
+				chunkHolder.getEntityTickingChunkFuture()
+						.getNow(ChunkHolder.UNLOADED_LEVEL_CHUNK)
 						.left()
 						.ifPresent(chunk -> {
 							for (int x = 0; x < 16; x++) {
 								for (int z = 0; z < 16; z++) {
 									// Get the position of top block at the current x and z coordinates within the chunk
-									final BlockPos pos = world.getHeight(Heightmap.Type.WORLD_SURFACE, chunk.getPos().asBlockPos().add(x, 0, z));
+									final BlockPos pos = world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE, chunk.getPos().getWorldPosition().offset(x, 0, z));
 
 									// Get the state of the block at that position
 									final BlockState state = world.getBlockState(pos);
 
 									// If the biome at that position allows snow, the block is a snow layer and a random integer in the range [0,24) is 0 (roughly 4% chance),
-									if (world.getBiome(pos).doesSnowGenerate(world, pos) && state.getBlock() == Blocks.SNOW && random.nextInt(24) == 0) {
+									if (world.getBiome(pos).shouldSnow(world, pos) && state.getBlock() == Blocks.SNOW && random.nextInt(24) == 0) {
 										// Get the number of layers
-										final int numLayers = state.get(SnowBlock.LAYERS);
+										final int numLayers = state.getValue(SnowBlock.LAYERS);
 
 										if (numLayers < MAX_LAYERS) { // If it's less than the maximum, increase it by 1
-											world.setBlockState(pos, state.with(SnowBlock.LAYERS, numLayers + 1));
+											world.setBlockAndUpdate(pos, state.setValue(SnowBlock.LAYERS, numLayers + 1));
 										}
 									}
 								}

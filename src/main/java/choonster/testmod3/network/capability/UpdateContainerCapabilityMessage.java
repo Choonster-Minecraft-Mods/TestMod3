@@ -31,9 +31,9 @@ public abstract class UpdateContainerCapabilityMessage<HANDLER, DATA> {
 	final Direction facing;
 
 	/**
-	 * The window ID of the {@link Container}.
+	 * The ID of the {@link Container}.
 	 */
-	final int windowID;
+	final int containerID;
 
 	/**
 	 * The slot's index in the {@link Container}.
@@ -48,14 +48,14 @@ public abstract class UpdateContainerCapabilityMessage<HANDLER, DATA> {
 	public UpdateContainerCapabilityMessage(
 			final Capability<HANDLER> capability,
 			@Nullable final Direction facing,
-			final int windowID,
+			final int containerID,
 			final int slotNumber,
 			final HANDLER handler,
 			final CapabilityContainerUpdateMessageUtils.CapabilityDataConverter<HANDLER, DATA> capabilityDataConverter
 	) {
 		this.capability = capability;
 		this.facing = facing;
-		this.windowID = windowID;
+		this.containerID = containerID;
 		this.slotNumber = slotNumber;
 		capabilityData = capabilityDataConverter.convert(handler);
 	}
@@ -63,13 +63,13 @@ public abstract class UpdateContainerCapabilityMessage<HANDLER, DATA> {
 	protected UpdateContainerCapabilityMessage(
 			final Capability<HANDLER> capability,
 			@Nullable final Direction facing,
-			final int windowID,
+			final int containerID,
 			final int slotNumber,
 			@Nullable final DATA capabilityData
 	) {
 		this.capability = capability;
 		this.facing = facing;
-		this.windowID = windowID;
+		this.containerID = containerID;
 		this.slotNumber = slotNumber;
 		this.capabilityData = capabilityData;
 	}
@@ -107,7 +107,7 @@ public abstract class UpdateContainerCapabilityMessage<HANDLER, DATA> {
 		final boolean hasFacing = buffer.readBoolean();
 		final Direction facing;
 		if (hasFacing) {
-			facing = buffer.readEnumValue(Direction.class);
+			facing = buffer.readEnum(Direction.class);
 		} else {
 			facing = null;
 		}
@@ -150,10 +150,10 @@ public abstract class UpdateContainerCapabilityMessage<HANDLER, DATA> {
 		buffer.writeBoolean(hasFacing);
 
 		if (hasFacing) {
-			buffer.writeEnumValue(message.facing);
+			buffer.writeEnum(message.facing);
 		}
 
-		buffer.writeInt(message.windowID);
+		buffer.writeInt(message.containerID);
 		buffer.writeInt(message.slotNumber);
 
 		final boolean hasData = message.hasData();
@@ -197,10 +197,10 @@ public abstract class UpdateContainerCapabilityMessage<HANDLER, DATA> {
 			}
 
 			final Container container;
-			if (message.windowID == 0) {
-				container = player.container;
-			} else if (message.windowID == player.openContainer.windowId) {
-				container = player.openContainer;
+			if (message.containerID == 0) {
+				container = player.inventoryMenu;
+			} else if (message.containerID == player.containerMenu.containerId) {
+				container = player.containerMenu;
 			} else {
 				return;
 			}

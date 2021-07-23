@@ -100,8 +100,8 @@ public class MobSpawnerIngredientBuilder {
 		}
 
 		@Override
-		public JsonElement serialize() {
-			final JsonObject rootObject = super.serialize().getAsJsonObject();
+		public JsonElement toJson() {
+			final JsonObject rootObject = super.toJson().getAsJsonObject();
 
 			rootObject.addProperty("type", new ResourceLocation(TestMod3.MODID, "mob_spawner").toString());
 			rootObject.addProperty("entity", Preconditions.checkNotNull(entityType.getRegistryName()).toString());

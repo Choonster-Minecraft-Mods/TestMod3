@@ -34,41 +34,41 @@ public class ChunkEnergySetterItem extends Item {
 	 * @param amount The amount to add/remove
 	 */
 	private void addRemoveChunkEnergy(final World world, final PlayerEntity player, final int amount) {
-		final Chunk chunk = world.getChunkAt(player.getPosition());
+		final Chunk chunk = world.getChunkAt(player.blockPosition());
 		final ChunkPos chunkPos = chunk.getPos();
 
 		ChunkEnergyCapability.getChunkEnergy(chunk)
 				.map(chunkEnergy -> {
-					if (player.isSneaking()) {
+					if (player.isShiftKeyDown()) {
 						final int energyRemoved = chunkEnergy.extractEnergy(amount, false);
-						player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_REMOVE.getTranslationKey(), energyRemoved, chunkPos), Util.DUMMY_UUID);
+						player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_REMOVE.getTranslationKey(), energyRemoved, chunkPos), Util.NIL_UUID);
 					} else {
 						final int energyAdded = chunkEnergy.receiveEnergy(amount, false);
-						player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_ADD.getTranslationKey(), energyAdded, chunkPos), Util.DUMMY_UUID);
+						player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_ADD.getTranslationKey(), energyAdded, chunkPos), Util.NIL_UUID);
 					}
 
 					return true;
 				})
 				.orElseGet(() -> {
-					player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_NOT_FOUND.getTranslationKey(), chunkPos), Util.DUMMY_UUID);
+					player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_NOT_FOUND.getTranslationKey(), chunkPos), Util.NIL_UUID);
 
 					return false;
 				});
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final PlayerEntity playerIn, final Hand handIn) {
-		if (!worldIn.isRemote) {
+	public ActionResult<ItemStack> use(final World worldIn, final PlayerEntity playerIn, final Hand handIn) {
+		if (!worldIn.isClientSide) {
 			addRemoveChunkEnergy(worldIn, playerIn, 1);
 		}
 
-		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(handIn));
 	}
 
 	@Override
 	public boolean onEntitySwing(final ItemStack stack, final LivingEntity entity) {
-		final World world = entity.getEntityWorld();
-		if (!world.isRemote && entity instanceof PlayerEntity) {
+		final World world = entity.getCommandSenderWorld();
+		if (!world.isClientSide && entity instanceof PlayerEntity) {
 			addRemoveChunkEnergy(world, (PlayerEntity) entity, 100);
 		}
 

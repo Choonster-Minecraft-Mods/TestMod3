@@ -31,12 +31,12 @@ public class MobSpawnerIngredientSerializer implements IIngredientSerializer<NBT
 	public NBTIngredient parse(final JsonObject json) {
 		final ItemStack stack = CraftingHelper.getItemStack(json, true);
 
-		final ResourceLocation entityRegistryName = new ResourceLocation(JSONUtils.getString(json, "entity"));
+		final ResourceLocation entityRegistryName = new ResourceLocation(JSONUtils.getAsString(json, "entity"));
 		if (!ForgeRegistries.ENTITIES.containsKey(entityRegistryName)) {
 			throw new JsonSyntaxException("Unknown entity type '" + entityRegistryName.toString() + "'");
 		}
 
-		final CompoundNBT tileEntityData = stack.getOrCreateChildTag("BlockEntityTag");
+		final CompoundNBT tileEntityData = stack.getOrCreateTagElement("BlockEntityTag");
 
 		final CompoundNBT spawnData = tileEntityData.getCompound("SpawnData");
 		spawnData.putString("id", entityRegistryName.toString());

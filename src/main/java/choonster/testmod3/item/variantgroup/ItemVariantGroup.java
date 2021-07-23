@@ -104,9 +104,9 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 		variants.forEach(variant -> {
 			final String registryName;
 			if (isSuffix) {
-				registryName = groupName + "_" + variant.getString();
+				registryName = groupName + "_" + variant.getSerializedName();
 			} else {
-				registryName = variant.getString() + "_" + groupName;
+				registryName = variant.getSerializedName() + "_" + groupName;
 			}
 
 			final RegistryObject<ITEM> item = items.register(registryName, () -> {
@@ -139,7 +139,7 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializabl
 		private boolean isSuffix;
 		private Iterable<VARIANT> variants;
 
-		private Function<VARIANT, Item.Properties> itemPropertiesFactory = variant -> new Item.Properties().group(TestMod3.ITEM_GROUP);
+		private Function<VARIANT, Item.Properties> itemPropertiesFactory = variant -> new Item.Properties().tab(TestMod3.ITEM_GROUP);
 		private ItemFactory<VARIANT, ITEM> itemFactory;
 
 		/**

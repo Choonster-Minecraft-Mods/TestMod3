@@ -40,24 +40,24 @@ public class RitualCheckerItem extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final PlayerEntity playerIn, final Hand hand) {
-		if (!worldIn.isRemote) {
+	public ActionResult<ItemStack> use(final World worldIn, final PlayerEntity playerIn, final Hand hand) {
+		if (!worldIn.isClientSide) {
 			final ITextComponent textComponent;
 
 			final Optional<BlockPos> invalidPosition = checkRitual(playerIn);
 			if (invalidPosition.isPresent()) {
 				final BlockPos pos = invalidPosition.get();
 				textComponent = new TranslationTextComponent(TestMod3Lang.MESSAGE_RITUAL_CHECKER_FAILURE.getTranslationKey(), pos.getX(), pos.getY(), pos.getZ());
-				textComponent.getStyle().setFormatting(TextFormatting.RED);
+				textComponent.getStyle().withColor(TextFormatting.RED);
 			} else {
 				textComponent = new TranslationTextComponent(TestMod3Lang.MESSAGE_RITUAL_CHECKER_SUCCESS.getTranslationKey());
-				textComponent.getStyle().setFormatting(TextFormatting.GREEN);
+				textComponent.getStyle().withColor(TextFormatting.GREEN);
 			}
 
-			playerIn.sendMessage(textComponent, Util.DUMMY_UUID);
+			playerIn.sendMessage(textComponent, Util.NIL_UUID);
 		}
 
-		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(hand));
+		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(hand));
 	}
 
 	/**
@@ -67,12 +67,12 @@ public class RitualCheckerItem extends Item {
 	 * @return The first invalid position, if any.
 	 */
 	private Optional<BlockPos> checkRitual(final PlayerEntity player) {
-		final World world = player.getEntityWorld();
-		final BlockPos playerPos = player.getPosition();
+		final World world = player.getCommandSenderWorld();
+		final BlockPos playerPos = player.blockPosition();
 
 		// The block under the player must be obsidian
-		if (!(world.getBlockState(playerPos.down()).getBlock() == Blocks.OBSIDIAN))
-			return Optional.of(playerPos.down());
+		if (!(world.getBlockState(playerPos.below()).getBlock() == Blocks.OBSIDIAN))
+			return Optional.of(playerPos.below());
 
 		// Iterate from -2,0,-2 to +2,0,+2
 		for (int x = -2; x <= 2; x++) {
@@ -82,7 +82,7 @@ public class RitualCheckerItem extends Item {
 					continue;
 				}
 
-				final BlockPos pos = playerPos.add(x, 0, z);
+				final BlockPos pos = playerPos.offset(x, 0, z);
 				final Block block = world.getBlockState(pos).getBlock();
 
 				if (Math.abs(x) == 2 || Math.abs(z) == 2) { // If this is the outer layer, the block must be air

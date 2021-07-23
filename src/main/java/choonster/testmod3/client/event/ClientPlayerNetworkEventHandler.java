@@ -30,9 +30,9 @@ public class ClientPlayerNetworkEventHandler {
 	 */
 	@SubscribeEvent
 	public static void clientConnectedToServer(final ClientPlayerNetworkEvent.LoggedInEvent event) {
-		final ServerData serverData = Minecraft.getInstance().getCurrentServerData();
+		final ServerData serverData = Minecraft.getInstance().getCurrentServer();
 		final NetworkManager networkManager = event.getNetworkManager();
 
-		LOGGER.info("Server Connected! Local? {} - Address: {}", networkManager != null ? String.valueOf(networkManager.isLocalChannel()) : "<No NetworkManager>", serverData != null ? serverData.serverIP : "<No ServerData>");
+		LOGGER.info("Server Connected! Local? {} - Address: {}", networkManager != null ? String.valueOf(networkManager.isMemoryConnection()) : "<No NetworkManager>", serverData != null ? serverData.ip : "<No ServerData>");
 	}
 }

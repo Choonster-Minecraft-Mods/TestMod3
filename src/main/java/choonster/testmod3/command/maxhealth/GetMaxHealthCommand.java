@@ -42,7 +42,7 @@ public class GetMaxHealthCommand {
 		final LivingEntity livingEntity = (LivingEntity) entity;
 
 		MaxHealthCapability.getMaxHealth(livingEntity).ifPresent(maxHealth ->
-				context.getSource().sendFeedback(
+				context.getSource().sendSuccess(
 						new TranslationTextComponent(
 								TestMod3Lang.MESSAGE_MAX_HEALTH_GET.getTranslationKey(),
 								entity.getDisplayName(),

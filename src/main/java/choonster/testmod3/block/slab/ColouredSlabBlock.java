@@ -35,22 +35,22 @@ public class ColouredSlabBlock extends TestMod3SlabBlock<DyeColor, ColouredSlabB
 	}
 
 	private boolean recolorBlock(final BlockState state, final IWorld world, final BlockPos pos, final Direction facing, final DyeColor colour) {
-		final BlockState newState = variantGroup.getBlock(colour).get().getDefaultState()
-				.with(TYPE, state.get(TYPE));
+		final BlockState newState = variantGroup.getBlock(colour).get().defaultBlockState()
+				.setValue(TYPE, state.getValue(TYPE));
 
-		return world.setBlockState(pos, newState, 3);
+		return world.setBlock(pos, newState, 3);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
-		final ItemStack heldItem = player.getHeldItem(hand);
+	public ActionResultType use(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+		final ItemStack heldItem = player.getItemInHand(hand);
 
 		if (!heldItem.isEmpty()) {
 
 			final DyeColor dyeColour = DyeColor.getColor(heldItem);
 			if (dyeColour != null) {
-				final boolean success = recolorBlock(state, world, pos, rayTraceResult.getFace(), dyeColour);
+				final boolean success = recolorBlock(state, world, pos, rayTraceResult.getDirection(), dyeColour);
 				if (success) {
 					heldItem.shrink(1);
 					return ActionResultType.SUCCESS;

@@ -79,7 +79,7 @@ public class ModTileEntities {
 			@SuppressWarnings("ConstantConditions")
 			// dataFixerType will always be null until mod data fixers are implemented
 			final TileEntityType<T> tileEntityType = TileEntityType.Builder
-					.create(tileEntityFactory, validBlock.get())
+					.of(tileEntityFactory, validBlock.get())
 					.build(null);
 
 			return tileEntityType;

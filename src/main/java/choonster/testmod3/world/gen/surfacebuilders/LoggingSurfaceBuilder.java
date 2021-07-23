@@ -33,14 +33,14 @@ public class LoggingSurfaceBuilder<C extends ISurfaceBuilderConfig, S extends Su
 	}
 
 	@Override
-	public void buildSurface(
+	public void apply(
 			final Random random, final IChunk chunk, final Biome biome,
 			final int x, final int z, final int startHeight, final double noise,
 			final BlockState defaultBlock, final BlockState defaultFluid,
 			final int seaLevel, final long seed,
 			final C config
 	) {
-		delegatedSurfaceBuilder.get().buildSurface(
+		delegatedSurfaceBuilder.get().apply(
 				random, chunk, biome,
 				x, z, startHeight, noise,
 				defaultBlock, defaultFluid,
@@ -50,7 +50,7 @@ public class LoggingSurfaceBuilder<C extends ISurfaceBuilderConfig, S extends Su
 		if (!logged) {
 			logged = true;
 			final ChunkPos chunkPos = chunk.getPos();
-			LOGGER.info("Generating {} at {},{}", biome.getRegistryName(), chunkPos.getXStart(), chunkPos.getZStart());
+			LOGGER.info("Generating {} at {},{}", biome.getRegistryName(), chunkPos.getMinBlockX(), chunkPos.getMinBlockZ());
 		}
 	}
 }

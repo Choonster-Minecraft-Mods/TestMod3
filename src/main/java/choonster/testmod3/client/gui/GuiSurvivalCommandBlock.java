@@ -16,25 +16,25 @@ import java.lang.reflect.Field;
 public class GuiSurvivalCommandBlock extends CommandBlockScreen {
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	private static final Field COMMAND_BLOCK_MODE = ObfuscationReflectionHelper.findField(CommandBlockScreen.class, /* commandBlockMode */ "field_184082_w");
+	private static final Field MODE = ObfuscationReflectionHelper.findField(CommandBlockScreen.class, /* mode */ "field_184082_w");
 	private static final Field CONDITIONAL = ObfuscationReflectionHelper.findField(CommandBlockScreen.class, /* conditional */ "field_184084_y");
-	private static final Field AUTOMATIC = ObfuscationReflectionHelper.findField(CommandBlockScreen.class, /* automatic */ "field_184085_z");
+	private static final Field AUTOEXEC = ObfuscationReflectionHelper.findField(CommandBlockScreen.class, /* autoexec */ "field_184085_z");
 
 	private final SurvivalCommandBlockLogic survivalCommandBlockLogic;
 
 	public GuiSurvivalCommandBlock(final SurvivalCommandBlockTileEntity survivalCommandBlockTileEntity) {
 		super(survivalCommandBlockTileEntity);
-		survivalCommandBlockLogic = survivalCommandBlockTileEntity.getCommandBlockLogic();
+		survivalCommandBlockLogic = survivalCommandBlockTileEntity.getCommandBlock();
 	}
 
 	@Override
-	protected void func_195235_a(final CommandBlockLogic p_195235_1_) {
+	protected void populateAndSendPacket(final CommandBlockLogic p_195235_1_) {
 		try {
-			final CommandBlockTileEntity.Mode commandBlockMode = (CommandBlockTileEntity.Mode) COMMAND_BLOCK_MODE.get(this);
+			final CommandBlockTileEntity.Mode mode = (CommandBlockTileEntity.Mode) MODE.get(this);
 			final boolean conditional = (boolean) CONDITIONAL.get(this);
-			final boolean automatic = (boolean) AUTOMATIC.get(this);
+			final boolean autoexec = (boolean) AUTOEXEC.get(this);
 
-			TestMod3.network.sendToServer(new SaveSurvivalCommandBlockMessage(survivalCommandBlockLogic, commandTextField.getText(), commandBlockMode, conditional, automatic));
+			TestMod3.network.sendToServer(new SaveSurvivalCommandBlockMessage(survivalCommandBlockLogic, commandEdit.getValue(), mode, conditional, autoexec));
 		} catch (final IllegalAccessException e) {
 			LOGGER.error("Couldn't set survival command block", e);
 		}

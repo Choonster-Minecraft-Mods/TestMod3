@@ -31,7 +31,7 @@ public abstract class BasePigSpawner implements IPigSpawner {
 			return false;
 		}
 
-		pig.setPosition(x, y, z);
-		return world.addEntity(pig);
+		pig.setPos(x, y, z);
+		return world.addFreshEntity(pig);
 	}
 }

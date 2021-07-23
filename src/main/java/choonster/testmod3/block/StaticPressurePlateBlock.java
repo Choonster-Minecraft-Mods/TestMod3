@@ -19,7 +19,7 @@ import net.minecraft.world.IWorldReader;
  * @author Choonster
  */
 public abstract class StaticPressurePlateBlock extends Block {
-	protected final VoxelShape SHAPE = makeCuboidShape(1, 0, 1, 15, 0.5, 15.0);
+	protected final VoxelShape SHAPE = box(1, 0, 1, 15, 0.5, 15.0);
 
 	public StaticPressurePlateBlock(final Block.Properties properties) {
 		super(properties);
@@ -33,15 +33,15 @@ public abstract class StaticPressurePlateBlock extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public BlockState updatePostPlacement(final BlockState state, final Direction facing, final BlockState facingState, final IWorld world, final BlockPos currentPos, final BlockPos facingPos) {
-		return facing == Direction.DOWN && !state.isValidPosition(world, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(state, facing, facingState, world, currentPos, facingPos);
+	public BlockState updateShape(final BlockState state, final Direction facing, final BlockState facingState, final IWorld world, final BlockPos currentPos, final BlockPos facingPos) {
+		return facing == Direction.DOWN && !state.canSurvive(world, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, facing, facingState, world, currentPos, facingPos);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isValidPosition(final BlockState state, final IWorldReader world, final BlockPos pos) {
-		final BlockPos downPos = pos.down();
-		return hasSolidSideOnTop(world, downPos) || hasEnoughSolidSide(world, downPos, Direction.UP);
+	public boolean canSurvive(final BlockState state, final IWorldReader world, final BlockPos pos) {
+		final BlockPos downPos = pos.below();
+		return canSupportRigidBlock(world, downPos) || canSupportCenter(world, downPos, Direction.UP);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -52,7 +52,7 @@ public abstract class StaticPressurePlateBlock extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public PushReaction getPushReaction(final BlockState state) {
+	public PushReaction getPistonPushReaction(final BlockState state) {
 		return PushReaction.DESTROY;
 	}
 }

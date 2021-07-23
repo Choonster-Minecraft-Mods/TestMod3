@@ -15,7 +15,7 @@ import java.lang.reflect.Field;
  * @author Choonster
  */
 public class LockableTileEntityWrapper implements ILock {
-	private static final Field CODE = ObfuscationReflectionHelper.findField(LockableTileEntity.class, /* code */ "field_174901_a");
+	private static final Field CODE = ObfuscationReflectionHelper.findField(LockableTileEntity.class, /* code */ "lockKey");
 
 	private final LockableTileEntity lockableTileEntity;
 
@@ -29,7 +29,7 @@ public class LockableTileEntityWrapper implements ILock {
 	@Override
 	public boolean isLocked() {
 		// An empty ItemStack can only unlock an empty lock code
-		return !getLockCode().func_219964_a(ItemStack.EMPTY);
+		return !getLockCode().unlocksWith(ItemStack.EMPTY);
 	}
 
 	/**
@@ -42,7 +42,7 @@ public class LockableTileEntityWrapper implements ILock {
 		try {
 			CODE.set(lockableTileEntity, code);
 		} catch (final IllegalAccessException e) {
-			throw new RuntimeException(String.format("Couldn't set lock code of LockableTileEntity at %s", lockableTileEntity.getPos()), e);
+			throw new RuntimeException(String.format("Couldn't set lock code of LockableTileEntity at %s", lockableTileEntity.getBlockPos()), e);
 		}
 	}
 
@@ -56,7 +56,7 @@ public class LockableTileEntityWrapper implements ILock {
 		try {
 			return (LockCode) CODE.get(lockableTileEntity);
 		} catch (final IllegalAccessException e) {
-			throw new RuntimeException(String.format("Couldn't get lock code of LockableTileEntity at %s", lockableTileEntity.getPos()), e);
+			throw new RuntimeException(String.format("Couldn't get lock code of LockableTileEntity at %s", lockableTileEntity.getBlockPos()), e);
 		}
 	}
 

@@ -30,12 +30,12 @@ public class FluidPipeBlock extends BasePipeBlock {
 			return true;
 		}
 
-		final BlockPos neighbourPos = ownPos.offset(neighbourDirection);
+		final BlockPos neighbourPos = ownPos.relative(neighbourDirection);
 		final Block neighbourBlock = neighbourState.getBlock();
 
 		// Connect if the neighbouring block has a TileEntity with an IFluidHandler for the adjacent face
 		if (neighbourBlock.hasTileEntity(neighbourState)) {
-			final TileEntity tileEntity = world.getTileEntity(neighbourPos);
+			final TileEntity tileEntity = world.getBlockEntity(neighbourPos);
 			return tileEntity != null && tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, neighbourDirection.getOpposite()).isPresent();
 		}
 

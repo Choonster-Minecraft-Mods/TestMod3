@@ -52,7 +52,7 @@ public class FluidTankBlock<TE extends BaseFluidTankTileEntity> extends TileEnti
 	@SuppressWarnings("deprecation")
 	@Override
 	public List<ItemStack> getDrops(final BlockState state, final LootContext.Builder builder) {
-		final TileEntity tileentity = builder.get(LootParameters.BLOCK_ENTITY);
+		final TileEntity tileentity = builder.getOptionalParameter(LootParameters.BLOCK_ENTITY);
 
 		if (tileentity != null) {
 			tileentity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)
@@ -80,7 +80,7 @@ public class FluidTankBlock<TE extends BaseFluidTankTileEntity> extends TileEnti
 	}
 
 	@Override
-	public void onBlockPlacedBy(final World worldIn, final BlockPos pos, final BlockState state, @Nullable final LivingEntity placer, final ItemStack stack) {
+	public void setPlacedBy(final World worldIn, final BlockPos pos, final BlockState state, @Nullable final LivingEntity placer, final ItemStack stack) {
 		getFluidHandler(worldIn, pos).ifPresent(fluidHandler ->
 				FluidUtil.tryEmptyContainer(stack, fluidHandler, Integer.MAX_VALUE, null, true)
 		);
@@ -113,15 +113,15 @@ public class FluidTankBlock<TE extends BaseFluidTankTileEntity> extends TileEnti
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
-		final ItemStack heldItem = player.getHeldItem(hand);
+	public ActionResultType use(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+		final ItemStack heldItem = player.getItemInHand(hand);
 		return getFluidHandler(world, pos)
 				.map(fluidHandler -> {
 					// Try fill/empty the held fluid container from the tank
-					final boolean success = FluidUtil.interactWithFluidHandler(player, hand, world, pos, rayTraceResult.getFace());
+					final boolean success = FluidUtil.interactWithFluidHandler(player, hand, world, pos, rayTraceResult.getDirection());
 
 					// If the contents changed or this is the off hand, send a chat message to the player
-					if (!world.isRemote && (success || hand == Hand.OFF_HAND)) {
+					if (!world.isClientSide && (success || hand == Hand.OFF_HAND)) {
 						final FluidTankSnapshot[] fluidTankSnapshots = FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler);
 						TestMod3.network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new FluidTankContentsMessage(fluidTankSnapshots));
 					}

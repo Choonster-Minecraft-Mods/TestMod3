@@ -23,16 +23,16 @@ public class EntityKillerItem extends Item {
 
 	@Override
 	public boolean onLeftClickEntity(final ItemStack stack, final PlayerEntity player, final Entity entity) {
-		if (!player.world.isRemote) {
+		if (!player.level.isClientSide) {
 			final Entity entityToKill;
 			if (entity instanceof EnderDragonPartEntity) { // If it's a part of an Ender Dragon, kill the main Ender Dragon entity
-				entityToKill = ((EnderDragonPartEntity) entity).dragon;
+				entityToKill = ((EnderDragonPartEntity) entity).parentMob;
 			} else {
 				entityToKill = entity;
 			}
 
-			entityToKill.onKillCommand();
-			player.sendMessage(new TranslationTextComponent("commands.kill.success.single", entityToKill.getDisplayName()), Util.DUMMY_UUID);
+			entityToKill.kill();
+			player.sendMessage(new TranslationTextComponent("commands.kill.success.single", entityToKill.getDisplayName()), Util.NIL_UUID);
 		}
 
 		return true;

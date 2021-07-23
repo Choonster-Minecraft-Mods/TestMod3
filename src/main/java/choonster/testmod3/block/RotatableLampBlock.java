@@ -32,38 +32,38 @@ public class RotatableLampBlock extends Block {
 
 	public RotatableLampBlock(final Block.Properties properties) {
 		super(properties);
-		setDefaultState(getStateContainer().getBaseState().with(FACING, Direction.NORTH).with(LIT, false));
+		registerDefaultState(getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(LIT, false));
 	}
 
 	@Override
-	protected void fillStateContainer(final StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(final StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(FACING, LIT);
 	}
 
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(final BlockItemUseContext context) {
-		return getDefaultState().with(FACING, context.getNearestLookingDirection());
+		return defaultBlockState().setValue(FACING, context.getNearestLookingDirection());
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+	public ActionResultType use(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
 		final BlockState newState;
 
-		if (player.isSneaking()) {
-			newState = state.cycleValue(FACING); // Cycle the facing (down -> up -> north -> south -> west -> east -> down)
+		if (player.isShiftKeyDown()) {
+			newState = state.cycle(FACING); // Cycle the facing (down -> up -> north -> south -> west -> east -> down)
 		} else {
-			newState = state.cycleValue(LIT); // Cycle the lit state (true -> false -> true)
+			newState = state.cycle(LIT); // Cycle the lit state (true -> false -> true)
 		}
 
-		world.setBlockState(pos, newState);
+		world.setBlockAndUpdate(pos, newState);
 
 		return ActionResultType.SUCCESS;
 	}
 
 	@Override
 	public int getLightValue(final BlockState state, final IBlockReader world, final BlockPos pos) {
-		return state.get(LIT) ? 15 : 0;
+		return state.getValue(LIT) ? 15 : 0;
 	}
 }

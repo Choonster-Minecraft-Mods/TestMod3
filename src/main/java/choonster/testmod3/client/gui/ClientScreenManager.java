@@ -54,7 +54,7 @@ public class ClientScreenManager {
 	public interface IScreenFactory<S extends Screen> {
 		default void createAndOpenScreen(final ResourceLocation id, final PacketBuffer additionalData, final Minecraft mc) {
 			final S screen = create(id, additionalData);
-			mc.displayGuiScreen(screen);
+			mc.setScreen(screen);
 		}
 
 		S create(ResourceLocation id, PacketBuffer additionalData);

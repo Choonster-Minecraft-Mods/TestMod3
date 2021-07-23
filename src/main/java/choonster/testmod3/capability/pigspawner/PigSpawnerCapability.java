@@ -165,7 +165,7 @@ public final class PigSpawnerCapability {
 		 * @param commandSource   The command source, if any
 		 */
 		private static void trySpawnPig(final IPigSpawner pigSpawner, final World world, final double x, final double y, final double z, @Nullable final IPigSpawnerInteractable interactable, final BlockPos interactablePos, @Nullable final ICommandSource commandSource) {
-			if (world.isRemote) return;
+			if (world.isClientSide) return;
 
 			boolean shouldSpawnPig = true;
 
@@ -190,7 +190,7 @@ public final class PigSpawnerCapability {
 			final Direction facing = event.getFace();
 			assert facing != null;
 
-			final BlockPos spawnPos = event.getPos().offset(facing);
+			final BlockPos spawnPos = event.getPos().relative(facing);
 			final double x = spawnPos.getX() + 0.5, y = spawnPos.getY() + 0.5, z = spawnPos.getZ() + 0.5;
 
 			final World world = event.getWorld();
@@ -212,16 +212,16 @@ public final class PigSpawnerCapability {
 		 */
 		@SubscribeEvent
 		public static void entityInteract(final PlayerInteractEvent.EntityInteract event) {
-			final World world = event.getPlayer().getEntityWorld();
+			final World world = event.getPlayer().getCommandSenderWorld();
 
 			final Entity target = event.getTarget();
-			final double x = target.getPosX(), y = target.getPosY(), z = target.getPosZ();
+			final double x = target.getX(), y = target.getY(), z = target.getZ();
 			final IPigSpawnerInteractable interactable = target instanceof IPigSpawnerInteractable ? (IPigSpawnerInteractable) target : null;
 
 			final Hand hand = event.getHand();
 
-			getPigSpawner(event.getPlayer().getHeldItem(hand))
-					.ifPresent(pigSpawner -> trySpawnPig(pigSpawner, world, x, y, z, interactable, target.getPosition(), event.getPlayer()));
+			getPigSpawner(event.getPlayer().getItemInHand(hand))
+					.ifPresent(pigSpawner -> trySpawnPig(pigSpawner, world, x, y, z, interactable, target.blockPosition(), event.getPlayer()));
 		}
 
 	}
@@ -236,7 +236,7 @@ public final class PigSpawnerCapability {
 		@SubscribeEvent
 		public static void itemTooltip(final ItemTooltipEvent event) {
 			getPigSpawner(event.getItemStack()).ifPresent(pigSpawner -> {
-				final Style style = Style.EMPTY.setFormatting(TextFormatting.LIGHT_PURPLE);
+				final Style style = Style.EMPTY.withColor(TextFormatting.LIGHT_PURPLE);
 
 				final List<ITextComponent> tooltipLines = pigSpawner.getTooltipLines().stream()
 						.map(textComponent -> textComponent.setStyle(style))

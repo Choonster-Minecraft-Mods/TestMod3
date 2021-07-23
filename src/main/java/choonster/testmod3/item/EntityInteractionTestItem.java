@@ -30,25 +30,25 @@ public class EntityInteractionTestItem extends Item {
 	}
 
 	@Override
-	public ActionResultType itemInteractionForEntity(final ItemStack stack, final PlayerEntity player, final LivingEntity target, final Hand hand) {
-		if (!player.world.isRemote) {
+	public ActionResultType interactLivingEntity(final ItemStack stack, final PlayerEntity player, final LivingEntity target, final Hand hand) {
+		if (!player.level.isClientSide) {
 			final int count = getInteractCount(stack) + 1;
 			stack.getTag().putInt("Count", count);
 
-			player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_ENTITY_INTERACT_COUNT.getTranslationKey(), count), Util.DUMMY_UUID);
+			player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_ENTITY_INTERACT_COUNT.getTranslationKey(), count), Util.NIL_UUID);
 		}
 
 		return ActionResultType.SUCCESS;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World world, final PlayerEntity player, final Hand hand) {
-		final ItemStack heldItem = player.getHeldItem(hand);
+	public ActionResult<ItemStack> use(final World world, final PlayerEntity player, final Hand hand) {
+		final ItemStack heldItem = player.getItemInHand(hand);
 
-		if (!player.world.isRemote) {
+		if (!player.level.isClientSide) {
 			final int count = getInteractCount(heldItem);
 
-			player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_ENTITY_INTERACT_COUNT.getTranslationKey(), count), Util.DUMMY_UUID);
+			player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_ENTITY_INTERACT_COUNT.getTranslationKey(), count), Util.NIL_UUID);
 		}
 
 		return new ActionResult<>(ActionResultType.SUCCESS, heldItem);

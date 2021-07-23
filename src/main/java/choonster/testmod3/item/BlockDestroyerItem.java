@@ -23,10 +23,10 @@ public class BlockDestroyerItem extends Item {
 	}
 
 	@Override
-	public boolean onBlockDestroyed(final ItemStack stack, final World world, final BlockState state, final BlockPos pos, final LivingEntity entityLiving) {
-		if (!world.isRemote) {
-			if (state.getBlock() == Blocks.WHEAT && state.get(CropsBlock.AGE) >= 6) {
-				entityLiving.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_BLOCK_DESTROYER_DESTROY.getTranslationKey()), Util.DUMMY_UUID);
+	public boolean mineBlock(final ItemStack stack, final World world, final BlockState state, final BlockPos pos, final LivingEntity entityLiving) {
+		if (!world.isClientSide) {
+			if (state.getBlock() == Blocks.WHEAT && state.getValue(CropsBlock.AGE) >= 6) {
+				entityLiving.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_BLOCK_DESTROYER_DESTROY.getTranslationKey()), Util.NIL_UUID);
 			}
 		}
 

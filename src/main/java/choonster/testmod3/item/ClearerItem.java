@@ -41,21 +41,21 @@ public class ClearerItem extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World world, final PlayerEntity player, final Hand hand) {
-		final ItemStack heldItem = player.getHeldItem(hand);
+	public ActionResult<ItemStack> use(final World world, final PlayerEntity player, final Hand hand) {
+		final ItemStack heldItem = player.getItemInHand(hand);
 
-		if (!world.isRemote) {
+		if (!world.isClientSide) {
 			final int currentMode = getMode(heldItem);
 
-			if (player.isSneaking()) {
+			if (player.isShiftKeyDown()) {
 				final int newMode = currentMode == MODE_ALL ? MODE_WHITELIST : MODE_ALL;
 				setMode(heldItem, newMode);
-				player.sendMessage(new TranslationTextComponent(String.format(TestMod3Lang.MESSAGE_CLEARER_MODE_S.getTranslationKey(), newMode)), Util.DUMMY_UUID);
+				player.sendMessage(new TranslationTextComponent(String.format(TestMod3Lang.MESSAGE_CLEARER_MODE_S.getTranslationKey(), newMode)), Util.NIL_UUID);
 			} else {
-				final int minX = MathHelper.floor(player.getPosX() / 16) * 16;
-				final int minZ = MathHelper.floor(player.getPosZ() / 16) * 16;
+				final int minX = MathHelper.floor(player.getX() / 16) * 16;
+				final int minZ = MathHelper.floor(player.getZ() / 16) * 16;
 
-				player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CLEARER_CLEARING.getTranslationKey(), minX, minZ), Util.DUMMY_UUID);
+				player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CLEARER_CLEARING.getTranslationKey(), minX, minZ), Util.NIL_UUID);
 
 				for (int x = minX; x < minX + 16; x++) {
 					for (int z = minZ; z < minZ + 16; z++) {
@@ -63,17 +63,17 @@ public class ClearerItem extends Item {
 							final BlockPos pos = new BlockPos(x, y, z);
 							final Block block = world.getBlockState(pos).getBlock();
 							if ((currentMode == MODE_ALL && block != Blocks.BEDROCK) || whitelist.contains(block)) {
-								world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+								world.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
 							}
 						}
 					}
 				}
 
-				final BlockPos pos = player.getPosition();
+				final BlockPos pos = player.blockPosition();
 				final BlockState state = world.getBlockState(pos);
-				world.notifyBlockUpdate(pos, state, state, 3);
+				world.sendBlockUpdated(pos, state, state, 3);
 
-				player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CLEARER_CLEARED.getTranslationKey()), Util.DUMMY_UUID);
+				player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_CLEARER_CLEARED.getTranslationKey()), Util.NIL_UUID);
 			}
 		}
 
@@ -81,7 +81,7 @@ public class ClearerItem extends Item {
 	}
 
 	@Override
-	public boolean hasEffect(final ItemStack stack) {
-		return getMode(stack) == MODE_ALL || super.hasEffect(stack);
+	public boolean isFoil(final ItemStack stack) {
+		return getMode(stack) == MODE_ALL || super.isFoil(stack);
 	}
 }

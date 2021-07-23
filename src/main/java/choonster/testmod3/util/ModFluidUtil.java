@@ -23,7 +23,7 @@ public class ModFluidUtil {
 	 */
 	public static boolean hasBucket(final FluidStack fluidStack) {
 		return !fluidStack.getFluid().getAttributes().getBucket(fluidStack).isEmpty() &&
-				fluidStack.getFluid().getDefaultState().isSource();
+				fluidStack.getFluid().defaultFluidState().isSource();
 	}
 
 	/**

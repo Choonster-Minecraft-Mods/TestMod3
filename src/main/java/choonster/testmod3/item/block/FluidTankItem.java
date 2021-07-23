@@ -47,7 +47,7 @@ public class FluidTankItem extends BlockItem {
 	}
 
 	@Override
-	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
+	public void appendHoverText(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
 		FluidUtil.getFluidHandler(stack).ifPresent(fluidHandler -> {
 			final FluidTankSnapshot[] fluidTankSnapshots = FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler);
 			tooltip.addAll(FluidTankBlock.getFluidDataForDisplay(fluidTankSnapshots));
@@ -55,10 +55,10 @@ public class FluidTankItem extends BlockItem {
 	}
 
 	@Override
-	public void fillItemGroup(final ItemGroup group, final NonNullList<ItemStack> items) {
-		super.fillItemGroup(group, items);
+	public void fillItemCategory(final ItemGroup group, final NonNullList<ItemStack> items) {
+		super.fillItemCategory(group, items);
 
-		if (isInGroup(group)) {
+		if (allowdedIn(group)) {
 			items.addAll(tankItems);
 		}
 	}

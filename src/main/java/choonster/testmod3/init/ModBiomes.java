@@ -74,12 +74,12 @@ public class ModBiomes {
 		}
 
 		private static RegistryKey<Biome> key(final Biome biome) {
-			return RegistryKey.getOrCreateKey(ForgeRegistries.Keys.BIOMES, Objects.requireNonNull(ForgeRegistries.BIOMES.getKey(biome), "Biome registry name was null"));
+			return RegistryKey.create(ForgeRegistries.Keys.BIOMES, Objects.requireNonNull(ForgeRegistries.BIOMES.getKey(biome), "Biome registry name was null"));
 		}
 	}
 
 	private static class Utils {
-		private static final Method GET_SKY_COLOR_WITH_TEMPERATURE_MODIFIER = ObfuscationReflectionHelper.findMethod(BiomeMaker.class, /* getSkyColorWithTemperatureModifier */ "func_244206_a", float.class);
+		private static final Method GET_SKY_COLOR_WITH_TEMPERATURE_MODIFIER = ObfuscationReflectionHelper.findMethod(BiomeMaker.class, /* getSkyColorWithTemperatureModifier */ "calculateSkyColor", float.class);
 
 		public static Supplier<ConfiguredSurfaceBuilder<?>> surfaceBuilder(final RegistryKey<ConfiguredSurfaceBuilder<?>> key) {
 			return () -> WorldGenRegistries.CONFIGURED_SURFACE_BUILDER.getOrThrow(key);
@@ -101,40 +101,40 @@ public class ModBiomes {
 				final boolean hasFossils
 		) {
 			final MobSpawnInfo.Builder mobSpawnInfoBuilder = new MobSpawnInfo.Builder();
-			DefaultBiomeFeatures.withDesertMobs(mobSpawnInfoBuilder);
+			DefaultBiomeFeatures.desertSpawns(mobSpawnInfoBuilder);
 
 			final BiomeGenerationSettings.Builder biomeGenerationSettingBuilder = new BiomeGenerationSettings.Builder()
-					.withSurfaceBuilder(surfaceBuilder);
+					.surfaceBuilder(surfaceBuilder);
 
 			if (hasVillageAndOutpost) {
-				biomeGenerationSettingBuilder.withStructure(StructureFeatures.VILLAGE_DESERT);
-				biomeGenerationSettingBuilder.withStructure(StructureFeatures.PILLAGER_OUTPOST);
+				biomeGenerationSettingBuilder.addStructureStart(StructureFeatures.VILLAGE_DESERT);
+				biomeGenerationSettingBuilder.addStructureStart(StructureFeatures.PILLAGER_OUTPOST);
 			}
 
 			if (hasDesertPyramid) {
-				biomeGenerationSettingBuilder.withStructure(StructureFeatures.DESERT_PYRAMID);
+				biomeGenerationSettingBuilder.addStructureStart(StructureFeatures.DESERT_PYRAMID);
 			}
 
 			if (hasFossils) {
-				DefaultBiomeFeatures.withFossils(biomeGenerationSettingBuilder);
+				DefaultBiomeFeatures.addFossilDecoration(biomeGenerationSettingBuilder);
 			}
 
-			DefaultBiomeFeatures.withStrongholdAndMineshaft(biomeGenerationSettingBuilder);
-			biomeGenerationSettingBuilder.withStructure(StructureFeatures.RUINED_PORTAL_DESERT);
-			DefaultBiomeFeatures.withCavesAndCanyons(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.withLavaLakes(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.withMonsterRoom(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.withCommonOverworldBlocks(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.withOverworldOres(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.withDisks(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.withDefaultFlowers(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.withBadlandsGrass(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.withDesertDeadBushes(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.withNormalMushroomGeneration(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.withDesertVegetation(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.withLavaAndWaterSprings(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.withDesertWells(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.withFrozenTopLayer(biomeGenerationSettingBuilder);
+			DefaultBiomeFeatures.addDefaultOverworldLandStructures(biomeGenerationSettingBuilder);
+			biomeGenerationSettingBuilder.addStructureStart(StructureFeatures.RUINED_PORTAL_DESERT);
+			DefaultBiomeFeatures.addDefaultCarvers(biomeGenerationSettingBuilder);
+			DefaultBiomeFeatures.addDesertLakes(biomeGenerationSettingBuilder);
+			DefaultBiomeFeatures.addDefaultMonsterRoom(biomeGenerationSettingBuilder);
+			DefaultBiomeFeatures.addDefaultUndergroundVariety(biomeGenerationSettingBuilder);
+			DefaultBiomeFeatures.addDefaultOres(biomeGenerationSettingBuilder);
+			DefaultBiomeFeatures.addDefaultSoftDisks(biomeGenerationSettingBuilder);
+			DefaultBiomeFeatures.addDefaultFlowers(biomeGenerationSettingBuilder);
+			DefaultBiomeFeatures.addDefaultGrass(biomeGenerationSettingBuilder);
+			DefaultBiomeFeatures.addDesertVegetation(biomeGenerationSettingBuilder);
+			DefaultBiomeFeatures.addDefaultMushrooms(biomeGenerationSettingBuilder);
+			DefaultBiomeFeatures.addDesertExtraVegetation(biomeGenerationSettingBuilder);
+			DefaultBiomeFeatures.addDefaultSprings(biomeGenerationSettingBuilder);
+			DefaultBiomeFeatures.addDesertExtraDecoration(biomeGenerationSettingBuilder);
+			DefaultBiomeFeatures.addSurfaceFreezing(biomeGenerationSettingBuilder);
 
 			final int skyColour;
 			try {
@@ -145,22 +145,22 @@ public class ModBiomes {
 
 			return new Biome.Builder()
 					.precipitation(Biome.RainType.NONE)
-					.category(Biome.Category.DESERT)
+					.biomeCategory(Biome.Category.DESERT)
 					.depth(depth)
 					.scale(scale)
 					.temperature(2)
 					.downfall(0)
-					.setEffects(
+					.specialEffects(
 							new BiomeAmbience.Builder()
-									.setWaterColor(0x3f76e4)
-									.setWaterFogColor(0x50533)
-									.setFogColor(0xc0d8ff)
-									.withSkyColor(skyColour)
-									.setMoodSound(MoodSoundAmbience.DEFAULT_CAVE)
+									.waterColor(0x3f76e4)
+									.waterFogColor(0x50533)
+									.fogColor(0xc0d8ff)
+									.skyColor(skyColour)
+									.ambientMoodSound(MoodSoundAmbience.LEGACY_CAVE_SETTINGS)
 									.build()
 					)
-					.withMobSpawnSettings(mobSpawnInfoBuilder.build())
-					.withGenerationSettings(biomeGenerationSettingBuilder.build())
+					.mobSpawnSettings(mobSpawnInfoBuilder.build())
+					.generationSettings(biomeGenerationSettingBuilder.build())
 					.build();
 		}
 	}

@@ -36,6 +36,6 @@ public abstract class TileEntityBlock<TE extends TileEntity> extends Block {
 	@SuppressWarnings("unchecked")
 	@Nullable
 	protected TE getTileEntity(final IBlockReader world, final BlockPos pos) {
-		return (TE) world.getTileEntity(pos);
+		return (TE) world.getBlockEntity(pos);
 	}
 }

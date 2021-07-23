@@ -33,7 +33,7 @@ public class ModConfiguredFeatures {
 	public static final RegistryKey<ConfiguredFeature<?, ?>> END_IRON_ORE = key("end_iron_ore");
 
 	private static RegistryKey<ConfiguredFeature<?, ?>> key(final String name) {
-		return RegistryKey.getOrCreateKey(Registry.CONFIGURED_FEATURE_KEY, new ResourceLocation(TestMod3.MODID, name));
+		return RegistryKey.create(Registry.CONFIGURED_FEATURE_REGISTRY, new ResourceLocation(TestMod3.MODID, name));
 	}
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
@@ -46,35 +46,35 @@ public class ModConfiguredFeatures {
 			// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2535868-banner-nbt-tags
 			register(BANNER,
 					ModFeatures.BANNER.get()
-							.withConfiguration(BannerFeatureConfig.create(
+							.configured(BannerFeatureConfig.create(
 									DyeColor.PINK,
 									Pair.of(BannerPattern.GRADIENT_UP, DyeColor.MAGENTA),
 									Pair.of(BannerPattern.FLOWER, DyeColor.BLACK)
 							))
-							.withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT)
-							.withPlacement(ModConfiguredPlacements.IN_CHUNKS_DIVISIBLE_BY_16.get())
+							.decorated(Features.Placements.HEIGHTMAP_SQUARE)
+							.decorated(ModConfiguredPlacements.IN_CHUNKS_DIVISIBLE_BY_16.get())
 							.count(1)
 			);
 
 			register(NETHER_IRON_ORE,
 					Feature.ORE
-							.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NETHERRACK, Blocks.IRON_ORE.getDefaultState(), 20))
+							.configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NETHERRACK, Blocks.IRON_ORE.defaultBlockState(), 20))
 							.range(118)
-							.square()
+							.squared()
 							.count(16)
 			);
 
 			register(END_IRON_ORE,
 					Feature.ORE
-							.withConfiguration(new OreFeatureConfig(FillerBlockType.END_STONE, Blocks.IRON_ORE.getDefaultState(), 20))
+							.configured(new OreFeatureConfig(FillerBlockType.END_STONE, Blocks.IRON_ORE.defaultBlockState(), 20))
 							.range(128)
-							.square()
+							.squared()
 							.count(16)
 			);
 		}
 
 		private static void register(final RegistryKey<ConfiguredFeature<?, ?>> key, final ConfiguredFeature<?, ?> configuredFeature) {
-			Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, key.getLocation(), configuredFeature);
+			Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, key.location(), configuredFeature);
 		}
 	}
 

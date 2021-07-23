@@ -28,7 +28,7 @@ public abstract class LootItemHandlerTileEntity extends LockableItemHandlerTileE
 	@Override
 	public void openGUI(final ServerPlayerEntity player) {
 		if (inventory.getLootTable() != null && player.isSpectator()) {
-			player.sendMessage(new TranslationTextComponent("container.spectatorCantOpen").setStyle(Style.EMPTY.setFormatting(TextFormatting.RED)), Util.DUMMY_UUID);
+			player.sendMessage(new TranslationTextComponent("container.spectatorCantOpen").setStyle(Style.EMPTY.withColor(TextFormatting.RED)), Util.NIL_UUID);
 		} else {
 			super.openGUI(player);
 		}

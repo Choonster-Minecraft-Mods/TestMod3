@@ -41,7 +41,7 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 
 	@Override
 	public void deserializeNBT(final IntNBT nbt) {
-		energy = nbt.getInt();
+		energy = nbt.getAsInt();
 	}
 
 	@Override
@@ -93,11 +93,11 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 		final World world = getWorld();
 		final ChunkPos chunkPos = getChunkPos();
 
-		if (world.isRemote) return;
+		if (world.isClientSide) return;
 
-		if (world.getChunkProvider().isChunkLoaded(chunkPos)) {  // Don't load the chunk when reading from NBT
+		if (world.getChunkSource().isEntityTickingChunk(chunkPos)) {  // Don't load the chunk when reading from NBT
 			final Chunk chunk = world.getChunk(chunkPos.x, chunkPos.z);
-			chunk.markDirty();
+			chunk.markUnsaved();
 			TestMod3.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> chunk), new UpdateChunkEnergyValueMessage(this));
 		}
 	}

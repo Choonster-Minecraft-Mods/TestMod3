@@ -21,25 +21,25 @@ public abstract class StaticFluid extends ForgeFlowingFluid {
 	}
 
 	@Override
-	protected boolean canFlow(final IBlockReader worldIn, final BlockPos fromPos, final BlockState fromBlockState, final Direction direction, final BlockPos toPos, final BlockState toBlockState, final FluidState toFluidState, final Fluid fluidIn) {
-		return direction.getAxis() == Direction.Axis.Y && super.canFlow(worldIn, fromPos, fromBlockState, direction, toPos, toBlockState, toFluidState, fluidIn);
+	protected boolean canSpreadTo(final IBlockReader worldIn, final BlockPos fromPos, final BlockState fromBlockState, final Direction direction, final BlockPos toPos, final BlockState toBlockState, final FluidState toFluidState, final Fluid fluidIn) {
+		return direction.getAxis() == Direction.Axis.Y && super.canSpreadTo(worldIn, fromPos, fromBlockState, direction, toPos, toBlockState, toFluidState, fluidIn);
 	}
 
 	public static class Flowing extends StaticFluid {
 		public Flowing(final Properties properties) {
 			super(properties);
-			setDefaultState(getStateContainer().getBaseState().with(LEVEL_1_8, 7));
+			registerDefaultState(getStateDefinition().any().setValue(LEVEL, 7));
 		}
 
 		@Override
-		protected void fillStateContainer(final StateContainer.Builder<Fluid, FluidState> builder) {
-			super.fillStateContainer(builder);
-			builder.add(LEVEL_1_8);
+		protected void createFluidStateDefinition(final StateContainer.Builder<Fluid, FluidState> builder) {
+			super.createFluidStateDefinition(builder);
+			builder.add(LEVEL);
 		}
 
 		@Override
-		public int getLevel(final FluidState state) {
-			return state.get(LEVEL_1_8);
+		public int getAmount(final FluidState state) {
+			return state.getValue(LEVEL);
 		}
 
 		@Override
@@ -54,7 +54,7 @@ public abstract class StaticFluid extends ForgeFlowingFluid {
 		}
 
 		@Override
-		public int getLevel(final FluidState state) {
+		public int getAmount(final FluidState state) {
 			return 8;
 		}
 

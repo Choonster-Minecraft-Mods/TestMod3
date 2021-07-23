@@ -39,7 +39,7 @@ public class PigSpawnerRefillerBlock extends Block implements IPigSpawnerInterac
 			pigSpawnerFinite.setNumPigs(pigSpawnerFinite.getMaxNumPigs());
 
 			if (iCommandSender != null) {
-				iCommandSender.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_PIG_SPAWNER_REFILLER_REFILLED.getTranslationKey()), Util.DUMMY_UUID);
+				iCommandSender.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_PIG_SPAWNER_REFILLER_REFILLED.getTranslationKey()), Util.NIL_UUID);
 			}
 		}
 

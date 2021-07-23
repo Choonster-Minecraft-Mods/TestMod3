@@ -27,7 +27,7 @@ public abstract class ScriptsItem extends Item {
 		this.scriptFunction = scriptFunction;
 	}
 
-	private int getNumber(final ItemStack stack) {
+	private static int getNumber(final ItemStack stack) {
 		if (stack.hasTag()) {
 			return stack.getTag().getInt("Number");
 		} else {
@@ -36,16 +36,16 @@ public abstract class ScriptsItem extends Item {
 	}
 
 	@Override
-	public ITextComponent getDisplayName(final ItemStack stack) {
-		return super.getDisplayName(stack).deepCopy().appendString(scriptFunction.apply(getNumber(stack)));
+	public ITextComponent getName(final ItemStack stack) {
+		return super.getName(stack).copy().append(scriptFunction.apply(getNumber(stack)));
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final PlayerEntity playerIn, final Hand hand) {
-		final ItemStack heldItem = playerIn.getHeldItem(hand);
+	public ActionResult<ItemStack> use(final World worldIn, final PlayerEntity playerIn, final Hand hand) {
+		final ItemStack heldItem = playerIn.getItemInHand(hand);
 
-		if (!worldIn.isRemote) {
-			playerIn.sendMessage(new TranslationTextComponent(String.format(TestMod3Lang.MESSAGE_SCRIPTS_RIGHT_CLICK.getTranslationKey(), getTranslationKey()), scriptFunction.apply(getNumber(heldItem))), Util.DUMMY_UUID);
+		if (!worldIn.isClientSide) {
+			playerIn.sendMessage(new TranslationTextComponent(String.format(TestMod3Lang.MESSAGE_SCRIPTS_RIGHT_CLICK.getTranslationKey(), getDescriptionId()), scriptFunction.apply(getNumber(heldItem))), Util.NIL_UUID);
 		}
 
 		return new ActionResult<>(ActionResultType.SUCCESS, heldItem);

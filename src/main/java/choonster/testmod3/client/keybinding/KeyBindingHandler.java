@@ -45,11 +45,11 @@ public class KeyBindingHandler {
 	public static void clientTick(final TickEvent.ClientTickEvent event) {
 		if (event.phase != TickEvent.Phase.END) return;
 
-		if (ModKeyBindings.PLACE_HELD_BLOCK.isKeyDown()) {
+		if (ModKeyBindings.PLACE_HELD_BLOCK.isDown()) {
 			placeHeldBlock();
 		}
 
-		if (ModKeyBindings.PRINT_POTIONS.isPressed()) {
+		if (ModKeyBindings.PRINT_POTIONS.consumeClick()) {
 			printPotions();
 		}
 	}
@@ -66,19 +66,19 @@ public class KeyBindingHandler {
 		final ClientPlayerEntity clientPlayer = MINECRAFT.player;
 
 		for (final Hand hand : Hand.values()) {
-			final ItemStack heldItem = clientPlayer.getHeldItem(hand);
+			final ItemStack heldItem = clientPlayer.getItemInHand(hand);
 			final int heldItemCount = heldItem.getCount();
 
-			final BlockPos pos = clientPlayer.getPosition().down();
+			final BlockPos pos = clientPlayer.blockPosition().below();
 			final BlockRayTraceResult rayTraceResult = new BlockRayTraceResult(new Vector3d(0, 0, 0), Direction.UP, pos, false);
 
-			final ActionResultType actionResult = MINECRAFT.playerController.func_217292_a(clientPlayer, MINECRAFT.world, hand, rayTraceResult);
+			final ActionResultType actionResult = MINECRAFT.gameMode.useItemOn(clientPlayer, MINECRAFT.level, hand, rayTraceResult);
 
 			if (actionResult == ActionResultType.SUCCESS) {
-				clientPlayer.swingArm(hand);
+				clientPlayer.swing(hand);
 
-				if (!heldItem.isEmpty() && (heldItem.getCount() != heldItemCount || MINECRAFT.playerController.isInCreativeMode())) {
-					MINECRAFT.gameRenderer.itemRenderer.resetEquippedProgress(hand);
+				if (!heldItem.isEmpty() && (heldItem.getCount() != heldItemCount || MINECRAFT.gameMode.hasInfiniteItems())) {
+					MINECRAFT.gameRenderer.itemInHandRenderer.itemUsed(hand);
 				}
 
 				return;
@@ -95,25 +95,25 @@ public class KeyBindingHandler {
 	private static void printPotions() {
 		final ClientPlayerEntity clientPlayer = MINECRAFT.player;
 
-		if (MINECRAFT.objectMouseOver.getType() == RayTraceResult.Type.ENTITY) {
-			final EntityRayTraceResult rayTraceResult = (EntityRayTraceResult) MINECRAFT.objectMouseOver;
+		if (MINECRAFT.hitResult.getType() == RayTraceResult.Type.ENTITY) {
+			final EntityRayTraceResult rayTraceResult = (EntityRayTraceResult) MINECRAFT.hitResult;
 			if (rayTraceResult.getEntity() instanceof LivingEntity) {
-				final Collection<EffectInstance> activePotionEffects = ((LivingEntity) rayTraceResult.getEntity()).getActivePotionEffects();
+				final Collection<EffectInstance> activePotionEffects = ((LivingEntity) rayTraceResult.getEntity()).getActiveEffects();
 
 				if (activePotionEffects.isEmpty()) {
-					clientPlayer.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_POTIONS.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()), Util.DUMMY_UUID);
+					clientPlayer.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_POTIONS.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()), Util.NIL_UUID);
 				} else {
-					clientPlayer.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_PRINT_POTIONS_POTIONS.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()), Util.DUMMY_UUID);
+					clientPlayer.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_PRINT_POTIONS_POTIONS.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()), Util.NIL_UUID);
 
 					activePotionEffects.forEach(
-							potionEffect -> clientPlayer.sendMessage(new StringTextComponent(potionEffect.toString()), Util.DUMMY_UUID)
+							potionEffect -> clientPlayer.sendMessage(new StringTextComponent(potionEffect.toString()), Util.NIL_UUID)
 					);
 				}
 			} else {
-				clientPlayer.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_PRINT_POTIONS_NOT_LIVING.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()), Util.DUMMY_UUID);
+				clientPlayer.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_PRINT_POTIONS_NOT_LIVING.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()), Util.NIL_UUID);
 			}
 		} else {
-			clientPlayer.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_ENTITY.getTranslationKey()), Util.DUMMY_UUID);
+			clientPlayer.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_ENTITY.getTranslationKey()), Util.NIL_UUID);
 		}
 	}
 }

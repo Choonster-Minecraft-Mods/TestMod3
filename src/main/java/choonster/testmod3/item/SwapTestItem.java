@@ -38,11 +38,11 @@ public class SwapTestItem extends Item {
 	}
 
 	@Override
-	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
+	public void appendHoverText(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
 		final ItemStack otherItem = getOtherItem();
 
 		if (!otherItem.isEmpty()) {
-			tooltip.add(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_SWAP_TEST_WITH_ITEM.getTranslationKey(), otherItem.getDisplayName()));
+			tooltip.add(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_SWAP_TEST_WITH_ITEM.getTranslationKey(), otherItem.getHoverName()));
 		} else {
 			tooltip.add(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_SWAP_TEST_WITHOUT_ITEM.getTranslationKey()));
 		}
@@ -50,13 +50,13 @@ public class SwapTestItem extends Item {
 
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World worldIn, final PlayerEntity playerIn, final Hand hand) {
+	public ActionResult<ItemStack> use(final World worldIn, final PlayerEntity playerIn, final Hand hand) {
 		final ItemStack otherItem = getOtherItem();
 
-		if (!otherItem.isEmpty() && playerIn.isSneaking()) {
+		if (!otherItem.isEmpty() && playerIn.isShiftKeyDown()) {
 			return new ActionResult<>(ActionResultType.SUCCESS, otherItem.copy());
 		}
 
-		return new ActionResult<>(ActionResultType.PASS, playerIn.getHeldItem(hand));
+		return new ActionResult<>(ActionResultType.PASS, playerIn.getItemInHand(hand));
 	}
 }

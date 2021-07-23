@@ -134,7 +134,7 @@ public enum TestMod3Lang {
 	private final String key;
 
 	TestMod3Lang(final String type, final String path) {
-		this(Util.makeTranslationKey(type, new ResourceLocation(TestMod3.MODID, path)));
+		this(Util.makeDescriptionId(type, new ResourceLocation(TestMod3.MODID, path)));
 	}
 
 	TestMod3Lang(final String key) {

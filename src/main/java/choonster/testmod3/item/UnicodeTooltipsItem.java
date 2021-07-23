@@ -30,21 +30,21 @@ public class UnicodeTooltipsItem extends Item {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
-		super.addInformation(stack, world, tooltip, flag);
+	public void appendHoverText(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
+		super.appendHoverText(stack, world, tooltip, flag);
 
 		tooltip.add(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_UNICODE_TOOLTIPS_1.getTranslationKey()));
 
 		tooltip.add(
 				new StringTextComponent("§a§o")
-						.appendSibling(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_UNICODE_TOOLTIPS_2.getTranslationKey()))
-						.appendString("§r")
+						.append(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_UNICODE_TOOLTIPS_2.getTranslationKey()))
+						.append("§r")
 		);
 
 		tooltip.add(
 				new StringTextComponent("" + TextFormatting.GREEN + TextFormatting.ITALIC)
-						.appendSibling(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_UNICODE_TOOLTIPS_3.getTranslationKey()))
-						.appendString("" + TextFormatting.RESET)
+						.append(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_UNICODE_TOOLTIPS_3.getTranslationKey()))
+						.append("" + TextFormatting.RESET)
 		);
 	}
 }

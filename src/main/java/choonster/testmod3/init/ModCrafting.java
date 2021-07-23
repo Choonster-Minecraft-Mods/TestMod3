@@ -90,7 +90,6 @@ public class ModCrafting {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	public static class Ingredients {
 		public static final IIngredientSerializer<Ingredient> CONDITIONAL = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "conditional"), new ConditionalIngredientSerializer());
 		public static final IIngredientSerializer<FluidContainerIngredient> FLUID_CONTAINER = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "fluid_container"), new FluidContainerIngredient.Serializer());
@@ -166,8 +165,8 @@ public class ModCrafting {
 		 */
 		private static void removeRecipes(final RecipeManager recipeManager, final ITag.INamedTag<Item> tag) {
 			final int recipesRemoved = removeRecipes(recipeManager, recipe -> {
-				final ItemStack recipeOutput = recipe.getRecipeOutput();
-				return !recipeOutput.isEmpty() && recipeOutput.getItem().isIn(tag);
+				final ItemStack resultItem = recipe.getResultItem();
+				return !resultItem.isEmpty() && resultItem.getItem().is(tag);
 			});
 
 			LOGGER.info("Removed {} recipe(s) for tag {}", recipesRemoved, tag.getName());

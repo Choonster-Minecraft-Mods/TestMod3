@@ -34,8 +34,8 @@ public class SlowSwordItem extends SwordItem {
 		final Multimap<Attribute, AttributeModifier> modifiers = ArrayListMultimap.create(super.getAttributeModifiers(slot, stack));
 
 		if (slot == EquipmentSlotType.MAINHAND) {
-			replaceModifier(modifiers, Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE_MODIFIER, 2);
-			replaceModifier(modifiers, Attributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, 1.5);
+			replaceModifier(modifiers, Attributes.ATTACK_DAMAGE, BASE_ATTACK_DAMAGE_UUID, 2);
+			replaceModifier(modifiers, Attributes.ATTACK_SPEED, BASE_ATTACK_SPEED_UUID, 1.5);
 		}
 
 		return ImmutableMultimap.copyOf(modifiers);
@@ -54,11 +54,11 @@ public class SlowSwordItem extends SwordItem {
 		final Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute);
 
 		// Find the modifier with the specified ID, if any
-		final Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
+		final Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getId().equals(id)).findFirst();
 
 		modifierOptional.ifPresent(modifier -> { // If it exists,
 			modifiers.remove(modifier); // Remove it
-			modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), modifier.getAmount() * multiplier, modifier.getOperation())); // Add the new modifier
+			modifiers.add(new AttributeModifier(modifier.getId(), modifier.getName(), modifier.getAmount() * multiplier, modifier.getOperation())); // Add the new modifier
 		});
 	}
 }

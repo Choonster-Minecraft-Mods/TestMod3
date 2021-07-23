@@ -19,9 +19,9 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class VanillaCodecs {
-	public static final Codec<DyeColor> DYE_COLOR = IStringSerializable.createEnumCodec(
+	public static final Codec<DyeColor> DYE_COLOR = IStringSerializable.fromEnum(
 			DyeColor::values,
-			createFromNameFunction(DyeColor::values, DyeColor::getString)
+			createFromNameFunction(DyeColor::values, DyeColor::getSerializedName)
 	);
 
 	public static final Codec<BannerPattern> BANNER_PATTERN = createExtensibleEnumCodec(

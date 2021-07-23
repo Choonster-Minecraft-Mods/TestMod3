@@ -22,20 +22,20 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class TestMod3EntityLootTables extends EntityLootTables {
 	@Override
 	protected void addTables() {
-		registerLootTable(ModEntities.PLAYER_AVOIDING_CREEPER.get(),
-				LootTable.builder()
-						.addLootPool(
-								LootPool.builder()
-										.rolls(ConstantRange.of(1))
-										.addEntry(ItemLootEntry.builder(Items.GUNPOWDER)
-												.acceptFunction(SetCount.builder(RandomValueRange.of(0.0F, 2.0F)))
-												.acceptFunction(LootingEnchantBonus.builder(RandomValueRange.of(0.0F, 1.0F)))
+		add(ModEntities.PLAYER_AVOIDING_CREEPER.get(),
+				LootTable.lootTable()
+						.withPool(
+								LootPool.lootPool()
+										.setRolls(ConstantRange.exactly(1))
+										.add(ItemLootEntry.lootTableItem(Items.GUNPOWDER)
+												.apply(SetCount.setCount(RandomValueRange.between(0.0F, 2.0F)))
+												.apply(LootingEnchantBonus.lootingMultiplier(RandomValueRange.between(0.0F, 1.0F)))
 										)
 						)
-						.addLootPool(
-								LootPool.builder()
-										.addEntry(TagLootEntry.getBuilder(ItemTags.MUSIC_DISCS))
-										.acceptCondition(EntityHasProperty.builder(LootContext.EntityTarget.KILLER, EntityPredicate.Builder.create().type(EntityTypeTags.SKELETONS)))
+						.withPool(
+								LootPool.lootPool()
+										.add(TagLootEntry.expandTag(ItemTags.MUSIC_DISCS))
+										.when(EntityHasProperty.hasProperties(LootContext.EntityTarget.KILLER, EntityPredicate.Builder.entity().of(EntityTypeTags.SKELETONS)))
 						)
 		);
 	}

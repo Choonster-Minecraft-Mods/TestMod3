@@ -41,9 +41,9 @@ public abstract class BulkUpdateContainerCapabilityMessage<HANDLER, DATA> {
 	final Direction facing;
 
 	/**
-	 * The window ID of the {@link Container}.
+	 * The ID of the {@link Container}.
 	 */
-	final int windowID;
+	final int containerID;
 
 	/**
 	 * The capability data instances for each slot, indexed by their index in the original {@link NonNullList<ItemStack>}.
@@ -53,13 +53,13 @@ public abstract class BulkUpdateContainerCapabilityMessage<HANDLER, DATA> {
 	public BulkUpdateContainerCapabilityMessage(
 			final Capability<HANDLER> capability,
 			@Nullable final Direction facing,
-			final int windowID,
+			final int containerID,
 			final NonNullList<ItemStack> items,
 			final CapabilityContainerUpdateMessageUtils.CapabilityDataConverter<HANDLER, DATA> capabilityDataConverter
 	) {
 		this.capability = capability;
 		this.facing = facing;
-		this.windowID = windowID;
+		this.containerID = containerID;
 
 		capabilityData = new Int2ObjectOpenHashMap<>();
 		IntStream.range(0, items.size()).forEach(slotNumber -> {
@@ -78,12 +78,12 @@ public abstract class BulkUpdateContainerCapabilityMessage<HANDLER, DATA> {
 	protected BulkUpdateContainerCapabilityMessage(
 			final Capability<HANDLER> capability,
 			@Nullable final Direction facing,
-			final int windowID,
+			final int containerID,
 			final Int2ObjectMap<DATA> capabilityData
 	) {
 		this.capability = capability;
 		this.facing = facing;
-		this.windowID = windowID;
+		this.containerID = containerID;
 		this.capabilityData = capabilityData;
 	}
 
@@ -121,7 +121,7 @@ public abstract class BulkUpdateContainerCapabilityMessage<HANDLER, DATA> {
 
 		final Direction facing;
 		if (hasFacing) {
-			facing = buffer.readEnumValue(Direction.class);
+			facing = buffer.readEnum(Direction.class);
 		} else {
 			facing = null;
 		}
@@ -164,10 +164,10 @@ public abstract class BulkUpdateContainerCapabilityMessage<HANDLER, DATA> {
 		buffer.writeBoolean(hasFacing);
 
 		if (hasFacing) {
-			buffer.writeEnumValue(message.facing);
+			buffer.writeEnum(message.facing);
 		}
 
-		buffer.writeInt(message.windowID);
+		buffer.writeInt(message.containerID);
 
 		buffer.writeInt(message.capabilityData.size());
 		Int2ObjectMaps.fastForEach(message.capabilityData, (entry) -> {
@@ -209,10 +209,10 @@ public abstract class BulkUpdateContainerCapabilityMessage<HANDLER, DATA> {
 			}
 
 			final Container container;
-			if (message.windowID == 0) {
-				container = player.container;
-			} else if (message.windowID == player.openContainer.windowId) {
-				container = player.openContainer;
+			if (message.containerID == 0) {
+				container = player.inventoryMenu;
+			} else if (message.containerID == player.containerMenu.containerId) {
+				container = player.containerMenu;
 			} else {
 				return;
 			}
@@ -247,7 +247,7 @@ public abstract class BulkUpdateContainerCapabilityMessage<HANDLER, DATA> {
 	public interface MessageFactory<HANDLER, DATA, MESSAGE extends BulkUpdateContainerCapabilityMessage<HANDLER, DATA>> {
 		MESSAGE createMessage(
 				@Nullable Direction facing,
-				int windowID,
+				int containerID,
 				Int2ObjectMap<DATA> capabilityData
 		);
 	}

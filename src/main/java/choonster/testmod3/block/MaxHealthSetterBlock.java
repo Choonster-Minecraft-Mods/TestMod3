@@ -26,14 +26,14 @@ public class MaxHealthSetterBlock extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
-		if (!world.isRemote) {
+	public ActionResultType use(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+		if (!world.isClientSide) {
 			MaxHealthCapability.getMaxHealth(player).ifPresent(maxHealth -> {
-				final float healthToAdd = player.isSneaking() ? -1.0f : 1.0f;
+				final float healthToAdd = player.isShiftKeyDown() ? -1.0f : 1.0f;
 
 				maxHealth.addBonusMaxHealth(healthToAdd);
 
-				player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_MAX_HEALTH_ADD.getTranslationKey(), player.getDisplayName(), healthToAdd), Util.DUMMY_UUID);
+				player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_MAX_HEALTH_ADD.getTranslationKey(), player.getDisplayName(), healthToAdd), Util.NIL_UUID);
 			});
 		}
 

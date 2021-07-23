@@ -33,18 +33,18 @@ public class ModEntities {
 	private static boolean isInitialised;
 
 	public static final RegistryObject<EntityType<ModArrowEntity>> MOD_ARROW = registerEntityType("mod_arrow",
-			() -> EntityType.Builder.<ModArrowEntity>create((ModArrowEntity::new), EntityClassification.MISC)
-					.size(0.5f, 0.5f)
+			() -> EntityType.Builder.<ModArrowEntity>of((ModArrowEntity::new), EntityClassification.MISC)
+					.sized(0.5f, 0.5f)
 	);
 
 	public static final RegistryObject<EntityType<BlockDetectionArrowEntity>> BLOCK_DETECTION_ARROW = registerEntityType("block_detection_arrow",
-			() -> EntityType.Builder.<BlockDetectionArrowEntity>create(BlockDetectionArrowEntity::new, EntityClassification.MISC)
-					.size(0.5f, 0.5f)
+			() -> EntityType.Builder.<BlockDetectionArrowEntity>of(BlockDetectionArrowEntity::new, EntityClassification.MISC)
+					.sized(0.5f, 0.5f)
 	);
 
 	public static final RegistryObject<EntityType<PlayerAvoidingCreeperEntity>> PLAYER_AVOIDING_CREEPER = registerEntityType("player_avoiding_creeper",
-			() -> EntityType.Builder.create(PlayerAvoidingCreeperEntity::new, EntityClassification.MONSTER)
-					.size(0.6f, 1.7f)
+			() -> EntityType.Builder.of(PlayerAvoidingCreeperEntity::new, EntityClassification.MONSTER)
+					.sized(0.6f, 1.7f)
 	);
 
 	/**
@@ -81,7 +81,7 @@ public class ModEntities {
 	public static class RegistrationHandler {
 		@SubscribeEvent
 		public static void registerAttributes(final EntityAttributeCreationEvent event) {
-			event.put(PLAYER_AVOIDING_CREEPER.get(), PlayerAvoidingCreeperEntity.registerAttributes().create());
+			event.put(PLAYER_AVOIDING_CREEPER.get(), PlayerAvoidingCreeperEntity.registerAttributes().build());
 		}
 	}
 
@@ -89,7 +89,7 @@ public class ModEntities {
 	public static class SpawnHandler {
 		@SubscribeEvent(priority = EventPriority.LOW)
 		public static void registerEntitySpawns(final BiomeLoadingEvent event) {
-			final RegistryKey<Biome> biomeRegistryKey = RegistryKey.getOrCreateKey(ForgeRegistries.Keys.BIOMES, event.getName());
+			final RegistryKey<Biome> biomeRegistryKey = RegistryKey.create(ForgeRegistries.Keys.BIOMES, event.getName());
 
 			if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.OCEAN)) {
 				addSpawn(event, EntityType.GUARDIAN, 100, 5, 20, EntityClassification.WATER_CREATURE);
@@ -141,7 +141,7 @@ public class ModEntities {
 					.findFirst()
 					.ifPresent(spawners ->
 							event.getSpawns().getSpawner(classificationToAdd)
-									.add(new MobSpawnInfo.Spawners(entityTypeToAdd, spawners.itemWeight, spawners.minCount, spawners.maxCount))
+									.add(new MobSpawnInfo.Spawners(entityTypeToAdd, spawners.weight, spawners.minCount, spawners.maxCount))
 					);
 		}
 	}

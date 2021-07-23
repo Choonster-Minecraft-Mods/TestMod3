@@ -80,8 +80,8 @@ public class ModBucketItem extends Item {
 	}
 
 	@Override
-	public void fillItemGroup(final ItemGroup group, final NonNullList<ItemStack> items) {
-		if (!isInGroup(group)) return;
+	public void fillItemCategory(final ItemGroup group, final NonNullList<ItemStack> items) {
+		if (!allowdedIn(group)) return;
 
 		items.add(empty);
 
@@ -99,9 +99,9 @@ public class ModBucketItem extends Item {
 	}
 
 	@Override
-	public ITextComponent getDisplayName(final ItemStack stack) {
+	public ITextComponent getName(final ItemStack stack) {
 		final FluidStack fluidStack = getFluid(stack);
-		final String translationKey = getTranslationKey(stack);
+		final String translationKey = getDescriptionId(stack);
 
 		// If the bucket is empty, translate the translation key directly
 		if (fluidStack.isEmpty()) {
@@ -111,7 +111,7 @@ public class ModBucketItem extends Item {
 		// If there's a fluid-specific translation, use it
 		final String fluidTranslationKey = translationKey + ".filled." + fluidStack.getTranslationKey();
 
-		if (LanguageMap.getInstance()./* exists */func_230506_b_(fluidTranslationKey)) {
+		if (LanguageMap.getInstance().has(fluidTranslationKey)) {
 			return new TranslationTextComponent(fluidTranslationKey);
 		}
 
@@ -130,12 +130,12 @@ public class ModBucketItem extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World world, final PlayerEntity player, final Hand hand) {
-		final ItemStack heldItem = player.getHeldItem(hand);
+	public ActionResult<ItemStack> use(final World world, final PlayerEntity player, final Hand hand) {
+		final ItemStack heldItem = player.getItemInHand(hand);
 		final FluidStack fluidStack = getFluid(heldItem);
 		final boolean isEmpty = fluidStack.isEmpty();
 
-		final BlockRayTraceResult rayTrace = rayTrace(world, player, isEmpty ? RayTraceContext.FluidMode.SOURCE_ONLY : RayTraceContext.FluidMode.NONE);
+		final BlockRayTraceResult rayTrace = getPlayerPOVHitResult(world, player, isEmpty ? RayTraceContext.FluidMode.SOURCE_ONLY : RayTraceContext.FluidMode.NONE);
 
 		final ActionResult<ItemStack> eventResult = ForgeEventFactory.onBucketUse(player, world, heldItem, rayTrace);
 		if (eventResult != null) {
@@ -143,15 +143,15 @@ public class ModBucketItem extends Item {
 		}
 
 		if (rayTrace.getType() != RayTraceResult.Type.BLOCK) {
-			return ActionResult.resultPass(heldItem);
+			return ActionResult.pass(heldItem);
 		}
 
-		final BlockPos pos = rayTrace.getPos();
-		final Direction direction = rayTrace.getFace();
-		final BlockPos adjacentPos = pos.offset(direction);
+		final BlockPos pos = rayTrace.getBlockPos();
+		final Direction direction = rayTrace.getDirection();
+		final BlockPos adjacentPos = pos.relative(direction);
 
-		if (!world.isBlockModifiable(player, pos) || !player.canPlayerEdit(adjacentPos, direction, heldItem)) {
-			return ActionResult.resultFail(heldItem);
+		if (!world.mayInteract(player, pos) || !player.mayUseItemAt(adjacentPos, direction, heldItem)) {
+			return ActionResult.fail(heldItem);
 		}
 
 		final ItemStack result;
@@ -160,17 +160,17 @@ public class ModBucketItem extends Item {
 			final FluidActionResult pickUpResult = tryPickUpFluid(player, heldItem, world, pos, direction);
 
 			if (!pickUpResult.isSuccess()) {
-				return ActionResult.resultFail(heldItem);
+				return ActionResult.fail(heldItem);
 			}
 
 			final ItemStack filledBucket = pickUpResult.getResult();
 
-			if (!world.isRemote()) {
+			if (!world.isClientSide()) {
 				CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity) player, filledBucket);
 			}
 
 			// Add the filled bucket to the player's inventory, or replace this stack if this was the last empty bucket
-			result = DrinkHelper.fill(heldItem, player, filledBucket);
+			result = DrinkHelper.createFilledResult(heldItem, player, filledBucket);
 		} else {
 			final BlockState destState = world.getBlockState(pos);
 			final BlockPos destPos = canBlockContainFluid(world, pos, direction, destState, fluidStack) ? pos : adjacentPos;
@@ -184,20 +184,20 @@ public class ModBucketItem extends Item {
 			final BlockPos placePos = placeResultPair.getSecond();
 
 			if (!placeResult.isSuccess()) {
-				return ActionResult.resultFail(heldItem);
+				return ActionResult.fail(heldItem);
 			}
 
-			if (!world.isRemote()) {
+			if (!world.isClientSide()) {
 				CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) player, placePos, heldItem);
 			}
 
 			// Return an empty bucket, or the original held item if the player is in Creative Mode
-			result = !player.abilities.isCreativeMode ? empty.copy() : heldItem;
+			result = !player.abilities.instabuild ? empty.copy() : heldItem;
 		}
 
-		player.addStat(Stats.ITEM_USED.get(this));
+		player.awardStat(Stats.ITEM_USED.get(this));
 
-		return ActionResult.func_233538_a_(result, world.isRemote());
+		return ActionResult.sidedSuccess(result, world.isClientSide());
 	}
 
 	private FluidActionResult tryPickUpFluid(
@@ -218,7 +218,7 @@ public class ModBucketItem extends Item {
 		// This includes FlowingFluidBlock/ForgeFlowingFluidBlock used by Vanilla and likely most modded fluids.
 		if (destBlock instanceof IBucketPickupHandler) {
 			world.captureBlockSnapshots = true;
-			final Fluid fluid = ((IBucketPickupHandler) destBlock).pickupFluid(world, pos, destState);
+			final Fluid fluid = ((IBucketPickupHandler) destBlock).takeLiquid(world, pos, destState);
 			world.captureBlockSnapshots = false;
 
 			@SuppressWarnings("unchecked")
@@ -239,7 +239,7 @@ public class ModBucketItem extends Item {
 						final BlockState oldState = snapshot.getReplacedBlock();
 						final BlockState newState = world.getBlockState(snapshot.getPos());
 
-						newState.onBlockAdded(world, snapshot.getPos(), oldState, false);
+						newState.onPlace(world, snapshot.getPos(), oldState, false);
 
 						world.markAndNotifyBlock(snapshot.getPos(), world.getChunkAt(snapshot.getPos()), oldState, newState, updateFlag, 512);
 					}
@@ -265,7 +265,7 @@ public class ModBucketItem extends Item {
 	) {
 		final Fluid fluid = fluidStack.getFluid();
 
-		if (world.getDimensionType().isUltrawarm() && fluid.getAttributes().doesVaporize(world, pos, fluidStack)) {
+		if (world.dimensionType().ultraWarm() && fluid.getAttributes().doesVaporize(world, pos, fluidStack)) {
 
 			fluid.getAttributes().vaporize(player, world, pos, fluidStack);
 
@@ -278,8 +278,8 @@ public class ModBucketItem extends Item {
 			final Block destBlock = destState.getBlock();
 
 			// Try to place the fluid in a Vanilla ILiquidContainer block
-			if (destBlock instanceof ILiquidContainer && ((ILiquidContainer) destBlock).canContainFluid(world, pos, destState, fluid)) {
-				((ILiquidContainer) destBlock).receiveFluid(world, pos, destState, ((FlowingFluid) fluid).getStillFluidState(false));
+			if (destBlock instanceof ILiquidContainer && ((ILiquidContainer) destBlock).canPlaceLiquid(world, pos, destState, fluid)) {
+				((ILiquidContainer) destBlock).placeLiquid(world, pos, destState, ((FlowingFluid) fluid).getSource(false));
 
 				final SoundEvent soundEvent = fluid.getAttributes().getEmptySound(fluidStack);
 				world.playSound(player, pos, soundEvent, SoundCategory.BLOCKS, 1, 1);
@@ -299,7 +299,7 @@ public class ModBucketItem extends Item {
 		if (tryAdjacentBlock) {
 			return tryPlaceContainedFluid(
 					player, hand, container, fluidStack,
-					world, originalPos.offset(direction), originalPos, direction, false
+					world, originalPos.relative(direction), originalPos, direction, false
 			);
 		}
 
@@ -316,7 +316,7 @@ public class ModBucketItem extends Item {
 	) {
 		// If the block implements ILiquidContainer, check if it can contain the fluid
 		if (blockState.getBlock() instanceof ILiquidContainer) {
-			return ((ILiquidContainer) blockState.getBlock()).canContainFluid(worldIn, posIn, blockState, fluidStack.getFluid());
+			return ((ILiquidContainer) blockState.getBlock()).canPlaceLiquid(worldIn, posIn, blockState, fluidStack.getFluid());
 		}
 
 		// Otherwise check if there's an IFluidHandler that can be filled with the entire FluidStack

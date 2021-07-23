@@ -47,7 +47,7 @@ public final class LockCapability {
 				final CompoundNBT tagCompound = new CompoundNBT();
 
 				final LockCode lockCode = instance.getLockCode();
-				lockCode.write(tagCompound);
+				lockCode.addToTag(tagCompound);
 
 				return tagCompound;
 			}
@@ -60,7 +60,7 @@ public final class LockCapability {
 				final Lock lock = (Lock) instance;
 				final CompoundNBT tagCompound = (CompoundNBT) nbt;
 
-				lock.setLockCode(LockCode.read(tagCompound));
+				lock.setLockCode(LockCode.fromTag(tagCompound));
 			}
 		}, () -> new Lock(() -> new TranslationTextComponent("container.inventory")));
 	}
@@ -77,7 +77,7 @@ public final class LockCapability {
 		final BlockState state = world.getBlockState(pos);
 
 		if (state.getBlock().hasTileEntity(state)) {
-			final TileEntity tileEntity = world.getTileEntity(pos);
+			final TileEntity tileEntity = world.getBlockEntity(pos);
 			if (tileEntity != null) {
 				final LazyOptional<ILock> optionalLock = tileEntity.getCapability(LOCK_CAPABILITY, side);
 				if (optionalLock.isPresent()) {

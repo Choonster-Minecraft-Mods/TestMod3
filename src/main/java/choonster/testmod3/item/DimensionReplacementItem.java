@@ -70,16 +70,16 @@ public class DimensionReplacementItem extends Item {
 	 */
 	private Optional<ItemStack> getReplacement(final World world) {
 		return world
-				./* getDynamicRegistries */func_241828_r()
-				./* getDimensionTypeRegistry */func_230520_a_()
-				.getOptionalKey(world.getDimensionType())
+				./* getDynamicRegistries */registryAccess()
+				./* getDimensionTypeRegistry */dimensionTypes()
+				.getResourceKey(world.dimensionType())
 				.map(replacements::get)
 				.map(Supplier::get);
 	}
 
 	@Override
 	public void inventoryTick(final ItemStack stack, final World world, final Entity entity, final int itemSlot, final boolean isSelected) {
-		if (world.isRemote) {
+		if (world.isClientSide) {
 			return;
 		}
 
@@ -98,7 +98,7 @@ public class DimensionReplacementItem extends Item {
 						inventory -> tryReplaceItem(inventory, itemSlot, stack, replacementCopy),
 						EntityInventoryType.MAIN, EntityInventoryType.HAND
 				).ifPresent(successfulInventoryType ->
-						LOGGER.info("Replaced item in slot {} of {}'s {} inventory with {}", itemSlot, entity.getName(), successfulInventoryType, replacementCopy.getDisplayName())
+						LOGGER.info("Replaced item in slot {} of {}'s {} inventory with {}", itemSlot, entity.getName(), successfulInventoryType, replacementCopy.getHoverName())
 				);
 			});
 		}
@@ -113,7 +113,7 @@ public class DimensionReplacementItem extends Item {
 	 * @param replacementStack The replacement ItemStack
 	 * @return Was the item replaced?
 	 */
-	private boolean tryReplaceItem(final IItemHandler inventory, final int slot, final ItemStack stackToReplace, final ItemStack replacementStack) {
+	private static boolean tryReplaceItem(final IItemHandler inventory, final int slot, final ItemStack stackToReplace, final ItemStack replacementStack) {
 		if (slot < inventory.getSlots() && inventory.getStackInSlot(slot) == stackToReplace && !inventory.extractItem(slot, stackToReplace.getCount(), true).isEmpty()) {
 			inventory.extractItem(slot, stackToReplace.getCount(), false);
 			inventory.insertItem(slot, replacementStack, false);
@@ -124,14 +124,14 @@ public class DimensionReplacementItem extends Item {
 	}
 
 	@Override
-	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
+	public void appendHoverText(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
 		if (world == null) {
 			return;
 		}
 
 		tooltip.add(
 				getReplacement(world)
-						.map(replacement -> new TranslationTextComponent(TestMod3Lang.ITEM_DESC_DIMENSION_REPLACEMENT_REPLACEMENT.getTranslationKey(), replacement.getDisplayName()))
+						.map(replacement -> new TranslationTextComponent(TestMod3Lang.ITEM_DESC_DIMENSION_REPLACEMENT_REPLACEMENT.getTranslationKey(), replacement.getHoverName()))
 						.orElseGet(() -> new TranslationTextComponent(TestMod3Lang.ITEM_DESC_DIMENSION_REPLACEMENT_NO_REPLACEMENT.getTranslationKey()))
 		);
 	}

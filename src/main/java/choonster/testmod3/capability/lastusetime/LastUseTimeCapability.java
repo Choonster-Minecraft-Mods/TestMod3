@@ -53,7 +53,7 @@ public final class LastUseTimeCapability {
 
 			@Override
 			public void readNBT(final Capability<ILastUseTime> capability, final ILastUseTime instance, final Direction side, final INBT nbt) {
-				instance.set(((LongNBT) nbt).getLong());
+				instance.set(((LongNBT) nbt).getAsLong());
 			}
 		}, () -> new LastUseTime(true));
 
@@ -78,7 +78,7 @@ public final class LastUseTimeCapability {
 	 */
 	public static void updateLastUseTime(final PlayerEntity player, final ItemStack itemStack) {
 		getLastUseTime(itemStack).ifPresent((lastUseTime) -> {
-			final World world = player.getEntityWorld();
+			final World world = player.getCommandSenderWorld();
 
 			lastUseTime.set(world.getGameTime());
 		});

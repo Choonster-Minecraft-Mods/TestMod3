@@ -70,7 +70,7 @@ public class MaxHealthCommand {
 				.ifPresent(maxHealth -> processor.process(entityLivingBase, maxHealth, amount));
 
 		context.getSource()
-				.sendFeedback(new TranslationTextComponent(successMessage, entity.getDisplayName(), MaxHealthCapability.formatMaxHealth(amount)), true);
+				.sendSuccess(new TranslationTextComponent(successMessage, entity.getDisplayName(), MaxHealthCapability.formatMaxHealth(amount)), true);
 
 		return 0;
 	}

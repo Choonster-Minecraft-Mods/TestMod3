@@ -49,7 +49,7 @@ public class RestrictedArmourItem extends ArmorItem {
 	 */
 	@Override
 	public void inventoryTick(final ItemStack stack, final World world, final Entity entity, final int itemSlot, final boolean isSelected) {
-		if (!world.isRemote) { // If this is the server,
+		if (!world.isClientSide) { // If this is the server,
 			// Try to remove the item from the entity's inventories
 			InventoryUtils.forEachEntityInventory(
 					entity,
@@ -88,13 +88,13 @@ public class RestrictedArmourItem extends ArmorItem {
 	@Override
 	public boolean onEntityItemUpdate(final ItemStack stack, final ItemEntity entity) {
 		entity.remove(); // Kill the item entity
-		LOGGER.info("Restricted armour deleted from world at {}", entity.getPosition());
+		LOGGER.info("Restricted armour deleted from world at {}", entity.blockPosition());
 		return true; // Skip the rest of the update
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
+	public void appendHoverText(final ItemStack stack, @Nullable final World world, final List<ITextComponent> tooltip, final ITooltipFlag flag) {
 		tooltip.add(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_ARMOUR_RESTRICTED.getTranslationKey()));
 	}
 }

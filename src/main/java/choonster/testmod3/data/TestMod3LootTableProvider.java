@@ -29,7 +29,7 @@ public class TestMod3LootTableProvider extends LootTableProvider {
 	private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> lootTableGenerators = ImmutableList.of(
 			Pair.of(TestMod3BlockLootTables::new, LootParameterSets.BLOCK),
 			Pair.of(TestMod3EntityLootTables::new, LootParameterSets.ENTITY),
-			Pair.of(TestMod3GenericLootTables::new, LootParameterSets.GENERIC)
+			Pair.of(TestMod3GenericLootTables::new, LootParameterSets.ALL_PARAMS)
 	);
 
 	public TestMod3LootTableProvider(final DataGenerator dataGeneratorIn) {
@@ -44,17 +44,17 @@ public class TestMod3LootTableProvider extends LootTableProvider {
 	@Override
 	protected void validate(final Map<ResourceLocation, LootTable> map, final ValidationTracker validationtracker) {
 		final Set<ResourceLocation> modLootTableIds = LootTables
-				.getReadOnlyLootTables()
+				.all()
 				.stream()
 				.filter(lootTable -> lootTable.getNamespace().equals(TestMod3.MODID))
 				.collect(Collectors.toSet());
 
 		for (final ResourceLocation id : Sets.difference(modLootTableIds, map.keySet())) {
-			validationtracker.addProblem("Missing mod loot table: " + id);
+			validationtracker.reportProblem("Missing mod loot table: " + id);
 		}
 
 		map.forEach((id, lootTable) -> {
-			LootTableManager.validateLootTable(validationtracker, id, lootTable);
+			LootTableManager.validate(validationtracker, id, lootTable);
 		});
 	}
 

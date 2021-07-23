@@ -155,17 +155,17 @@ public class FluidGroup<STILL extends Fluid, FLOWING extends Fluid, BLOCK extend
 	}
 
 	public static Block.Properties defaultBlockProperties(final Material material) {
-		return Block.Properties.create(material)
-				.doesNotBlockMovement()
-				.hardnessAndResistance(100)
+		return Block.Properties.of(material)
+				.noCollission()
+				.strength(100)
 				.noDrops();
 	}
 
 	public static Item.Properties defaultBucketProperties() {
 		return new Item.Properties()
-				.containerItem(Items.BUCKET)
-				.maxStackSize(1)
-				.group(ItemGroup.MISC);
+				.craftRemainder(Items.BUCKET)
+				.stacksTo(1)
+				.tab(ItemGroup.TAB_MISC);
 	}
 
 	public interface IFluidFactory<FLUID extends Fluid> {

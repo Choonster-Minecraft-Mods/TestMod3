@@ -28,7 +28,7 @@ public class ModJsonUtil {
 	 * @throws JsonSyntaxException If the fluid registry name is missing or invalid
 	 */
 	public static Fluid getFluid(final JsonObject object, final String memberName) {
-		final ResourceLocation registryName = new ResourceLocation(JSONUtils.getString(object, memberName));
+		final ResourceLocation registryName = new ResourceLocation(JSONUtils.getAsString(object, memberName));
 		final Fluid fluid = ForgeRegistries.FLUIDS.getValue(registryName);
 
 		if (fluid == null) {
@@ -57,9 +57,9 @@ public class ModJsonUtil {
 
 			try {
 				if (element.isJsonObject()) {
-					nbt = JsonToNBT.getTagFromJson(GSON.toJson(element));
+					nbt = JsonToNBT.parseTag(GSON.toJson(element));
 				} else {
-					nbt = JsonToNBT.getTagFromJson(JSONUtils.getString(element, memberName));
+					nbt = JsonToNBT.parseTag(JSONUtils.convertToString(element, memberName));
 				}
 			} catch (final CommandSyntaxException e) {
 				throw new JsonSyntaxException("Malformed NBT tag", e);

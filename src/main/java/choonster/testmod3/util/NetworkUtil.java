@@ -68,9 +68,9 @@ public class NetworkUtil {
 	 * @param extraDataWriter Consumer to write any additional data required by the GUI
 	 */
 	public static void openClientGui(final ServerPlayerEntity player, final ResourceLocation id, final Consumer<PacketBuffer> extraDataWriter) {
-		if (player.world.isRemote) return;
-		player.closeScreen();
-		player.openContainer = player.container;
+		if (player.level.isClientSide) return;
+		player.closeContainer();
+		player.containerMenu = player.inventoryMenu;
 
 		final PacketBuffer extraData = new PacketBuffer(Unpooled.buffer());
 		extraDataWriter.accept(extraData);
@@ -100,7 +100,7 @@ public class NetworkUtil {
 		buffer.writeBoolean(hasFacing);
 
 		if (hasFacing) {
-			buffer.writeEnumValue(facing);
+			buffer.writeEnum(facing);
 		}
 	}
 
@@ -115,7 +115,7 @@ public class NetworkUtil {
 		final boolean hasFacing = buffer.readBoolean();
 
 		if (hasFacing) {
-			return buffer.readEnumValue(Direction.class);
+			return buffer.readEnum(Direction.class);
 		}
 
 		return null;

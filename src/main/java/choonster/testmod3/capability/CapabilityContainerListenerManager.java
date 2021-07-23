@@ -46,7 +46,7 @@ public class CapabilityContainerListenerManager {
 		 */
 		private static void addListeners(final ServerPlayerEntity player, final Container container) {
 			containerListenerFactories.forEach(
-					factory -> container.addListener(factory.apply(player))
+					factory -> container.addSlotListener(factory.apply(player))
 			);
 		}
 
@@ -59,7 +59,7 @@ public class CapabilityContainerListenerManager {
 		public static void playerLoggedIn(final PlayerEvent.PlayerLoggedInEvent event) {
 			if (event.getPlayer() instanceof ServerPlayerEntity) {
 				final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
-				addListeners(player, player.container);
+				addListeners(player, player.inventoryMenu);
 			}
 		}
 
@@ -72,7 +72,7 @@ public class CapabilityContainerListenerManager {
 		public static void playerClone(final PlayerEvent.Clone event) {
 			if (event.getPlayer() instanceof ServerPlayerEntity) {
 				final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
-				addListeners(player, player.container);
+				addListeners(player, player.inventoryMenu);
 			}
 		}
 

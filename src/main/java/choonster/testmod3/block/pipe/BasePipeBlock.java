@@ -35,7 +35,7 @@ public class BasePipeBlock extends SixWayBlock {
 	 * @return The property
 	 */
 	public static Property<Boolean> getConnectedProperty(final Direction direction) {
-		return FACING_TO_PROPERTY_MAP.get(direction);
+		return PROPERTY_BY_DIRECTION.get(direction);
 	}
 
 	public BasePipeBlock(final AbstractBlock.Properties properties) {
@@ -49,8 +49,8 @@ public class BasePipeBlock extends SixWayBlock {
 	}
 
 	@Override
-	protected void fillStateContainer(final StateContainer.Builder<Block, BlockState> builder) {
-		FACING_TO_PROPERTY_MAP.values().forEach(builder::add);
+	protected void createBlockStateDefinition(final StateContainer.Builder<Block, BlockState> builder) {
+		PROPERTY_BY_DIRECTION.values().forEach(builder::add);
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class BasePipeBlock extends SixWayBlock {
 	 * @return Can this pipe connect?
 	 */
 	private boolean canConnectTo(final BlockState ownState, final IWorldReader world, final BlockPos ownPos, final Direction neighbourDirection) {
-		final BlockPos neighbourPos = ownPos.offset(neighbourDirection);
+		final BlockPos neighbourPos = ownPos.relative(neighbourDirection);
 		final BlockState neighbourState = world.getBlockState(neighbourPos);
 		final Block neighbourBlock = neighbourState.getBlock();
 
@@ -89,22 +89,22 @@ public class BasePipeBlock extends SixWayBlock {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public BlockState updatePostPlacement(BlockState state, final Direction facing, final BlockState facingState, final IWorld world, final BlockPos currentPos, final BlockPos facingPos) {
+	public BlockState updateShape(BlockState state, final Direction facing, final BlockState facingState, final IWorld world, final BlockPos currentPos, final BlockPos facingPos) {
 		// TODO: This may be incorrect
 		for (final Direction neighbourFacing : Direction.values()) {
-			state = state.with(FACING_TO_PROPERTY_MAP.get(facing), canConnectTo(state, world, currentPos, neighbourFacing));
+			state = state.setValue(PROPERTY_BY_DIRECTION.get(facing), canConnectTo(state, world, currentPos, neighbourFacing));
 		}
 
 		return state;
 	}
 
 	public final boolean isConnected(final BlockState state, final Direction facing) {
-		return state.get(FACING_TO_PROPERTY_MAP.get(facing));
+		return state.getValue(PROPERTY_BY_DIRECTION.get(facing));
 	}
 
 	@Override
 	public VoxelShape getShape(final BlockState state, final IBlockReader worldIn, final BlockPos pos, final ISelectionContext context) {
-		return shapes.get(getShapeIndex(state));
+		return shapes.get(getAABBIndex(state));
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class BasePipeBlock extends SixWayBlock {
 		final float extensionFaceMin = 8 - extensionWidth;
 		final float extensionFaceMax = 8 + extensionWidth;
 
-		final VoxelShape coreShape = makeCuboidShape(coreMin, coreMin, coreMin, coreMax, coreMax, coreMax);
+		final VoxelShape coreShape = box(coreMin, coreMin, coreMin, coreMax, coreMax, coreMax);
 
 		final BiFunction<Direction.Axis, Direction, Float> getMinCoordinate = (axis, direction) -> {
 			if (axis == direction.getAxis()) {
@@ -146,7 +146,7 @@ public class BasePipeBlock extends SixWayBlock {
 		for (int facingIndex = 0; facingIndex < FACING_VALUES.length; ++facingIndex) {
 			final Direction direction = FACING_VALUES[facingIndex];
 
-			extensionShapes[facingIndex] = makeCuboidShape(
+			extensionShapes[facingIndex] = box(
 					getMinCoordinate.apply(Direction.Axis.X, direction),
 					getMinCoordinate.apply(Direction.Axis.Y, direction),
 					getMinCoordinate.apply(Direction.Axis.Z, direction),

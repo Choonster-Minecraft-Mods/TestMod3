@@ -28,25 +28,25 @@ public class RightClickTestBlock extends GlassBlock {
 
 	public RightClickTestBlock(final Block.Properties properties) {
 		super(properties);
-		setDefaultState(getStateContainer().getBaseState().with(HAS_ENDER_EYE, false));
+		registerDefaultState(getStateDefinition().any().setValue(HAS_ENDER_EYE, false));
 	}
 
 	@Override
-	protected void fillStateContainer(final StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(final StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(HAS_ENDER_EYE);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
-		final ItemStack heldItem = player.getHeldItem(hand);
+	public ActionResultType use(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+		final ItemStack heldItem = player.getItemInHand(hand);
 
-		if (!heldItem.isEmpty() && heldItem.getItem() == Items.ENDER_EYE && !state.get(HAS_ENDER_EYE)) {
+		if (!heldItem.isEmpty() && heldItem.getItem() == Items.ENDER_EYE && !state.getValue(HAS_ENDER_EYE)) {
 			if (!player.isCreative()) {
 				heldItem.shrink(1);
 			}
 
-			world.setBlockState(pos, state.with(HAS_ENDER_EYE, true));
+			world.setBlockAndUpdate(pos, state.setValue(HAS_ENDER_EYE, true));
 			return ActionResultType.SUCCESS;
 		}
 

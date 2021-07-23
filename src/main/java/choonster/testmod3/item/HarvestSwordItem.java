@@ -64,10 +64,10 @@ public class HarvestSwordItem extends ToolItem {
 	 */
 	public static Item.Properties addToolTypes(final IItemTier itemTier, final Item.Properties properties) {
 		return properties
-				.addToolType(ToolType.PICKAXE, itemTier.getHarvestLevel())
-				.addToolType(ToolType.AXE, itemTier.getHarvestLevel())
-				.addToolType(ToolType.SHOVEL, itemTier.getHarvestLevel())
-				.addToolType(ToolType.get("sword"), itemTier.getHarvestLevel()); // Waila Harvestability sets the harvest tool of Cobwebs to "sword"
+				.addToolType(ToolType.PICKAXE, itemTier.getLevel())
+				.addToolType(ToolType.AXE, itemTier.getLevel())
+				.addToolType(ToolType.SHOVEL, itemTier.getLevel())
+				.addToolType(ToolType.get("sword"), itemTier.getLevel()); // Waila Harvestability sets the harvest tool of Cobwebs to "sword"
 	}
 
 	/**
@@ -75,25 +75,25 @@ public class HarvestSwordItem extends ToolItem {
 	 */
 	private static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(
 			// Pickaxe
-			Material.ROCK, Material.IRON, Material.IRON, Material.GLASS, Material.PISTON, Material.ANVIL, Material.MISCELLANEOUS,
+			Material.STONE, Material.METAL, Material.METAL, Material.GLASS, Material.PISTON, Material.HEAVY_METAL, Material.DECORATION,
 
 			// Axe
-			Material.WOOD, Material.GOURD, Material.PLANTS, Material.TALL_PLANTS,
+			Material.WOOD, Material.VEGETABLE, Material.PLANT, Material.REPLACEABLE_PLANT,
 
 			// Shovel
-			Material.ORGANIC, Material.EARTH, Material.SAND, Material.SNOW, Material.SNOW_BLOCK, Material.CLAY
+			Material.GRASS, Material.DIRT, Material.SAND, Material.TOP_SNOW, Material.SNOW, Material.CLAY
 	);
 
 	/**
 	 * The {@link Material}s that Swords are effective on.
 	 */
 	private static final Set<Material> SWORD_MATERIALS = ImmutableSet.of(
-			Material.PLANTS, Material.TALL_PLANTS, Material.CORAL, Material.LEAVES, Material.GOURD
+			Material.PLANT, Material.REPLACEABLE_PLANT, Material.CORAL, Material.LEAVES, Material.VEGETABLE
 	);
 
 	@Override
-	public boolean canHarvestBlock(final BlockState blockIn) {
-		return super.canHarvestBlock(blockIn);
+	public boolean isCorrectToolForDrops(final BlockState blockIn) {
+		return super.isCorrectToolForDrops(blockIn);
 	}
 
 	@Override
@@ -109,13 +109,13 @@ public class HarvestSwordItem extends ToolItem {
 
 		for (final ToolType type : getToolTypes(stack)) {
 			if (state.isToolEffective(type)) {
-				return efficiency;
+				return speed;
 			}
 		}
 
 		// Not all blocks have a harvest tool/level set, so we need to fall back to checking the Material like the vanilla tools do
 		if (EFFECTIVE_MATERIALS.contains(state.getMaterial())) {
-			return efficiency;
+			return speed;
 		}
 
 		if (SWORD_MATERIALS.contains(state.getMaterial())) {
@@ -126,9 +126,9 @@ public class HarvestSwordItem extends ToolItem {
 	}
 
 	@Override
-	public boolean hitEntity(final ItemStack itemStack, final LivingEntity target, final LivingEntity attacker) {
+	public boolean hurtEnemy(final ItemStack itemStack, final LivingEntity target, final LivingEntity attacker) {
 		// Only reduce the durability by 1 point (like swords do) instead of 2 (like tools do)
-		itemStack.damageItem(1, attacker, (entity) -> entity.sendBreakAnimation(Hand.MAIN_HAND));
+		itemStack.hurtAndBreak(1, attacker, (entity) -> entity.broadcastBreakEvent(Hand.MAIN_HAND));
 		return true;
 	}
 }

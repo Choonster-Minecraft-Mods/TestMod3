@@ -20,17 +20,17 @@ public class ModRenderLayerSetup {
 	@SubscribeEvent
 	public static void setRenderLayers(final FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
-			RenderTypeLookup.setRenderLayer(ModBlocks.FLUID_TANK.get(), RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.FLUID_TANK_RESTRICTED.get(), RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.FLUID_PIPE.get(), RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.MIRROR_PLANE.get(), RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.OAK_SAPLING.get(), RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.SPRUCE_SAPLING.get(), RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.BIRCH_SAPLING.get(), RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.JUNGLE_SAPLING.get(), RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.ACACIA_SAPLING.get(), RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.DARK_OAK_SAPLING.get(), RenderType.getCutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.WATER_GRASS.get(), RenderType.getCutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.FLUID_TANK.get(), RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.FLUID_TANK_RESTRICTED.get(), RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.FLUID_PIPE.get(), RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.MIRROR_PLANE.get(), RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.OAK_SAPLING.get(), RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.SPRUCE_SAPLING.get(), RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.BIRCH_SAPLING.get(), RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.JUNGLE_SAPLING.get(), RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.ACACIA_SAPLING.get(), RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.DARK_OAK_SAPLING.get(), RenderType.cutout());
+			RenderTypeLookup.setRenderLayer(ModBlocks.WATER_GRASS.get(), RenderType.cutout());
 		});
 	}
 }

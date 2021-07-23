@@ -51,14 +51,14 @@ public abstract class LockableItemHandlerTileEntity<
 	}
 
 	@Override
-	public void read(final BlockState state, final CompoundNBT nbt) {
-		super.read(state, nbt);
+	public void load(final BlockState state, final CompoundNBT nbt) {
+		super.load(state, nbt);
 		lock.deserializeNBT(nbt.getCompound("Lock"));
 	}
 
 	@Override
-	public CompoundNBT write(final CompoundNBT compound) {
-		super.write(compound);
+	public CompoundNBT save(final CompoundNBT compound) {
+		super.save(compound);
 		compound.put("Lock", lock.serializeNBT());
 		return compound;
 	}
@@ -66,7 +66,7 @@ public abstract class LockableItemHandlerTileEntity<
 	@Nullable
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(getPos(), 0, getUpdateTag());
+		return new SUpdateTileEntityPacket(getBlockPos(), 0, getUpdateTag());
 	}
 
 	@Override

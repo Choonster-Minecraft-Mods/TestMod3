@@ -43,14 +43,14 @@ public class TestMod3BiomeProvider implements IDataProvider {
 	 * Performs this provider's action.
 	 */
 	@Override
-	public void act(final DirectoryCache cache) {
+	public void run(final DirectoryCache cache) {
 		final Path basePath = generator.getOutputFolder();
 
 		for (final Biome biome : RegistryUtil.getModRegistryEntries(ForgeRegistries.BIOMES)) {
 			final ResourceLocation registryName = Objects.requireNonNull(ForgeRegistries.BIOMES.getKey(biome), "Biome registry name was null");
 			final Path biomePath = getPath(basePath, registryName);
 
-			final Function<Supplier<Biome>, DataResult<JsonElement>> function = JsonOps.INSTANCE.withEncoder(Biome.BIOME_CODEC);
+			final Function<Supplier<Biome>, DataResult<JsonElement>> function = JsonOps.INSTANCE.withEncoder(Biome.CODEC);
 
 			try {
 				final Optional<JsonElement> optional = function.apply(() -> biome).result();

@@ -33,27 +33,27 @@ public class ModChestScreen extends ContainerScreen<ModChestContainer> {
 
 		passEvents = false;
 		numRows = container.getNumRows();
-		ySize = 114 + numRows * 18;
-		playerInventoryTitleY = ySize - 94;
+		imageHeight = 114 + numRows * 18;
+		inventoryLabelY = imageHeight - 94;
 	}
 
 	@Override
 	public void render(final MatrixStack matrixStack, final int mouseX, final int mouseY, final float partialTicks) {
 		renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		renderHoveredTooltip(matrixStack, mouseX, mouseY);
+		renderTooltip(matrixStack, mouseX, mouseY);
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(final MatrixStack matrixStack, final float partialTicks, final int x, final int y) {
+	protected void renderBg(final MatrixStack matrixStack, final float partialTicks, final int x, final int y) {
 		// TODO: Figure out how to render texture with colour without using this method
 		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-		minecraft.getTextureManager().bindTexture(CHEST_GUI_TEXTURE);
+		minecraft.getTextureManager().bind(CHEST_GUI_TEXTURE);
 
-		final int centreX = (width - xSize) / 2;
-		final int centreY = (height - ySize) / 2;
-		blit(matrixStack, centreX, centreY, 0, 0, xSize, numRows * 18 + 17);
-		blit(matrixStack, centreX, centreY + numRows * 18 + 17, 0, 126, xSize, 96);
+		final int centreX = (width - imageWidth) / 2;
+		final int centreY = (height - imageHeight) / 2;
+		blit(matrixStack, centreX, centreY, 0, 0, imageWidth, numRows * 18 + 17);
+		blit(matrixStack, centreX, centreY + numRows * 18 + 17, 0, 126, imageWidth, 96);
 	}
 }

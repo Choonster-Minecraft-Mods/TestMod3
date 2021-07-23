@@ -25,7 +25,7 @@ public class NameHolder implements INameable, INBTSerializable<CompoundNBT> {
 	private ITextComponent customName;
 
 	public NameHolder(final ITextComponent defaultName) {
-		this.defaultName = defaultName.deepCopy();
+		this.defaultName = defaultName.copy();
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class NameHolder implements INameable, INBTSerializable<CompoundNBT> {
 	 * @param customName The custom name
 	 */
 	public void setCustomName(final ITextComponent customName) {
-		this.customName = customName.deepCopy();
+		this.customName = customName.copy();
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class NameHolder implements INameable, INBTSerializable<CompoundNBT> {
 	@Override
 	public void deserializeNBT(final CompoundNBT nbt) {
 		if (nbt.contains("DisplayName")) {
-			final ITextComponent customName = Objects.requireNonNull(ITextComponent.Serializer.getComponentFromJson(nbt.getString("DisplayName")));
+			final ITextComponent customName = Objects.requireNonNull(ITextComponent.Serializer.fromJson(nbt.getString("DisplayName")));
 			setCustomName(customName);
 		}
 	}

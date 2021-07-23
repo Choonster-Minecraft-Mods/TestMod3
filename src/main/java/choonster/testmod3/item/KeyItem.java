@@ -22,16 +22,16 @@ public class KeyItem extends Item {
 	}
 
 	@Override
-	public ActionResultType onItemUse(final ItemUseContext context) {
-		return LockCapability.getLock(context.getWorld(), context.getPos(), context.getFace())
+	public ActionResultType useOn(final ItemUseContext context) {
+		return LockCapability.getLock(context.getLevel(), context.getClickedPos(), context.getClickedFace())
 				.map(lock -> {
-					if (!context.getWorld().isRemote && context.getPlayer() != null) {
+					if (!context.getLevel().isClientSide && context.getPlayer() != null) {
 						if (lock.isLocked()) {
-							context.getPlayer().sendMessage(new TranslationTextComponent("testmod3.lock.already_locked"), Util.DUMMY_UUID);
+							context.getPlayer().sendMessage(new TranslationTextComponent("testmod3.lock.already_locked"), Util.NIL_UUID);
 						} else {
 							NetworkUtil.openClientGui((ServerPlayerEntity) context.getPlayer(), GuiIDs.Client.LOCK, buffer -> {
-								buffer.writeBlockPos(context.getPos());
-								NetworkUtil.writeNullableFacing(context.getFace(), buffer);
+								buffer.writeBlockPos(context.getClickedPos());
+								NetworkUtil.writeNullableFacing(context.getClickedFace(), buffer);
 							});
 						}
 					}

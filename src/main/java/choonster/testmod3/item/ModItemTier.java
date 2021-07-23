@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 public enum ModItemTier implements IItemTier {
 	GLOWSTONE(
 			1, 5, 0.5f, 1.0f, 10,
-			() -> Ingredient.fromItems(Items.GLOWSTONE_DUST)
+			() -> Ingredient.of(Items.GLOWSTONE_DUST)
 	),
 
 	;
@@ -61,32 +61,32 @@ public enum ModItemTier implements IItemTier {
 	}
 
 	@Override
-	public int getMaxUses() {
+	public int getUses() {
 		return maxUses;
 	}
 
 	@Override
-	public float getEfficiency() {
+	public float getSpeed() {
 		return efficiency;
 	}
 
 	@Override
-	public float getAttackDamage() {
+	public float getAttackDamageBonus() {
 		return attackDamage;
 	}
 
 	@Override
-	public int getHarvestLevel() {
+	public int getLevel() {
 		return harvestLevel;
 	}
 
 	@Override
-	public int getEnchantability() {
+	public int getEnchantmentValue() {
 		return enchantability;
 	}
 
 	@Override
-	public Ingredient getRepairMaterial() {
-		return repairMaterial.getValue();
+	public Ingredient getRepairIngredient() {
+		return repairMaterial.get();
 	}
 }

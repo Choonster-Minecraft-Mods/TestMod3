@@ -311,7 +311,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 	private ItemModelBuilder withSimpleParent(final String name) {
 		return getBuilder(name)
-				.parent(simpleModel.getValue());
+				.parent(simpleModel.get());
 	}
 
 	private void bowItem(final Item item) {

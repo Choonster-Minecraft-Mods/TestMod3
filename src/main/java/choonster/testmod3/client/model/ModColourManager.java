@@ -36,7 +36,7 @@ public class ModColourManager {
 		// Use the grass colour of the biome or the default grass colour
 		final IBlockColor grassColourHandler = (state, blockAccess, pos, tintIndex) -> {
 			if (blockAccess != null && pos != null) {
-				return BiomeColors.getGrassColor(blockAccess, pos);
+				return BiomeColors.getAverageGrassColor(blockAccess, pos);
 			}
 
 			return GrassColors.get(0.5d, 1.0d);
@@ -57,7 +57,7 @@ public class ModColourManager {
 
 		// Use the Block's colour handler for an ItemBlock
 		final IItemColor itemBlockColourHandler = (stack, tintIndex) -> {
-			final BlockState state = ((BlockItem) stack.getItem()).getBlock().getDefaultState();
+			final BlockState state = ((BlockItem) stack.getItem()).getBlock().defaultBlockState();
 			return blockColors.getColor(state, null, null, tintIndex);
 		};
 

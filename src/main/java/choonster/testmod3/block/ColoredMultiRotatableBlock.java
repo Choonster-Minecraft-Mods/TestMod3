@@ -32,30 +32,30 @@ public class ColoredMultiRotatableBlock extends ColoredRotatableBlock {
 	}
 
 	@Override
-	protected void fillStateContainer(final StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder);
+	protected void createBlockStateDefinition(final StateContainer.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 		builder.add(FACE_ROTATION);
 	}
 
 	@Override
 	protected BlockState copyState(final BlockState currentState, final BlockState newState) {
-		return super.copyState(currentState, newState).with(FACE_ROTATION, currentState.get(FACE_ROTATION));
+		return super.copyState(currentState, newState).setValue(FACE_ROTATION, currentState.getValue(FACE_ROTATION));
 	}
 
 	public void rotateFace(final World world, final BlockPos pos) {
-		final EnumFaceRotation faceRotation = world.getBlockState(pos).get(FACE_ROTATION);
-		final BlockState newState = world.getBlockState(pos).with(FACE_ROTATION, faceRotation.rotateClockwise());
+		final EnumFaceRotation faceRotation = world.getBlockState(pos).getValue(FACE_ROTATION);
+		final BlockState newState = world.getBlockState(pos).setValue(FACE_ROTATION, faceRotation.rotateClockwise());
 
-		world.setBlockState(pos, newState, Constants.BlockFlags.DEFAULT);
+		world.setBlock(pos, newState, Constants.BlockFlags.DEFAULT);
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
-		if (player.isSneaking()) { // If the player is sneaking, rotate the face
+	public ActionResultType use(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+		if (player.isShiftKeyDown()) { // If the player is sneaking, rotate the face
 			rotateFace(world, pos);
 			return ActionResultType.SUCCESS;
 		} else { // Else rotate or recolour the block
-			return super.onBlockActivated(state, world, pos, player, hand, rayTraceResult);
+			return super.use(state, world, pos, player, hand, rayTraceResult);
 		}
 	}
 }

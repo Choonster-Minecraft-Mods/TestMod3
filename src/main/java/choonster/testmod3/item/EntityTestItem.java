@@ -27,26 +27,26 @@ import java.util.function.Predicate;
  * @author Choonster
  */
 public class EntityTestItem extends Item {
-	private static final Predicate<Entity> ENTITY_PREDICATE = EntityPredicates.NOT_SPECTATING.and(Entity::canBeCollidedWith);
+	private static final Predicate<Entity> ENTITY_PREDICATE = EntityPredicates.NO_SPECTATORS.and(Entity::isPickable);
 
 	public EntityTestItem(final Item.Properties properties) {
 		super(properties);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World world, final PlayerEntity player, final Hand hand) {
-		final ItemStack heldItem = player.getHeldItem(hand);
-		final RayTraceResult rayTraceResult = rayTrace(world, player, RayTraceContext.FluidMode.ANY);
+	public ActionResult<ItemStack> use(final World world, final PlayerEntity player, final Hand hand) {
+		final ItemStack heldItem = player.getItemInHand(hand);
+		final RayTraceResult rayTraceResult = getPlayerPOVHitResult(world, player, RayTraceContext.FluidMode.ANY);
 		if (rayTraceResult.getType() == RayTraceResult.Type.MISS) {
 			return new ActionResult<>(ActionResultType.PASS, heldItem);
 		} else {
-			final Vector3d lookVector = player.getLook(1.0f);
-			final List<Entity> entitiesInWay = world.getEntitiesInAABBexcluding(player, player.getBoundingBox().expand(lookVector.scale(5.0)).grow(1.0), ENTITY_PREDICATE);
+			final Vector3d lookVector = player.getViewVector(1.0f);
+			final List<Entity> entitiesInWay = world.getEntities(player, player.getBoundingBox().expandTowards(lookVector.scale(5.0)).inflate(1.0), ENTITY_PREDICATE);
 			if (!entitiesInWay.isEmpty()) {
 				final Vector3d eyePosition = player.getEyePosition(1.0f);
 
 				for (final Entity entity : entitiesInWay) {
-					final AxisAlignedBB aabb = entity.getBoundingBox().grow(entity.getCollisionBorderSize());
+					final AxisAlignedBB aabb = entity.getBoundingBox().inflate(entity.getPickRadius());
 					if (aabb.contains(eyePosition)) {
 						return new ActionResult<>(ActionResultType.PASS, heldItem);
 					}
@@ -59,20 +59,20 @@ public class EntityTestItem extends Item {
 					return new ActionResult<>(ActionResultType.FAIL, heldItem);
 				}
 
-				pig.rotationYaw = player.rotationYaw;
+				pig.yRot = player.yRot;
 
-				if (!world.hasNoCollisions(pig, pig.getBoundingBox().grow(-0.1))) {
+				if (!world.noCollision(pig, pig.getBoundingBox().inflate(-0.1))) {
 					return new ActionResult<>(ActionResultType.FAIL, heldItem);
 				} else {
-					if (!world.isRemote) {
-						world.addEntity(pig);
+					if (!world.isClientSide) {
+						world.addFreshEntity(pig);
 					}
 
-					if (!player.abilities.isCreativeMode) {
+					if (!player.abilities.instabuild) {
 						heldItem.shrink(1);
 					}
 
-					player.addStat(Stats.ITEM_USED.get(this));
+					player.awardStat(Stats.ITEM_USED.get(this));
 					return new ActionResult<>(ActionResultType.SUCCESS, heldItem);
 				}
 			} else {

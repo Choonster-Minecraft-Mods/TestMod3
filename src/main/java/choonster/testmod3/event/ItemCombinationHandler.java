@@ -55,7 +55,7 @@ public class ItemCombinationHandler {
 		final World world = event.world;
 
 		// If this is the END phase on the server,
-		if (event.phase == TickEvent.Phase.END && !world.isRemote) {
+		if (event.phase == TickEvent.Phase.END && !world.isClientSide) {
 			// Handle each loaded EntityItem with an input item
 			((ServerWorld) world).getEntities()
 					.filter(isMatchingItemEntity(INPUTS))
@@ -74,7 +74,7 @@ public class ItemCombinationHandler {
 		// If the item entity is removed, do nothing
 		if (!entityItem.isAlive()) return;
 
-		final World world = entityItem.getEntityWorld();
+		final World world = entityItem.getCommandSenderWorld();
 
 		final Set<Item> remainingInputs = new HashSet<>(INPUTS); // Create a mutable copy of the input set to track which items have been found
 		final List<ItemEntity> matchingEntityItems = new ArrayList<>(); // Create a list to track the item entities containing the input items
@@ -83,8 +83,8 @@ public class ItemCombinationHandler {
 		matchingEntityItems.add(entityItem);
 
 		// Find all other item entities with input items within 3 blocks
-		final AxisAlignedBB axisAlignedBB = entityItem.getBoundingBox().grow(3);
-		final List<Entity> nearbyEntityItems = world.getEntitiesInAABBexcluding(entityItem, axisAlignedBB, isMatchingItemEntity(remainingInputs));
+		final AxisAlignedBB axisAlignedBB = entityItem.getBoundingBox().inflate(3);
+		final List<Entity> nearbyEntityItems = world.getEntities(entityItem, axisAlignedBB, isMatchingItemEntity(remainingInputs));
 
 		// For each nearby item entity
 		nearbyEntityItems.forEach(nearbyEntity -> {
@@ -94,11 +94,11 @@ public class ItemCombinationHandler {
 
 				if (remainingInputs.isEmpty()) { // If all inputs have been found,
 					// Spawn the output item at the first item's position
-					final double x = entityItem.getPosX(), y = entityItem.getPosY(), z = entityItem.getPosZ();
+					final double x = entityItem.getX(), y = entityItem.getY(), z = entityItem.getZ();
 					final ItemEntity outputEntityItem = new ItemEntity(world, x, y, z, OUTPUT.get().copy());
-					world.addEntity(outputEntityItem);
+					world.addFreshEntity(outputEntityItem);
 
-					((ServerWorld) world).spawnParticle(ParticleTypes.LARGE_SMOKE, x + 0.5, y + 1.0, z + 0.5, 1, 0.0, 0.0, 0.0, 0);
+					((ServerWorld) world).sendParticles(ParticleTypes.LARGE_SMOKE, x + 0.5, y + 1.0, z + 0.5, 1, 0.0, 0.0, 0.0, 0);
 
 					// Consume one item from each matching entity
 					matchingEntityItems.forEach(matchingEntityItem -> {

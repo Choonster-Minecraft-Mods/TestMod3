@@ -35,11 +35,11 @@ public class VariantsBlock extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+	public ActionResultType use(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
 		final EnumType newType = variantGroup.cycleVariant(type);
-		final BlockState newState = variantGroup.getBlock(newType).get().getDefaultState();
+		final BlockState newState = variantGroup.getBlock(newType).get().defaultBlockState();
 
-		world.setBlockState(pos, newState);
+		world.setBlockAndUpdate(pos, newState);
 
 		return ActionResultType.SUCCESS;
 	}
@@ -55,7 +55,7 @@ public class VariantsBlock extends Block {
 		}
 
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return name;
 		}
 	}

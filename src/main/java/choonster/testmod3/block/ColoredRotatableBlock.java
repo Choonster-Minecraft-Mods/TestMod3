@@ -37,7 +37,7 @@ public class ColoredRotatableBlock extends Block {
 	}
 
 	@Override
-	protected void fillStateContainer(final StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(final StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(FACING);
 	}
 
@@ -52,41 +52,41 @@ public class ColoredRotatableBlock extends Block {
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(final BlockItemUseContext context) {
-		return getDefaultState().with(FACING, context.getNearestLookingDirection());
+		return defaultBlockState().setValue(FACING, context.getNearestLookingDirection());
 	}
 
 	private boolean recolorBlock(final BlockState currentState, final IWorld world, final BlockPos pos, final Direction facing, final DyeColor color) {
-		final BlockState newState = copyState(currentState, getVariantGroup().getBlock(color).get().getDefaultState());
+		final BlockState newState = copyState(currentState, getVariantGroup().getBlock(color).get().defaultBlockState());
 
-		world.setBlockState(pos, newState, Constants.BlockFlags.DEFAULT);
+		world.setBlock(pos, newState, Constants.BlockFlags.DEFAULT);
 
 		return true;
 	}
 
 	protected BlockState copyState(final BlockState currentState, final BlockState newState) {
-		return newState.with(FACING, currentState.get(FACING));
+		return newState.setValue(FACING, currentState.getValue(FACING));
 	}
 
 	@Override
 	public BlockState rotate(final BlockState state, final IWorld world, final BlockPos pos, final Rotation direction) {
-		return state.with(FACING, direction.rotate(state.get(FACING)));
+		return state.setValue(FACING, direction.rotate(state.getValue(FACING)));
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public BlockState mirror(final BlockState state, final Mirror mirror) {
-		return state.with(FACING, mirror.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirror.mirror(state.getValue(FACING)));
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType onBlockActivated(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
-		final ItemStack heldItem = player.getHeldItem(hand);
+	public ActionResultType use(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockRayTraceResult rayTraceResult) {
+		final ItemStack heldItem = player.getItemInHand(hand);
 
 		if (!heldItem.isEmpty()) { // If the player is holding dye, change the colour
 			final DyeColor dyeColour = DyeColor.getColor(heldItem);
 			if (dyeColour != null) {
-				final boolean success = recolorBlock(state, world, pos, rayTraceResult.getFace(), dyeColour);
+				final boolean success = recolorBlock(state, world, pos, rayTraceResult.getDirection(), dyeColour);
 				if (success) {
 					heldItem.shrink(1);
 					return ActionResultType.SUCCESS;
@@ -95,7 +95,7 @@ public class ColoredRotatableBlock extends Block {
 
 			return ActionResultType.FAIL;
 		} else { // Else rotate the block
-			world.setBlockState(pos, rotate(state, world, pos, Rotation.CLOCKWISE_90));
+			world.setBlockAndUpdate(pos, rotate(state, world, pos, Rotation.CLOCKWISE_90));
 
 			return ActionResultType.SUCCESS;
 		}

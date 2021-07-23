@@ -19,7 +19,7 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class ModSpawnEggItem extends SpawnEggItem {
-	private static final Field EGGS = ObfuscationReflectionHelper.findField(SpawnEggItem.class, /* EGGS */ "field_195987_b");
+	private static final Field BY_ID = ObfuscationReflectionHelper.findField(SpawnEggItem.class, /* BY_ID */ "field_195987_b");
 
 	private final Supplier<? extends EntityType<?>> entityType;
 
@@ -38,18 +38,18 @@ public class ModSpawnEggItem extends SpawnEggItem {
 	 * @param modSpawnEggs The spawn egg items to add to the map
 	 */
 	public static void addEggsToEggsMap(final Collection<? extends Supplier<ModSpawnEggItem>> modSpawnEggs) {
-		final Map<EntityType<?>, SpawnEggItem> eggs;
+		final Map<EntityType<?>, SpawnEggItem> eggsByID;
 		try {
 			@SuppressWarnings("unchecked")
-			final Map<EntityType<?>, SpawnEggItem> map = (Map<EntityType<?>, SpawnEggItem>) EGGS.get(null);
-			eggs = map;
+			final Map<EntityType<?>, SpawnEggItem> map = (Map<EntityType<?>, SpawnEggItem>) BY_ID.get(null);
+			eggsByID = map;
 		} catch (final IllegalAccessException e) {
 			throw new RuntimeException("Unable to add spawn egg item to EGGS map", e);
 		}
 
 		modSpawnEggs.stream()
 				.map(Supplier::get)
-				.forEach(egg -> eggs.put(egg.entityType.get(), egg));
+				.forEach(egg -> eggsByID.put(egg.entityType.get(), egg));
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class ModSpawnEggItem extends SpawnEggItem {
 		if (nbt != null && nbt.contains("EntityTag", Constants.NBT.TAG_COMPOUND)) {
 			final CompoundNBT entityTag = nbt.getCompound("EntityTag");
 			if (entityTag.contains("id", Constants.NBT.TAG_STRING)) {
-				return EntityType.byKey(entityTag.getString("id")).orElse(entityType.get());
+				return EntityType.byString(entityTag.getString("id")).orElse(entityType.get());
 			}
 		}
 

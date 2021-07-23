@@ -22,7 +22,7 @@ public class CuttingAxeItem extends AxeItem {
 	@Override
 	public ItemStack getContainerItem(ItemStack stack) {
 		stack = stack.copy();
-		stack.attemptDamageItem(1, random, null);
+		stack.hurt(1, random, null);
 		return stack;
 	}
 }

@@ -59,7 +59,7 @@ public final class MaxHealthCapability {
 
 			@Override
 			public void readNBT(final Capability<IMaxHealth> capability, final IMaxHealth instance, final Direction side, final INBT nbt) {
-				instance.setBonusMaxHealth(((FloatNBT) nbt).getFloat());
+				instance.setBonusMaxHealth(((FloatNBT) nbt).getAsFloat());
 			}
 		}, () -> new MaxHealth(null));
 	}
@@ -91,7 +91,7 @@ public final class MaxHealthCapability {
 	 * @return The formatted text.
 	 */
 	public static String formatMaxHealth(final float maxHealth) {
-		return ItemStack.DECIMALFORMAT.format(maxHealth);
+		return ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(maxHealth);
 	}
 
 	/**

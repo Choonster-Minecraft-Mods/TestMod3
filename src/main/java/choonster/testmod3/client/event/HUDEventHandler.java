@@ -30,7 +30,7 @@ public class HUDEventHandler {
 		if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
 
 		final PlayerEntity player = minecraft.player;
-		if (player.getHeldItemMainhand().getItem() != ModItems.CHUNK_ENERGY_DISPLAY.get() && player.getHeldItemOffhand().getItem() != ModItems.CHUNK_ENERGY_DISPLAY.get())
+		if (player.getMainHandItem().getItem() != ModItems.CHUNK_ENERGY_DISPLAY.get() && player.getOffhandItem().getItem() != ModItems.CHUNK_ENERGY_DISPLAY.get())
 			return;
 
 		chunkEnergyHUD.drawHUD(event.getMatrixStack());

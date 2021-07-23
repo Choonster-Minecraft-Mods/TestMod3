@@ -39,7 +39,7 @@ public class SoundEffectItem extends Item {
 	@Override
 	public boolean onEntitySwing(final ItemStack stack, final LivingEntity entity) {
 		final PlayerEntity player = entity instanceof PlayerEntity ? ((PlayerEntity) entity) : null;
-		entity.world.playSound(player, entity.getPosX(), entity.getPosY(), entity.getPosZ(), soundEvent.getValue(), SoundCategory.PLAYERS, 0.5F, 1.0f);
+		entity.level.playSound(player, entity.getX(), entity.getY(), entity.getZ(), soundEvent.get(), SoundCategory.PLAYERS, 0.5F, 1.0f);
 
 		return false;
 	}

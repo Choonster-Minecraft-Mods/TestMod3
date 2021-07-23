@@ -27,8 +27,8 @@ public class PotionEffectArmourItem extends ArmorItem {
 
 	@Override
 	public void onArmorTick(final ItemStack stack, final World world, final PlayerEntity player) {
-		if (!player.isPotionActive(potionEffect.getPotion())) { // If the Potion isn't currently active,
-			player.addPotionEffect(new EffectInstance(potionEffect)); // Apply a copy of the PotionEffect to the player
+		if (!player.hasEffect(potionEffect.getEffect())) { // If the Potion isn't currently active,
+			player.addEffect(new EffectInstance(potionEffect)); // Apply a copy of the PotionEffect to the player
 		}
 	}
 }

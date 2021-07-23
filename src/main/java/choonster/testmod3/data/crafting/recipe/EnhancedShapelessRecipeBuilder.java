@@ -36,8 +36,8 @@ public class EnhancedShapelessRecipeBuilder<
 		RECIPE extends ShapelessRecipe,
 		BUILDER extends EnhancedShapelessRecipeBuilder<RECIPE, BUILDER>
 		> extends ShapelessRecipeBuilder {
-	private static final Method VALIDATE = ObfuscationReflectionHelper.findMethod(ShapelessRecipeBuilder.class, /* validate */ "func_200481_a", ResourceLocation.class);
-	private static final Field ADVANCEMENT_BUILDER = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* advancementBuilder */ "field_200497_e");
+	private static final Method ENSURE_VALID = ObfuscationReflectionHelper.findMethod(ShapelessRecipeBuilder.class, /* ensureValid */ "func_200481_a", ResourceLocation.class);
+	private static final Field ADVANCEMENT = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* advancement */ "field_200497_e");
 	private static final Field GROUP = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* group */ "field_200498_f");
 	private static final Field INGREDIENTS = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* ingredients */ "field_200496_d");
 
@@ -58,52 +58,44 @@ public class EnhancedShapelessRecipeBuilder<
 	 * @param group The group name
 	 * @return This builder
 	 */
-	@SuppressWarnings("unchecked")
-	public BUILDER setItemGroup(final String group) {
+	public BUILDER itemGroup(final String group) {
 		itemGroup = group;
 		return (BUILDER) this;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER addIngredient(final ITag<Item> tagIn) {
-		return (BUILDER) super.addIngredient(tagIn);
+	public BUILDER requires(final ITag<Item> tagIn) {
+		return (BUILDER) super.requires(tagIn);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER addIngredient(final IItemProvider itemIn) {
-		return (BUILDER) super.addIngredient(itemIn);
+	public BUILDER requires(final IItemProvider itemIn) {
+		return (BUILDER) super.requires(itemIn);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER addIngredient(final IItemProvider itemIn, final int quantity) {
-		return (BUILDER) super.addIngredient(itemIn, quantity);
+	public BUILDER requires(final IItemProvider itemIn, final int quantity) {
+		return (BUILDER) super.requires(itemIn, quantity);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER addIngredient(final Ingredient ingredientIn) {
-		return (BUILDER) super.addIngredient(ingredientIn);
+	public BUILDER requires(final Ingredient ingredientIn) {
+		return (BUILDER) super.requires(ingredientIn);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER addIngredient(final Ingredient ingredientIn, final int quantity) {
-		return (BUILDER) super.addIngredient(ingredientIn, quantity);
+	public BUILDER requires(final Ingredient ingredientIn, final int quantity) {
+		return (BUILDER) super.requires(ingredientIn, quantity);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER addCriterion(final String name, final ICriterionInstance criterionIn) {
-		return (BUILDER) super.addCriterion(name, criterionIn);
+	public BUILDER unlockedBy(final String name, final ICriterionInstance criterionIn) {
+		return (BUILDER) super.unlockedBy(name, criterionIn);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER setGroup(final String groupIn) {
-		return (BUILDER) super.setGroup(groupIn);
+	public BUILDER group(final String groupIn) {
+		return (BUILDER) super.group(groupIn);
 	}
 
 	/**
@@ -112,24 +104,24 @@ public class EnhancedShapelessRecipeBuilder<
 	 * @param consumer The recipe consumer
 	 */
 	@Override
-	public void build(final Consumer<IFinishedRecipe> consumer) {
-		build(consumer, RegistryUtil.getRequiredRegistryName(result.getItem()));
+	public void save(final Consumer<IFinishedRecipe> consumer) {
+		save(consumer, RegistryUtil.getRequiredRegistryName(result.getItem()));
 	}
 
 	/**
-	 * Builds this recipe into an {@link IFinishedRecipe}. Use {@link #build(Consumer)} if save is the same as the ID for
+	 * Builds this recipe into an {@link IFinishedRecipe}. Use {@link #save(Consumer)} if save is the same as the ID for
 	 * the result.
 	 *
 	 * @param consumer The recipe consumer
 	 * @param save     The ID to use for the recipe
 	 */
 	@Override
-	public void build(final Consumer<IFinishedRecipe> consumer, final String save) {
+	public void save(final Consumer<IFinishedRecipe> consumer, final String save) {
 		final ResourceLocation resourcelocation = result.getItem().getRegistryName();
 		if (new ResourceLocation(save).equals(resourcelocation)) {
 			throw new IllegalStateException("Enhanced Shapeless Recipe " + save + " should remove its 'save' argument");
 		} else {
-			build(consumer, new ResourceLocation(save));
+			save(consumer, new ResourceLocation(save));
 		}
 	}
 
@@ -140,10 +132,10 @@ public class EnhancedShapelessRecipeBuilder<
 	 * @param id       The ID to use for the recipe
 	 */
 	@Override
-	public void build(final Consumer<IFinishedRecipe> consumer, final ResourceLocation id) {
+	public void save(final Consumer<IFinishedRecipe> consumer, final ResourceLocation id) {
 		try {
 			// Perform the super class's validation
-			VALIDATE.invoke(this, id);
+			ENSURE_VALID.invoke(this, id);
 
 			// Perform our validation
 			validate(id);
@@ -151,11 +143,11 @@ public class EnhancedShapelessRecipeBuilder<
 			// We can't call the super method directly because it throws an exception when the result is an item that
 			// doesn't belong to an item group (e.g. Mob Spawners).
 
-			final Advancement.Builder advancementBuilder = ((Advancement.Builder) ADVANCEMENT_BUILDER.get(this))
-					.withParentId(new ResourceLocation("minecraft", "recipes/root"))
-					.withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
-					.withRewards(AdvancementRewards.Builder.recipe(id))
-					.withRequirementsStrategy(IRequirementsStrategy.OR);
+			final Advancement.Builder advancementBuilder = ((Advancement.Builder) ADVANCEMENT.get(this))
+					.parent(new ResourceLocation("minecraft", "recipes/root"))
+					.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
+					.rewards(AdvancementRewards.Builder.recipe(id))
+					.requirements(IRequirementsStrategy.OR);
 
 			String group = (String) GROUP.get(this);
 			if (group == null) {
@@ -166,8 +158,8 @@ public class EnhancedShapelessRecipeBuilder<
 
 			String itemGroupName = itemGroup;
 			if (itemGroupName == null) {
-				final ItemGroup itemGroup = Preconditions.checkNotNull(result.getItem().getGroup());
-				itemGroupName = itemGroup.getPath();
+				final ItemGroup itemGroup = Preconditions.checkNotNull(result.getItem().getItemCategory());
+				itemGroupName = itemGroup.getRecipeFolderName();
 			}
 
 			final ResourceLocation advancementID = new ResourceLocation(id.getNamespace(), "recipes/" + itemGroupName + "/" + id.getPath());
@@ -180,7 +172,6 @@ public class EnhancedShapelessRecipeBuilder<
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	protected List<Ingredient> getIngredients() {
 		try {
 			return (List<Ingredient>) INGREDIENTS.get(this);
@@ -190,14 +181,14 @@ public class EnhancedShapelessRecipeBuilder<
 	}
 
 	protected void validate(final ResourceLocation id) {
-		if (itemGroup == null && result.getItem().getGroup() == null) {
+		if (itemGroup == null && result.getItem().getItemCategory() == null) {
 			throw new IllegalStateException("Enhanced Shapeless Recipe " + id + " has result " + result + " with no item group - use EnhancedShapedRecipeBuilder.itemGroup to specify one");
 		}
 	}
 
 	public static class Vanilla extends EnhancedShapelessRecipeBuilder<ShapelessRecipe, Vanilla> {
 		private Vanilla(final ItemStack result) {
-			super(result, IRecipeSerializer.CRAFTING_SHAPELESS);
+			super(result, IRecipeSerializer.SHAPELESS_RECIPE);
 		}
 
 		/**

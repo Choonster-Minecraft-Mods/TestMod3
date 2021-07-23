@@ -16,7 +16,7 @@ public class ModTags {
 		public static final ITag.INamedTag<Item> VANILLA_TERRACOTTA = tag("vanilla_terracotta");
 
 		private static ITag.INamedTag<Item> tag(final String name) {
-			return ItemTags.makeWrapperTag(new ResourceLocation(TestMod3.MODID, name).toString());
+			return ItemTags.bind(new ResourceLocation(TestMod3.MODID, name).toString());
 		}
 	}
 }

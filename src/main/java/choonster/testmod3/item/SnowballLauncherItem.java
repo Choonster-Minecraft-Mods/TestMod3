@@ -50,46 +50,45 @@ public class SnowballLauncherItem extends ShootableItem {
 	 * @return True if the player is not in creative mode and the launcher doesn't have the Infinity enchantment
 	 */
 	private boolean isAmmoRequired(final ItemStack stack, final PlayerEntity player) {
-		return !player.abilities.isCreativeMode && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) == 0;
+		return !player.abilities.instabuild && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) == 0;
 	}
 
 	@Override
-	public Predicate<ItemStack> getInventoryAmmoPredicate() {
+	public Predicate<ItemStack> getAllSupportedProjectiles() {
 		return stack -> stack.getItem() == Items.SNOWBALL;
 	}
 
-	/* getRange */
 	@Override
-	public int func_230305_d_() {
+	public int getDefaultProjectileRange() {
 		return 15;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World world, final PlayerEntity player, final Hand hand) {
-		final ItemStack heldItem = player.getHeldItem(hand);
+	public ActionResult<ItemStack> use(final World world, final PlayerEntity player, final Hand hand) {
+		final ItemStack heldItem = player.getItemInHand(hand);
 
 		final boolean ammoRequired = isAmmoRequired(heldItem, player);
-		final ItemStack ammo = player.findAmmo(heldItem);
+		final ItemStack ammo = player.getProjectile(heldItem);
 		final boolean hasAmmo = !ammo.isEmpty();
 
 		if (!ammoRequired || hasAmmo) {
 			final int cooldown = getCooldown(heldItem);
 			if (cooldown > 0) {
-				player.getCooldownTracker().setCooldown(this, cooldown);
+				player.getCooldowns().addCooldown(this, cooldown);
 			}
 
-			world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5f, 0.4f / (random.nextFloat() * 0.4f + 0.8f));
+			world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5f, 0.4f / (random.nextFloat() * 0.4f + 0.8f));
 
-			if (!world.isRemote) {
+			if (!world.isClientSide) {
 				final SnowballEntity entitySnowball = new SnowballEntity(world, player);
-				entitySnowball.setDirectionAndMovement(player, player.rotationPitch, player.rotationYaw, 0.0f, 1.5f, 1.0f);
-				world.addEntity(entitySnowball);
+				entitySnowball.shootFromRotation(player, player.xRot, player.yRot, 0.0f, 1.5f, 1.0f);
+				world.addFreshEntity(entitySnowball);
 			}
 
 			if (ammoRequired) {
 				ammo.shrink(1);
 				if (ammo.isEmpty()) {
-					player.inventory.deleteStack(ammo);
+					player.inventory.removeItem(ammo);
 				}
 			}
 

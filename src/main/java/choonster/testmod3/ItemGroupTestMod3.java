@@ -18,14 +18,14 @@ public class ItemGroupTestMod3 extends ItemGroup {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public ItemStack createIcon() {
+	public ItemStack makeIcon() {
 		return sword;
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void fill(final NonNullList<ItemStack> items) {
+	public void fillItemList(final NonNullList<ItemStack> items) {
 		items.add(sword.copy());
-		super.fill(items);
+		super.fillItemList(items);
 	}
 }

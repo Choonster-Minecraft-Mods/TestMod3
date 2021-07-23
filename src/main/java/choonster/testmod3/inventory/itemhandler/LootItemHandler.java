@@ -126,13 +126,13 @@ public class LootItemHandler extends ItemStackHandler {
 	 */
 	public void fillWithLoot(@Nullable final PlayerEntity player) {
 		final World world = worldSupplier.get();
-		if (lootTableLocation != null && world != null && !world.isRemote) {
+		if (lootTableLocation != null && world != null && !world.isClientSide) {
 			final MinecraftServer server = Preconditions.checkNotNull(world.getServer());
-			final LootTable lootTable = server.getLootTableManager().getLootTableFromLocation(lootTableLocation);
+			final LootTable lootTable = server.getLootTables().get(lootTableLocation);
 			lootTableLocation = null;
 
 			final LootContext.Builder builder = new LootContext.Builder((ServerWorld) world)
-					.withSeed(lootTableSeed);
+					.withOptionalRandomSeed(lootTableSeed);
 
 			if (player != null) {
 				builder.withLuck(player.getLuck())
@@ -141,7 +141,7 @@ public class LootItemHandler extends ItemStackHandler {
 
 			addAdditionalLootParameters(player, builder);
 
-			InventoryUtils.fillItemHandlerWithLoot(this, lootTable, builder.build(LootParameterSets.CHEST));
+			InventoryUtils.fillItemHandlerWithLoot(this, lootTable, builder.create(LootParameterSets.CHEST));
 		}
 	}
 

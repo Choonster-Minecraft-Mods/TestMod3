@@ -25,36 +25,36 @@ public class RespawnerItem extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(final World world, final PlayerEntity player, final Hand hand) {
-		final ItemStack heldItem = player.getHeldItem(hand);
+	public ActionResult<ItemStack> use(final World world, final PlayerEntity player, final Hand hand) {
+		final ItemStack heldItem = player.getItemInHand(hand);
 
-		if (!world.isRemote) {
+		if (!world.isClientSide) {
 			final ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
 
-			final BlockPos spawnPosition = serverPlayer.func_241140_K_();
-			final ServerWorld spawnWorld = serverPlayer.server.getWorld(serverPlayer.func_241141_L_());
-			final boolean spawnForced = serverPlayer.func_241142_M_();
-			final float spawnAngle = serverPlayer.func_242109_L();
+			final BlockPos respawnPosition = serverPlayer.getRespawnPosition();
+			final ServerWorld respawnWorld = serverPlayer.server.getLevel(serverPlayer.getRespawnDimension());
+			final boolean respawnForced = serverPlayer.isRespawnForced();
+			final float respawnAngle = serverPlayer.getRespawnAngle();
 
-			if (spawnPosition == null || spawnWorld == null) {
-				serverPlayer.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_RESPAWNER_NO_SPAWN_LOCATION.getTranslationKey()), Util.DUMMY_UUID);
+			if (respawnPosition == null || respawnWorld == null) {
+				serverPlayer.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_RESPAWNER_NO_SPAWN_LOCATION.getTranslationKey()), Util.NIL_UUID);
 				return new ActionResult<>(ActionResultType.FAIL, heldItem);
 			}
 
-			if (spawnWorld != serverPlayer.getServerWorld()) {
-				player.changeDimension(spawnWorld);
+			if (respawnWorld != serverPlayer.getLevel()) {
+				player.changeDimension(respawnWorld);
 			}
 
-			return PlayerEntity./* getSpawnLocation */func_242374_a(spawnWorld, spawnPosition, spawnAngle, spawnForced, /* endConquered */false)
+			return PlayerEntity.findRespawnPositionAndUseSpawnBlock(respawnWorld, respawnPosition, respawnAngle, respawnForced, /* endConquered */false)
 					.map(spawnLocation -> {
-						serverPlayer.setLocationAndAngles(spawnLocation.x + 0.5, spawnLocation.getY() + 0.1, spawnLocation.getZ() + 0.5, 0, 0);
-						serverPlayer.connection.setPlayerLocation(serverPlayer.getPosX(), serverPlayer.getPosY(), serverPlayer.getPosZ(), serverPlayer.rotationYaw, serverPlayer.rotationPitch);
+						serverPlayer.moveTo(spawnLocation.x + 0.5, spawnLocation.y() + 0.1, spawnLocation.z() + 0.5, 0, 0);
+						serverPlayer.connection.teleport(serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), serverPlayer.yRot, serverPlayer.xRot);
 
-						while (!spawnWorld.hasNoCollisions(serverPlayer, serverPlayer.getBoundingBox()) && serverPlayer.getPosY() < 256) {
-							serverPlayer.setPosition(serverPlayer.getPosX(), serverPlayer.getPosY() + 1, serverPlayer.getPosZ());
+						while (!respawnWorld.noCollision(serverPlayer, serverPlayer.getBoundingBox()) && serverPlayer.getY() < 256) {
+							serverPlayer.setPos(serverPlayer.getX(), serverPlayer.getY() + 1, serverPlayer.getZ());
 						}
 
-						player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_RESPAWNER_TELEPORTING.getTranslationKey(), spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ(), spawnWorld.getDimensionKey()), Util.DUMMY_UUID);
+						player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_RESPAWNER_TELEPORTING.getTranslationKey(), spawnLocation.x(), spawnLocation.y(), spawnLocation.z(), respawnWorld.dimension()), Util.NIL_UUID);
 
 						return new ActionResult<>(ActionResultType.SUCCESS, heldItem);
 					})

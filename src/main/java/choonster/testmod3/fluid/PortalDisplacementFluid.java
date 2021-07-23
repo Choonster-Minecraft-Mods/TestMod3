@@ -26,46 +26,46 @@ import java.lang.reflect.Method;
  */
 // TODO: Properly implement portal displacement
 public abstract class PortalDisplacementFluid extends ForgeFlowingFluid {
-	private static final Method DOES_SIDE_HAVE_HOLES = ObfuscationReflectionHelper.findMethod(FlowingFluid.class, /* doesSideHaveHoles */ "func_212751_a", Direction.class, IBlockReader.class, BlockPos.class, BlockState.class, BlockPos.class, BlockState.class);
+	private static final Method CAN_PASS_THROUGH_WALL = ObfuscationReflectionHelper.findMethod(FlowingFluid.class, /* canPassThroughWall */ "func_212751_a", Direction.class, IBlockReader.class, BlockPos.class, BlockState.class, BlockPos.class, BlockState.class);
 
 	protected PortalDisplacementFluid(final Properties properties) {
 		super(properties);
 	}
 
 	@Override
-	protected boolean canFlow(final IBlockReader worldIn, final BlockPos fromPos, final BlockState fromBlockState, final Direction direction, final BlockPos toPos, final BlockState toBlockState, final FluidState toFluidState, final Fluid fluidIn) {
+	protected boolean canSpreadTo(final IBlockReader worldIn, final BlockPos fromPos, final BlockState fromBlockState, final Direction direction, final BlockPos toPos, final BlockState toBlockState, final FluidState toFluidState, final Fluid fluidIn) {
 		try {
-			return toFluidState.canDisplace(worldIn, toPos, fluidIn, direction) &&
-					(boolean) DOES_SIDE_HAVE_HOLES.invoke(this, direction, worldIn, fromPos, fromBlockState, toPos, toBlockState) &&
+			return toFluidState.canBeReplacedWith(worldIn, toPos, fluidIn, direction) &&
+					(boolean) CAN_PASS_THROUGH_WALL.invoke(this, direction, worldIn, fromPos, fromBlockState, toPos, toBlockState) &&
 					isNotBlocked(worldIn, toPos, toBlockState, fluidIn);
 		} catch (final IllegalAccessException | InvocationTargetException e) {
-			throw new RuntimeException("Failed to invoke FlowingFluid.doesSideHaveHoles", e);
+			throw new RuntimeException("Failed to invoke FlowingFluid.canPassThroughWall", e);
 		}
 	}
 
 	@Override
-	protected boolean canDisplace(final FluidState state, final IBlockReader world, final BlockPos pos, final Fluid fluidIn, final Direction direction) {
+	protected boolean canBeReplacedWith(final FluidState state, final IBlockReader world, final BlockPos pos, final Fluid fluidIn, final Direction direction) {
 		final BlockState blockState = world.getBlockState(pos);
 
 		if (blockState.getBlock() == Blocks.NETHER_PORTAL || blockState.getBlock() == Blocks.END_PORTAL || blockState.getBlock() == Blocks.END_GATEWAY) {
 			return true;
 		}
 
-		return super.canDisplace(state, world, pos, fluidIn, direction);
+		return super.canBeReplacedWith(state, world, pos, fluidIn, direction);
 	}
 
-	private boolean isNotBlocked(final IBlockReader world, final BlockPos pos, final BlockState state, final Fluid fluid) {
+	private static boolean isNotBlocked(final IBlockReader world, final BlockPos pos, final BlockState state, final Fluid fluid) {
 		final Block block = state.getBlock();
 
 		if (block instanceof ILiquidContainer) {
-			return ((ILiquidContainer) block).canContainFluid(world, pos, state, fluid);
+			return ((ILiquidContainer) block).canPlaceLiquid(world, pos, state, fluid);
 		}
 
-		if (!(block instanceof DoorBlock) && !block.isIn(BlockTags.SIGNS) && block != Blocks.LADDER && block != Blocks.SUGAR_CANE && block != Blocks.BUBBLE_COLUMN) {
+		if (!(block instanceof DoorBlock) && !block.is(BlockTags.SIGNS) && block != Blocks.LADDER && block != Blocks.SUGAR_CANE && block != Blocks.BUBBLE_COLUMN) {
 			final Material material = state.getMaterial();
 
-			if (material != Material.STRUCTURE_VOID && material != Material.OCEAN_PLANT && material != Material.SEA_GRASS) {
-				return !material.blocksMovement();
+			if (material != Material.STRUCTURAL_AIR && material != Material.WATER_PLANT && material != Material.REPLACEABLE_WATER_PLANT) {
+				return !material.blocksMotion();
 			}
 
 			return false;
@@ -77,18 +77,18 @@ public abstract class PortalDisplacementFluid extends ForgeFlowingFluid {
 	public static class Flowing extends PortalDisplacementFluid {
 		public Flowing(final Properties properties) {
 			super(properties);
-			setDefaultState(getStateContainer().getBaseState().with(LEVEL_1_8, 7));
+			registerDefaultState(getStateDefinition().any().setValue(LEVEL, 7));
 		}
 
 		@Override
-		protected void fillStateContainer(final StateContainer.Builder<Fluid, FluidState> builder) {
-			super.fillStateContainer(builder);
-			builder.add(LEVEL_1_8);
+		protected void createFluidStateDefinition(final StateContainer.Builder<Fluid, FluidState> builder) {
+			super.createFluidStateDefinition(builder);
+			builder.add(LEVEL);
 		}
 
 		@Override
-		public int getLevel(final FluidState state) {
-			return state.get(LEVEL_1_8);
+		public int getAmount(final FluidState state) {
+			return state.getValue(LEVEL);
 		}
 
 		@Override
@@ -103,7 +103,7 @@ public abstract class PortalDisplacementFluid extends ForgeFlowingFluid {
 		}
 
 		@Override
-		public int getLevel(final FluidState state) {
+		public int getAmount(final FluidState state) {
 			return 8;
 		}
 

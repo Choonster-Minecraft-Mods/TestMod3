@@ -31,8 +31,8 @@ public class EnumPropertyHUDHandler<T extends Enum<T> & IStringSerializable> imp
 	public void appendBody(final List<ITextComponent> tooltip, final IDataAccessor accessor, final IPluginConfig config) {
 		final BlockState state = accessor.getBlockState();
 
-		final T value = state.get(property);
-		final String valueTranslationKey = valueTranslationKeyPrefix + "." + value.getString();
+		final T value = state.getValue(property);
+		final String valueTranslationKey = valueTranslationKeyPrefix + "." + value.getSerializedName();
 
 		tooltip.add(new TranslationTextComponent(tooltipTranslationKey, new TranslationTextComponent(valueTranslationKey)));
 	}

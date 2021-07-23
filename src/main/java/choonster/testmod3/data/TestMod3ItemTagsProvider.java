@@ -21,8 +21,8 @@ public class TestMod3ItemTagsProvider extends ItemTagsProvider {
 	}
 
 	@Override
-	protected void registerTags() {
-		getOrCreateBuilder(ItemTags.ARROWS).add(
+	protected void addTags() {
+		tag(ItemTags.ARROWS).add(
 				ModItems.ARROW.get(),
 				ModItems.BLOCK_DETECTION_ARROW.get()
 		);

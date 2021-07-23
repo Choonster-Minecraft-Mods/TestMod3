@@ -30,13 +30,13 @@ public class MatchBlockTag implements ILootCondition {
 	}
 
 	@Override
-	public LootConditionType getConditionType() {
+	public LootConditionType getType() {
 		return ModLootConditionTypes.MATCH_BLOCK_TAG;
 	}
 
 	@Override
 	public boolean test(final LootContext lootContext) {
-		final BlockState state = lootContext.get(LootParameters.BLOCK_STATE);
+		final BlockState state = lootContext.getParamOrNull(LootParameters.BLOCK_STATE);
 
 		return state != null && tag.contains(state.getBlock());
 	}
@@ -53,7 +53,7 @@ public class MatchBlockTag implements ILootCondition {
 
 		@Override
 		public MatchBlockTag deserialize(final JsonObject object, final JsonDeserializationContext context) {
-			final ResourceLocation tagName = new ResourceLocation(JSONUtils.getString(object, "tag"));
+			final ResourceLocation tagName = new ResourceLocation(JSONUtils.getAsString(object, "tag"));
 			final Tags.IOptionalNamedTag<Block> tag = BlockTags.createOptional(tagName);
 			return new MatchBlockTag(tag);
 		}

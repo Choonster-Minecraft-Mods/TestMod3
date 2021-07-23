@@ -29,11 +29,11 @@ import java.util.Random;
  * @author Choonster
  */
 public class BannerFeature extends Feature<BannerFeatureConfig> {
-	private static final Field PATTERNS = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* patterns */"field_175118_f");
-	private static final Field BASE_COLOR = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* baseColor */"field_175120_a");
-	private static final Field PATTERN_LIST = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* patternList */ "field_175122_h");
-	private static final Field PATTERN_DATA_SET = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* patternDataSet */"field_175119_g");
-	private static final Field NAME = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* name */"field_190617_a");
+	private static final Field ITEM_PATTERNS = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* itemPatterns */ "field_175118_f");
+	private static final Field BASE_COLOR = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* baseColor */ "field_175120_a");
+	private static final Field PATTERNS = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* patterns */ "field_175122_h");
+	private static final Field RECEIVED_DATA = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* receivedData */ "field_175119_g");
+	private static final Field NAME = ObfuscationReflectionHelper.findField(BannerTileEntity.class, /* name */ "field_190617_a");
 
 	public BannerFeature(final Codec<BannerFeatureConfig> codec) {
 		super(codec);
@@ -69,10 +69,10 @@ public class BannerFeature extends Feature<BannerFeatureConfig> {
 	}
 
 	@Override
-	public boolean generate(final ISeedReader world, final ChunkGenerator generator, final Random rand, final BlockPos pos, final BannerFeatureConfig config) {
-		world.setBlockState(pos, BannerBlock.forColor(config.getColor()).getDefaultState(), Constants.BlockFlags.DEFAULT);
+	public boolean place(final ISeedReader world, final ChunkGenerator generator, final Random rand, final BlockPos pos, final BannerFeatureConfig config) {
+		world.setBlock(pos, BannerBlock.byColor(config.getColor()).defaultBlockState(), Constants.BlockFlags.DEFAULT);
 
-		final TileEntity tileEntity = world.getTileEntity(pos);
+		final TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity instanceof BannerTileEntity) {
 			loadFromItemStack((BannerTileEntity) tileEntity, createPatternList(config.getPatterns()), DyeColor.PINK);
 		}
@@ -80,13 +80,13 @@ public class BannerFeature extends Feature<BannerFeatureConfig> {
 		return true;
 	}
 
-	// Adapted from BannerTileEntity.loadFromItemStack, which is client-only
+	// Adapted from BannerTileEntity.fromItem, which is client-only
 	private static void loadFromItemStack(final BannerTileEntity tileEntity, final ListNBT patterns, final DyeColor color) {
 		try {
-			PATTERNS.set(tileEntity, patterns);
+			ITEM_PATTERNS.set(tileEntity, patterns);
 			BASE_COLOR.set(tileEntity, color);
-			PATTERN_LIST.set(tileEntity, null);
-			PATTERN_DATA_SET.set(tileEntity, true);
+			PATTERNS.set(tileEntity, null);
+			RECEIVED_DATA.set(tileEntity, true);
 			NAME.set(tileEntity, null);
 		} catch (final IllegalAccessException e) {
 			throw new RuntimeException("Unable to add banner data to TileEntity", e);

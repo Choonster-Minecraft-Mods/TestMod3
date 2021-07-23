@@ -18,7 +18,7 @@ public class TestMod3BlockTagsProvider extends BlockTagsProvider {
 	}
 
 	@Override
-	protected void registerTags() {
+	protected void addTags() {
 		
 	}
 }

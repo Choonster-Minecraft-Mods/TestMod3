@@ -18,6 +18,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -31,8 +32,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-
-import static net.minecraftforge.common.util.Constants.NBT;
 
 /**
  * An armour item that replaces your other armour when equipped and restores it when unequipped.
@@ -81,7 +80,7 @@ public class ReplacementArmourItem extends ArmorItem {
 	 * @param stack The ItemStack of this item
 	 * @return Has this item replaced the other armour?
 	 */
-	public boolean hasReplacedArmour(final ItemStack stack) {
+	public static boolean hasReplacedArmour(final ItemStack stack) {
 		return stack.getOrCreateTag().contains(KEY_REPLACED_ARMOUR, NBT.TAG_LIST);
 	}
 
@@ -102,7 +101,7 @@ public class ReplacementArmourItem extends ArmorItem {
 				.collect(Collectors.toSet());
 
 		Constants.ARMOUR_SLOTS.stream() // For each armour type,
-				.filter(equipmentSlot -> equipmentSlot != getEquipmentSlot()) // If it's not this item's equipment slot,
+				.filter(equipmentSlot -> equipmentSlot != getSlot()) // If it's not this item's equipment slot,
 				.forEach(equipmentSlot -> {
 					final Optional<ItemStack> optionalReplacement = replacements.stream()
 							.filter(replacementStack -> replacementStack.getItem().canEquip(replacementStack, equipmentSlot, entity))
@@ -114,15 +113,15 @@ public class ReplacementArmourItem extends ArmorItem {
 						// Create a compound tag to store the original and add it to the list of replaced armour
 						final CompoundNBT compoundNBT = new CompoundNBT();
 						replacedArmour.add(compoundNBT);
-						compoundNBT.putByte(KEY_SLOT, (byte) equipmentSlot.getSlotIndex());
+						compoundNBT.putByte(KEY_SLOT, (byte) equipmentSlot.getFilterFlag());
 
 						// If the original item exists, add it to the compound tag
-						final ItemStack original = entity.getItemStackFromSlot(equipmentSlot);
+						final ItemStack original = entity.getItemBySlot(equipmentSlot);
 						if (!original.isEmpty()) {
 							compoundNBT.put(KEY_STACK, original.serializeNBT());
 						}
 
-						entity.setItemStackToSlot(equipmentSlot, replacement.copy()); // Equip a copy of the replacement
+						entity.setItemSlot(equipmentSlot, replacement.copy()); // Equip a copy of the replacement
 						LOGGER.info("Equipped replacement {} to {}, replacing {}", replacement, equipmentSlot, original);
 					});
 				});
@@ -142,21 +141,21 @@ public class ReplacementArmourItem extends ArmorItem {
 
 		for (int i = 0; i < replacedArmour.size(); i++) { // For each saved armour item,
 			final CompoundNBT replacedTagCompound = replacedArmour.getCompound(i);
-			final ItemStack original = ItemStack.read(replacedTagCompound.getCompound(KEY_STACK)); // Load the original ItemStack from the NBT
+			final ItemStack original = ItemStack.of(replacedTagCompound.getCompound(KEY_STACK)); // Load the original ItemStack from the NBT
 
 			final EquipmentSlotType equipmentSlot = InventoryUtils.getEquipmentSlotFromIndex(replacedTagCompound.getByte(KEY_SLOT)); // Get the armour slot
-			final ItemStack current = entity.getItemStackFromSlot(equipmentSlot);
+			final ItemStack current = entity.getItemBySlot(equipmentSlot);
 
 			// Is the item currently in the slot one of the replacements defined for this item?
 			final boolean isReplacement = replacementItems
 					.stream()
 					.map(Supplier::get)
-					.anyMatch(replacement -> ItemStack.areItemStacksEqual(replacement, current));
+					.anyMatch(replacement -> ItemStack.matches(replacement, current));
 
 			if (original.isEmpty()) { // If the original item is empty,
 				if (isReplacement) { // If the current item is a replacement,
 					LOGGER.info("Original item for {} is empty, clearing replacement", equipmentSlot);
-					entity.setItemStackToSlot(equipmentSlot, ItemStack.EMPTY); // Delete it
+					entity.setItemSlot(equipmentSlot, ItemStack.EMPTY); // Delete it
 				} else { // Else do nothing
 					LOGGER.info("Original item for {} is empty, leaving current item", equipmentSlot);
 				}
@@ -168,7 +167,7 @@ public class ReplacementArmourItem extends ArmorItem {
 					ItemHandlerHelper.giveItemToPlayer((PlayerEntity) entity, current);
 				}
 
-				entity.setItemStackToSlot(equipmentSlot, original); // Equip the original item
+				entity.setItemSlot(equipmentSlot, original); // Equip the original item
 			}
 		}
 
@@ -206,9 +205,9 @@ public class ReplacementArmourItem extends ArmorItem {
 	 */
 	@Override
 	public void onArmorTick(final ItemStack stack, final World world, final PlayerEntity player) {
-		if (!world.isRemote && !hasReplacedArmour(stack)) { // If this is the server and the player's armour hasn't been replaced,
+		if (!world.isClientSide && !hasReplacedArmour(stack)) { // If this is the server and the player's armour hasn't been replaced,
 			replaceArmour(stack, player); // Replace the player's armour
-			player.container.detectAndSendChanges(); // Sync the player's inventory with the client
+			player.inventoryMenu.broadcastChanges(); // Sync the player's inventory with the client
 		}
 	}
 
@@ -224,7 +223,7 @@ public class ReplacementArmourItem extends ArmorItem {
 	@Override
 	public void inventoryTick(final ItemStack stack, final World world, final Entity entity, final int itemSlot, final boolean isSelected) {
 		// If this is the server, the entity is living and the entity's armour has been replaced,
-		if (!world.isRemote && entity instanceof LivingEntity && hasReplacedArmour(stack)) {
+		if (!world.isClientSide && entity instanceof LivingEntity && hasReplacedArmour(stack)) {
 
 			// Try to restore the entity's armour
 			InventoryUtils.forEachEntityInventory(
@@ -238,7 +237,7 @@ public class ReplacementArmourItem extends ArmorItem {
 	}
 
 	@Override
-	public void addInformation(final ItemStack stack, @Nullable final World worldIn, final List<ITextComponent> tooltip, final ITooltipFlag flagIn) {
+	public void appendHoverText(final ItemStack stack, @Nullable final World worldIn, final List<ITextComponent> tooltip, final ITooltipFlag flagIn) {
 		tooltip.add(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_ARMOUR_REPLACEMENT_EQUIP.getTranslationKey()));
 		tooltip.add(new TranslationTextComponent(TestMod3Lang.ITEM_DESC_ARMOUR_REPLACEMENT_UNEQUIP.getTranslationKey()));
 	}
