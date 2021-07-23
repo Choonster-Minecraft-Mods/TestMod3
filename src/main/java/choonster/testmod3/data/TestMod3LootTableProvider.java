@@ -8,9 +8,14 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.LootTableProvider;
-import net.minecraft.loot.*;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.world.level.storage.loot.ValidationContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 import java.util.List;
 import java.util.Map;
@@ -26,10 +31,10 @@ import java.util.stream.Collectors;
  * @author Choonster
  */
 public class TestMod3LootTableProvider extends LootTableProvider {
-	private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> lootTableGenerators = ImmutableList.of(
-			Pair.of(TestMod3BlockLootTables::new, LootParameterSets.BLOCK),
-			Pair.of(TestMod3EntityLootTables::new, LootParameterSets.ENTITY),
-			Pair.of(TestMod3GenericLootTables::new, LootParameterSets.ALL_PARAMS)
+	private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> lootTableGenerators = ImmutableList.of(
+			Pair.of(TestMod3BlockLootTables::new, LootContextParamSets.BLOCK),
+			Pair.of(TestMod3EntityLootTables::new, LootContextParamSets.ENTITY),
+			Pair.of(TestMod3GenericLootTables::new, LootContextParamSets.ALL_PARAMS)
 	);
 
 	public TestMod3LootTableProvider(final DataGenerator dataGeneratorIn) {
@@ -37,13 +42,13 @@ public class TestMod3LootTableProvider extends LootTableProvider {
 	}
 
 	@Override
-	protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables() {
+	protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
 		return lootTableGenerators;
 	}
 
 	@Override
-	protected void validate(final Map<ResourceLocation, LootTable> map, final ValidationTracker validationtracker) {
-		final Set<ResourceLocation> modLootTableIds = LootTables
+	protected void validate(final Map<ResourceLocation, LootTable> map, final ValidationContext validationtracker) {
+		final Set<ResourceLocation> modLootTableIds = BuiltInLootTables
 				.all()
 				.stream()
 				.filter(lootTable -> lootTable.getNamespace().equals(TestMod3.MODID))
@@ -54,7 +59,7 @@ public class TestMod3LootTableProvider extends LootTableProvider {
 		}
 
 		map.forEach((id, lootTable) -> {
-			LootTableManager.validate(validationtracker, id, lootTable);
+			LootTables.validate(validationtracker, id, lootTable);
 		});
 	}
 

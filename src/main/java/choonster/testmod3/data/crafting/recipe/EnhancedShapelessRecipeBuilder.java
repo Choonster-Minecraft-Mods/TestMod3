@@ -4,21 +4,21 @@ import choonster.testmod3.util.RegistryUtil;
 import com.google.common.base.Preconditions;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.ICriterionInstance;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.ShapelessRecipeBuilder;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapelessRecipe;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.RequirementsStrategy;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -42,10 +42,10 @@ public class EnhancedShapelessRecipeBuilder<
 	private static final Field INGREDIENTS = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* ingredients */ "field_200496_d");
 
 	protected final ItemStack result;
-	protected final IRecipeSerializer<? extends RECIPE> serializer;
+	protected final RecipeSerializer<? extends RECIPE> serializer;
 	protected String itemGroup;
 
-	protected EnhancedShapelessRecipeBuilder(final ItemStack result, final IRecipeSerializer<? extends RECIPE> serializer) {
+	protected EnhancedShapelessRecipeBuilder(final ItemStack result, final RecipeSerializer<? extends RECIPE> serializer) {
 		super(result.getItem(), result.getCount());
 		this.result = result;
 		this.serializer = serializer;
@@ -64,17 +64,17 @@ public class EnhancedShapelessRecipeBuilder<
 	}
 
 	@Override
-	public BUILDER requires(final ITag<Item> tagIn) {
+	public BUILDER requires(final Tag<Item> tagIn) {
 		return (BUILDER) super.requires(tagIn);
 	}
 
 	@Override
-	public BUILDER requires(final IItemProvider itemIn) {
+	public BUILDER requires(final ItemLike itemIn) {
 		return (BUILDER) super.requires(itemIn);
 	}
 
 	@Override
-	public BUILDER requires(final IItemProvider itemIn, final int quantity) {
+	public BUILDER requires(final ItemLike itemIn, final int quantity) {
 		return (BUILDER) super.requires(itemIn, quantity);
 	}
 
@@ -89,7 +89,7 @@ public class EnhancedShapelessRecipeBuilder<
 	}
 
 	@Override
-	public BUILDER unlockedBy(final String name, final ICriterionInstance criterionIn) {
+	public BUILDER unlockedBy(final String name, final CriterionTriggerInstance criterionIn) {
 		return (BUILDER) super.unlockedBy(name, criterionIn);
 	}
 
@@ -99,24 +99,24 @@ public class EnhancedShapelessRecipeBuilder<
 	}
 
 	/**
-	 * Builds this recipe into an {@link IFinishedRecipe}.
+	 * Builds this recipe into a {@link FinishedRecipe}.
 	 *
 	 * @param consumer The recipe consumer
 	 */
 	@Override
-	public void save(final Consumer<IFinishedRecipe> consumer) {
+	public void save(final Consumer<FinishedRecipe> consumer) {
 		save(consumer, RegistryUtil.getRequiredRegistryName(result.getItem()));
 	}
 
 	/**
-	 * Builds this recipe into an {@link IFinishedRecipe}. Use {@link #save(Consumer)} if save is the same as the ID for
+	 * Builds this recipe into a {@link FinishedRecipe}. Use {@link #save(Consumer)} if save is the same as the ID for
 	 * the result.
 	 *
 	 * @param consumer The recipe consumer
 	 * @param save     The ID to use for the recipe
 	 */
 	@Override
-	public void save(final Consumer<IFinishedRecipe> consumer, final String save) {
+	public void save(final Consumer<FinishedRecipe> consumer, final String save) {
 		final ResourceLocation resourcelocation = result.getItem().getRegistryName();
 		if (new ResourceLocation(save).equals(resourcelocation)) {
 			throw new IllegalStateException("Enhanced Shapeless Recipe " + save + " should remove its 'save' argument");
@@ -126,13 +126,13 @@ public class EnhancedShapelessRecipeBuilder<
 	}
 
 	/**
-	 * Builds this recipe into an {@link IFinishedRecipe}.
+	 * Builds this recipe into a {@link FinishedRecipe}.
 	 *
 	 * @param consumer The recipe consumer
 	 * @param id       The ID to use for the recipe
 	 */
 	@Override
-	public void save(final Consumer<IFinishedRecipe> consumer, final ResourceLocation id) {
+	public void save(final Consumer<FinishedRecipe> consumer, final ResourceLocation id) {
 		try {
 			// Perform the super class's validation
 			ENSURE_VALID.invoke(this, id);
@@ -147,7 +147,7 @@ public class EnhancedShapelessRecipeBuilder<
 					.parent(new ResourceLocation("minecraft", "recipes/root"))
 					.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
 					.rewards(AdvancementRewards.Builder.recipe(id))
-					.requirements(IRequirementsStrategy.OR);
+					.requirements(RequirementsStrategy.OR);
 
 			String group = (String) GROUP.get(this);
 			if (group == null) {
@@ -158,7 +158,7 @@ public class EnhancedShapelessRecipeBuilder<
 
 			String itemGroupName = itemGroup;
 			if (itemGroupName == null) {
-				final ItemGroup itemGroup = Preconditions.checkNotNull(result.getItem().getItemCategory());
+				final CreativeModeTab itemGroup = Preconditions.checkNotNull(result.getItem().getItemCategory());
 				itemGroupName = itemGroup.getRecipeFolderName();
 			}
 
@@ -188,7 +188,7 @@ public class EnhancedShapelessRecipeBuilder<
 
 	public static class Vanilla extends EnhancedShapelessRecipeBuilder<ShapelessRecipe, Vanilla> {
 		private Vanilla(final ItemStack result) {
-			super(result, IRecipeSerializer.SHAPELESS_RECIPE);
+			super(result, RecipeSerializer.SHAPELESS_RECIPE);
 		}
 
 		/**

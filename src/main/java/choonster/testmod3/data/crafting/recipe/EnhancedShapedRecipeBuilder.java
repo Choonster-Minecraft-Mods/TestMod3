@@ -4,21 +4,21 @@ import choonster.testmod3.util.RegistryUtil;
 import com.google.common.base.Preconditions;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.ICriterionInstance;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.RequirementsStrategy;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -44,10 +44,10 @@ public class EnhancedShapedRecipeBuilder<
 	private static final Field KEY = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* key */ "field_200478_e");
 
 	protected final ItemStack result;
-	protected final IRecipeSerializer<? extends RECIPE> serializer;
+	protected final RecipeSerializer<? extends RECIPE> serializer;
 	protected String itemGroup;
 
-	protected EnhancedShapedRecipeBuilder(final ItemStack result, final IRecipeSerializer<? extends RECIPE> serializer) {
+	protected EnhancedShapedRecipeBuilder(final ItemStack result, final RecipeSerializer<? extends RECIPE> serializer) {
 		super(result.getItem(), result.getCount());
 		this.result = result;
 		this.serializer = serializer;
@@ -69,7 +69,7 @@ public class EnhancedShapedRecipeBuilder<
 	 * Adds a key to the recipe pattern.
 	 */
 	@Override
-	public BUILDER define(final Character symbol, final ITag<Item> tagIn) {
+	public BUILDER define(final Character symbol, final Tag<Item> tagIn) {
 		return (BUILDER) super.define(symbol, tagIn);
 	}
 
@@ -77,7 +77,7 @@ public class EnhancedShapedRecipeBuilder<
 	 * Adds a key to the recipe pattern.
 	 */
 	@Override
-	public BUILDER define(final Character symbol, final IItemProvider itemIn) {
+	public BUILDER define(final Character symbol, final ItemLike itemIn) {
 		return (BUILDER) super.define(symbol, itemIn);
 	}
 
@@ -101,7 +101,7 @@ public class EnhancedShapedRecipeBuilder<
 	 * Adds a criterion needed to unlock the recipe.
 	 */
 	@Override
-	public BUILDER unlockedBy(final String name, final ICriterionInstance criterion) {
+	public BUILDER unlockedBy(final String name, final CriterionTriggerInstance criterion) {
 		return (BUILDER) super.unlockedBy(name, criterion);
 	}
 
@@ -111,19 +111,19 @@ public class EnhancedShapedRecipeBuilder<
 	}
 
 	/**
-	 * Builds this recipe into an {@link IFinishedRecipe}.
+	 * Builds this recipe into a {@link FinishedRecipe}.
 	 */
 	@Override
-	public void save(final Consumer<IFinishedRecipe> consumer) {
+	public void save(final Consumer<FinishedRecipe> consumer) {
 		save(consumer, RegistryUtil.getRequiredRegistryName(result.getItem()));
 	}
 
 	/**
-	 * Builds this recipe into an {@link IFinishedRecipe}. Use {@link #save(Consumer)} if save is the same as the ID for
+	 * Builds this recipe into a {@link FinishedRecipe}. Use {@link #save(Consumer)} if save is the same as the ID for
 	 * the result.
 	 */
 	@Override
-	public void save(final Consumer<IFinishedRecipe> consumer, final String save) {
+	public void save(final Consumer<FinishedRecipe> consumer, final String save) {
 		final ResourceLocation registryName = result.getItem().getRegistryName();
 		if (new ResourceLocation(save).equals(registryName)) {
 			throw new IllegalStateException("Shaped Recipe " + save + " should remove its 'save' argument");
@@ -144,10 +144,10 @@ public class EnhancedShapedRecipeBuilder<
 	}
 
 	/**
-	 * Builds this recipe into an {@link IFinishedRecipe}.
+	 * Builds this recipe into a {@link FinishedRecipe}.
 	 */
 	@Override
-	public void save(final Consumer<IFinishedRecipe> consumer, final ResourceLocation id) {
+	public void save(final Consumer<FinishedRecipe> consumer, final ResourceLocation id) {
 		try {
 			// Perform the super class's validation
 			ENSURE_VALID.invoke(this, id);
@@ -162,7 +162,7 @@ public class EnhancedShapedRecipeBuilder<
 					.parent(new ResourceLocation("minecraft", "recipes/root"))
 					.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
 					.rewards(AdvancementRewards.Builder.recipe(id))
-					.requirements(IRequirementsStrategy.OR);
+					.requirements(RequirementsStrategy.OR);
 
 			String group = (String) GROUP.get(this);
 			if (group == null) {
@@ -175,7 +175,7 @@ public class EnhancedShapedRecipeBuilder<
 
 			String itemGroupName = itemGroup;
 			if (itemGroupName == null) {
-				final ItemGroup itemGroup = Preconditions.checkNotNull(result.getItem().getItemCategory());
+				final CreativeModeTab itemGroup = Preconditions.checkNotNull(result.getItem().getItemCategory());
 				itemGroupName = itemGroup.getRecipeFolderName();
 			}
 
@@ -191,7 +191,7 @@ public class EnhancedShapedRecipeBuilder<
 
 	public static class Vanilla extends EnhancedShapedRecipeBuilder<ShapedRecipe, Vanilla> {
 		private Vanilla(final ItemStack result) {
-			super(result, IRecipeSerializer.SHAPED_RECIPE);
+			super(result, RecipeSerializer.SHAPED_RECIPE);
 		}
 
 		/**

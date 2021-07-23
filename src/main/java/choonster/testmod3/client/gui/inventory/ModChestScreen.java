@@ -1,23 +1,24 @@
 package choonster.testmod3.client.gui.inventory;
 
-import choonster.testmod3.inventory.container.ModChestContainer;
-import choonster.testmod3.tileentity.ModChestTileEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import choonster.testmod3.world.inventory.menu.ModChestMenu;
+import choonster.testmod3.world.level.block.entity.ModChestBlockEntity;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.inventory.ChestScreen;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.ContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 /**
- * GUI for {@link ModChestTileEntity}.
+ * GUI for {@link ModChestBlockEntity}.
  * <p>
- * Adapted from {@link ChestScreen}.
+ * Adapted from {@link ContainerScreen}.
  *
  * @author Choonster
  */
-public class ModChestScreen extends ContainerScreen<ModChestContainer> {
+public class ModChestScreen extends AbstractContainerScreen<ModChestMenu> {
 	/**
 	 * The ResourceLocation containing the chest GUI texture.
 	 */
@@ -28,7 +29,7 @@ public class ModChestScreen extends ContainerScreen<ModChestContainer> {
 	 */
 	private final int numRows;
 
-	public ModChestScreen(final ModChestContainer container, final PlayerInventory playerInventory, final ITextComponent title) {
+	public ModChestScreen(final ModChestMenu container, final Inventory playerInventory, final Component title) {
 		super(container, playerInventory, title);
 
 		passEvents = false;
@@ -38,18 +39,17 @@ public class ModChestScreen extends ContainerScreen<ModChestContainer> {
 	}
 
 	@Override
-	public void render(final MatrixStack matrixStack, final int mouseX, final int mouseY, final float partialTicks) {
+	public void render(final PoseStack matrixStack, final int mouseX, final int mouseY, final float partialTicks) {
 		renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		renderTooltip(matrixStack, mouseX, mouseY);
 	}
 
 	@Override
-	protected void renderBg(final MatrixStack matrixStack, final float partialTicks, final int x, final int y) {
-		// TODO: Figure out how to render texture with colour without using this method
-		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-
-		minecraft.getTextureManager().bind(CHEST_GUI_TEXTURE);
+	protected void renderBg(final PoseStack matrixStack, final float partialTicks, final int x, final int y) {
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, CHEST_GUI_TEXTURE);
 
 		final int centreX = (width - imageWidth) / 2;
 		final int centreY = (height - imageHeight) / 2;

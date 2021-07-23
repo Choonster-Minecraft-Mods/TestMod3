@@ -2,22 +2,22 @@ package choonster.testmod3.data.crafting.recipe;
 
 import choonster.testmod3.util.ModJsonUtil;
 import com.google.gson.JsonObject;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 
 /**
- * An {@link IFinishedRecipe} that allows the recipe result to have NBT.
- * Delegates all other logic to another {@link IFinishedRecipe} instance.
+ * A {@link FinishedRecipe} that allows the recipe result to have NBT.
+ * Delegates all other logic to another {@link FinishedRecipe} instance.
  *
  * @author Choonster
  */
 public class SimpleFinishedRecipe extends DelegateFinishedRecipe {
-	private final IRecipeSerializer<?> serializer;
-	private final CompoundNBT resultNBT;
+	private final RecipeSerializer<?> serializer;
+	private final CompoundTag resultNBT;
 
-	public SimpleFinishedRecipe(final IFinishedRecipe baseRecipe, final ItemStack result, final IRecipeSerializer<?> serializer) {
+	public SimpleFinishedRecipe(final FinishedRecipe baseRecipe, final ItemStack result, final RecipeSerializer<?> serializer) {
 		super(baseRecipe);
 		this.serializer = serializer;
 		resultNBT = result.getTag();
@@ -33,7 +33,7 @@ public class SimpleFinishedRecipe extends DelegateFinishedRecipe {
 	}
 
 	@Override
-	public IRecipeSerializer<?> getType() {
+	public RecipeSerializer<?> getType() {
 		return serializer;
 	}
 }

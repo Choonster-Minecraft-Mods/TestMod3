@@ -1,8 +1,8 @@
 package choonster.testmod3.text;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
+import net.minecraft.Util;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Adapted from Mekanism's APILang under the following license:
@@ -148,6 +148,4 @@ public enum TestMod3Lang {
 	private static String prefix() {
 		return TestMod3.MODID + ".";
 	}
-
-
 }

@@ -1,10 +1,10 @@
 package choonster.testmod3.network.capability.lastusetime;
 
 import choonster.testmod3.api.capability.lastusetime.ILastUseTime;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 /**
- * Functions used by the {@link ILastUseTime} capability update messages.
+ * Functions used by the {@link ILastUseTime} capability update message.
  *
  * @author Choonster
  */
@@ -13,11 +13,11 @@ class LastUseTimeFunctions {
 		return lastUseTime.get();
 	}
 
-	static long decodeLastUseTimeValue(final PacketBuffer buffer) {
+	static long decodeLastUseTimeValue(final FriendlyByteBuf buffer) {
 		return buffer.readLong();
 	}
 
-	static void encodeLastUseTimeValue(final long lastUseTimeValue, final PacketBuffer buffer) {
+	static void encodeLastUseTimeValue(final long lastUseTimeValue, final FriendlyByteBuf buffer) {
 		buffer.writeLong(lastUseTimeValue);
 	}
 

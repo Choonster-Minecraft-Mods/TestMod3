@@ -1,6 +1,8 @@
 package choonster.testmod3.fluid;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -14,7 +16,7 @@ import javax.annotation.Nullable;
  *
  * @author Choonster
  */
-public class ItemFluidTank extends FluidTank implements IFluidHandlerItem {
+public class ItemFluidTank extends FluidTank implements IFluidHandlerItem, INBTSerializable<CompoundTag> {
 	private final ItemStack container;
 
 	public ItemFluidTank(final ItemStack container, final int capacity) {
@@ -74,5 +76,15 @@ public class ItemFluidTank extends FluidTank implements IFluidHandlerItem {
 	@Override
 	public int hashCode() {
 		return fluid.hashCode();
+	}
+
+	@Override
+	public CompoundTag serializeNBT() {
+		return writeToNBT(new CompoundTag());
+	}
+
+	@Override
+	public void deserializeNBT(final CompoundTag tag) {
+		readFromNBT(tag);
 	}
 }

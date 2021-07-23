@@ -1,26 +1,26 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.entity.BlockDetectionArrowEntity;
-import choonster.testmod3.entity.ModArrowEntity;
-import choonster.testmod3.entity.PlayerAvoidingCreeperEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.MobSpawnInfo;
+import choonster.testmod3.world.entity.BlockDetectionArrow;
+import choonster.testmod3.world.entity.ModArrow;
+import choonster.testmod3.world.entity.PlayerAvoidingCreeper;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -32,18 +32,18 @@ public class ModEntities {
 
 	private static boolean isInitialised;
 
-	public static final RegistryObject<EntityType<ModArrowEntity>> MOD_ARROW = registerEntityType("mod_arrow",
-			() -> EntityType.Builder.<ModArrowEntity>of((ModArrowEntity::new), EntityClassification.MISC)
+	public static final RegistryObject<EntityType<ModArrow>> MOD_ARROW = registerEntityType("mod_arrow",
+			() -> EntityType.Builder.<ModArrow>of((ModArrow::new), MobCategory.MISC)
 					.sized(0.5f, 0.5f)
 	);
 
-	public static final RegistryObject<EntityType<BlockDetectionArrowEntity>> BLOCK_DETECTION_ARROW = registerEntityType("block_detection_arrow",
-			() -> EntityType.Builder.<BlockDetectionArrowEntity>of(BlockDetectionArrowEntity::new, EntityClassification.MISC)
+	public static final RegistryObject<EntityType<BlockDetectionArrow>> BLOCK_DETECTION_ARROW = registerEntityType("block_detection_arrow",
+			() -> EntityType.Builder.<BlockDetectionArrow>of(BlockDetectionArrow::new, MobCategory.MISC)
 					.sized(0.5f, 0.5f)
 	);
 
-	public static final RegistryObject<EntityType<PlayerAvoidingCreeperEntity>> PLAYER_AVOIDING_CREEPER = registerEntityType("player_avoiding_creeper",
-			() -> EntityType.Builder.of(PlayerAvoidingCreeperEntity::new, EntityClassification.MONSTER)
+	public static final RegistryObject<EntityType<PlayerAvoidingCreeper>> PLAYER_AVOIDING_CREEPER = registerEntityType("player_avoiding_creeper",
+			() -> EntityType.Builder.of(PlayerAvoidingCreeper::new, MobCategory.MONSTER)
 					.sized(0.6f, 1.7f)
 	);
 
@@ -81,7 +81,7 @@ public class ModEntities {
 	public static class RegistrationHandler {
 		@SubscribeEvent
 		public static void registerAttributes(final EntityAttributeCreationEvent event) {
-			event.put(PLAYER_AVOIDING_CREEPER.get(), PlayerAvoidingCreeperEntity.registerAttributes().build());
+			event.put(PLAYER_AVOIDING_CREEPER.get(), PlayerAvoidingCreeper.registerAttributes().build());
 		}
 	}
 
@@ -89,13 +89,13 @@ public class ModEntities {
 	public static class SpawnHandler {
 		@SubscribeEvent(priority = EventPriority.LOW)
 		public static void registerEntitySpawns(final BiomeLoadingEvent event) {
-			final RegistryKey<Biome> biomeRegistryKey = RegistryKey.create(ForgeRegistries.Keys.BIOMES, event.getName());
+			final ResourceKey<Biome> biomeRegistryKey = ResourceKey.create(ForgeRegistries.Keys.BIOMES, event.getName());
 
 			if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.OCEAN)) {
-				addSpawn(event, EntityType.GUARDIAN, 100, 5, 20, EntityClassification.WATER_CREATURE);
+				addSpawn(event, EntityType.GUARDIAN, 100, 5, 20, MobCategory.WATER_CREATURE);
 			}
 
-			copySpawns(event, PLAYER_AVOIDING_CREEPER.get(), EntityClassification.MONSTER, EntityType.CREEPER, EntityClassification.MONSTER);
+			copySpawns(event, PLAYER_AVOIDING_CREEPER.get(), MobCategory.MONSTER, EntityType.CREEPER, MobCategory.MONSTER);
 		}
 
 		/**
@@ -110,8 +110,8 @@ public class ModEntities {
 		 * @param maxGroupCount  Max spawn count
 		 * @param classification The entity classification
 		 */
-		private static void addSpawn(final BiomeLoadingEvent event, final EntityType<? extends MobEntity> entityType, final int itemWeight, final int minGroupCount, final int maxGroupCount, final EntityClassification classification) {
-			final List<MobSpawnInfo.Spawners> spawnersList = event.getSpawns()
+		private static void addSpawn(final BiomeLoadingEvent event, final EntityType<? extends Mob> entityType, final int itemWeight, final int minGroupCount, final int maxGroupCount, final MobCategory classification) {
+			final List<MobSpawnSettings.SpawnerData> spawnersList = event.getSpawns()
 					.getSpawner(classification);
 
 			// Try to find an existing entry for the entity type
@@ -121,7 +121,7 @@ public class ModEntities {
 					.ifPresent(spawnersList::remove); // If there is one, remove it
 
 			// Add a new one
-			spawnersList.add(new MobSpawnInfo.Spawners(entityType, itemWeight, minGroupCount, maxGroupCount));
+			spawnersList.add(new MobSpawnSettings.SpawnerData(entityType, itemWeight, minGroupCount, maxGroupCount));
 		}
 
 		/**
@@ -133,7 +133,7 @@ public class ModEntities {
 		 * @param entityTypeToCopy     The entity type to copy spawn entries from
 		 * @param classificationToCopy The entity classification to copy spawn entries from
 		 */
-		private static void copySpawns(final BiomeLoadingEvent event, final EntityType<? extends MobEntity> entityTypeToAdd, final EntityClassification classificationToAdd, final EntityType<? extends MobEntity> entityTypeToCopy, final EntityClassification classificationToCopy) {
+		private static void copySpawns(final BiomeLoadingEvent event, final EntityType<? extends Mob> entityTypeToAdd, final MobCategory classificationToAdd, final EntityType<? extends Mob> entityTypeToCopy, final MobCategory classificationToCopy) {
 			event.getSpawns()
 					.getSpawner(classificationToCopy)
 					.stream()
@@ -141,7 +141,7 @@ public class ModEntities {
 					.findFirst()
 					.ifPresent(spawners ->
 							event.getSpawns().getSpawner(classificationToAdd)
-									.add(new MobSpawnInfo.Spawners(entityTypeToAdd, spawners.weight, spawners.minCount, spawners.maxCount))
+									.add(new MobSpawnSettings.SpawnerData(entityTypeToAdd, spawners.getWeight(), spawners.minCount, spawners.maxCount))
 					);
 		}
 	}

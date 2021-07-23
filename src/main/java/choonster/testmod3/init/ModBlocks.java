@@ -1,22 +1,22 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.block.*;
-import choonster.testmod3.block.pipe.BasicPipeBlock;
-import choonster.testmod3.block.pipe.FluidPipeBlock;
-import choonster.testmod3.block.slab.ColouredSlabBlock;
-import choonster.testmod3.block.variantgroup.BlockVariantGroup;
-import choonster.testmod3.item.block.FluidTankItem;
-import choonster.testmod3.tileentity.BaseFluidTankTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.trees.*;
-import net.minecraft.item.*;
-import net.minecraft.tileentity.CommandBlockTileEntity;
+import choonster.testmod3.world.item.block.FluidTankItem;
+import choonster.testmod3.world.level.block.*;
+import choonster.testmod3.world.level.block.entity.BaseFluidTankBlockEntity;
+import choonster.testmod3.world.level.block.pipe.BasicPipeBlock;
+import choonster.testmod3.world.level.block.pipe.FluidPipeBlock;
+import choonster.testmod3.world.level.block.slab.ColouredSlabBlock;
+import choonster.testmod3.world.level.block.variantgroup.BlockVariantGroup;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.CommandBlockEntity;
+import net.minecraft.world.level.block.grower.*;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -52,7 +52,7 @@ public class ModBlocks {
 			() -> new ItemCollisionTestBlock(Block.Properties.of(Material.WOOL))
 	);
 
-	public static final RegistryObject<FluidTankBlock<BaseFluidTankTileEntity>> FLUID_TANK = registerBlock("fluid_tank",
+	public static final RegistryObject<FluidTankBlock<BaseFluidTankBlockEntity>> FLUID_TANK = registerBlock("fluid_tank",
 			() -> new FluidTankBlock<>(Block.Properties.of(Material.GLASS).sound(SoundType.GLASS).strength(0.3f).noOcclusion()),
 			(block) -> new FluidTankItem(block, defaultItemProperties().stacksTo(1))
 	);
@@ -121,43 +121,43 @@ public class ModBlocks {
 			() -> new FluidPipeBlock(Block.Properties.of(Material.METAL))
 	);
 
-	public static final RegistryObject<SurvivalCommandBlockBlock> SURVIVAL_COMMAND_BLOCK = registerBlock("survival_command_block",
-			() -> new SurvivalCommandBlockBlock(CommandBlockTileEntity.Mode.REDSTONE, Block.Properties.copy(Blocks.COMMAND_BLOCK)),
+	public static final RegistryObject<SurvivalCommandBlock> SURVIVAL_COMMAND_BLOCK = registerBlock("survival_command_block",
+			() -> new SurvivalCommandBlock(CommandBlockEntity.Mode.REDSTONE, Block.Properties.copy(Blocks.COMMAND_BLOCK), false),
 			(block) -> new BlockItem(block, defaultItemProperties().rarity(Rarity.EPIC))
 	);
 
-	public static final RegistryObject<SurvivalCommandBlockBlock> REPEATING_SURVIVAL_COMMAND_BLOCK = registerBlock("repeating_survival_command_block",
-			() -> new SurvivalCommandBlockBlock(CommandBlockTileEntity.Mode.AUTO, Block.Properties.copy(Blocks.REPEATING_COMMAND_BLOCK)),
+	public static final RegistryObject<SurvivalCommandBlock> REPEATING_SURVIVAL_COMMAND_BLOCK = registerBlock("repeating_survival_command_block",
+			() -> new SurvivalCommandBlock(CommandBlockEntity.Mode.AUTO, Block.Properties.copy(Blocks.REPEATING_COMMAND_BLOCK), false),
 			(block) -> new BlockItem(block, defaultItemProperties().rarity(Rarity.EPIC))
 	);
 
-	public static final RegistryObject<SurvivalCommandBlockBlock> CHAIN_SURVIVAL_COMMAND_BLOCK = registerBlock("chain_survival_command_block",
-			() -> new SurvivalCommandBlockBlock(CommandBlockTileEntity.Mode.SEQUENCE, Block.Properties.copy(Blocks.CHAIN_COMMAND_BLOCK)),
+	public static final RegistryObject<SurvivalCommandBlock> CHAIN_SURVIVAL_COMMAND_BLOCK = registerBlock("chain_survival_command_block",
+			() -> new SurvivalCommandBlock(CommandBlockEntity.Mode.SEQUENCE, Block.Properties.copy(Blocks.CHAIN_COMMAND_BLOCK), true),
 			(block) -> new BlockItem(block, defaultItemProperties().rarity(Rarity.EPIC))
 	);
 
 	public static final RegistryObject<TestMod3SaplingBlock> OAK_SAPLING = registerBlock("oak_sapling",
-			() -> new TestMod3SaplingBlock(new OakTree(), Block.Properties.copy(Blocks.OAK_SAPLING))
+			() -> new TestMod3SaplingBlock(new OakTreeGrower(), Block.Properties.copy(Blocks.OAK_SAPLING))
 	);
 
 	public static final RegistryObject<TestMod3SaplingBlock> SPRUCE_SAPLING = registerBlock("spruce_sapling",
-			() -> new TestMod3SaplingBlock(new SpruceTree(), Block.Properties.copy(Blocks.SPRUCE_SAPLING))
+			() -> new TestMod3SaplingBlock(new SpruceTreeGrower(), Block.Properties.copy(Blocks.SPRUCE_SAPLING))
 	);
 
 	public static final RegistryObject<TestMod3SaplingBlock> BIRCH_SAPLING = registerBlock("birch_sapling",
-			() -> new TestMod3SaplingBlock(new BirchTree(), Block.Properties.copy(Blocks.BIRCH_SAPLING))
+			() -> new TestMod3SaplingBlock(new BirchTreeGrower(), Block.Properties.copy(Blocks.BIRCH_SAPLING))
 	);
 
 	public static final RegistryObject<TestMod3SaplingBlock> JUNGLE_SAPLING = registerBlock("jungle_sapling",
-			() -> new TestMod3SaplingBlock(new JungleTree(), Block.Properties.copy(Blocks.JUNGLE_SAPLING))
+			() -> new TestMod3SaplingBlock(new JungleTreeGrower(), Block.Properties.copy(Blocks.JUNGLE_SAPLING))
 	);
 
 	public static final RegistryObject<TestMod3SaplingBlock> ACACIA_SAPLING = registerBlock("acacia_sapling",
-			() -> new TestMod3SaplingBlock(new AcaciaTree(), Block.Properties.copy(Blocks.ACACIA_SAPLING))
+			() -> new TestMod3SaplingBlock(new AcaciaTreeGrower(), Block.Properties.copy(Blocks.ACACIA_SAPLING))
 	);
 
 	public static final RegistryObject<TestMod3SaplingBlock> DARK_OAK_SAPLING = registerBlock("dark_oak_sapling",
-			() -> new TestMod3SaplingBlock(new DarkOakTree(), Block.Properties.copy(Blocks.DARK_OAK_SAPLING))
+			() -> new TestMod3SaplingBlock(new DarkOakTreeGrower(), Block.Properties.copy(Blocks.DARK_OAK_SAPLING))
 	);
 
 	public static final RegistryObject<InvisibleBlock> INVISIBLE = registerBlock("invisible",
@@ -251,12 +251,12 @@ public class ModBlocks {
 	}
 
 	/**
-	 * Gets an {@link Item.Properties} instance with the {@link ItemGroup} set to {@link TestMod3#ITEM_GROUP}.
+	 * Gets an {@link Item.Properties} instance with the {@link CreativeModeTab} set to {@link TestMod3#CREATIVE_MODE_TAB}.
 	 *
 	 * @return The item properties
 	 */
 	private static Item.Properties defaultItemProperties() {
-		return new Item.Properties().tab(TestMod3.ITEM_GROUP);
+		return new Item.Properties().tab(TestMod3.CREATIVE_MODE_TAB);
 	}
 
 	/**

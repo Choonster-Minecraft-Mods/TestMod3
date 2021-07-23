@@ -1,27 +1,27 @@
 package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.client.item.RevealHiddenBlocksItemPropertyGetter;
-import choonster.testmod3.client.item.TicksSinceLastUseItemPropertyGetter;
+import choonster.testmod3.client.item.RevealHiddenBlocksItemPropertyFunction;
+import choonster.testmod3.client.item.TicksSinceLastUseItemPropertyFunction;
 import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
 import com.google.common.base.Preconditions;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.util.LazyValue;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.LazyLoadedValue;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelBuilder.Perspective;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.loaders.DynamicBucketModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
@@ -39,7 +39,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 	/**
 	 * A model that extends item/generated and uses the same transforms as the Vanilla bow.
 	 */
-	private final LazyValue<ModelFile> simpleModel = new LazyValue<>(() ->
+	private final LazyLoadedValue<ModelFile> simpleModel = new LazyLoadedValue<>(() ->
 			withGeneratedParent("simple_model")
 					.transforms()
 
@@ -116,7 +116,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 				.forEachOrdered(child ->
 						modelTest
 								.override()
-								.predicate(TicksSinceLastUseItemPropertyGetter.ID, child.getKey() * 20)
+								.predicate(TicksSinceLastUseItemPropertyFunction.ID, child.getKey() * 20)
 								.model(child.getValue())
 								.end()
 				);
@@ -124,7 +124,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 		// Add the parent as a fallback that displays when the ticks since last use is >= 60
 		modelTest
 				.override()
-				.predicate(TicksSinceLastUseItemPropertyGetter.ID, 60)
+				.predicate(TicksSinceLastUseItemPropertyFunction.ID, 60)
 				.model(modelTest)
 				.end();
 
@@ -142,14 +142,14 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 		// Add the child as an override that displays when the ticks since last use is >= 0 and < 20
 		slingshot
 				.override()
-				.predicate(TicksSinceLastUseItemPropertyGetter.ID, 0)
+				.predicate(TicksSinceLastUseItemPropertyFunction.ID, 0)
 				.model(slingshotPulled)
 				.end();
 
 		// Add the parent as a fallback that displays when the ticks since last use is >= 20
 		slingshot
 				.override()
-				.predicate(TicksSinceLastUseItemPropertyGetter.ID, 20)
+				.predicate(TicksSinceLastUseItemPropertyFunction.ID, 20)
 				.model(slingshot)
 				.end();
 
@@ -212,7 +212,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 		hiddenBlockRevealer
 				.override()
-				.predicate(RevealHiddenBlocksItemPropertyGetter.ID, 1)
+				.predicate(RevealHiddenBlocksItemPropertyFunction.ID, 1)
 				.model(hiddenBlockRevealerActive)
 				.end();
 

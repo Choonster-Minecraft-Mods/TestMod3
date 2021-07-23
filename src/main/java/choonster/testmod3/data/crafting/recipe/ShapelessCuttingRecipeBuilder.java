@@ -1,9 +1,9 @@
 package choonster.testmod3.data.crafting.recipe;
 
-import choonster.testmod3.crafting.recipe.ShapelessCuttingRecipe;
 import choonster.testmod3.init.ModCrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IItemProvider;
+import choonster.testmod3.world.item.crafting.recipe.ShapelessCuttingRecipe;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 
 /**
  * Builder for {@link ShapelessCuttingRecipe}.
@@ -21,7 +21,7 @@ public class ShapelessCuttingRecipeBuilder extends EnhancedShapelessRecipeBuilde
 	 * @param result The recipe result item
 	 * @return The builder
 	 */
-	public static ShapelessCuttingRecipeBuilder shapelessCuttingRecipe(final IItemProvider result) {
+	public static ShapelessCuttingRecipeBuilder shapelessCuttingRecipe(final ItemLike result) {
 		return shapelessCuttingRecipe(new ItemStack(result));
 	}
 
@@ -32,7 +32,7 @@ public class ShapelessCuttingRecipeBuilder extends EnhancedShapelessRecipeBuilde
 	 * @param count  The recipe result count
 	 * @return The builder
 	 */
-	public static ShapelessCuttingRecipeBuilder shapelessCuttingRecipe(final IItemProvider result, final int count) {
+	public static ShapelessCuttingRecipeBuilder shapelessCuttingRecipe(final ItemLike result, final int count) {
 		return shapelessCuttingRecipe(new ItemStack(result, count));
 	}
 

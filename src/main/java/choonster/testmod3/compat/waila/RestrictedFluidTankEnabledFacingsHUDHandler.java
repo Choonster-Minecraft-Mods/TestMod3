@@ -1,32 +1,22 @@
 package choonster.testmod3.compat.waila;
 
-import choonster.testmod3.block.RestrictedFluidTankBlock;
-import choonster.testmod3.text.TestMod3Lang;
-import choonster.testmod3.tileentity.RestrictedFluidTankTileEntity;
-import mcp.mobius.waila.api.IComponentProvider;
-import mcp.mobius.waila.api.IDataAccessor;
-import mcp.mobius.waila.api.IPluginConfig;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import java.util.List;
-
 /**
- * Adds a line to the Waila tooltip body displaying the enabled facings of a {@link RestrictedFluidTankTileEntity}.
+ * Adds a line to the Waila tooltip body displaying the enabled facings of a {@link RestrictedFluidTankBlockEntity}.
  *
  * @author Choonster
  */
+/*
 public class RestrictedFluidTankEnabledFacingsHUDHandler implements IComponentProvider {
 	@Override
-	public void appendBody(final List<ITextComponent> tooltip, final IDataAccessor accessor, final IPluginConfig config) {
-		final TileEntity tileEntity = accessor.getTileEntity();
+	public void appendBody(final List<Component> tooltip, final IDataAccessor accessor, final IPluginConfig config) {
+		final BlockEntity tileEntity = accessor.getTileEntity();
 
-		if (tileEntity instanceof RestrictedFluidTankTileEntity) {
+		if (tileEntity instanceof RestrictedFluidTankBlockEntity) {
 			final String enabledFacingsString = ((RestrictedFluidTankBlock) accessor.getBlock())
 					.getEnabledFacingsString(accessor.getWorld(), accessor.getPosition());
 
-			tooltip.add(new TranslationTextComponent(TestMod3Lang.BLOCK_DESC_FLUID_TANK_RESTRICTED_ENABLED_FACINGS.getTranslationKey(), enabledFacingsString));
+			tooltip.add(new TranslatableComponent(TestMod3Lang.BLOCK_DESC_FLUID_TANK_RESTRICTED_ENABLED_FACINGS.getTranslationKey(), enabledFacingsString));
 		}
 	}
 }
+*/

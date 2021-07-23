@@ -1,19 +1,19 @@
 package choonster.testmod3.client.event;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.item.ModBowItem;
-import net.minecraft.block.Blocks;
+import choonster.testmod3.world.item.ModBowItem;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Scoreboard;
+import net.minecraft.world.scores.Team;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.event.TickEvent;
@@ -51,7 +51,7 @@ public class ClientEventHandler {
 	@SubscribeEvent
 	public static void onClientTick(final TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.END && MINECRAFT.player != null && MINECRAFT.level != null) {
-			final PlayerEntity player = MINECRAFT.player;
+			final Player player = MINECRAFT.player;
 			if (MINECRAFT.level.getBlockState(player.blockPosition().below()).getBlock() == Blocks.IRON_BLOCK) {
 				player.turn(5, 0);
 			}
@@ -59,7 +59,7 @@ public class ClientEventHandler {
 	}
 
 	/**
-	 * When an {@link AbstractMinecartEntity} is spawned on the client side, add it to a {@link Team} and make it glow.
+	 * When an {@link AbstractMinecart} is spawned on the client side, add it to a {@link Team} and make it glow.
 	 * <p>
 	 * Test for this thread:
 	 * http://www.minecraftforge.net/forum/topic/50836-adding-an-entity-other-than-a-player-to-a-team/
@@ -68,21 +68,21 @@ public class ClientEventHandler {
 	 */
 	@SubscribeEvent
 	public static void entityJoinWorld(final EntityJoinWorldEvent event) {
-		final World world = event.getWorld();
+		final Level level = event.getWorld();
 		final Entity entity = event.getEntity();
 
-		if (world.isClientSide && entity instanceof AbstractMinecartEntity) {
-			final Scoreboard scoreboard = world.getScoreboard();
+		if (level.isClientSide && entity instanceof AbstractMinecart) {
+			final Scoreboard scoreboard = level.getScoreboard();
 
-			ScorePlayerTeam team = scoreboard.getPlayerTeam(TestMod3.MODID);
+			PlayerTeam team = scoreboard.getPlayerTeam(TestMod3.MODID);
 			if (team == null) {
 				team = scoreboard.addPlayerTeam(TestMod3.MODID);
-				team.setPlayerPrefix(new StringTextComponent("").setStyle(Style.EMPTY.withColor(TextFormatting.DARK_AQUA)));
-				team.setColor(TextFormatting.DARK_AQUA);
+				team.setPlayerPrefix(new TextComponent("").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)));
+				team.setColor(ChatFormatting.DARK_AQUA);
 			}
 
 			scoreboard.addPlayerToTeam(entity.getStringUUID(), team);
-			entity.setGlowing(true);
+			entity.setGlowingTag(true); // TODO: Doesn't look like this will work on the client
 		}
 	}
 }

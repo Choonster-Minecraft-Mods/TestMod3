@@ -1,35 +1,35 @@
 package choonster.testmod3.util;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.INameable;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.Nameable;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
- * An reusable implementation of {@link INameable}.
+ * An reusable implementation of {@link Nameable}.
  *
  * @author Choonster
  */
-public class NameHolder implements INameable, INBTSerializable<CompoundNBT> {
+public class NameHolder implements Nameable, INBTSerializable<CompoundTag> {
 	/**
 	 * The default name.
 	 */
-	private final ITextComponent defaultName;
+	private final Component defaultName;
 
 	/**
 	 * The custom name, if any.
 	 */
-	private ITextComponent customName;
+	private Component customName;
 
-	public NameHolder(final ITextComponent defaultName) {
+	public NameHolder(final Component defaultName) {
 		this.defaultName = defaultName.copy();
 	}
 
 	@Override
-	public ITextComponent getName() {
+	public Component getName() {
 		return hasCustomName() ? customName : defaultName;
 	}
 
@@ -40,7 +40,7 @@ public class NameHolder implements INameable, INBTSerializable<CompoundNBT> {
 
 	@Nullable
 	@Override
-	public ITextComponent getCustomName() {
+	public Component getCustomName() {
 		return customName;
 	}
 
@@ -49,25 +49,25 @@ public class NameHolder implements INameable, INBTSerializable<CompoundNBT> {
 	 *
 	 * @param customName The custom name
 	 */
-	public void setCustomName(final ITextComponent customName) {
+	public void setCustomName(final Component customName) {
 		this.customName = customName.copy();
 	}
 
 	@Override
-	public CompoundNBT serializeNBT() {
-		final CompoundNBT nbt = new CompoundNBT();
+	public CompoundTag serializeNBT() {
+		final CompoundTag nbt = new CompoundTag();
 
 		if (hasCustomName()) {
-			nbt.putString("DisplayName", ITextComponent.Serializer.toJson(getDisplayName()));
+			nbt.putString("DisplayName", Component.Serializer.toJson(getDisplayName()));
 		}
 
 		return nbt;
 	}
 
 	@Override
-	public void deserializeNBT(final CompoundNBT nbt) {
+	public void deserializeNBT(final CompoundTag nbt) {
 		if (nbt.contains("DisplayName")) {
-			final ITextComponent customName = Objects.requireNonNull(ITextComponent.Serializer.fromJson(nbt.getString("DisplayName")));
+			final Component customName = Objects.requireNonNull(Component.Serializer.fromJson(nbt.getString("DisplayName")));
 			setCustomName(customName);
 		}
 	}

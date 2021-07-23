@@ -1,30 +1,30 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.capability.pigspawner.FinitePigSpawner;
 import choonster.testmod3.capability.pigspawner.InfinitePigSpawner;
-import choonster.testmod3.capability.pigspawner.PigSpawnerCapability;
-import choonster.testmod3.entity.BlockDetectionArrowEntity;
-import choonster.testmod3.entity.ModArrowEntity;
-import choonster.testmod3.item.*;
-import choonster.testmod3.item.variantgroup.ItemVariantGroup;
+import choonster.testmod3.world.entity.BlockDetectionArrow;
+import choonster.testmod3.world.entity.ModArrow;
+import choonster.testmod3.world.item.*;
+import choonster.testmod3.world.item.variantgroup.ItemVariantGroup;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.EntityType;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.*;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.world.DimensionType;
+import net.minecraft.Util;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -42,7 +42,7 @@ public class ModItems {
 	private static boolean isInitialised;
 
 	public static final RegistryObject<CuttingAxeItem> WOODEN_AXE = ITEMS.register("wooden_axe",
-			() -> new CuttingAxeItem(ItemTier.WOOD, 6.0f, -3.2f, defaultItemProperties())
+			() -> new CuttingAxeItem(Tiers.WOOD, 6.0f, -3.2f, defaultItemProperties())
 	);
 
 	public static final RegistryObject<EntityTestItem> ENTITY_TEST = ITEMS.register("entity_test",
@@ -55,8 +55,8 @@ public class ModItems {
 	 * Test for this thread:
 	 * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2408066-try-creating-a-music-disc-in-my-1-8-mod-please
 	 */
-	public static final RegistryObject<MusicDiscItem> RECORD_SOLARIS = ITEMS.register("record_solaris",
-			() -> new MusicDiscItem(13, ModSoundEvents.RECORD_SOLARIS, defaultItemProperties())
+	public static final RegistryObject<RecordItem> RECORD_SOLARIS = ITEMS.register("record_solaris",
+			() -> new RecordItem(13, ModSoundEvents.RECORD_SOLARIS, defaultItemProperties())
 	);
 
 	public static final RegistryObject<HeavyItem> HEAVY = ITEMS.register("heavy",
@@ -123,11 +123,11 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<HarvestSwordItem> WOODEN_HARVEST_SWORD = ITEMS.register("wooden_harvest_sword",
-			() -> new HarvestSwordItem(ItemTier.WOOD, HarvestSwordItem.addToolTypes(ItemTier.WOOD, defaultItemProperties()))
+			() -> new HarvestSwordItem(Tiers.WOOD, HarvestSwordItem.addToolTypes(Tiers.WOOD, defaultItemProperties()))
 	);
 
 	public static final RegistryObject<HarvestSwordItem> DIAMOND_HARVEST_SWORD = ITEMS.register("diamond_harvest_sword",
-			() -> new HarvestSwordItem(ItemTier.DIAMOND, HarvestSwordItem.addToolTypes(ItemTier.DIAMOND, defaultItemProperties()))
+			() -> new HarvestSwordItem(Tiers.DIAMOND, HarvestSwordItem.addToolTypes(Tiers.DIAMOND, defaultItemProperties()))
 	);
 
 	public static final RegistryObject<ClearerItem> CLEARER = ITEMS.register("clearer",
@@ -139,7 +139,7 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<ModArrowItem> ARROW = ITEMS.register("arrow",
-			() -> new ModArrowItem(ModArrowEntity::new, defaultItemProperties())
+			() -> new ModArrowItem(ModArrow::new, defaultItemProperties())
 	);
 
 	public static final RegistryObject<HeightTesterItem> HEIGHT_TESTER = ITEMS.register("height_tester",
@@ -148,9 +148,8 @@ public class ModItems {
 
 	// Capabilities are registered and injected in FMLCommonSetupEvent, which is fired after RegistryEvent.Register.
 	// This means that item constructors can't directly reference Capability fields (e.g. CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY).
-	@SuppressWarnings("Convert2MethodRef")
 	public static final RegistryObject<PigSpawnerItem> PIG_SPAWNER_FINITE = ITEMS.register("pig_spawner_finite",
-			() -> new PigSpawnerItem(() -> PigSpawnerCapability.PIG_SPAWNER_CAPABILITY.getDefaultInstance(), defaultItemProperties())
+			() -> new PigSpawnerItem(() -> new FinitePigSpawner(20), defaultItemProperties())
 	);
 
 	public static final RegistryObject<PigSpawnerItem> PIG_SPAWNER_INFINITE = ITEMS.register("pig_spawner_infinite",
@@ -185,7 +184,7 @@ public class ModItems {
 			() -> new DimensionReplacementItem(
 					defaultItemProperties(),
 					Util.make(() -> {
-						final ImmutableMap.Builder<RegistryKey<DimensionType>, Supplier<ItemStack>> builder = ImmutableMap.builder();
+						final ImmutableMap.Builder<ResourceKey<DimensionType>, Supplier<ItemStack>> builder = ImmutableMap.builder();
 
 						builder.put(DimensionType.NETHER_LOCATION, () -> new ItemStack(Items.NETHER_STAR));
 						builder.put(DimensionType.END_LOCATION, () -> new ItemStack(Items.ENDER_PEARL));
@@ -200,11 +199,11 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<SlowSwordItem> WOODEN_SLOW_SWORD = ITEMS.register("wooden_slow_sword",
-			() -> new SlowSwordItem(ItemTier.WOOD, defaultItemProperties())
+			() -> new SlowSwordItem(Tiers.WOOD, defaultItemProperties())
 	);
 
 	public static final RegistryObject<SlowSwordItem> DIAMOND_SLOW_SWORD = ITEMS.register("diamond_slow_sword",
-			() -> new SlowSwordItem(ItemTier.DIAMOND, defaultItemProperties())
+			() -> new SlowSwordItem(Tiers.DIAMOND, defaultItemProperties())
 	);
 
 	public static final RegistryObject<RitualCheckerItem> RITUAL_CHECKER = ITEMS.register("ritual_checker",
@@ -224,7 +223,7 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<ModArrowItem> BLOCK_DETECTION_ARROW = ITEMS.register("block_detection_arrow",
-			() -> new ModArrowItem(BlockDetectionArrowEntity::new, defaultItemProperties())
+			() -> new ModArrowItem(BlockDetectionArrow::new, defaultItemProperties())
 	);
 
 	public static final RegistryObject<Item> TRANSLUCENT_ITEM = ITEMS.register("translucent_item",
@@ -252,7 +251,7 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<PotionEffectArmourItem> SATURATION_HELMET = ITEMS.register("saturation_helmet",
-			() -> new PotionEffectArmourItem(ArmorMaterial.CHAIN, EquipmentSlotType.HEAD, new EffectInstance(Effects.SATURATION, 1, 0, true, false), defaultItemProperties())
+			() -> new PotionEffectArmourItem(ArmorMaterials.CHAIN, EquipmentSlot.HEAD, new MobEffectInstance(MobEffects.SATURATION, 1, 0, true, false), defaultItemProperties())
 	);
 
 	public static final RegistryObject<EntityCheckerItem> ENTITY_CHECKER = ITEMS.register("entity_checker",
@@ -267,22 +266,22 @@ public class ModItems {
 	public static final RegistryObject<ReplacementArmourItem> REPLACEMENT_HELMET;
 
 	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_CHESTPLATE = ITEMS.register("replacement_chestplate",
-			() -> new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, EquipmentSlotType.CHEST, defaultItemProperties())
+			() -> new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, EquipmentSlot.CHEST, defaultItemProperties())
 	);
 
 	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_LEGGINGS = ITEMS.register("replacement_leggings",
-			() -> new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, EquipmentSlotType.LEGS, defaultItemProperties())
+			() -> new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, EquipmentSlot.LEGS, defaultItemProperties())
 	);
 
 	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_BOOTS = ITEMS.register("replacement_boots",
-			() -> new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, EquipmentSlotType.FEET, defaultItemProperties())
+			() -> new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, EquipmentSlot.FEET, defaultItemProperties())
 	);
 
 	static {
 		REPLACEMENT_HELMET = ITEMS.register("replacement_helmet",
 				() -> new ReplacementArmourItem(
 						ModArmourMaterial.REPLACEMENT,
-						EquipmentSlotType.HEAD,
+						EquipmentSlot.HEAD,
 						defaultItemProperties(),
 						ImmutableSet.of(
 								() -> {
@@ -313,7 +312,7 @@ public class ModItems {
 			() -> new ModBucketItem(defaultItemProperties().stacksTo(16))
 	);
 
-	
+
 	public static final ItemVariantGroup<VariantsItem.Type, VariantsItem> VARIANTS_ITEMS = ItemVariantGroup.Builder.<VariantsItem.Type, VariantsItem>create(ITEMS)
 			.groupName("variants_item")
 			.suffix()
@@ -362,7 +361,7 @@ public class ModItems {
 			final int primaryColor, final int secondaryColor
 	) {
 		final RegistryObject<ModSpawnEggItem> spawnEgg = ITEMS.register(name,
-				() -> new ModSpawnEggItem(entityType, primaryColor, secondaryColor, new Item.Properties().tab(TestMod3.ITEM_GROUP))
+				() -> new ModSpawnEggItem(entityType, primaryColor, secondaryColor, new Item.Properties().tab(TestMod3.CREATIVE_MODE_TAB))
 		);
 
 		SPAWN_EGGS.add(spawnEgg);
@@ -371,12 +370,12 @@ public class ModItems {
 	}
 
 	/**
-	 * Gets an {@link Item.Properties} instance with the {@link ItemGroup} set to {@link TestMod3#ITEM_GROUP}.
+	 * Gets an {@link Item.Properties} instance with the {@link CreativeModeTab} set to {@link TestMod3#CREATIVE_MODE_TAB}.
 	 *
 	 * @return The item properties
 	 */
 	private static Item.Properties defaultItemProperties() {
-		return new Item.Properties().tab(TestMod3.ITEM_GROUP);
+		return new Item.Properties().tab(TestMod3.CREATIVE_MODE_TAB);
 	}
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)

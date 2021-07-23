@@ -1,15 +1,15 @@
 package choonster.testmod3.data.crafting.ingredient;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.crafting.ingredient.MobSpawnerIngredientSerializer;
+import choonster.testmod3.world.item.crafting.ingredient.MobSpawnerIngredientSerializer;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.crafting.StackList;
 
 import java.util.Collections;
@@ -34,7 +34,7 @@ public class MobSpawnerIngredientBuilder {
 	 * @param spawner The spawner Item
 	 * @return The builder
 	 */
-	public static MobSpawnerIngredientBuilder mobSpawnerIngredient(final IItemProvider spawner) {
+	public static MobSpawnerIngredientBuilder mobSpawnerIngredient(final ItemLike spawner) {
 		return mobSpawnerIngredient(new ItemStack(spawner));
 	}
 

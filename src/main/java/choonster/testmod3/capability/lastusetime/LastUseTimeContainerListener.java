@@ -3,46 +3,23 @@ package choonster.testmod3.capability.lastusetime;
 import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockRevealer;
 import choonster.testmod3.api.capability.lastusetime.ILastUseTime;
 import choonster.testmod3.capability.CapabilityContainerListener;
-import choonster.testmod3.network.capability.lastusetime.BulkUpdateContainerLastUseTimesMessage;
-import choonster.testmod3.network.capability.lastusetime.UpdateContainerLastUseTimeMessage;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import choonster.testmod3.network.capability.lastusetime.UpdateMenuLastUseTimeMessage;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 /**
- * Syncs the {@link IHiddenBlockRevealer} capability for items in {@link Container}s.
+ * Syncs the {@link IHiddenBlockRevealer} capability for items in {@link AbstractContainerMenu}s.
  *
  * @author Choonster
  */
 public class LastUseTimeContainerListener extends CapabilityContainerListener<ILastUseTime> {
 
-	public LastUseTimeContainerListener(final ServerPlayerEntity player) {
+	public LastUseTimeContainerListener(final ServerPlayer player) {
 		super(player, LastUseTimeCapability.LAST_USE_TIME_CAPABILITY, LastUseTimeCapability.DEFAULT_FACING);
 	}
 
-	/**
-	 * Create an instance of the bulk update message.
-	 *
-	 * @param containerID The ID of the Container
-	 * @param items       The items list
-	 * @return The bulk update message
-	 */
 	@Override
-	protected BulkUpdateContainerLastUseTimesMessage createBulkUpdateMessage(final int containerID, final NonNullList<ItemStack> items) {
-		return new BulkUpdateContainerLastUseTimesMessage(LastUseTimeCapability.DEFAULT_FACING, containerID, items);
-	}
-
-	/**
-	 * Create an instance of the single update message.
-	 *
-	 * @param containerID The ID of the Container
-	 * @param slotNumber  The slot's index in the Container
-	 * @param lastUseTime The capability handler instance
-	 * @return The single update message
-	 */
-	@Override
-	protected UpdateContainerLastUseTimeMessage createSingleUpdateMessage(final int containerID, final int slotNumber, final ILastUseTime lastUseTime) {
-		return new UpdateContainerLastUseTimeMessage(LastUseTimeCapability.DEFAULT_FACING, containerID, slotNumber, lastUseTime);
+	protected UpdateMenuLastUseTimeMessage createSingleUpdateMessage(final int containerID, final int slotNumber, final ILastUseTime lastUseTime) {
+		return new UpdateMenuLastUseTimeMessage(LastUseTimeCapability.DEFAULT_FACING, containerID, slotNumber, lastUseTime);
 	}
 }

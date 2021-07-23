@@ -1,12 +1,12 @@
 package choonster.testmod3.data.crafting.recipe;
 
-import choonster.testmod3.crafting.ingredient.FluidContainerIngredient;
-import choonster.testmod3.crafting.recipe.ShapelessFluidContainerRecipe;
 import choonster.testmod3.init.ModCrafting;
+import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
+import choonster.testmod3.world.item.crafting.recipe.ShapelessFluidContainerRecipe;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 
 /**
  * Builder for {@link ShapelessFluidContainerRecipe}.
@@ -24,7 +24,7 @@ public class ShapelessFluidContainerRecipeBuilder extends EnhancedShapelessRecip
 	 * @param result The recipe result item
 	 * @return The builder
 	 */
-	public static ShapelessFluidContainerRecipeBuilder shapelessFluidContainerRecipe(final IItemProvider result) {
+	public static ShapelessFluidContainerRecipeBuilder shapelessFluidContainerRecipe(final ItemLike result) {
 		return shapelessFluidContainerRecipe(new ItemStack(result));
 	}
 

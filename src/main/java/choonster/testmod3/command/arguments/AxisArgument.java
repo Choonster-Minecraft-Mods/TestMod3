@@ -7,9 +7,9 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import net.minecraft.command.CommandSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.Collection;
 
@@ -21,14 +21,14 @@ import java.util.Collection;
 public class AxisArgument implements ArgumentType<Direction.Axis> {
 	private static final Collection<String> EXAMPLES = ImmutableList.of("x", "y", "z");
 	private static final SimpleCommandExceptionType INVALID_AXIS_EXCEPTION = new SimpleCommandExceptionType(
-			new TranslationTextComponent(TestMod3Lang.ARGUMENT_AXIS_INVALID.getTranslationKey())
+			new TranslatableComponent(TestMod3Lang.ARGUMENT_AXIS_INVALID.getTranslationKey())
 	);
 
 	public static AxisArgument axis() {
 		return new AxisArgument();
 	}
 
-	public static Direction.Axis getAxis(final CommandContext<CommandSource> context, final String name) {
+	public static Direction.Axis getAxis(final CommandContext<CommandSourceStack> context, final String name) {
 		return context.getArgument(name, Direction.Axis.class);
 	}
 

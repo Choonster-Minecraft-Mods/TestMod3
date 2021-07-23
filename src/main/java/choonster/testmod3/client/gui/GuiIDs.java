@@ -2,15 +2,15 @@ package choonster.testmod3.client.gui;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.network.OpenClientScreenMessage;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.FMLPlayMessages;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 public class GuiIDs {
 	/**
-	 * IDs for {@link ContainerScreen} classes opened with {@link NetworkHooks#openGui}/{@link FMLPlayMessages.OpenContainer}.
+	 * IDs for {@link AbstractContainerScreen} classes opened with {@link NetworkHooks#openGui}/{@link FMLPlayMessages.OpenContainer}.
 	 */
 	public static class Container {
 		public static final ResourceLocation MOD_CHEST = id("chest");

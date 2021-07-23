@@ -1,9 +1,9 @@
 package choonster.testmod3.capability.pigspawner;
 
 import choonster.testmod3.api.capability.pigspawner.IPigSpawner;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.PigEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.world.level.Level;
 
 /**
  * Base implementation of {@link IPigSpawner}.
@@ -14,24 +14,15 @@ import net.minecraft.world.World;
  * @author Choonster
  */
 public abstract class BasePigSpawner implements IPigSpawner {
-	/**
-	 * Spawn a pig at the specified position.
-	 *
-	 * @param world The world
-	 * @param x     The x coordinate
-	 * @param y     The y coordinate
-	 * @param z     The z coordinate
-	 * @return Was the pig successfully spawned?
-	 */
 	@Override
-	public boolean spawnPig(final World world, final double x, final double y, final double z) {
-		final PigEntity pig = EntityType.PIG.create(world);
+	public boolean spawnPig(final Level level, final double x, final double y, final double z) {
+		final Pig pig = EntityType.PIG.create(level);
 
 		if (pig == null) {
 			return false;
 		}
 
 		pig.setPos(x, y, z);
-		return world.addFreshEntity(pig);
+		return level.addFreshEntity(pig);
 	}
 }

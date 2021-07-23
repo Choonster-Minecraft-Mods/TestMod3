@@ -3,20 +3,20 @@ package choonster.testmod3.client.gui;
 import choonster.testmod3.capability.chunkenergy.ChunkEnergyCapability;
 import choonster.testmod3.config.TestMod3Config;
 import choonster.testmod3.text.TestMod3Lang;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.resources.language.I18n;
 
 /**
  * Displays the chunk energy in the player's current chunk.
  *
  * @author Choonster
  */
-public class GuiChunkEnergyHUD extends AbstractGui {
+public class GuiChunkEnergyHUD extends GuiComponent {
 	private static final Minecraft minecraft = Minecraft.getInstance();
 
-	public void drawHUD(final MatrixStack matrixStack) {
+	public void drawHUD(final PoseStack matrixStack) {
 		ChunkEnergyCapability.getChunkEnergy(minecraft.level.getChunkAt(minecraft.player.blockPosition()))
 				.ifPresent(chunkEnergy -> {
 					final String text = I18n.get(TestMod3Lang.CHUNK_ENERGY_HUD.getTranslationKey(), chunkEnergy.getEnergyStored(), chunkEnergy.getMaxEnergyStored());

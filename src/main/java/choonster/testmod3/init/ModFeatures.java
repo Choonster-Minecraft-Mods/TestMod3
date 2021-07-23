@@ -1,11 +1,11 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.world.gen.feature.BannerFeature;
-import choonster.testmod3.world.gen.feature.BannerFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
+import choonster.testmod3.world.level.levelgen.feature.BannerFeature;
+import choonster.testmod3.world.level.levelgen.feature.BannerFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 

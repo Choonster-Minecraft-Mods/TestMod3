@@ -2,16 +2,20 @@ package choonster.testmod3.data.loot;
 
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.init.ModLootTables;
-import net.minecraft.advancements.criterion.EntityFlagsPredicate;
-import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.item.Items;
-import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.EntityHasProperty;
-import net.minecraft.loot.functions.LootingEnchantBonus;
-import net.minecraft.loot.functions.SetCount;
-import net.minecraft.loot.functions.SetDamage;
-import net.minecraft.loot.functions.Smelt;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.critereon.EntityFlagsPredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
+import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -30,32 +34,32 @@ public class TestMod3GenericLootTables implements Consumer<BiConsumer<ResourceLo
 						.withPool(
 								LootPool.lootPool()
 										.name("main")
-										.setRolls(new RandomValueRange(1, 4))
+										.setRolls(UniformGenerator.between(1, 4))
 										.add(
-												ItemLootEntry.lootTableItem(Items.PORKCHOP)
+												LootItem.lootTableItem(Items.PORKCHOP)
 														.setWeight(1)
-														.apply(SetCount.setCount(new RandomValueRange(1, 3)))
+														.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3)))
 														.apply(
-																Smelt.smelted()
+																SmeltItemFunction.smelted()
 																		.when(
-																				EntityHasProperty.hasProperties(
+																				LootItemEntityPropertyCondition.hasProperties(
 																						LootContext.EntityTarget.THIS,
 																						EntityPredicate.Builder.entity()
 																								.flags(EntityFlagsPredicate.Builder.flags().setOnFire(true).build())
 																				)
 																		)
 														)
-														.apply(LootingEnchantBonus.lootingMultiplier(new RandomValueRange(0, 1)))
+														.apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0, 1)))
 										)
 										.add(
-												ItemLootEntry.lootTableItem(ModItems.ARROW.get())
+												LootItem.lootTableItem(ModItems.ARROW.get())
 														.setWeight(2)
-														.apply(SetCount.setCount(new RandomValueRange(1, 64)))
+														.apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 64)))
 										)
 										.add(
-												ItemLootEntry.lootTableItem(Items.WOODEN_AXE)
+												LootItem.lootTableItem(Items.WOODEN_AXE)
 														.setWeight(1)
-														.apply(SetDamage.setDamage(new RandomValueRange(0.28f, 0.28f)))
+														.apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.28f, 0.28f)))
 										)
 						)
 		);

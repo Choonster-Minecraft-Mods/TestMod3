@@ -1,13 +1,13 @@
 package choonster.testmod3.network.capability.fluidhandler;
 
 import choonster.testmod3.fluid.FluidTankSnapshot;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 /**
- * Functions used by the {@link IFluidHandlerItem} capability update messages.
+ * Functions used by the {@link IFluidHandlerItem} capability update message.
  *
  * @author Choonster
  */
@@ -16,14 +16,14 @@ class FluidHandlerFunctions {
 		return new FluidTankSnapshot(fluidHandlerItem.getFluidInTank(0), fluidHandlerItem.getTankCapacity(0));
 	}
 
-	static FluidTankSnapshot decodeFluidTankSnapshot(final PacketBuffer buffer) {
+	static FluidTankSnapshot decodeFluidTankSnapshot(final FriendlyByteBuf buffer) {
 		final FluidStack contents = FluidStack.readFromPacket(buffer);
 		final int capacity = buffer.readInt();
 
 		return new FluidTankSnapshot(contents, capacity);
 	}
 
-	static void encodeFluidTankSnapshot(final FluidTankSnapshot fluidTankSnapshot, final PacketBuffer buffer) {
+	static void encodeFluidTankSnapshot(final FluidTankSnapshot fluidTankSnapshot, final FriendlyByteBuf buffer) {
 		final FluidStack contents = fluidTankSnapshot.getContents();
 		contents.writeToPacket(buffer);
 

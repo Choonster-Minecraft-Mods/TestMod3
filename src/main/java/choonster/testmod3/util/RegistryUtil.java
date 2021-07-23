@@ -2,7 +2,7 @@ package choonster.testmod3.util;
 
 import choonster.testmod3.TestMod3;
 import com.google.common.base.Preconditions;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryManager;

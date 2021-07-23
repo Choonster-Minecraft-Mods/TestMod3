@@ -1,37 +1,37 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.crafting.ingredient.ConditionalIngredientSerializer;
-import choonster.testmod3.crafting.ingredient.FluidContainerIngredient;
-import choonster.testmod3.crafting.ingredient.IngredientNever;
-import choonster.testmod3.crafting.ingredient.MobSpawnerIngredientSerializer;
-import choonster.testmod3.crafting.recipe.ShapedArmourUpgradeRecipe;
-import choonster.testmod3.crafting.recipe.ShapelessCuttingRecipe;
-import choonster.testmod3.crafting.recipe.ShapelessFluidContainerRecipe;
 import choonster.testmod3.util.LogUtil;
+import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredientSerializer;
+import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
+import choonster.testmod3.world.item.crafting.ingredient.IngredientNever;
+import choonster.testmod3.world.item.crafting.ingredient.MobSpawnerIngredientSerializer;
+import choonster.testmod3.world.item.crafting.recipe.ShapedArmourUpgradeRecipe;
+import choonster.testmod3.world.item.crafting.recipe.ShapelessCuttingRecipe;
+import choonster.testmod3.world.item.crafting.recipe.ShapelessFluidContainerRecipe;
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.*;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionBrewing;
-import net.minecraft.potion.Potions;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionBrewing;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.*;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.common.crafting.NBTIngredient;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
@@ -102,7 +102,7 @@ public class ModCrafting {
 	}
 
 	public static class Recipes {
-		private static final DeferredRegister<IRecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, TestMod3.MODID);
+		private static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, TestMod3.MODID);
 
 		private static boolean isInitialised;
 
@@ -163,10 +163,10 @@ public class ModCrafting {
 		 * @param recipeManager The recipe manager
 		 * @param tag           The tag
 		 */
-		private static void removeRecipes(final RecipeManager recipeManager, final ITag.INamedTag<Item> tag) {
+		private static void removeRecipes(final RecipeManager recipeManager, final Tag.Named<Item> tag) {
 			final int recipesRemoved = removeRecipes(recipeManager, recipe -> {
 				final ItemStack resultItem = recipe.getResultItem();
-				return !resultItem.isEmpty() && resultItem.getItem().is(tag);
+				return !resultItem.isEmpty() && resultItem.is(tag);
 			});
 
 			LOGGER.info("Removed {} recipe(s) for tag {}", recipesRemoved, tag.getName());
@@ -181,7 +181,7 @@ public class ModCrafting {
 		 * @param recipeManager The recipe manager
 		 * @param recipeClass   The recipe class
 		 */
-		private static void removeRecipes(final RecipeManager recipeManager, final Class<? extends IRecipe> recipeClass) {
+		private static void removeRecipes(final RecipeManager recipeManager, final Class<? extends Recipe> recipeClass) {
 			final int recipesRemoved = removeRecipes(recipeManager, recipeClass::isInstance);
 
 			LOGGER.info("Removed {} recipe(s) for class {}", recipesRemoved, recipeClass);
@@ -194,23 +194,23 @@ public class ModCrafting {
 		 * @param predicate     The predicate
 		 * @return The number of recipes removed
 		 */
-		private static int removeRecipes(final RecipeManager recipeManager, final Predicate<IRecipe> predicate) {
-			final Map<IRecipeType<?>, Map<ResourceLocation, IRecipe<?>>> existingRecipes;
+		private static int removeRecipes(final RecipeManager recipeManager, final Predicate<Recipe> predicate) {
+			final Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> existingRecipes;
 			try {
 				@SuppressWarnings("unchecked")
-				final Map<IRecipeType<?>, Map<ResourceLocation, IRecipe<?>>> recipesMap = (Map<IRecipeType<?>, Map<ResourceLocation, IRecipe<?>>>) RECIPES.get(recipeManager);
+				final Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> recipesMap = (Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>>) RECIPES.get(recipeManager);
 				existingRecipes = recipesMap;
 			} catch (final IllegalAccessException e) {
 				throw new RuntimeException("Couldn't get recipes map while removing recipes", e);
 			}
 
-			final Object2IntMap<IRecipeType<?>> removedCounts = new Object2IntOpenHashMap<>();
-			final ImmutableMap.Builder<IRecipeType<?>, Map<ResourceLocation, IRecipe<?>>> newRecipes = ImmutableMap.builder();
+			final Object2IntMap<RecipeType<?>> removedCounts = new Object2IntOpenHashMap<>();
+			final ImmutableMap.Builder<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> newRecipes = ImmutableMap.builder();
 
 			// For each recipe type, create a new map that doesn't contain the recipes to be removed
 			existingRecipes.forEach((recipeType, existingRecipesForType) -> {
 				//noinspection UnstableApiUsage
-				final ImmutableMap<ResourceLocation, IRecipe<?>> newRecipesForType = existingRecipesForType.entrySet()
+				final ImmutableMap<ResourceLocation, Recipe<?>> newRecipesForType = existingRecipesForType.entrySet()
 						.stream()
 						.filter(entry -> !predicate.test(entry.getValue()))
 						.collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, Map.Entry::getValue));

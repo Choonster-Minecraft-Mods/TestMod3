@@ -1,9 +1,9 @@
 package choonster.testmod3.capability;
 
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import com.google.common.base.Preconditions;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 
@@ -12,21 +12,12 @@ import javax.annotation.Nullable;
 /**
  * A simple implementation of {@link ICapabilityProvider} and {@link INBTSerializable} that supports a single {@link Capability} handler instance.
  * <p>
- * Uses the {@link Capability}'s {@link IStorage} to serialise/deserialise NBT.
+ * The handler instance must implement {@link INBTSerializable}.
  *
  * @author Choonster
  */
-public class SerializableCapabilityProvider<HANDLER> extends SimpleCapabilityProvider<HANDLER> implements INBTSerializable<INBT> {
-
-	/**
-	 * Create a provider for the default handler instance.
-	 *
-	 * @param capability The Capability instance to provide the handler for
-	 * @param facing     The Direction to provide the handler for
-	 */
-	public SerializableCapabilityProvider(final Capability<HANDLER> capability, @Nullable final Direction facing) {
-		this(capability, facing, capability.getDefaultInstance());
-	}
+public class SerializableCapabilityProvider<HANDLER> extends SimpleCapabilityProvider<HANDLER> implements INBTSerializable<Tag> {
+	private final INBTSerializable<Tag> serializableInstance;
 
 	/**
 	 * Create a provider for the specified handler instance.
@@ -35,31 +26,23 @@ public class SerializableCapabilityProvider<HANDLER> extends SimpleCapabilityPro
 	 * @param facing     The Direction to provide the handler for
 	 * @param instance   The handler instance to provide
 	 */
-	public SerializableCapabilityProvider(final Capability<HANDLER> capability, @Nullable final Direction facing, @Nullable final HANDLER instance) {
+	@SuppressWarnings("unchecked")
+	public SerializableCapabilityProvider(final Capability<HANDLER> capability, @Nullable final Direction facing, final HANDLER instance) {
 		super(capability, facing, instance);
-	}
 
-	@Nullable
-	@Override
-	public INBT serializeNBT() {
-		final HANDLER instance = getInstance();
+		Preconditions.checkArgument(instance instanceof INBTSerializable, "instance must implement INBTSerializable");
 
-		if (instance == null) {
-			return null;
-		}
-
-		return getCapability().writeNBT(instance, getFacing());
+		serializableInstance = (INBTSerializable<Tag>) instance;
 	}
 
 	@Override
-	public void deserializeNBT(final INBT nbt) {
-		final HANDLER instance = getInstance();
+	public Tag serializeNBT() {
+		return serializableInstance.serializeNBT();
+	}
 
-		if (instance == null) {
-			return;
-		}
-
-		getCapability().readNBT(instance, getFacing(), nbt);
+	@Override
+	public void deserializeNBT(final Tag tag) {
+		serializableInstance.deserializeNBT(tag);
 	}
 
 }

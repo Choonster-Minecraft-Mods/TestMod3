@@ -1,11 +1,11 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Potion;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -34,16 +34,16 @@ public class ModPotions {
 	private static final int HARMFUL_DURATION_STRONG = 900;
 
 	public static final RegistryObject<Potion> TEST = registerPotion("test",
-			() -> new EffectInstance(ModEffects.TEST.get(), HELPFUL_DURATION_STANDARD)
+			() -> new MobEffectInstance(ModEffects.TEST.get(), HELPFUL_DURATION_STANDARD)
 	);
 
 	public static final RegistryObject<Potion> LONG_TEST = registerPotion("test",
-			() -> new EffectInstance(ModEffects.TEST.get(), HELPFUL_DURATION_LONG),
+			() -> new MobEffectInstance(ModEffects.TEST.get(), HELPFUL_DURATION_LONG),
 			LONG_PREFIX
 	);
 
 	public static final RegistryObject<Potion> STRONG_TEST = registerPotion("test",
-			() -> new EffectInstance(ModEffects.TEST.get(), HELPFUL_DURATION_STRONG, 1),
+			() -> new MobEffectInstance(ModEffects.TEST.get(), HELPFUL_DURATION_STRONG, 1),
 			STRONG_PREFIX
 	);
 
@@ -65,7 +65,7 @@ public class ModPotions {
 	}
 
 	/**
-	 * Registers a {@link Potion} from the specified {@link EffectInstance}.
+	 * Registers a {@link Potion} from the specified {@link MobEffectInstance}.
 	 * <p>
 	 * Uses the specified name as the {@link Potion}'s registry name and base name.
 	 *
@@ -73,21 +73,21 @@ public class ModPotions {
 	 * @param effectInstanceFactory The factory used to create the potion's effect instance
 	 * @return A RegistryObject reference to the potion
 	 */
-	private static RegistryObject<Potion> registerPotion(final String name, final Supplier<EffectInstance> effectInstanceFactory) {
+	private static RegistryObject<Potion> registerPotion(final String name, final Supplier<MobEffectInstance> effectInstanceFactory) {
 		return registerPotion(name, effectInstanceFactory, null);
 	}
 
 	/**
-	 * Registers a {@link Potion} from the specified {@link EffectInstance}
+	 * Registers a {@link Potion} from the specified {@link MobEffectInstance}
 	 * <p>
-	 * Uses the {@link Effect}'s registry name as the {@link Potion}'s registry name (with an optional prefix) and base name (with no prefix).
+	 * Uses the {@link MobEffect}'s registry name as the {@link Potion}'s registry name (with an optional prefix) and base name (with no prefix).
 	 *
 	 * @param name                  The base name of the potion
 	 * @param effectInstanceFactory The factory used to create the potion's effect instance
 	 * @param namePrefix            The name prefix, if any
 	 * @return The PotionType
 	 */
-	private static RegistryObject<Potion> registerPotion(final String name, final Supplier<EffectInstance> effectInstanceFactory, @Nullable final String namePrefix) {
+	private static RegistryObject<Potion> registerPotion(final String name, final Supplier<MobEffectInstance> effectInstanceFactory, @Nullable final String namePrefix) {
 		final String fullName = namePrefix != null ? namePrefix + name : name;
 
 		return POTIONS.register(fullName, () -> {

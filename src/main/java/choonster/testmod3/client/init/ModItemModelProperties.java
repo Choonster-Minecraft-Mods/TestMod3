@@ -1,10 +1,10 @@
 package choonster.testmod3.client.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.client.item.RevealHiddenBlocksItemPropertyGetter;
-import choonster.testmod3.client.item.TicksSinceLastUseItemPropertyGetter;
+import choonster.testmod3.client.item.RevealHiddenBlocksItemPropertyFunction;
+import choonster.testmod3.client.item.TicksSinceLastUseItemPropertyFunction;
 import choonster.testmod3.init.ModItems;
-import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 /**
- * Registers this mod's {@link IItemPropertyGetter}s.
+ * Registers this mod's {@link ItemPropertyFunction}s.
  *
  * @author Choonster
  */
@@ -21,9 +21,9 @@ public class ModItemModelProperties {
 	@SubscribeEvent
 	public static void registerItemModelProperties(final FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
-			RevealHiddenBlocksItemPropertyGetter.registerForItem(ModItems.HIDDEN_BLOCK_REVEALER.get());
-			TicksSinceLastUseItemPropertyGetter.registerForItem(ModItems.MODEL_TEST.get());
-			TicksSinceLastUseItemPropertyGetter.registerForItem(ModItems.SLINGSHOT.get());
+			RevealHiddenBlocksItemPropertyFunction.registerForItem(ModItems.HIDDEN_BLOCK_REVEALER.get());
+			TicksSinceLastUseItemPropertyFunction.registerForItem(ModItems.MODEL_TEST.get());
+			TicksSinceLastUseItemPropertyFunction.registerForItem(ModItems.SLINGSHOT.get());
 		});
 	}
 }

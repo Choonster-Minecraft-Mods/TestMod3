@@ -1,19 +1,19 @@
 package choonster.testmod3.util;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootTable;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.PlayerArmorInvWrapper;
@@ -34,13 +34,13 @@ public class InventoryUtils {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	/**
-	 * Get the {@link EquipmentSlotType} with the specified index (as returned by {@link EquipmentSlotType#getIndex()}.
+	 * Get the {@link EquipmentSlot} with the specified index (as returned by {@link EquipmentSlot#getIndex()}.
 	 *
 	 * @param index The index
 	 * @return The equipment slot
 	 */
-	public static EquipmentSlotType getEquipmentSlotFromIndex(final int index) {
-		for (final EquipmentSlotType equipmentSlot : EquipmentSlotType.values()) {
+	public static EquipmentSlot getEquipmentSlotFromIndex(final int index) {
+		for (final EquipmentSlot equipmentSlot : EquipmentSlot.values()) {
 			if (equipmentSlot.getIndex() == index) {
 				return equipmentSlot;
 			}
@@ -114,16 +114,16 @@ public class InventoryUtils {
 	/**
 	 * Drops the contents of the {@link IItemHandler} in the world.
 	 * <p>
-	 * Adapted from {@link InventoryHelper#dropContents(World, BlockPos, IInventory)}.
+	 * Adapted from {@link  Containers#dropContents(Level, BlockPos, Container)}.
 	 *
-	 * @param world       The World
+	 * @param level       The level
 	 * @param pos         The position to drop the items around
 	 * @param itemHandler The inventory to drop the contents of
 	 */
-	public static void dropItemHandlerContents(final World world, final BlockPos pos, final IItemHandler itemHandler) {
+	public static void dropItemHandlerContents(final Level level, final BlockPos pos, final IItemHandler itemHandler) {
 		for (int slot = 0; slot < itemHandler.getSlots(); slot++) {
 			final ItemStack stack = itemHandler.extractItem(slot, Integer.MAX_VALUE, false);
-			InventoryHelper.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
+			Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
 		}
 	}
 
@@ -150,7 +150,7 @@ public class InventoryUtils {
 	 * @return A lazy optional containing the inventory, if any
 	 */
 	public static LazyOptional<IItemHandler> getMainInventory(final Entity entity) {
-		if (entity instanceof PlayerEntity) {
+		if (entity instanceof Player) {
 			return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP);
 		}
 
@@ -166,8 +166,8 @@ public class InventoryUtils {
 	 * @return A lazy optional containing the hand inventory, if any
 	 */
 	public static LazyOptional<IItemHandler> getHandInventory(final Entity entity) {
-		if (entity instanceof PlayerEntity) {
-			return LazyOptional.of(() -> new PlayerOffhandInvWrapper(((PlayerEntity) entity).inventory));
+		if (entity instanceof Player) {
+			return LazyOptional.of(() -> new PlayerOffhandInvWrapper(((Player) entity).getInventory()));
 		}
 
 		return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP);
@@ -182,8 +182,8 @@ public class InventoryUtils {
 	 * @return A lazy optional containing the inventory, if any
 	 */
 	public static LazyOptional<IItemHandler> getArmourInventory(final Entity entity) {
-		if (entity instanceof PlayerEntity) {
-			return LazyOptional.of(() -> new PlayerArmorInvWrapper(((PlayerEntity) entity).inventory));
+		if (entity instanceof Player) {
+			return LazyOptional.of(() -> new PlayerArmorInvWrapper(((Player) entity).getInventory()));
 		}
 
 		return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.NORTH);
@@ -214,7 +214,7 @@ public class InventoryUtils {
 	 * <p>
 	 * Only performs the operation on inventory types that exist for the entity.
 	 * <p>
-	 * This is mainly useful in {@link Item#inventoryTick(ItemStack, World, Entity, int, boolean)}, where the item can be in any of the player's inventories.
+	 * This is mainly useful in {@link Item#inventoryTick(ItemStack, Level, Entity, int, boolean)}, where the item can be in any of the player's inventories.
 	 *
 	 * @param entity         The entity
 	 * @param operation      The operation to perform

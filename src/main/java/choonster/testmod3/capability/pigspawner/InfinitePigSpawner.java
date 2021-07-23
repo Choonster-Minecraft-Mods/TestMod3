@@ -2,9 +2,9 @@ package choonster.testmod3.capability.pigspawner;
 
 import choonster.testmod3.text.TestMod3Lang;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -15,25 +15,13 @@ import java.util.List;
  */
 public class InfinitePigSpawner extends BasePigSpawner {
 
-	/**
-	 * Can a pig be spawned at the specified position?
-	 *
-	 * @param world The world
-	 * @param x     The x coordinate
-	 * @param y     The y coordinate
-	 * @param z     The z coordinate
-	 * @return Can a pig be spawned?
-	 */
 	@Override
-	public boolean canSpawnPig(final World world, final double x, final double y, final double z) {
+	public boolean canSpawnPig(final Level world, final double x, final double y, final double z) {
 		return true;
 	}
 
-	/**
-	 * Add tooltip lines for this spawner. Can be called on the client or server.
-	 */
 	@Override
-	public List<IFormattableTextComponent> getTooltipLines() {
-		return ImmutableList.of(new TranslationTextComponent(TestMod3Lang.PIG_SPAWNER_INFINITE_DESC.getTranslationKey()));
+	public List<MutableComponent> getTooltipLines() {
+		return ImmutableList.of(new TranslatableComponent(TestMod3Lang.PIG_SPAWNER_INFINITE_DESC.getTranslationKey()));
 	}
 }

@@ -1,23 +1,27 @@
 package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.block.*;
-import choonster.testmod3.block.pipe.BasePipeBlock;
-import choonster.testmod3.block.slab.ColouredSlabBlock;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.util.EnumFaceRotation;
 import choonster.testmod3.util.RegistryUtil;
+import choonster.testmod3.world.level.block.*;
+import choonster.testmod3.world.level.block.pipe.BasePipeBlock;
+import choonster.testmod3.world.level.block.slab.ColouredSlabBlock;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import net.minecraft.block.*;
+import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.LazyValue;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.LazyLoadedValue;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CommandBlock;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -42,7 +46,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	/**
 	 * Centre cube of the pipe model.
 	 */
-	private final LazyValue<ModelFile> pipeCentre = new LazyValue<>(() ->
+	private final LazyLoadedValue<ModelFile> pipeCentre = new LazyLoadedValue<>(() ->
 			models().withExistingParent("block/pipe/pipe_centre", mcLoc("block"))
 					.texture("particle", "#centre")
 					.element()
@@ -55,7 +59,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	/**
 	 * North side of the pipe model. Can be rotated for other sides.
 	 */
-	private final LazyValue<ModelFile> pipePart = new LazyValue<>(() ->
+	private final LazyLoadedValue<ModelFile> pipePart = new LazyLoadedValue<>(() ->
 			models().withExistingParent("block/pipe/pipe_part", mcLoc("block"))
 					.texture("particle", "#side")
 					.element()
@@ -68,7 +72,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	/**
 	 * Inventory model for pipe blocks.
 	 */
-	private final LazyValue<ModelFile> pipeInventory = new LazyValue<>(() ->
+	private final LazyLoadedValue<ModelFile> pipeInventory = new LazyLoadedValue<>(() ->
 			itemModels().withExistingParent("item/pipe/inventory", "block/block")
 					.texture("particle", "#all")
 					.element()
@@ -81,7 +85,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	/**
 	 * Orientable models for each {@link EnumFaceRotation} value.
 	 */
-	private final LazyValue<Map<EnumFaceRotation, ModelFile>> rotatedOrientables = new LazyValue<>(() -> {
+	private final LazyLoadedValue<Map<EnumFaceRotation, ModelFile>> rotatedOrientables = new LazyLoadedValue<>(() -> {
 		Map<EnumFaceRotation, ModelFile> map = new EnumMap<>(EnumFaceRotation.class);
 		map.put(EnumFaceRotation.UP, existingMcModel("orientable"));
 
@@ -145,7 +149,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	 * A copy of {@code minecraft:block/pressure_plate_down} that extends {@code minecraft:block/thin_block}
 	 * so that it has the same display transformations as {@code minecraft:block/pressure_plate_up}.
 	 */
-	private final LazyValue<ModelFile> PRESSURE_PLATE_DOWN_WITH_TRANSFORMS = new LazyValue<>(() ->
+	private final LazyLoadedValue<ModelFile> PRESSURE_PLATE_DOWN_WITH_TRANSFORMS = new LazyLoadedValue<>(() ->
 			models().withExistingParent("block/pressure_plate_down_with_transforms", mcLoc("thin_block"))
 
 					.element()
@@ -518,7 +522,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	private void validate() {
 		for (final Block block : Sets.difference(RegistryUtil.getModRegistryEntries(ForgeRegistries.BLOCKS), registeredBlocks.keySet())) {
 			// Ignore fluids, since they don't need block state files
-			if (block instanceof FlowingFluidBlock) {
+			if (block instanceof LiquidBlock) {
 				continue;
 			}
 
@@ -662,14 +666,14 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 				.texture("all", texture);
 	}
 
-	private void commandBlock(final CommandBlockBlock commandBlock, final Block modelCommandBlock) {
+	private void commandBlock(final CommandBlock commandBlock, final Block modelCommandBlock) {
 		final ModelFile normalModel = models().withExistingParent(name(commandBlock), name(modelCommandBlock));
 		final ModelFile conditionalModel = models().withExistingParent(name(commandBlock) + "_conditional", name(modelCommandBlock) + "_conditional");
 
 		getVariantBuilder(commandBlock)
 				.forAllStates(state -> {
-					final Direction direction = state.getValue(CommandBlockBlock.FACING);
-					final boolean conditional = state.getValue(CommandBlockBlock.CONDITIONAL);
+					final Direction direction = state.getValue(CommandBlock.FACING);
+					final boolean conditional = state.getValue(CommandBlock.CONDITIONAL);
 
 					final ModelFile modelFile = conditional ? conditionalModel : normalModel;
 

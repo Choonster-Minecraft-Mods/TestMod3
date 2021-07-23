@@ -6,9 +6,9 @@ import choonster.testmod3.util.DebugUtil;
 import choonster.testmod3.util.LogUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,73 +38,36 @@ public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinit
 		LogUtil.debug(LOGGER, PigSpawnerCapability.LOG_MARKER, DebugUtil.getStackTrace(10), "Creating finite pig spawner: {}", this);
 	}
 
-	/**
-	 * Get the current number of pigs that can be spawned.
-	 *
-	 * @return The number of pigs that can be spawned
-	 */
 	@Override
 	public int getNumPigs() {
 		return numPigs;
 	}
 
-	/**
-	 * Get the maximum number of pigs that can be spawned.
-	 *
-	 * @return The maximum number of pigs that can be spawned.
-	 */
 	@Override
 	public int getMaxNumPigs() {
 		return maxNumPigs;
 	}
 
-	/**
-	 * Set the current number of pigs that can be spawned.
-	 *
-	 * @param numPigs The number of pigs that can be spawned
-	 * @throws IllegalArgumentException If {@code numPigs} is greater than {@link #getMaxNumPigs()}
-	 */
 	@Override
 	public void setNumPigs(final int numPigs) {
 		Preconditions.checkArgument(numPigs <= getMaxNumPigs(), "Attempted to set numPigs to %s, but maximum is %s", numPigs, getMaxNumPigs());
 		this.numPigs = numPigs;
 	}
 
-	/**
-	 * Can a pig be spawned at the specified position?
-	 *
-	 * @param world The world
-	 * @param x     The x coordinate
-	 * @param y     The y coordinate
-	 * @param z     The z coordinate
-	 * @return Can a pig be spawned?
-	 */
 	@Override
-	public boolean canSpawnPig(final World world, final double x, final double y, final double z) {
+	public boolean canSpawnPig(final Level world, final double x, final double y, final double z) {
 		return getNumPigs() > 0;
 	}
 
-	/**
-	 * Spawn a pig at the specified position.
-	 *
-	 * @param world The world
-	 * @param x     The x coordinate
-	 * @param y     The y coordinate
-	 * @param z     The z coordinate
-	 * @return Was the pig successfully spawned?
-	 */
 	@Override
-	public boolean spawnPig(final World world, final double x, final double y, final double z) {
+	public boolean spawnPig(final Level level, final double x, final double y, final double z) {
 		setNumPigs(getNumPigs() - 1);
-		return super.spawnPig(world, x, y, z);
+		return super.spawnPig(level, x, y, z);
 	}
 
-	/**
-	 * Add tooltip lines for this spawner. Can be called on the client or server.
-	 */
 	@Override
-	public List<IFormattableTextComponent> getTooltipLines() {
-		return ImmutableList.of(new TranslationTextComponent(TestMod3Lang.PIG_SPAWNER_FINITE_DESC.getTranslationKey(), getNumPigs(), getMaxNumPigs()));
+	public List<MutableComponent> getTooltipLines() {
+		return ImmutableList.of(new TranslatableComponent(TestMod3Lang.PIG_SPAWNER_FINITE_DESC.getTranslationKey(), getNumPigs(), getMaxNumPigs()));
 	}
 
 	@Override

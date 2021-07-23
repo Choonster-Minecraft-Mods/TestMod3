@@ -3,15 +3,15 @@ package choonster.testmod3.event;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.Constants;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -36,11 +36,11 @@ public class PlayerEventHandler {
 	 */
 	@SubscribeEvent
 	public static void playerLoggedIn(final PlayerEvent.PlayerLoggedInEvent event) {
-		final PlayerEntity player = event.getPlayer();
+		final Player player = event.getPlayer();
 
-		final CompoundNBT entityData = player.getPersistentData();
-		final CompoundNBT persistedData = entityData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
-		entityData.put(PlayerEntity.PERSISTED_NBT_TAG, persistedData);
+		final CompoundTag entityData = player.getPersistentData();
+		final CompoundTag persistedData = entityData.getCompound(Player.PERSISTED_NBT_TAG);
+		entityData.put(Player.PERSISTED_NBT_TAG, persistedData);
 
 		final String key = Constants.RESOURCE_PREFIX + "ReceivedItems";
 		final TestMod3Lang message;
@@ -55,8 +55,8 @@ public class PlayerEventHandler {
 			message = TestMod3Lang.MESSAGE_LOGIN_FREE_APPLE;
 		}
 
-		final ITextComponent textComponent = new TranslationTextComponent(message.getTranslationKey());
-		textComponent.getStyle().withColor(TextFormatting.LIGHT_PURPLE);
+		final Component textComponent = new TranslatableComponent(message.getTranslationKey());
+		textComponent.getStyle().withColor(ChatFormatting.LIGHT_PURPLE);
 		player.sendMessage(textComponent, Util.NIL_UUID);
 	}
 
@@ -67,10 +67,10 @@ public class PlayerEventHandler {
 	 */
 	@SubscribeEvent
 	public static void livingDeath(final LivingDeathEvent event) {
-		if (event.getEntity() instanceof PlayerEntity && !event.getEntity().getCommandSenderWorld().isClientSide) {
-			final PlayerEntity player = (PlayerEntity) event.getEntity();
+		if (event.getEntity() instanceof Player && !event.getEntity().getCommandSenderWorld().isClientSide) {
+			final Player player = (Player) event.getEntity();
 			final BlockPos pos = player.blockPosition();
-			player.sendMessage(new TranslationTextComponent(TestMod3Lang.MESSAGE_DEATH_COORDINATES.getTranslationKey(), pos.getX(), pos.getY(), pos.getZ(), player.level.dimension()), Util.NIL_UUID);
+			player.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_DEATH_COORDINATES.getTranslationKey(), pos.getX(), pos.getY(), pos.getZ(), player.level.dimension()), Util.NIL_UUID);
 		}
 	}
 }

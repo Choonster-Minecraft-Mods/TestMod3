@@ -3,13 +3,13 @@ package choonster.testmod3.client.capability;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockRevealer;
 import choonster.testmod3.capability.hiddenblockrevealer.HiddenBlockRevealerCapability;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -33,8 +33,8 @@ public class HiddenBlockManager {
 	 * @param player The player
 	 * @return Should hidden blocks be revealed?
 	 */
-	private static boolean shouldHeldItemRevealHiddenBlocks(final PlayerEntity player) {
-		for (final Hand hand : Hand.values()) {
+	private static boolean shouldHeldItemRevealHiddenBlocks(final Player player) {
+		for (final InteractionHand hand : InteractionHand.values()) {
 			final boolean revealHiddenBlocks = HiddenBlockRevealerCapability.getHiddenBlockRevealer(player.getItemInHand(hand))
 					.map(IHiddenBlockRevealer::revealHiddenBlocks)
 					.orElse(false);
@@ -51,7 +51,7 @@ public class HiddenBlockManager {
 	public static void clientTick(final TickEvent.ClientTickEvent event) {
 		if (event.phase != TickEvent.Phase.END) return;
 
-		final ClientPlayerEntity player = Minecraft.getInstance().player;
+		final LocalPlayer player = Minecraft.getInstance().player;
 		if (player == null) return;
 
 		final boolean checkResult = shouldHeldItemRevealHiddenBlocks(player);
@@ -77,7 +77,7 @@ public class HiddenBlockManager {
 	 * @param pos   The position of the hidden block to update
 	 * @return A SafeRunnable that updates the chunk when run
 	 */
-	public static void refresh(final World world, final BlockPos pos) {
+	public static void refresh(final Level world, final BlockPos pos) {
 		if (toggled) {
 			final BlockState state = world.getBlockState(pos);
 			world.sendBlockUpdated(pos, state, state, 3);

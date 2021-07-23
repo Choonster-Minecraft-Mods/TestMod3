@@ -2,6 +2,6 @@
 @MethodsReturnNonnullByDefault
 package choonster.testmod3.capability.maxhealth;
 
-import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;

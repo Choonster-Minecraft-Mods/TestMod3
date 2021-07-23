@@ -1,10 +1,10 @@
 package choonster.testmod3.capability.lock;
 
 import choonster.testmod3.api.capability.lock.ILock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.INameable;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Nameable;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.LockCode;
 import net.minecraftforge.common.util.INBTSerializable;
 
@@ -15,16 +15,16 @@ import javax.annotation.Nonnull;
  *
  * @author Choonster
  */
-public class Lock implements ILock, INBTSerializable<CompoundNBT> {
+public class Lock implements ILock, INBTSerializable<CompoundTag> {
 	/**
 	 * The lock code.
 	 */
 	@Nonnull
 	private LockCode code = LockCode.NO_LOCK;
 
-	private final INameable nameProvider;
+	private final Nameable nameProvider;
 
-	public Lock(final INameable nameProvider) {
+	public Lock(final Nameable nameProvider) {
 		this.nameProvider = nameProvider;
 	}
 
@@ -45,8 +45,8 @@ public class Lock implements ILock, INBTSerializable<CompoundNBT> {
 	}
 
 	@Override
-	public CompoundNBT serializeNBT() {
-		final CompoundNBT tagCompound = new CompoundNBT();
+	public CompoundTag serializeNBT() {
+		final CompoundTag tagCompound = new CompoundTag();
 
 		code.addToTag(tagCompound);
 
@@ -54,12 +54,12 @@ public class Lock implements ILock, INBTSerializable<CompoundNBT> {
 	}
 
 	@Override
-	public void deserializeNBT(final CompoundNBT nbt) {
+	public void deserializeNBT(final CompoundTag nbt) {
 		code = LockCode.fromTag(nbt);
 	}
 
 	@Override
-	public ITextComponent getDisplayName() {
+	public Component getDisplayName() {
 		return nameProvider.getDisplayName();
 	}
 }

@@ -1,12 +1,12 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.loot.modifiers.ItemLootModifier;
-import choonster.testmod3.loot.modifiers.LootTableLootModifier;
-import choonster.testmod3.loot.modifiers.TileEntityNBTLootModifier;
+import choonster.testmod3.world.level.storage.loot.modifiers.BlockEntityNBTLootModifier;
+import choonster.testmod3.world.level.storage.loot.modifiers.ItemLootModifier;
+import choonster.testmod3.world.level.storage.loot.modifiers.LootTableLootModifier;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -25,9 +25,9 @@ public class ModLootModifierSerializers {
 			LootTableLootModifier.Serializer::new
 	);
 
-	public static final RegistryObject<TileEntityNBTLootModifier.Serializer> TILE_ENTITY_NBT = SERIALIZERS.register(
+	public static final RegistryObject<BlockEntityNBTLootModifier.Serializer> TILE_ENTITY_NBT = SERIALIZERS.register(
 			"tile_entity_nbt",
-			TileEntityNBTLootModifier.Serializer::new
+			BlockEntityNBTLootModifier.Serializer::new
 	);
 
 	public static final RegistryObject<ItemLootModifier.Serializer> ITEM = SERIALIZERS.register(

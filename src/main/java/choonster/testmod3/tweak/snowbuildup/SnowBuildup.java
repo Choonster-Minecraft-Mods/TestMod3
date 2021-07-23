@@ -1,18 +1,18 @@
 package choonster.testmod3.tweak.snowbuildup;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SnowBlock;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ChunkHolder;
-import net.minecraft.world.server.ChunkManager;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.ChunkMap;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SnowLayerBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -28,7 +28,7 @@ import java.util.Random;
  */
 @Mod.EventBusSubscriber(modid = TestMod3.MODID)
 public class SnowBuildup {
-	private static final Method GET_CHUNKS = ObfuscationReflectionHelper.findMethod(ChunkManager.class, /* getChunks */ "func_223491_f");
+	private static final Method GET_CHUNKS = ObfuscationReflectionHelper.findMethod(ChunkMap.class, /* getChunks */ "func_223491_f");
 
 	/**
 	 * The number of ticks between each buildup.
@@ -49,7 +49,7 @@ public class SnowBuildup {
 	public static void onWorldTick(final TickEvent.WorldTickEvent event) {
 		if (event.world.isClientSide) return;
 
-		final ServerWorld world = (ServerWorld) event.world;
+		final ServerLevel world = (ServerLevel) event.world;
 
 		// If this is the post tick, the world's total time (number of ticks) is divisible by NUM_TICKS and it's raining/snowing,
 		if (event.phase != TickEvent.Phase.END || world.getGameTime() % NUM_TICKS != 0 || !world.isRaining())
@@ -73,7 +73,7 @@ public class SnowBuildup {
 							for (int x = 0; x < 16; x++) {
 								for (int z = 0; z < 16; z++) {
 									// Get the position of top block at the current x and z coordinates within the chunk
-									final BlockPos pos = world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE, chunk.getPos().getWorldPosition().offset(x, 0, z));
+									final BlockPos pos = world.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, chunk.getPos().getWorldPosition().offset(x, 0, z));
 
 									// Get the state of the block at that position
 									final BlockState state = world.getBlockState(pos);
@@ -81,10 +81,10 @@ public class SnowBuildup {
 									// If the biome at that position allows snow, the block is a snow layer and a random integer in the range [0,24) is 0 (roughly 4% chance),
 									if (world.getBiome(pos).shouldSnow(world, pos) && state.getBlock() == Blocks.SNOW && random.nextInt(24) == 0) {
 										// Get the number of layers
-										final int numLayers = state.getValue(SnowBlock.LAYERS);
+										final int numLayers = state.getValue(SnowLayerBlock.LAYERS);
 
 										if (numLayers < MAX_LAYERS) { // If it's less than the maximum, increase it by 1
-											world.setBlockAndUpdate(pos, state.setValue(SnowBlock.LAYERS, numLayers + 1));
+											world.setBlockAndUpdate(pos, state.setValue(SnowLayerBlock.LAYERS, numLayers + 1));
 										}
 									}
 								}

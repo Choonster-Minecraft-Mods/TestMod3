@@ -2,12 +2,12 @@ package choonster.testmod3.network.capability.pigspawner;
 
 import choonster.testmod3.api.capability.pigspawner.IPigSpawner;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import javax.annotation.Nullable;
 
 /**
- * Functions used by the {@link IPigSpawner} capability update messages.
+ * Functions used by the {@link IPigSpawner} capability update message.
  *
  * @author Choonster
  */
@@ -21,11 +21,11 @@ class PigSpawnerFunctions {
 		}
 	}
 
-	static int decodeNumPigs(final PacketBuffer buf) {
+	static int decodeNumPigs(final FriendlyByteBuf buf) {
 		return buf.readInt();
 	}
 
-	static void encodeNumPigs(final int numPigs, final PacketBuffer buffer) {
+	static void encodeNumPigs(final int numPigs, final FriendlyByteBuf buffer) {
 		buffer.writeInt(numPigs);
 	}
 

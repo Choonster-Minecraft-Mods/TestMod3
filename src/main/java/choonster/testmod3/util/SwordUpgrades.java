@@ -1,10 +1,10 @@
 package choonster.testmod3.util;
 
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.UUID;
 
@@ -37,7 +37,7 @@ public class SwordUpgrades {
 
 		// Modifiers provided by the Item are completely ignored as soon as any modifiers are added to the ItemStack,
 		// so add the Item's modifiers to the output ItemStack manually
-		for (final EquipmentSlotType slot : EquipmentSlotType.values()) {
+		for (final EquipmentSlot slot : EquipmentSlot.values()) {
 			originalStack.getAttributeModifiers(slot)
 					.entries()
 					.forEach(entry -> outputStack.addAttributeModifier(entry.getKey(), entry.getValue(), slot));
@@ -47,7 +47,7 @@ public class SwordUpgrades {
 		final AttributeModifier attackDamageModifier = new AttributeModifier(MODIFIER_UUID, MODIFIER_NAME, MODIFIER_AMOUNT, AttributeModifier.Operation.ADDITION);
 
 		// Add it to the output ItemStack
-		outputStack.addAttributeModifier(Attributes.ATTACK_DAMAGE, attackDamageModifier, EquipmentSlotType.MAINHAND);
+		outputStack.addAttributeModifier(Attributes.ATTACK_DAMAGE, attackDamageModifier, EquipmentSlot.MAINHAND);
 
 		return outputStack;
 	}

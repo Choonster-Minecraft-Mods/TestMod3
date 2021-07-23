@@ -1,14 +1,14 @@
 package choonster.testmod3.data.crafting.ingredient;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.crafting.ingredient.ConditionalIngredientSerializer;
+import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredientSerializer;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +36,7 @@ public class ConditionalIngredientBuilder {
 	 * @param items The Ingredient Items to be used when the conditions are met
 	 * @return The builder
 	 */
-	public static ConditionalIngredientBuilder conditionalIngredient(final IItemProvider... items) {
+	public static ConditionalIngredientBuilder conditionalIngredient(final ItemLike... items) {
 		return conditionalIngredient(Ingredient.of(items));
 	}
 

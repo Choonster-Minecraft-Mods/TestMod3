@@ -4,9 +4,9 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
-import net.minecraft.item.DyeColor;
-import net.minecraft.tileentity.BannerPattern;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.common.IExtensibleEnum;
 
 import java.util.Optional;
@@ -19,7 +19,7 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class VanillaCodecs {
-	public static final Codec<DyeColor> DYE_COLOR = IStringSerializable.fromEnum(
+	public static final Codec<DyeColor> DYE_COLOR = StringRepresentable.fromEnum(
 			DyeColor::values,
 			createFromNameFunction(DyeColor::values, DyeColor::getSerializedName)
 	);
@@ -58,7 +58,7 @@ public class VanillaCodecs {
 	/**
 	 * Creates a {@link Codec} for an {@link IExtensibleEnum} that serialises to/from a name.
 	 * <p>
-	 * Based on {@link IStringSerializable#createCodec}, but never uses the ordinal value as that can change for modded
+	 * Based on {@link StringRepresentable#fromStringResolver}, but never uses the ordinal value as that can change for modded
 	 * enum values.
 	 *
 	 * @param elementsSupplier A supplier that returns an array of enum values, usually a reference to the {@code values()} function
@@ -76,7 +76,7 @@ public class VanillaCodecs {
 	/**
 	 * Creates a {@link Codec} for an {@link IExtensibleEnum} that serialises to/from a name.
 	 * <p>
-	 * Based on {@link IStringSerializable#createCodec}, but never uses the ordinal value as that can change for modded
+	 * Based on {@link StringRepresentable#fromStringResolver}, but never uses the ordinal value as that can change for modded
 	 * enum values.
 	 *
 	 * @param toNameFunction   A function that converts an enum value to its name
@@ -88,7 +88,7 @@ public class VanillaCodecs {
 			final Function<E, String> toNameFunction,
 			final Function<String, ? extends E> fromNameFunction
 	) {
-		return new Codec<E>() {
+		return new Codec<>() {
 			@Override
 			public <T> DataResult<T> encode(final E input, final DynamicOps<T> ops, final T prefix) {
 				return ops.mergeToPrimitive(prefix, ops.createString(toNameFunction.apply(input)));

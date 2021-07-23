@@ -1,10 +1,10 @@
 package choonster.testmod3.capability;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 /**
- * Manages the {@link IContainerListener}s that handle syncing of each item capability.
+ * Manages the {@link ContainerListener}s that handle syncing of each item capability.
  *
  * @author Choonster
  */
@@ -23,14 +23,14 @@ public class CapabilityContainerListenerManager {
 	/**
 	 * The {@link CapabilityContainerListener} factories.
 	 */
-	private static final Set<Function<ServerPlayerEntity, CapabilityContainerListener<?>>> containerListenerFactories = new HashSet<>();
+	private static final Set<Function<ServerPlayer, CapabilityContainerListener<?>>> containerListenerFactories = new HashSet<>();
 
 	/**
 	 * Register a factory for a {@link CapabilityContainerListener}.
 	 *
 	 * @param factory The factory
 	 */
-	public static void registerListenerFactory(final Function<ServerPlayerEntity, CapabilityContainerListener<?>> factory) {
+	public static void registerListenerFactory(final Function<ServerPlayer, CapabilityContainerListener<?>> factory) {
 		containerListenerFactories.add(factory);
 	}
 
@@ -39,52 +39,52 @@ public class CapabilityContainerListenerManager {
 	private static class EventHandler {
 
 		/**
-		 * Add the listeners to a {@link Container}.
+		 * Add the listeners to a {@link AbstractContainerMenu}.
 		 *
 		 * @param player    The player
 		 * @param container The Container
 		 */
-		private static void addListeners(final ServerPlayerEntity player, final Container container) {
+		private static void addListeners(final ServerPlayer player, final AbstractContainerMenu container) {
 			containerListenerFactories.forEach(
 					factory -> container.addSlotListener(factory.apply(player))
 			);
 		}
 
 		/**
-		 * Add the listeners to {@link PlayerEntity#container} when an {@link ServerPlayerEntity} logs in.
+		 * Add the listeners to {@link Player#inventoryMenu} when a {@link ServerPlayer} logs in.
 		 *
 		 * @param event The event
 		 */
 		@SubscribeEvent
 		public static void playerLoggedIn(final PlayerEvent.PlayerLoggedInEvent event) {
-			if (event.getPlayer() instanceof ServerPlayerEntity) {
-				final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+			if (event.getPlayer() instanceof ServerPlayer) {
+				final ServerPlayer player = (ServerPlayer) event.getPlayer();
 				addListeners(player, player.inventoryMenu);
 			}
 		}
 
 		/**
-		 * Add the listeners to {@link PlayerEntity#container} when an {@link ServerPlayerEntity} is cloned.
+		 * Add the listeners to {@link Player#inventoryMenu} when a {@link ServerPlayer} is cloned.
 		 *
 		 * @param event The event
 		 */
 		@SubscribeEvent
 		public static void playerClone(final PlayerEvent.Clone event) {
-			if (event.getPlayer() instanceof ServerPlayerEntity) {
-				final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+			if (event.getPlayer() instanceof ServerPlayer) {
+				final ServerPlayer player = (ServerPlayer) event.getPlayer();
 				addListeners(player, player.inventoryMenu);
 			}
 		}
 
 		/**
-		 * Add the listeners to a {@link Container} when it's opened by an {@link ServerPlayerEntity}.
+		 * Add the listeners to an {@link AbstractContainerMenu} when it's opened by a {@link ServerPlayer}.
 		 *
 		 * @param event The event
 		 */
 		@SubscribeEvent
 		public static void containerOpen(final PlayerContainerEvent.Open event) {
-			if (event.getPlayer() instanceof ServerPlayerEntity) {
-				final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+			if (event.getPlayer() instanceof ServerPlayer) {
+				final ServerPlayer player = (ServerPlayer) event.getPlayer();
 				addListeners(player, event.getContainer());
 			}
 		}

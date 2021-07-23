@@ -1,12 +1,12 @@
 package choonster.testmod3.capability.maxhealth;
 
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.network.play.server.SEntityPropertiesPacket;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
+import net.minecraft.server.level.ServerLevel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -84,10 +84,10 @@ public class MaxHealth implements IMaxHealth {
 	@Override
 	public void synchronise() {
 		if (entity != null && !entity.getCommandSenderWorld().isClientSide) {
-			final ModifiableAttributeInstance entityMaxHealthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
-			final SEntityPropertiesPacket packet = new SEntityPropertiesPacket(entity.getId(), Collections.singleton(entityMaxHealthAttribute));
+			final AttributeInstance entityMaxHealthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
+			final ClientboundUpdateAttributesPacket packet = new ClientboundUpdateAttributesPacket(entity.getId(), Collections.singleton(entityMaxHealthAttribute));
 
-			((ServerWorld) entity.getCommandSenderWorld()).getChunkSource().broadcastAndSend(entity, packet);
+			((ServerLevel) entity.getCommandSenderWorld()).getChunkSource().broadcastAndSend(entity, packet);
 		}
 	}
 
@@ -106,7 +106,7 @@ public class MaxHealth implements IMaxHealth {
 	protected void onBonusMaxHealthChanged() {
 		if (entity == null) return;
 
-		final ModifiableAttributeInstance entityMaxHealthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
+		final AttributeInstance entityMaxHealthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
 
 		final AttributeModifier modifier = createModifier();
 

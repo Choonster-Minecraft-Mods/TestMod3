@@ -3,11 +3,11 @@ package choonster.testmod3.network;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.capability.chunkenergy.ChunkEnergy;
 import choonster.testmod3.capability.chunkenergy.ChunkEnergyCapability;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.LogicalSidedProvider;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.fmllegacy.LogicalSidedProvider;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -39,14 +39,14 @@ public class UpdateChunkEnergyValueMessage {
 		this.energy = energy;
 	}
 
-	public static UpdateChunkEnergyValueMessage decode(final PacketBuffer buffer) {
+	public static UpdateChunkEnergyValueMessage decode(final FriendlyByteBuf buffer) {
 		return new UpdateChunkEnergyValueMessage(
 				new ChunkPos(buffer.readInt(), buffer.readInt()),
 				buffer.readInt()
 		);
 	}
 
-	public static void encode(final UpdateChunkEnergyValueMessage message, final PacketBuffer buffer) {
+	public static void encode(final UpdateChunkEnergyValueMessage message, final FriendlyByteBuf buffer) {
 		buffer.writeInt(message.chunkPos.x);
 		buffer.writeInt(message.chunkPos.z);
 		buffer.writeInt(message.energy);
@@ -54,9 +54,9 @@ public class UpdateChunkEnergyValueMessage {
 
 	public static void handle(final UpdateChunkEnergyValueMessage message, final Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() -> {
-			final Optional<World> optionalWorld = LogicalSidedProvider.CLIENTWORLD.get(ctx.get().getDirection().getReceptionSide());
+			final Optional<Level> optionalLevel = LogicalSidedProvider.CLIENTWORLD.get(ctx.get().getDirection().getReceptionSide());
 
-			optionalWorld.ifPresent(world ->
+			optionalLevel.ifPresent(world ->
 					ChunkEnergyCapability.getChunkEnergy(world, message.chunkPos).ifPresent(chunkEnergy -> {
 						if (!(chunkEnergy instanceof ChunkEnergy)) return;
 

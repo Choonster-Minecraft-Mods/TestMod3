@@ -1,21 +1,21 @@
 package choonster.testmod3.data.crafting.recipe;
 
 import com.google.gson.JsonObject;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 
 import javax.annotation.Nullable;
 
 /**
- * An {@link IFinishedRecipe} that delegates to another {@link IFinishedRecipe} instance.
+ * A {@link FinishedRecipe} that delegates to another {@link FinishedRecipe} instance.
  *
  * @author Choonster
  */
-public class DelegateFinishedRecipe implements IFinishedRecipe {
-	protected final IFinishedRecipe baseRecipe;
+public class DelegateFinishedRecipe implements FinishedRecipe {
+	protected final FinishedRecipe baseRecipe;
 
-	public DelegateFinishedRecipe(final IFinishedRecipe baseRecipe) {
+	public DelegateFinishedRecipe(final FinishedRecipe baseRecipe) {
 		this.baseRecipe = baseRecipe;
 	}
 
@@ -33,7 +33,7 @@ public class DelegateFinishedRecipe implements IFinishedRecipe {
 	}
 
 	@Override
-	public IRecipeSerializer<?> getType() {
+	public RecipeSerializer<?> getType() {
 		return baseRecipe.getType();
 	}
 
@@ -47,7 +47,7 @@ public class DelegateFinishedRecipe implements IFinishedRecipe {
 	}
 
 	/**
-	 * Gets the ID for the advancement associated with this recipe. Should not be null if {@link #getAdvancementJson} is
+	 * Gets the ID for the advancement associated with this recipe. Should not be null if {@link #serializeAdvancement()} is
 	 * non-null.
 	 */
 	@Override

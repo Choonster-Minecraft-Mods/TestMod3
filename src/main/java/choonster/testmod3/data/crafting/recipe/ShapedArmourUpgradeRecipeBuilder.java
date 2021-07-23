@@ -1,10 +1,10 @@
 package choonster.testmod3.data.crafting.recipe;
 
-import choonster.testmod3.crafting.recipe.ShapedArmourUpgradeRecipe;
 import choonster.testmod3.init.ModCrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import choonster.testmod3.world.item.crafting.recipe.ShapedArmourUpgradeRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 
 /**
  * Builder for {@link ShapedArmourUpgradeRecipe}.
@@ -22,7 +22,7 @@ public class ShapedArmourUpgradeRecipeBuilder extends EnhancedShapedRecipeBuilde
 	 * @param result The recipe result item
 	 * @return The builder
 	 */
-	public static ShapedArmourUpgradeRecipeBuilder shapedArmourUpgradeRecipe(final IItemProvider result) {
+	public static ShapedArmourUpgradeRecipeBuilder shapedArmourUpgradeRecipe(final ItemLike result) {
 		return shapedArmourUpgradeRecipe(new ItemStack(result));
 	}
 

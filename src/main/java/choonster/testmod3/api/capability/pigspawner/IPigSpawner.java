@@ -1,7 +1,7 @@
 package choonster.testmod3.api.capability.pigspawner;
 
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -21,7 +21,7 @@ public interface IPigSpawner {
 	 * @param z     The z coordinate
 	 * @return Can a pig be spawned?
 	 */
-	boolean canSpawnPig(final World world, final double x, final double y, final double z);
+	boolean canSpawnPig(final Level world, final double x, final double y, final double z);
 
 	/**
 	 * Spawn a pig at the specified position.
@@ -32,14 +32,14 @@ public interface IPigSpawner {
 	 * @param z     The z coordinate
 	 * @return Was the pig successfully spawned?
 	 */
-	boolean spawnPig(final World world, final double x, final double y, final double z);
+	boolean spawnPig(final Level world, final double x, final double y, final double z);
 
 	/**
 	 * Get the tooltip lines for this spawner. Can be called on the client or server.
 	 *
 	 * @return The tooltip lines
 	 */
-	List<IFormattableTextComponent> getTooltipLines();
+	List<MutableComponent> getTooltipLines();
 
 	/**
 	 * {@inheritDoc}

@@ -2,7 +2,6 @@ package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.advancements.criterion.FluidContainerItemPredicate;
-import choonster.testmod3.crafting.ingredient.FluidContainerIngredient;
 import choonster.testmod3.data.crafting.ingredient.ConditionalIngredientBuilder;
 import choonster.testmod3.data.crafting.ingredient.MobSpawnerIngredientBuilder;
 import choonster.testmod3.data.crafting.recipe.EnhancedShapedRecipeBuilder;
@@ -11,17 +10,19 @@ import choonster.testmod3.data.crafting.recipe.ShapelessCuttingRecipeBuilder;
 import choonster.testmod3.data.crafting.recipe.ShapelessFluidContainerRecipeBuilder;
 import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
+import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
 import com.google.common.base.Preconditions;
-import net.minecraft.advancements.criterion.MinMaxBounds;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.*;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.recipes.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -39,7 +40,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 	}
 
 	@Override
-	protected void buildShapelessRecipes(final Consumer<IFinishedRecipe> recipeConsumer) {
+	protected void buildCraftingRecipes(final Consumer<FinishedRecipe> recipeConsumer) {
 		// Craft a Dimension Replacement item from a Subscripts item and a Superscripts item
 		{
 			ShapelessRecipeBuilder.shapeless(ModItems.DIMENSION_REPLACEMENT.get())
@@ -52,7 +53,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 
 		// Craft a Dimension Replacement item by smelting a Subscripts item
 		{
-			CookingRecipeBuilder.smelting(Ingredient.of(ModItems.SUBSCRIPTS.get()), ModItems.DIMENSION_REPLACEMENT.get(), 0.35f, 200)
+			SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModItems.SUBSCRIPTS.get()), ModItems.DIMENSION_REPLACEMENT.get(), 0.35f, 200)
 					.unlockedBy("has_subscripts", has(ModItems.SUBSCRIPTS.get()))
 					.save(recipeConsumer, new ResourceLocation(TestMod3.MODID, "dimension_replacement_from_subscripts"));
 		}
@@ -90,14 +91,14 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 		// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2424619-help-needed-creating-non-pig-mob-spawners
 		{
 			final ItemStack guardianSpawner = new ItemStack(Blocks.SPAWNER);
-			final CompoundNBT blockEntityTag = guardianSpawner.getOrCreateTagElement("BlockEntityTag");
+			final CompoundTag blockEntityTag = guardianSpawner.getOrCreateTagElement("BlockEntityTag");
 
-			final CompoundNBT spawnData = new CompoundNBT();
+			final CompoundTag spawnData = new CompoundTag();
 
 			spawnData.putString("id", Preconditions.checkNotNull(EntityType.GUARDIAN.getRegistryName()).toString());
 			blockEntityTag.put("SpawnData", spawnData);
 
-			final ListNBT spawnPotentials = new ListNBT();
+			final ListTag spawnPotentials = new ListTag();
 			blockEntityTag.put("SpawnPotentials", spawnPotentials);
 
 			EnhancedShapedRecipeBuilder.Vanilla.shapedRecipe(guardianSpawner)
@@ -160,7 +161,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.unlockedBy("has_static_gas_container", inventoryTrigger(
 							FluidContainerItemPredicate.Builder.create()
 									.fluid(staticGas.getFluid())
-									.amount(MinMaxBounds.IntBound.atLeast(staticGas.getAmount()))
+									.amount(MinMaxBounds.Ints.atLeast(staticGas.getAmount()))
 									.build()
 					))
 					.save(recipeConsumer, new ResourceLocation(TestMod3.MODID, "cobblestone_from_static_gas"));

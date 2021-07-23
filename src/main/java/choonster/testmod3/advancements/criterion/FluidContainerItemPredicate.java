@@ -7,16 +7,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.advancements.criterion.MinMaxBounds;
-import net.minecraft.advancements.criterion.NBTPredicate;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.TagCollectionManager;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.critereon.NbtPredicate;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -31,12 +31,12 @@ import java.util.Optional;
 public class FluidContainerItemPredicate extends ItemPredicate {
 	public static final ResourceLocation TYPE = new ResourceLocation(TestMod3.MODID, "fluid_container");
 
-	private final ITag<Fluid> tag;
+	private final Tag<Fluid> tag;
 	private final Fluid fluid;
-	private final MinMaxBounds.IntBound amount;
-	private final NBTPredicate nbt;
+	private final MinMaxBounds.Ints amount;
+	private final NbtPredicate nbt;
 
-	public FluidContainerItemPredicate(@Nullable final ITag<Fluid> tag, @Nullable final Fluid fluid, final MinMaxBounds.IntBound amount, final NBTPredicate nbt) {
+	public FluidContainerItemPredicate(@Nullable final Tag<Fluid> tag, @Nullable final Fluid fluid, final MinMaxBounds.Ints amount, final NbtPredicate nbt) {
 		this.tag = tag;
 		this.fluid = fluid;
 		this.amount = amount;
@@ -73,21 +73,21 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 			return ANY;
 		}
 
-		final JsonObject object = JSONUtils.convertToJsonObject(element, "item");
+		final JsonObject object = GsonHelper.convertToJsonObject(element, "item");
 
-		final MinMaxBounds.IntBound amount = MinMaxBounds.IntBound.fromJson(object.get("amount"));
+		final MinMaxBounds.Ints amount = MinMaxBounds.Ints.fromJson(object.get("amount"));
 
-		final NBTPredicate nbt = NBTPredicate.fromJson(object.get("nbt"));
+		final NbtPredicate nbt = NbtPredicate.fromJson(object.get("nbt"));
 
 		Fluid fluid = null;
 		if (object.has("fluid")) {
 			fluid = ModJsonUtil.getFluid(object, "fluid");
 		}
 
-		ITag<Fluid> tag = null;
+		Tag<Fluid> tag = null;
 		if (object.has("tag")) {
-			final ResourceLocation tagName = new ResourceLocation(JSONUtils.getAsString(object, "tag"));
-			tag = TagCollectionManager.getInstance().getFluids().getTag(tagName);
+			final ResourceLocation tagName = new ResourceLocation(GsonHelper.getAsString(object, "tag"));
+			tag = FluidTags.getAllTags().getTag(tagName);
 			if (tag == null) {
 				throw new JsonSyntaxException("Unknown fluid tag '" + tagName + "'");
 			}
@@ -119,9 +119,9 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 
 	public static class Builder {
 		private Fluid fluid;
-		private ITag<Fluid> tag;
-		private MinMaxBounds.IntBound amount = MinMaxBounds.IntBound.ANY;
-		private NBTPredicate nbt = NBTPredicate.ANY;
+		private Tag<Fluid> tag;
+		private MinMaxBounds.Ints amount = MinMaxBounds.Ints.ANY;
+		private NbtPredicate nbt = NbtPredicate.ANY;
 
 		private Builder() {
 		}
@@ -135,18 +135,18 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 			return this;
 		}
 
-		public Builder tag(final ITag<Fluid> tag) {
+		public Builder tag(final Tag<Fluid> tag) {
 			this.tag = tag;
 			return this;
 		}
 
-		public Builder amount(final MinMaxBounds.IntBound amount) {
+		public Builder amount(final MinMaxBounds.Ints amount) {
 			this.amount = amount;
 			return this;
 		}
 
-		public Builder nbt(final CompoundNBT nbt) {
-			this.nbt = new NBTPredicate(nbt);
+		public Builder nbt(final CompoundTag nbt) {
+			this.nbt = new NbtPredicate(nbt);
 			return this;
 		}
 

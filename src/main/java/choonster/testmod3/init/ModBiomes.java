@@ -1,19 +1,21 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.biome.*;
-import net.minecraft.world.gen.feature.structure.StructureFeatures;
-import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.worldgen.BiomeDefaultFeatures;
+import net.minecraft.data.worldgen.StructureFeatures;
+import net.minecraft.data.worldgen.biome.VanillaBiomes;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.biome.*;
+import net.minecraft.world.level.levelgen.surfacebuilders.ConfiguredSurfaceBuilder;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -73,22 +75,22 @@ public class ModBiomes {
 			BiomeManager.addBiome(biomeType, new BiomeManager.BiomeEntry(key(biome), weight));
 		}
 
-		private static RegistryKey<Biome> key(final Biome biome) {
-			return RegistryKey.create(ForgeRegistries.Keys.BIOMES, Objects.requireNonNull(ForgeRegistries.BIOMES.getKey(biome), "Biome registry name was null"));
+		private static ResourceKey<Biome> key(final Biome biome) {
+			return ResourceKey.create(ForgeRegistries.Keys.BIOMES, Objects.requireNonNull(ForgeRegistries.BIOMES.getKey(biome), "Biome registry name was null"));
 		}
 	}
 
 	private static class Utils {
-		private static final Method GET_SKY_COLOR_WITH_TEMPERATURE_MODIFIER = ObfuscationReflectionHelper.findMethod(BiomeMaker.class, /* getSkyColorWithTemperatureModifier */ "calculateSkyColor", float.class);
+		private static final Method GET_SKY_COLOR_WITH_TEMPERATURE_MODIFIER = ObfuscationReflectionHelper.findMethod(VanillaBiomes.class, /* getSkyColorWithTemperatureModifier */ "calculateSkyColor", float.class);
 
-		public static Supplier<ConfiguredSurfaceBuilder<?>> surfaceBuilder(final RegistryKey<ConfiguredSurfaceBuilder<?>> key) {
-			return () -> WorldGenRegistries.CONFIGURED_SURFACE_BUILDER.getOrThrow(key);
+		public static Supplier<ConfiguredSurfaceBuilder<?>> surfaceBuilder(final ResourceKey<ConfiguredSurfaceBuilder<?>> key) {
+			return () -> BuiltinRegistries.CONFIGURED_SURFACE_BUILDER.getOrThrow(key);
 		}
 
 		/**
 		 * Creates a desert biome.
 		 * <p>
-		 * Adapted from {@link BiomeMaker#makeDesertBiome(float, float, boolean, boolean, boolean)}
+		 * Adapted from {@link VanillaBiomes#desertBiome(float, float, boolean, boolean, boolean)}
 		 *
 		 * @return The biome
 		 */
@@ -100,8 +102,8 @@ public class ModBiomes {
 				final boolean hasDesertPyramid,
 				final boolean hasFossils
 		) {
-			final MobSpawnInfo.Builder mobSpawnInfoBuilder = new MobSpawnInfo.Builder();
-			DefaultBiomeFeatures.desertSpawns(mobSpawnInfoBuilder);
+			final MobSpawnSettings.Builder mobSpawnInfoBuilder = new MobSpawnSettings.Builder();
+			BiomeDefaultFeatures.desertSpawns(mobSpawnInfoBuilder);
 
 			final BiomeGenerationSettings.Builder biomeGenerationSettingBuilder = new BiomeGenerationSettings.Builder()
 					.surfaceBuilder(surfaceBuilder);
@@ -116,25 +118,25 @@ public class ModBiomes {
 			}
 
 			if (hasFossils) {
-				DefaultBiomeFeatures.addFossilDecoration(biomeGenerationSettingBuilder);
+				BiomeDefaultFeatures.addFossilDecoration(biomeGenerationSettingBuilder);
 			}
 
-			DefaultBiomeFeatures.addDefaultOverworldLandStructures(biomeGenerationSettingBuilder);
+			BiomeDefaultFeatures.addDefaultOverworldLandStructures(biomeGenerationSettingBuilder);
 			biomeGenerationSettingBuilder.addStructureStart(StructureFeatures.RUINED_PORTAL_DESERT);
-			DefaultBiomeFeatures.addDefaultCarvers(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.addDesertLakes(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.addDefaultMonsterRoom(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.addDefaultUndergroundVariety(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.addDefaultOres(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.addDefaultSoftDisks(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.addDefaultFlowers(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.addDefaultGrass(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.addDesertVegetation(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.addDefaultMushrooms(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.addDesertExtraVegetation(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.addDefaultSprings(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.addDesertExtraDecoration(biomeGenerationSettingBuilder);
-			DefaultBiomeFeatures.addSurfaceFreezing(biomeGenerationSettingBuilder);
+			BiomeDefaultFeatures.addDefaultCarvers(biomeGenerationSettingBuilder);
+			BiomeDefaultFeatures.addDesertLakes(biomeGenerationSettingBuilder);
+			BiomeDefaultFeatures.addDefaultMonsterRoom(biomeGenerationSettingBuilder);
+			BiomeDefaultFeatures.addDefaultUndergroundVariety(biomeGenerationSettingBuilder);
+			BiomeDefaultFeatures.addDefaultOres(biomeGenerationSettingBuilder);
+			BiomeDefaultFeatures.addDefaultSoftDisks(biomeGenerationSettingBuilder);
+			BiomeDefaultFeatures.addDefaultFlowers(biomeGenerationSettingBuilder);
+			BiomeDefaultFeatures.addDefaultGrass(biomeGenerationSettingBuilder);
+			BiomeDefaultFeatures.addDesertVegetation(biomeGenerationSettingBuilder);
+			BiomeDefaultFeatures.addDefaultMushrooms(biomeGenerationSettingBuilder);
+			BiomeDefaultFeatures.addDesertExtraVegetation(biomeGenerationSettingBuilder);
+			BiomeDefaultFeatures.addDefaultSprings(biomeGenerationSettingBuilder);
+			BiomeDefaultFeatures.addDesertExtraDecoration(biomeGenerationSettingBuilder);
+			BiomeDefaultFeatures.addSurfaceFreezing(biomeGenerationSettingBuilder);
 
 			final int skyColour;
 			try {
@@ -143,20 +145,20 @@ public class ModBiomes {
 				throw new RuntimeException("Unable to get sky colour", e);
 			}
 
-			return new Biome.Builder()
-					.precipitation(Biome.RainType.NONE)
-					.biomeCategory(Biome.Category.DESERT)
+			return new Biome.BiomeBuilder()
+					.precipitation(Biome.Precipitation.NONE)
+					.biomeCategory(Biome.BiomeCategory.DESERT)
 					.depth(depth)
 					.scale(scale)
 					.temperature(2)
 					.downfall(0)
 					.specialEffects(
-							new BiomeAmbience.Builder()
+							new BiomeSpecialEffects.Builder()
 									.waterColor(0x3f76e4)
 									.waterFogColor(0x50533)
 									.fogColor(0xc0d8ff)
 									.skyColor(skyColour)
-									.ambientMoodSound(MoodSoundAmbience.LEGACY_CAVE_SETTINGS)
+									.ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
 									.build()
 					)
 					.mobSpawnSettings(mobSpawnInfoBuilder.build())

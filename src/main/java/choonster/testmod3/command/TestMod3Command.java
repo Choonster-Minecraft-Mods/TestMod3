@@ -2,8 +2,8 @@ package choonster.testmod3.command;
 
 import choonster.testmod3.command.maxhealth.MaxHealthCommand;
 import com.mojang.brigadier.CommandDispatcher;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 
 /**
  * A command with sub-commands.
@@ -14,7 +14,7 @@ import net.minecraft.command.Commands;
  * @author Choonster
  */
 public class TestMod3Command {
-	public static void register(final CommandDispatcher<CommandSource> dispatcher) {
+	public static void register(final CommandDispatcher<CommandSourceStack> dispatcher) {
 		dispatcher.register(
 				Commands.literal("testmod3")
 						.then(RotateVectorCommand.register())

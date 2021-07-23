@@ -5,14 +5,14 @@ import choonster.testmod3.client.gui.ClientScreenManager;
 import choonster.testmod3.client.init.ModScreenFactories;
 import choonster.testmod3.network.OpenClientScreenMessage;
 import io.netty.buffer.Unpooled;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -29,12 +29,12 @@ public class NetworkUtil {
 	 * <p>
 	 * The factories are registered with {@link ClientScreenManager} in {@link ModScreenFactories}.
 	 * <p>
-	 * This is similar to {@link NetworkHooks#openGui} for GUIs without a {@link Container}.
+	 * This is similar to {@link NetworkHooks#openGui} for GUIs without an {@link AbstractContainerMenu}.
 	 *
 	 * @param player The player to open the GUI for
 	 * @param id     The ID of the GUI to open.
 	 */
-	public static void openClientGui(final ServerPlayerEntity player, final ResourceLocation id) {
+	public static void openClientGui(final ServerPlayer player, final ResourceLocation id) {
 		openClientGui(player, id, buf -> {
 		});
 	}
@@ -44,13 +44,13 @@ public class NetworkUtil {
 	 * <p>
 	 * The factories are registered with {@link ClientScreenManager} in {@link ModScreenFactories}.
 	 * <p>
-	 * This is similar to {@link NetworkHooks#openGui} for GUIs without a {@link Container}.
+	 * This is similar to {@link NetworkHooks#openGui} for GUIs without an {@link AbstractContainerMenu}.
 	 *
 	 * @param player The player to open the GUI for
 	 * @param id     The ID of the GUI to open.
 	 * @param pos    A BlockPos, which will be encoded into the additional data for this request
 	 */
-	public static void openClientGui(final ServerPlayerEntity player, final ResourceLocation id, final BlockPos pos) {
+	public static void openClientGui(final ServerPlayer player, final ResourceLocation id, final BlockPos pos) {
 		openClientGui(player, id, buf -> buf.writeBlockPos(pos));
 	}
 
@@ -59,7 +59,7 @@ public class NetworkUtil {
 	 * <p>
 	 * The factories are registered with {@link ClientScreenManager} in {@link ModScreenFactories}.
 	 * <p>
-	 * This is similar to {@link NetworkHooks#openGui} for GUIs without a {@link Container}.
+	 * This is similar to {@link NetworkHooks#openGui} for GUIs without an {@link AbstractContainerMenu}.
 	 * <p>
 	 * The maximum size for {@code extraDataWriter} is 32600 bytes.
 	 *
@@ -67,16 +67,16 @@ public class NetworkUtil {
 	 * @param id              The ID of the GUI to open.
 	 * @param extraDataWriter Consumer to write any additional data required by the GUI
 	 */
-	public static void openClientGui(final ServerPlayerEntity player, final ResourceLocation id, final Consumer<PacketBuffer> extraDataWriter) {
+	public static void openClientGui(final ServerPlayer player, final ResourceLocation id, final Consumer<FriendlyByteBuf> extraDataWriter) {
 		if (player.level.isClientSide) return;
 		player.closeContainer();
 		player.containerMenu = player.inventoryMenu;
 
-		final PacketBuffer extraData = new PacketBuffer(Unpooled.buffer());
+		final FriendlyByteBuf extraData = new FriendlyByteBuf(Unpooled.buffer());
 		extraDataWriter.accept(extraData);
 		extraData.readerIndex(0); // Reset to the beginning in case the factories read from it
 
-		final PacketBuffer output = new PacketBuffer(Unpooled.buffer());
+		final FriendlyByteBuf output = new FriendlyByteBuf(Unpooled.buffer());
 		output.writeVarInt(extraData.readableBytes());
 		output.writeBytes(extraData);
 
@@ -89,12 +89,12 @@ public class NetworkUtil {
 	}
 
 	/**
-	 * Writes a nullable {@link Direction} to a {@link PacketBuffer}.
+	 * Writes a nullable {@link Direction} to a {@link FriendlyByteBuf}.
 	 *
 	 * @param facing The facing
 	 * @param buffer The buffer
 	 */
-	public static void writeNullableFacing(@Nullable final Direction facing, final PacketBuffer buffer) {
+	public static void writeNullableFacing(@Nullable final Direction facing, final FriendlyByteBuf buffer) {
 		final boolean hasFacing = facing != null;
 
 		buffer.writeBoolean(hasFacing);
@@ -105,13 +105,13 @@ public class NetworkUtil {
 	}
 
 	/**
-	 * Reads a nullable {@link Direction} from a {@link PacketBuffer}.
+	 * Reads a nullable {@link Direction} from a {@link FriendlyByteBuf}.
 	 *
 	 * @param buffer The buffer
 	 * @return The facing
 	 */
 	@Nullable
-	public static Direction readNullableFacing(final PacketBuffer buffer) {
+	public static Direction readNullableFacing(final FriendlyByteBuf buffer) {
 		final boolean hasFacing = buffer.readBoolean();
 
 		if (hasFacing) {

@@ -4,15 +4,15 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.lock.ILock;
 import choonster.testmod3.network.SetLockCodeMessage;
 import choonster.testmod3.text.TestMod3Lang;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.chat.NarratorChatListener;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
@@ -41,9 +41,7 @@ public class LockScreen extends Screen {
 	/**
 	 * The lock code text field.
 	 */
-	private TextFieldWidget lockCodeTextField;
-	private Button doneButton;
-	private Button cancelButton;
+	private EditBox lockCodeTextField;
 
 	public LockScreen(final ILock lock, final BlockPos pos, @Nullable final Direction facing) {
 		super(NarratorChatListener.NO_TITLE);
@@ -62,14 +60,14 @@ public class LockScreen extends Screen {
 	protected void init() {
 		minecraft.keyboardHandler.setSendRepeatsToGui(true);
 
-		doneButton = addButton(new Button(width / 2 - 4 - 150, height / 4 + 120 + 12, 150, 20, new TranslationTextComponent("gui.done"), button -> done()));
+		addRenderableWidget(new Button(width / 2 - 4 - 150, height / 4 + 120 + 12, 150, 20, new TranslatableComponent("gui.done"), button -> done()));
 
-		cancelButton = addButton(new Button(width / 2 + 4, height / 4 + 120 + 12, 150, 20, new TranslationTextComponent("gui.cancel"), button -> removed()));
+		addRenderableWidget(new Button(width / 2 + 4, height / 4 + 120 + 12, 150, 20, new TranslatableComponent("gui.cancel"), button -> removed()));
 
-		lockCodeTextField = new TextFieldWidget(font, width / 2 - 150, 50, 300, 20, new TranslationTextComponent("gui.testmod3.lock.lock_code"));
+		lockCodeTextField = new EditBox(font, width / 2 - 150, 50, 300, 20, new TranslatableComponent("gui.testmod3.lock.lock_code"));
 		lockCodeTextField.setMaxLength(32500);
 		lockCodeTextField.setFocus(true);
-		children.add(lockCodeTextField);
+		addWidget(lockCodeTextField);
 	}
 
 	private void done() {
@@ -100,7 +98,7 @@ public class LockScreen extends Screen {
 	}
 
 	@Override
-	public void render(final MatrixStack matrixStack, final int mouseX, final int mouseY, final float partialTicks) {
+	public void render(final PoseStack matrixStack, final int mouseX, final int mouseY, final float partialTicks) {
 		renderBackground(matrixStack);
 		drawCenteredString(matrixStack, font, I18n.get(TestMod3Lang.LOCK_SET_LOCK_CODE.getTranslationKey()), width / 2, 20, 0xffffff);
 		drawString(matrixStack, font, I18n.get(TestMod3Lang.LOCK_LOCK_CODE.getTranslationKey()), width / 2 - 150, 37, 0xa0a0a0);

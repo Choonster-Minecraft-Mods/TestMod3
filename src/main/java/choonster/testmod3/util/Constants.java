@@ -2,7 +2,7 @@ package choonster.testmod3.util;
 
 import choonster.testmod3.TestMod3;
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.entity.EquipmentSlot;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -14,9 +14,9 @@ public class Constants {
 	/**
 	 * The armour equipment slots.
 	 */
-	public static final Set<EquipmentSlotType> ARMOUR_SLOTS = ImmutableSet.copyOf(
-			Stream.of(EquipmentSlotType.values())
-					.filter(equipmentSlot -> equipmentSlot.getType() == EquipmentSlotType.Group.ARMOR)
+	public static final Set<EquipmentSlot> ARMOUR_SLOTS = ImmutableSet.copyOf(
+			Stream.of(EquipmentSlot.values())
+					.filter(equipmentSlot -> equipmentSlot.getType() == EquipmentSlot.Type.ARMOR)
 					.collect(Collectors.toList())
 	);
 }

@@ -1,7 +1,7 @@
 package choonster.testmod3.api.capability.chunkenergy;
 
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.energy.IEnergyStorage;
 
 /**
@@ -12,11 +12,11 @@ import net.minecraftforge.energy.IEnergyStorage;
 public interface IChunkEnergy extends IEnergyStorage {
 
 	/**
-	 * Get the {@link World} containing this instance's chunk.
+	 * Get the {@link Level} containing this instance's chunk.
 	 *
-	 * @return The World
+	 * @return The Level
 	 */
-	World getWorld();
+	Level getLevel();
 
 	/**
 	 * Get the {@link ChunkPos} of this instance's chunk.

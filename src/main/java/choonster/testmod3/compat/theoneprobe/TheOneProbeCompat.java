@@ -1,18 +1,11 @@
 package choonster.testmod3.compat.theoneprobe;
 
-import choonster.testmod3.TestMod3;
-import choonster.testmod3.block.*;
-import choonster.testmod3.text.TestMod3Lang;
-import mcjty.theoneprobe.api.ITheOneProbe;
-import net.minecraft.util.ResourceLocation;
-
-import java.util.function.Function;
-
 /**
  * The One Probe compatibility.
  *
  * @author Choonster
  */
+/*
 public class TheOneProbeCompat implements Function<ITheOneProbe, Void> {
 	@Override
 	public Void apply(final ITheOneProbe theOneProbe) {
@@ -61,3 +54,4 @@ public class TheOneProbeCompat implements Function<ITheOneProbe, Void> {
 		return null;
 	}
 }
+*/

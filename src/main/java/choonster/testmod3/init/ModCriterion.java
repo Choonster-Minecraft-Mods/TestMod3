@@ -1,7 +1,7 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.advancements.criterion.FluidContainerItemPredicate;
-import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.critereon.ItemPredicate;
 
 /**
  * Registers this mod's advancement criterion and predicates.

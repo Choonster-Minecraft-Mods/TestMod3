@@ -4,14 +4,12 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.capability.SerializableCapabilityProvider;
 import choonster.testmod3.network.UpdateChunkEnergyValueMessage;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.IntNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -20,7 +18,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 import static choonster.testmod3.util.InjectionUtil.Null;
 
@@ -52,31 +50,18 @@ public class ChunkEnergyCapability {
 	private static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "chunk_energy");
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IChunkEnergy.class, new Capability.IStorage<IChunkEnergy>() {
-			@Override
-			public INBT writeNBT(final Capability<IChunkEnergy> capability, final IChunkEnergy instance, final Direction side) {
-				return IntNBT.valueOf(instance.getEnergyStored());
-			}
-
-			@Override
-			public void readNBT(final Capability<IChunkEnergy> capability, final IChunkEnergy instance, final Direction side, final INBT nbt) {
-				if (!(instance instanceof ChunkEnergy))
-					throw new IllegalArgumentException("Can not deserialize to an instance that isn't the default implementation");
-
-				((ChunkEnergy) instance).setEnergy(((IntNBT) nbt).getAsInt());
-			}
-		}, () -> null);
+		CapabilityManager.INSTANCE.register(IChunkEnergy.class);
 	}
 
 	/**
-	 * Get the {@link IChunkEnergy} for the {@link World} and chunk position.
+	 * Get the {@link IChunkEnergy} for the {@link Level} and chunk position.
 	 *
-	 * @param world    The World
+	 * @param level    The level
 	 * @param chunkPos The chunk position
 	 * @return A lazy optional containing the IChunkEnergy, if any
 	 */
-	public static LazyOptional<IChunkEnergy> getChunkEnergy(final World world, final ChunkPos chunkPos) {
-		return getChunkEnergy(world.getChunk(chunkPos.x, chunkPos.z));
+	public static LazyOptional<IChunkEnergy> getChunkEnergy(final Level level, final ChunkPos chunkPos) {
+		return getChunkEnergy(level.getChunk(chunkPos.x, chunkPos.z));
 	}
 
 	/**
@@ -85,7 +70,7 @@ public class ChunkEnergyCapability {
 	 * @param chunk The chunk
 	 * @return A lazy optional containing the IChunkEnergy, if any
 	 */
-	public static LazyOptional<IChunkEnergy> getChunkEnergy(final Chunk chunk) {
+	public static LazyOptional<IChunkEnergy> getChunkEnergy(final LevelChunk chunk) {
 		return chunk.getCapability(CHUNK_ENERGY_CHUNK_CAPABILITY, DEFAULT_FACING);
 	}
 
@@ -93,8 +78,8 @@ public class ChunkEnergyCapability {
 	@SuppressWarnings("unused")
 	private static class EventHandler {
 		@SubscribeEvent
-		public static void attachChunkCapabilities(final AttachCapabilitiesEvent<Chunk> event) {
-			final Chunk chunk = event.getObject();
+		public static void attachChunkCapabilities(final AttachCapabilitiesEvent<LevelChunk> event) {
+			final LevelChunk chunk = event.getObject();
 			final IChunkEnergy chunkEnergy = new ChunkEnergy(DEFAULT_CAPACITY, chunk.getLevel(), chunk.getPos());
 			event.addCapability(ID, new SerializableCapabilityProvider<>(CHUNK_ENERGY_CHUNK_CAPABILITY, DEFAULT_FACING, chunkEnergy));
 		}
@@ -106,7 +91,7 @@ public class ChunkEnergyCapability {
 		 */
 		@SubscribeEvent
 		public static void chunkWatch(final ChunkWatchEvent.Watch event) {
-			final ServerPlayerEntity player = event.getPlayer();
+			final ServerPlayer player = event.getPlayer();
 
 			getChunkEnergy(event.getWorld(), event.getPos())
 					.ifPresent((chunkEnergy) -> TestMod3.network.send(PacketDistributor.PLAYER.with(() -> player), new UpdateChunkEnergyValueMessage(chunkEnergy)));

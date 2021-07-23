@@ -1,16 +1,20 @@
 package choonster.testmod3.data.loot;
 
-import choonster.testmod3.block.FluidTankBlock;
-import choonster.testmod3.block.RightClickTestBlock;
 import choonster.testmod3.init.ModBlocks;
-import choonster.testmod3.loot.functions.SetFluidTankContents;
 import choonster.testmod3.util.RegistryUtil;
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
-import net.minecraft.block.Block;
-import net.minecraft.data.loot.BlockLootTables;
-import net.minecraft.item.Items;
-import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.BlockStateProperty;
+import choonster.testmod3.world.level.block.FluidTankBlock;
+import choonster.testmod3.world.level.block.RightClickTestBlock;
+import choonster.testmod3.world.level.storage.loot.functions.SetFluidTankContents;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
@@ -18,7 +22,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  *
  * @author Choonster
  */
-public class TestMod3BlockLootTables extends BlockLootTables {
+public class TestMod3BlockLootTables extends BlockLoot {
 	@Override
 	protected void addTables() {
 		dropSelf(ModBlocks.WATER_GRASS.get());
@@ -30,14 +34,14 @@ public class TestMod3BlockLootTables extends BlockLootTables {
 								applyExplosionCondition(Items.ENDER_EYE, LootPool.lootPool()
 										.name("ender_eye")
 										.when(
-												BlockStateProperty.hasBlockStateProperties(block)
+												LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
 														.setProperties(
 																StatePropertiesPredicate.Builder.properties()
 																		.hasProperty(RightClickTestBlock.HAS_ENDER_EYE, true)
 														)
 										)
-										.setRolls(ConstantRange.exactly(1))
-										.add(ItemLootEntry.lootTableItem(Items.ENDER_EYE))
+										.setRolls(ConstantValue.exactly(1))
+										.add(LootItem.lootTableItem(Items.ENDER_EYE))
 								)
 						)
 		));
@@ -89,7 +93,7 @@ public class TestMod3BlockLootTables extends BlockLootTables {
 
 		ModBlocks.TERRACOTTA_SLABS
 				.getBlocks()
-				.forEach(slab -> add(slab.get(), BlockLootTables::createSlabItemTable));
+				.forEach(slab -> add(slab.get(), BlockLoot::createSlabItemTable));
 	}
 
 	@Override
@@ -102,12 +106,12 @@ public class TestMod3BlockLootTables extends BlockLootTables {
 				.withPool(
 						applyExplosionCondition(block,
 								LootPool.lootPool()
-										.setRolls(ConstantRange.exactly(1))
+										.setRolls(ConstantValue.exactly(1))
 										.add(
-												ItemLootEntry.lootTableItem(block)
+												LootItem.lootTableItem(block)
 														.apply(
 																SetFluidTankContents.builder()
-																		.addLootEntry(DynamicLootEntry.dynamicEntry(FluidTankBlock.FLUID_TANK_CONTENTS))
+																		.addLootEntry(DynamicLoot.dynamicEntry(FluidTankBlock.FLUID_TANK_CONTENTS))
 														)
 										)
 						)

@@ -7,12 +7,12 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.network.chat.TranslatableComponent;
 
 /**
  * Get the current max health of an entity and the bonus max health provided by its {@link IMaxHealth}.
@@ -20,9 +20,9 @@ import net.minecraft.util.text.TranslationTextComponent;
  * @author Choonster
  */
 public class GetMaxHealthCommand {
-	private static final SimpleCommandExceptionType INVALID_ENTITY_EXCEPTION = new SimpleCommandExceptionType(new TranslationTextComponent("commands.testmod3.maxhealth.invalid_entity"));
+	private static final SimpleCommandExceptionType INVALID_ENTITY_EXCEPTION = new SimpleCommandExceptionType(new TranslatableComponent("commands.testmod3.maxhealth.invalid_entity"));
 
-	static ArgumentBuilder<CommandSource, ?> register() {
+	static ArgumentBuilder<CommandSourceStack, ?> register() {
 		return Commands.literal("get")
 				.then(Commands.argument("entity", EntityArgument.entity())
 						.executes(context ->
@@ -34,7 +34,7 @@ public class GetMaxHealthCommand {
 				);
 	}
 
-	private static int execute(final CommandContext<CommandSource> context, final Entity entity) throws CommandSyntaxException {
+	private static int execute(final CommandContext<CommandSourceStack> context, final Entity entity) throws CommandSyntaxException {
 		if (!(entity instanceof LivingEntity)) {
 			throw INVALID_ENTITY_EXCEPTION.create();
 		}
@@ -43,7 +43,7 @@ public class GetMaxHealthCommand {
 
 		MaxHealthCapability.getMaxHealth(livingEntity).ifPresent(maxHealth ->
 				context.getSource().sendSuccess(
-						new TranslationTextComponent(
+						new TranslatableComponent(
 								TestMod3Lang.MESSAGE_MAX_HEALTH_GET.getTranslationKey(),
 								entity.getDisplayName(),
 								MaxHealthCapability.formatMaxHealth(livingEntity.getMaxHealth()),

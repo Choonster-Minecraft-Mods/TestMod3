@@ -2,22 +2,18 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.network.*;
-import choonster.testmod3.network.capability.fluidhandler.BulkUpdateContainerFluidTanksMessage;
-import choonster.testmod3.network.capability.fluidhandler.UpdateContainerFluidTankMessage;
-import choonster.testmod3.network.capability.hiddenblock.BulkUpdateContainerHiddenBlockRevealersMessage;
-import choonster.testmod3.network.capability.hiddenblock.UpdateContainerHiddenBlockRevealerMessage;
-import choonster.testmod3.network.capability.lastusetime.BulkUpdateContainerLastUseTimesMessage;
-import choonster.testmod3.network.capability.lastusetime.UpdateContainerLastUseTimeMessage;
-import choonster.testmod3.network.capability.pigspawner.BulkUpdateContainerPigSpawnerFinitesMessage;
-import choonster.testmod3.network.capability.pigspawner.UpdateContainerPigSpawnerFiniteMessage;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import choonster.testmod3.network.capability.fluidhandler.UpdateMenuFluidTankMessage;
+import choonster.testmod3.network.capability.hiddenblock.UpdateMenuHiddenBlockRevealerMessage;
+import choonster.testmod3.network.capability.lastusetime.UpdateMenuLastUseTimeMessage;
+import choonster.testmod3.network.capability.pigspawner.UpdateMenuPigSpawnerFiniteMessage;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fmllegacy.network.NetworkRegistry;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 
 public class ModNetwork {
 	public static final ResourceLocation CHANNEL_NAME = new ResourceLocation(TestMod3.MODID, "network");
 
-	public static final String NETWORK_VERSION = new ResourceLocation(TestMod3.MODID, "1").toString();
+	public static final String NETWORK_VERSION = new ResourceLocation(TestMod3.MODID, "2").toString();
 
 	public static SimpleChannel getNetworkChannel() {
 		final SimpleChannel channel = NetworkRegistry.ChannelBuilder.named(CHANNEL_NAME)
@@ -50,56 +46,28 @@ public class ModNetwork {
 				.consumer(UpdateChunkEnergyValueMessage::handle)
 				.add();
 
-
-		channel.messageBuilder(BulkUpdateContainerFluidTanksMessage.class, 5)
-				.decoder(BulkUpdateContainerFluidTanksMessage::decode)
-				.encoder(BulkUpdateContainerFluidTanksMessage::encode)
-				.consumer(BulkUpdateContainerFluidTanksMessage::handle)
+		channel.messageBuilder(UpdateMenuFluidTankMessage.class, 6)
+				.decoder(UpdateMenuFluidTankMessage::decode)
+				.encoder(UpdateMenuFluidTankMessage::encode)
+				.consumer(UpdateMenuFluidTankMessage::handle)
 				.add();
 
-		channel.messageBuilder(UpdateContainerFluidTankMessage.class, 6)
-				.decoder(UpdateContainerFluidTankMessage::decode)
-				.encoder(UpdateContainerFluidTankMessage::encode)
-				.consumer(UpdateContainerFluidTankMessage::handle)
+		channel.messageBuilder(UpdateMenuHiddenBlockRevealerMessage.class, 8)
+				.decoder(UpdateMenuHiddenBlockRevealerMessage::decode)
+				.encoder(UpdateMenuHiddenBlockRevealerMessage::encode)
+				.consumer(UpdateMenuHiddenBlockRevealerMessage::handle)
 				.add();
 
-
-		channel.messageBuilder(BulkUpdateContainerHiddenBlockRevealersMessage.class, 7)
-				.decoder(BulkUpdateContainerHiddenBlockRevealersMessage::decode)
-				.encoder(BulkUpdateContainerHiddenBlockRevealersMessage::encode)
-				.consumer(BulkUpdateContainerHiddenBlockRevealersMessage::handle)
+		channel.messageBuilder(UpdateMenuLastUseTimeMessage.class, 10)
+				.decoder(UpdateMenuLastUseTimeMessage::decode)
+				.encoder(UpdateMenuLastUseTimeMessage::encode)
+				.consumer(UpdateMenuLastUseTimeMessage::handle)
 				.add();
 
-		channel.messageBuilder(UpdateContainerHiddenBlockRevealerMessage.class, 8)
-				.decoder(UpdateContainerHiddenBlockRevealerMessage::decode)
-				.encoder(UpdateContainerHiddenBlockRevealerMessage::encode)
-				.consumer(UpdateContainerHiddenBlockRevealerMessage::handle)
-				.add();
-
-
-		channel.messageBuilder(BulkUpdateContainerLastUseTimesMessage.class, 9)
-				.decoder(BulkUpdateContainerLastUseTimesMessage::decode)
-				.encoder(BulkUpdateContainerLastUseTimesMessage::encode)
-				.consumer(BulkUpdateContainerLastUseTimesMessage::handle)
-				.add();
-
-		channel.messageBuilder(UpdateContainerLastUseTimeMessage.class, 10)
-				.decoder(UpdateContainerLastUseTimeMessage::decode)
-				.encoder(UpdateContainerLastUseTimeMessage::encode)
-				.consumer(UpdateContainerLastUseTimeMessage::handle)
-				.add();
-
-
-		channel.messageBuilder(BulkUpdateContainerPigSpawnerFinitesMessage.class, 11)
-				.decoder(BulkUpdateContainerPigSpawnerFinitesMessage::decode)
-				.encoder(BulkUpdateContainerPigSpawnerFinitesMessage::encode)
-				.consumer(BulkUpdateContainerPigSpawnerFinitesMessage::handle)
-				.add();
-
-		channel.messageBuilder(UpdateContainerPigSpawnerFiniteMessage.class, 12)
-				.decoder(UpdateContainerPigSpawnerFiniteMessage::decode)
-				.encoder(UpdateContainerPigSpawnerFiniteMessage::encode)
-				.consumer(UpdateContainerPigSpawnerFiniteMessage::handle)
+		channel.messageBuilder(UpdateMenuPigSpawnerFiniteMessage.class, 12)
+				.decoder(UpdateMenuPigSpawnerFiniteMessage::decode)
+				.encoder(UpdateMenuPigSpawnerFiniteMessage::encode)
+				.consumer(UpdateMenuPigSpawnerFiniteMessage::handle)
 				.add();
 
 		channel.messageBuilder(OpenClientScreenMessage.class, 13)

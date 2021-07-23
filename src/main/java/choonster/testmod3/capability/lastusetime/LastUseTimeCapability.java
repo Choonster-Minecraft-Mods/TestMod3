@@ -4,13 +4,11 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.lastusetime.ILastUseTime;
 import choonster.testmod3.capability.CapabilityContainerListenerManager;
 import choonster.testmod3.capability.SerializableCapabilityProvider;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.LongNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -45,17 +43,7 @@ public final class LastUseTimeCapability {
 	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "last_use_time");
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(ILastUseTime.class, new Capability.IStorage<ILastUseTime>() {
-			@Override
-			public INBT writeNBT(final Capability<ILastUseTime> capability, final ILastUseTime instance, final Direction side) {
-				return LongNBT.valueOf(instance.get());
-			}
-
-			@Override
-			public void readNBT(final Capability<ILastUseTime> capability, final ILastUseTime instance, final Direction side, final INBT nbt) {
-				instance.set(((LongNBT) nbt).getAsLong());
-			}
-		}, () -> new LastUseTime(true));
+		CapabilityManager.INSTANCE.register(ILastUseTime.class);
 
 		CapabilityContainerListenerManager.registerListenerFactory(LastUseTimeContainerListener::new);
 	}
@@ -76,21 +64,12 @@ public final class LastUseTimeCapability {
 	 * @param player    The player
 	 * @param itemStack The held ItemStack
 	 */
-	public static void updateLastUseTime(final PlayerEntity player, final ItemStack itemStack) {
+	public static void updateLastUseTime(final Player player, final ItemStack itemStack) {
 		getLastUseTime(itemStack).ifPresent((lastUseTime) -> {
-			final World world = player.getCommandSenderWorld();
+			final Level world = player.getCommandSenderWorld();
 
 			lastUseTime.set(world.getGameTime());
 		});
-	}
-
-	/**
-	 * Create a provider for the default {@link ILastUseTime} instance.
-	 *
-	 * @return The provider
-	 */
-	public static ICapabilityProvider createProvider() {
-		return new SerializableCapabilityProvider<>(LAST_USE_TIME_CAPABILITY, DEFAULT_FACING);
 	}
 
 	/**

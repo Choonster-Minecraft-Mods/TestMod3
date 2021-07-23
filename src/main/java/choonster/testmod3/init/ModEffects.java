@@ -1,11 +1,11 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.potion.TestMod3Effect;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
+import choonster.testmod3.world.effect.TestMod3MobEffect;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -15,12 +15,12 @@ import net.minecraftforge.registries.ForgeRegistries;
  * @author Choonster
  */
 public class ModEffects {
-	private static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, TestMod3.MODID);
+	private static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, TestMod3.MODID);
 
 	private static boolean isInitialised;
 
-	public static final RegistryObject<TestMod3Effect> TEST = EFFECTS.register("test",
-			() -> new TestMod3Effect(EffectType.BENEFICIAL, 2, 2, 2)
+	public static final RegistryObject<TestMod3MobEffect> TEST = EFFECTS.register("test",
+			() -> new TestMod3MobEffect(MobEffectCategory.BENEFICIAL, 2, 2, 2)
 	);
 
 	/**

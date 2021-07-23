@@ -2,18 +2,15 @@ package choonster.testmod3.capability.lock;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.lock.ILock;
-import choonster.testmod3.capability.lock.wrapper.LockableTileEntityWrapper;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.tileentity.LockableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.LockCode;
+import choonster.testmod3.capability.lock.wrapper.BaseContainerBlockEntityWrapper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -41,28 +38,7 @@ public final class LockCapability {
 	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "lock");
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(ILock.class, new Capability.IStorage<ILock>() {
-			@Override
-			public INBT writeNBT(final Capability<ILock> capability, final ILock instance, final Direction side) {
-				final CompoundNBT tagCompound = new CompoundNBT();
-
-				final LockCode lockCode = instance.getLockCode();
-				lockCode.addToTag(tagCompound);
-
-				return tagCompound;
-			}
-
-			@Override
-			public void readNBT(final Capability<ILock> capability, final ILock instance, final Direction side, final INBT nbt) {
-				if (!(instance instanceof Lock))
-					throw new RuntimeException("Can not deserialise to an instance that isn't the default implementation");
-
-				final Lock lock = (Lock) instance;
-				final CompoundNBT tagCompound = (CompoundNBT) nbt;
-
-				lock.setLockCode(LockCode.fromTag(tagCompound));
-			}
-		}, () -> new Lock(() -> new TranslationTextComponent("container.inventory")));
+		CapabilityManager.INSTANCE.register(ILock.class);
 	}
 
 	/**
@@ -73,17 +49,17 @@ public final class LockCapability {
 	 * @param side  The side
 	 * @return A lazy optional containing the ILock, or an empty lazy optional if there isn't one
 	 */
-	public static LazyOptional<ILock> getLock(final IWorldReader world, final BlockPos pos, @Nullable final Direction side) {
+	public static LazyOptional<ILock> getLock(final LevelReader world, final BlockPos pos, @Nullable final Direction side) {
 		final BlockState state = world.getBlockState(pos);
 
-		if (state.getBlock().hasTileEntity(state)) {
-			final TileEntity tileEntity = world.getBlockEntity(pos);
-			if (tileEntity != null) {
-				final LazyOptional<ILock> optionalLock = tileEntity.getCapability(LOCK_CAPABILITY, side);
+		if (state.getBlock() instanceof EntityBlock) {
+			final BlockEntity blockEntity = world.getBlockEntity(pos);
+			if (blockEntity != null) {
+				final LazyOptional<ILock> optionalLock = blockEntity.getCapability(LOCK_CAPABILITY, side);
 				if (optionalLock.isPresent()) {
 					return optionalLock;
-				} else if (tileEntity instanceof LockableTileEntity) {
-					return LazyOptional.of(() -> new LockableTileEntityWrapper((LockableTileEntity) tileEntity));
+				} else if (blockEntity instanceof BaseContainerBlockEntity) {
+					return LazyOptional.of(() -> new BaseContainerBlockEntityWrapper((BaseContainerBlockEntity) blockEntity));
 				}
 			}
 		}

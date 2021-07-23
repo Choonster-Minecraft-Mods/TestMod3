@@ -1,13 +1,13 @@
 package choonster.testmod3.util;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 
 /**
  * An enum representing the rotation of a block's face.
  *
  * @author Choonster
  */
-public enum EnumFaceRotation implements IStringSerializable {
+public enum EnumFaceRotation implements StringRepresentable {
 	UP("up"),
 	RIGHT("right"),
 	DOWN("down"),

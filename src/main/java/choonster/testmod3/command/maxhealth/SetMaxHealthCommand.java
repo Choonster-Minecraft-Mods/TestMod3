@@ -3,9 +3,9 @@ package choonster.testmod3.command.maxhealth;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.text.TestMod3Lang;
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.world.entity.LivingEntity;
 
 /**
  * Set the max health provided by an entity's {@link IMaxHealth}.
@@ -13,7 +13,7 @@ import net.minecraft.entity.LivingEntity;
  * @author Choonster
  */
 class SetMaxHealthCommand {
-	static ArgumentBuilder<CommandSource, ?> register() {
+	static ArgumentBuilder<CommandSourceStack, ?> register() {
 		return MaxHealthCommand.create(
 				Commands.literal("set"),
 				SetMaxHealthCommand::processEntity,

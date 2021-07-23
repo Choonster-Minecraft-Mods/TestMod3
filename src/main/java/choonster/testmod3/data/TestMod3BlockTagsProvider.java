@@ -1,7 +1,7 @@
 package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.data.BlockTagsProvider;
+import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 

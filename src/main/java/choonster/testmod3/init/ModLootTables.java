@@ -1,10 +1,10 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.LootTables;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -24,7 +24,7 @@ public class ModLootTables {
 	}
 
 	public static class RegistrationHandler {
-		private static final Method REGISTER = ObfuscationReflectionHelper.findMethod(LootTables.class, /* register */ "func_186375_a", ResourceLocation.class);
+		private static final Method REGISTER = ObfuscationReflectionHelper.findMethod(BuiltInLootTables.class, /* register */ "func_186375_a", ResourceLocation.class);
 
 		public static ResourceLocation register(final String name) {
 			final ResourceLocation id = new ResourceLocation(TestMod3.MODID, name);

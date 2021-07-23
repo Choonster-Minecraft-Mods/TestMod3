@@ -1,16 +1,16 @@
 package choonster.testmod3.fluid.group;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.block.Block;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 
 /**
@@ -24,12 +24,12 @@ import net.minecraftforge.registries.DeferredRegister;
  *
  * @author Choonster
  */
-public class StandardFluidGroup extends FluidGroup<FlowingFluid, FlowingFluid, FlowingFluidBlock, Item> {
-	private StandardFluidGroup(final RegistryObject<FlowingFluid> still, final RegistryObject<FlowingFluid> flowing, final RegistryObject<FlowingFluidBlock> block, final RegistryObject<Item> bucket) {
+public class StandardFluidGroup extends FluidGroup<FlowingFluid, FlowingFluid, LiquidBlock, Item> {
+	private StandardFluidGroup(final RegistryObject<FlowingFluid> still, final RegistryObject<FlowingFluid> flowing, final RegistryObject<LiquidBlock> block, final RegistryObject<Item> bucket) {
 		super(still, flowing, block, bucket);
 	}
 
-	public static class Builder extends FluidGroup.Builder<FlowingFluid, FlowingFluid, FlowingFluidBlock, Item> {
+	public static class Builder extends FluidGroup.Builder<FlowingFluid, FlowingFluid, LiquidBlock, Item> {
 		private Material blockMaterial;
 
 		public Builder(final String name, final DeferredRegister<Fluid> fluids, final DeferredRegister<Block> blocks, final DeferredRegister<Item> items) {
@@ -41,7 +41,7 @@ public class StandardFluidGroup extends FluidGroup<FlowingFluid, FlowingFluid, F
 			blockFactory = fluid -> {
 				Preconditions.checkState(blockMaterial != null, "Block Material not provided");
 
-				return new FlowingFluidBlock(fluid, FluidGroup.defaultBlockProperties(blockMaterial));
+				return new LiquidBlock(fluid, FluidGroup.defaultBlockProperties(blockMaterial));
 			};
 
 			bucketFactory = fluid -> new BucketItem(fluid, FluidGroup.defaultBucketProperties());
@@ -63,7 +63,7 @@ public class StandardFluidGroup extends FluidGroup<FlowingFluid, FlowingFluid, F
 		}
 
 		@Override
-		public Builder blockFactory(final IBlockFactory<FlowingFluid, FlowingFluidBlock> blockFactory) {
+		public Builder blockFactory(final IBlockFactory<FlowingFluid, LiquidBlock> blockFactory) {
 			return (Builder) super.blockFactory(blockFactory);
 		}
 

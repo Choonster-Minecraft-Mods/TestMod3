@@ -1,16 +1,16 @@
 package choonster.testmod3.util;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMaps;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.Util;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -18,7 +18,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
- * Utility methods for vectors and {@link AxisAlignedBB}s.
+ * Utility methods for vectors and {@link AABB}s.
  *
  * @author Choonster
  */
@@ -33,7 +33,7 @@ public class VectorUtils {
 
 		for (final Direction.Axis axis : Direction.Axis.values()) { // For each axis,
 			// Get the direction vector of the positive facing of the axis
-			final Vector3i directionVec = Direction.get(Direction.AxisDirection.POSITIVE, axis).getNormal();
+			final Vec3i directionVec = Direction.get(Direction.AxisDirection.POSITIVE, axis).getNormal();
 			axisVectors.put(axis, new Vector3f(directionVec.getX(), directionVec.getY(), directionVec.getZ())); // Add it to the map
 		}
 
@@ -68,13 +68,13 @@ public class VectorUtils {
 	}
 
 	/**
-	 * Rotate an {@link AxisAlignedBB} by the specified quaternion.
+	 * Rotate an {@link AABB} by the specified quaternion.
 	 *
 	 * @param axisAlignedBB      The AABB
 	 * @param rotationQuaternion The rotation quaternion to apply
 	 * @return The rotated AABB
 	 */
-	public static AxisAlignedBB rotateAABB(final AxisAlignedBB axisAlignedBB, final Quaternion rotationQuaternion) {
+	public static AABB rotateAABB(final AABB axisAlignedBB, final Quaternion rotationQuaternion) {
 		// Extract the minimum and maximum coordinates of the AABB into vectors
 		final Vector3f minCoords = new Vector3f((float) axisAlignedBB.minX, (float) axisAlignedBB.minY, (float) axisAlignedBB.minZ);
 		final Vector3f maxCoords = new Vector3f((float) axisAlignedBB.maxX, (float) axisAlignedBB.maxY, (float) axisAlignedBB.maxZ);
@@ -84,19 +84,19 @@ public class VectorUtils {
 		maxCoords.transform(rotationQuaternion);
 
 		// Return an AABB with the new coordinates
-		return new AxisAlignedBB(minCoords.x(), minCoords.y(), minCoords.z(), maxCoords.x(), maxCoords.y(), maxCoords.z());
+		return new AABB(minCoords.x(), minCoords.y(), minCoords.z(), maxCoords.x(), maxCoords.y(), maxCoords.z());
 	}
 
 	/**
-	 * Rounds and offsets an {@link AxisAlignedBB} for use in a {@link VoxelShape}.
+	 * Rounds and offsets an {@link AABB} for use in a {@link VoxelShape}.
 	 * <p>
 	 * The coordinates are rounded to 5 decimal places and offset such that all coordinates are in the range [0, 1].
 	 *
 	 * @param axisAlignedBB The AABB
 	 * @return The rounded and offset AABB
 	 */
-	public static AxisAlignedBB adjustAABBForVoxelShape(final AxisAlignedBB axisAlignedBB) {
-		final AxisAlignedBB roundedAABB = new AxisAlignedBB(
+	public static AABB adjustAABBForVoxelShape(final AABB axisAlignedBB) {
+		final AABB roundedAABB = new AABB(
 				epsilonRound(axisAlignedBB.minX), epsilonRound(axisAlignedBB.minY), epsilonRound(axisAlignedBB.minZ),
 				epsilonRound(axisAlignedBB.maxX), epsilonRound(axisAlignedBB.maxY), epsilonRound(axisAlignedBB.maxZ)
 		);

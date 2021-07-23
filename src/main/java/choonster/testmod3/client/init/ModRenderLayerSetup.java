@@ -2,9 +2,9 @@ package choonster.testmod3.client.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModBlocks;
-import net.minecraft.block.Block;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -20,17 +20,17 @@ public class ModRenderLayerSetup {
 	@SubscribeEvent
 	public static void setRenderLayers(final FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
-			RenderTypeLookup.setRenderLayer(ModBlocks.FLUID_TANK.get(), RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.FLUID_TANK_RESTRICTED.get(), RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.FLUID_PIPE.get(), RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.MIRROR_PLANE.get(), RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.OAK_SAPLING.get(), RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.SPRUCE_SAPLING.get(), RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.BIRCH_SAPLING.get(), RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.JUNGLE_SAPLING.get(), RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.ACACIA_SAPLING.get(), RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.DARK_OAK_SAPLING.get(), RenderType.cutout());
-			RenderTypeLookup.setRenderLayer(ModBlocks.WATER_GRASS.get(), RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(ModBlocks.FLUID_TANK.get(), RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(ModBlocks.FLUID_TANK_RESTRICTED.get(), RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(ModBlocks.FLUID_PIPE.get(), RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(ModBlocks.MIRROR_PLANE.get(), RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(ModBlocks.OAK_SAPLING.get(), RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(ModBlocks.SPRUCE_SAPLING.get(), RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(ModBlocks.BIRCH_SAPLING.get(), RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(ModBlocks.JUNGLE_SAPLING.get(), RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(ModBlocks.ACACIA_SAPLING.get(), RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(ModBlocks.DARK_OAK_SAPLING.get(), RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(ModBlocks.WATER_GRASS.get(), RenderType.cutout());
 		});
 	}
 }

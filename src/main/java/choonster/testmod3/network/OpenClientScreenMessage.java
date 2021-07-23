@@ -2,41 +2,41 @@ package choonster.testmod3.network;
 
 import choonster.testmod3.client.gui.ClientScreenManager;
 import io.netty.buffer.Unpooled;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 import java.util.function.Supplier;
 
 /**
  * Sent by the server to open a client-side {@link Screen}.
  * <p>
- * This is similar to {@link NetworkHooks#openGui} for GUIs without a {@link Container}.
+ * This is similar to {@link NetworkHooks#openGui} for GUIs without an {@link AbstractContainerMenu}.
  *
  * @author Choonster
  */
 public class OpenClientScreenMessage {
 	private final ResourceLocation id;
-	private final PacketBuffer additionalData;
+	private final FriendlyByteBuf additionalData;
 
-	public OpenClientScreenMessage(final ResourceLocation id, final PacketBuffer additionalData) {
+	public OpenClientScreenMessage(final ResourceLocation id, final FriendlyByteBuf additionalData) {
 		this.id = id;
 		this.additionalData = additionalData;
 	}
 
-	public static OpenClientScreenMessage decode(final PacketBuffer buffer) {
+	public static OpenClientScreenMessage decode(final FriendlyByteBuf buffer) {
 		final ResourceLocation id = buffer.readResourceLocation();
-		final PacketBuffer additionalData = new PacketBuffer(Unpooled.wrappedBuffer(buffer.readByteArray(32600)));
+		final FriendlyByteBuf additionalData = new FriendlyByteBuf(Unpooled.wrappedBuffer(buffer.readByteArray(32600)));
 
 		return new OpenClientScreenMessage(id, additionalData);
 	}
 
-	public static void encode(final OpenClientScreenMessage message, final PacketBuffer buffer) {
+	public static void encode(final OpenClientScreenMessage message, final FriendlyByteBuf buffer) {
 		buffer.writeResourceLocation(message.id);
 		buffer.writeByteArray(message.additionalData.readByteArray());
 	}
@@ -52,7 +52,7 @@ public class OpenClientScreenMessage {
 		return id;
 	}
 
-	public PacketBuffer getAdditionalData() {
+	public FriendlyByteBuf getAdditionalData() {
 		return additionalData;
 	}
 }

@@ -4,15 +4,15 @@ import choonster.testmod3.capability.lock.LockCapability;
 import choonster.testmod3.client.gui.LockScreen;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.NetworkUtil;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.LockCode;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -33,7 +33,7 @@ public class SetLockCodeMessage {
 		this.lockCode = lockCode;
 	}
 
-	public static SetLockCodeMessage decode(final PacketBuffer buffer) {
+	public static SetLockCodeMessage decode(final FriendlyByteBuf buffer) {
 		final BlockPos pos = BlockPos.of(buffer.readLong());
 		final Direction facing = NetworkUtil.readNullableFacing(buffer);
 		final String lockCode = buffer.readUtf(Short.MAX_VALUE);
@@ -41,7 +41,7 @@ public class SetLockCodeMessage {
 		return new SetLockCodeMessage(pos, facing, lockCode);
 	}
 
-	public static void encode(final SetLockCodeMessage message, final PacketBuffer buffer) {
+	public static void encode(final SetLockCodeMessage message, final FriendlyByteBuf buffer) {
 		buffer.writeLong(message.pos.asLong());
 		NetworkUtil.writeNullableFacing(message.facing, buffer);
 		buffer.writeUtf(message.lockCode);
@@ -50,15 +50,15 @@ public class SetLockCodeMessage {
 
 	public static void handle(final SetLockCodeMessage message, final Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() -> {
-			final ServerPlayerEntity player = ctx.get().getSender();
-			final World world = player.level;
+			final ServerPlayer player = ctx.get().getSender();
+			final Level world = player.level;
 
 			player.resetLastActionTime();
 
 			if (world.isAreaLoaded(message.pos, 1)) {
 				LockCapability.getLock(world, message.pos, message.facing).ifPresent((lock) -> {
 					if (lock.isLocked()) {
-						player.sendMessage(new TranslationTextComponent(TestMod3Lang.LOCK_ALREADY_LOCKED.getTranslationKey()), Util.NIL_UUID);
+						player.sendMessage(new TranslatableComponent(TestMod3Lang.LOCK_ALREADY_LOCKED.getTranslationKey()), Util.NIL_UUID);
 					}
 
 					lock.setLockCode(new LockCode(message.lockCode));

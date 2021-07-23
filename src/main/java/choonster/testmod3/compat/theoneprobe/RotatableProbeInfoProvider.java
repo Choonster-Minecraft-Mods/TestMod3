@@ -1,16 +1,13 @@
 package choonster.testmod3.compat.theoneprobe;
 
-import choonster.testmod3.text.TestMod3Lang;
-import net.minecraft.block.Block;
-import net.minecraft.state.Property;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.Direction;
 
 /**
  * Adds a line to the probe displaying the current value of a {@link Direction} property.
  *
  * @author Choonster
  */
+/*
 public class RotatableProbeInfoProvider<BLOCK extends Block> extends EnumPropertyProbeInfoProvider<BLOCK, Direction> {
 	public RotatableProbeInfoProvider(
 			final ResourceLocation id, final Class<BLOCK> blockClass, final Property<Direction> property
@@ -25,3 +22,4 @@ public class RotatableProbeInfoProvider<BLOCK extends Block> extends EnumPropert
 		super(id, blockClass, property, tooltipTranslationKey, TestMod3Lang.PREFIX_FACING.getTranslationKey());
 	}
 }
+*/

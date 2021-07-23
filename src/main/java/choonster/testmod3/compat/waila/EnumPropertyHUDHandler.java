@@ -1,22 +1,12 @@
 package choonster.testmod3.compat.waila;
 
-import mcp.mobius.waila.api.IComponentProvider;
-import mcp.mobius.waila.api.IDataAccessor;
-import mcp.mobius.waila.api.IPluginConfig;
-import net.minecraft.block.BlockState;
-import net.minecraft.state.Property;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import java.util.List;
-
 /**
  * Adds a line to the Waila tooltip body displaying the current value of an enum property.
  *
  * @author Choonster
  */
-public class EnumPropertyHUDHandler<T extends Enum<T> & IStringSerializable> implements IComponentProvider {
+/*
+public class EnumPropertyHUDHandler<T extends Enum<T> & StringRepresentable> implements IComponentProvider {
 	protected final Property<T> property;
 	protected final String tooltipTranslationKey;
 	protected final String valueTranslationKeyPrefix;
@@ -28,12 +18,13 @@ public class EnumPropertyHUDHandler<T extends Enum<T> & IStringSerializable> imp
 	}
 
 	@Override
-	public void appendBody(final List<ITextComponent> tooltip, final IDataAccessor accessor, final IPluginConfig config) {
+	public void appendBody(final List<Component> tooltip, final IDataAccessor accessor, final IPluginConfig config) {
 		final BlockState state = accessor.getBlockState();
 
 		final T value = state.getValue(property);
 		final String valueTranslationKey = valueTranslationKeyPrefix + "." + value.getSerializedName();
 
-		tooltip.add(new TranslationTextComponent(tooltipTranslationKey, new TranslationTextComponent(valueTranslationKey)));
+		tooltip.add(new TranslatableComponent(tooltipTranslationKey, new TranslatableComponent(valueTranslationKey)));
 	}
 }
+*/

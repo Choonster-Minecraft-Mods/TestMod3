@@ -1,7 +1,7 @@
 package choonster.testmod3.client.block;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.client.KeyMapping;
 
 /**
  * Client-only methods used by various blocks.
@@ -10,6 +10,6 @@ import net.minecraft.client.settings.KeyBinding;
  */
 public class ClientOnlyBlockMethods {
 	public static void pressUseItemKeyBinding() {
-		KeyBinding.click(Minecraft.getInstance().options.keyUse.getKey());
+		KeyMapping.click(Minecraft.getInstance().options.keyUse.getKey());
 	}
 }

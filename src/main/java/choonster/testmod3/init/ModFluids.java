@@ -5,15 +5,15 @@ import choonster.testmod3.fluid.PortalDisplacementFluid;
 import choonster.testmod3.fluid.StaticFluid;
 import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.fluid.group.StandardFluidGroup;
-import choonster.testmod3.item.block.FluidTankItem;
-import choonster.testmod3.tileentity.FluidTankTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
+import choonster.testmod3.world.item.block.FluidTankItem;
+import choonster.testmod3.world.level.block.entity.FluidTankBlockEntity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -33,7 +33,7 @@ public class ModFluids {
 
 	private static boolean isInitialised = false;
 
-	public static final FluidGroup<FlowingFluid, FlowingFluid, FlowingFluidBlock, Item> STATIC = new StandardFluidGroup.Builder("static", FLUIDS, BLOCKS, ITEMS)
+	public static final FluidGroup<FlowingFluid, FlowingFluid, LiquidBlock, Item> STATIC = new StandardFluidGroup.Builder("static", FLUIDS, BLOCKS, ITEMS)
 			.stillFactory(StaticFluid.Source::new)
 			.flowingFactory(StaticFluid.Flowing::new)
 			.attributes(
@@ -46,7 +46,7 @@ public class ModFluids {
 			.build();
 
 	// TODO: Implement gases
-	public static final FluidGroup<FlowingFluid, FlowingFluid, FlowingFluidBlock, Item> STATIC_GAS = new StandardFluidGroup.Builder("static_gas", FLUIDS, BLOCKS, ITEMS)
+	public static final FluidGroup<FlowingFluid, FlowingFluid, LiquidBlock, Item> STATIC_GAS = new StandardFluidGroup.Builder("static_gas", FLUIDS, BLOCKS, ITEMS)
 			.stillFactory(StaticFluid.Source::new)
 			.flowingFactory(StaticFluid.Flowing::new)
 			.attributes(
@@ -59,7 +59,7 @@ public class ModFluids {
 			.blockMaterial(ModMaterials.STATIC_GAS)
 			.build();
 
-	public static final FluidGroup<FlowingFluid, FlowingFluid, FlowingFluidBlock, Item> NORMAL = new StandardFluidGroup.Builder("normal", FLUIDS, BLOCKS, ITEMS)
+	public static final FluidGroup<FlowingFluid, FlowingFluid, LiquidBlock, Item> NORMAL = new StandardFluidGroup.Builder("normal", FLUIDS, BLOCKS, ITEMS)
 			.attributes(
 					FluidAttributes.builder(new ResourceLocation(TestMod3.MODID, "block/fluid_normal_still"), new ResourceLocation(TestMod3.MODID, "block/fluid_normal_flow"))
 							.luminosity(10)
@@ -69,7 +69,7 @@ public class ModFluids {
 			.blockMaterial(ModMaterials.NORMAL)
 			.build();
 
-	public static final FluidGroup<FlowingFluid, FlowingFluid, FlowingFluidBlock, Item> NORMAL_GAS = new StandardFluidGroup.Builder("normal_gas", FLUIDS, BLOCKS, ITEMS)
+	public static final FluidGroup<FlowingFluid, FlowingFluid, LiquidBlock, Item> NORMAL_GAS = new StandardFluidGroup.Builder("normal_gas", FLUIDS, BLOCKS, ITEMS)
 			.attributes(
 					FluidAttributes.builder(new ResourceLocation(TestMod3.MODID, "block/fluid_normal_gas_still"), new ResourceLocation(TestMod3.MODID, "block/fluid_normal_gas_flow"))
 							.luminosity(10)
@@ -80,7 +80,7 @@ public class ModFluids {
 			.blockMaterial(ModMaterials.NORMAL_GAS)
 			.build();
 
-	public static final FluidGroup<FlowingFluid, FlowingFluid, FlowingFluidBlock, Item> PORTAL_DISPLACEMENT = new StandardFluidGroup.Builder("portal_displacement", FLUIDS, BLOCKS, ITEMS)
+	public static final FluidGroup<FlowingFluid, FlowingFluid, LiquidBlock, Item> PORTAL_DISPLACEMENT = new StandardFluidGroup.Builder("portal_displacement", FLUIDS, BLOCKS, ITEMS)
 			.stillFactory(PortalDisplacementFluid.Source::new)
 			.flowingFactory(PortalDisplacementFluid.Flowing::new)
 			.attributes(
@@ -137,7 +137,7 @@ public class ModFluids {
 
 		private static void registerTank(final Supplier<Fluid> fluid) {
 			final Fluid fluid1 = fluid.get();
-			final FluidStack fluidStack = new FluidStack(fluid1, FluidTankTileEntity.CAPACITY);
+			final FluidStack fluidStack = new FluidStack(fluid1, FluidTankBlockEntity.CAPACITY);
 
 			final Item item = ModBlocks.FLUID_TANK.get().asItem();
 			assert item instanceof FluidTankItem;

@@ -3,50 +3,39 @@ package choonster.testmod3.capability.chunkenergy;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.network.UpdateChunkEnergyValueMessage;
-import net.minecraft.nbt.IntNBT;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 /**
  * Default implementation of {@link IChunkEnergy}.
  *
  * @author Choonster
  */
-public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSerializable<IntNBT> {
+public class ChunkEnergy extends EnergyStorage implements IChunkEnergy {
 	/**
-	 * The {@link World} containing this instance's chunk.
+	 * The {@link Level} containing this instance's chunk.
 	 */
-	private final World world;
+	private final Level level;
 
 	/**
 	 * The {@link ChunkPos} of this instance's chunk.
 	 */
 	private final ChunkPos chunkPos;
 
-	public ChunkEnergy(final int capacity, final World world, final ChunkPos chunkPos) {
+	public ChunkEnergy(final int capacity, final Level level, final ChunkPos chunkPos) {
 		super(capacity);
-		this.world = world;
+		this.level = level;
 		this.chunkPos = chunkPos;
 		energy = capacity;
 	}
 
 	@Override
-	public IntNBT serializeNBT() {
-		return IntNBT.valueOf(getEnergyStored());
-	}
-
-	@Override
-	public void deserializeNBT(final IntNBT nbt) {
-		energy = nbt.getAsInt();
-	}
-
-	@Override
-	public World getWorld() {
-		return world;
+	public Level getLevel() {
+		return level;
 	}
 
 	@Override
@@ -90,13 +79,13 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy, INBTSeri
 	 * Called when the energy value changes.
 	 */
 	protected void onEnergyChanged() {
-		final World world = getWorld();
+		final Level level = getLevel();
 		final ChunkPos chunkPos = getChunkPos();
 
-		if (world.isClientSide) return;
+		if (level.isClientSide) return;
 
-		if (world.getChunkSource().isEntityTickingChunk(chunkPos)) {  // Don't load the chunk when reading from NBT
-			final Chunk chunk = world.getChunk(chunkPos.x, chunkPos.z);
+		if (((ServerLevel) level).isPositionEntityTicking(chunkPos)) {  // Don't load the chunk when reading from NBT
+			final LevelChunk chunk = level.getChunk(chunkPos.x, chunkPos.z);
 			chunk.markUnsaved();
 			TestMod3.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> chunk), new UpdateChunkEnergyValueMessage(this));
 		}

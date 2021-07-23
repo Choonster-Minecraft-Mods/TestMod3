@@ -3,7 +3,7 @@ package choonster.testmod3.client.event;
 import choonster.testmod3.TestMod3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
-import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Connection;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -31,7 +31,7 @@ public class ClientPlayerNetworkEventHandler {
 	@SubscribeEvent
 	public static void clientConnectedToServer(final ClientPlayerNetworkEvent.LoggedInEvent event) {
 		final ServerData serverData = Minecraft.getInstance().getCurrentServer();
-		final NetworkManager networkManager = event.getNetworkManager();
+		final Connection networkManager = event.getNetworkManager();
 
 		LOGGER.info("Server Connected! Local? {} - Address: {}", networkManager != null ? String.valueOf(networkManager.isMemoryConnection()) : "<No NetworkManager>", serverData != null ? serverData.ip : "<No ServerData>");
 	}

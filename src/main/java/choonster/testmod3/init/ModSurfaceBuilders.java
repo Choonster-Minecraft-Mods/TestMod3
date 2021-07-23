@@ -1,11 +1,11 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.world.gen.surfacebuilders.LoggingSurfaceBuilder;
-import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
-import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
+import choonster.testmod3.world.level.levelgen.surfacebuilders.LoggingSurfaceBuilder;
+import net.minecraft.world.level.levelgen.surfacebuilders.SurfaceBuilder;
+import net.minecraft.world.level.levelgen.surfacebuilders.SurfaceBuilderBaseConfiguration;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -19,9 +19,9 @@ public class ModSurfaceBuilders {
 
 	private static boolean isInitialised;
 
-	public static final RegistryObject<SurfaceBuilder<SurfaceBuilderConfig>> LOGGING_DEFAULT = SURFACE_BUILDERS.register(
+	public static final RegistryObject<SurfaceBuilder<SurfaceBuilderBaseConfiguration>> LOGGING_DEFAULT = SURFACE_BUILDERS.register(
 			"logging_default",
-			() -> new LoggingSurfaceBuilder<>(() -> SurfaceBuilder.DEFAULT, SurfaceBuilderConfig.CODEC)
+			() -> new LoggingSurfaceBuilder<>(() -> SurfaceBuilder.DEFAULT, SurfaceBuilderBaseConfiguration.CODEC)
 	);
 
 	/**

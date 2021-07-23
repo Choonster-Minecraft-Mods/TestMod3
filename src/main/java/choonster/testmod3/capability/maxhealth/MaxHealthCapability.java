@@ -4,13 +4,11 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.SerializableCapabilityProvider;
 import choonster.testmod3.util.LogUtil;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.FloatNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -51,17 +49,7 @@ public final class MaxHealthCapability {
 	public static final Marker LOG_MARKER = MarkerManager.getMarker("MaxHealth").addParents(LogUtil.MOD_MARKER);
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IMaxHealth.class, new Capability.IStorage<IMaxHealth>() {
-			@Override
-			public INBT writeNBT(final Capability<IMaxHealth> capability, final IMaxHealth instance, final Direction side) {
-				return FloatNBT.valueOf(instance.getBonusMaxHealth());
-			}
-
-			@Override
-			public void readNBT(final Capability<IMaxHealth> capability, final IMaxHealth instance, final Direction side, final INBT nbt) {
-				instance.setBonusMaxHealth(((FloatNBT) nbt).getAsFloat());
-			}
-		}, () -> new MaxHealth(null));
+		CapabilityManager.INSTANCE.register(IMaxHealth.class);
 	}
 
 	/**

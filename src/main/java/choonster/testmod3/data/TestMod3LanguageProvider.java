@@ -1,26 +1,26 @@
 package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.block.PlaneBlock;
 import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.init.*;
-import choonster.testmod3.item.ModBucketItem;
-import choonster.testmod3.item.ModSpawnEggItem;
+import choonster.testmod3.world.item.ModBucketItem;
+import choonster.testmod3.world.item.ModSpawnEggItem;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.EnumFaceRotation;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.client.resources.I18n;
+import choonster.testmod3.world.level.block.PlaneBlock;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.entity.EntityType;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.data.LanguageProvider;
 import org.apache.commons.lang3.StringUtils;
 
@@ -363,7 +363,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 
 	private <
 			STILL extends Fluid, FLOWING extends Fluid,
-			BLOCK extends FlowingFluidBlock, BUCKET extends Item,
+			BLOCK extends LiquidBlock, BUCKET extends Item,
 			GROUP extends FluidGroup<STILL, FLOWING, BLOCK, BUCKET>
 			>
 	void addFluidGroup(final GROUP group, final String name) {
@@ -389,7 +389,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		add(lang.getTranslationKey(), value);
 	}
 
-	private void add(final TestMod3Lang prefix, final IStringSerializable enumValue, final String name) {
+	private void add(final TestMod3Lang prefix, final StringRepresentable enumValue, final String name) {
 		add(prefix.getTranslationKey() + "." + enumValue.getSerializedName(), name);
 	}
 

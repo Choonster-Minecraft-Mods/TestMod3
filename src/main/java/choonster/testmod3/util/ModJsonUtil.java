@@ -2,11 +2,11 @@ package choonster.testmod3.util;
 
 import com.google.gson.*;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -28,7 +28,7 @@ public class ModJsonUtil {
 	 * @throws JsonSyntaxException If the fluid registry name is missing or invalid
 	 */
 	public static Fluid getFluid(final JsonObject object, final String memberName) {
-		final ResourceLocation registryName = new ResourceLocation(JSONUtils.getAsString(object, memberName));
+		final ResourceLocation registryName = new ResourceLocation(GsonHelper.getAsString(object, memberName));
 		final Fluid fluid = ForgeRegistries.FLUIDS.getValue(registryName);
 
 		if (fluid == null) {
@@ -49,17 +49,17 @@ public class ModJsonUtil {
 	 * @throws JsonSyntaxException If the NBT is malformed
 	 */
 	@Nullable
-	public static CompoundNBT getCompoundTag(final JsonObject json, final String memberName) {
-		final CompoundNBT nbt;
+	public static CompoundTag getCompoundTag(final JsonObject json, final String memberName) {
+		final CompoundTag nbt;
 
 		if (json.has(memberName)) {
 			final JsonElement element = json.get(memberName);
 
 			try {
 				if (element.isJsonObject()) {
-					nbt = JsonToNBT.parseTag(GSON.toJson(element));
+					nbt = TagParser.parseTag(GSON.toJson(element));
 				} else {
-					nbt = JsonToNBT.parseTag(JSONUtils.convertToString(element, memberName));
+					nbt = TagParser.parseTag(GsonHelper.convertToString(element, memberName));
 				}
 			} catch (final CommandSyntaxException e) {
 				throw new JsonSyntaxException("Malformed NBT tag", e);
@@ -71,7 +71,7 @@ public class ModJsonUtil {
 		return nbt;
 	}
 
-	public static void setCompoundTag(final JsonObject json, final String memberName, final CompoundNBT nbt) {
+	public static void setCompoundTag(final JsonObject json, final String memberName, final CompoundTag nbt) {
 		final JsonObject object = new JsonParser().parse(nbt.toString()).getAsJsonObject();
 
 		json.add(memberName, object);
