@@ -15,7 +15,7 @@ import java.lang.reflect.Field;
  * @author Choonster
  */
 public class LockableTileEntityWrapper implements ILock {
-	private static final Field CODE = ObfuscationReflectionHelper.findField(LockableTileEntity.class, /* code */ "lockKey");
+	private static final Field LOCK_KEY = ObfuscationReflectionHelper.findField(LockableTileEntity.class, /* lockKey */ "field_174901_a");
 
 	private final LockableTileEntity lockableTileEntity;
 
@@ -40,7 +40,7 @@ public class LockableTileEntityWrapper implements ILock {
 	@Override
 	public void setLockCode(final LockCode code) {
 		try {
-			CODE.set(lockableTileEntity, code);
+			LOCK_KEY.set(lockableTileEntity, code);
 		} catch (final IllegalAccessException e) {
 			throw new RuntimeException(String.format("Couldn't set lock code of LockableTileEntity at %s", lockableTileEntity.getBlockPos()), e);
 		}
@@ -54,7 +54,7 @@ public class LockableTileEntityWrapper implements ILock {
 	@Override
 	public LockCode getLockCode() {
 		try {
-			return (LockCode) CODE.get(lockableTileEntity);
+			return (LockCode) LOCK_KEY.get(lockableTileEntity);
 		} catch (final IllegalAccessException e) {
 			throw new RuntimeException(String.format("Couldn't get lock code of LockableTileEntity at %s", lockableTileEntity.getBlockPos()), e);
 		}
