@@ -21,12 +21,13 @@ public class UpdateMenuPigSpawnerFiniteMessage extends UpdateMenuCapabilityMessa
 	public UpdateMenuPigSpawnerFiniteMessage(
 			@Nullable final Direction facing,
 			final int containerID,
+			final int stateID,
 			final int slotNumber,
 			final IPigSpawner pigSpawner
 	) {
 		super(
 				PigSpawnerCapability.PIG_SPAWNER_CAPABILITY,
-				facing, containerID, slotNumber, pigSpawner,
+				facing, containerID, stateID, slotNumber, pigSpawner,
 				PigSpawnerFunctions::convertFinitePigSpawnerToNumPigs
 		);
 	}
@@ -34,12 +35,13 @@ public class UpdateMenuPigSpawnerFiniteMessage extends UpdateMenuCapabilityMessa
 	private UpdateMenuPigSpawnerFiniteMessage(
 			@Nullable final Direction facing,
 			final int containerID,
+			final int stateID,
 			final int slotNumber,
 			final int numPigs
 	) {
 		super(
 				PigSpawnerCapability.PIG_SPAWNER_CAPABILITY,
-				facing, containerID, slotNumber, numPigs
+				facing, containerID, stateID, slotNumber, numPigs
 		);
 	}
 

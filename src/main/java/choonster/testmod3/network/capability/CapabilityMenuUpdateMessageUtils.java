@@ -18,6 +18,7 @@ public class CapabilityMenuUpdateMessageUtils {
 	 * Applies the data instance to the capability handler instance in the specified {@link AbstractContainerMenu} slot.
 	 *
 	 * @param menu                  The menu
+	 * @param stateID               The state ID from the menu
 	 * @param slotNumber            The slot number to apply the data to
 	 * @param capability            The capability to apply the data for
 	 * @param facing                The facing to apply the data for
@@ -26,8 +27,9 @@ public class CapabilityMenuUpdateMessageUtils {
 	 * @param <HANDLER>             The capability handler type
 	 * @param <DATA>                The data type written to and read from the buffer
 	 */
-	static <HANDLER, DATA> void applyCapabilityDataToContainerSlot(
+	static <HANDLER, DATA> void applyCapabilityDataToMenuSlot(
 			final AbstractContainerMenu menu,
+			final int stateID,
 			final int slotNumber,
 			final Capability<HANDLER> capability,
 			@Nullable final Direction facing,
@@ -43,7 +45,7 @@ public class CapabilityMenuUpdateMessageUtils {
 				capabilityDataApplier.apply(newHandler, data);
 
 				if (!originalHandler.equals(newHandler)) {
-					menu.setItem(slotNumber, newStack);
+					menu.setItem(slotNumber, stateID, newStack);
 				}
 			});
 		});

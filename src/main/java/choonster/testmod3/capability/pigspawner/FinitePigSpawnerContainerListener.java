@@ -20,7 +20,7 @@ public class FinitePigSpawnerContainerListener extends CapabilityContainerListen
 	}
 
 	@Override
-	protected UpdateMenuCapabilityMessage<IPigSpawner, ?> createSingleUpdateMessage(final int containerID, final int slotNumber, final IPigSpawner pigSpawner) {
-		return new UpdateMenuPigSpawnerFiniteMessage(PigSpawnerCapability.DEFAULT_FACING, containerID, slotNumber, pigSpawner);
+	protected UpdateMenuCapabilityMessage<IPigSpawner, ?> createUpdateMessage(final int containerID, final int stateID, final int slotNumber, final IPigSpawner pigSpawner) {
+		return new UpdateMenuPigSpawnerFiniteMessage(PigSpawnerCapability.DEFAULT_FACING, containerID, stateID, slotNumber, pigSpawner);
 	}
 }

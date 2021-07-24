@@ -19,7 +19,7 @@ public class LastUseTimeContainerListener extends CapabilityContainerListener<IL
 	}
 
 	@Override
-	protected UpdateMenuLastUseTimeMessage createSingleUpdateMessage(final int containerID, final int slotNumber, final ILastUseTime lastUseTime) {
-		return new UpdateMenuLastUseTimeMessage(LastUseTimeCapability.DEFAULT_FACING, containerID, slotNumber, lastUseTime);
+	protected UpdateMenuLastUseTimeMessage createUpdateMessage(final int containerID, final int stateID, final int slotNumber, final ILastUseTime lastUseTime) {
+		return new UpdateMenuLastUseTimeMessage(LastUseTimeCapability.DEFAULT_FACING, containerID, stateID, slotNumber, lastUseTime);
 	}
 }

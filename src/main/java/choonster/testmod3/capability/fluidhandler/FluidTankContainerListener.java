@@ -27,7 +27,7 @@ public class FluidTankContainerListener extends CapabilityContainerListener<IFlu
 	}
 
 	@Override
-	protected UpdateMenuFluidTankMessage createSingleUpdateMessage(final int containerID, final int slotNumber, final IFluidHandlerItem fluidHandlerItem) {
-		return new UpdateMenuFluidTankMessage(null, containerID, slotNumber, fluidHandlerItem);
+	protected UpdateMenuFluidTankMessage createUpdateMessage(final int containerID, final int stateID, final int slotNumber, final IFluidHandlerItem fluidHandlerItem) {
+		return new UpdateMenuFluidTankMessage(null, containerID, stateID, slotNumber, fluidHandlerItem);
 	}
 }

@@ -20,12 +20,13 @@ public class UpdateMenuLastUseTimeMessage extends UpdateMenuCapabilityMessage<IL
 	public UpdateMenuLastUseTimeMessage(
 			@Nullable final Direction facing,
 			final int containerID,
+			final int stateID,
 			final int slotNumber,
 			final ILastUseTime lastUseTime
 	) {
 		super(
 				LastUseTimeCapability.LAST_USE_TIME_CAPABILITY,
-				facing, containerID, slotNumber, lastUseTime,
+				facing, containerID, stateID, slotNumber, lastUseTime,
 				LastUseTimeFunctions::convertLastUseTimeToLastUseTimeValue
 		);
 	}
@@ -33,12 +34,13 @@ public class UpdateMenuLastUseTimeMessage extends UpdateMenuCapabilityMessage<IL
 	private UpdateMenuLastUseTimeMessage(
 			@Nullable final Direction facing,
 			final int windowID,
+			final int stateID,
 			final int slotNumber,
 			final long lastUseTime
 	) {
 		super(
 				LastUseTimeCapability.LAST_USE_TIME_CAPABILITY,
-				facing, windowID, slotNumber, lastUseTime
+				facing, windowID, stateID, slotNumber, lastUseTime
 		);
 	}
 

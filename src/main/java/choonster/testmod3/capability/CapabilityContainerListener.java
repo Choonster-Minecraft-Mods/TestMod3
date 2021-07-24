@@ -46,7 +46,7 @@ public abstract class CapabilityContainerListener<HANDLER> implements ContainerL
 		if (!shouldSyncItem(stack)) return;
 
 		stack.getCapability(capability, facing).ifPresent(handler -> {
-			final UpdateMenuCapabilityMessage<HANDLER, ?> message = createSingleUpdateMessage(menu.containerId, slotNumber, handler);
+			final UpdateMenuCapabilityMessage<HANDLER, ?> message = createUpdateMessage(menu.containerId, menu.incrementStateId(), slotNumber, handler);
 			if (message.hasData()) { // Don't send the message if there's nothing to update
 				TestMod3.network.send(PacketDistributor.PLAYER.with(() -> player), message);
 			}
@@ -69,12 +69,13 @@ public abstract class CapabilityContainerListener<HANDLER> implements ContainerL
 	}
 
 	/**
-	 * Create an instance of the single update message.
+	 * Create an instance of the update message.
 	 *
 	 * @param containerID The ID of the menu
+	 * @param stateID     The state ID from the menu
 	 * @param slotNumber  The slot's index in the menu
 	 * @param handler     The capability handler instance
-	 * @return The single update message
+	 * @return The update message
 	 */
-	protected abstract UpdateMenuCapabilityMessage<HANDLER, ?> createSingleUpdateMessage(final int containerID, final int slotNumber, final HANDLER handler);
+	protected abstract UpdateMenuCapabilityMessage<HANDLER, ?> createUpdateMessage(final int containerID, final int stateID, final int slotNumber, final HANDLER handler);
 }

@@ -18,7 +18,7 @@ public class HiddenBlockRevealerContainerListener extends CapabilityContainerLis
 	}
 
 	@Override
-	protected UpdateMenuHiddenBlockRevealerMessage createSingleUpdateMessage(final int containerID, final int slotNumber, final IHiddenBlockRevealer hiddenBlockRevealer) {
-		return new UpdateMenuHiddenBlockRevealerMessage(HiddenBlockRevealerCapability.DEFAULT_FACING, containerID, slotNumber, hiddenBlockRevealer);
+	protected UpdateMenuHiddenBlockRevealerMessage createUpdateMessage(final int containerID, final int stateID, final int slotNumber, final IHiddenBlockRevealer hiddenBlockRevealer) {
+		return new UpdateMenuHiddenBlockRevealerMessage(HiddenBlockRevealerCapability.DEFAULT_FACING, containerID, stateID, slotNumber, hiddenBlockRevealer);
 	}
 }

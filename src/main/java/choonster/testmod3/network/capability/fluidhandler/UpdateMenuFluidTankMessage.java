@@ -22,12 +22,13 @@ public class UpdateMenuFluidTankMessage extends UpdateMenuCapabilityMessage<IFlu
 	public UpdateMenuFluidTankMessage(
 			@Nullable final Direction facing,
 			final int containerID,
+			final int stateID,
 			final int slotNumber,
 			final IFluidHandlerItem fluidHandler
 	) {
 		super(
 				CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
-				facing, containerID, slotNumber, fluidHandler,
+				facing, containerID, stateID, slotNumber, fluidHandler,
 				FluidHandlerFunctions::convertFluidHandlerToFluidTankSnapshot
 		);
 	}
@@ -35,12 +36,13 @@ public class UpdateMenuFluidTankMessage extends UpdateMenuCapabilityMessage<IFlu
 	private UpdateMenuFluidTankMessage(
 			@Nullable final Direction facing,
 			final int containerID,
+			final int stateID,
 			final int slotNumber,
 			final FluidTankSnapshot capabilityData
 	) {
 		super(
 				CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
-				facing, containerID, slotNumber, capabilityData
+				facing, containerID, stateID, slotNumber, capabilityData
 		);
 	}
 

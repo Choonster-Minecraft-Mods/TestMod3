@@ -36,6 +36,11 @@ public abstract class UpdateMenuCapabilityMessage<HANDLER, DATA> {
 	final int containerID;
 
 	/**
+	 * The state ID from the {@link AbstractContainerMenu}.
+	 */
+	final int stateID;
+
+	/**
 	 * The slot's index in the {@link AbstractContainerMenu}.
 	 */
 	final int slotNumber;
@@ -49,6 +54,7 @@ public abstract class UpdateMenuCapabilityMessage<HANDLER, DATA> {
 			final Capability<HANDLER> capability,
 			@Nullable final Direction facing,
 			final int containerID,
+			final int stateID,
 			final int slotNumber,
 			final HANDLER handler,
 			final CapabilityMenuUpdateMessageUtils.CapabilityDataConverter<HANDLER, DATA> capabilityDataConverter
@@ -56,6 +62,7 @@ public abstract class UpdateMenuCapabilityMessage<HANDLER, DATA> {
 		this.capability = capability;
 		this.facing = facing;
 		this.containerID = containerID;
+		this.stateID = stateID;
 		this.slotNumber = slotNumber;
 		capabilityData = capabilityDataConverter.convert(handler);
 	}
@@ -64,12 +71,14 @@ public abstract class UpdateMenuCapabilityMessage<HANDLER, DATA> {
 			final Capability<HANDLER> capability,
 			@Nullable final Direction facing,
 			final int containerID,
+			final int stateID,
 			final int slotNumber,
 			@Nullable final DATA capabilityData
 	) {
 		this.capability = capability;
 		this.facing = facing;
 		this.containerID = containerID;
+		this.stateID = stateID;
 		this.slotNumber = slotNumber;
 		this.capabilityData = capabilityData;
 	}
@@ -113,6 +122,7 @@ public abstract class UpdateMenuCapabilityMessage<HANDLER, DATA> {
 		}
 
 		final int windowID = buffer.readInt();
+		final int stateID = buffer.readInt();
 		final int slotNumber = buffer.readInt();
 
 		final boolean hasData = buffer.readBoolean();
@@ -123,7 +133,7 @@ public abstract class UpdateMenuCapabilityMessage<HANDLER, DATA> {
 			capabilityData = null;
 		}
 
-		return messageFactory.createMessage(facing, windowID, slotNumber, capabilityData);
+		return messageFactory.createMessage(facing, windowID, stateID, slotNumber, capabilityData);
 	}
 
 	/**
@@ -154,6 +164,7 @@ public abstract class UpdateMenuCapabilityMessage<HANDLER, DATA> {
 		}
 
 		buffer.writeInt(message.containerID);
+		buffer.writeInt(message.stateID);
 		buffer.writeInt(message.slotNumber);
 
 		final boolean hasData = message.hasData();
@@ -205,9 +216,10 @@ public abstract class UpdateMenuCapabilityMessage<HANDLER, DATA> {
 				return;
 			}
 
-			CapabilityMenuUpdateMessageUtils.applyCapabilityDataToContainerSlot(
+			CapabilityMenuUpdateMessageUtils.applyCapabilityDataToMenuSlot(
 					container,
 					message.slotNumber,
+					message.stateID,
 					message.capability,
 					message.facing,
 					message.capabilityData,
@@ -230,6 +242,7 @@ public abstract class UpdateMenuCapabilityMessage<HANDLER, DATA> {
 		MESSAGE createMessage(
 				@Nullable Direction facing,
 				int windowID,
+				int stateID,
 				int slotNumber,
 				@Nullable DATA capabilityData
 		);

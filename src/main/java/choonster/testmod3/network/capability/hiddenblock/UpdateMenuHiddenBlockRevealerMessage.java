@@ -20,12 +20,13 @@ public class UpdateMenuHiddenBlockRevealerMessage extends UpdateMenuCapabilityMe
 	public UpdateMenuHiddenBlockRevealerMessage(
 			@Nullable final Direction facing,
 			final int containerID,
+			final int stateID,
 			final int slotNumber,
 			final IHiddenBlockRevealer hiddenBlockRevealer
 	) {
 		super(
 				HiddenBlockRevealerCapability.HIDDEN_BLOCK_REVEALER_CAPABILITY,
-				facing, containerID, slotNumber, hiddenBlockRevealer,
+				facing, containerID, stateID, slotNumber, hiddenBlockRevealer,
 				HiddenBlockRevealerFunctions::convertHiddenBlockRevealerToRevealHiddenBlocksFlag
 		);
 	}
@@ -33,12 +34,13 @@ public class UpdateMenuHiddenBlockRevealerMessage extends UpdateMenuCapabilityMe
 	private UpdateMenuHiddenBlockRevealerMessage(
 			@Nullable final Direction facing,
 			final int containerID,
+			final int stateID,
 			final int slotNumber,
 			final boolean revealHiddenBlocks
 	) {
 		super(
 				HiddenBlockRevealerCapability.HIDDEN_BLOCK_REVEALER_CAPABILITY,
-				facing, containerID, slotNumber, revealHiddenBlocks
+				facing, containerID, stateID, slotNumber, revealHiddenBlocks
 		);
 	}
 
