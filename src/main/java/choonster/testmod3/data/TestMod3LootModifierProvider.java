@@ -6,7 +6,6 @@ import choonster.testmod3.init.ModLootTables;
 import choonster.testmod3.world.level.storage.loot.modifiers.BlockEntityNBTLootModifier;
 import choonster.testmod3.world.level.storage.loot.modifiers.ItemLootModifier;
 import choonster.testmod3.world.level.storage.loot.modifiers.LootTableLootModifier;
-import choonster.testmod3.world.level.storage.loot.predicates.IsChestLoot;
 import choonster.testmod3.world.level.storage.loot.predicates.MatchBlockTag;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -16,6 +15,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
@@ -24,6 +24,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCon
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
+import net.minecraftforge.common.loot.LootTableIdCondition;
 
 /**
  * Generates this mod's global loot modifier JSON files.
@@ -47,11 +48,7 @@ public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
 		add("loot_table_test", ModLootModifierSerializers.LOOT_TABLE.get(), new LootTableLootModifier(
 				new LootItemCondition[]{
 						LootItemRandomChanceCondition.randomChance(0.5f).build(),
-						/*
-						 TODO: Replace with loot table ID condition for minecraft:chests/simple_dungeon once
-						  https://github.com/MinecraftForge/MinecraftForge/pull/7428 is merged
-						 */
-						IsChestLoot.builder().build(),
+						LootTableIdCondition.builder(BuiltInLootTables.SIMPLE_DUNGEON).build(),
 				},
 				ModLootTables.LOOT_TABLE_TEST
 		));
