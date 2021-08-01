@@ -16,7 +16,7 @@ import java.util.List;
 public class InfinitePigSpawner extends BasePigSpawner {
 
 	@Override
-	public boolean canSpawnPig(final Level world, final double x, final double y, final double z) {
+	public boolean canSpawnPig(final Level level, final double x, final double y, final double z) {
 		return true;
 	}
 

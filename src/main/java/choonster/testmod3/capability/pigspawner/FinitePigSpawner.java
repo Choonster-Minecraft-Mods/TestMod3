@@ -55,7 +55,7 @@ public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinit
 	}
 
 	@Override
-	public boolean canSpawnPig(final Level world, final double x, final double y, final double z) {
+	public boolean canSpawnPig(final Level level, final double x, final double y, final double z) {
 		return getNumPigs() > 0;
 	}
 

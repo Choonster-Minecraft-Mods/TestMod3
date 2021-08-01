@@ -15,24 +15,24 @@ public interface IPigSpawner {
 	/**
 	 * Can a pig be spawned at the specified position?
 	 *
-	 * @param world The world
+	 * @param level The level
 	 * @param x     The x coordinate
 	 * @param y     The y coordinate
 	 * @param z     The z coordinate
 	 * @return Can a pig be spawned?
 	 */
-	boolean canSpawnPig(final Level world, final double x, final double y, final double z);
+	boolean canSpawnPig(final Level level, final double x, final double y, final double z);
 
 	/**
 	 * Spawn a pig at the specified position.
 	 *
-	 * @param world The world
+	 * @param level The level
 	 * @param x     The x coordinate
 	 * @param y     The y coordinate
 	 * @param z     The z coordinate
 	 * @return Was the pig successfully spawned?
 	 */
-	boolean spawnPig(final Level world, final double x, final double y, final double z);
+	boolean spawnPig(final Level level, final double x, final double y, final double z);
 
 	/**
 	 * Get the tooltip lines for this spawner. Can be called on the client or server.
