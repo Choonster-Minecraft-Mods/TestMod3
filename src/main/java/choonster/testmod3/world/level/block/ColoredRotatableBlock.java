@@ -59,7 +59,7 @@ public class ColoredRotatableBlock extends Block {
 		return defaultBlockState().setValue(FACING, context.getNearestLookingDirection());
 	}
 
-	private boolean recolorBlock(final BlockState currentState, final LevelAccessor world, final BlockPos pos, final Direction facing, final DyeColor color) {
+	private boolean recolorBlock(final BlockState currentState, final LevelAccessor world, final BlockPos pos, final DyeColor color) {
 		final BlockState newState = copyState(currentState, getVariantGroup().getBlock(color).get().defaultBlockState());
 
 		world.setBlock(pos, newState, Constants.BlockFlags.DEFAULT);
@@ -90,7 +90,7 @@ public class ColoredRotatableBlock extends Block {
 		if (!heldItem.isEmpty()) { // If the player is holding dye, change the colour
 			final DyeColor dyeColour = DyeColor.getColor(heldItem);
 			if (dyeColour != null) {
-				final boolean success = recolorBlock(state, world, pos, rayTraceResult.getDirection(), dyeColour);
+				final boolean success = recolorBlock(state, world, pos, dyeColour);
 				if (success) {
 					heldItem.shrink(1);
 					return InteractionResult.SUCCESS;

@@ -32,13 +32,13 @@ public class ContinuousBowItem extends ModBowItem {
 	@Override
 	public void releaseUsing(final ItemStack stack, final Level level, final LivingEntity livingEntity, final int timeLeft) {
 		final int charge = (stack.getUseDuration() - timeLeft) * CHARGE_MULTIPLIER;
-		fireArrow(stack, level, livingEntity, livingEntity.getUsedItemHand(), charge);
+		fireArrow(stack, level, livingEntity, charge);
 	}
 
 	@Override
 	public ItemStack finishUsingItem(final ItemStack stack, final Level level, final LivingEntity livingEntity) {
 		final int charge = stack.getUseDuration() * CHARGE_MULTIPLIER;
-		fireArrow(stack, level, livingEntity, livingEntity.getUsedItemHand(), charge);
+		fireArrow(stack, level, livingEntity, charge);
 
 		return stack;
 	}

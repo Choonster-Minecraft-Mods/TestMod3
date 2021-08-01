@@ -70,7 +70,7 @@ public class ModBowItem extends BowItem {
 	 * @param shooter The player firing the bow
 	 * @param charge  The charge of the arrow
 	 */
-	void fireArrow(final ItemStack bow, final Level level, final LivingEntity shooter, final InteractionHand hand, int charge) {
+	void fireArrow(final ItemStack bow, final Level level, final LivingEntity shooter, int charge) {
 		if (!(shooter instanceof final Player player)) return;
 
 		final boolean ammoRequired = isAmmoRequired(bow, player);
@@ -140,7 +140,7 @@ public class ModBowItem extends BowItem {
 	@Override
 	public void releaseUsing(final ItemStack stack, final Level level, final LivingEntity livingEntity, final int timeLeft) {
 		final int charge = stack.getUseDuration() - timeLeft;
-		fireArrow(stack, level, livingEntity, livingEntity.getUsedItemHand(), charge);
+		fireArrow(stack, level, livingEntity, charge);
 	}
 
 	@Override
