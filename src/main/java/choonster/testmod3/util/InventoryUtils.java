@@ -197,16 +197,11 @@ public class InventoryUtils {
 	 * @return A lazy optional containing the inventory, if any
 	 */
 	public static LazyOptional<IItemHandler> getInventoryForType(final Entity entity, final EntityInventoryType inventoryType) {
-		switch (inventoryType) {
-			case MAIN:
-				return getMainInventory(entity);
-			case HAND:
-				return getHandInventory(entity);
-			case ARMOUR:
-				return getArmourInventory(entity);
-			default:
-				throw new IllegalArgumentException("Unknown inventory type: " + inventoryType);
-		}
+		return switch (inventoryType) {
+			case MAIN -> getMainInventory(entity);
+			case HAND -> getHandInventory(entity);
+			case ARMOUR -> getArmourInventory(entity);
+		};
 	}
 
 	/**

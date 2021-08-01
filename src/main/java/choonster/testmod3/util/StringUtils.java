@@ -67,16 +67,12 @@ public class StringUtils {
 	 */
 	private static char[] superscriptForDigit(final int digit) {
 		// Superscript 1, 2 and 3 require a special case since they're outside the U+207x range
-		switch (digit) {
-			case 1:
-				return SUPERSCRIPT_1;
-			case 2:
-				return SUPERSCRIPT_2;
-			case 3:
-				return SUPERSCRIPT_3;
-			default:
-				return Character.toChars(0x2070 + digit);
-		}
+		return switch (digit) {
+			case 1 -> SUPERSCRIPT_1;
+			case 2 -> SUPERSCRIPT_2;
+			case 3 -> SUPERSCRIPT_3;
+			default -> Character.toChars(0x2070 + digit);
+		};
 	}
 
 	/**

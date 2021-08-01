@@ -71,9 +71,8 @@ public class ModBowItem extends BowItem {
 	 * @param charge  The charge of the arrow
 	 */
 	void fireArrow(final ItemStack bow, final Level level, final LivingEntity shooter, final InteractionHand hand, int charge) {
-		if (!(shooter instanceof Player)) return;
+		if (!(shooter instanceof final Player player)) return;
 
-		final Player player = (Player) shooter;
 		final boolean ammoRequired = isAmmoRequired(bow, player);
 		ItemStack ammo = player.getProjectile(bow);
 

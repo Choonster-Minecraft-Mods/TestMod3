@@ -124,15 +124,12 @@ public class PlaneBlock extends Block {
 		BlockState state = level.getBlockState(pos);
 
 		switch (axisToRotate) {
-			case X:
-			case Z:
-				state = state.cycle(VERTICAL_ROTATION);
-				break;
-			case Y:
+			case X, Z -> state = state.cycle(VERTICAL_ROTATION);
+			case Y -> {
 				final Direction originalRotation = state.getValue(HORIZONTAL_ROTATION);
 				final Direction newRotation = axis.getAxisDirection() == Direction.AxisDirection.POSITIVE ? originalRotation.getClockWise() : originalRotation.getCounterClockWise();
 				state = state.setValue(HORIZONTAL_ROTATION, newRotation);
-				break;
+			}
 		}
 
 		return level.setBlockAndUpdate(pos, state) ? InteractionResult.SUCCESS : InteractionResult.FAIL;
@@ -181,14 +178,11 @@ public class PlaneBlock extends Block {
 		 * @return The value
 		 */
 		public static VerticalRotation fromDirection(final Direction direction) {
-			switch (direction) {
-				case DOWN:
-					return DOWN;
-				case UP:
-					return UP;
-				default:
-					return SIDE;
-			}
+			return switch (direction) {
+				case DOWN -> DOWN;
+				case UP -> UP;
+				default -> SIDE;
+			};
 		}
 
 		/**

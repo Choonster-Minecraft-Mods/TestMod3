@@ -57,8 +57,7 @@ public class CapabilityContainerListenerManager {
 		 */
 		@SubscribeEvent
 		public static void playerLoggedIn(final PlayerEvent.PlayerLoggedInEvent event) {
-			if (event.getPlayer() instanceof ServerPlayer) {
-				final ServerPlayer player = (ServerPlayer) event.getPlayer();
+			if (event.getPlayer() instanceof final ServerPlayer player) {
 				addListeners(player, player.inventoryMenu);
 			}
 		}
@@ -70,8 +69,7 @@ public class CapabilityContainerListenerManager {
 		 */
 		@SubscribeEvent
 		public static void playerClone(final PlayerEvent.Clone event) {
-			if (event.getPlayer() instanceof ServerPlayer) {
-				final ServerPlayer player = (ServerPlayer) event.getPlayer();
+			if (event.getPlayer() instanceof final ServerPlayer player) {
 				addListeners(player, player.inventoryMenu);
 			}
 		}
@@ -83,8 +81,7 @@ public class CapabilityContainerListenerManager {
 		 */
 		@SubscribeEvent
 		public static void containerOpen(final PlayerContainerEvent.Open event) {
-			if (event.getPlayer() instanceof ServerPlayer) {
-				final ServerPlayer player = (ServerPlayer) event.getPlayer();
+			if (event.getPlayer() instanceof final ServerPlayer player) {
 				addListeners(player, event.getContainer());
 			}
 		}

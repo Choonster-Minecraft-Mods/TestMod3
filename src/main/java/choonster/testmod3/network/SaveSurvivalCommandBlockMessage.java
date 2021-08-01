@@ -83,12 +83,8 @@ public class SaveSurvivalCommandBlockMessage {
 		int minecartEntityID = -1;
 
 		switch (type) {
-			case BLOCK:
-				blockPos = buffer.readBlockPos();
-				break;
-			case MINECART:
-				minecartEntityID = buffer.readInt();
-				break;
+			case BLOCK -> blockPos = buffer.readBlockPos();
+			case MINECART -> minecartEntityID = buffer.readInt();
 		}
 
 		return new SaveSurvivalCommandBlockMessage(
@@ -107,12 +103,8 @@ public class SaveSurvivalCommandBlockMessage {
 		buffer.writeEnum(message.type);
 
 		switch (message.type) {
-			case BLOCK:
-				buffer.writeBlockPos(message.blockPos);
-				break;
-			case MINECART:
-				buffer.writeInt(message.minecartEntityID);
-				break;
+			case BLOCK -> buffer.writeBlockPos(message.blockPos);
+			case MINECART -> buffer.writeInt(message.minecartEntityID);
 		}
 
 		buffer.writeUtf(message.command);
@@ -137,19 +129,11 @@ public class SaveSurvivalCommandBlockMessage {
 					SurvivalCommandBlock survivalCommandBlock = null;
 
 					if (message.type == SurvivalCommandBlock.Type.BLOCK) {
-						final RegistryObject<? extends Block> newBlock;
-						switch (message.commandBlockMode) {
-							case SEQUENCE:
-								newBlock = ModBlocks.CHAIN_SURVIVAL_COMMAND_BLOCK;
-								break;
-							case AUTO:
-								newBlock = ModBlocks.REPEATING_SURVIVAL_COMMAND_BLOCK;
-								break;
-							case REDSTONE:
-							default:
-								newBlock = ModBlocks.SURVIVAL_COMMAND_BLOCK;
-								break;
-						}
+						final RegistryObject<? extends Block> newBlock = switch (message.commandBlockMode) {
+							case SEQUENCE -> ModBlocks.CHAIN_SURVIVAL_COMMAND_BLOCK;
+							case AUTO -> ModBlocks.REPEATING_SURVIVAL_COMMAND_BLOCK;
+							default -> ModBlocks.SURVIVAL_COMMAND_BLOCK;
+						};
 
 						final BlockEntity existingBlockEntity = world.getBlockEntity(message.blockPos);
 
@@ -158,9 +142,10 @@ public class SaveSurvivalCommandBlockMessage {
 						world.setBlockAndUpdate(message.blockPos, newState);
 
 						final BlockEntity newBlockEntity = world.getBlockEntity(message.blockPos);
-						if (existingBlockEntity instanceof SurvivalCommandBlockEntity && newBlockEntity instanceof SurvivalCommandBlockEntity) {
-							final SurvivalCommandBlockEntity newSurvivalCommandBlockEntity = (SurvivalCommandBlockEntity) newBlockEntity;
-
+						if (
+								existingBlockEntity instanceof SurvivalCommandBlockEntity &&
+										newBlockEntity instanceof final SurvivalCommandBlockEntity newSurvivalCommandBlockEntity
+						) {
 							newSurvivalCommandBlockEntity.deserializeNBT(existingBlockEntity.serializeNBT());
 							survivalCommandBlock = newSurvivalCommandBlockEntity.getCommandBlock();
 							newSurvivalCommandBlockEntity.setAutomatic(message.automatic);

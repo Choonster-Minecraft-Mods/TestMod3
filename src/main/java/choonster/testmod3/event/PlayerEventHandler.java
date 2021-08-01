@@ -3,15 +3,15 @@ package choonster.testmod3.event;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.Constants;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.Util;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -67,8 +67,7 @@ public class PlayerEventHandler {
 	 */
 	@SubscribeEvent
 	public static void livingDeath(final LivingDeathEvent event) {
-		if (event.getEntity() instanceof Player && !event.getEntity().getCommandSenderWorld().isClientSide) {
-			final Player player = (Player) event.getEntity();
+		if (event.getEntity() instanceof final Player player && !event.getEntity().getCommandSenderWorld().isClientSide) {
 			final BlockPos pos = player.blockPosition();
 			player.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_DEATH_COORDINATES.getTranslationKey(), pos.getX(), pos.getY(), pos.getZ(), player.level.dimension()), Util.NIL_UUID);
 		}

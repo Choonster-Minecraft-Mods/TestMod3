@@ -25,8 +25,7 @@ public class PigSpawnerRefillerBlock extends Block implements IPigSpawnerInterac
 
 	@Override
 	public boolean interact(final IPigSpawner pigSpawner, final Level world, final BlockPos pos, @Nullable final CommandSource iCommandSender) {
-		if (pigSpawner instanceof IPigSpawnerFinite) {
-			final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) pigSpawner;
+		if (pigSpawner instanceof final IPigSpawnerFinite pigSpawnerFinite) {
 			pigSpawnerFinite.setNumPigs(pigSpawnerFinite.getMaxNumPigs());
 
 			if (iCommandSender != null) {

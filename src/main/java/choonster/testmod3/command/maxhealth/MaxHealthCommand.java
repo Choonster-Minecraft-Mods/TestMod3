@@ -11,9 +11,9 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.network.chat.TranslatableComponent;
 
 /**
  * Base class for commands that affect an entity's {@link IMaxHealth}.
@@ -60,14 +60,12 @@ public class MaxHealthCommand {
 	 *                       This will be provided with the entity's display name and the amount as format arguments.
 	 */
 	private static int execute(final CommandContext<CommandSourceStack> context, final Entity entity, final float amount, final IEntityProcessor processor, final String successMessage) throws CommandSyntaxException {
-		if (!(entity instanceof LivingEntity)) {
+		if (!(entity instanceof final LivingEntity livingEntity)) {
 			throw INVALID_ENTITY_EXCEPTION.create();
 		}
 
-		final LivingEntity entityLivingBase = (LivingEntity) entity;
-
-		MaxHealthCapability.getMaxHealth(entityLivingBase)
-				.ifPresent(maxHealth -> processor.process(entityLivingBase, maxHealth, amount));
+		MaxHealthCapability.getMaxHealth(livingEntity)
+				.ifPresent(maxHealth -> processor.process(livingEntity, maxHealth, amount));
 
 		context.getSource()
 				.sendSuccess(new TranslatableComponent(successMessage, entity.getDisplayName(), MaxHealthCapability.formatMaxHealth(amount)), true);

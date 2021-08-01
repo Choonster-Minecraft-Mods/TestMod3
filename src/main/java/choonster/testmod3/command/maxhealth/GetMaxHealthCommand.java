@@ -10,9 +10,9 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.network.chat.TranslatableComponent;
 
 /**
  * Get the current max health of an entity and the bonus max health provided by its {@link IMaxHealth}.
@@ -35,11 +35,9 @@ public class GetMaxHealthCommand {
 	}
 
 	private static int execute(final CommandContext<CommandSourceStack> context, final Entity entity) throws CommandSyntaxException {
-		if (!(entity instanceof LivingEntity)) {
+		if (!(entity instanceof final LivingEntity livingEntity)) {
 			throw INVALID_ENTITY_EXCEPTION.create();
 		}
-
-		final LivingEntity livingEntity = (LivingEntity) entity;
 
 		MaxHealthCapability.getMaxHealth(livingEntity).ifPresent(maxHealth ->
 				context.getSource().sendSuccess(

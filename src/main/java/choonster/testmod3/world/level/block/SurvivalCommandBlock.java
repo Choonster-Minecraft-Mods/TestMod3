@@ -68,9 +68,7 @@ public class SurvivalCommandBlock extends CommandBlock {
 	@Override
 	public void setPlacedBy(final Level level, final BlockPos pos, final BlockState state, final LivingEntity placer, final ItemStack stack) {
 		final BlockEntity blockEntity = level.getBlockEntity(pos);
-		if (blockEntity instanceof SurvivalCommandBlockEntity && !level.isClientSide) {
-			final SurvivalCommandBlockEntity survivalCommandBlockEntity = (SurvivalCommandBlockEntity) blockEntity;
-
+		if (blockEntity instanceof final SurvivalCommandBlockEntity survivalCommandBlockEntity && !level.isClientSide) {
 			final CompoundTag tagCompound = stack.getTag();
 			if (tagCompound == null || !tagCompound.contains("BlockEntityTag", Constants.NBT.TAG_COMPOUND)) {
 				survivalCommandBlockEntity.setAutomatic(getCommandBlockMode() == CommandBlockEntity.Mode.SEQUENCE);
@@ -92,11 +90,9 @@ public class SurvivalCommandBlock extends CommandBlock {
 	 */
 	@Override
 	public void tick(final BlockState state, final ServerLevel world, final BlockPos pos, final Random random) {
-
 		final BlockEntity blockEntity = world.getBlockEntity(pos);
 
-		if (blockEntity instanceof CommandBlockEntity) {
-			final CommandBlockEntity commandBlockEntity = (CommandBlockEntity) blockEntity;
+		if (blockEntity instanceof final CommandBlockEntity commandBlockEntity) {
 			final BaseCommandBlock commandBlock = commandBlockEntity.getCommandBlock();
 			final boolean hasCommand = !StringUtil.isNullOrEmpty(commandBlock.getCommand());
 			final CommandBlockEntity.Mode mode = commandBlockEntity.getMode();
@@ -169,11 +165,9 @@ public class SurvivalCommandBlock extends CommandBlock {
 			final Block block = neighbourState.getBlock();
 			final BlockEntity neighbourBlockEntity = world.getBlockEntity(neighbourPos);
 
-			if (!(neighbourBlockEntity instanceof CommandBlockEntity)) {
+			if (!(neighbourBlockEntity instanceof final CommandBlockEntity neighbourCommandBlockEntity)) {
 				break;
 			}
-
-			final CommandBlockEntity neighbourCommandBlockEntity = (CommandBlockEntity) neighbourBlockEntity;
 
 			if (neighbourCommandBlockEntity.getMode() != CommandBlockEntity.Mode.SEQUENCE) {
 				break;

@@ -101,19 +101,16 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 											.texture("#" + direction.getSerializedName())
 											.cullface(direction)
 							)
-							.allFaces((direction, faceBuilder) -> {
-								switch (faceRotation) {
-									case LEFT:
-										faceBuilder.rotation(ModelBuilder.FaceRotation.COUNTERCLOCKWISE_90);
-										break;
-									case RIGHT:
-										faceBuilder.rotation(ModelBuilder.FaceRotation.CLOCKWISE_90);
-										break;
-									case DOWN:
-										faceBuilder.rotation(ModelBuilder.FaceRotation.UPSIDE_DOWN);
-										break;
-								}
-							})
+							.allFaces((direction, faceBuilder) ->
+									faceBuilder.rotation(
+											switch (faceRotation) {
+												case LEFT -> ModelBuilder.FaceRotation.COUNTERCLOCKWISE_90;
+												case RIGHT -> ModelBuilder.FaceRotation.CLOCKWISE_90;
+												case DOWN -> ModelBuilder.FaceRotation.UPSIDE_DOWN;
+												default -> throw new IllegalStateException("Invalid rotation: " + faceRotation);
+											}
+									)
+							)
 							.end();
 
 					final ModelFile orientableWithBottom = models().getBuilder("orientable_with_bottom_rotated_" + faceRotation.getSerializedName())
