@@ -61,7 +61,7 @@ public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
 			final RecipeUtil.ShapedPrimer primer = RecipeUtil.parseShaped(json);
 			final ItemStack result = CraftingHelper.getItemStack(GsonHelper.getAsJsonObject(json, "result"), true);
 
-			return new ShapedArmourUpgradeRecipe(recipeID, group, primer.getRecipeWidth(), primer.getRecipeHeight(), primer.getIngredients(), result);
+			return new ShapedArmourUpgradeRecipe(recipeID, group, primer.recipeWidth(), primer.recipeHeight(), primer.ingredients(), result);
 		}
 
 		@Override

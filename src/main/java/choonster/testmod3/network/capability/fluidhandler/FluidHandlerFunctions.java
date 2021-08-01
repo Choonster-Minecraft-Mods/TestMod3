@@ -24,15 +24,15 @@ class FluidHandlerFunctions {
 	}
 
 	static void encodeFluidTankSnapshot(final FluidTankSnapshot fluidTankSnapshot, final FriendlyByteBuf buffer) {
-		final FluidStack contents = fluidTankSnapshot.getContents();
+		final FluidStack contents = fluidTankSnapshot.contents();
 		contents.writeToPacket(buffer);
 
-		buffer.writeInt(fluidTankSnapshot.getCapacity());
+		buffer.writeInt(fluidTankSnapshot.capacity());
 	}
 
 	static void applyFluidTankSnapshotToFluidTank(final IFluidHandlerItem fluidHandlerItem, final FluidTankSnapshot fluidTankSnapshot) {
 		if (fluidHandlerItem instanceof FluidTank) {
-			((FluidTank) fluidHandlerItem).setFluid(fluidTankSnapshot.getContents());
+			((FluidTank) fluidHandlerItem).setFluid(fluidTankSnapshot.contents());
 		}
 	}
 }

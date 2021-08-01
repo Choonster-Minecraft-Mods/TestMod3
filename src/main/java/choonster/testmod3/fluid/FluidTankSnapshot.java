@@ -9,33 +9,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
  *
  * @author Choonster
  */
-public class FluidTankSnapshot {
-	private final FluidStack contents;
-	private final int capacity;
-
-	public FluidTankSnapshot(final FluidStack contents, final int capacity) {
-		this.contents = contents;
-		this.capacity = capacity;
-	}
-
-	/**
-	 * Gets the contents of the tank.
-	 *
-	 * @return The contents
-	 */
-	public FluidStack getContents() {
-		return contents;
-	}
-
-	/**
-	 * Gets the capacity of the tank.
-	 *
-	 * @return The capacity
-	 */
-	public int getCapacity() {
-		return capacity;
-	}
-
+public record FluidTankSnapshot(FluidStack contents, int capacity) {
 	/**
 	 * Creates an array of {@link FluidTankSnapshot}s from an {@link IFluidHandler}.
 	 *

@@ -12,7 +12,10 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 import java.util.Arrays;
 import java.util.List;
 
-public class BannerFeatureConfig implements FeatureConfiguration {
+public record BannerFeatureConfig(
+		DyeColor color,
+		List<Pair<BannerPattern, DyeColor>> patterns
+) implements FeatureConfiguration {
 	public static final Codec<BannerFeatureConfig> CODEC = RecordCodecBuilder.create((builder) ->
 			builder.group(
 
@@ -21,9 +24,9 @@ public class BannerFeatureConfig implements FeatureConfiguration {
 							.forGetter(config -> config.color),
 
 					Codec.mapPair(
-							VanillaCodecs.BANNER_PATTERN.fieldOf("pattern"),
-							VanillaCodecs.DYE_COLOR.fieldOf("color")
-					)
+									VanillaCodecs.BANNER_PATTERN.fieldOf("pattern"),
+									VanillaCodecs.DYE_COLOR.fieldOf("color")
+							)
 							.codec()
 							.listOf()
 							.fieldOf("patterns")
@@ -32,20 +35,9 @@ public class BannerFeatureConfig implements FeatureConfiguration {
 			).apply(builder, BannerFeatureConfig::new)
 	);
 
-	private final DyeColor color;
-	private final List<Pair<BannerPattern, DyeColor>> patterns;
-
-	private BannerFeatureConfig(final DyeColor color, final List<Pair<BannerPattern, DyeColor>> patterns) {
+	public BannerFeatureConfig(final DyeColor color, final List<Pair<BannerPattern, DyeColor>> patterns) {
 		this.color = color;
 		this.patterns = ImmutableList.copyOf(patterns);
-	}
-
-	public DyeColor getColor() {
-		return color;
-	}
-
-	public List<Pair<BannerPattern, DyeColor>> getPatterns() {
-		return patterns;
 	}
 
 	@SafeVarargs

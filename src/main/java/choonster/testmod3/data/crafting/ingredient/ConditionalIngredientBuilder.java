@@ -98,16 +98,8 @@ public class ConditionalIngredientBuilder {
 	/**
 	 * Represents a condition type and its accompanying data.
 	 */
-	private static class Condition {
-		private final ResourceLocation type;
-		private final JsonObject data;
-
-		Condition(final ResourceLocation type, final JsonObject data) {
-			this.type = type;
-			this.data = data;
-		}
-
-		JsonElement serialize() {
+	private record Condition(ResourceLocation type, JsonObject data) {
+		public JsonElement serialize() {
 			data.addProperty("type", type.toString());
 			return data;
 		}

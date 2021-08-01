@@ -73,11 +73,11 @@ public class BannerFeature extends Feature<BannerFeatureConfig> {
 		final BlockPos origin = context.origin();
 		final BannerFeatureConfig config = context.config();
 
-		level.setBlock(origin, BannerBlock.byColor(config.getColor()).defaultBlockState(), Constants.BlockFlags.DEFAULT);
+		level.setBlock(origin, BannerBlock.byColor(config.color()).defaultBlockState(), Constants.BlockFlags.DEFAULT);
 
 		final BlockEntity blockEntity = level.getBlockEntity(origin);
 		if (blockEntity instanceof BannerBlockEntity) {
-			loadFromItemStack((BannerBlockEntity) blockEntity, createPatternList(config.getPatterns()), DyeColor.PINK);
+			loadFromItemStack((BannerBlockEntity) blockEntity, createPatternList(config.patterns()), DyeColor.PINK);
 		}
 
 		return true;

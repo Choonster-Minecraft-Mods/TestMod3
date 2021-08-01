@@ -59,7 +59,7 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 					.ifPresent(fluidHandler ->
 							builder.withDynamicDrop(FLUID_TANK_CONTENTS, (context, stackConsumer) ->
 									Stream.of(FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler))
-											.map(fluidTankSnapshot -> ModItems.FLUID_STACK_ITEM.get().withFluidStack(fluidTankSnapshot.getContents()))
+											.map(fluidTankSnapshot -> ModItems.FLUID_STACK_ITEM.get().withFluidStack(fluidTankSnapshot.contents()))
 											.forEach(stackConsumer)
 							)
 					);
@@ -98,10 +98,10 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 		boolean hasFluid = false;
 
 		for (final FluidTankSnapshot snapshot : fluidTankSnapshots) {
-			final FluidStack contents = snapshot.getContents();
+			final FluidStack contents = snapshot.contents();
 			if (!contents.isEmpty()) {
 				hasFluid = true;
-				data.add(new TranslatableComponent(TestMod3Lang.BLOCK_DESC_FLUID_TANK_FLUID.getTranslationKey(), contents.getDisplayName(), contents.getAmount(), snapshot.getCapacity()));
+				data.add(new TranslatableComponent(TestMod3Lang.BLOCK_DESC_FLUID_TANK_FLUID.getTranslationKey(), contents.getDisplayName(), contents.getAmount(), snapshot.capacity()));
 			}
 		}
 

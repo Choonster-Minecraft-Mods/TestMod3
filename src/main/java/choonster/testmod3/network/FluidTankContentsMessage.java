@@ -42,10 +42,10 @@ public class FluidTankContentsMessage {
 		buffer.writeInt(message.fluidTankSnapshots.length);
 
 		for (final FluidTankSnapshot snapshot : message.fluidTankSnapshots) {
-			final FluidStack contents = snapshot.getContents();
+			final FluidStack contents = snapshot.contents();
 			contents.writeToPacket(buffer);
 
-			buffer.writeInt(snapshot.getCapacity());
+			buffer.writeInt(snapshot.capacity());
 		}
 	}
 
