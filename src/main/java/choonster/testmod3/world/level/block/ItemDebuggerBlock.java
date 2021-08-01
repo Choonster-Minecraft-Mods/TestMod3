@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nullable;
 
 /**
- * A Block that prints the current state of the player's held {@link ItemStack}s on the client and server when left or right clicked.
+ * A Block that prints the current state of the player's held {@link ItemStack}s on the client and server when left- or right-clicked.
  *
  * @author Choonster
  */

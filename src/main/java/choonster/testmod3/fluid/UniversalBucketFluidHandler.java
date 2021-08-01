@@ -35,7 +35,7 @@ public class UniversalBucketFluidHandler extends ItemFluidTank {
 			return amountToBeFilled;
 		}
 
-		// Otherwise call the super method to execute the fill
+		// Otherwise, call the super method to execute the fill
 		return super.fill(resource, FluidAction.EXECUTE);
 	}
 
@@ -54,7 +54,7 @@ public class UniversalBucketFluidHandler extends ItemFluidTank {
 			return fluidToBeDrained;
 		}
 
-		// Otherwise call the super method to execute the drain
+		// Otherwise, call the super method to execute the drain
 		return super.drain(maxDrain, FluidAction.EXECUTE);
 	}
 }

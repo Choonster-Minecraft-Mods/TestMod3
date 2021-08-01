@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.function.Supplier;
 
 /**
- * An item that plays a sound when left clicked by a player.
+ * An item that plays a sound when left-clicked by a player.
  * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,38242.0.html
@@ -19,7 +19,7 @@ import java.util.function.Supplier;
  */
 public class SoundEffectItem extends Item {
 	/**
-	 * The {@link SoundEvent} to play when left clicked.
+	 * The {@link SoundEvent} to play when left-clicked.
 	 */
 	private final Supplier<SoundEvent> soundEvent;
 
@@ -29,7 +29,7 @@ public class SoundEffectItem extends Item {
 	}
 
 	/**
-	 * Called when a entity tries to play the 'swing' animation.
+	 * Called when an entity tries to play the 'swing' animation.
 	 *
 	 * @param entity The entity swinging the item.
 	 * @param stack  The Item stack

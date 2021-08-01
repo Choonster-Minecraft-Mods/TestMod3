@@ -110,7 +110,7 @@ public class BasePipeBlock extends PipeBlock {
 	/**
 	 * Creates a list containing a VoxelShape for every possible combination of facing properties.
 	 * <p>
-	 * Adapted from {@link SixWayBlock#makeShapes}.
+	 * Adapted from {@link PipeBlock}#makeShapes.
 	 *
 	 * @param coreSize       Half the core cube's width, height and length
 	 * @param extensionWidth Half the extension's face width and height

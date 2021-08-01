@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 
 /**
- * An item that inserts or extracts energy from the {@link IChunkEnergy} of the player's current chunk when left or right clicked.
+ * An item that inserts or extracts energy from the {@link IChunkEnergy} of the player's current chunk when left or right-clicked.
  *
  * @author Choonster
  */

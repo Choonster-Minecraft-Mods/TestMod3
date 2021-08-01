@@ -49,7 +49,7 @@ public class PlayerAvoidingCreeper extends Creeper {
 			throw new RuntimeException("Unable to access target goals", e);
 		}
 
-		// Remove the NearestAttackableTargetGoal added by CreeperEntity so it can be replaced
+		// Remove the NearestAttackableTargetGoal added by CreeperEntity, so it can be replaced
 		targetSelectorGoals
 				.stream()
 				.map(WrappedGoal::getGoal)

@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
- * An reusable implementation of {@link Nameable}.
+ * A reusable implementation of {@link Nameable}.
  *
  * @author Choonster
  */

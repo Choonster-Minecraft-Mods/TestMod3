@@ -145,7 +145,7 @@ public final class PigSpawnerCapability {
 		}
 
 		/**
-		 * Spawn a pig when a player right clicks a block with an item that has the {@link IPigSpawner} capability.
+		 * Spawn a pig when a player right-clicks a block with an item that has the {@link IPigSpawner} capability.
 		 * <p>
 		 * If the block implements {@link IPigSpawnerInteractable}, call {@link IPigSpawnerInteractable#interact} on it.
 		 *
@@ -170,7 +170,7 @@ public final class PigSpawnerCapability {
 		}
 
 		/**
-		 * Spawn a pig when a player right clicks an entity with an item that has the {@link IPigSpawner} capability.
+		 * Spawn a pig when a player right-clicks an entity with an item that has the {@link IPigSpawner} capability.
 		 * <p>
 		 * If the entity implements {@link IPigSpawnerInteractable}, call {@link IPigSpawnerInteractable#interact} on it.
 		 *

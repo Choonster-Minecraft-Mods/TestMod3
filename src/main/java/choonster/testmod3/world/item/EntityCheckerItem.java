@@ -28,11 +28,11 @@ import java.util.List;
 
 /**
  * An item that lists the entities within the specified horizontal square radius of either the block's northwest corner
- * or its edges (depending on the current mode) when right clicked on a block.
+ * or its edges (depending on the current mode) when right-clicked on a block.
  * <p>
- * Right click air to increase the radius, sneak-right click in air to decrease the radius.
+ * Right-click air to increase the radius, sneak-right click in air to decrease the radius.
  * <p>
- * Left click an entity to toggle corner mode on or off.
+ * Left-click an entity to toggle corner mode on or off.
  * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/topic/57877-1112-unsolved-accessing-an-entitys-gui-container/
@@ -129,7 +129,7 @@ public class EntityCheckerItem extends Item {
 			final int radius = getRadius(heldItem);
 			final AABB boundingBox;
 
-			// Create the AABB based on whether or not corner mode is enabled.
+			// Create the AABB based on whether corner mode is enabled.
 			// The AABB will always have the block's y coordinate minus 1 as the minimum coordinate and the block's y coordinate plus 2 as the maximum coordinate.
 			if (isCornerModeEnabled(heldItem)) {
 				// In corner mode, use the block's x and z coordinates as both the minimum and maximum coordinates of the AABB.

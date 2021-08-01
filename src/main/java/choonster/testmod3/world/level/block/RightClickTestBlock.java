@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
- * A Block that changes state when right clicked with an Eye of Ender.
+ * A Block that changes state when right-clicked with an Eye of Ender.
  * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/index.php/topic,32685.0.html

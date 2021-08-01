@@ -27,7 +27,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Random;
 
 /**
- * A Command Block that's accessible outside of Creative Mode.
+ * A Command Block that's accessible outside Creative Mode.
  * <p>
  * Due to anti-cheat restrictions imposed by Minecraft, it's not possible to place or break this block outside of Creative Mode
  * (without reimplementing it to not extend {@link CommandBlock}).
@@ -79,9 +79,9 @@ public class SurvivalCommandBlock extends CommandBlock {
 	}
 
 	/**
-	 * Copy of {@link CommandBlock#tick} that calls {@link SurvivalCommandBlock#execute} and
-	 * {@link SurvivalCommandBlock#executeChain} rather than {@link CommandBlock#execute} and
-	 * {@link CommandBlock#executeChain}, removing the checks for the vanilla Command Block instances.
+	 * Copy of {@link CommandBlock#tick} that calls {@link SurvivalCommandBlock}#execute and
+	 * {@link SurvivalCommandBlock}#executeChain rather than {@link CommandBlock}#execute and
+	 * {@link CommandBlock}#executeChain, removing the checks for the vanilla Command Block instances.
 	 *
 	 * @param world  The level
 	 * @param pos    The position
@@ -125,8 +125,8 @@ public class SurvivalCommandBlock extends CommandBlock {
 	/**
 	 * Trigger the Command Block and propagate the update to neighbouring Command Blocks.
 	 * <p>
-	 * Copy of {@link CommandBlock#execute} that calls {@link SurvivalCommandBlock#executeChain}
-	 * instead of {@link CommandBlock#executeChain}.
+	 * Copy of {@link CommandBlock}#execute that calls {@link SurvivalCommandBlock}#executeChain
+	 * instead of {@link CommandBlock}#executeChain.
 	 *
 	 * @param state             The block state
 	 * @param world             The level

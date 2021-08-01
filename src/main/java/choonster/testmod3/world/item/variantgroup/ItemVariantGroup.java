@@ -236,7 +236,7 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentabl
 		}
 
 		/**
-		 * Creates a item variant group based on the data in this builder.
+		 * Creates an item variant group based on the data in this builder.
 		 *
 		 * @return The variant group
 		 * @throws IllegalStateException If the group name hasn't been provided

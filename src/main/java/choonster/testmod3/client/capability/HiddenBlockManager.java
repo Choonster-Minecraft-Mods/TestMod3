@@ -75,7 +75,6 @@ public class HiddenBlockManager {
 	 *
 	 * @param world The world
 	 * @param pos   The position of the hidden block to update
-	 * @return A SafeRunnable that updates the chunk when run
 	 */
 	public static void refresh(final Level world, final BlockPos pos) {
 		if (toggled) {

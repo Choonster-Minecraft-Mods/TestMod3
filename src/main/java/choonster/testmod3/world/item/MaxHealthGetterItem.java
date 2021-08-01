@@ -13,7 +13,7 @@ import net.minecraft.Util;
 import net.minecraft.network.chat.TranslatableComponent;
 
 /**
- * An item that tells the player the current max health and the bonus max health provided by the entity's {@link IMaxHealth} when right clicked on an entity.
+ * An item that tells the player the current max health and the bonus max health provided by the entity's {@link IMaxHealth} when right-clicked on an entity.
  *
  * @author Choonster
  */

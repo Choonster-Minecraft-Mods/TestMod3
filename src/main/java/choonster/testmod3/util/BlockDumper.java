@@ -17,7 +17,7 @@ import java.util.stream.StreamSupport;
 /**
  * Dumps the translation keys and the output of the {@link BlockItem}'s {@link Object#toString()} method for all of this mod's blocks.
  * <p>
- * I wrote this because I was getting an {@link AbstractMethodError} from a lambda implementing ItemMeshDefinition and the only the toString output was included in the crash report.
+ * I wrote this because I was getting an {@link AbstractMethodError} from a lambda implementing ItemMeshDefinition and only the toString output was included in the crash report.
  *
  * @author Choonster
  */

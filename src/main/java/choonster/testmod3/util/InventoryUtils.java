@@ -34,7 +34,7 @@ public class InventoryUtils {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	/**
-	 * Get the {@link EquipmentSlot} with the specified index (as returned by {@link EquipmentSlot#getIndex()}.
+	 * Get the {@link EquipmentSlot} with the specified index (as returned by {@link EquipmentSlot#getIndex()}).
 	 *
 	 * @param index The index
 	 * @return The equipment slot
@@ -91,7 +91,7 @@ public class InventoryUtils {
 	/**
 	 * Get a list containing the indices of the empty slots in an {@link IItemHandler} in random order.
 	 * <p>
-	 * Adapted from {@link LootTable#getAvailableSlots}.
+	 * Adapted from {@link LootTable}#getAvailableSlots.
 	 *
 	 * @param itemHandler The inventory
 	 * @param random      The Random object

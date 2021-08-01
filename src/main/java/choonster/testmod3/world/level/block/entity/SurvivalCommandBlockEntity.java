@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.Constants;
 
 /**
- * A Command Block that's accessible outside of Creative Mode.
+ * A Command Block that's accessible outside Creative Mode.
  * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2540671-command-block-replica-issue

@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * A Fluid Tank block that can have access enabled and disabled for each facing when right-clicked with a stick.
  * <p>
- * When left clicked, it will tell the player which sides are enabled.
+ * When left-clicked, it will tell the player which sides are enabled.
  *
  * @author Choonster
  */

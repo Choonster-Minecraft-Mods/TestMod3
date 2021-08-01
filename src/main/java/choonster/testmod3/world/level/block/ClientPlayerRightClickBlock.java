@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
 /**
- * A block that forces a player to right click (from the client side) every 10 ticks (0.5 seconds) while standing on it.
+ * A block that forces a player to right-click (from the client side) every 10 ticks (0.5 seconds) while standing on it.
  * <p>
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2512904-make-the-player-perform-a-right-click-on-non

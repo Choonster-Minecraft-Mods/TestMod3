@@ -13,7 +13,7 @@ import net.minecraft.Util;
 import net.minecraft.network.chat.TranslatableComponent;
 
 /**
- * An item that adds or removes max health from entities right clicked with it using the {@link IMaxHealth} capability.
+ * An item that adds or removes max health from entities right-clicked with it using the {@link IMaxHealth} capability.
  *
  * @author Choonster
  */

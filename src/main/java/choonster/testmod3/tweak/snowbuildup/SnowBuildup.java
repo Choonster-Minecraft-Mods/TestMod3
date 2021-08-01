@@ -51,7 +51,7 @@ public class SnowBuildup {
 
 		final ServerLevel world = (ServerLevel) event.world;
 
-		// If this is the post tick, the world's total time (number of ticks) is divisible by NUM_TICKS and it's raining/snowing,
+		// If this is the post tick, the world's total time (number of ticks) is divisible by NUM_TICKS, and it's raining/snowing,
 		if (event.phase != TickEvent.Phase.END || world.getGameTime() % NUM_TICKS != 0 || !world.isRaining())
 			return;
 

@@ -10,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * An Item that prints the current state of a Block and its BlockEntity on the client and server when right clicked.
+ * An Item that prints the current state of a Block and its BlockEntity on the client and server when right-clicked.
  *
  * @author Choonster
  */

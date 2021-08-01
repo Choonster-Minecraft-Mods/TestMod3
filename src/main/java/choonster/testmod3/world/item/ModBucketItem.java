@@ -261,7 +261,7 @@ public class ModBucketItem extends Item {
 			return ((LiquidBlockContainer) blockState.getBlock()).canPlaceLiquid(level, posIn, blockState, fluidStack.getFluid());
 		}
 
-		// Otherwise check if there's an IFluidHandler that can be filled with the entire FluidStack
+		// Otherwise, check if there's an IFluidHandler that can be filled with the entire FluidStack
 		return FluidUtil.getFluidHandler(level, posIn, direction)
 				.map(fluidHandler -> fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) == fluidStack.getAmount())
 				.orElse(false);

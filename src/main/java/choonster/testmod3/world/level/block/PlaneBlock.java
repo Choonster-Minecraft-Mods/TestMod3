@@ -42,12 +42,12 @@ import java.util.stream.IntStream;
  */
 public class PlaneBlock extends Block {
 	/**
-	 * The block's rotation around the y axis.
+	 * The block's rotation around the y-axis.
 	 */
 	public static final Property<Direction> HORIZONTAL_ROTATION = DirectionProperty.create("horizontal_rotation", Direction.Plane.HORIZONTAL);
 
 	/**
-	 * The block's rotation around the z axis.
+	 * The block's rotation around the z-axis.
 	 */
 	public static final Property<VerticalRotation> VERTICAL_ROTATION = EnumProperty.create("vertical_rotation", VerticalRotation.class);
 
@@ -74,12 +74,12 @@ public class PlaneBlock extends Block {
 		// For each horizontal and vertical rotation pair,
 		for (final Direction horizontalRotation : HORIZONTAL_ROTATION.getPossibleValues()) {
 			for (final VerticalRotation verticalRotation : VERTICAL_ROTATION.getPossibleValues()) {
-				// Get the horizontal (around the y axis) rotation angle and quaternion
+				// Get the horizontal (around the y-axis) rotation angle and quaternion
 				// Needs to be negated to perform correct rotation.
 				final double horizontalRotationAngle = -VectorUtils.getHorizontalRotation(horizontalRotation);
 				final Quaternion horizontalRotationQuaternion = VectorUtils.getRotationQuaternion(Direction.Axis.Y, (float) horizontalRotationAngle);
 
-				// Get the vertical (around the z axis) rotation angle and quaternion
+				// Get the vertical (around the z-axis) rotation angle and quaternion
 				// Needs to be negated to perform correct rotation.
 				final double verticalRotationAngle = -verticalRotation.getAngle();
 				final Quaternion verticalRotationQuaternion = VectorUtils.getRotationQuaternion(Direction.Axis.Z, (float) verticalRotationAngle);

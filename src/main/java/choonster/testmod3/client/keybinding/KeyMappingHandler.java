@@ -57,7 +57,7 @@ public class KeyMappingHandler {
 	/**
 	 * Attempt to place a block from the player's hand below them.
 	 * <p>
-	 * Adapted from {@link Minecraft#startUseItem}.
+	 * Adapted from {@link Minecraft}#startUseItem.
 	 * <p>
 	 * Test for this thread:
 	 * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2786461-how-to-get-minecraftserver-instance

@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 /**
- * When right clicked, prints the value of {@link Level#getHeightmapPos(Heightmap.Types, BlockPos)} at the player's current position.
+ * When right-clicked, prints the value of {@link Level#getHeightmapPos(Heightmap.Types, BlockPos)} at the player's current position.
  *
  * @author Choonster
  */

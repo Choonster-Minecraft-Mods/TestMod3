@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.Registry;
 
 /**
- * Registers this mod's {@link LootFunctionType}s.
+ * Registers this mod's {@link LootItemFunctionType}s.
  *
  * @author Choonster
  */

@@ -15,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 /**
- * An item that teleports the player to their spawn position when right clicked.
+ * An item that teleports the player to their spawn position when right-clicked.
  *
  * @author Choonster
  */
