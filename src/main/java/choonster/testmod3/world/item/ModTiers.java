@@ -1,10 +1,10 @@
 package choonster.testmod3.world.item;
 
-import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.common.util.Lazy;
 
 import java.util.function.Supplier;
 
@@ -49,7 +49,7 @@ public enum ModTiers implements Tier {
 	/**
 	 * The repair material of the item tier.
 	 */
-	private final LazyLoadedValue<Ingredient> repairMaterial;
+	private final Supplier<Ingredient> repairMaterial;
 
 	ModTiers(final int harvestLevel, final int maxUses, final float efficiency, final float attackDamage, final int enchantability, final Supplier<Ingredient> repairMaterial) {
 		this.harvestLevel = harvestLevel;
@@ -57,7 +57,7 @@ public enum ModTiers implements Tier {
 		this.efficiency = efficiency;
 		this.attackDamage = attackDamage;
 		this.enchantability = enchantability;
-		this.repairMaterial = new LazyLoadedValue<>(repairMaterial);
+		this.repairMaterial = Lazy.of(repairMaterial);
 	}
 
 	@Override

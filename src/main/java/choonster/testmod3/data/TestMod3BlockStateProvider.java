@@ -13,7 +13,6 @@ import com.google.common.collect.Sets;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -24,12 +23,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Generates this mod's block models and blockstate files.
@@ -46,7 +47,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	/**
 	 * Centre cube of the pipe model.
 	 */
-	private final LazyLoadedValue<ModelFile> pipeCentre = new LazyLoadedValue<>(() ->
+	private final Supplier<ModelFile> pipeCentre = Lazy.of(() ->
 			models().withExistingParent("block/pipe/pipe_centre", mcLoc("block"))
 					.texture("particle", "#centre")
 					.element()
@@ -59,7 +60,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	/**
 	 * North side of the pipe model. Can be rotated for other sides.
 	 */
-	private final LazyLoadedValue<ModelFile> pipePart = new LazyLoadedValue<>(() ->
+	private final Supplier<ModelFile> pipePart = Lazy.of(() ->
 			models().withExistingParent("block/pipe/pipe_part", mcLoc("block"))
 					.texture("particle", "#side")
 					.element()
@@ -72,7 +73,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	/**
 	 * Inventory model for pipe blocks.
 	 */
-	private final LazyLoadedValue<ModelFile> pipeInventory = new LazyLoadedValue<>(() ->
+	private final Supplier<ModelFile> pipeInventory = Lazy.of(() ->
 			itemModels().withExistingParent("item/pipe/inventory", "block/block")
 					.texture("particle", "#all")
 					.element()
@@ -85,7 +86,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	/**
 	 * Orientable models for each {@link EnumFaceRotation} value.
 	 */
-	private final LazyLoadedValue<Map<EnumFaceRotation, ModelFile>> rotatedOrientables = new LazyLoadedValue<>(() -> {
+	private final Supplier<Map<EnumFaceRotation, ModelFile>> rotatedOrientables = Lazy.of(() -> {
 		Map<EnumFaceRotation, ModelFile> map = new EnumMap<>(EnumFaceRotation.class);
 		map.put(EnumFaceRotation.UP, existingMcModel("orientable"));
 
@@ -149,7 +150,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	 * A copy of {@code minecraft:block/pressure_plate_down} that extends {@code minecraft:block/thin_block}
 	 * so that it has the same display transformations as {@code minecraft:block/pressure_plate_up}.
 	 */
-	private final LazyLoadedValue<ModelFile> PRESSURE_PLATE_DOWN_WITH_TRANSFORMS = new LazyLoadedValue<>(() ->
+	private final Supplier<ModelFile> PRESSURE_PLATE_DOWN_WITH_TRANSFORMS = Lazy.of(() ->
 			models().withExistingParent("block/pressure_plate_down_with_transforms", mcLoc("thin_block"))
 
 					.element()

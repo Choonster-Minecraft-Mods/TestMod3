@@ -9,7 +9,6 @@ import choonster.testmod3.init.ModItems;
 import com.google.common.base.Preconditions;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -21,10 +20,12 @@ import net.minecraftforge.client.model.generators.ModelBuilder.Perspective;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.loaders.DynamicBucketModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -39,7 +40,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 	/**
 	 * A model that extends item/generated and uses the same transforms as the Vanilla bow.
 	 */
-	private final LazyLoadedValue<ModelFile> simpleModel = new LazyLoadedValue<>(() ->
+	private final Supplier<ModelFile> simpleModel = Lazy.of(() ->
 			withGeneratedParent("simple_model")
 					.transforms()
 

@@ -5,10 +5,10 @@ import choonster.testmod3.init.ModItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.common.util.Lazy;
 
 import java.util.function.Supplier;
 
@@ -70,7 +70,7 @@ public enum ModArmourMaterial implements ArmorMaterial {
 	/**
 	 * The repair material of the armour material.
 	 */
-	private final LazyLoadedValue<Ingredient> repairMaterial;
+	private final Supplier<Ingredient> repairMaterial;
 
 	ModArmourMaterial(
 			final String name, final int maxDamageFactor, final int[] damageReductionAmountArray,
@@ -84,7 +84,7 @@ public enum ModArmourMaterial implements ArmorMaterial {
 		this.soundEvent = soundEvent;
 		this.toughness = toughness;
 		this.knockbackResistance = knockbackResistance;
-		this.repairMaterial = new LazyLoadedValue<>(repairMaterial);
+		this.repairMaterial = Lazy.of(repairMaterial);
 	}
 
 	@Override

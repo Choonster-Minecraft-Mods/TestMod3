@@ -1,12 +1,11 @@
 package choonster.testmod3.world.item;
 
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.LazyLoadedValue;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvent;
 
 import java.util.function.Supplier;
 
@@ -22,11 +21,11 @@ public class SoundEffectItem extends Item {
 	/**
 	 * The {@link SoundEvent} to play when left clicked.
 	 */
-	private final LazyLoadedValue<SoundEvent> soundEvent;
+	private final Supplier<SoundEvent> soundEvent;
 
 	public SoundEffectItem(final Supplier<SoundEvent> soundEvent, final Item.Properties properties) {
 		super(properties);
-		this.soundEvent = new LazyLoadedValue<>(soundEvent);
+		this.soundEvent = soundEvent;
 	}
 
 	/**
