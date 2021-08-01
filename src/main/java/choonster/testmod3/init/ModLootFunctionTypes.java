@@ -2,11 +2,11 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.level.storage.loot.functions.SetFluidTankContents;
-import net.minecraft.world.level.storage.loot.Serializer;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.Serializer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
 /**
  * Registers this mod's {@link LootItemFunctionType}s.

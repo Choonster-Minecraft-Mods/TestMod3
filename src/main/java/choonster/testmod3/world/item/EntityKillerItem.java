@@ -1,12 +1,12 @@
 package choonster.testmod3.world.item;
 
+import net.minecraft.Util;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.Util;
-import net.minecraft.network.chat.TranslatableComponent;
 
 /**
  * An item that kills an entity when you left-click on it.

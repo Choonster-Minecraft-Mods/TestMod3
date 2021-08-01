@@ -3,14 +3,14 @@ package choonster.testmod3.world.item;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.maxhealth.MaxHealthCapability;
 import choonster.testmod3.text.TestMod3Lang;
+import net.minecraft.Util;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.Util;
-import net.minecraft.network.chat.TranslatableComponent;
 
 /**
  * An item that tells the player the current max health and the bonus max health provided by the entity's {@link IMaxHealth} when right-clicked on an entity.

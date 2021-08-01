@@ -47,7 +47,7 @@ public class LootTableTestItem extends Item {
 			final LootTable lootTable = Objects.requireNonNull(world.getServer()).getLootTables().get(ModLootTables.LOOT_TABLE_TEST);
 
 			final BlockState state = Blocks.CHEST.defaultBlockState();
-			
+
 			final LootContext lootContext = new LootContext.Builder((ServerLevel) world)
 					.withParameter(LootContextParams.THIS_ENTITY, player)
 					.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player)
