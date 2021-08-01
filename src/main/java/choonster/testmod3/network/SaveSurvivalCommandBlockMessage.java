@@ -23,6 +23,7 @@ import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 /**
@@ -65,7 +66,7 @@ public class SaveSurvivalCommandBlockMessage {
 		this.automatic = automatic;
 	}
 
-	private SaveSurvivalCommandBlockMessage(final SurvivalCommandBlock.Type type, final BlockPos blockPos, final int minecartEntityID, final String command, final boolean shouldTrackOutput, final CommandBlockEntity.Mode commandBlockMode, final boolean conditional, final boolean automatic) {
+	private SaveSurvivalCommandBlockMessage(final SurvivalCommandBlock.Type type, @Nullable final BlockPos blockPos, final int minecartEntityID, final String command, final boolean shouldTrackOutput, final CommandBlockEntity.Mode commandBlockMode, final boolean conditional, final boolean automatic) {
 		this.type = type;
 		this.command = command;
 		this.shouldTrackOutput = shouldTrackOutput;

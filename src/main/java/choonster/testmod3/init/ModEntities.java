@@ -89,6 +89,8 @@ public class ModEntities {
 	public static class SpawnHandler {
 		@SubscribeEvent(priority = EventPriority.LOW)
 		public static void registerEntitySpawns(final BiomeLoadingEvent event) {
+			if (event.getName() == null) return;
+			
 			final ResourceKey<Biome> biomeRegistryKey = ResourceKey.create(ForgeRegistries.Keys.BIOMES, event.getName());
 
 			if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.OCEAN)) {

@@ -17,6 +17,8 @@ public class GuiChunkEnergyHUD extends GuiComponent {
 	private static final Minecraft minecraft = Minecraft.getInstance();
 
 	public void drawHUD(final PoseStack matrixStack) {
+		if (minecraft.level == null || minecraft.player == null) return;
+
 		ChunkEnergyCapability.getChunkEnergy(minecraft.level.getChunkAt(minecraft.player.blockPosition()))
 				.ifPresent(chunkEnergy -> {
 					final String text = I18n.get(TestMod3Lang.CHUNK_ENERGY_HUD.getTranslationKey(), chunkEnergy.getEnergyStored(), chunkEnergy.getMaxEnergyStored());

@@ -33,7 +33,7 @@ public class EntityInteractionTestItem extends Item {
 	public InteractionResult interactLivingEntity(final ItemStack stack, final Player player, final LivingEntity target, final InteractionHand hand) {
 		if (!player.level.isClientSide) {
 			final int count = getInteractCount(stack) + 1;
-			stack.getTag().putInt("Count", count);
+			stack.getOrCreateTag().putInt("Count", count);
 
 			player.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_ENTITY_INTERACT_COUNT.getTranslationKey(), count), Util.NIL_UUID);
 		}

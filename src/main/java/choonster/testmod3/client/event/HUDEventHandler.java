@@ -28,6 +28,7 @@ public class HUDEventHandler {
 	@SubscribeEvent
 	public static void renderChunkEnergyHUD(final RenderGameOverlayEvent.Post event) {
 		if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
+		if (minecraft.player == null) return;
 
 		final Player player = minecraft.player;
 		if (player.getMainHandItem().getItem() != ModItems.CHUNK_ENERGY_DISPLAY.get() && player.getOffhandItem().getItem() != ModItems.CHUNK_ENERGY_DISPLAY.get())
