@@ -47,7 +47,7 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 	public boolean matches(final ItemStack item) {
 		final Optional<FluidStack> fluidContained = FluidUtil.getFluidContained(item);
 
-		if (!fluidContained.isPresent()) {
+		if (fluidContained.isEmpty()) {
 			return false;
 		}
 
