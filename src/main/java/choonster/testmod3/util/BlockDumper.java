@@ -33,7 +33,7 @@ public class BlockDumper {
 					.forEach(block -> {
 						final Item item = block.asItem();
 						if (item != Items.AIR) {
-							writer.printf("%s - %s\n", item.getDescriptionId(), item.toString());
+							writer.printf("%s - %s\n", item.getDescriptionId(), item);
 						}
 					});
 		} catch (final Exception e) {

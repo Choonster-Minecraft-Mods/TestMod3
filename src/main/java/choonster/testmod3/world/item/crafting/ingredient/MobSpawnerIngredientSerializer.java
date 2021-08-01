@@ -33,7 +33,7 @@ public class MobSpawnerIngredientSerializer implements IIngredientSerializer<NBT
 
 		final ResourceLocation entityRegistryName = new ResourceLocation(GsonHelper.getAsString(json, "entity"));
 		if (!ForgeRegistries.ENTITIES.containsKey(entityRegistryName)) {
-			throw new JsonSyntaxException("Unknown entity type '" + entityRegistryName.toString() + "'");
+			throw new JsonSyntaxException("Unknown entity type '" + entityRegistryName + "'");
 		}
 
 		final CompoundTag blockEntityData = stack.getOrCreateTagElement("BlockEntityTag");
