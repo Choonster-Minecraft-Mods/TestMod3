@@ -41,7 +41,7 @@ public class TestMod3 {
 		ModItems.initialise(modEventBus);
 		ModBiomes.initialise(modEventBus);
 		ModMenuTypes.initialise(modEventBus);
-		ModEffects.initialise(modEventBus);
+		ModMobEffects.initialise(modEventBus);
 		ModEntities.initialise(modEventBus);
 		ModFeatures.initialise(modEventBus);
 		ModLootModifierSerializers.initialise(modEventBus);

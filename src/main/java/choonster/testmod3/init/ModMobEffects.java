@@ -10,11 +10,11 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * Registers this mod's {@link Effect}s.
+ * Registers this mod's {@link MobEffect}s.
  *
  * @author Choonster
  */
-public class ModEffects {
+public class ModMobEffects {
 	private static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, TestMod3.MODID);
 
 	private static boolean isInitialised;

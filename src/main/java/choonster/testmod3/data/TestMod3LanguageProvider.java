@@ -3,10 +3,10 @@ package choonster.testmod3.data;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.init.*;
-import choonster.testmod3.world.item.ModBucketItem;
-import choonster.testmod3.world.item.ModSpawnEggItem;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.EnumFaceRotation;
+import choonster.testmod3.world.item.ModBucketItem;
+import choonster.testmod3.world.item.ModSpawnEggItem;
 import choonster.testmod3.world.level.block.PlaneBlock;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
@@ -230,7 +230,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 	}
 
 	private void addPotions() {
-		addEffect(ModEffects.TEST, "Test");
+		addEffect(ModMobEffects.TEST, "Test");
 		addPotion(ModPotions.TEST, "Testing");
 	}
 

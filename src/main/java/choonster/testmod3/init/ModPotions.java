@@ -34,16 +34,16 @@ public class ModPotions {
 	private static final int HARMFUL_DURATION_STRONG = 900;
 
 	public static final RegistryObject<Potion> TEST = registerPotion("test",
-			() -> new MobEffectInstance(ModEffects.TEST.get(), HELPFUL_DURATION_STANDARD)
+			() -> new MobEffectInstance(ModMobEffects.TEST.get(), HELPFUL_DURATION_STANDARD)
 	);
 
 	public static final RegistryObject<Potion> LONG_TEST = registerPotion("test",
-			() -> new MobEffectInstance(ModEffects.TEST.get(), HELPFUL_DURATION_LONG),
+			() -> new MobEffectInstance(ModMobEffects.TEST.get(), HELPFUL_DURATION_LONG),
 			LONG_PREFIX
 	);
 
 	public static final RegistryObject<Potion> STRONG_TEST = registerPotion("test",
-			() -> new MobEffectInstance(ModEffects.TEST.get(), HELPFUL_DURATION_STRONG, 1),
+			() -> new MobEffectInstance(ModMobEffects.TEST.get(), HELPFUL_DURATION_STRONG, 1),
 			STRONG_PREFIX
 	);
 
