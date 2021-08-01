@@ -50,7 +50,6 @@ public class WaterGrassBlock extends BushBlock implements LiquidBlockContainer {
 		return fluidState.is(FluidTags.WATER) && fluidState.getAmount() == 8 ? super.getStateForPlacement(context) : null;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public BlockState updateShape(final BlockState state, final Direction facing, final BlockState facingState, final LevelAccessor world, final BlockPos currentPos, final BlockPos facingPos) {
 		final BlockState newState = super.updateShape(state, facing, facingState, world, currentPos, facingPos);
