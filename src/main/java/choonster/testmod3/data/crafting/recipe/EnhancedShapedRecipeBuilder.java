@@ -60,6 +60,7 @@ public class EnhancedShapedRecipeBuilder<
 	 * @param group The group name
 	 * @return This builder
 	 */
+	@SuppressWarnings("unchecked")
 	public BUILDER itemGroup(final String group) {
 		itemGroup = group;
 		return (BUILDER) this;
@@ -68,6 +69,7 @@ public class EnhancedShapedRecipeBuilder<
 	/**
 	 * Adds a key to the recipe pattern.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public BUILDER define(final Character symbol, final Tag<Item> tagIn) {
 		return (BUILDER) super.define(symbol, tagIn);
@@ -76,6 +78,7 @@ public class EnhancedShapedRecipeBuilder<
 	/**
 	 * Adds a key to the recipe pattern.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public BUILDER define(final Character symbol, final ItemLike itemIn) {
 		return (BUILDER) super.define(symbol, itemIn);
@@ -84,6 +87,7 @@ public class EnhancedShapedRecipeBuilder<
 	/**
 	 * Adds a key to the recipe pattern.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public BUILDER define(final Character symbol, final Ingredient ingredientIn) {
 		return (BUILDER) super.define(symbol, ingredientIn);
@@ -92,6 +96,7 @@ public class EnhancedShapedRecipeBuilder<
 	/**
 	 * Adds a new entry to the patterns for this recipe.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public BUILDER pattern(final String pattern) {
 		return (BUILDER) super.pattern(pattern);
@@ -100,11 +105,13 @@ public class EnhancedShapedRecipeBuilder<
 	/**
 	 * Adds a criterion needed to unlock the recipe.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public BUILDER unlockedBy(final String name, final CriterionTriggerInstance criterion) {
 		return (BUILDER) super.unlockedBy(name, criterion);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public BUILDER group(final String group) {
 		return (BUILDER) super.group(group);
@@ -169,8 +176,10 @@ public class EnhancedShapedRecipeBuilder<
 				group = "";
 			}
 
+			@SuppressWarnings("unchecked")
 			final List<String> rows = (List<String>) ROWS.get(this);
 
+			@SuppressWarnings("unchecked")
 			final Map<Character, Ingredient> key = (Map<Character, Ingredient>) KEY.get(this);
 
 			String itemGroupName = itemGroup;

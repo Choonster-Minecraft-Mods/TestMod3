@@ -58,44 +58,52 @@ public class EnhancedShapelessRecipeBuilder<
 	 * @param group The group name
 	 * @return This builder
 	 */
+	@SuppressWarnings("unchecked")
 	public BUILDER itemGroup(final String group) {
 		itemGroup = group;
 		return (BUILDER) this;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public BUILDER requires(final Tag<Item> tagIn) {
 		return (BUILDER) super.requires(tagIn);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public BUILDER requires(final ItemLike itemIn) {
 		return (BUILDER) super.requires(itemIn);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public BUILDER requires(final ItemLike itemIn, final int quantity) {
 		return (BUILDER) super.requires(itemIn, quantity);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public BUILDER requires(final Ingredient ingredientIn) {
 		return (BUILDER) super.requires(ingredientIn);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public BUILDER requires(final Ingredient ingredientIn, final int quantity) {
 		return (BUILDER) super.requires(ingredientIn, quantity);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public BUILDER unlockedBy(final String name, final CriterionTriggerInstance criterionIn) {
 		return (BUILDER) super.unlockedBy(name, criterionIn);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER group(final String groupIn) {
-		return (BUILDER) super.group(groupIn);
+	public BUILDER group(final String group) {
+		return (BUILDER) super.group(group);
 	}
 
 	/**
@@ -172,6 +180,7 @@ public class EnhancedShapelessRecipeBuilder<
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected List<Ingredient> getIngredients() {
 		try {
 			return (List<Ingredient>) INGREDIENTS.get(this);
