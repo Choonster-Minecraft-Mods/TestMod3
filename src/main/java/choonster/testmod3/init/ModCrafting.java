@@ -181,7 +181,7 @@ public class ModCrafting {
 		 * @param recipeManager The recipe manager
 		 * @param recipeClass   The recipe class
 		 */
-		private static void removeRecipes(final RecipeManager recipeManager, final Class<? extends Recipe> recipeClass) {
+		private static void removeRecipes(final RecipeManager recipeManager, final Class<? extends Recipe<?>> recipeClass) {
 			final int recipesRemoved = removeRecipes(recipeManager, recipeClass::isInstance);
 
 			LOGGER.info("Removed {} recipe(s) for class {}", recipesRemoved, recipeClass);
@@ -194,7 +194,7 @@ public class ModCrafting {
 		 * @param predicate     The predicate
 		 * @return The number of recipes removed
 		 */
-		private static int removeRecipes(final RecipeManager recipeManager, final Predicate<Recipe> predicate) {
+		private static int removeRecipes(final RecipeManager recipeManager, final Predicate<Recipe<?>> predicate) {
 			final Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> existingRecipes;
 			try {
 				@SuppressWarnings("unchecked")
