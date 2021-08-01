@@ -47,7 +47,7 @@ public class TestMod3LootTableProvider extends LootTableProvider {
 	}
 
 	@Override
-	protected void validate(final Map<ResourceLocation, LootTable> map, final ValidationContext validationtracker) {
+	protected void validate(final Map<ResourceLocation, LootTable> map, final ValidationContext validationContext) {
 		final Set<ResourceLocation> modLootTableIds = BuiltInLootTables
 				.all()
 				.stream()
@@ -55,12 +55,10 @@ public class TestMod3LootTableProvider extends LootTableProvider {
 				.collect(Collectors.toSet());
 
 		for (final ResourceLocation id : Sets.difference(modLootTableIds, map.keySet())) {
-			validationtracker.reportProblem("Missing mod loot table: " + id);
+			validationContext.reportProblem("Missing mod loot table: " + id);
 		}
 
-		map.forEach((id, lootTable) -> {
-			LootTables.validate(validationtracker, id, lootTable);
-		});
+		map.forEach((id, lootTable) -> LootTables.validate(validationContext, id, lootTable));
 	}
 
 	/**
