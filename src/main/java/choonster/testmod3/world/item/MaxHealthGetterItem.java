@@ -25,9 +25,9 @@ public class MaxHealthGetterItem extends Item {
 	@Override
 	public InteractionResult interactLivingEntity(final ItemStack stack, final Player player, final LivingEntity target, final InteractionHand hand) {
 		if (!player.level.isClientSide) {
-			MaxHealthCapability.getMaxHealth(target).ifPresent(maxHealth -> {
-				player.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_MAX_HEALTH_GET.getTranslationKey(), target.getDisplayName(), target.getMaxHealth(), maxHealth.getBonusMaxHealth()), Util.NIL_UUID);
-			});
+			MaxHealthCapability.getMaxHealth(target).ifPresent(maxHealth ->
+					player.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_MAX_HEALTH_GET.getTranslationKey(), target.getDisplayName(), target.getMaxHealth(), maxHealth.getBonusMaxHealth()), Util.NIL_UUID)
+			);
 		}
 
 		return InteractionResult.SUCCESS;

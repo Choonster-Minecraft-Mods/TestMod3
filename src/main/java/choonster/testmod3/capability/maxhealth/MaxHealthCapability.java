@@ -109,11 +109,11 @@ public final class MaxHealthCapability {
 		 */
 		@SubscribeEvent
 		public static void playerClone(final PlayerEvent.Clone event) {
-			getMaxHealth(event.getOriginal()).ifPresent(oldMaxHealth -> {
-				getMaxHealth(event.getPlayer()).ifPresent(newMaxHealth -> {
-					newMaxHealth.setBonusMaxHealth(oldMaxHealth.getBonusMaxHealth());
-				});
-			});
+			getMaxHealth(event.getOriginal()).ifPresent(oldMaxHealth ->
+					getMaxHealth(event.getPlayer()).ifPresent(newMaxHealth ->
+							newMaxHealth.setBonusMaxHealth(oldMaxHealth.getBonusMaxHealth())
+					)
+			);
 		}
 
 		/**
