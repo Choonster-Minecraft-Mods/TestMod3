@@ -122,6 +122,13 @@ repositories {
         url "https://maven.tterrag.com/"
     }
 
+    maven {
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
     // flatDir {
     //     dir 'libs'
@@ -147,10 +154,8 @@ dependencies {
 
     embed "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
 
-    // Compile against the Hwyla API, but do not include it at runtime
-//    compileOnly fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}:api")
-    // At runtime, use the full Hwyla jar
-//    runtimeOnly fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}")
+    // Visit https://www.curseforge.com/minecraft/mc-mods/jade/files/all o get the latest version
+    implementation fg.deobf("curse.maven:jade-324717:${jade_file_id}")
 
 //    compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
 //    runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
