@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:cod"
+            "items": [
+              "minecraft:cod"
+            ]
           }
         ]
       }

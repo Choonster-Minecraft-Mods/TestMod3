@@ -9,7 +9,8 @@
   "functions": [
     {
       "function": "minecraft:set_count",
-      "count": 2
+      "count": 2.0,
+      "add": false
     }
   ],
   "type": "testmod3:item"

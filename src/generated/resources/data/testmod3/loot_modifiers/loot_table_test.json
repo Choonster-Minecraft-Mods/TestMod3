@@ -5,7 +5,8 @@
       "chance": 0.5
     },
     {
-      "condition": "testmod3:is_chest_loot"
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/simple_dungeon"
     }
   ],
   "loot_table": "testmod3:loot_table_test",

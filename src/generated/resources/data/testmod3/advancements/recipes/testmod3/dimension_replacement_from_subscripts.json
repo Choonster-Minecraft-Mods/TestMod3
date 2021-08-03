@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "testmod3:subscripts"
+            "items": [
+              "testmod3:subscripts"
+            ]
           }
         ]
       }
