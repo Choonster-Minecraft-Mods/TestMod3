@@ -15,7 +15,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  * @author Choonster
  */
 public class ModMobEffects {
-	private static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, TestMod3.MODID);
+	private static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, TestMod3.MODID);
 
 	private static boolean isInitialised;
 

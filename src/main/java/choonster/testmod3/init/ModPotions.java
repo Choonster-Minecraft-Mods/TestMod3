@@ -18,7 +18,7 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class ModPotions {
-	private static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTION_TYPES, TestMod3.MODID);
+	private static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTIONS, TestMod3.MODID);
 
 	private static boolean isInitialised;
 
