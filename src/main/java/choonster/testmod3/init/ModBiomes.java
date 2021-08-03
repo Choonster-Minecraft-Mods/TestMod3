@@ -81,7 +81,7 @@ public class ModBiomes {
 	}
 
 	private static class Utils {
-		private static final Method GET_SKY_COLOR_WITH_TEMPERATURE_MODIFIER = ObfuscationReflectionHelper.findMethod(VanillaBiomes.class, /* getSkyColorWithTemperatureModifier */ "calculateSkyColor", float.class);
+		private static final Method CALCULATE_SKY_COLOR = ObfuscationReflectionHelper.findMethod(VanillaBiomes.class, /* calculateSkyColor */ "m_127332_", float.class);
 
 		public static Supplier<ConfiguredSurfaceBuilder<?>> surfaceBuilder(final ResourceKey<ConfiguredSurfaceBuilder<?>> key) {
 			return () -> BuiltinRegistries.CONFIGURED_SURFACE_BUILDER.getOrThrow(key);
@@ -140,7 +140,7 @@ public class ModBiomes {
 
 			final int skyColour;
 			try {
-				skyColour = (int) GET_SKY_COLOR_WITH_TEMPERATURE_MODIFIER.invoke(null, 2);
+				skyColour = (int) CALCULATE_SKY_COLOR.invoke(null, 2);
 			} catch (final IllegalAccessException | InvocationTargetException e) {
 				throw new RuntimeException("Unable to get sky colour", e);
 			}

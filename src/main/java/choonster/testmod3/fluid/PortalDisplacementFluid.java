@@ -30,7 +30,7 @@ import java.lang.reflect.Method;
  */
 // TODO: Properly implement portal displacement
 public abstract class PortalDisplacementFluid extends ForgeFlowingFluid {
-	private static final Method CAN_PASS_THROUGH_WALL = ObfuscationReflectionHelper.findMethod(FlowingFluid.class, /* canPassThroughWall */ "func_212751_a", Direction.class, BlockGetter.class, BlockPos.class, BlockState.class, BlockPos.class, BlockState.class);
+	private static final Method CAN_PASS_THROUGH_WALL = ObfuscationReflectionHelper.findMethod(FlowingFluid.class, /* canPassThroughWall */ "m_76061_", Direction.class, BlockGetter.class, BlockPos.class, BlockState.class, BlockPos.class, BlockState.class);
 
 	protected PortalDisplacementFluid(final Properties properties) {
 		super(properties);

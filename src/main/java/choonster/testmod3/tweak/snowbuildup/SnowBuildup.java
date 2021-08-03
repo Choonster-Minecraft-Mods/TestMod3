@@ -28,7 +28,7 @@ import java.util.Random;
  */
 @Mod.EventBusSubscriber(modid = TestMod3.MODID)
 public class SnowBuildup {
-	private static final Method GET_CHUNKS = ObfuscationReflectionHelper.findMethod(ChunkMap.class, /* getChunks */ "func_223491_f");
+	private static final Method GET_CHUNKS = ObfuscationReflectionHelper.findMethod(ChunkMap.class, /* getChunks */ "getChunks");
 
 	/**
 	 * The number of ticks between each buildup.

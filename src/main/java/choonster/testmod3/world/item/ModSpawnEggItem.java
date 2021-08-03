@@ -19,7 +19,7 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class ModSpawnEggItem extends SpawnEggItem {
-	private static final Field BY_ID = ObfuscationReflectionHelper.findField(SpawnEggItem.class, /* BY_ID */ "field_195987_b");
+	private static final Field BY_ID = ObfuscationReflectionHelper.findField(SpawnEggItem.class, /* BY_ID */ "f_43201_");
 
 	private final Supplier<? extends EntityType<?>> entityType;
 

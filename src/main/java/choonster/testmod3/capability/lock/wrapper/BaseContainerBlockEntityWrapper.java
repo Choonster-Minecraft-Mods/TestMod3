@@ -15,7 +15,7 @@ import java.lang.reflect.Field;
  * @author Choonster
  */
 public class BaseContainerBlockEntityWrapper implements ILock {
-	private static final Field LOCK_KEY = ObfuscationReflectionHelper.findField(BaseContainerBlockEntity.class, /* lockKey */ "field_174901_a");
+	private static final Field LOCK_KEY = ObfuscationReflectionHelper.findField(BaseContainerBlockEntity.class, /* lockKey */ "f_58621_");
 
 	private final BaseContainerBlockEntity blockEntity;
 

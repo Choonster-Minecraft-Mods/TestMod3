@@ -23,10 +23,10 @@ import java.util.Map;
  * @author Choonster
  */
 public class RecipeUtil {
-	private static final Method KEY_FROM_JSON = ObfuscationReflectionHelper.findMethod(ShapedRecipe.class, /* keyFromJson */ "func_192408_a", JsonObject.class);
-	private static final Method SHRINK = ObfuscationReflectionHelper.findMethod(ShapedRecipe.class, /* shrink */ "func_194134_a", String[].class);
-	private static final Method PATTERN_FROM_JSON = ObfuscationReflectionHelper.findMethod(ShapedRecipe.class, /* patternFromJson */ "func_192407_a", JsonArray.class);
-	private static final Method DISSOLVE_PATTERN = ObfuscationReflectionHelper.findMethod(ShapedRecipe.class, /* dissolvePattern */ "func_192402_a", String[].class, Map.class, int.class, int.class);
+	private static final Method KEY_FROM_JSON = ObfuscationReflectionHelper.findMethod(ShapedRecipe.class, /* keyFromJson */ "m_44210_", JsonObject.class);
+	private static final Method SHRINK = ObfuscationReflectionHelper.findMethod(ShapedRecipe.class, /* shrink */ "m_44186_", String[].class);
+	private static final Method PATTERN_FROM_JSON = ObfuscationReflectionHelper.findMethod(ShapedRecipe.class, /* patternFromJson */ "m_44196_", JsonArray.class);
+	private static final Method DISSOLVE_PATTERN = ObfuscationReflectionHelper.findMethod(ShapedRecipe.class, /* dissolvePattern */ "m_44202_", String[].class, Map.class, int.class, int.class);
 
 	/**
 	 * Parse the ingredients of a shaped recipe.

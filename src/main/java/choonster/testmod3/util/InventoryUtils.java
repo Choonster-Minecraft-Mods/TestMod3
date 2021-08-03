@@ -52,7 +52,7 @@ public class InventoryUtils {
 	/**
 	 * A reference to {@code LootTable#shuffleAndSplitItems}.
 	 */
-	private static final Method SHUFFLE_AND_SPLIT_ITEMS = ObfuscationReflectionHelper.findMethod(LootTable.class, /* shuffleAndSplitItems */ "func_186463_a", List.class, int.class, Random.class);
+	private static final Method SHUFFLE_AND_SPLIT_ITEMS = ObfuscationReflectionHelper.findMethod(LootTable.class, /* shuffleAndSplitItems */ "m_79138_", List.class, int.class, Random.class);
 
 	/**
 	 * Fill an {@link IItemHandler} with random loot from a {@link LootTable}.

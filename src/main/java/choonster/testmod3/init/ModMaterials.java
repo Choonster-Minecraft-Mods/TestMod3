@@ -33,7 +33,7 @@ public class ModMaterials {
 	 * Extension of {@link Material.Builder} that allows access to the private and protected methods from the Vanilla class.
 	 */
 	private static class MaterialBuilder extends Material.Builder {
-		private static final Method NOT_SOLID_BLOCKING = ObfuscationReflectionHelper.findMethod(Material.Builder.class, /* notSolidBlocking */ "func_200505_j");
+		private static final Method NOT_SOLID_BLOCKING = ObfuscationReflectionHelper.findMethod(Material.Builder.class, /* notSolidBlocking */ "m_76360_");
 
 		public MaterialBuilder(final MaterialColor color) {
 			super(color);

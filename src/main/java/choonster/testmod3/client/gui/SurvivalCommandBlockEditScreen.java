@@ -16,9 +16,9 @@ import java.lang.reflect.Field;
 public class SurvivalCommandBlockEditScreen extends CommandBlockEditScreen {
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	private static final Field MODE = ObfuscationReflectionHelper.findField(CommandBlockEditScreen.class, /* mode */ "field_184082_w");
-	private static final Field CONDITIONAL = ObfuscationReflectionHelper.findField(CommandBlockEditScreen.class, /* conditional */ "field_184084_y");
-	private static final Field AUTOEXEC = ObfuscationReflectionHelper.findField(CommandBlockEditScreen.class, /* autoexec */ "field_184085_z");
+	private static final Field MODE = ObfuscationReflectionHelper.findField(CommandBlockEditScreen.class, /* mode */ "f_98378_");
+	private static final Field CONDITIONAL = ObfuscationReflectionHelper.findField(CommandBlockEditScreen.class, /* conditional */ "f_98379_");
+	private static final Field AUTOEXEC = ObfuscationReflectionHelper.findField(CommandBlockEditScreen.class, /* autoexec */ "f_98380_");
 
 	private final SurvivalCommandBlock survivalCommandBlock;
 

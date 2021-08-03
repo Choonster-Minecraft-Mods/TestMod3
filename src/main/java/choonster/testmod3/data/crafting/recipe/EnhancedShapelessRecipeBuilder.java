@@ -36,10 +36,10 @@ public class EnhancedShapelessRecipeBuilder<
 		RECIPE extends ShapelessRecipe,
 		BUILDER extends EnhancedShapelessRecipeBuilder<RECIPE, BUILDER>
 		> extends ShapelessRecipeBuilder {
-	private static final Method ENSURE_VALID = ObfuscationReflectionHelper.findMethod(ShapelessRecipeBuilder.class, /* ensureValid */ "func_200481_a", ResourceLocation.class);
-	private static final Field ADVANCEMENT = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* advancement */ "field_200497_e");
-	private static final Field GROUP = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* group */ "field_200498_f");
-	private static final Field INGREDIENTS = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* ingredients */ "field_200496_d");
+	private static final Method ENSURE_VALID = ObfuscationReflectionHelper.findMethod(ShapelessRecipeBuilder.class, /* ensureValid */ "m_126207_", ResourceLocation.class);
+	private static final Field ADVANCEMENT = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* advancement */ "f_126176_");
+	private static final Field GROUP = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* group */ "f_126177_");
+	private static final Field INGREDIENTS = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* ingredients */ "f_126175_");
 
 	protected final ItemStack result;
 	protected final RecipeSerializer<? extends RECIPE> serializer;

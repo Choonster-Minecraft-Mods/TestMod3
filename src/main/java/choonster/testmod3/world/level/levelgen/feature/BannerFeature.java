@@ -28,11 +28,11 @@ import java.util.List;
  * @author Choonster
  */
 public class BannerFeature extends Feature<BannerFeatureConfig> {
-	private static final Field ITEM_PATTERNS = ObfuscationReflectionHelper.findField(BannerBlockEntity.class, /* itemPatterns */ "field_175118_f");
-	private static final Field BASE_COLOR = ObfuscationReflectionHelper.findField(BannerBlockEntity.class, /* baseColor */ "field_175120_a");
-	private static final Field PATTERNS = ObfuscationReflectionHelper.findField(BannerBlockEntity.class, /* patterns */ "field_175122_h");
-	private static final Field RECEIVED_DATA = ObfuscationReflectionHelper.findField(BannerBlockEntity.class, /* receivedData */ "field_175119_g");
-	private static final Field NAME = ObfuscationReflectionHelper.findField(BannerBlockEntity.class, /* name */ "field_190617_a");
+	private static final Field ITEM_PATTERNS = ObfuscationReflectionHelper.findField(BannerBlockEntity.class, /* itemPatterns */ "f_58475_");
+	private static final Field BASE_COLOR = ObfuscationReflectionHelper.findField(BannerBlockEntity.class, /* baseColor */ "f_58474_");
+	private static final Field PATTERNS = ObfuscationReflectionHelper.findField(BannerBlockEntity.class, /* patterns */ "f_58477_");
+	private static final Field RECEIVED_DATA = ObfuscationReflectionHelper.findField(BannerBlockEntity.class, /* receivedData */ "f_58476_");
+	private static final Field NAME = ObfuscationReflectionHelper.findField(BannerBlockEntity.class, /* name */ "f_58473_");
 
 	public BannerFeature(final Codec<BannerFeatureConfig> codec) {
 		super(codec);

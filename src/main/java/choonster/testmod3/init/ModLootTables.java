@@ -24,7 +24,7 @@ public class ModLootTables {
 	}
 
 	public static class RegistrationHandler {
-		private static final Method REGISTER = ObfuscationReflectionHelper.findMethod(BuiltInLootTables.class, /* register */ "func_186375_a", ResourceLocation.class);
+		private static final Method REGISTER = ObfuscationReflectionHelper.findMethod(BuiltInLootTables.class, /* register */ "m_78769_", ResourceLocation.class);
 
 		public static ResourceLocation register(final String name) {
 			final ResourceLocation id = new ResourceLocation(TestMod3.MODID, name);
