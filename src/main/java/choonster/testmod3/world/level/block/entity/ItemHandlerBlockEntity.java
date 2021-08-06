@@ -99,7 +99,7 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler & IN
 	}
 
 	@Override
-	protected void invalidateCaps() {
+	public void invalidateCaps() {
 		super.invalidateCaps();
 		holder.invalidate();
 	}

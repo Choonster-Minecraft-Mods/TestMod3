@@ -71,7 +71,7 @@ public abstract class LockableItemHandlerBlockEntity<
 	}
 
 	@Override
-	protected void invalidateCaps() {
+	public void invalidateCaps() {
 		super.invalidateCaps();
 		holder.invalidate();
 	}

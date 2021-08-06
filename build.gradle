@@ -49,7 +49,7 @@ minecraft {
     mappings channel: project.mappings_channel, version: project.mappings_version
 
     // Currently, this location cannot be changed from the default.
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
