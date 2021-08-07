@@ -6,9 +6,11 @@ import choonster.testmod3.util.DebugUtil;
 import choonster.testmod3.util.LogUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import net.minecraft.nbt.IntTag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.INBTSerializable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +22,7 @@ import java.util.List;
  *
  * @author Choonster
  */
-public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinite {
+public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinite, INBTSerializable<IntTag> {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	/**
@@ -71,6 +73,16 @@ public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinit
 	}
 
 	@Override
+	public IntTag serializeNBT() {
+		return IntTag.valueOf(numPigs);
+	}
+
+	@Override
+	public void deserializeNBT(final IntTag tag) {
+		numPigs = tag.getAsInt();
+	}
+
+	@Override
 	public boolean equals(@Nullable final Object obj) {
 		if (this == obj) return true;
 		if (obj == null || getClass() != obj.getClass()) return false;
@@ -86,4 +98,6 @@ public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinit
 		result = 31 * result + maxNumPigs;
 		return result;
 	}
+
+
 }

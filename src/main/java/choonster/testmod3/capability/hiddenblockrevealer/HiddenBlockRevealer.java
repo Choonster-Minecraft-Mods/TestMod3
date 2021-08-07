@@ -1,6 +1,8 @@
 package choonster.testmod3.capability.hiddenblockrevealer;
 
 import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockRevealer;
+import net.minecraft.nbt.ByteTag;
+import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nullable;
 
@@ -9,7 +11,7 @@ import javax.annotation.Nullable;
  *
  * @author Choonster
  */
-public class HiddenBlockRevealer implements IHiddenBlockRevealer {
+public class HiddenBlockRevealer implements IHiddenBlockRevealer, INBTSerializable<ByteTag> {
 	/**
 	 * Should hidden blocks be revealed?
 	 */
@@ -31,6 +33,15 @@ public class HiddenBlockRevealer implements IHiddenBlockRevealer {
 		this.revealHiddenBlocks = revealHiddenBlocks;
 	}
 
+	@Override
+	public ByteTag serializeNBT() {
+		return ByteTag.valueOf(revealHiddenBlocks);
+	}
+
+	@Override
+	public void deserializeNBT(final ByteTag tag) {
+		revealHiddenBlocks = tag.getAsByte() != 0;
+	}
 
 	@Override
 	public boolean equals(@Nullable final Object obj) {

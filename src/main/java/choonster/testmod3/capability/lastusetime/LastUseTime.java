@@ -1,6 +1,8 @@
 package choonster.testmod3.capability.lastusetime;
 
 import choonster.testmod3.api.capability.lastusetime.ILastUseTime;
+import net.minecraft.nbt.LongTag;
+import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nullable;
 
@@ -9,7 +11,7 @@ import javax.annotation.Nullable;
  *
  * @author Choonster
  */
-public class LastUseTime implements ILastUseTime {
+public class LastUseTime implements ILastUseTime, INBTSerializable<LongTag> {
 	private long lastUseTime;
 	private final boolean automaticUpdates;
 
@@ -45,6 +47,16 @@ public class LastUseTime implements ILastUseTime {
 	@Override
 	public boolean automaticUpdates() {
 		return automaticUpdates;
+	}
+
+	@Override
+	public LongTag serializeNBT() {
+		return LongTag.valueOf(lastUseTime);
+	}
+
+	@Override
+	public void deserializeNBT(final LongTag tag) {
+		lastUseTime = tag.getAsLong();
 	}
 
 	@Override

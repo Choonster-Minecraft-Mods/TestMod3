@@ -1,12 +1,14 @@
 package choonster.testmod3.capability.maxhealth;
 
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.nbt.FloatTag;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraftforge.common.util.INBTSerializable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +21,7 @@ import java.util.UUID;
  *
  * @author Choonster
  */
-public class MaxHealth implements IMaxHealth {
+public class MaxHealth implements IMaxHealth, INBTSerializable<FloatTag> {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	/**
@@ -89,6 +91,16 @@ public class MaxHealth implements IMaxHealth {
 
 			((ServerLevel) entity.getCommandSenderWorld()).getChunkSource().broadcastAndSend(entity, packet);
 		}
+	}
+
+	@Override
+	public FloatTag serializeNBT() {
+		return FloatTag.valueOf(bonusMaxHealth);
+	}
+
+	@Override
+	public void deserializeNBT(final FloatTag tag) {
+		bonusMaxHealth = tag.getAsFloat();
 	}
 
 	/**
