@@ -1,7 +1,9 @@
 package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.init.ModBlocks;
+import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.util.EnumFaceRotation;
 import choonster.testmod3.util.RegistryUtil;
 import choonster.testmod3.world.level.block.*;
@@ -18,7 +20,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CommandBlock;
-import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.*;
@@ -514,16 +515,18 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 				});
 
 
+		fluidBlock(ModFluids.STATIC);
+		fluidBlock(ModFluids.STATIC_GAS);
+		fluidBlock(ModFluids.NORMAL);
+		fluidBlock(ModFluids.NORMAL_GAS);
+		fluidBlock(ModFluids.PORTAL_DISPLACEMENT);
+
+
 		validate();
 	}
 
 	private void validate() {
 		for (final Block block : Sets.difference(RegistryUtil.getModRegistryEntries(ForgeRegistries.BLOCKS), registeredBlocks.keySet())) {
-			// Ignore fluids, since they don't need block state files
-			if (block instanceof LiquidBlock) {
-				continue;
-			}
-
 			blockstateError(block, "Missing block state file");
 		}
 
@@ -681,6 +684,14 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 							.rotationY(getRotationY(direction))
 							.build();
 				});
+	}
+
+	private void fluidBlock(final FluidGroup<?, ?, ?, ?> fluidGroup) {
+		final var block = fluidGroup.getBlock().get();
+		final var model = models().getBuilder(name(block))
+				.texture("particle", fluidGroup.getStill().get().getAttributes().getStillTexture());
+
+		simpleBlock(block, model);
 	}
 
 	private int getRotationX(final Direction direction) {
