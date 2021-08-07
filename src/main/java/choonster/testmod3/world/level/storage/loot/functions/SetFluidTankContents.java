@@ -100,7 +100,7 @@ public class SetFluidTankContents extends LootItemConditionalFunction {
 
 		@Override
 		public SetFluidTankContents deserialize(final JsonObject object, final JsonDeserializationContext deserializationContext, final LootItemCondition[] conditions) {
-			final LootPoolEntryContainer[] lootEntries = GsonHelper.convertToObject(object, "entries", deserializationContext, LootPoolEntryContainer[].class);
+			final LootPoolEntryContainer[] lootEntries = GsonHelper.getAsObject(object, "entries", deserializationContext, LootPoolEntryContainer[].class);
 			return new SetFluidTankContents(conditions, Arrays.asList(lootEntries));
 		}
 	}
