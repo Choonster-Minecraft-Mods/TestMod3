@@ -251,6 +251,8 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 		withExistingParent(ModItems.REPLACEMENT_BOOTS.get(), Items.CHAINMAIL_BOOTS);
 
+		getBuilder(name(ModItems.FLUID_STACK_ITEM.get()));
+
 		spawnEggItem(ModItems.PLAYER_AVOIDING_CREEPER_SPAWN_EGG.get());
 
 		bucketItem(ModItems.WOODEN_BUCKET.get());
