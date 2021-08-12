@@ -23,7 +23,7 @@ public class BlockEventHandler {
 	private static boolean isPlayerHarvestingLogWithoutCorrectTool(final BlockState state, final Player player) {
 		return !player.getAbilities().instabuild
 				&& state.is(BlockTags.LOGS)
-				&& !ForgeHooks.canHarvestBlock(state, player, player.level, player.blockPosition());
+				&& !ForgeHooks.isCorrectToolForDrops(state, player);
 	}
 
 	/**

@@ -123,11 +123,11 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<HarvestSwordItem> WOODEN_HARVEST_SWORD = ITEMS.register("wooden_harvest_sword",
-			() -> new HarvestSwordItem(Tiers.WOOD, HarvestSwordItem.addToolTypes(Tiers.WOOD, defaultItemProperties()))
+			() -> new HarvestSwordItem(Tiers.WOOD, defaultItemProperties())
 	);
 
 	public static final RegistryObject<HarvestSwordItem> DIAMOND_HARVEST_SWORD = ITEMS.register("diamond_harvest_sword",
-			() -> new HarvestSwordItem(Tiers.DIAMOND, HarvestSwordItem.addToolTypes(Tiers.DIAMOND, defaultItemProperties()))
+			() -> new HarvestSwordItem(Tiers.DIAMOND, defaultItemProperties())
 	);
 
 	public static final RegistryObject<ClearerItem> CLEARER = ITEMS.register("clearer",

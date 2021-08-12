@@ -1,6 +1,7 @@
 package choonster.testmod3.world.item;
 
 import com.google.common.collect.ImmutableSet;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.SetTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,9 +12,12 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.common.ToolType;
+import net.minecraftforge.common.TierSortingRegistry;
+import net.minecraftforge.common.ToolAction;
+import net.minecraftforge.common.ToolActions;
 
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * A tool that can function as a sword, pickaxe, axe or shovel.
@@ -24,7 +28,6 @@ import java.util.Set;
  * @author Choonster
  */
 public class HarvestSwordItem extends DiggerItem {
-
 	/**
 	 * The speed at which Cobwebs are harvested
 	 */
@@ -50,75 +53,47 @@ public class HarvestSwordItem extends DiggerItem {
 	 */
 	private static final float ATTACK_SPEED = -2.4f;
 
+	/**
+	 * The vegetation {@link Material}s that Swords are effective on.
+	 */
+	private static final Set<Material> VEGETATION_MATERIALS = ImmutableSet.of(
+			Material.PLANT, Material.REPLACEABLE_PLANT, Material.VEGETABLE
+	);
+
 	public HarvestSwordItem(final Tier tier, final Item.Properties properties) {
 		super(BASE_DAMAGE, ATTACK_SPEED, tier, SetTag.empty(), properties);
 	}
 
-	/**
-	 * Add the pickaxe, axe, shovel and sword tool types to the item properties,
-	 * using the {@link Tier}'s harvest level for each tool.
-	 *
-	 * @param itemTier   The item tier
-	 * @param properties The item properties to add the tool types to
-	 * @return The item properties with the tool types added
-	 */
-	public static Item.Properties addToolTypes(final Tier itemTier, final Item.Properties properties) {
-		return properties
-				.addToolType(ToolType.PICKAXE, itemTier.getLevel())
-				.addToolType(ToolType.AXE, itemTier.getLevel())
-				.addToolType(ToolType.SHOVEL, itemTier.getLevel())
-				.addToolType(ToolType.get("sword"), itemTier.getLevel()); // Waila Harvestability sets the harvest tool of Cobwebs to "sword"
-	}
-
-	/**
-	 * The {@link Material}s that this tool is effective on.
-	 */
-	private static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(
-			// Pickaxe
-			Material.STONE, Material.METAL, Material.METAL, Material.GLASS, Material.PISTON, Material.HEAVY_METAL, Material.DECORATION,
-
-			// Axe
-			Material.WOOD, Material.VEGETABLE, Material.PLANT, Material.REPLACEABLE_PLANT,
-
-			// Shovel
-			Material.GRASS, Material.DIRT, Material.SAND, Material.TOP_SNOW, Material.SNOW, Material.CLAY
-	);
-
-	/**
-	 * The {@link Material}s that Swords are effective on.
-	 */
-	private static final Set<Material> SWORD_MATERIALS = ImmutableSet.of(
-			Material.PLANT, Material.REPLACEABLE_PLANT, Material.LEAVES, Material.VEGETABLE
-	);
-
 	@Override
-	public boolean isCorrectToolForDrops(final BlockState blockIn) {
-		return super.isCorrectToolForDrops(blockIn);
+	public boolean isCorrectToolForDrops(final ItemStack stack, final BlockState state) {
+		if (state.is(Blocks.COBWEB)) {
+			return true;
+		}
+
+		return isMineable(state) && TierSortingRegistry.isCorrectTierForDrops(getTier(), state);
 	}
 
 	@Override
-	public boolean canHarvestBlock(final ItemStack stack, final BlockState state) {
-		return EFFECTIVE_MATERIALS.contains(state.getMaterial()) || state.getBlock() == Blocks.COBWEB;
+	public boolean canPerformAction(final ItemStack stack, final ToolAction toolAction) {
+		return Stream.of(
+				ToolActions.DEFAULT_SWORD_ACTIONS,
+				ToolActions.DEFAULT_PICKAXE_ACTIONS,
+				ToolActions.DEFAULT_AXE_ACTIONS,
+				ToolActions.DEFAULT_SHOVEL_ACTIONS
+		).anyMatch(toolActions -> toolActions.contains(toolAction));
 	}
 
 	@Override
 	public float getDestroySpeed(final ItemStack stack, final BlockState state) {
-		if (state.getBlock() == Blocks.COBWEB) {
+		if (state.is(Blocks.COBWEB)) {
 			return DIG_SPEED_COBWEB;
 		}
 
-		for (final ToolType type : getToolTypes(stack)) {
-			if (state.isToolEffective(type)) {
-				return speed;
-			}
-		}
-
-		// Not all blocks have a harvest tool/level set, so we need to fall back to checking the Material like the vanilla tools do
-		if (EFFECTIVE_MATERIALS.contains(state.getMaterial())) {
+		if (isMineable(state)) {
 			return speed;
 		}
 
-		if (SWORD_MATERIALS.contains(state.getMaterial())) {
+		if (isVegetation(state)) {
 			return DIG_SPEED_SWORD;
 		}
 
@@ -130,5 +105,18 @@ public class HarvestSwordItem extends DiggerItem {
 		// Only reduce the durability by 1 point (like swords do) instead of 2 (like tools do)
 		itemStack.hurtAndBreak(1, attacker, (entity) -> entity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 		return true;
+	}
+
+	private boolean isMineable(final BlockState state) {
+		return Stream.of(
+				BlockTags.MINEABLE_WITH_AXE,
+				BlockTags.MINEABLE_WITH_HOE,
+				BlockTags.MINEABLE_WITH_PICKAXE,
+				BlockTags.MINEABLE_WITH_SHOVEL
+		).anyMatch(state::is);
+	}
+
+	private boolean isVegetation(final BlockState state) {
+		return state.is(BlockTags.LEAVES) || VEGETATION_MATERIALS.contains(state.getMaterial());
 	}
 }
