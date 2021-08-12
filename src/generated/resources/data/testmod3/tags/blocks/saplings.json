@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "testmod3:oak_sapling",
+    "testmod3:spruce_sapling",
+    "testmod3:birch_sapling",
+    "testmod3:jungle_sapling",
+    "testmod3:acacia_sapling",
+    "testmod3:dark_oak_sapling"
+  ]
+}

@@ -1,14 +1,20 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.world.item.Item;
-import net.minecraft.tags.Tag;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 
 public class ModTags {
 	public static class Blocks {
+		public static final Tag.Named<Block> SAPLINGS = tag("saplings");
 
+		private static Tag.Named<Block> tag(final String name) {
+			return BlockTags.bind(new ResourceLocation(TestMod3.MODID, name).toString());
+		}
 	}
 
 	public static class Items {
