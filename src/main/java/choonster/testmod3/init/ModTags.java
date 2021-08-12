@@ -7,6 +7,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.versions.forge.ForgeVersion;
 
 public class ModTags {
 	public static class Blocks {
@@ -20,9 +21,14 @@ public class ModTags {
 	public static class Items {
 		public static final Tag.Named<Item> VANILLA_DYES = tag("vanilla_dyes");
 		public static final Tag.Named<Item> VANILLA_TERRACOTTA = tag("vanilla_terracotta");
+		public static final Tag.Named<Item> RUBBER = forgeTag("rubber");
 
 		private static Tag.Named<Item> tag(final String name) {
 			return ItemTags.bind(new ResourceLocation(TestMod3.MODID, name).toString());
+		}
+
+		private static Tag.Named<Item> forgeTag(final String name) {
+			return ItemTags.bind(new ResourceLocation(ForgeVersion.MOD_ID, name).toString());
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.init.ModTags;
 import net.minecraft.data.DataGenerator;
@@ -68,6 +69,16 @@ public class TestMod3ItemTagsProvider extends ItemTagsProvider {
 						Items.GREEN_TERRACOTTA,
 						Items.RED_TERRACOTTA,
 						Items.BLACK_TERRACOTTA
+				);
+
+		tag(ItemTags.PLANKS)
+				.add(
+						ModBlocks.PLANKS.get().asItem()
+				);
+
+		tag(ModTags.Items.RUBBER)
+				.add(
+						ModItems.RUBBER.get()
 				);
 	}
 }
