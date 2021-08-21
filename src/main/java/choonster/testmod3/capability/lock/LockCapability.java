@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nullable;
@@ -37,8 +37,8 @@ public final class LockCapability {
 	 */
 	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "lock");
 
-	public static void register() {
-		CapabilityManager.INSTANCE.register(ILock.class);
+	public static void register(final RegisterCapabilitiesEvent event) {
+		event.register(ILock.class);
 	}
 
 	/**

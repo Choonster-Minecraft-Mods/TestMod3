@@ -29,9 +29,6 @@ public class PigSpawnerItem extends Item {
 
 	@Override
 	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final CompoundTag nbt) {
-		//noinspection ConstantConditions
-		if (PigSpawnerCapability.PIG_SPAWNER_CAPABILITY == null) return null;
-
 		return PigSpawnerCapability.createProvider(spawnerFactory.get());
 	}
 

@@ -11,8 +11,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -48,8 +48,8 @@ public final class MaxHealthCapability {
 
 	public static final Marker LOG_MARKER = MarkerManager.getMarker("MaxHealth").addParents(LogUtil.MOD_MARKER);
 
-	public static void register() {
-		CapabilityManager.INSTANCE.register(IMaxHealth.class);
+	public static void register(final RegisterCapabilitiesEvent event) {
+		event.register(IMaxHealth.class);
 	}
 
 	/**

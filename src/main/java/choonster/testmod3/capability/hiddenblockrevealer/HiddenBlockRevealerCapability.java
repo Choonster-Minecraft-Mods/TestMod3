@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 
 import java.util.Optional;
@@ -37,8 +37,8 @@ public final class HiddenBlockRevealerCapability {
 	 */
 	private static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "hidden_block_revealer");
 
-	public static void register() {
-		CapabilityManager.INSTANCE.register(IHiddenBlockRevealer.class);
+	public static void register(final RegisterCapabilitiesEvent event) {
+		event.register(IHiddenBlockRevealer.class);
 
 		CapabilityContainerListenerManager.registerListenerFactory(HiddenBlockRevealerContainerListener::new);
 	}

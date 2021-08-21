@@ -24,8 +24,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -72,8 +72,8 @@ public final class PigSpawnerCapability {
 	/**
 	 * Register the capability.
 	 */
-	public static void register() {
-		CapabilityManager.INSTANCE.register(IPigSpawner.class);
+	public static void register(final RegisterCapabilitiesEvent event) {
+		event.register(IPigSpawner.class);
 
 		CapabilityContainerListenerManager.registerListenerFactory(FinitePigSpawnerContainerListener::new);
 	}

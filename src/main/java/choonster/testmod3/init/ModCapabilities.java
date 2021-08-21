@@ -8,10 +8,10 @@ import choonster.testmod3.capability.lastusetime.LastUseTimeCapability;
 import choonster.testmod3.capability.lock.LockCapability;
 import choonster.testmod3.capability.maxhealth.MaxHealthCapability;
 import choonster.testmod3.capability.pigspawner.PigSpawnerCapability;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 /**
  * Registers this mod's capabilities.
@@ -22,17 +22,15 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 public class ModCapabilities {
 	/**
 	 * Register the capabilities.
-	 *
-	 * @param event The common setup event
 	 */
 	@SubscribeEvent
-	public static void registerCapabilities(final FMLCommonSetupEvent event) {
-		PigSpawnerCapability.register();
-		LastUseTimeCapability.register();
-		MaxHealthCapability.register();
-		HiddenBlockRevealerCapability.register();
-		LockCapability.register();
-		ChunkEnergyCapability.register();
+	public static void registerCapabilities(final RegisterCapabilitiesEvent event) {
+		PigSpawnerCapability.register(event);
+		LastUseTimeCapability.register(event);
+		MaxHealthCapability.register(event);
+		HiddenBlockRevealerCapability.register(event);
+		LockCapability.register(event);
+		ChunkEnergyCapability.register(event);
 		FluidHandlerCapability.register();
 	}
 }

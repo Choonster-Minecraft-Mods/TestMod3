@@ -11,8 +11,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -42,8 +42,8 @@ public final class LastUseTimeCapability {
 	 */
 	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "last_use_time");
 
-	public static void register() {
-		CapabilityManager.INSTANCE.register(ILastUseTime.class);
+	public static void register(final RegisterCapabilitiesEvent event) {
+		event.register(ILastUseTime.class);
 
 		CapabilityContainerListenerManager.registerListenerFactory(LastUseTimeContainerListener::new);
 	}
