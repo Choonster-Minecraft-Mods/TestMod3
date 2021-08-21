@@ -1,11 +1,17 @@
 package choonster.testmod3.compat.waila;
 
+import choonster.testmod3.text.TestMod3Lang;
+import choonster.testmod3.world.level.block.*;
+import mcp.mobius.waila.api.IRegistrar;
+import mcp.mobius.waila.api.IWailaPlugin;
+import mcp.mobius.waila.api.TooltipPosition;
+import mcp.mobius.waila.api.WailaPlugin;
+
 /**
  * Waila compatibility.
  *
  * @author Choonster
  */
-/*
 @WailaPlugin
 public class WailaCompat implements IWailaPlugin {
 
@@ -23,4 +29,3 @@ public class WailaCompat implements IWailaPlugin {
 		registrar.registerComponentProvider(new RestrictedFluidTankEnabledFacingsHUDHandler(), TooltipPosition.BODY, RestrictedFluidTankBlock.class);
 	}
 }
-*/
