@@ -154,11 +154,9 @@ dependencies {
 
     embed "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
 
-    // Visit https://www.curseforge.com/minecraft/mc-mods/jade/files/all to get the latest version
-//    implementation fg.deobf("curse.maven:jade-324717:${jade_file_id}")
+    implementation fg.deobf("curse.maven:jade-324717:${jade_file_id}")
 
-//    compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
-//    runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
+    implementation fg.deobf("curse.maven:the-one-probe-245211:${top_file_id}")
 
     // Examples using mod jars from ./libs
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
