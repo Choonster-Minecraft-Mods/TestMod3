@@ -7,13 +7,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 
 import java.util.Optional;
-
-import static choonster.testmod3.util.InjectionUtil.Null;
 
 /**
  * Items with this capability reveal hidden blocks.
@@ -24,8 +23,8 @@ public final class HiddenBlockRevealerCapability {
 	/**
 	 * The {@link Capability} instance.
 	 */
-	@CapabilityInject(IHiddenBlockRevealer.class)
-	public static final Capability<IHiddenBlockRevealer> HIDDEN_BLOCK_REVEALER_CAPABILITY = Null();
+	public static final Capability<IHiddenBlockRevealer> HIDDEN_BLOCK_REVEALER_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+	});
 
 	/**
 	 * The default {@link Direction} to use for this capability.

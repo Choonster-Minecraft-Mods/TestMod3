@@ -22,10 +22,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -41,8 +38,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static choonster.testmod3.util.InjectionUtil.Null;
-
 /**
  * Capability for {@link IPigSpawner}.
  *
@@ -54,8 +49,8 @@ public final class PigSpawnerCapability {
 	/**
 	 * The {@link Capability} instance.
 	 */
-	@CapabilityInject(IPigSpawner.class)
-	public static final Capability<IPigSpawner> PIG_SPAWNER_CAPABILITY = Null();
+	public static final Capability<IPigSpawner> PIG_SPAWNER_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+	});
 
 	/**
 	 * The default {@link Direction} to use for this capability.
@@ -131,7 +126,9 @@ public final class PigSpawnerCapability {
 		 * @param commandSource   The command source, if any
 		 */
 		private static void trySpawnPig(final IPigSpawner pigSpawner, final Level world, final double x, final double y, final double z, @Nullable final IPigSpawnerInteractable interactable, final BlockPos interactablePos, @Nullable final CommandSource commandSource) {
-			if (world.isClientSide) return;
+			if (world.isClientSide) {
+				return;
+			}
 
 			boolean shouldSpawnPig = true;
 

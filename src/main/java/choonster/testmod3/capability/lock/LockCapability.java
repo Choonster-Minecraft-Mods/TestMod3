@@ -12,13 +12,12 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nullable;
-
-import static choonster.testmod3.util.InjectionUtil.Null;
 
 /**
  * Capability for {@link ILock}.
@@ -29,8 +28,8 @@ public final class LockCapability {
 	/**
 	 * The {@link Capability} instance.
 	 */
-	@CapabilityInject(ILock.class)
-	public static final Capability<ILock> LOCK_CAPABILITY = Null();
+	public static final Capability<ILock> LOCK_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+	});
 
 	/**
 	 * The ID of this capability.

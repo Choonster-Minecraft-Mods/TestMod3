@@ -11,7 +11,8 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -19,8 +20,6 @@ import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fmllegacy.network.PacketDistributor;
-
-import static choonster.testmod3.util.InjectionUtil.Null;
 
 /**
  * Capability to store per-chunk energy values.
@@ -31,8 +30,8 @@ public class ChunkEnergyCapability {
 	/**
 	 * The {@link IChunkEnergy} {@link Capability} instance.
 	 */
-	@CapabilityInject(IChunkEnergy.class)
-	public static final Capability<IChunkEnergy> CHUNK_ENERGY_CHUNK_CAPABILITY = Null();
+	public static final Capability<IChunkEnergy> CHUNK_ENERGY_CHUNK_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+	});
 
 	/**
 	 * The default {@link Direction} to use for this capability.

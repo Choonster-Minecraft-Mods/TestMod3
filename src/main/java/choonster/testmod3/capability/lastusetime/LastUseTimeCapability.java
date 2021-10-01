@@ -9,16 +9,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import static choonster.testmod3.util.InjectionUtil.Null;
 
 /**
  * Capability for {@link ILastUseTime}.
@@ -29,8 +24,8 @@ public final class LastUseTimeCapability {
 	/**
 	 * The {@link Capability} instance.
 	 */
-	@CapabilityInject(ILastUseTime.class)
-	public static final Capability<ILastUseTime> LAST_USE_TIME_CAPABILITY = Null();
+	public static final Capability<ILastUseTime> LAST_USE_TIME_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+	});
 
 	/**
 	 * The default {@link Direction} to use for this capability.
