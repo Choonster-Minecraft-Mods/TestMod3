@@ -4,14 +4,10 @@ import choonster.testmod3.TestMod3;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
-import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
@@ -20,8 +16,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-
-import java.util.function.Supplier;
 
 /**
  * Registers this mod's {@link DispenseItemBehavior}s.
@@ -62,30 +56,6 @@ public class ModDispenseBehaviors {
 					return stack;
 				}
 			});
-
-			// Add a copy of the Vanilla spawn egg dispense behaviour for all our spawn eggs
-			final DefaultDispenseItemBehavior spawnEggDispenseBehavior = new DefaultDispenseItemBehavior() {
-				@Override
-				public ItemStack execute(final BlockSource source, final ItemStack stack) {
-					final Direction direction = source.getBlockState().getValue(DispenserBlock.FACING);
-					final EntityType<?> entityType = ((SpawnEggItem) stack.getItem()).getType(stack.getTag());
-
-					entityType.spawn(
-							source.getLevel(), stack, null,
-							source.getPos().relative(direction), MobSpawnType.DISPENSER,
-							direction != Direction.UP, false
-					);
-
-					stack.shrink(1);
-
-					return stack;
-				}
-			};
-
-			ModItems.getSpawnEggs()
-					.stream()
-					.map(Supplier::get)
-					.forEach(egg -> DispenserBlock.registerBehavior(egg, spawnEggDispenseBehavior));
 		});
 	}
 }

@@ -14,30 +14,20 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.function.Supplier;
 
 public class ModItems {
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TestMod3.MODID);
-
-	private static final Set<RegistryObject<ModSpawnEggItem>> SPAWN_EGGS = new HashSet<>();
 
 	private static boolean isInitialised;
 
@@ -300,8 +290,8 @@ public class ModItems {
 			() -> new FluidStackItem(new Item.Properties())
 	);
 
-	public static final RegistryObject<ModSpawnEggItem> PLAYER_AVOIDING_CREEPER_SPAWN_EGG = registerSpawnEgg("player_avoiding_creeper_spawn_egg",
-			ModEntities.PLAYER_AVOIDING_CREEPER, 0xda70b, 0
+	public static final RegistryObject<ForgeSpawnEggItem> PLAYER_AVOIDING_CREEPER_SPAWN_EGG = ITEMS.register("player_avoiding_creeper_spawn_egg",
+			() -> new ForgeSpawnEggItem(ModEntities.PLAYER_AVOIDING_CREEPER, 0xda70b, 0, defaultItemProperties())
 	);
 
 	public static final RegistryObject<ModBucketItem> WOODEN_BUCKET = ITEMS.register("wooden_bucket",
@@ -339,52 +329,11 @@ public class ModItems {
 	}
 
 	/**
-	 * Gets the registered mod spawn eggs.
-	 *
-	 * @return The spawn egg items
-	 */
-	public static Collection<? extends Supplier<ModSpawnEggItem>> getSpawnEggs() {
-		return Collections.unmodifiableCollection(SPAWN_EGGS);
-	}
-
-	/**
-	 * Registers a spawn egg item.
-	 *
-	 * @param name           The registry name of the item
-	 * @param entityType     The entity type to spawn
-	 * @param primaryColor   The primary colour of the spawn egg
-	 * @param secondaryColor The secondary colour of the spawn egg
-	 * @return A RegistryObject reference to the item
-	 */
-	private static RegistryObject<ModSpawnEggItem> registerSpawnEgg(
-			final String name, final RegistryObject<? extends EntityType<?>> entityType,
-			final int primaryColor, final int secondaryColor
-	) {
-		final RegistryObject<ModSpawnEggItem> spawnEgg = ITEMS.register(name,
-				() -> new ModSpawnEggItem(entityType, primaryColor, secondaryColor, new Item.Properties().tab(TestMod3.CREATIVE_MODE_TAB))
-		);
-
-		SPAWN_EGGS.add(spawnEgg);
-
-		return spawnEgg;
-	}
-
-	/**
 	 * Gets an {@link Item.Properties} instance with the {@link CreativeModeTab} set to {@link TestMod3#CREATIVE_MODE_TAB}.
 	 *
 	 * @return The item properties
 	 */
 	private static Item.Properties defaultItemProperties() {
 		return new Item.Properties().tab(TestMod3.CREATIVE_MODE_TAB);
-	}
-
-	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
-	public static class EventHandler {
-		@SubscribeEvent
-		public static void commonSetup(final FMLCommonSetupEvent event) {
-			event.enqueueWork(() ->
-					ModSpawnEggItem.addEggsToEggsMap(getSpawnEggs())
-			);
-		}
 	}
 }

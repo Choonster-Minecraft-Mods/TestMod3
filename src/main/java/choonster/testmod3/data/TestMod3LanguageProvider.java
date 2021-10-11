@@ -6,7 +6,6 @@ import choonster.testmod3.init.*;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.EnumFaceRotation;
 import choonster.testmod3.world.item.ModBucketItem;
-import choonster.testmod3.world.item.ModSpawnEggItem;
 import choonster.testmod3.world.level.block.PlaneBlock;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
@@ -21,6 +20,7 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.data.LanguageProvider;
 import org.apache.commons.lang3.StringUtils;
 
@@ -348,9 +348,9 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		ENTITY_TYPE_NAMES.put(key.get(), name);
 	}
 
-	private void addSpawnEgg(final Supplier<? extends ModSpawnEggItem> spawnEggItem) {
-		final ModSpawnEggItem item = spawnEggItem.get();
-		final EntityType<?> entityType = item.getType(null);
+	private void addSpawnEgg(final Supplier<? extends ForgeSpawnEggItem> spawnEggItem) {
+		final var item = spawnEggItem.get();
+		final var entityType = item.getType(null);
 		add(item, String.format("%s Spawn Egg", ENTITY_TYPE_NAMES.get(entityType)));
 	}
 
