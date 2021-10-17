@@ -32,8 +32,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ModScreenFactories {
 	@SubscribeEvent
 	public static void registerConstructors(final FMLClientSetupEvent event) {
-		registerMenuScreenConstructors();
-		registerClientScreenConstructors();
+		event.enqueueWork(() -> {
+			registerMenuScreenConstructors();
+			registerClientScreenConstructors();
+		});
 	}
 
 	private static void registerMenuScreenConstructors() {
