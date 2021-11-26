@@ -60,14 +60,14 @@ public class PigSpawnerItem extends Item {
 	}
 
 	@Override
-	public double getDurabilityForDisplay(final ItemStack stack) {
+	public int getBarWidth(final ItemStack stack) {
 		return PigSpawnerCapability.getPigSpawner(stack)
 				.filter(pigSpawner -> pigSpawner instanceof IPigSpawnerFinite)
 				.map(pigSpawner -> {
 					final IPigSpawnerFinite pigSpawnerFinite = (IPigSpawnerFinite) pigSpawner;
 					final int maxNumPigs = pigSpawnerFinite.getMaxNumPigs();
-					return (double) (maxNumPigs - pigSpawnerFinite.getNumPigs()) / maxNumPigs;
+					return Math.round(13.0f - ((float) (maxNumPigs - pigSpawnerFinite.getNumPigs()) / maxNumPigs) * 13.0f);
 				})
-				.orElse(super.getDurabilityForDisplay(stack));
+				.orElse(super.getBarWidth(stack));
 	}
 }
