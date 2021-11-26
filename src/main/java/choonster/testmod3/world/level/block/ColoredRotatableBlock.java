@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 
@@ -62,7 +61,7 @@ public class ColoredRotatableBlock extends Block {
 	private boolean recolorBlock(final BlockState currentState, final LevelAccessor world, final BlockPos pos, final DyeColor color) {
 		final BlockState newState = copyState(currentState, getVariantGroup().getBlock(color).get().defaultBlockState());
 
-		world.setBlock(pos, newState, Constants.BlockFlags.DEFAULT);
+		world.setBlock(pos, newState, Block.UPDATE_ALL);
 
 		return true;
 	}

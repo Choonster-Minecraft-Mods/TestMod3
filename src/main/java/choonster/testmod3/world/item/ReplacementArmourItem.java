@@ -7,6 +7,7 @@ import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
@@ -18,7 +19,6 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -81,7 +81,7 @@ public class ReplacementArmourItem extends ArmorItem {
 	 * @return Has this item replaced the other armour?
 	 */
 	public static boolean hasReplacedArmour(final ItemStack stack) {
-		return stack.getOrCreateTag().contains(KEY_REPLACED_ARMOUR, NBT.TAG_LIST);
+		return stack.getOrCreateTag().contains(KEY_REPLACED_ARMOUR, Tag.TAG_LIST);
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class ReplacementArmourItem extends ArmorItem {
 	 */
 	private void restoreArmour(final ItemStack stack, final LivingEntity entity) {
 		final CompoundTag stackTagCompound = stack.getOrCreateTag();
-		final ListTag replacedArmour = stackTagCompound.getList(KEY_REPLACED_ARMOUR, NBT.TAG_COMPOUND);
+		final ListTag replacedArmour = stackTagCompound.getList(KEY_REPLACED_ARMOUR, Tag.TAG_COMPOUND);
 
 		for (int i = 0; i < replacedArmour.size(); i++) { // For each saved armour item,
 			final CompoundTag replacedTagCompound = replacedArmour.getCompound(i);

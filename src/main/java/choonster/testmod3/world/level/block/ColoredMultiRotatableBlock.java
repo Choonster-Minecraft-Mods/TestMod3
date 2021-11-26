@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.util.Constants;
 
 /**
  * A block with 16 colours, 6 facings and 4 face rotations.
@@ -46,7 +45,7 @@ public class ColoredMultiRotatableBlock extends ColoredRotatableBlock {
 		final EnumFaceRotation faceRotation = world.getBlockState(pos).getValue(FACE_ROTATION);
 		final BlockState newState = world.getBlockState(pos).setValue(FACE_ROTATION, faceRotation.rotateClockwise());
 
-		world.setBlock(pos, newState, Constants.BlockFlags.DEFAULT);
+		world.setBlock(pos, newState, Block.UPDATE_ALL);
 	}
 
 	@Override

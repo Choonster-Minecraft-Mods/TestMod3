@@ -11,12 +11,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.Constants;
 
 /**
  * A Command Block that's accessible outside Creative Mode.
@@ -38,7 +38,7 @@ public class SurvivalCommandBlockEntity extends CommandBlockEntity {
 		@Override
 		public void onUpdated() {
 			final BlockState state = getLevel().getBlockState(worldPosition);
-			getLevel().sendBlockUpdated(worldPosition, state, state, Constants.BlockFlags.DEFAULT);
+			getLevel().sendBlockUpdated(worldPosition, state, state, Block.UPDATE_ALL);
 		}
 
 		@Override

@@ -8,12 +8,12 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.BannerBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
@@ -73,7 +73,7 @@ public class BannerFeature extends Feature<BannerFeatureConfig> {
 		final BlockPos origin = context.origin();
 		final BannerFeatureConfig config = context.config();
 
-		level.setBlock(origin, BannerBlock.byColor(config.color()).defaultBlockState(), Constants.BlockFlags.DEFAULT);
+		level.setBlock(origin, BannerBlock.byColor(config.color()).defaultBlockState(), Block.UPDATE_ALL);
 
 		final BlockEntity blockEntity = level.getBlockEntity(origin);
 		if (blockEntity instanceof BannerBlockEntity) {

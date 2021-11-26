@@ -4,6 +4,7 @@ import choonster.testmod3.util.InventoryUtils;
 import com.google.common.base.Preconditions;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -15,7 +16,6 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
@@ -87,7 +87,7 @@ public class LootItemHandler extends ItemStackHandler {
 	 * @return Was the location read from NBT?
 	 */
 	protected boolean checkLootAndRead(final CompoundTag compound) {
-		if (compound.contains("LootTable", Constants.NBT.TAG_STRING)) {
+		if (compound.contains("LootTable", Tag.TAG_STRING)) {
 			lootTableLocation = new ResourceLocation(compound.getString("LootTable"));
 			lootTableSeed = compound.getLong("LootTableSeed");
 			return true;
@@ -110,7 +110,7 @@ public class LootItemHandler extends ItemStackHandler {
 	@Override
 	public void deserializeNBT(final CompoundTag nbt) {
 		if (checkLootAndRead(nbt)) { // If the LootTable location exists, don't read the inventory contents from NBT
-			setSize(nbt.contains("Size", Constants.NBT.TAG_INT) ? nbt.getInt("Size") : stacks.size());
+			setSize(nbt.contains("Size", Tag.TAG_INT) ? nbt.getInt("Size") : stacks.size());
 			onLoad();
 		} else {
 			super.deserializeNBT(nbt);

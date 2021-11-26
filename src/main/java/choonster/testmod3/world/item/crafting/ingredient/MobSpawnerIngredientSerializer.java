@@ -3,6 +3,7 @@ package choonster.testmod3.world.item.crafting.ingredient;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -11,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.common.crafting.NBTIngredient;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
@@ -42,7 +42,7 @@ public class MobSpawnerIngredientSerializer implements IIngredientSerializer<NBT
 		spawnData.putString("id", entityRegistryName.toString());
 		blockEntityData.put("SpawnData", spawnData);
 
-		blockEntityData.put("SpawnPotentials", blockEntityData.getList("SpawnPotentials", Constants.NBT.TAG_COMPOUND));
+		blockEntityData.put("SpawnPotentials", blockEntityData.getList("SpawnPotentials", Tag.TAG_COMPOUND));
 
 		return new TestMod3NBTIngredient(stack);
 	}
