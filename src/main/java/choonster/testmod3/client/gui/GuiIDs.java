@@ -5,12 +5,12 @@ import choonster.testmod3.network.OpenClientScreenMessage;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
 
 public class GuiIDs {
 	/**
-	 * IDs for {@link AbstractContainerScreen} classes opened with {@link NetworkHooks#openGui}/{@link FMLPlayMessages.OpenContainer}.
+	 * IDs for {@link AbstractContainerScreen} classes opened with {@link NetworkHooks#openGui}/{@link PlayMessages.OpenContainer}.
 	 */
 	public static class Container {
 		public static final ResourceLocation MOD_CHEST = id("chest");

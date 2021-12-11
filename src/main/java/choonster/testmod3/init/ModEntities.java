@@ -20,9 +20,9 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -89,8 +89,10 @@ public class ModEntities {
 	public static class SpawnHandler {
 		@SubscribeEvent(priority = EventPriority.LOW)
 		public static void registerEntitySpawns(final BiomeLoadingEvent event) {
-			if (event.getName() == null) return;
-			
+			if (event.getName() == null) {
+				return;
+			}
+
 			final ResourceKey<Biome> biomeRegistryKey = ResourceKey.create(ForgeRegistries.Keys.BIOMES, event.getName());
 
 			if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.OCEAN)) {

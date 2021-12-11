@@ -8,7 +8,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 
 /**
  * Default implementation of {@link IChunkEnergy}.
@@ -82,11 +82,13 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy {
 		final Level level = getLevel();
 		final ChunkPos chunkPos = getChunkPos();
 
-		if (level.isClientSide) return;
+		if (level.isClientSide) {
+			return;
+		}
 
 		if (((ServerLevel) level).isPositionEntityTicking(chunkPos)) {  // Don't load the chunk when reading from NBT
 			final LevelChunk chunk = level.getChunk(chunkPos.x, chunkPos.z);
-			chunk.markUnsaved();
+			chunk.setUnsaved(true);
 			TestMod3.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> chunk), new UpdateChunkEnergyValueMessage(this));
 		}
 	}

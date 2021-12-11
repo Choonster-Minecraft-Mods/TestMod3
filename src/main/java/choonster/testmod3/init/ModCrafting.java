@@ -24,16 +24,16 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.common.crafting.NBTIngredient;
+import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import net.minecraftforge.fmllegacy.RegistryObject;
-import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -148,7 +148,7 @@ public class ModCrafting {
 		 * @param event The server starting event
 		 */
 		@SubscribeEvent
-		public static void removeRecipes(final FMLServerStartedEvent event) {
+		public static void removeRecipes(final ServerStartedEvent event) {
 			final RecipeManager recipeManager = event.getServer().getRecipeManager();
 			removeRecipes(recipeManager, FireworkRocketRecipe.class);
 			removeRecipes(recipeManager, FireworkStarRecipe.class);
@@ -209,7 +209,6 @@ public class ModCrafting {
 
 			// For each recipe type, create a new map that doesn't contain the recipes to be removed
 			existingRecipes.forEach((recipeType, existingRecipesForType) -> {
-				//noinspection UnstableApiUsage
 				final ImmutableMap<ResourceLocation, Recipe<?>> newRecipesForType = existingRecipesForType.entrySet()
 						.stream()
 						.filter(entry -> !predicate.test(entry.getValue()))
@@ -219,7 +218,7 @@ public class ModCrafting {
 				newRecipes.put(recipeType, newRecipesForType);
 			});
 
-			final int removedCount = removedCounts.values().stream().reduce(0, Integer::sum);
+			final int removedCount = removedCounts.values().intStream().reduce(0, Integer::sum);
 
 			try {
 				RECIPES.set(recipeManager, newRecipes.build());

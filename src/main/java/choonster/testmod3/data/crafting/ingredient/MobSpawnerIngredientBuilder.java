@@ -10,9 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.common.crafting.StackList;
 
-import java.util.Collections;
 import java.util.stream.Stream;
 
 /**
@@ -95,7 +93,7 @@ public class MobSpawnerIngredientBuilder {
 		private final EntityType<?> entityType;
 
 		private Result(final ItemStack spawner, final EntityType<?> entityType) {
-			super(Stream.of(new StackList(Collections.singleton(spawner))));
+			super(Stream.of(new ItemValue(spawner)));
 			this.entityType = entityType;
 		}
 

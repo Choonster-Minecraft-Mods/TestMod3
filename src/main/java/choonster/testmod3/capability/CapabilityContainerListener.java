@@ -8,7 +8,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 
@@ -43,7 +43,9 @@ public abstract class CapabilityContainerListener<HANDLER> implements ContainerL
 
 	@Override
 	public final void slotChanged(final AbstractContainerMenu menu, final int slotNumber, final ItemStack stack) {
-		if (!shouldSyncItem(stack)) return;
+		if (!shouldSyncItem(stack)) {
+			return;
+		}
 
 		stack.getCapability(capability, facing).ifPresent(handler -> {
 			final UpdateMenuCapabilityMessage<HANDLER, ?> message = createUpdateMessage(menu.containerId, menu.incrementStateId(), slotNumber, handler);

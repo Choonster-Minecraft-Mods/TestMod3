@@ -1,13 +1,13 @@
-package choonster.testmod3.init;
+package choonster.testmod3.init.levelgen;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.level.levelgen.feature.BannerFeature;
 import choonster.testmod3.world.level.levelgen.feature.BannerFeatureConfig;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 /**
  * Registers this mod's {@link Feature}s.

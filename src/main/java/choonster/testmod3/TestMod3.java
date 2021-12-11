@@ -3,6 +3,8 @@ package choonster.testmod3;
 import choonster.testmod3.compat.theoneprobe.TheOneProbeCompat;
 import choonster.testmod3.config.TestMod3Config;
 import choonster.testmod3.init.*;
+import choonster.testmod3.init.levelgen.ModBiomes;
+import choonster.testmod3.init.levelgen.ModFeatures;
 import choonster.testmod3.tests.Tests;
 import choonster.testmod3.util.BlockDumper;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -15,7 +17,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,11 +49,9 @@ public class TestMod3 {
 		ModEntities.initialise(modEventBus);
 		ModFeatures.initialise(modEventBus);
 		ModLootModifierSerializers.initialise(modEventBus);
-		ModFeatureDecorators.initialise(modEventBus);
 		ModPotions.initialise(modEventBus);
 		ModCrafting.Recipes.initialise(modEventBus);
 		ModSoundEvents.initialise(modEventBus);
-		ModSurfaceBuilders.initialise(modEventBus);
 		ModBlockEntities.initialise(modEventBus);
 		ModTestRegistryEntries.initialise(modEventBus);
 	}

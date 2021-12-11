@@ -1,12 +1,12 @@
 package choonster.testmod3.world.level.levelgen;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.init.ModConfiguredFeatures;
+import choonster.testmod3.init.levelgen.ModPlacedFeatures;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -34,21 +34,21 @@ public class ModLevelGen {
 		*/
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.OVERWORLD)) {
 			generation
-					.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, getFeature(ModConfiguredFeatures.BANNER));
+					.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, feature(ModPlacedFeatures.BANNER));
 		}
 
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.NETHER)) {
 			generation
-					.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, getFeature(ModConfiguredFeatures.NETHER_IRON_ORE));
+					.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, feature(ModPlacedFeatures.ORE_IRON_NETHER));
 		}
 
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.END)) {
 			generation
-					.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, getFeature(ModConfiguredFeatures.END_IRON_ORE));
+					.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, feature(ModPlacedFeatures.ORE_IRON_END));
 		}
 	}
 
-	private static ConfiguredFeature<?, ?> getFeature(final ResourceKey<ConfiguredFeature<?, ?>> key) {
-		return BuiltinRegistries.CONFIGURED_FEATURE.getOrThrow(key);
+	private static PlacedFeature feature(final ResourceKey<PlacedFeature> key) {
+		return BuiltinRegistries.PLACED_FEATURE.getOrThrow(key);
 	}
 }

@@ -6,8 +6,8 @@ import choonster.testmod3.capability.chunkenergy.ChunkEnergyCapability;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fmllegacy.LogicalSidedProvider;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.common.util.LogicalSidedProvider;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -58,7 +58,9 @@ public class UpdateChunkEnergyValueMessage {
 
 			optionalLevel.ifPresent(world ->
 					ChunkEnergyCapability.getChunkEnergy(world, message.chunkPos).ifPresent(chunkEnergy -> {
-						if (!(chunkEnergy instanceof ChunkEnergy)) return;
+						if (!(chunkEnergy instanceof ChunkEnergy)) {
+							return;
+						}
 
 						((ChunkEnergy) chunkEnergy).setEnergy(message.energy);
 					})

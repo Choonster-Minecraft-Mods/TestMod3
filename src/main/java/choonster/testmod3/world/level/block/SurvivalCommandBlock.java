@@ -1,11 +1,15 @@
 package choonster.testmod3.world.level.block;
 
+import choonster.testmod3.client.gui.GuiIDs;
+import choonster.testmod3.util.NetworkUtil;
 import choonster.testmod3.world.level.block.entity.SurvivalCommandBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -57,12 +61,18 @@ public class SurvivalCommandBlock extends CommandBlock {
 	@Override
 	public InteractionResult use(final BlockState state, final Level world, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult hit) {
 		final BlockEntity blockEntity = world.getBlockEntity(pos);
-
 		if (blockEntity instanceof SurvivalCommandBlockEntity) {
-			return ((SurvivalCommandBlockEntity) blockEntity).getCommandBlock().usedBy(player);
+			if (!player.getCommandSenderWorld().isClientSide) {
+				final ServerPlayer serverPlayer = (ServerPlayer) player;
+				NetworkUtil.openClientGui(serverPlayer, GuiIDs.Client.SURVIVAL_COMMAND_BLOCK, pos);
+				serverPlayer.connection.send(ClientboundBlockEntityDataPacket.create(blockEntity, BlockEntity::saveWithoutMetadata));
+			}
+
+			return InteractionResult.sidedSuccess(world.isClientSide);
+		} else {
+			return InteractionResult.PASS;
 		}
 
-		return InteractionResult.FAIL;
 	}
 
 	@Override
@@ -108,7 +118,7 @@ public class SurvivalCommandBlock extends CommandBlock {
 				}
 
 				if (commandBlockEntity.isPowered() || commandBlockEntity.isAutomatic()) {
-					world.getBlockTicks().scheduleTick(pos, this, 1);
+					world.scheduleTick(pos, this, 1);
 				}
 			} else if (mode == CommandBlockEntity.Mode.REDSTONE) {
 				if (conditionMet) {

@@ -11,8 +11,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -68,7 +68,9 @@ public class NetworkUtil {
 	 * @param extraDataWriter Consumer to write any additional data required by the GUI
 	 */
 	public static void openClientGui(final ServerPlayer player, final ResourceLocation id, final Consumer<FriendlyByteBuf> extraDataWriter) {
-		if (player.level.isClientSide) return;
+		if (player.level.isClientSide) {
+			return;
+		}
 		player.closeContainer();
 		player.containerMenu = player.inventoryMenu;
 

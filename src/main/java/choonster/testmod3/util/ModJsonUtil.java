@@ -2,11 +2,11 @@ package choonster.testmod3.util;
 
 import com.google.gson.*;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -72,7 +72,7 @@ public class ModJsonUtil {
 	}
 
 	public static void setCompoundTag(final JsonObject json, final String memberName, final CompoundTag nbt) {
-		final JsonObject object = new JsonParser().parse(nbt.toString()).getAsJsonObject();
+		final JsonObject object = JsonParser.parseString(nbt.toString()).getAsJsonObject();
 
 		json.add(memberName, object);
 	}

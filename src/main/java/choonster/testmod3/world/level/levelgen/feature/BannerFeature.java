@@ -28,10 +28,9 @@ import java.util.List;
  * @author Choonster
  */
 public class BannerFeature extends Feature<BannerFeatureConfig> {
-	private static final Field ITEM_PATTERNS = ObfuscationReflectionHelper.findField(BannerBlockEntity.class, /* itemPatterns */ "f_58475_");
 	private static final Field BASE_COLOR = ObfuscationReflectionHelper.findField(BannerBlockEntity.class, /* baseColor */ "f_58474_");
+	private static final Field ITEM_PATTERNS = ObfuscationReflectionHelper.findField(BannerBlockEntity.class, /* itemPatterns */ "f_58475_");
 	private static final Field PATTERNS = ObfuscationReflectionHelper.findField(BannerBlockEntity.class, /* patterns */ "f_58477_");
-	private static final Field RECEIVED_DATA = ObfuscationReflectionHelper.findField(BannerBlockEntity.class, /* receivedData */ "f_58476_");
 	private static final Field NAME = ObfuscationReflectionHelper.findField(BannerBlockEntity.class, /* name */ "f_58473_");
 
 	public BannerFeature(final Codec<BannerFeatureConfig> codec) {
@@ -83,13 +82,12 @@ public class BannerFeature extends Feature<BannerFeatureConfig> {
 		return true;
 	}
 
-	// Adapted from BannerBlockEntity.fromItem, which is client-only
+	// Adapted from BannerBlockEntity.fromItem
 	private static void loadFromItemStack(final BannerBlockEntity blockEntity, final ListTag patterns, final DyeColor color) {
 		try {
-			ITEM_PATTERNS.set(blockEntity, patterns);
 			BASE_COLOR.set(blockEntity, color);
+			ITEM_PATTERNS.set(blockEntity, patterns);
 			PATTERNS.set(blockEntity, null);
-			RECEIVED_DATA.set(blockEntity, true);
 			NAME.set(blockEntity, null);
 		} catch (final IllegalAccessException e) {
 			throw new RuntimeException("Unable to add banner data to BlockEntity", e);

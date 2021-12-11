@@ -15,7 +15,7 @@ import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.scores.Team;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.FOVUpdateEvent;
+import net.minecraftforge.client.event.FOVModifierEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,7 +26,7 @@ public class ClientEventHandler {
 	private static final Minecraft MINECRAFT = Minecraft.getInstance();
 
 	@SubscribeEvent
-	public static void onFOVUpdate(final FOVUpdateEvent event) {
+	public static void onFOVUpdate(final FOVModifierEvent event) {
 		if (event.getEntity().isUsingItem() && event.getEntity().getUseItem().getItem() instanceof ModBowItem) {
 			float fovModifier = event.getEntity().getTicksUsingItem() / 20.0f;
 

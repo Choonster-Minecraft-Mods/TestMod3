@@ -9,7 +9,6 @@ import com.mojang.serialization.JsonOps;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
-import net.minecraft.data.worldgen.biome.BiomeReport;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -25,11 +24,10 @@ import java.util.function.Supplier;
 
 /**
  * Generates "report" JSON files for this mod's biomes.
- * <p>
- * Adapted from {@link BiomeReport}.
  *
  * @author Choonster
  */
+// TODO: Remove in favour of WorldgenRegistryDumpReport?
 public class TestMod3BiomeReport implements DataProvider {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();

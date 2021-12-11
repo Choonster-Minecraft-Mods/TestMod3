@@ -1,16 +1,10 @@
 package choonster.testmod3.world.level.block.entity;
 
-import choonster.testmod3.client.gui.GuiIDs;
 import choonster.testmod3.init.ModBlockEntities;
-import choonster.testmod3.util.NetworkUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
@@ -44,17 +38,6 @@ public class SurvivalCommandBlockEntity extends CommandBlockEntity {
 		@Override
 		public ServerLevel getLevel() {
 			return (ServerLevel) level;
-		}
-
-		@Override
-		public InteractionResult usedBy(final Player player) {
-			if (!player.getCommandSenderWorld().isClientSide) {
-				final ServerPlayer playerMP = (ServerPlayer) player;
-				NetworkUtil.openClientGui(playerMP, GuiIDs.Client.SURVIVAL_COMMAND_BLOCK, worldPosition);
-				sendToClient(playerMP);
-			}
-
-			return InteractionResult.SUCCESS;
 		}
 
 		@Override
@@ -106,20 +89,6 @@ public class SurvivalCommandBlockEntity extends CommandBlockEntity {
 		compound.put("SurvivalCommandBlockLogic", getCommandBlock().save(new CompoundTag()));
 
 		return compound;
-	}
-
-	/**
-	 * Send an update packet for this command block to the specified player.
-	 *
-	 * @param player The player.
-	 */
-	private void sendToClient(final ServerPlayer player) {
-		setSendToClient(true);
-
-		final ClientboundBlockEntityDataPacket updatePacket = getUpdatePacket();
-		if (updatePacket != null) {
-			player.connection.send(updatePacket);
-		}
 	}
 
 	@Override

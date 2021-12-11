@@ -7,8 +7,8 @@ import choonster.testmod3.network.capability.hiddenblock.UpdateMenuHiddenBlockRe
 import choonster.testmod3.network.capability.lastusetime.UpdateMenuLastUseTimeMessage;
 import choonster.testmod3.network.capability.pigspawner.UpdateMenuPigSpawnerFiniteMessage;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fmllegacy.network.NetworkRegistry;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
 
 public class ModNetwork {
 	public static final ResourceLocation CHANNEL_NAME = new ResourceLocation(TestMod3.MODID, "network");

@@ -3,7 +3,7 @@ package choonster.testmod3.world.item.variantgroup;
 import choonster.testmod3.registry.IVariantGroup;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collection;
 
