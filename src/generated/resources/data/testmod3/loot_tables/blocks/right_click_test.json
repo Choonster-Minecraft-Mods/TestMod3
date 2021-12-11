@@ -14,8 +14,7 @@
         {
           "condition": "minecraft:survives_explosion"
         }
-      ],
-      "functions": []
+      ]
     },
     {
       "name": "ender_eye",
@@ -38,8 +37,7 @@
         {
           "condition": "minecraft:survives_explosion"
         }
-      ],
-      "functions": []
+      ]
     }
   ]
 }
