@@ -89,13 +89,11 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler & IN
 	}
 
 	@Override
-	public CompoundTag save(final CompoundTag compound) {
-		super.save(compound);
+	protected void saveAdditional(final CompoundTag compound) {
+		super.saveAdditional(compound);
 
 		compound.put("ItemHandler", inventory.serializeNBT());
 		compound.put("NameHolder", nameHolder.serializeNBT());
-
-		return compound;
 	}
 
 	@Override

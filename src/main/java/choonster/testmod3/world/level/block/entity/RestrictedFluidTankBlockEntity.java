@@ -78,14 +78,14 @@ public class RestrictedFluidTankBlockEntity extends BaseFluidTankBlockEntity {
 	}
 
 	@Override
-	public CompoundTag save(final CompoundTag tag) {
+	protected void saveAdditional(final CompoundTag tag) {
+		super.saveAdditional(tag);
+
 		final int[] enabledFacingIndices = enabledFacings.stream()
 				.mapToInt(Direction::get3DDataValue)
 				.toArray();
 
 		tag.putIntArray("EnabledFacings", enabledFacingIndices);
-
-		return super.save(tag);
 	}
 
 	@Override

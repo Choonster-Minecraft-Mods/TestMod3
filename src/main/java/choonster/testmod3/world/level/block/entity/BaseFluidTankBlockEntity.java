@@ -21,7 +21,7 @@ public abstract class BaseFluidTankBlockEntity extends TileFluidHandler {
 
 	@Override
 	public CompoundTag getUpdateTag() {
-		return save(new CompoundTag());
+		return saveWithoutMetadata();
 	}
 
 	@Nullable

@@ -83,12 +83,10 @@ public class SurvivalCommandBlockEntity extends CommandBlockEntity {
 	}
 
 	@Override
-	public CompoundTag save(final CompoundTag compound) {
-		super.save(compound);
+	protected void saveAdditional(final CompoundTag compound) {
+		super.saveAdditional(compound);
 
 		compound.put("SurvivalCommandBlockLogic", getCommandBlock().save(new CompoundTag()));
-
-		return compound;
 	}
 
 	@Override

@@ -58,10 +58,10 @@ public abstract class LockableItemHandlerBlockEntity<
 	}
 
 	@Override
-	public CompoundTag save(final CompoundTag compound) {
-		super.save(compound);
+	protected void saveAdditional(final CompoundTag compound) {
+		super.saveAdditional(compound);
+
 		compound.put("Lock", lock.serializeNBT());
-		return compound;
 	}
 
 	@Nullable
