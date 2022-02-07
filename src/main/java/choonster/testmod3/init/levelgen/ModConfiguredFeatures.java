@@ -1,13 +1,12 @@
 package choonster.testmod3.init.levelgen;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.registry.DeferredVanillaRegister;
+import choonster.testmod3.registry.VanillaRegistryObject;
 import choonster.testmod3.world.level.levelgen.feature.BannerFeatureConfig;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.features.OreFeatures;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPattern;
@@ -15,11 +14,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.eventbus.api.IEventBus;
 
 import java.util.List;
 
@@ -29,50 +24,58 @@ import java.util.List;
  * @author Choonster
  */
 public class ModConfiguredFeatures {
-	public static final ResourceKey<ConfiguredFeature<?, ?>> BANNER = key("banner");
-	public static final ResourceKey<ConfiguredFeature<?, ?>> ORE_IRON_NETHER = key("ore_iron_nether");
-	public static final ResourceKey<ConfiguredFeature<?, ?>> ORE_IRON_END = key("ore_iron_end");
+	private static final DeferredVanillaRegister<ConfiguredFeature<?, ?>> CONFIGURED_FEATURES =
+			DeferredVanillaRegister.create(BuiltinRegistries.CONFIGURED_FEATURE, TestMod3.MODID);
 
-	private static ResourceKey<ConfiguredFeature<?, ?>> key(final String name) {
-		return ResourceKey.create(Registry.CONFIGURED_FEATURE_REGISTRY, new ResourceLocation(TestMod3.MODID, name));
-	}
+	private static boolean isInitialised = false;
 
-	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
-	public static class RegistrationHandler {
-		// Ensure this is run after the Feature DeferredRegister in ModFeatures
-		@SubscribeEvent(priority = EventPriority.LOW)
-		public static void register(final RegistryEvent.Register<Feature<?>> event) {
-			final BlockMatchTest endStone = new BlockMatchTest(Blocks.END_STONE);
+	/**
+	 * Places a banner at the surface, but only in chunks with coordinates divisible by 16.
+	 * Test for this thread:
+	 * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2535868-banner-nbt-tags
+	 */
+	public static final VanillaRegistryObject<ConfiguredFeature<?, ?>> BANNER = CONFIGURED_FEATURES.register("banner",
+			() -> ModFeatures.BANNER.get().configured(BannerFeatureConfig.create(
+					DyeColor.PINK,
+					Pair.of(BannerPattern.GRADIENT_UP, DyeColor.MAGENTA),
+					Pair.of(BannerPattern.FLOWER, DyeColor.BLACK)
+			))
+	);
 
-			final List<OreConfiguration.TargetBlockState> oreIronNetherTargetList = List.of(OreConfiguration.target(
-					OreFeatures.NETHER_ORE_REPLACEABLES,
-					Blocks.IRON_ORE.defaultBlockState()
-			));
+	public static final VanillaRegistryObject<ConfiguredFeature<?, ?>> ORE_IRON_NETHER = CONFIGURED_FEATURES.register("ore_iron_nether",
+			() -> Feature.ORE.configured(new OreConfiguration(
+					List.of(OreConfiguration.target(
+							OreFeatures.NETHER_ORE_REPLACEABLES,
+							Blocks.IRON_ORE.defaultBlockState()
+					)),
+					9
+			))
+	);
 
-			final List<OreConfiguration.TargetBlockState> oreIronEndTargetList = List.of(OreConfiguration.target(
-					endStone,
-					Blocks.IRON_ORE.defaultBlockState()
-			));
+	public static final VanillaRegistryObject<ConfiguredFeature<?, ?>> ORE_IRON_END = CONFIGURED_FEATURES.register("ore_iron_end",
+			() -> Feature.ORE.configured(new OreConfiguration(
+					List.of(OreConfiguration.target(
+							new BlockMatchTest(Blocks.END_STONE),
+							Blocks.IRON_ORE.defaultBlockState()
+					)),
+					9
+			))
+	);
 
-			// Places a banner at the surface, but only in chunks with coordinates divisible by 16.
-			// Test for this thread:
-			// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2535868-banner-nbt-tags
-			register(BANNER,
-					ModFeatures.BANNER.get()
-							.configured(BannerFeatureConfig.create(
-									DyeColor.PINK,
-									Pair.of(BannerPattern.GRADIENT_UP, DyeColor.MAGENTA),
-									Pair.of(BannerPattern.FLOWER, DyeColor.BLACK)
-							))
-			);
-
-			register(ORE_IRON_NETHER, Feature.ORE.configured(new OreConfiguration(oreIronNetherTargetList, 9)));
-
-			register(ORE_IRON_END, Feature.ORE.configured(new OreConfiguration(oreIronEndTargetList, 9)));
+	/**
+	 * Registers the {@link DeferredVanillaRegister} instance with the mod event bus.
+	 * <p>
+	 * This should be called during mod construction.
+	 *
+	 * @param modEventBus The mod event bus
+	 */
+	public static void initialise(final IEventBus modEventBus) {
+		if (isInitialised) {
+			throw new IllegalStateException("Already initialised");
 		}
 
-		private static void register(final ResourceKey<ConfiguredFeature<?, ?>> key, final ConfiguredFeature<?, ?> configuredFeature) {
-			Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, key.location(), configuredFeature);
-		}
+		CONFIGURED_FEATURES.register(modEventBus);
+
+		isInitialised = true;
 	}
 }

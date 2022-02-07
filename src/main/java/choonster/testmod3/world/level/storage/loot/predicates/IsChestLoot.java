@@ -23,7 +23,7 @@ public class IsChestLoot implements LootItemCondition {
 
 	@Override
 	public LootItemConditionType getType() {
-		return ModLootConditionTypes.IS_CHEST_LOOT;
+		return ModLootConditionTypes.IS_CHEST_LOOT.get();
 	}
 
 	@Override

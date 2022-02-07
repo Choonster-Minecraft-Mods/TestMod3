@@ -2,11 +2,9 @@ package choonster.testmod3.world.level.levelgen;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.levelgen.ModPlacedFeatures;
-import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -34,21 +32,17 @@ public class ModLevelGen {
 		*/
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.OVERWORLD)) {
 			generation
-					.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, feature(ModPlacedFeatures.BANNER));
+					.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, ModPlacedFeatures.BANNER.get());
 		}
 
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.NETHER)) {
 			generation
-					.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, feature(ModPlacedFeatures.ORE_IRON_NETHER));
+					.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ModPlacedFeatures.ORE_IRON_NETHER.get());
 		}
 
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.END)) {
 			generation
-					.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, feature(ModPlacedFeatures.ORE_IRON_END));
+					.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ModPlacedFeatures.ORE_IRON_END.get());
 		}
-	}
-
-	private static PlacedFeature feature(final ResourceKey<PlacedFeature> key) {
-		return BuiltinRegistries.PLACED_FEATURE.getOrThrow(key);
 	}
 }

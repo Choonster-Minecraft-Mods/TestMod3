@@ -65,7 +65,7 @@ public class SetFluidTankContents extends LootItemConditionalFunction {
 
 	@Override
 	public LootItemFunctionType getType() {
-		return ModLootFunctionTypes.SET_FLUID_TANK_CONTENTS;
+		return ModLootFunctionTypes.SET_FLUID_TANK_CONTENTS.get();
 	}
 
 	public static Builder builder() {

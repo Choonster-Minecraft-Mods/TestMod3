@@ -3,8 +3,7 @@ package choonster.testmod3;
 import choonster.testmod3.compat.theoneprobe.TheOneProbeCompat;
 import choonster.testmod3.config.TestMod3Config;
 import choonster.testmod3.init.*;
-import choonster.testmod3.init.levelgen.ModBiomes;
-import choonster.testmod3.init.levelgen.ModFeatures;
+import choonster.testmod3.init.levelgen.*;
 import choonster.testmod3.tests.Tests;
 import choonster.testmod3.util.BlockDumper;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -54,6 +53,11 @@ public class TestMod3 {
 		ModSoundEvents.initialise(modEventBus);
 		ModBlockEntities.initialise(modEventBus);
 		ModTestRegistryEntries.initialise(modEventBus);
+		ModConfiguredFeatures.initialise(modEventBus);
+		ModPlacedFeatures.initialise(modEventBus);
+		ModPlacementModifierTypes.initialise(modEventBus);
+		ModLootConditionTypes.initialise(modEventBus);
+		ModLootFunctionTypes.initialise(modEventBus);
 	}
 
 	@SubscribeEvent
@@ -66,8 +70,6 @@ public class TestMod3 {
 			ModCrafting.Ingredients.register();
 			ModCriterion.register();
 			ModLootTables.registerLootTables();
-			ModLootConditionTypes.register();
-			ModLootFunctionTypes.register();
 
 			BlockDumper.dump();
 			Tests.runTests();

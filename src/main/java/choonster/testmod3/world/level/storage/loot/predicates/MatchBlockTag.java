@@ -31,7 +31,7 @@ public class MatchBlockTag implements LootItemCondition {
 
 	@Override
 	public LootItemConditionType getType() {
-		return ModLootConditionTypes.MATCH_BLOCK_TAG;
+		return ModLootConditionTypes.MATCH_BLOCK_TAG.get();
 	}
 
 	@Override

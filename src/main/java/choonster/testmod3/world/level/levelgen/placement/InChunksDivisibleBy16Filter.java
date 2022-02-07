@@ -35,6 +35,6 @@ public class InChunksDivisibleBy16Filter extends PlacementFilter {
 
 	@Override
 	public PlacementModifierType<?> type() {
-		return ModPlacementModifierTypes.IN_CHUNKS_DIVISIBLE_BY_16;
+		return ModPlacementModifierTypes.IN_CHUNKS_DIVISIBLE_BY_16.get();
 	}
 }
