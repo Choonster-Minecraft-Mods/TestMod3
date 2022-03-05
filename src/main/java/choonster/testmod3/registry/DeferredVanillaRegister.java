@@ -39,8 +39,7 @@ public class DeferredVanillaRegister<T> {
 	 * @param supplier A factory for the new entry, it should return a new instance every time it is called.
 	 * @return A VanillaRegistryObject that will be updated with when the entries in the registry change.
 	 */
-	@SuppressWarnings("unchecked")
-	public <I extends T> VanillaRegistryObject<I> register(final String name, final Supplier<? extends I> supplier) {
+	public VanillaRegistryObject<T> register(final String name, final Supplier<T> supplier) {
 		if (seenRegisterEvent) {
 			throw new IllegalStateException("Cannot register new entries to DeferredVanillaRegister after FMLCommonSetupEvent has been fired.");
 		}
@@ -50,9 +49,9 @@ public class DeferredVanillaRegister<T> {
 
 		final ResourceLocation key = new ResourceLocation(modid, name);
 
-		final VanillaRegistryObject<I> ret = VanillaRegistryObject.of(key, registry);
+		final VanillaRegistryObject<T> ret = VanillaRegistryObject.of(key, registry);
 
-		if (entries.putIfAbsent((VanillaRegistryObject<T>) ret, supplier) != null) {
+		if (entries.putIfAbsent(ret, supplier) != null) {
 			throw new IllegalArgumentException("Duplicate registration " + name);
 		}
 

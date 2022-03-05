@@ -5,8 +5,11 @@ import choonster.testmod3.registry.DeferredVanillaRegister;
 import choonster.testmod3.registry.VanillaRegistryObject;
 import choonster.testmod3.world.level.levelgen.placement.InChunksDivisibleBy16Filter;
 import net.minecraft.core.Registry;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraftforge.eventbus.api.IEventBus;
+
+import java.util.function.Supplier;
 
 /**
  * Registers this mod's {@link PlacementModifierType}s.
@@ -19,7 +22,7 @@ public class ModPlacementModifierTypes {
 
 	private static boolean isInitialised = false;
 
-	public static final VanillaRegistryObject<PlacementModifierType<InChunksDivisibleBy16Filter>> IN_CHUNKS_DIVISIBLE_BY_16 = PLACEMENT_MODIFIER_TYPES.register(
+	public static final VanillaRegistryObject<PlacementModifierType<?>> IN_CHUNKS_DIVISIBLE_BY_16 = register(
 			"in_chunks_divisible_by_16",
 			() -> () -> InChunksDivisibleBy16Filter.CODEC
 	);
@@ -39,5 +42,12 @@ public class ModPlacementModifierTypes {
 		PLACEMENT_MODIFIER_TYPES.register(modEventBus);
 
 		isInitialised = true;
+	}
+
+	private static <P extends PlacementModifier> VanillaRegistryObject<PlacementModifierType<?>> register(
+			final String name,
+			final Supplier<PlacementModifierType<P>> factory
+	) {
+		return PLACEMENT_MODIFIER_TYPES.register(name, factory::get);
 	}
 }

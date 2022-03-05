@@ -10,7 +10,7 @@ import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -71,7 +71,7 @@ public class EnhancedShapedRecipeBuilder<
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER define(final Character symbol, final Tag<Item> tagIn) {
+	public BUILDER define(final Character symbol, final TagKey<Item> tagIn) {
 		return (BUILDER) super.define(symbol, tagIn);
 	}
 

@@ -5,10 +5,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
+import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -20,7 +24,6 @@ import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * Generates "report" JSON files for this mod's biomes.
@@ -44,18 +47,22 @@ public class TestMod3BiomeReport implements DataProvider {
 	public void run(final HashCache cache) {
 		final Path basePath = generator.getOutputFolder();
 
+		final RegistryAccess registryAccess = RegistryAccess.BUILTIN.get();
+		final DynamicOps<JsonElement> dynamicOps = RegistryOps.create(JsonOps.INSTANCE, registryAccess);
+
 		for (final Biome biome : RegistryUtil.getModRegistryEntries(ForgeRegistries.BIOMES)) {
 			final ResourceLocation registryName = Objects.requireNonNull(ForgeRegistries.BIOMES.getKey(biome), "Biome registry name was null");
 			final Path biomePath = getPath(basePath, registryName);
 
-			final Function<Supplier<Biome>, DataResult<JsonElement>> function = JsonOps.INSTANCE.withEncoder(Biome.CODEC);
+			final Function<Holder<Biome>, DataResult<JsonElement>> function = JsonOps.INSTANCE.withEncoder(Biome.CODEC);
 
 			try {
-				final Optional<JsonElement> optional = function.apply(() -> biome).result();
+				final Optional<JsonElement> optional = Biome.DIRECT_CODEC
+						.encodeStart(dynamicOps, biome)
+						.resultOrPartial((p_206405_) -> LOGGER.error("Couldn't serialize biome: {}", biomePath));
+
 				if (optional.isPresent()) {
 					DataProvider.save(GSON, cache, optional.get(), biomePath);
-				} else {
-					LOGGER.error("Couldn't serialise biome {}", biomePath);
 				}
 			} catch (final IOException e) {
 				LOGGER.error("Couldn't save biome {}", biomePath, e);

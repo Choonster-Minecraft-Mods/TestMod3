@@ -1,8 +1,8 @@
 package choonster.testmod3.world.item;
 
+import choonster.testmod3.init.ModTags;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.SetTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.DiggerItem;
@@ -61,7 +61,7 @@ public class HarvestSwordItem extends DiggerItem {
 	);
 
 	public HarvestSwordItem(final Tier tier, final Item.Properties properties) {
-		super(BASE_DAMAGE, ATTACK_SPEED, tier, SetTag.empty(), properties);
+		super(BASE_DAMAGE, ATTACK_SPEED, tier, ModTags.Blocks.EMPTY, properties);
 	}
 
 	@Override

@@ -3,7 +3,6 @@ package choonster.testmod3.capability.chunkenergy;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.network.UpdateChunkEnergyValueMessage;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -86,7 +85,7 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy {
 			return;
 		}
 
-		if (((ServerLevel) level).isPositionEntityTicking(chunkPos)) {  // Don't load the chunk when reading from NBT
+		if (level.hasChunk(chunkPos.x, chunkPos.z)) {  // Don't load the chunk when reading from NBT
 			final LevelChunk chunk = level.getChunk(chunkPos.x, chunkPos.z);
 			chunk.setUnsaved(true);
 			TestMod3.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> chunk), new UpdateChunkEnergyValueMessage(this));

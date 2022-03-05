@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -163,13 +163,13 @@ public class ModCrafting {
 		 * @param recipeManager The recipe manager
 		 * @param tag           The tag
 		 */
-		private static void removeRecipes(final RecipeManager recipeManager, final Tag.Named<Item> tag) {
+		private static void removeRecipes(final RecipeManager recipeManager, final TagKey<Item> tag) {
 			final int recipesRemoved = removeRecipes(recipeManager, recipe -> {
 				final ItemStack resultItem = recipe.getResultItem();
 				return !resultItem.isEmpty() && resultItem.is(tag);
 			});
 
-			LOGGER.info("Removed {} recipe(s) for tag {}", recipesRemoved, tag.getName());
+			LOGGER.info("Removed {} recipe(s) for tag {}", recipesRemoved, tag.location());
 		}
 
 		/**

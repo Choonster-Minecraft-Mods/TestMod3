@@ -7,12 +7,12 @@ import choonster.testmod3.world.level.levelgen.placement.InChunksDivisibleBy16Fi
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.placement.CountPlacement;
-import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
-import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+
+import java.util.List;
 
 /**
  * Registers this mod's {@link PlacedFeature}s.
@@ -28,29 +28,26 @@ public class ModPlacedFeatures {
 	// Places a banner at the surface, but only in chunks with coordinates divisible by 16.
 	// Test for this thread:
 	// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2535868-banner-nbt-tags
-	public static final VanillaRegistryObject<PlacedFeature> BANNER = PLACED_FEATURES.register("banner",
-			() -> ModConfiguredFeatures.BANNER.get().placed(
-					CountPlacement.of(1),
-					InSquarePlacement.spread(),
-					PlacementUtils.HEIGHTMAP,
-					InChunksDivisibleBy16Filter.instance()
-			)
+	public static final VanillaRegistryObject<PlacedFeature> BANNER = register("banner",
+			ModConfiguredFeatures.BANNER,
+			CountPlacement.of(1),
+			InSquarePlacement.spread(),
+			PlacementUtils.HEIGHTMAP,
+			InChunksDivisibleBy16Filter.instance()
 	);
 
-	public static final VanillaRegistryObject<PlacedFeature> ORE_IRON_NETHER = PLACED_FEATURES.register("ore_iron_nether",
-			() -> ModConfiguredFeatures.ORE_IRON_NETHER.get().placed(
-					CountPlacement.of(16),
-					InSquarePlacement.spread(),
-					HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(118))
-			)
+	public static final VanillaRegistryObject<PlacedFeature> ORE_IRON_NETHER = register("ore_iron_nether",
+			ModConfiguredFeatures.ORE_IRON_NETHER,
+			CountPlacement.of(16),
+			InSquarePlacement.spread(),
+			HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(118))
 	);
 
-	public static final VanillaRegistryObject<PlacedFeature> ORE_IRON_END = PLACED_FEATURES.register("ore_iron_end",
-			() -> ModConfiguredFeatures.ORE_IRON_END.get().placed(
-					CountPlacement.of(16),
-					InSquarePlacement.spread(),
-					HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(118))
-			)
+	public static final VanillaRegistryObject<PlacedFeature> ORE_IRON_END = register("ore_iron_end",
+			ModConfiguredFeatures.ORE_IRON_END,
+			CountPlacement.of(16),
+			InSquarePlacement.spread(),
+			HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(118))
 	);
 
 	/**
@@ -69,5 +66,15 @@ public class ModPlacedFeatures {
 		PLACED_FEATURES.register(modEventBus, EventPriority.LOW);
 
 		isInitialised = true;
+	}
+
+	private static VanillaRegistryObject<PlacedFeature> register(final String name, final VanillaRegistryObject<ConfiguredFeature<?, ?>> feature, final PlacementModifier... placements) {
+		return PLACED_FEATURES.register(
+				name,
+				() -> new PlacedFeature(
+						feature.getHolder(),
+						List.of(placements)
+				)
+		);
 	}
 }

@@ -6,14 +6,13 @@ import choonster.testmod3.util.RegistryUtil;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.NbtPredicate;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
@@ -31,12 +30,12 @@ import java.util.Optional;
 public class FluidContainerItemPredicate extends ItemPredicate {
 	public static final ResourceLocation TYPE = new ResourceLocation(TestMod3.MODID, "fluid_container");
 
-	private final Tag<Fluid> tag;
+	private final TagKey<Fluid> tag;
 	private final Fluid fluid;
 	private final MinMaxBounds.Ints amount;
 	private final NbtPredicate nbt;
 
-	public FluidContainerItemPredicate(@Nullable final Tag<Fluid> tag, @Nullable final Fluid fluid, final MinMaxBounds.Ints amount, final NbtPredicate nbt) {
+	public FluidContainerItemPredicate(@Nullable final TagKey<Fluid> tag, @Nullable final Fluid fluid, final MinMaxBounds.Ints amount, final NbtPredicate nbt) {
 		this.tag = tag;
 		this.fluid = fluid;
 		this.amount = amount;
@@ -53,7 +52,7 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 
 		final FluidStack fluidStack = fluidContained.get();
 
-		if (tag != null && !fluidStack.getFluid().is(tag)) {
+		if (tag != null && !fluidStack.getFluid().defaultFluidState().is(tag)) {
 			return false;
 		}
 
@@ -84,13 +83,10 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 			fluid = ModJsonUtil.getFluid(object, "fluid");
 		}
 
-		Tag<Fluid> tag = null;
+		TagKey<Fluid> tag = null;
 		if (object.has("tag")) {
 			final ResourceLocation tagName = new ResourceLocation(GsonHelper.getAsString(object, "tag"));
-			tag = FluidTags.getAllTags().getTag(tagName);
-			if (tag == null) {
-				throw new JsonSyntaxException("Unknown fluid tag '" + tagName + "'");
-			}
+			tag = FluidTags.create(tagName);
 		}
 
 		return new FluidContainerItemPredicate(tag, fluid, amount, nbt);
@@ -119,7 +115,7 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 
 	public static class Builder {
 		private Fluid fluid;
-		private Tag<Fluid> tag;
+		private TagKey<Fluid> tag;
 		private MinMaxBounds.Ints amount = MinMaxBounds.Ints.ANY;
 		private NbtPredicate nbt = NbtPredicate.ANY;
 
@@ -135,7 +131,7 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 			return this;
 		}
 
-		public Builder tag(final Tag<Fluid> tag) {
+		public Builder tag(final TagKey<Fluid> tag) {
 			this.tag = tag;
 			return this;
 		}

@@ -47,13 +47,16 @@ public class SnowBuildup {
 
 	@SubscribeEvent
 	public static void onWorldTick(final TickEvent.WorldTickEvent event) {
-		if (event.world.isClientSide) return;
+		if (event.world.isClientSide) {
+			return;
+		}
 
 		final ServerLevel world = (ServerLevel) event.world;
 
 		// If this is the post tick, the world's total time (number of ticks) is divisible by NUM_TICKS, and it's raining/snowing,
-		if (event.phase != TickEvent.Phase.END || world.getGameTime() % NUM_TICKS != 0 || !world.isRaining())
+		if (event.phase != TickEvent.Phase.END || world.getGameTime() % NUM_TICKS != 0 || !world.isRaining()) {
 			return;
+		}
 
 		final Iterable<ChunkHolder> loadedChunks;
 		try {
@@ -79,7 +82,7 @@ public class SnowBuildup {
 									final BlockState state = world.getBlockState(pos);
 
 									// If the biome at that position allows snow, the block is a snow layer and a random integer in the range [0,24) is 0 (roughly 4% chance),
-									if (world.getBiome(pos).shouldSnow(world, pos) && state.getBlock() == Blocks.SNOW && random.nextInt(24) == 0) {
+									if (world.getBiome(pos).value().shouldSnow(world, pos) && state.getBlock() == Blocks.SNOW && random.nextInt(24) == 0) {
 										// Get the number of layers
 										final int numLayers = state.getValue(SnowLayerBlock.LAYERS);
 

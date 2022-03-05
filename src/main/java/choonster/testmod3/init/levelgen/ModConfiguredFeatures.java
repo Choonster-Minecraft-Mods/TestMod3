@@ -12,11 +12,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraftforge.eventbus.api.IEventBus;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Registers this mod's {@link ConfiguredFeature}s.
@@ -34,32 +36,35 @@ public class ModConfiguredFeatures {
 	 * Test for this thread:
 	 * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2535868-banner-nbt-tags
 	 */
-	public static final VanillaRegistryObject<ConfiguredFeature<?, ?>> BANNER = CONFIGURED_FEATURES.register("banner",
-			() -> ModFeatures.BANNER.get().configured(BannerFeatureConfig.create(
+	public static final VanillaRegistryObject<ConfiguredFeature<?, ?>> BANNER = register("banner",
+			ModFeatures.BANNER,
+			() -> BannerFeatureConfig.create(
 					DyeColor.PINK,
 					Pair.of(BannerPattern.GRADIENT_UP, DyeColor.MAGENTA),
 					Pair.of(BannerPattern.FLOWER, DyeColor.BLACK)
-			))
+			)
 	);
 
-	public static final VanillaRegistryObject<ConfiguredFeature<?, ?>> ORE_IRON_NETHER = CONFIGURED_FEATURES.register("ore_iron_nether",
-			() -> Feature.ORE.configured(new OreConfiguration(
+	public static final VanillaRegistryObject<ConfiguredFeature<?, ?>> ORE_IRON_NETHER = register("ore_iron_nether",
+			Feature.ORE,
+			() -> new OreConfiguration(
 					List.of(OreConfiguration.target(
 							OreFeatures.NETHER_ORE_REPLACEABLES,
 							Blocks.IRON_ORE.defaultBlockState()
 					)),
 					9
-			))
+			)
 	);
 
-	public static final VanillaRegistryObject<ConfiguredFeature<?, ?>> ORE_IRON_END = CONFIGURED_FEATURES.register("ore_iron_end",
-			() -> Feature.ORE.configured(new OreConfiguration(
+	public static final VanillaRegistryObject<ConfiguredFeature<?, ?>> ORE_IRON_END = register("ore_iron_end",
+			Feature.ORE,
+			() -> new OreConfiguration(
 					List.of(OreConfiguration.target(
 							new BlockMatchTest(Blocks.END_STONE),
 							Blocks.IRON_ORE.defaultBlockState()
 					)),
 					9
-			))
+			)
 	);
 
 	/**
@@ -77,5 +82,21 @@ public class ModConfiguredFeatures {
 		CONFIGURED_FEATURES.register(modEventBus);
 
 		isInitialised = true;
+	}
+
+	private static <FC extends FeatureConfiguration, F extends Feature<FC>> VanillaRegistryObject<ConfiguredFeature<?, ?>> register(
+			final String name,
+			final F feature,
+			final Supplier<FC> configurationFactory
+	) {
+		return register(name, (Supplier<F>) () -> feature, configurationFactory);
+	}
+
+	private static <FC extends FeatureConfiguration, F extends Feature<FC>> VanillaRegistryObject<ConfiguredFeature<?, ?>> register(
+			final String name,
+			final Supplier<F> feature,
+			final Supplier<FC> configurationFactory
+	) {
+		return CONFIGURED_FEATURES.register(name, () -> new ConfiguredFeature<>(feature.get(), configurationFactory.get()));
 	}
 }

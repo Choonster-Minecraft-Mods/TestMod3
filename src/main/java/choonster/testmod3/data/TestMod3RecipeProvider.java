@@ -12,13 +12,17 @@ import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
 import com.google.common.base.Preconditions;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -171,5 +175,9 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 	@Override
 	public String getName() {
 		return "TestMod3Recipes";
+	}
+
+	private static InventoryChangeTrigger.TriggerInstance has(final TagKey<Item> tag) {
+		return inventoryTrigger(ItemPredicate.Builder.item().of(tag).build());
 	}
 }

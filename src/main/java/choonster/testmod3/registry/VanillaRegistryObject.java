@@ -1,12 +1,12 @@
 package choonster.testmod3.registry;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -20,59 +20,62 @@ import java.util.stream.Stream;
  *
  * @author Choonster
  */
-public class VanillaRegistryObject<T> implements Supplier<T> {
+public final class VanillaRegistryObject<T> implements Supplier<T> {
+	private static final VanillaRegistryObject<Object> EMPTY = new VanillaRegistryObject<>();
+
 	private final ResourceLocation name;
-	private final ResourceKey<? super T> key;
-
-	@Nullable
-	private T value;
-
-	public static <T, U extends T> VanillaRegistryObject<U> of(final ResourceLocation name, final Registry<T> registry) {
-		return new VanillaRegistryObject<>(name, registry);
-	}
-
-	private static final VanillaRegistryObject<?> EMPTY = new VanillaRegistryObject<>();
-
-	private static <T> VanillaRegistryObject<T> empty() {
-		@SuppressWarnings("unchecked")
-		final VanillaRegistryObject<T> t = (VanillaRegistryObject<T>) EMPTY;
-		return t;
-	}
+	private final ResourceKey<T> key;
+	private Holder<T> holder;
 
 	private VanillaRegistryObject() {
 		name = null;
 		key = null;
+		holder = new EmptyHolder<>();
 	}
 
-	private VanillaRegistryObject(final ResourceLocation name, final Registry<? super T> registry) {
+	private VanillaRegistryObject(final ResourceLocation name, final Registry<T> registry) {
 		this.name = name;
 		key = ResourceKey.create(registry.key(), name);
-
 		updateReference(registry);
+	}
+
+	private static <T> VanillaRegistryObject<T> empty() {
+		@SuppressWarnings("unchecked")
+		final VanillaRegistryObject<T> t = (VanillaRegistryObject<T>) VanillaRegistryObject.EMPTY;
+		return t;
+	}
+
+	public static <T> VanillaRegistryObject<T> of(final ResourceLocation name, final Registry<T> registry) {
+		return new VanillaRegistryObject<>(name, registry);
+	}
+
+	void updateReference(final Registry<T> registry) {
+		holder = registry.getHolder(key).orElseGet(EmptyHolder::new);
 	}
 
 	/**
 	 * Directly retrieves the wrapped Registry Object. This value will automatically be updated when the backing registry is updated.
-	 * Will throw NPE if the value is null, use isPresent to check first. Or use any of the other guarded functions.
+	 * Will throw exception if the value is not present, use isPresent to check first. Or use any of the other guarded functions.
 	 */
 	@Override
 	@Nonnull
 	public T get() {
-		final T ret = value;
-		Objects.requireNonNull(ret, () -> "Registry Object not present: " + name);
-		return ret;
+		if (!isPresent()) {
+			throw new NullPointerException("Registry Object not present: " + name);
+		}
+
+		return holder.value();
 	}
 
-	@SuppressWarnings("unchecked")
-	public void updateReference(final Registry<? super T> registry) {
-		value = (T) registry.get(getId());
+	public Holder<T> getHolder() {
+		return holder;
 	}
 
 	public ResourceLocation getId() {
 		return name;
 	}
 
-	public ResourceKey<? super T> getKey() {
+	public ResourceKey<T> getKey() {
 		return key;
 	}
 
@@ -86,7 +89,7 @@ public class VanillaRegistryObject<T> implements Supplier<T> {
 	 * @return {@code true} if there is a mod object present, otherwise {@code false}
 	 */
 	public boolean isPresent() {
-		return value != null;
+		return holder.isBound();
 	}
 
 	/**
@@ -97,7 +100,7 @@ public class VanillaRegistryObject<T> implements Supplier<T> {
 	 * @throws NullPointerException if mod object is present and {@code consumer} is
 	 *                              null
 	 */
-	public void ifPresent(final Consumer<? super T> consumer) {
+	public void ifPresent(final Consumer<T> consumer) {
 		if (isPresent()) {
 			consumer.accept(get());
 		}
@@ -114,7 +117,7 @@ public class VanillaRegistryObject<T> implements Supplier<T> {
 	 * otherwise an empty {@code RegistryObject}
 	 * @throws NullPointerException if the predicate is null
 	 */
-	public VanillaRegistryObject<T> filter(final Predicate<? super T> predicate) {
+	public VanillaRegistryObject<T> filter(final Predicate<T> predicate) {
 		Objects.requireNonNull(predicate);
 		if (!isPresent()) {
 			return this;
@@ -137,7 +140,7 @@ public class VanillaRegistryObject<T> implements Supplier<T> {
 	 * @apiNote This method supports post-processing on optional values, without
 	 * the need to explicitly check for a return status.
 	 */
-	public <U> Optional<U> map(final Function<? super T, ? extends U> mapper) {
+	public <U> Optional<U> map(final Function<T, ? extends U> mapper) {
 		Objects.requireNonNull(mapper);
 		if (!isPresent()) {
 			return Optional.empty();
@@ -163,7 +166,7 @@ public class VanillaRegistryObject<T> implements Supplier<T> {
 	 * @throws NullPointerException if the mapping function is null or returns
 	 *                              a null result
 	 */
-	public <U> Optional<U> flatMap(final Function<? super T, Optional<U>> mapper) {
+	public <U> Optional<U> flatMap(final Function<T, Optional<U>> mapper) {
 		Objects.requireNonNull(mapper);
 		if (!isPresent()) {
 			return Optional.empty();
@@ -186,7 +189,7 @@ public class VanillaRegistryObject<T> implements Supplier<T> {
 	 * @apiNote This method supports post-processing on optional values, without
 	 * the need to explicitly check for a return status.
 	 */
-	public <U> Supplier<U> lazyMap(final Function<? super T, ? extends U> mapper) {
+	public <U> Supplier<U> lazyMap(final Function<T, ? extends U> mapper) {
 		Objects.requireNonNull(mapper);
 		return () -> isPresent() ? mapper.apply(get()) : null;
 	}

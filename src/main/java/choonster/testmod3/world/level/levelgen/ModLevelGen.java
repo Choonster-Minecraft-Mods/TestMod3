@@ -32,17 +32,17 @@ public class ModLevelGen {
 		*/
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.OVERWORLD)) {
 			generation
-					.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, ModPlacedFeatures.BANNER.get());
+					.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, ModPlacedFeatures.BANNER.getHolder());
 		}
 
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.NETHER)) {
 			generation
-					.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ModPlacedFeatures.ORE_IRON_NETHER.get());
+					.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ModPlacedFeatures.ORE_IRON_NETHER.getHolder());
 		}
 
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.END)) {
 			generation
-					.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ModPlacedFeatures.ORE_IRON_END.get());
+					.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ModPlacedFeatures.ORE_IRON_END.getHolder());
 		}
 	}
 }
