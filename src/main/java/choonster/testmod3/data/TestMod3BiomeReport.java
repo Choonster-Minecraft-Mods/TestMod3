@@ -59,7 +59,7 @@ public class TestMod3BiomeReport implements DataProvider {
 			try {
 				final Optional<JsonElement> optional = Biome.DIRECT_CODEC
 						.encodeStart(dynamicOps, biome)
-						.resultOrPartial((p_206405_) -> LOGGER.error("Couldn't serialize biome: {}", biomePath));
+						.resultOrPartial((error) -> LOGGER.error("Couldn't serialize biome {}: {}", biomePath, error));
 
 				if (optional.isPresent()) {
 					DataProvider.save(GSON, cache, optional.get(), biomePath);
