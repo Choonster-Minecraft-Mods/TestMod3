@@ -15,6 +15,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 
 import java.util.List;
@@ -79,7 +80,7 @@ public class ModConfiguredFeatures {
 			throw new IllegalStateException("Already initialised");
 		}
 
-		CONFIGURED_FEATURES.register(modEventBus);
+		CONFIGURED_FEATURES.<Feature<?>>register(modEventBus, Feature.class, EventPriority.LOW);
 
 		isInitialised = true;
 	}

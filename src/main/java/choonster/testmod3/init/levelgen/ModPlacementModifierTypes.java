@@ -5,8 +5,10 @@ import choonster.testmod3.registry.DeferredVanillaRegister;
 import choonster.testmod3.registry.VanillaRegistryObject;
 import choonster.testmod3.world.level.levelgen.placement.InChunksDivisibleBy16Filter;
 import net.minecraft.core.Registry;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 
 import java.util.function.Supplier;
@@ -39,7 +41,7 @@ public class ModPlacementModifierTypes {
 			throw new IllegalStateException("Already initialised");
 		}
 
-		PLACEMENT_MODIFIER_TYPES.register(modEventBus);
+		PLACEMENT_MODIFIER_TYPES.<Feature<?>>register(modEventBus, Feature.class, EventPriority.NORMAL);
 
 		isInitialised = true;
 	}

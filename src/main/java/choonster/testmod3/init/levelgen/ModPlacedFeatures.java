@@ -8,6 +8,7 @@ import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -63,7 +64,7 @@ public class ModPlacedFeatures {
 		}
 
 		// Ensure this is run after the ConfiguredFeature registration in ModConfiguredFeatures
-		PLACED_FEATURES.register(modEventBus, EventPriority.LOW);
+		PLACED_FEATURES.<Feature<?>>register(modEventBus, Feature.class, EventPriority.LOW);
 
 		isInitialised = true;
 	}

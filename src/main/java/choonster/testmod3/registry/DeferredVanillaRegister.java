@@ -2,10 +2,12 @@ package choonster.testmod3.registry;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -41,7 +43,7 @@ public class DeferredVanillaRegister<T> {
 	 */
 	public VanillaRegistryObject<T> register(final String name, final Supplier<T> supplier) {
 		if (seenRegisterEvent) {
-			throw new IllegalStateException("Cannot register new entries to DeferredVanillaRegister after FMLCommonSetupEvent has been fired.");
+			throw new IllegalStateException("Cannot register new entries to DeferredVanillaRegister after RegistryEvent.Register has been fired.");
 		}
 
 		Objects.requireNonNull(name);
@@ -61,20 +63,31 @@ public class DeferredVanillaRegister<T> {
 	/**
 	 * Adds our event handler to the specified event bus, this MUST be called in order for this class to function.
 	 *
-	 * @param bus      The Mod Specific event bus.
-	 * @param priority The priority to register the event handler at. This can be used to control registration order.
+	 * @param bus The Mod Specific event bus.
 	 */
-	public void register(final IEventBus bus, final EventPriority priority) {
-		bus.addListener(priority, (FMLCommonSetupEvent event) -> event.enqueueWork(this::addEntries));
+	public void register(final IEventBus bus) {
+		register(bus, Block.class);
 	}
 
 	/**
 	 * Adds our event handler to the specified event bus, this MUST be called in order for this class to function.
 	 *
-	 * @param bus The Mod Specific event bus.
+	 * @param bus               The Mod Specific event bus.
+	 * @param registrySuperType The RegistryEvent.Register type to perform the registration in. This can be used to control registration order.
 	 */
-	public void register(final IEventBus bus) {
-		register(bus, EventPriority.NORMAL);
+	public <U extends IForgeRegistryEntry<U>> void register(final IEventBus bus, final Class<? super U> registrySuperType) {
+		this.<U>register(bus, registrySuperType, EventPriority.NORMAL);
+	}
+
+	/**
+	 * Adds our event handler to the specified event bus, this MUST be called in order for this class to function.
+	 *
+	 * @param bus               The Mod Specific event bus.
+	 * @param registrySuperType The RegistryEvent.Register type to perform the registration in. This can be used to control registration order.
+	 * @param priority          The priority to register the event handler at. This can be used to control registration order.
+	 */
+	public <U extends IForgeRegistryEntry<U>> void register(final IEventBus bus, final Class<? super U> registrySuperType, final EventPriority priority) {
+		bus.addGenericListener(registrySuperType, priority, (RegistryEvent.Register<U> event) -> addEntries());
 	}
 
 	/**
