@@ -1,0 +1,16 @@
+{
+  "config": {
+    "color": "pink",
+    "patterns": [
+      {
+        "color": "magenta",
+        "pattern": "gru"
+      },
+      {
+        "color": "black",
+        "pattern": "flo"
+      }
+    ]
+  },
+  "type": "testmod3:banner"
+}

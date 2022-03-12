@@ -35,7 +35,7 @@ public class ModDataProviders {
 		if (event.includeServer()) {
 			dataGenerator.addProvider(new TestMod3RecipeProvider(dataGenerator));
 			dataGenerator.addProvider(new TestMod3LootTableProvider(dataGenerator));
-			dataGenerator.addProvider(new TestMod3BiomeReport(dataGenerator));
+			dataGenerator.addProvider(new TestMod3WorldgenRegistryDumpReport(dataGenerator));
 			dataGenerator.addProvider(new TestMod3LootModifierProvider(dataGenerator));
 
 			final TestMod3BlockTagsProvider blockTagsProvider = new TestMod3BlockTagsProvider(dataGenerator, existingFileHelper);
