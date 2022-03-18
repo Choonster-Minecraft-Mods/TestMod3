@@ -149,8 +149,10 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-1.18.2:${jei_version}:api")
+//    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:${jei_version}")
+//    compileOnly fg.deobf("mezz.jei:jei-1.18.2:${jei_version}:api")
+
+    implementation fg.deobf("curse.maven:just-enough-items-238222:${jei_file_id}")
 
     embed "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
 

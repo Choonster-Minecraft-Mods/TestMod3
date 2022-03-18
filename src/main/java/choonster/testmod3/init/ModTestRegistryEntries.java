@@ -2,6 +2,9 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.registry.TestRegistryEntry;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,9 +25,11 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class ModTestRegistryEntries {
-	private static final DeferredRegister<TestRegistryEntry> TEST_REGISTRY_ENTRIES = DeferredRegister.create(TestRegistryEntry.class, TestMod3.MODID);
+	public static final ResourceKey<Registry<TestRegistryEntry>> REGISTRY_KEY = ResourceKey.createRegistryKey(new ResourceLocation(TestMod3.MODID, "test_registry_entry"));
 
-	public static final Supplier<IForgeRegistry<TestRegistryEntry>> REGISTRY = TEST_REGISTRY_ENTRIES.makeRegistry("test_registry_entry", RegistryBuilder::new);
+	private static final DeferredRegister<TestRegistryEntry> TEST_REGISTRY_ENTRIES = DeferredRegister.create(REGISTRY_KEY, TestMod3.MODID);
+
+	public static final Supplier<IForgeRegistry<TestRegistryEntry>> REGISTRY = TEST_REGISTRY_ENTRIES.makeRegistry(TestRegistryEntry.class, RegistryBuilder::new);
 
 	private static boolean isInitialised = false;
 

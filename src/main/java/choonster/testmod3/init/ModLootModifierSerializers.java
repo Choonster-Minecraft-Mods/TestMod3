@@ -16,7 +16,7 @@ import net.minecraftforge.registries.RegistryObject;
  * @author Choonster
  */
 public class ModLootModifierSerializers {
-	private static final DeferredRegister<GlobalLootModifierSerializer<?>> SERIALIZERS = DeferredRegister.create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, TestMod3.MODID);
+	private static final DeferredRegister<GlobalLootModifierSerializer<?>> SERIALIZERS = DeferredRegister.create(ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS, TestMod3.MODID);
 
 	private static boolean isInitialised;
 

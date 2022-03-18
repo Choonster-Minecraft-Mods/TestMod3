@@ -30,7 +30,7 @@ public final class VanillaRegistryObject<T> implements Supplier<T> {
 	private VanillaRegistryObject() {
 		name = null;
 		key = null;
-		holder = new EmptyHolder<>();
+		holder = null;
 	}
 
 	private VanillaRegistryObject(final ResourceLocation name, final Registry<T> registry) {
@@ -50,7 +50,7 @@ public final class VanillaRegistryObject<T> implements Supplier<T> {
 	}
 
 	void updateReference(final Registry<T> registry) {
-		holder = registry.getHolder(key).orElseGet(EmptyHolder::new);
+		holder = registry.getHolder(key).orElse(null);
 	}
 
 	/**
@@ -60,14 +60,14 @@ public final class VanillaRegistryObject<T> implements Supplier<T> {
 	@Override
 	@Nonnull
 	public T get() {
+		return getHolder().value();
+	}
+
+	public Holder<T> getHolder() {
 		if (!isPresent()) {
 			throw new NullPointerException("Registry Object not present: " + name);
 		}
 
-		return holder.value();
-	}
-
-	public Holder<T> getHolder() {
 		return holder;
 	}
 
@@ -89,7 +89,7 @@ public final class VanillaRegistryObject<T> implements Supplier<T> {
 	 * @return {@code true} if there is a mod object present, otherwise {@code false}
 	 */
 	public boolean isPresent() {
-		return holder.isBound();
+		return holder != null && holder.isBound();
 	}
 
 	/**
