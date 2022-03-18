@@ -175,21 +175,18 @@ tasks.withType(JavaCompile) {
 
 tasks.withType(Javadoc) {
     options.encoding = 'UTF-8'
+    options.addStringOption("tag", "apiNote:a:API Note:")
+    options.addBooleanOption("Xdoclint:all,-missing", true)
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
-    classifier = 'javadoc'
+
+    archiveClassifier = 'javadoc'
 }
 
 artifacts {
-    /*
-     TODO: Uncomment when Hwyla fixes its Javadoc errors or I find a way to ignore them
-     https://forums.minecraftforge.net/topic/92633-ignoring-javadoc-errors-in-dependencies/
-     https://github.com/TehNut/HWYLA/issues/303
-     https://stackoverflow.com/questions/64619620/ignoring-javadoc-errors-in-dependencies
-     */
-//    archives javadocJar
+    archives javadocJar
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
