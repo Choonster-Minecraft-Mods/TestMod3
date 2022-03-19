@@ -6,6 +6,7 @@ import choonster.testmod3.init.*;
 import choonster.testmod3.init.levelgen.*;
 import choonster.testmod3.tests.Tests;
 import choonster.testmod3.util.BlockDumper;
+import com.mojang.logging.LogUtils;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
@@ -17,15 +18,14 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.simple.SimpleChannel;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import java.util.UUID;
 
 @Mod(TestMod3.MODID)
 @Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 public class TestMod3 {
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
 	public static final String MODID = "testmod3";
 	public static final String NAME = "Test Mod 3";
@@ -63,7 +63,7 @@ public class TestMod3 {
 	@SubscribeEvent
 	public static void commonSetup(final FMLCommonSetupEvent event) {
 		LOGGER.warn("****************************************");
-		LOGGER.warn("Random UUID: {}", UUID.randomUUID().toString());
+		LOGGER.warn("Random UUID: {}", UUID.randomUUID());
 		LOGGER.warn("****************************************");
 
 		event.enqueueWork(() -> {

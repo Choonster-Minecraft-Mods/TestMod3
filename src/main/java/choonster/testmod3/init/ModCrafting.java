@@ -1,7 +1,6 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.util.LogUtil;
 import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredientSerializer;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
 import choonster.testmod3.world.item.crafting.ingredient.IngredientNever;
@@ -10,6 +9,7 @@ import choonster.testmod3.world.item.crafting.recipe.ShapedArmourUpgradeRecipe;
 import choonster.testmod3.world.item.crafting.recipe.ShapelessCuttingRecipe;
 import choonster.testmod3.world.item.crafting.recipe.ShapelessFluidContainerRecipe;
 import com.google.common.collect.ImmutableMap;
+import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.resources.ResourceLocation;
@@ -34,8 +34,7 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -50,7 +49,7 @@ public class ModCrafting {
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 	public static class Brewing {
-		private static final Logger LOGGER = LogManager.getLogger();
+		private static final Logger LOGGER = LogUtils.getLogger();
 
 		private static final Method ADD_MIX = ObfuscationReflectionHelper.findMethod(PotionBrewing.class, /* addMix */ "m_43513_", Potion.class, Item.class, Potion.class);
 
@@ -85,7 +84,7 @@ public class ModCrafting {
 				ADD_MIX.invoke(null, standardPotionType, Items.REDSTONE, longPotionType);
 				ADD_MIX.invoke(null, standardPotionType, Items.GLOWSTONE_DUST, strongPotionType);
 			} catch (final IllegalAccessException | InvocationTargetException e) {
-				LogUtil.error(LOGGER, e, "Failed to add potion recipes for potion type {}/ingredient item {}", standardPotionType.getRegistryName(), ingredient.getRegistryName());
+				LOGGER.error("Failed to add potion recipes for potion type {}/ingredient item {}", standardPotionType.getRegistryName(), ingredient.getRegistryName(), e);
 			}
 		}
 	}
@@ -138,7 +137,7 @@ public class ModCrafting {
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	public static class RecipeRemover {
-		private static final Logger LOGGER = LogManager.getLogger();
+		private static final Logger LOGGER = LogUtils.getLogger();
 
 		private static final Field RECIPES = ObfuscationReflectionHelper.findField(RecipeManager.class,  /* recipes */ "f_44007_");
 

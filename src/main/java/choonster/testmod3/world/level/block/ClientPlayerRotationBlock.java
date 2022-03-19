@@ -1,6 +1,7 @@
 package choonster.testmod3.world.level.block;
 
 import choonster.testmod3.client.util.ClientUtil;
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -10,8 +11,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 /**
  * A block that forces a player to rotate (from the client side) while standing on it.
@@ -24,7 +24,7 @@ import org.apache.logging.log4j.Logger;
  * @author Choonster
  */
 public class ClientPlayerRotationBlock extends StaticPressurePlateBlock {
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
 	/**
 	 * The yaw rotation in degrees to add to the player each tick. Positive values rotate clockwise, negative values rotate anticlockwise.

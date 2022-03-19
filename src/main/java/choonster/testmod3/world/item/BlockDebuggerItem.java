@@ -1,13 +1,13 @@
 package choonster.testmod3.world.item;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 /**
  * An Item that prints the current state of a Block and its BlockEntity on the client and server when right-clicked.
@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
  * @author Choonster
  */
 public class BlockDebuggerItem extends Item {
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
 	public BlockDebuggerItem(final Item.Properties properties) {
 		super(properties);

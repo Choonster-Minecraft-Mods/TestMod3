@@ -1,6 +1,7 @@
 package choonster.testmod3.capability.maxhealth;
 
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
+import com.mojang.logging.LogUtils;
 import net.minecraft.nbt.FloatTag;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.server.level.ServerLevel;
@@ -9,8 +10,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.common.util.INBTSerializable;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -22,7 +22,7 @@ import java.util.UUID;
  * @author Choonster
  */
 public class MaxHealth implements IMaxHealth, INBTSerializable<FloatTag> {
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
 	/**
 	 * The ID of the {@link AttributeModifier}.
@@ -116,7 +116,9 @@ public class MaxHealth implements IMaxHealth, INBTSerializable<FloatTag> {
 	 * Called when the bonus max health changes to re-apply the {@link AttributeModifier}.
 	 */
 	protected void onBonusMaxHealthChanged() {
-		if (entity == null) return;
+		if (entity == null) {
+			return;
+		}
 
 		final AttributeInstance entityMaxHealthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
 

@@ -2,6 +2,7 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.registry.TestRegistryEntry;
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -14,8 +15,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 import net.minecraftforge.registries.RegistryObject;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import java.util.function.Supplier;
 
@@ -60,7 +60,7 @@ public class ModTestRegistryEntries {
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 	public static class EventHandler {
-		private static final Logger LOGGER = LogManager.getLogger();
+		private static final Logger LOGGER = LogUtils.getLogger();
 
 		@SubscribeEvent
 		public static void commonSetup(final FMLCommonSetupEvent event) {

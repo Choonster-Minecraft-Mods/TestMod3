@@ -12,6 +12,7 @@ import choonster.testmod3.world.level.block.slab.ColouredSlabBlock;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -26,8 +27,7 @@ import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.function.Function;
@@ -39,7 +39,7 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class TestMod3BlockStateProvider extends BlockStateProvider {
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
 	private static final int DEFAULT_ANGLE_OFFSET = 180;
 

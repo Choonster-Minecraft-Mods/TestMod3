@@ -4,6 +4,7 @@ import choonster.testmod3.client.gui.SurvivalCommandBlockEditScreen;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.world.level.block.entity.SurvivalCommandBlock;
 import choonster.testmod3.world.level.block.entity.SurvivalCommandBlockEntity;
+import com.mojang.logging.LogUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,8 +21,7 @@ import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.registries.RegistryObject;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -37,7 +37,7 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class SaveSurvivalCommandBlockMessage {
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
 	private final SurvivalCommandBlock.Type type;
 	private final String command;

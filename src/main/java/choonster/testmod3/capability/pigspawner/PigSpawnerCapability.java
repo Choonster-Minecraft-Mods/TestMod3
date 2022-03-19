@@ -5,7 +5,7 @@ import choonster.testmod3.api.capability.pigspawner.IPigSpawner;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerInteractable;
 import choonster.testmod3.capability.CapabilityContainerListenerManager;
 import choonster.testmod3.capability.SerializableCapabilityProvider;
-import choonster.testmod3.util.LogUtil;
+import choonster.testmod3.util.ModLogUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.core.BlockPos;
@@ -29,10 +29,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.Marker;
-import org.apache.logging.log4j.MarkerManager;
+import org.slf4j.Marker;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -44,8 +41,6 @@ import java.util.stream.Collectors;
  * @author Choonster
  */
 public final class PigSpawnerCapability {
-	private static final Logger LOGGER = LogManager.getLogger();
-
 	/**
 	 * The {@link Capability} instance.
 	 */
@@ -62,7 +57,7 @@ public final class PigSpawnerCapability {
 	 */
 	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "pig_spawner");
 
-	public static final Marker LOG_MARKER = MarkerManager.getMarker("PIG_SPAWNER").addParents(LogUtil.MOD_MARKER);
+	public static final Marker LOG_MARKER = ModLogUtils.getMarker("PIG_SPAWNER");
 
 	/**
 	 * Register the capability.

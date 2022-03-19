@@ -1,5 +1,6 @@
 package choonster.testmod3.util;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Container;
@@ -18,8 +19,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.PlayerArmorInvWrapper;
 import net.minecraftforge.items.wrapper.PlayerOffhandInvWrapper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -31,7 +31,7 @@ import java.util.function.Predicate;
  * @author Choonster
  */
 public class InventoryUtils {
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
 	/**
 	 * Get the {@link EquipmentSlot} with the specified index (as returned by {@link EquipmentSlot#getIndex()}).

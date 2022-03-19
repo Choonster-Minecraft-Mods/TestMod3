@@ -3,17 +3,17 @@ package choonster.testmod3.remap;
 import choonster.testmod3.TestMod3;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.item.Item;
+import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.RegistryEvent.MissingMappings.Mapping;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +25,7 @@ import java.util.function.Predicate;
  * @author Choonster
  */
 final class Remapper<T extends IForgeRegistryEntry<T>> {
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
 	/**
 	 * A list of remapping functions that return {@code true} if they took an action for the {@link Mapping<T>}.
@@ -88,7 +88,9 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 	private boolean remapCustomName(final Mapping<T> missingMapping) {
 		final String missingPath = missingMapping.key.getPath();
 
-		if (!customNames.containsKey(missingPath)) return false;
+		if (!customNames.containsKey(missingPath)) {
+			return false;
+		}
 
 		final String newPath = customNames.get(missingPath);
 		final ResourceLocation newRegistryName = new ResourceLocation(missingMapping.key.getNamespace(), newPath);
@@ -105,7 +107,9 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 	private boolean ignoreName(final Mapping<T> missingMapping) {
 		final String missingPath = missingMapping.key.getPath();
 
-		if (!namesToIgnore.contains(missingPath)) return false;
+		if (!namesToIgnore.contains(missingPath)) {
+			return false;
+		}
 
 		missingMapping.ignore();
 

@@ -3,16 +3,15 @@ package choonster.testmod3.capability.pigspawner;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.DebugUtil;
-import choonster.testmod3.util.LogUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.mojang.logging.LogUtils;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.INBTSerializable;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -23,7 +22,7 @@ import java.util.List;
  * @author Choonster
  */
 public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinite, INBTSerializable<IntTag> {
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
 	/**
 	 * The current number of pigs that can be spawned.
@@ -37,7 +36,7 @@ public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinit
 
 	public FinitePigSpawner(final int maxNumPigs) {
 		this.maxNumPigs = maxNumPigs;
-		LogUtil.debug(LOGGER, PigSpawnerCapability.LOG_MARKER, DebugUtil.getStackTrace(10), "Creating finite pig spawner: {}", this);
+		LOGGER.debug(PigSpawnerCapability.LOG_MARKER, "Creating finite pig spawner: {}", this, DebugUtil.getStackTrace(10));
 	}
 
 	@Override
@@ -84,8 +83,13 @@ public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinit
 
 	@Override
 	public boolean equals(@Nullable final Object obj) {
-		if (this == obj) return true;
-		if (obj == null || getClass() != obj.getClass()) return false;
+		if (this == obj) {
+			return true;
+		}
+		
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
 
 		final FinitePigSpawner that = (FinitePigSpawner) obj;
 

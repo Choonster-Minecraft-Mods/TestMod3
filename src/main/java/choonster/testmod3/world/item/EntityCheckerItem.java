@@ -1,6 +1,7 @@
 package choonster.testmod3.world.item;
 
 import choonster.testmod3.text.TestMod3Lang;
+import com.mojang.logging.LogUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -20,8 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -40,7 +40,7 @@ import java.util.List;
  * @author Choonster
  */
 public class EntityCheckerItem extends Item {
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
 	public EntityCheckerItem(final Item.Properties properties) {
 		super(properties);

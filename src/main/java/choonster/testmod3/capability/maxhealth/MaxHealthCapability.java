@@ -3,7 +3,7 @@ package choonster.testmod3.capability.maxhealth;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.SerializableCapabilityProvider;
-import choonster.testmod3.util.LogUtil;
+import choonster.testmod3.util.ModLogUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -15,8 +15,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.apache.logging.log4j.Marker;
-import org.apache.logging.log4j.MarkerManager;
+import org.slf4j.Marker;
 
 /**
  * Capability for {@link IMaxHealth}.
@@ -41,7 +40,7 @@ public final class MaxHealthCapability {
 	 */
 	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "max_health");
 
-	public static final Marker LOG_MARKER = MarkerManager.getMarker("MaxHealth").addParents(LogUtil.MOD_MARKER);
+	public static final Marker LOG_MARKER = ModLogUtils.getMarker("MaxHealth");
 
 	public static void register(final RegisterCapabilitiesEvent event) {
 		event.register(IMaxHealth.class);

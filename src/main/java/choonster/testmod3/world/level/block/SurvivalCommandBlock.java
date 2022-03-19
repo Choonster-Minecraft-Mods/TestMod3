@@ -3,6 +3,7 @@ package choonster.testmod3.world.level.block;
 import choonster.testmod3.client.gui.GuiIDs;
 import choonster.testmod3.util.NetworkUtil;
 import choonster.testmod3.world.level.block.entity.SurvivalCommandBlockEntity;
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -25,8 +26,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import java.util.Random;
 
@@ -42,7 +42,7 @@ import java.util.Random;
  * @author Choonster
  */
 public class SurvivalCommandBlock extends CommandBlock {
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
 	private final CommandBlockEntity.Mode commandBlockMode;
 

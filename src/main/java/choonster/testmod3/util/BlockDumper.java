@@ -2,13 +2,13 @@ package choonster.testmod3.util;
 
 import choonster.testmod3.TestMod3;
 import com.google.common.base.Charsets;
+import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import java.io.PrintWriter;
 import java.util.Objects;
@@ -22,7 +22,7 @@ import java.util.stream.StreamSupport;
  * @author Choonster
  */
 public class BlockDumper {
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
 	public static void dump() {
 		try (final PrintWriter writer = new PrintWriter("TestMod3_BlockDump_" + (FMLEnvironment.dist.isClient() ? "Client" : "Server") + ".txt", Charsets.UTF_8.toString())) {
@@ -37,7 +37,7 @@ public class BlockDumper {
 						}
 					});
 		} catch (final Exception e) {
-			LOGGER.fatal("Exception dumping blocks", e);
+			LOGGER.error(LogUtils.FATAL_MARKER, "Exception dumping blocks", e);
 		}
 	}
 }
