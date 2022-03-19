@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -120,7 +121,7 @@ public class MaxHealth implements IMaxHealth, INBTSerializable<FloatTag> {
 			return;
 		}
 
-		final AttributeInstance entityMaxHealthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
+		final AttributeInstance entityMaxHealthAttribute = Objects.requireNonNull(entity.getAttribute(Attributes.MAX_HEALTH));
 
 		final AttributeModifier modifier = createModifier();
 

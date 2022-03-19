@@ -10,7 +10,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -33,7 +33,6 @@ import org.slf4j.Marker;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Capability for {@link IPigSpawner}.
@@ -196,13 +195,14 @@ public final class PigSpawnerCapability {
 			getPigSpawner(event.getItemStack()).ifPresent(pigSpawner -> {
 				final Style style = Style.EMPTY.withColor(ChatFormatting.LIGHT_PURPLE);
 
-				final List<Component> tooltipLines = pigSpawner.getTooltipLines().stream()
+				final List<MutableComponent> tooltipLines = pigSpawner
+						.getTooltipLines()
+						.stream()
 						.map(textComponent -> textComponent.setStyle(style))
-						.collect(Collectors.toList());
+						.toList();
 
 				event.getToolTip().add(new TextComponent(""));
 				event.getToolTip().addAll(tooltipLines);
-
 			});
 		}
 	}
