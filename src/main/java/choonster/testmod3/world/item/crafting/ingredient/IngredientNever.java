@@ -1,10 +1,13 @@
 package choonster.testmod3.world.item.crafting.ingredient;
 
 import choonster.testmod3.init.ModCrafting;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.common.crafting.AbstractIngredient;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 
 import javax.annotation.Nullable;
@@ -19,7 +22,7 @@ import java.util.stream.Stream;
  * @author Choonster
  */
 @SuppressWarnings("unused")
-public class IngredientNever extends Ingredient {
+public class IngredientNever extends AbstractIngredient {
 	public static final IngredientNever INSTANCE = new IngredientNever();
 
 	private IngredientNever() {
@@ -29,6 +32,16 @@ public class IngredientNever extends Ingredient {
 	@Override
 	public boolean test(@Nullable final ItemStack p_test_1_) {
 		return false;
+	}
+
+	@Override
+	public boolean isSimple() {
+		return false;
+	}
+
+	@Override
+	public JsonElement toJson() {
+		return new JsonArray();
 	}
 
 	@Override

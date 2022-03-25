@@ -16,6 +16,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.common.crafting.AbstractIngredient;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
@@ -37,7 +38,7 @@ import java.util.stream.Stream;
  *
  * @author Choonster
  */
-public class FluidContainerIngredient extends Ingredient {
+public class FluidContainerIngredient extends AbstractIngredient {
 	private final FluidStack fluidStack;
 	private ItemStack[] matchingStacks;
 

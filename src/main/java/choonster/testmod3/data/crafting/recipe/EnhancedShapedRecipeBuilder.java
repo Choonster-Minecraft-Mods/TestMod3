@@ -20,6 +20,7 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -113,7 +114,7 @@ public class EnhancedShapedRecipeBuilder<
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER group(final String group) {
+	public BUILDER group(@Nullable final String group) {
 		return (BUILDER) super.group(group);
 	}
 

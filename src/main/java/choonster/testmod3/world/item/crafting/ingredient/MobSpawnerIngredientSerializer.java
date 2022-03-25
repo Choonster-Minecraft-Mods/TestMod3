@@ -44,7 +44,7 @@ public class MobSpawnerIngredientSerializer implements IIngredientSerializer<NBT
 
 		blockEntityData.put("SpawnPotentials", blockEntityData.getList("SpawnPotentials", Tag.TAG_COMPOUND));
 
-		return new TestMod3NBTIngredient(stack);
+		return NBTIngredient.of(stack);
 	}
 
 	@Override
