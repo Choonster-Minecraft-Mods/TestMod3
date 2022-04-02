@@ -57,7 +57,7 @@ public class RegistryUtil {
 	}
 
 	/**
-	 * Gets a {@link  Holder} for the specified {@link  RegistryObject}, or throws an exception if the object isn't present in the registry.
+	 * Gets a {@link Holder} for the specified {@link RegistryObject}, or throws an exception if the object isn't present in the registry.
 	 *
 	 * @param registry       The registry to get the holder from
 	 * @param registryObject The registry object to get the holder of
