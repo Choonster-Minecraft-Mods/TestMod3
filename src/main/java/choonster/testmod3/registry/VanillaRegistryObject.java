@@ -4,6 +4,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
@@ -19,7 +20,9 @@ import java.util.stream.Stream;
  * Copy of {@link RegistryObject} for non-Forge registries.
  *
  * @author Choonster
+ * @deprecated Use {@link DeferredRegister}/{@link RegistryObject} now that they support Vanilla registries.
  */
+@Deprecated(since = "1.18.2", forRemoval = true)
 public final class VanillaRegistryObject<T> implements Supplier<T> {
 	private static final VanillaRegistryObject<Object> EMPTY = new VanillaRegistryObject<>();
 

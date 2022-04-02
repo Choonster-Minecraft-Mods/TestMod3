@@ -95,8 +95,8 @@ public class ModItems {
 
 		// Initialise the fields with lazy references to the items first,
 		// allowing them to be referenced from the constructors below
-		SWAP_TEST_A = RegistryObject.of(new ResourceLocation(TestMod3.MODID, swapTestA), ForgeRegistries.ITEMS);
-		SWAP_TEST_B = RegistryObject.of(new ResourceLocation(TestMod3.MODID, swapTestB), ForgeRegistries.ITEMS);
+		SWAP_TEST_A = RegistryObject.create(new ResourceLocation(TestMod3.MODID, swapTestA), ForgeRegistries.ITEMS);
+		SWAP_TEST_B = RegistryObject.create(new ResourceLocation(TestMod3.MODID, swapTestB), ForgeRegistries.ITEMS);
 
 		// Then register the items
 		ITEMS.register(swapTestA,

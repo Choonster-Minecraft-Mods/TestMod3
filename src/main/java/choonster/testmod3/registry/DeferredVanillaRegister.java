@@ -8,6 +8,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -16,7 +17,9 @@ import java.util.function.Supplier;
  * Copy of {@link  DeferredRegister} for non-Forge registries.
  *
  * @author Choonster
+ * @deprecated Use {@link DeferredRegister}/{@link RegistryObject} now that they support Vanilla registries.
  */
+@Deprecated(since = "1.18.2", forRemoval = true)
 public class DeferredVanillaRegister<T> {
 	public static <B> DeferredVanillaRegister<B> create(final Registry<B> reg, final String modid) {
 		return new DeferredVanillaRegister<>(reg, modid);

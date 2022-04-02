@@ -1,11 +1,10 @@
 package choonster.testmod3.init.levelgen;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.registry.DeferredVanillaRegister;
-import choonster.testmod3.registry.VanillaRegistryObject;
+import choonster.testmod3.world.level.levelgen.feature.BannerFeature;
 import choonster.testmod3.world.level.levelgen.feature.BannerFeatureConfig;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
@@ -15,8 +14,9 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -27,8 +27,8 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class ModConfiguredFeatures {
-	private static final DeferredVanillaRegister<ConfiguredFeature<?, ?>> CONFIGURED_FEATURES =
-			DeferredVanillaRegister.create(BuiltinRegistries.CONFIGURED_FEATURE, TestMod3.MODID);
+	private static final DeferredRegister<ConfiguredFeature<?, ?>> CONFIGURED_FEATURES =
+			DeferredRegister.create(Registry.CONFIGURED_FEATURE_REGISTRY, TestMod3.MODID);
 
 	private static boolean isInitialised = false;
 
@@ -37,7 +37,7 @@ public class ModConfiguredFeatures {
 	 * Test for this thread:
 	 * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2535868-banner-nbt-tags
 	 */
-	public static final VanillaRegistryObject<ConfiguredFeature<?, ?>> BANNER = register("banner",
+	public static final RegistryObject<ConfiguredFeature<BannerFeatureConfig, BannerFeature>> BANNER = register("banner",
 			ModFeatures.BANNER,
 			() -> BannerFeatureConfig.create(
 					DyeColor.PINK,
@@ -46,7 +46,7 @@ public class ModConfiguredFeatures {
 			)
 	);
 
-	public static final VanillaRegistryObject<ConfiguredFeature<?, ?>> ORE_IRON_NETHER = register("ore_iron_nether",
+	public static final RegistryObject<ConfiguredFeature<OreConfiguration, Feature<OreConfiguration>>> ORE_IRON_NETHER = register("ore_iron_nether",
 			Feature.ORE,
 			() -> new OreConfiguration(
 					List.of(OreConfiguration.target(
@@ -57,7 +57,7 @@ public class ModConfiguredFeatures {
 			)
 	);
 
-	public static final VanillaRegistryObject<ConfiguredFeature<?, ?>> ORE_IRON_END = register("ore_iron_end",
+	public static final RegistryObject<ConfiguredFeature<OreConfiguration, Feature<OreConfiguration>>> ORE_IRON_END = register("ore_iron_end",
 			Feature.ORE,
 			() -> new OreConfiguration(
 					List.of(OreConfiguration.target(
@@ -69,7 +69,7 @@ public class ModConfiguredFeatures {
 	);
 
 	/**
-	 * Registers the {@link DeferredVanillaRegister} instance with the mod event bus.
+	 * Registers the {@link DeferredRegister} instance with the mod event bus.
 	 * <p>
 	 * This should be called during mod construction.
 	 *
@@ -80,12 +80,12 @@ public class ModConfiguredFeatures {
 			throw new IllegalStateException("Already initialised");
 		}
 
-		CONFIGURED_FEATURES.<Feature<?>>register(modEventBus, Feature.class, EventPriority.LOW);
+		CONFIGURED_FEATURES.<Feature<?>>register(modEventBus);
 
 		isInitialised = true;
 	}
 
-	private static <FC extends FeatureConfiguration, F extends Feature<FC>> VanillaRegistryObject<ConfiguredFeature<?, ?>> register(
+	private static <FC extends FeatureConfiguration, F extends Feature<FC>> RegistryObject<ConfiguredFeature<FC, F>> register(
 			final String name,
 			final F feature,
 			final Supplier<FC> configurationFactory
@@ -93,7 +93,7 @@ public class ModConfiguredFeatures {
 		return register(name, (Supplier<F>) () -> feature, configurationFactory);
 	}
 
-	private static <FC extends FeatureConfiguration, F extends Feature<FC>> VanillaRegistryObject<ConfiguredFeature<?, ?>> register(
+	private static <FC extends FeatureConfiguration, F extends Feature<FC>> RegistryObject<ConfiguredFeature<FC, F>> register(
 			final String name,
 			final Supplier<F> feature,
 			final Supplier<FC> configurationFactory

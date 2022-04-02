@@ -1,8 +1,6 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.registry.DeferredVanillaRegister;
-import choonster.testmod3.registry.VanillaRegistryObject;
 import choonster.testmod3.world.level.storage.loot.predicates.IsChestLoot;
 import choonster.testmod3.world.level.storage.loot.predicates.MatchBlockTag;
 import net.minecraft.core.Registry;
@@ -10,6 +8,8 @@ import net.minecraft.world.level.storage.loot.Serializer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
@@ -19,21 +19,21 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class ModLootConditionTypes {
-	private static final DeferredVanillaRegister<LootItemConditionType> LOOT_ITEM_CONDITION_TYPES =
-			DeferredVanillaRegister.create(Registry.LOOT_CONDITION_TYPE, TestMod3.MODID);
+	private static final DeferredRegister<LootItemConditionType> LOOT_ITEM_CONDITION_TYPES =
+			DeferredRegister.create(Registry.LOOT_ITEM_REGISTRY, TestMod3.MODID);
 
 	private static boolean isInitialised = false;
 
-	public static final VanillaRegistryObject<LootItemConditionType> IS_CHEST_LOOT = register("is_chest_loot",
+	public static final RegistryObject<LootItemConditionType> IS_CHEST_LOOT = register("is_chest_loot",
 			IsChestLoot.ConditionSerializer::new
 	);
 
-	public static final VanillaRegistryObject<LootItemConditionType> MATCH_BLOCK_TAG = register("match_block_tag",
+	public static final RegistryObject<LootItemConditionType> MATCH_BLOCK_TAG = register("match_block_tag",
 			MatchBlockTag.ConditionSerializer::new
 	);
 
 	/**
-	 * Registers the {@link DeferredVanillaRegister} instance with the mod event bus.
+	 * Registers the {@link DeferredRegister} instance with the mod event bus.
 	 * <p>
 	 * This should be called during mod construction.
 	 *
@@ -49,7 +49,7 @@ public class ModLootConditionTypes {
 		isInitialised = true;
 	}
 
-	private static VanillaRegistryObject<LootItemConditionType> register(final String name, final Supplier<Serializer<? extends LootItemCondition>> serializerFactory) {
+	private static RegistryObject<LootItemConditionType> register(final String name, final Supplier<Serializer<? extends LootItemCondition>> serializerFactory) {
 		return LOOT_ITEM_CONDITION_TYPES.register(name, () -> new LootItemConditionType(serializerFactory.get()));
 	}
 }

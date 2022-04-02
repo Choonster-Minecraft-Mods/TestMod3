@@ -2,9 +2,13 @@ package choonster.testmod3.world.level.levelgen;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.levelgen.ModPlacedFeatures;
+import choonster.testmod3.util.RegistryUtil;
+import net.minecraft.core.Holder;
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -12,6 +16,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Objects;
 
@@ -32,17 +37,21 @@ public class ModLevelGen {
 		*/
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.OVERWORLD)) {
 			generation
-					.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, ModPlacedFeatures.BANNER.getHolder());
+					.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, holder(ModPlacedFeatures.BANNER));
 		}
 
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.NETHER)) {
 			generation
-					.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ModPlacedFeatures.ORE_IRON_NETHER.getHolder());
+					.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, holder(ModPlacedFeatures.ORE_IRON_NETHER));
 		}
 
 		if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.END)) {
 			generation
-					.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ModPlacedFeatures.ORE_IRON_END.getHolder());
+					.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, holder(ModPlacedFeatures.ORE_IRON_END));
 		}
+	}
+
+	private static Holder<PlacedFeature> holder(final RegistryObject<PlacedFeature> placedFeature) {
+		return RegistryUtil.getHolderOrThrow(BuiltinRegistries.PLACED_FEATURE, placedFeature);
 	}
 }

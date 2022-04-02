@@ -1,14 +1,14 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.registry.DeferredVanillaRegister;
-import choonster.testmod3.registry.VanillaRegistryObject;
 import choonster.testmod3.world.level.storage.loot.functions.SetFluidTankContents;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.storage.loot.Serializer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
@@ -18,16 +18,16 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class ModLootFunctionTypes {
-	private static final DeferredVanillaRegister<LootItemFunctionType> LOOT_ITEM_FUNCTION_TYPES = DeferredVanillaRegister.create(Registry.LOOT_FUNCTION_TYPE, TestMod3.MODID);
+	private static final DeferredRegister<LootItemFunctionType> LOOT_ITEM_FUNCTION_TYPES = DeferredRegister.create(Registry.LOOT_FUNCTION_REGISTRY, TestMod3.MODID);
 
 	private static boolean isInitialised = false;
 
-	public static final VanillaRegistryObject<LootItemFunctionType> SET_FLUID_TANK_CONTENTS = register("set_fluid_tank_contents",
+	public static final RegistryObject<LootItemFunctionType> SET_FLUID_TANK_CONTENTS = register("set_fluid_tank_contents",
 			SetFluidTankContents.Serializer::new
 	);
 
 	/**
-	 * Registers the {@link DeferredVanillaRegister} instance with the mod event bus.
+	 * Registers the {@link DeferredRegister} instance with the mod event bus.
 	 * <p>
 	 * This should be called during mod construction.
 	 *
@@ -43,7 +43,7 @@ public class ModLootFunctionTypes {
 		isInitialised = true;
 	}
 
-	private static VanillaRegistryObject<LootItemFunctionType> register(final String name, final Supplier<Serializer<? extends LootItemFunction>> serializerFactory) {
+	private static RegistryObject<LootItemFunctionType> register(final String name, final Supplier<Serializer<? extends LootItemFunction>> serializerFactory) {
 		return LOOT_ITEM_FUNCTION_TYPES.register(name, () -> new LootItemFunctionType(serializerFactory.get()));
 	}
 }
