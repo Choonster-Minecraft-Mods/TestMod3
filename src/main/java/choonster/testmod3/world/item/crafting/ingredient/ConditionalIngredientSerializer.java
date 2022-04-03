@@ -1,10 +1,20 @@
 package choonster.testmod3.world.item.crafting.ingredient;
 
+import choonster.testmod3.TestMod3;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.minecraftforge.common.crafting.conditions.ICondition;
+import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+
+import java.lang.reflect.Field;
 
 /**
  * An ingredient serializer that produces another {@link Ingredient} type, but only if the
@@ -24,9 +34,13 @@ import net.minecraftforge.common.crafting.IIngredientSerializer;
  * @author Choonster
  */
 public class ConditionalIngredientSerializer implements IIngredientSerializer<Ingredient> {
+	private static final Field CONTEXT = ObfuscationReflectionHelper.findField(RecipeManager.class, "context");
+
+	private static ICondition.IContext context = ICondition.IContext.EMPTY;
+
 	@Override
 	public Ingredient parse(final JsonObject json) {
-		if (CraftingHelper.processConditions(json, "conditions")) {
+		if (CraftingHelper.processConditions(json, "conditions", context)) {
 			return CraftingHelper.getIngredient(json.get("ingredient"));
 		}
 
@@ -41,5 +55,24 @@ public class ConditionalIngredientSerializer implements IIngredientSerializer<In
 	@Override
 	public void write(final FriendlyByteBuf buffer, final Ingredient ingredient) {
 		throw new UnsupportedOperationException("Can't write to PacketBuffer, use the Ingredient's own IIngredientSerializer instead");
+	}
+
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
+	public static class EventHandler {
+		@SubscribeEvent
+		public static void captureServerResources(final AddReloadListenerEvent event) {
+			// Capture the IContext before recipes are loaded
+			final var serverResources = event.getServerResources();
+			final var recipeManager = serverResources.getRecipeManager();
+
+			try {
+				context = (ICondition.IContext) CONTEXT.get(recipeManager);
+			} catch (final IllegalAccessException e) {
+				throw new RuntimeException("Failed to get IContext from RecipeManager", e);
+			}
+
+			// Clear the IContext after recipes are loaded
+			event.addListener((ResourceManagerReloadListener) resourceManager -> context = ICondition.IContext.EMPTY);
+		}
 	}
 }
