@@ -1,10 +1,9 @@
 package choonster.testmod3.init.levelgen;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.util.RegistryUtil;
 import choonster.testmod3.world.level.levelgen.placement.InChunksDivisibleBy16Filter;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -66,7 +65,7 @@ public class ModPlacedFeatures {
 		}
 
 		// Ensure this is run after the ConfiguredFeature registration in ModConfiguredFeatures
-		PLACED_FEATURES.<Feature<?>>register(modEventBus);
+		PLACED_FEATURES.register(modEventBus);
 
 		isInitialised = true;
 	}
@@ -79,7 +78,7 @@ public class ModPlacedFeatures {
 		return PLACED_FEATURES.register(
 				name,
 				() -> new PlacedFeature(
-						RegistryUtil.getHolderOrThrow(BuiltinRegistries.CONFIGURED_FEATURE, feature),
+						Holder.hackyErase(feature.getHolder().orElseThrow()),
 						List.of(placements)
 				)
 		);

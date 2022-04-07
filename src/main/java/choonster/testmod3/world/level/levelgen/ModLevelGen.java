@@ -2,9 +2,7 @@ package choonster.testmod3.world.level.levelgen;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.levelgen.ModPlacedFeatures;
-import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.core.Holder;
-import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -52,6 +50,6 @@ public class ModLevelGen {
 	}
 
 	private static Holder<PlacedFeature> holder(final RegistryObject<PlacedFeature> placedFeature) {
-		return RegistryUtil.getHolderOrThrow(BuiltinRegistries.PLACED_FEATURE, placedFeature);
+		return placedFeature.getHolder().orElseThrow();
 	}
 }

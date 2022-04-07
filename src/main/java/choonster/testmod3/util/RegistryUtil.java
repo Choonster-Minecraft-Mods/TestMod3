@@ -2,13 +2,9 @@ package choonster.testmod3.util;
 
 import choonster.testmod3.TestMod3;
 import com.google.common.base.Preconditions;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -54,18 +50,5 @@ public class RegistryUtil {
 	 */
 	public static ResourceLocation getRequiredRegistryName(final IForgeRegistryEntry<?> entry) {
 		return Preconditions.checkNotNull(entry.getRegistryName(), "%s has a null registry name", entry);
-	}
-
-	/**
-	 * Gets a {@link Holder} for the specified {@link RegistryObject}, or throws an exception if the object isn't present in the registry.
-	 *
-	 * @param registry       The registry to get the holder from
-	 * @param registryObject The registry object to get the holder of
-	 * @param <T>            The registry type
-	 * @return The holder
-	 * @throws IllegalStateException If the registry object isn't present in the registry
-	 */
-	public static <T> Holder<T> getHolderOrThrow(final Registry<T> registry, final RegistryObject<? extends T> registryObject) {
-		return registry.getHolderOrThrow(ResourceKey.create(registry.key(), registryObject.getId()));
 	}
 }
