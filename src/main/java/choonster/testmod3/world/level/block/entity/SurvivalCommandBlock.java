@@ -1,6 +1,6 @@
 package choonster.testmod3.world.level.block.entity;
 
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.BaseCommandBlock;
 
 public abstract class SurvivalCommandBlock extends BaseCommandBlock {
@@ -8,7 +8,7 @@ public abstract class SurvivalCommandBlock extends BaseCommandBlock {
 
 	public SurvivalCommandBlock(final Type type) {
 		this.type = type;
-		setName(new TextComponent("Server"));
+		setName(Component.literal("Server"));
 	}
 
 	public Type getType() {

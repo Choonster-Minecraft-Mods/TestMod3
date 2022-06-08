@@ -158,7 +158,7 @@ public class FluidGroup<STILL extends Fluid, FLOWING extends Fluid, BLOCK extend
 		return Block.Properties.of(material)
 				.noCollission()
 				.strength(100)
-				.noDrops();
+				.noLootTable();
 	}
 
 	public static Item.Properties defaultBucketProperties() {

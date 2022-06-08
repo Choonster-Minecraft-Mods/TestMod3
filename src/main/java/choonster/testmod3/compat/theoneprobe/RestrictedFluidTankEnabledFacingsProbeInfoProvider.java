@@ -7,7 +7,7 @@ import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -38,7 +38,7 @@ public class RestrictedFluidTankEnabledFacingsProbeInfoProvider<BLOCK extends Re
 			final String enabledFacingsString = ((RestrictedFluidTankBlock) blockState.getBlock())
 					.getEnabledFacingsString(world, pos);
 
-			probeInfo.text(new TranslatableComponent(
+			probeInfo.text(Component.translatable(
 					TestMod3Lang.BLOCK_DESC_FLUID_TANK_RESTRICTED_ENABLED_FACINGS.getTranslationKey(),
 					enabledFacingsString
 			));

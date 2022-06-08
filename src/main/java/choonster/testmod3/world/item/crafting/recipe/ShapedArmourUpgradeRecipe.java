@@ -14,7 +14,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 /**
  * A shaped recipe class that copies the item damage of the first armour ingredient to the output. The damage is clamped to the output item's damage range.
@@ -54,7 +53,7 @@ public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
 		return ModCrafting.Recipes.ARMOUR_UPGRADE_SHAPED.get();
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ShapedArmourUpgradeRecipe> {
+	public static class Serializer implements RecipeSerializer<ShapedArmourUpgradeRecipe> {
 		@Override
 		public ShapedArmourUpgradeRecipe fromJson(final ResourceLocation recipeID, final JsonObject json) {
 			final String group = GsonHelper.getAsString(json, "group", "");

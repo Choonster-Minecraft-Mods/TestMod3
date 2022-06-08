@@ -3,8 +3,7 @@ package choonster.testmod3.world.item;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.capability.chunkenergy.ChunkEnergyCapability;
 import choonster.testmod3.text.TestMod3Lang;
-import net.minecraft.Util;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -41,16 +40,16 @@ public class ChunkEnergySetterItem extends Item {
 				.map(chunkEnergy -> {
 					if (player.isShiftKeyDown()) {
 						final int energyRemoved = chunkEnergy.extractEnergy(amount, false);
-						player.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_REMOVE.getTranslationKey(), energyRemoved, chunkPos), Util.NIL_UUID);
+						player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_CHUNK_ENERGY_REMOVE.getTranslationKey(), energyRemoved, chunkPos));
 					} else {
 						final int energyAdded = chunkEnergy.receiveEnergy(amount, false);
-						player.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_ADD.getTranslationKey(), energyAdded, chunkPos), Util.NIL_UUID);
+						player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_CHUNK_ENERGY_ADD.getTranslationKey(), energyAdded, chunkPos));
 					}
 
 					return true;
 				})
 				.orElseGet(() -> {
-					player.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_CHUNK_ENERGY_NOT_FOUND.getTranslationKey(), chunkPos), Util.NIL_UUID);
+					player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_CHUNK_ENERGY_NOT_FOUND.getTranslationKey(), chunkPos));
 
 					return false;
 				});

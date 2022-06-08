@@ -3,7 +3,6 @@ package choonster.testmod3.network;
 import choonster.testmod3.client.util.ClientUtil;
 import choonster.testmod3.fluid.FluidTankSnapshot;
 import choonster.testmod3.world.level.block.FluidTankBlock;
-import net.minecraft.Util;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fluids.FluidStack;
@@ -58,7 +57,7 @@ public class FluidTankContentsMessage {
 			}
 
 			FluidTankBlock.getFluidDataForDisplay(message.fluidTankSnapshots)
-					.forEach((textComponent) -> player.sendMessage(textComponent, Util.NIL_UUID));
+					.forEach(player::sendSystemMessage);
 		});
 
 		ctx.get().setPacketHandled(true);

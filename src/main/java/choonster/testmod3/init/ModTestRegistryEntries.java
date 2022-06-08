@@ -29,7 +29,7 @@ public class ModTestRegistryEntries {
 
 	private static final DeferredRegister<TestRegistryEntry> TEST_REGISTRY_ENTRIES = DeferredRegister.create(REGISTRY_KEY, TestMod3.MODID);
 
-	public static final Supplier<IForgeRegistry<TestRegistryEntry>> REGISTRY = TEST_REGISTRY_ENTRIES.makeRegistry(TestRegistryEntry.class, RegistryBuilder::new);
+	public static final Supplier<IForgeRegistry<TestRegistryEntry>> REGISTRY = TEST_REGISTRY_ENTRIES.makeRegistry(RegistryBuilder::new);
 
 	private static boolean isInitialised = false;
 

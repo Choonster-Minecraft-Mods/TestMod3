@@ -1,8 +1,8 @@
 package choonster.testmod3.data.crafting.ingredient;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.util.RegistryUtil;
 import choonster.testmod3.world.item.crafting.ingredient.MobSpawnerIngredientSerializer;
-import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.stream.Stream;
 
@@ -69,7 +70,7 @@ public class MobSpawnerIngredientBuilder {
 			throw new IllegalStateException("Mob spawner ingredient " + spawner + " has no EntityType");
 		}
 
-		if (entityType.getRegistryName() == null) {
+		if (ForgeRegistries.ENTITIES.getKey(entityType) == null) {
 			throw new IllegalStateException("Mob spawner ingredient " + spawner + " has EntityType with no registry name");
 		}
 	}
@@ -102,7 +103,7 @@ public class MobSpawnerIngredientBuilder {
 			final JsonObject rootObject = super.toJson().getAsJsonObject();
 
 			rootObject.addProperty("type", new ResourceLocation(TestMod3.MODID, "mob_spawner").toString());
-			rootObject.addProperty("entity", Preconditions.checkNotNull(entityType.getRegistryName()).toString());
+			rootObject.addProperty("entity", RegistryUtil.getKey(entityType).toString());
 
 			return rootObject;
 		}

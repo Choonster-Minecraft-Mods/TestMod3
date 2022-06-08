@@ -4,8 +4,8 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.item.ModBowItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
@@ -27,8 +27,8 @@ public class ClientEventHandler {
 
 	@SubscribeEvent
 	public static void onFOVUpdate(final FOVModifierEvent event) {
-		if (event.getEntity().isUsingItem() && event.getEntity().getUseItem().getItem() instanceof ModBowItem) {
-			float fovModifier = event.getEntity().getTicksUsingItem() / 20.0f;
+		if (event.getPlayer().isUsingItem() && event.getPlayer().getUseItem().getItem() instanceof ModBowItem) {
+			float fovModifier = event.getPlayer().getTicksUsingItem() / 20.0f;
 
 			if (fovModifier > 1.0f) {
 				fovModifier = 1.0f;
@@ -36,7 +36,7 @@ public class ClientEventHandler {
 				fovModifier *= fovModifier;
 			}
 
-			event.setNewfov(event.getFov() * (1.0f - fovModifier * 0.15f));
+			event.setNewFov(event.getFov() * (1.0f - fovModifier * 0.15f));
 		}
 	}
 
@@ -77,7 +77,7 @@ public class ClientEventHandler {
 			PlayerTeam team = scoreboard.getPlayerTeam(TestMod3.MODID);
 			if (team == null) {
 				team = scoreboard.addPlayerTeam(TestMod3.MODID);
-				team.setPlayerPrefix(new TextComponent("").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)));
+				team.setPlayerPrefix(Component.literal("").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)));
 				team.setColor(ChatFormatting.DARK_AQUA);
 			}
 

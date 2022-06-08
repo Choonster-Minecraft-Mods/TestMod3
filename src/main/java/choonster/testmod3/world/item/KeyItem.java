@@ -4,12 +4,11 @@ import choonster.testmod3.api.capability.lock.ILock;
 import choonster.testmod3.capability.lock.LockCapability;
 import choonster.testmod3.client.gui.GuiIDs;
 import choonster.testmod3.util.NetworkUtil;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.Util;
-import net.minecraft.network.chat.TranslatableComponent;
 
 /**
  * A key that can lock {@link ILock}s.
@@ -27,7 +26,7 @@ public class KeyItem extends Item {
 				.map(lock -> {
 					if (!context.getLevel().isClientSide && context.getPlayer() != null) {
 						if (lock.isLocked()) {
-							context.getPlayer().sendMessage(new TranslatableComponent("testmod3.lock.already_locked"), Util.NIL_UUID);
+							context.getPlayer().sendSystemMessage(Component.translatable("testmod3.lock.already_locked"));
 						} else {
 							NetworkUtil.openClientGui((ServerPlayer) context.getPlayer(), GuiIDs.Client.LOCK, buffer -> {
 								buffer.writeBlockPos(context.getClickedPos());

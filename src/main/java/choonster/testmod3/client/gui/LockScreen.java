@@ -12,7 +12,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
@@ -60,11 +60,11 @@ public class LockScreen extends Screen {
 	protected void init() {
 		minecraft.keyboardHandler.setSendRepeatsToGui(true);
 
-		addRenderableWidget(new Button(width / 2 - 4 - 150, height / 4 + 120 + 12, 150, 20, new TranslatableComponent("gui.done"), button -> done()));
+		addRenderableWidget(new Button(width / 2 - 4 - 150, height / 4 + 120 + 12, 150, 20, Component.translatable("gui.done"), button -> done()));
 
-		addRenderableWidget(new Button(width / 2 + 4, height / 4 + 120 + 12, 150, 20, new TranslatableComponent("gui.cancel"), button -> removed()));
+		addRenderableWidget(new Button(width / 2 + 4, height / 4 + 120 + 12, 150, 20, Component.translatable("gui.cancel"), button -> removed()));
 
-		lockCodeTextField = new EditBox(font, width / 2 - 150, 50, 300, 20, new TranslatableComponent("gui.testmod3.lock.lock_code"));
+		lockCodeTextField = new EditBox(font, width / 2 - 150, 50, 300, 20, Component.translatable("gui.testmod3.lock.lock_code"));
 		lockCodeTextField.setMaxLength(32500);
 		lockCodeTextField.setFocus(true);
 		addWidget(lockCodeTextField);

@@ -103,7 +103,7 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 		object.addProperty("type", TYPE.toString());
 
 		if (fluid != null) {
-			final String registryName = RegistryUtil.getRequiredRegistryName(fluid).toString();
+			final String registryName = RegistryUtil.getKey(fluid).toString();
 			object.addProperty("fluid", registryName);
 		}
 

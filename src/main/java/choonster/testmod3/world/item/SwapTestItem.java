@@ -2,7 +2,6 @@ package choonster.testmod3.world.item;
 
 import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -42,12 +41,11 @@ public class SwapTestItem extends Item {
 		final ItemStack otherItem = getOtherItem();
 
 		if (!otherItem.isEmpty()) {
-			tooltip.add(new TranslatableComponent(TestMod3Lang.ITEM_DESC_SWAP_TEST_WITH_ITEM.getTranslationKey(), otherItem.getHoverName()));
+			tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_SWAP_TEST_WITH_ITEM.getTranslationKey(), otherItem.getHoverName()));
 		} else {
-			tooltip.add(new TranslatableComponent(TestMod3Lang.ITEM_DESC_SWAP_TEST_WITHOUT_ITEM.getTranslationKey()));
+			tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_SWAP_TEST_WITHOUT_ITEM.getTranslationKey()));
 		}
 	}
-
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(final Level level, final Player playerIn, final InteractionHand hand) {

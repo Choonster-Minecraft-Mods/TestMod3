@@ -6,7 +6,6 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.common.IExtensibleEnum;
 
 import java.util.Optional;
@@ -19,15 +18,7 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class VanillaCodecs {
-	public static final Codec<DyeColor> DYE_COLOR = StringRepresentable.fromEnum(
-			DyeColor::values,
-			createFromNameFunction(DyeColor::values, DyeColor::getSerializedName)
-	);
-
-	public static final Codec<BannerPattern> BANNER_PATTERN = createExtensibleEnumCodec(
-			BannerPattern::values,
-			BannerPattern::getHashname
-	);
+	public static final Codec<DyeColor> DYE_COLOR = StringRepresentable.fromEnum(DyeColor::values);
 
 	/**
 	 * Creates a function that converts a name to its corresponding enum value by iterating through the array returned
@@ -58,7 +49,7 @@ public class VanillaCodecs {
 	/**
 	 * Creates a {@link Codec} for an {@link IExtensibleEnum} that serialises to/from a name.
 	 * <p>
-	 * Based on {@link StringRepresentable#fromStringResolver}, but never uses the ordinal value as that can change for modded
+	 * Based on {@link StringRepresentable#fromEnum(Supplier)}, but never uses the ordinal value as that can change for modded
 	 * enum values.
 	 *
 	 * @param elementsSupplier A supplier that returns an array of enum values, usually a reference to the {@code values()} function
@@ -76,7 +67,7 @@ public class VanillaCodecs {
 	/**
 	 * Creates a {@link Codec} for an {@link IExtensibleEnum} that serialises to/from a name.
 	 * <p>
-	 * Based on {@link StringRepresentable#fromStringResolver}, but never uses the ordinal value as that can change for modded
+	 * Based on {@link StringRepresentable#fromEnum(Supplier)}, but never uses the ordinal value as that can change for modded
 	 * enum values.
 	 *
 	 * @param toNameFunction   A function that converts an enum value to its name

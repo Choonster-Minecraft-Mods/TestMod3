@@ -4,11 +4,10 @@ import choonster.testmod3.capability.lock.LockCapability;
 import choonster.testmod3.client.gui.LockScreen;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.NetworkUtil;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.level.Level;
@@ -58,7 +57,7 @@ public class SetLockCodeMessage {
 			if (world.isAreaLoaded(message.pos, 1)) {
 				LockCapability.getLock(world, message.pos, message.facing).ifPresent((lock) -> {
 					if (lock.isLocked()) {
-						player.sendMessage(new TranslatableComponent(TestMod3Lang.LOCK_ALREADY_LOCKED.getTranslationKey()), Util.NIL_UUID);
+						player.sendSystemMessage(Component.translatable(TestMod3Lang.LOCK_ALREADY_LOCKED.getTranslationKey()));
 					}
 
 					lock.setLockCode(new LockCode(message.lockCode));

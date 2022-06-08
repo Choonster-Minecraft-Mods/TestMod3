@@ -1,8 +1,11 @@
 package choonster.testmod3.util;
 
 import com.mojang.logging.LogUtils;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
@@ -22,7 +25,10 @@ import net.minecraftforge.items.wrapper.PlayerOffhandInvWrapper;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.Random;
 import java.util.function.Predicate;
 
 /**
@@ -64,7 +70,7 @@ public class InventoryUtils {
 	 * @param context     The LootContext to use in the loot generation
 	 */
 	public static void fillItemHandlerWithLoot(final IItemHandler itemHandler, final LootTable lootTable, final LootContext context) {
-		final Random random = context.getRandom();
+		final RandomSource random = context.getRandom();
 		final List<ItemStack> items = lootTable.getRandomItems(context);
 		final List<Integer> emptySlots = getAvailableSlots(itemHandler, random);
 
@@ -97,8 +103,8 @@ public class InventoryUtils {
 	 * @param random      The Random object
 	 * @return The slot indices
 	 */
-	private static List<Integer> getAvailableSlots(final IItemHandler itemHandler, final Random random) {
-		final List<Integer> emptySlots = new ArrayList<>();
+	private static List<Integer> getAvailableSlots(final IItemHandler itemHandler, final RandomSource random) {
+		final var emptySlots = new ObjectArrayList<Integer>();
 
 		for (int slot = 0; slot < itemHandler.getSlots(); ++slot) {
 			if (itemHandler.getStackInSlot(slot).isEmpty()) {
@@ -106,7 +112,7 @@ public class InventoryUtils {
 			}
 		}
 
-		Collections.shuffle(emptySlots, random);
+		Util.shuffle(emptySlots, random);
 
 		return emptySlots;
 	}

@@ -10,9 +10,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -201,7 +201,7 @@ public final class PigSpawnerCapability {
 						.map(textComponent -> textComponent.setStyle(style))
 						.toList();
 
-				event.getToolTip().add(new TextComponent(""));
+				event.getToolTip().add(Component.literal(""));
 				event.getToolTip().addAll(tooltipLines);
 			});
 		}

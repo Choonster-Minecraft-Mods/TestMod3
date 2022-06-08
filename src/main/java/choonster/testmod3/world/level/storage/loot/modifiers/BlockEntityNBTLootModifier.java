@@ -1,6 +1,7 @@
 package choonster.testmod3.world.level.storage.loot.modifiers;
 
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -11,8 +12,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
-
-import java.util.List;
 
 /**
  * A global loot modifier that adds an ItemStack of the harvested block's item with the BlockEntity's NBT stored in the
@@ -26,7 +25,7 @@ public class BlockEntityNBTLootModifier extends LootModifier {
 	}
 
 	@Override
-	protected List<ItemStack> doApply(final List<ItemStack> generatedLoot, final LootContext context) {
+	protected ObjectArrayList<ItemStack> doApply(final ObjectArrayList<ItemStack> generatedLoot, final LootContext context) {
 		final BlockState state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
 		final BlockEntity blockEntity = context.getParamOrNull(LootContextParams.BLOCK_ENTITY);
 

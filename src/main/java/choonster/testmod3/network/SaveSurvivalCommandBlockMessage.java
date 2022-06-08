@@ -5,11 +5,10 @@ import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.world.level.block.entity.SurvivalCommandBlock;
 import choonster.testmod3.world.level.block.entity.SurvivalCommandBlockEntity;
 import com.mojang.logging.LogUtils;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.entity.player.Player;
@@ -122,9 +121,9 @@ public class SaveSurvivalCommandBlockMessage {
 			final MinecraftServer minecraftServer = world.getServer();
 
 			if (minecraftServer != null && !minecraftServer.isCommandBlockEnabled()) {
-				player.sendMessage(new TranslatableComponent("advMode.notEnabled"), Util.NIL_UUID);
+				player.sendSystemMessage(Component.translatable("advMode.notEnabled"));
 			} else if (!player.hasPermissions(2)) {
-				player.sendMessage(new TranslatableComponent("advMode.notAllowed"), Util.NIL_UUID);
+				player.sendSystemMessage(Component.translatable("advMode.notAllowed"));
 			} else {
 				try {
 					SurvivalCommandBlock survivalCommandBlock = null;
@@ -166,7 +165,7 @@ public class SaveSurvivalCommandBlockMessage {
 						survivalCommandBlock.onUpdated();
 
 						if (!StringUtil.isNullOrEmpty(message.command)) {
-							player.sendMessage(new TranslatableComponent("advMode.setCommand.success", message.command), Util.NIL_UUID);
+							player.sendSystemMessage(Component.translatable("advMode.setCommand.success", message.command));
 						}
 					}
 				} catch (final Exception e) {

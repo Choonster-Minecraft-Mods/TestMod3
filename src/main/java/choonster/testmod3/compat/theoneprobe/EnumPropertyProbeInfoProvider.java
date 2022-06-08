@@ -3,7 +3,7 @@ package choonster.testmod3.compat.theoneprobe;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.player.Player;
@@ -40,6 +40,6 @@ public class EnumPropertyProbeInfoProvider<BLOCK extends Block, ENUM extends Enu
 		final ENUM value = blockState.getValue(property);
 		final String valueTranslationKey = valueTranslationKeyPrefix + "." + value.getSerializedName();
 
-		probeInfo.text(new TranslatableComponent(tooltipTranslationKey, new TranslatableComponent(valueTranslationKey)));
+		probeInfo.text(Component.translatable(tooltipTranslationKey, Component.translatable(valueTranslationKey)));
 	}
 }

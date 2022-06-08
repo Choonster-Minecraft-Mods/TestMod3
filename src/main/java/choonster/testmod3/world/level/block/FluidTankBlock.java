@@ -9,7 +9,6 @@ import choonster.testmod3.world.level.block.entity.BaseFluidTankBlockEntity;
 import choonster.testmod3.world.level.block.entity.FluidTankBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -101,12 +100,12 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 			final FluidStack contents = snapshot.contents();
 			if (!contents.isEmpty()) {
 				hasFluid = true;
-				data.add(new TranslatableComponent(TestMod3Lang.BLOCK_DESC_FLUID_TANK_FLUID.getTranslationKey(), contents.getDisplayName(), contents.getAmount(), snapshot.capacity()));
+				data.add(Component.translatable(TestMod3Lang.BLOCK_DESC_FLUID_TANK_FLUID.getTranslationKey(), contents.getDisplayName(), contents.getAmount(), snapshot.capacity()));
 			}
 		}
 
 		if (!hasFluid) {
-			data.add(new TranslatableComponent(TestMod3Lang.BLOCK_DESC_FLUID_TANK_EMPTY.getTranslationKey()));
+			data.add(Component.translatable(TestMod3Lang.BLOCK_DESC_FLUID_TANK_EMPTY.getTranslationKey()));
 		}
 
 		return data;

@@ -1,7 +1,6 @@
 package choonster.testmod3.world.item;
 
-import net.minecraft.Util;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.player.Player;
@@ -32,7 +31,7 @@ public class EntityKillerItem extends Item {
 			}
 
 			entityToKill.kill();
-			player.sendMessage(new TranslatableComponent("commands.kill.success.single", entityToKill.getDisplayName()), Util.NIL_UUID);
+			player.sendSystemMessage(Component.translatable("commands.kill.success.single", entityToKill.getDisplayName()));
 		}
 
 		return true;

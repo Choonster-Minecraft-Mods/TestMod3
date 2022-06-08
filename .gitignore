@@ -6,6 +6,7 @@
 !/LICENSE.txt
 !/README.md
 !build.gradle
+!settings.gradle
 !.travis.yml
 !/textures/
 !/gradle.properties

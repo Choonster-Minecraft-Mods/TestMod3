@@ -3,9 +3,8 @@ package choonster.testmod3.world.level.block;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.maxhealth.MaxHealthCapability;
 import choonster.testmod3.text.TestMod3Lang;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -29,7 +28,7 @@ public class MaxHealthGetterBlock extends Block {
 	public InteractionResult use(final BlockState state, final Level world, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult rayTraceResult) {
 		if (!world.isClientSide) {
 			MaxHealthCapability.getMaxHealth(player).ifPresent(maxHealth ->
-					player.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_MAX_HEALTH_GET.getTranslationKey(), player.getDisplayName(), player.getMaxHealth(), maxHealth.getBonusMaxHealth()), Util.NIL_UUID)
+					player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_MAX_HEALTH_GET.getTranslationKey(), player.getDisplayName(), player.getMaxHealth(), maxHealth.getBonusMaxHealth()))
 			);
 		}
 

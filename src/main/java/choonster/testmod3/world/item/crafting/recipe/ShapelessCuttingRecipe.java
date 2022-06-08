@@ -17,7 +17,6 @@ import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 /**
  * A shapeless recipe that damages any {@link AxeItem} ingredients.
@@ -61,7 +60,7 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 		return ModCrafting.Recipes.CUTTING_SHAPELESS.get();
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ShapelessCuttingRecipe> {
+	public static class Serializer implements RecipeSerializer<ShapelessCuttingRecipe> {
 		@Override
 		public ShapelessCuttingRecipe fromJson(final ResourceLocation recipeID, final JsonObject json) {
 			final String group = GsonHelper.getAsString(json, "group", "");

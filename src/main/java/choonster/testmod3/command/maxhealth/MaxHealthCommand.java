@@ -11,7 +11,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -22,7 +22,7 @@ import net.minecraft.world.entity.LivingEntity;
  */
 public class MaxHealthCommand {
 	private static final SimpleCommandExceptionType INVALID_ENTITY_EXCEPTION = new SimpleCommandExceptionType(
-			new TranslatableComponent(TestMod3Lang.COMMAND_MAX_HEALTH_INVALID_ENTITY.getTranslationKey())
+			Component.translatable(TestMod3Lang.COMMAND_MAX_HEALTH_INVALID_ENTITY.getTranslationKey())
 	);
 
 	public static ArgumentBuilder<CommandSourceStack, ?> register() {
@@ -68,7 +68,7 @@ public class MaxHealthCommand {
 				.ifPresent(maxHealth -> processor.process(livingEntity, maxHealth, amount));
 
 		context.getSource()
-				.sendSuccess(new TranslatableComponent(successMessage, entity.getDisplayName(), MaxHealthCapability.formatMaxHealth(amount)), true);
+				.sendSuccess(Component.translatable(successMessage, entity.getDisplayName(), MaxHealthCapability.formatMaxHealth(amount)), true);
 
 		return 0;
 	}

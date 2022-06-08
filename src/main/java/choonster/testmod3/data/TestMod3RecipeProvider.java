@@ -10,8 +10,8 @@ import choonster.testmod3.data.crafting.recipe.ShapelessCuttingRecipeBuilder;
 import choonster.testmod3.data.crafting.recipe.ShapelessFluidContainerRecipeBuilder;
 import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
+import choonster.testmod3.util.RegistryUtil;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
-import com.google.common.base.Preconditions;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
@@ -95,7 +95,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 
 			final CompoundTag spawnData = new CompoundTag();
 
-			spawnData.putString("id", Preconditions.checkNotNull(EntityType.GUARDIAN.getRegistryName()).toString());
+			spawnData.putString("id", RegistryUtil.getKey(EntityType.GUARDIAN).toString());
 			blockEntityTag.put("SpawnData", spawnData);
 
 			final ListTag spawnPotentials = new ListTag();

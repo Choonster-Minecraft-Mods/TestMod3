@@ -1,9 +1,7 @@
 package choonster.testmod3.world.item;
 
 import choonster.testmod3.text.TestMod3Lang;
-import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -45,7 +43,7 @@ public abstract class ScriptsItem extends Item {
 		final ItemStack heldItem = playerIn.getItemInHand(hand);
 
 		if (!level.isClientSide) {
-			playerIn.sendMessage(new TranslatableComponent(String.format(TestMod3Lang.MESSAGE_SCRIPTS_RIGHT_CLICK.getTranslationKey(), getDescriptionId()), scriptFunction.apply(getNumber(heldItem))), Util.NIL_UUID);
+			playerIn.sendSystemMessage(Component.translatable(String.format(TestMod3Lang.MESSAGE_SCRIPTS_RIGHT_CLICK.getTranslationKey(), getDescriptionId()), scriptFunction.apply(getNumber(heldItem))));
 		}
 
 		return new InteractionResultHolder<>(InteractionResult.SUCCESS, heldItem);

@@ -11,8 +11,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
 import java.io.PrintWriter;
-import java.util.Objects;
-import java.util.stream.StreamSupport;
 
 /**
  * Dumps the translation keys and the output of the {@link BlockItem}'s {@link Object#toString()} method for all of this mod's blocks.
@@ -28,8 +26,8 @@ public class BlockDumper {
 		try (final PrintWriter writer = new PrintWriter("TestMod3_BlockDump_" + (FMLEnvironment.dist.isClient() ? "Client" : "Server") + ".txt", Charsets.UTF_8.toString())) {
 			writer.println("Name - toString");
 
-			StreamSupport.stream(ForgeRegistries.BLOCKS.spliterator(), false)
-					.filter(block -> Objects.requireNonNull(block.getRegistryName()).getNamespace().equals(TestMod3.MODID))
+			RegistryUtil.stream(ForgeRegistries.BLOCKS)
+					.filter(block -> RegistryUtil.getKey(block).getNamespace().equals(TestMod3.MODID))
 					.forEach(block -> {
 						final Item item = block.asItem();
 						if (item != Items.AIR) {

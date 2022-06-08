@@ -113,7 +113,7 @@ public class EnhancedShapelessRecipeBuilder<
 	 */
 	@Override
 	public void save(final Consumer<FinishedRecipe> consumer) {
-		save(consumer, RegistryUtil.getRequiredRegistryName(result.getItem()));
+		save(consumer, RegistryUtil.getKey(result.getItem()));
 	}
 
 	/**
@@ -125,8 +125,8 @@ public class EnhancedShapelessRecipeBuilder<
 	 */
 	@Override
 	public void save(final Consumer<FinishedRecipe> consumer, final String save) {
-		final ResourceLocation resourcelocation = result.getItem().getRegistryName();
-		if (new ResourceLocation(save).equals(resourcelocation)) {
+		final ResourceLocation key = RegistryUtil.getKey(result.getItem());
+		if (new ResourceLocation(save).equals(key)) {
 			throw new IllegalStateException("Enhanced Shapeless Recipe " + save + " should remove its 'save' argument");
 		} else {
 			save(consumer, new ResourceLocation(save));

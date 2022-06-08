@@ -3,12 +3,11 @@ package choonster.testmod3.world.level.levelgen.placement;
 import choonster.testmod3.init.levelgen.ModPlacementModifierTypes;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementFilter;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
-
-import java.util.Random;
 
 /**
  * Only generates positions in chunks with coordinates divisible by 16.
@@ -27,7 +26,7 @@ public class InChunksDivisibleBy16Filter extends PlacementFilter {
 	}
 
 	@Override
-	protected boolean shouldPlace(final PlacementContext context, final Random random, final BlockPos pos) {
+	protected boolean shouldPlace(final PlacementContext context, final RandomSource random, final BlockPos pos) {
 		final ChunkPos chunkPos = new ChunkPos(pos);
 
 		return chunkPos.x % 16 == 0 && chunkPos.z % 16 == 0;

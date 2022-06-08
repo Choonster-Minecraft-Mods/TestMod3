@@ -4,9 +4,8 @@ import choonster.testmod3.capability.SerializableCapabilityProvider;
 import choonster.testmod3.capability.hiddenblockrevealer.HiddenBlockRevealer;
 import choonster.testmod3.capability.hiddenblockrevealer.HiddenBlockRevealerCapability;
 import choonster.testmod3.text.TestMod3Lang;
-import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -34,7 +33,7 @@ public class HiddenBlockRevealerItem extends Item {
 		HiddenBlockRevealerCapability.toggleRevealHiddenBlocks(heldItem)
 				.ifPresent(revealHiddenBlocks -> {
 					final TestMod3Lang message = revealHiddenBlocks ? TestMod3Lang.MESSAGE_HIDDEN_BLOCK_REVEALER_REVEAL : TestMod3Lang.MESSAGE_HIDDEN_BLOCK_REVEALER_HIDE;
-					playerIn.sendMessage(new TranslatableComponent(message.getTranslationKey()), Util.NIL_UUID);
+					playerIn.sendSystemMessage(Component.translatable(message.getTranslationKey()));
 				});
 
 		return new InteractionResultHolder<>(InteractionResult.SUCCESS, heldItem);

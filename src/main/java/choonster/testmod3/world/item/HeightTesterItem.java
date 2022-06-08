@@ -1,9 +1,8 @@
 package choonster.testmod3.world.item;
 
 import choonster.testmod3.text.TestMod3Lang;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -28,7 +27,7 @@ public class HeightTesterItem extends Item {
 		if (!world.isClientSide) {
 			final BlockPos pos = player.blockPosition();
 
-			player.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_HEIGHT_TESTER_HEIGHT.getTranslationKey(), pos.getX(), pos.getZ(), world.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, pos).getY()), Util.NIL_UUID);
+			player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_HEIGHT_TESTER_HEIGHT.getTranslationKey(), pos.getX(), pos.getZ(), world.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, pos).getY()));
 		}
 
 		return new InteractionResultHolder<>(InteractionResult.SUCCESS, player.getItemInHand(hand));

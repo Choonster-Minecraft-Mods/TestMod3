@@ -4,15 +4,16 @@ import choonster.testmod3.TestMod3;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.RegistryEvent.MissingMappings.Mapping;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.registries.MissingMappingsEvent;
+import net.minecraftforge.registries.MissingMappingsEvent.Mapping;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -24,11 +25,11 @@ import java.util.function.Predicate;
  *
  * @author Choonster
  */
-final class Remapper<T extends IForgeRegistryEntry<T>> {
+final class Remapper<T> {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
 	/**
-	 * A list of remapping functions that return {@code true} if they took an action for the {@link Mapping<T>}.
+	 * A list of remapping functions that return {@code true} if they took an action for the {@link Mapping <T>}.
 	 */
 	private final List<Predicate<Mapping<T>>> remappingFunctions = ImmutableList.of(this::remapCustomName, this::ignoreName);
 
@@ -42,13 +43,13 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 	 */
 	private void remapAll(final List<Mapping<T>> missingMappings) {
 		for (final Mapping<T> missingMapping : missingMappings) { // For each missing mapping,
-			LOGGER.info("Trying to remap {}", missingMapping.key);
+			LOGGER.info("Trying to remap {}", missingMapping.getKey());
 
 			// Try to apply all remapping functions until one performs an action.
 			final boolean remapped = remappingFunctions.stream().anyMatch(mappingPredicate -> mappingPredicate.test(missingMapping));
 
 			if (!remapped) {
-				LOGGER.info("Couldn't remap {}", missingMapping.key);
+				LOGGER.info("Couldn't remap {}", missingMapping.getKey());
 			}
 		}
 	}
@@ -61,10 +62,10 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 	 * @return True if the remapping was successful
 	 */
 	private boolean tryRemap(final Mapping<T> missingMapping, final ResourceLocation registryName) {
-		final IForgeRegistry<T> registry = missingMapping.registry;
+		final IForgeRegistry<T> registry = missingMapping.getRegistry();
 		final T value = registry.getValue(registryName);
 		if (registry.containsKey(registryName) && value != null) {
-			LOGGER.info("Remapped {} {} to {}", registry.getRegistrySuperType().getSimpleName(), missingMapping.key, registryName);
+			LOGGER.info("Remapped {} to {}", ResourceKey.create(registry.getRegistryKey(), missingMapping.getKey()), registryName);
 			missingMapping.remap(value);
 			return true;
 		}
@@ -86,14 +87,14 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 	 * @return True if the missing mapping was remapped
 	 */
 	private boolean remapCustomName(final Mapping<T> missingMapping) {
-		final String missingPath = missingMapping.key.getPath();
+		final String missingPath = missingMapping.getKey().getPath();
 
 		if (!customNames.containsKey(missingPath)) {
 			return false;
 		}
 
 		final String newPath = customNames.get(missingPath);
-		final ResourceLocation newRegistryName = new ResourceLocation(missingMapping.key.getNamespace(), newPath);
+		final ResourceLocation newRegistryName = new ResourceLocation(missingMapping.getKey().getNamespace(), newPath);
 
 		return tryRemap(missingMapping, newRegistryName);
 	}
@@ -105,7 +106,7 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 			.build();
 
 	private boolean ignoreName(final Mapping<T> missingMapping) {
-		final String missingPath = missingMapping.key.getPath();
+		final String missingPath = missingMapping.getKey().getPath();
 
 		if (!namesToIgnore.contains(missingPath)) {
 			return false;
@@ -113,7 +114,7 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 
 		missingMapping.ignore();
 
-		LOGGER.info("Ignored missing {} {}", missingMapping.registry.getRegistrySuperType().getSimpleName(), missingMapping.key);
+		LOGGER.info("Ignored missing entry {}", ResourceKey.create(missingMapping.getRegistry().getRegistryKey(), missingMapping.getKey()));
 
 		return true;
 	}
@@ -125,13 +126,9 @@ final class Remapper<T extends IForgeRegistryEntry<T>> {
 		private static final Remapper<Item> itemRemapper = new Remapper<>();
 
 		@SubscribeEvent
-		public static void missingBlockMappings(final RegistryEvent.MissingMappings<Block> event) {
-			blockRemapper.remapAll(event.getMappings(TestMod3.MODID));
-		}
-
-		@SubscribeEvent
-		public static void missingItemMappings(final RegistryEvent.MissingMappings<Item> event) {
-			itemRemapper.remapAll(event.getMappings(TestMod3.MODID));
+		public static void missingMappings(final MissingMappingsEvent event) {
+			blockRemapper.remapAll(event.getMappings(ForgeRegistries.Keys.BLOCKS, TestMod3.MODID));
+			itemRemapper.remapAll(event.getMappings(ForgeRegistries.Keys.ITEMS, TestMod3.MODID));
 		}
 	}
 }

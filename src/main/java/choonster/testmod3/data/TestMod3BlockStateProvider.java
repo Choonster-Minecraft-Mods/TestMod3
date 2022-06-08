@@ -9,10 +9,10 @@ import choonster.testmod3.util.RegistryUtil;
 import choonster.testmod3.world.level.block.*;
 import choonster.testmod3.world.level.block.pipe.BasePipeBlock;
 import choonster.testmod3.world.level.block.slab.ColouredSlabBlock;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -108,7 +108,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 												case LEFT -> ModelBuilder.FaceRotation.COUNTERCLOCKWISE_90;
 												case RIGHT -> ModelBuilder.FaceRotation.CLOCKWISE_90;
 												case DOWN -> ModelBuilder.FaceRotation.UPSIDE_DOWN;
-												default -> throw new IllegalStateException("Invalid rotation: " + faceRotation);
+												default ->
+														throw new IllegalStateException("Invalid rotation: " + faceRotation);
 											}
 									)
 							)
@@ -119,7 +120,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 							.transforms()
 
-							.transform(ModelBuilder.Perspective.FIRSTPERSON_RIGHT)
+							.transform(ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND)
 							.rotation(0, 135, 0)
 							.scale(0.40f)
 							.end()
@@ -545,16 +546,16 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		errors.add("Generated blockstate for block " + block + " " + String.format(fmt, args));
 	}
 
-	private ResourceLocation registryName(final Block block) {
-		return Preconditions.checkNotNull(block.getRegistryName(), "Block %s has a null registry name", block);
+	private ResourceLocation key(final Block block) {
+		return RegistryUtil.getKey(block);
 	}
 
-	private ResourceLocation registryName(final Item item) {
-		return Preconditions.checkNotNull(item.getRegistryName(), "Item %s has a null registry name", item);
+	private ResourceLocation key(final Item item) {
+		return RegistryUtil.getKey(item);
 	}
 
 	private String name(final Block block) {
-		return registryName(block).getPath();
+		return key(block).getPath();
 	}
 
 	/**
@@ -566,7 +567,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	 * @return The model
 	 */
 	private ModelFile existingModel(final Block block) {
-		return models().getExistingFile(registryName(block));
+		return models().getExistingFile(key(block));
 	}
 
 	/**
@@ -578,7 +579,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	 * @return The model
 	 */
 	private ModelFile existingModel(final Item item) {
-		return itemModels().getExistingFile(registryName(item));
+		return itemModels().getExistingFile(key(item));
 	}
 
 	/**

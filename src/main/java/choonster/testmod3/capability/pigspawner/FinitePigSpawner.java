@@ -7,8 +7,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.mojang.logging.LogUtils;
 import net.minecraft.nbt.IntTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.INBTSerializable;
 import org.slf4j.Logger;
@@ -68,7 +68,7 @@ public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinit
 
 	@Override
 	public List<MutableComponent> getTooltipLines() {
-		return ImmutableList.of(new TranslatableComponent(TestMod3Lang.PIG_SPAWNER_FINITE_DESC.getTranslationKey(), getNumPigs(), getMaxNumPigs()));
+		return ImmutableList.of(Component.translatable(TestMod3Lang.PIG_SPAWNER_FINITE_DESC.getTranslationKey(), getNumPigs(), getMaxNumPigs()));
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinit
 		if (this == obj) {
 			return true;
 		}
-		
+
 		if (obj == null || getClass() != obj.getClass()) {
 			return false;
 		}

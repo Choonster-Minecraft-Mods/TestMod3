@@ -2,20 +2,19 @@ package choonster.testmod3.world.item;
 
 import choonster.testmod3.text.TestMod3Lang;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.Util;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * An item that clears all whitelisted blocks from the player's current chunk when used.
@@ -50,12 +49,12 @@ public class ClearerItem extends Item {
 			if (player.isShiftKeyDown()) {
 				final int newMode = currentMode == MODE_ALL ? MODE_WHITELIST : MODE_ALL;
 				setMode(heldItem, newMode);
-				player.sendMessage(new TranslatableComponent(String.format(TestMod3Lang.MESSAGE_CLEARER_MODE_S.getTranslationKey(), newMode)), Util.NIL_UUID);
+				player.sendSystemMessage(Component.translatable(String.format(TestMod3Lang.MESSAGE_CLEARER_MODE_S.getTranslationKey(), newMode)));
 			} else {
 				final int minX = Mth.floor(player.getX() / 16) * 16;
 				final int minZ = Mth.floor(player.getZ() / 16) * 16;
 
-				player.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_CLEARER_CLEARING.getTranslationKey(), minX, minZ), Util.NIL_UUID);
+				player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_CLEARER_CLEARING.getTranslationKey(), minX, minZ));
 
 				for (int x = minX; x < minX + 16; x++) {
 					for (int z = minZ; z < minZ + 16; z++) {
@@ -73,7 +72,7 @@ public class ClearerItem extends Item {
 				final BlockState state = world.getBlockState(pos);
 				world.sendBlockUpdated(pos, state, state, 3);
 
-				player.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_CLEARER_CLEARED.getTranslationKey()), Util.NIL_UUID);
+				player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_CLEARER_CLEARED.getTranslationKey()));
 			}
 		}
 

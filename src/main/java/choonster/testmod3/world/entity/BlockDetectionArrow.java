@@ -2,9 +2,8 @@ package choonster.testmod3.world.entity;
 
 import choonster.testmod3.init.ModEntities;
 import choonster.testmod3.init.ModItems;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -51,7 +50,7 @@ public class BlockDetectionArrow extends ModArrow {
 			final BlockPos pos = ((BlockHitResult) result).getBlockPos();
 			final BlockState state = level.getBlockState(pos);
 
-			shooter.sendMessage(new TranslatableComponent("[%s] Block at %s,%s,%s: %s", level.isClientSide ? "CLIENT" : "SERVER", pos.getX(), pos.getY(), pos.getZ(), state), Util.NIL_UUID);
+			shooter.sendSystemMessage(Component.translatable("[%s] Block at %s,%s,%s: %s", level.isClientSide ? "CLIENT" : "SERVER", pos.getX(), pos.getY(), pos.getZ(), state));
 		}
 	}
 }

@@ -123,7 +123,8 @@ public class EnhancedShapedRecipeBuilder<
 	 */
 	@Override
 	public void save(final Consumer<FinishedRecipe> consumer) {
-		save(consumer, RegistryUtil.getRequiredRegistryName(result.getItem()));
+		final Item item = result.getItem();
+		save(consumer, RegistryUtil.getKey(item));
 	}
 
 	/**
@@ -132,8 +133,8 @@ public class EnhancedShapedRecipeBuilder<
 	 */
 	@Override
 	public void save(final Consumer<FinishedRecipe> consumer, final String save) {
-		final ResourceLocation registryName = result.getItem().getRegistryName();
-		if (new ResourceLocation(save).equals(registryName)) {
+		final ResourceLocation key = RegistryUtil.getKey(result.getItem());
+		if (new ResourceLocation(save).equals(key)) {
 			throw new IllegalStateException("Shaped Recipe " + save + " should remove its 'save' argument");
 		} else {
 			save(consumer, new ResourceLocation(save));

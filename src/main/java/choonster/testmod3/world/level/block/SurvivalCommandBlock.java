@@ -11,6 +11,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -27,8 +28,6 @@ import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.slf4j.Logger;
-
-import java.util.Random;
 
 /**
  * A Command Block that's accessible outside Creative Mode.
@@ -99,7 +98,7 @@ public class SurvivalCommandBlock extends CommandBlock {
 	 * @param random The level's RNG
 	 */
 	@Override
-	public void tick(final BlockState state, final ServerLevel world, final BlockPos pos, final Random random) {
+	public void tick(final BlockState state, final ServerLevel world, final BlockPos pos, final RandomSource random) {
 		final BlockEntity blockEntity = world.getBlockEntity(pos);
 
 		if (blockEntity instanceof final CommandBlockEntity commandBlockEntity) {

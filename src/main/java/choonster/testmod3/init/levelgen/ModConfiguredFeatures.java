@@ -8,7 +8,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.entity.BannerPatterns;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -41,8 +41,8 @@ public class ModConfiguredFeatures {
 			ModFeatures.BANNER,
 			() -> BannerFeatureConfig.create(
 					DyeColor.PINK,
-					Pair.of(BannerPattern.GRADIENT_UP, DyeColor.MAGENTA),
-					Pair.of(BannerPattern.FLOWER, DyeColor.BLACK)
+					Pair.of(BannerPatterns.GRADIENT_UP, DyeColor.MAGENTA),
+					Pair.of(BannerPatterns.FLOWER, DyeColor.BLACK)
 			)
 	);
 

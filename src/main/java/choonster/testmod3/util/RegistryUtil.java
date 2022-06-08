@@ -3,9 +3,15 @@ package choonster.testmod3.util;
 import choonster.testmod3.TestMod3;
 import com.google.common.base.Preconditions;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,9 +30,13 @@ public class RegistryUtil {
 	 * @param <T>      The registry type
 	 * @return A Set containing the registry entries
 	 */
-	public static <T extends IForgeRegistryEntry<T>> Set<T> getModRegistryEntries(final IForgeRegistry<T> registry) {
+	public static <T> Set<T> getModRegistryEntries(final IForgeRegistry<T> registry) {
 		return stream(registry)
-				.filter(entry -> entry.getRegistryName() != null && entry.getRegistryName().getNamespace().equals(TestMod3.MODID))
+				.filter(entry ->
+						Optional.ofNullable(registry.getKey(entry))
+								.filter(key -> key.getNamespace().equals(TestMod3.MODID))
+								.isPresent()
+				)
 				.collect(Collectors.toSet());
 	}
 
@@ -37,18 +47,53 @@ public class RegistryUtil {
 	 * @param <T>      The registry type
 	 * @return A Stream of the registry's entries
 	 */
-	public static <T extends IForgeRegistryEntry<T>> Stream<T> stream(final IForgeRegistry<T> registry) {
+	public static <T> Stream<T> stream(final IForgeRegistry<T> registry) {
 		return StreamSupport.stream(registry.spliterator(), false);
 	}
 
 	/**
-	 * Gets the registry name of the {@link IForgeRegistryEntry}, throwing an exception if it's not set.
+	 * Gets the key of the registry entry, throwing an exception if it's not set.
 	 *
 	 * @param entry The registry entry
-	 * @return The registry name
-	 * @throws NullPointerException If the registry name is null
+	 * @return The key
+	 * @throws NullPointerException If the key is null
 	 */
-	public static ResourceLocation getRequiredRegistryName(final IForgeRegistryEntry<?> entry) {
-		return Preconditions.checkNotNull(entry.getRegistryName(), "%s has a null registry name", entry);
+	public static <T> ResourceLocation getKey(final IForgeRegistry<T> registry, final T entry) {
+		return Preconditions.checkNotNull(registry.getKey(entry), "%s has no registry key", entry);
+	}
+
+	/**
+	 * @see #getKey(IForgeRegistry, Object)
+	 */
+	public static ResourceLocation getKey(final Block block) {
+		return getKey(ForgeRegistries.BLOCKS, block);
+	}
+
+	/**
+	 * @see #getKey(IForgeRegistry, Object)
+	 */
+	public static ResourceLocation getKey(final Item item) {
+		return getKey(ForgeRegistries.ITEMS, item);
+	}
+
+	/**
+	 * @see #getKey(IForgeRegistry, Object)
+	 */
+	public static ResourceLocation getKey(final EntityType<?> entityType) {
+		return getKey(ForgeRegistries.ENTITIES, entityType);
+	}
+
+	/**
+	 * @see #getKey(IForgeRegistry, Object)
+	 */
+	public static ResourceLocation getKey(final Fluid fluid) {
+		return getKey(ForgeRegistries.FLUIDS, fluid);
+	}
+
+	/**
+	 * @see #getKey(IForgeRegistry, Object)
+	 */
+	public static ResourceLocation getKey(final Potion potion) {
+		return getKey(ForgeRegistries.POTIONS, potion);
 	}
 }

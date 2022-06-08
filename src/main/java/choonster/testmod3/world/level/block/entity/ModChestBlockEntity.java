@@ -2,14 +2,13 @@ package choonster.testmod3.world.level.block.entity;
 
 import choonster.testmod3.capability.lock.Lock;
 import choonster.testmod3.init.ModBlockEntities;
+import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.world.inventory.IMenuCallbacks;
-import choonster.testmod3.world.inventory.menu.ModChestMenu;
 import choonster.testmod3.world.inventory.itemhandler.BlockEntityLootItemHandler;
 import choonster.testmod3.world.inventory.itemhandler.LootItemHandler;
-import choonster.testmod3.text.TestMod3Lang;
+import choonster.testmod3.world.inventory.menu.ModChestMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -36,7 +35,7 @@ public class ModChestBlockEntity extends LootItemHandlerBlockEntity implements I
 	/**
 	 * The default name of this chest's inventory.
 	 */
-	private static final Component DEFAULT_NAME = new TranslatableComponent(TestMod3Lang.CONTAINER_CHEST.getTranslationKey());
+	private static final Component DEFAULT_NAME = Component.translatable(TestMod3Lang.CONTAINER_CHEST.getTranslationKey());
 
 	public ModChestBlockEntity(final BlockPos pos, final BlockState state) {
 		super(ModBlockEntities.MOD_CHEST.get(), pos, state);

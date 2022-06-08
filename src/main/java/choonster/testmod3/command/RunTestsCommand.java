@@ -5,7 +5,7 @@ import choonster.testmod3.text.TestMod3Lang;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * A command that runs this mod's tests.
@@ -17,9 +17,9 @@ class RunTestsCommand {
 		return Commands.literal("runtests")
 				.executes(context -> {
 					if (Tests.runTests()) {
-						context.getSource().sendSuccess(new TranslatableComponent(TestMod3Lang.COMMAND_RUN_TESTS_TESTS_PASSED.getTranslationKey()), true);
+						context.getSource().sendSuccess(Component.translatable(TestMod3Lang.COMMAND_RUN_TESTS_TESTS_PASSED.getTranslationKey()), true);
 					} else {
-						context.getSource().sendSuccess(new TranslatableComponent(TestMod3Lang.COMMAND_RUN_TESTS_TESTS_FAILED.getTranslationKey()), true);
+						context.getSource().sendSuccess(Component.translatable(TestMod3Lang.COMMAND_RUN_TESTS_TESTS_FAILED.getTranslationKey()), true);
 					}
 
 					return 0;

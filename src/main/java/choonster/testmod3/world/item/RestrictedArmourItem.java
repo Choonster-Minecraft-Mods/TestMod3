@@ -5,7 +5,6 @@ import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import com.mojang.logging.LogUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -81,6 +80,6 @@ public class RestrictedArmourItem extends ArmorItem {
 
 	@Override
 	public void appendHoverText(final ItemStack stack, @Nullable final Level level, final List<Component> tooltip, final TooltipFlag flag) {
-		tooltip.add(new TranslatableComponent(TestMod3Lang.ITEM_DESC_ARMOUR_RESTRICTED.getTranslationKey()));
+		tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_ARMOUR_RESTRICTED.getTranslationKey()));
 	}
 }

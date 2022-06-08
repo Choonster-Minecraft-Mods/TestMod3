@@ -3,10 +3,9 @@ package choonster.testmod3.world.level.block.entity;
 import choonster.testmod3.capability.lock.Lock;
 import choonster.testmod3.world.inventory.itemhandler.LootItemHandler;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -30,7 +29,7 @@ public abstract class LootItemHandlerBlockEntity extends LockableItemHandlerBloc
 	@Override
 	public void openGUI(final ServerPlayer player) {
 		if (inventory.getLootTable() != null && player.isSpectator()) {
-			player.sendMessage(new TranslatableComponent("container.spectatorCantOpen").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)), Util.NIL_UUID);
+			player.sendSystemMessage(Component.translatable("container.spectatorCantOpen").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
 		} else {
 			super.openGUI(player);
 		}

@@ -6,7 +6,8 @@ import choonster.testmod3.client.item.TicksSinceLastUseItemPropertyFunction;
 import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
-import com.google.common.base.Preconditions;
+import choonster.testmod3.util.RegistryUtil;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
@@ -16,7 +17,6 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelBuilder.Perspective;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.loaders.DynamicBucketModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -26,7 +26,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -44,25 +43,25 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 			withGeneratedParent("simple_model")
 					.transforms()
 
-					.transform(Perspective.THIRDPERSON_RIGHT)
+					.transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND)
 					.rotation(-80, 260, -40)
 					.translation(-1, -2, 2.5f)
 					.scale(0.9f, 0.9f, 0.9f)
 					.end()
 
-					.transform(Perspective.THIRDPERSON_LEFT)
+					.transform(ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND)
 					.rotation(-80, -280, 40)
 					.translation(-1, -2, 2.5f)
 					.scale(0.9f, 0.9f, 0.9f)
 					.end()
 
-					.transform(Perspective.FIRSTPERSON_RIGHT)
+					.transform(ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND)
 					.rotation(0, -90, 25)
 					.translation(1.13f, 3.2f, 1.13f)
 					.scale(0.68f, 0.68f, 0.68f)
 					.end()
 
-					.transform(Perspective.FIRSTPERSON_LEFT)
+					.transform(ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND)
 					.rotation(0, 90, -25)
 					.translation(1.13f, 3.2f, 1.13f)
 					.scale(0.68f, 0.68f, 0.68f)
@@ -273,21 +272,21 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 	}
 
 
-	private ResourceLocation registryName(final Item item) {
-		return Preconditions.checkNotNull(item.getRegistryName(), "Item %s has a null registry name", item);
+	private ResourceLocation key(final Item item) {
+		return RegistryUtil.getKey(item);
 	}
 
 	private String name(final Item item) {
-		return registryName(item).getPath();
+		return key(item).getPath();
 	}
 
 	private ResourceLocation itemTexture(final Item item) {
-		final ResourceLocation name = registryName(item);
+		final ResourceLocation name = key(item);
 		return new ResourceLocation(name.getNamespace(), ITEM_FOLDER + "/" + name.getPath());
 	}
 
 	private ItemModelBuilder withExistingParent(final Item item, final Item modelItem) {
-		return withExistingParent(name(item), registryName(modelItem));
+		return withExistingParent(name(item), key(modelItem));
 	}
 
 	private ItemModelBuilder withGeneratedParentAndDefaultTexture(final Item item) {
@@ -328,7 +327,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 								.parent(bow)
 								.texture(LAYER_0, itemTexture(Items.BOW) + "_pulling_" + index)
 				)
-				.collect(Collectors.toList());
+				.toList();
 
 		// Add the child models as overrides that display when the bow is pulled back >= 0%, >= 65% and >= 90% respectively
 		bow

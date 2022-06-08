@@ -54,14 +54,16 @@ public class FluidTankItem extends BlockItem {
 	public void fillItemCategory(final CreativeModeTab group, final NonNullList<ItemStack> items) {
 		super.fillItemCategory(group, items);
 
-		if (allowdedIn(group)) {
+		if (allowedIn(group)) {
 			items.addAll(tankItems);
 		}
 	}
 
 	@Override
 	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final CompoundTag nbt) {
-		if (CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY == null) return null;
+		if (CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY == null) {
+			return null;
+		}
 
 		return new SerializableCapabilityProvider<>(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null, new ItemFluidTank(stack, FluidTankBlockEntity.CAPACITY));
 	}

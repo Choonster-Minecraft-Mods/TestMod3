@@ -1,16 +1,16 @@
 package choonster.testmod3.world.level.storage.loot.modifiers;
 
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
-
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A global loot modifier that generates loot from another loot table.
@@ -26,7 +26,7 @@ public class LootTableLootModifier extends LootModifier {
 	}
 
 	@Override
-	protected List<ItemStack> doApply(final List<ItemStack> generatedLoot, final LootContext context) {
+	protected @NotNull ObjectArrayList<ItemStack> doApply(final ObjectArrayList<ItemStack> generatedLoot, final LootContext context) {
 		final LootTable lootTable = context.getLootTable(lootTableID);
 
 		// Generate additional loot without applying loot modifiers, otherwise each modifier would run multiple times

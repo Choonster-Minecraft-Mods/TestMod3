@@ -2,10 +2,9 @@ package choonster.testmod3.world.level.block;
 
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.world.level.block.entity.RestrictedFluidTankBlockEntity;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -52,7 +51,7 @@ public class RestrictedFluidTankBlock extends FluidTankBlock<RestrictedFluidTank
 
 				if (!level.isClientSide) {
 					final TestMod3Lang message = enabled ? TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_FACING_ENABLED : TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_FACING_DISABLED;
-					player.sendMessage(new TranslatableComponent(message.getTranslationKey(), direction), Util.NIL_UUID);
+					player.sendSystemMessage(Component.translatable(message.getTranslationKey(), direction));
 				}
 
 				return InteractionResult.SUCCESS;
@@ -67,7 +66,7 @@ public class RestrictedFluidTankBlock extends FluidTankBlock<RestrictedFluidTank
 	public void attack(final BlockState state, final Level level, final BlockPos pos, final Player player) {
 		if (!level.isClientSide) {
 			final String enabledFacingsString = getEnabledFacingsString(level, pos);
-			player.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_ENABLED_FACINGS.getTranslationKey(), enabledFacingsString), Util.NIL_UUID);
+			player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_ENABLED_FACINGS.getTranslationKey(), enabledFacingsString));
 		}
 	}
 

@@ -17,6 +17,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -176,8 +177,8 @@ public class ModItems {
 					Util.make(() -> {
 						final ImmutableMap.Builder<ResourceKey<DimensionType>, Supplier<ItemStack>> builder = ImmutableMap.builder();
 
-						builder.put(DimensionType.NETHER_LOCATION, () -> new ItemStack(Items.NETHER_STAR));
-						builder.put(DimensionType.END_LOCATION, () -> new ItemStack(Items.ENDER_PEARL));
+						builder.put(BuiltinDimensionTypes.NETHER, () -> new ItemStack(Items.NETHER_STAR));
+						builder.put(BuiltinDimensionTypes.END, () -> new ItemStack(Items.ENDER_PEARL));
 
 						return builder.build();
 					})

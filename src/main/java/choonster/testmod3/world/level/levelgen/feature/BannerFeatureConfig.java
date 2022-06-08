@@ -5,6 +5,8 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -24,7 +26,7 @@ public record BannerFeatureConfig(
 							.forGetter(config -> config.color),
 
 					Codec.mapPair(
-									VanillaCodecs.BANNER_PATTERN.fieldOf("pattern"),
+									Registry.BANNER_PATTERN.byNameCodec().fieldOf("pattern"),
 									VanillaCodecs.DYE_COLOR.fieldOf("color")
 							)
 							.codec()
@@ -41,7 +43,12 @@ public record BannerFeatureConfig(
 	}
 
 	@SafeVarargs
-	public static BannerFeatureConfig create(final DyeColor color, final Pair<BannerPattern, DyeColor>... patterns) {
-		return new BannerFeatureConfig(color, Arrays.asList(patterns));
+	public static BannerFeatureConfig create(final DyeColor color, final Pair<ResourceKey<BannerPattern>, DyeColor>... patterns) {
+		return new BannerFeatureConfig(
+				color,
+				Arrays.stream(patterns)
+						.map(pair -> Pair.of(Registry.BANNER_PATTERN.get(pair.getFirst()), pair.getSecond()))
+						.toList()
+		);
 	}
 }

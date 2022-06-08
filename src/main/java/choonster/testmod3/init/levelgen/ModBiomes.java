@@ -4,7 +4,6 @@ import choonster.testmod3.TestMod3;
 import net.minecraft.data.worldgen.biome.OverworldBiomes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,7 +15,6 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Objects;
 
-import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 /**
  * Registers this mod's {@link Biome}s
@@ -55,12 +53,11 @@ public class ModBiomes {
 		@SubscribeEvent
 		public static void setupBiomes(final FMLCommonSetupEvent event) {
 			event.enqueueWork(() -> {
-				setupBiome(DESERT_TEST.get(), BiomeManager.BiomeType.DESERT, 1000, HOT, DRY, SANDY, OVERWORLD);
+				setupBiome(DESERT_TEST.get(), BiomeManager.BiomeType.DESERT, 1000);
 			});
 		}
 
-		private static void setupBiome(final Biome biome, final BiomeManager.BiomeType biomeType, final int weight, final BiomeDictionary.Type... types) {
-			BiomeDictionary.addTypes(key(biome), types);
+		private static void setupBiome(final Biome biome, final BiomeManager.BiomeType biomeType, final int weight) {
 			BiomeManager.addBiome(biomeType, new BiomeManager.BiomeEntry(key(biome), weight));
 		}
 
@@ -68,5 +65,4 @@ public class ModBiomes {
 			return ResourceKey.create(ForgeRegistries.Keys.BIOMES, Objects.requireNonNull(ForgeRegistries.BIOMES.getKey(biome), "Biome registry name was null"));
 		}
 	}
-
 }

@@ -1,8 +1,10 @@
 package choonster.testmod3.world.level.storage.loot.modifiers;
 
+import choonster.testmod3.util.RegistryUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
@@ -16,7 +18,6 @@ import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.List;
 import java.util.function.BiFunction;
 
 /**
@@ -38,7 +39,7 @@ public class ItemLootModifier extends LootModifier {
 	}
 
 	@Override
-	protected List<ItemStack> doApply(final List<ItemStack> generatedLoot, final LootContext context) {
+	protected ObjectArrayList<ItemStack> doApply(final ObjectArrayList<ItemStack> generatedLoot, final LootContext context) {
 		final ItemStack stack = new ItemStack(item);
 
 		combinedFunctions.apply(stack, context);
@@ -74,12 +75,8 @@ public class ItemLootModifier extends LootModifier {
 		public JsonObject write(final ItemLootModifier instance) {
 			final JsonObject object = makeConditions(instance.conditions);
 
-			final ResourceLocation registryName = instance.item.getRegistryName();
-			if (registryName == null) {
-				throw new IllegalArgumentException("Can't serialize unknown item " + instance.item);
-			} else {
-				object.addProperty("name", registryName.toString());
-			}
+			final ResourceLocation key = RegistryUtil.getKey(instance.item);
+			object.addProperty("name", key.toString());
 
 			if (!ArrayUtils.isEmpty(instance.functions)) {
 				object.add("functions", LOOT_FUNCTION_GSON.toJsonTree(instance.functions));

@@ -1,15 +1,15 @@
 package choonster.testmod3.registry;
 
-import net.minecraftforge.registries.ForgeRegistryEntry;
+import choonster.testmod3.init.ModTestRegistryEntries;
 
 /**
- * A Forge Registry Entry type with no functionality.
+ * A Registry Entry type with no functionality.
  *
  * @author Choonster
  */
-public class TestRegistryEntry extends ForgeRegistryEntry<TestRegistryEntry> {
+public class TestRegistryEntry {
 	@Override
 	public String toString() {
-		return "TestRegistryEntry{" + getRegistryName() + "}";
+		return "TestRegistryEntry{" + ModTestRegistryEntries.REGISTRY.get().getKey(this) + "}";
 	}
 }

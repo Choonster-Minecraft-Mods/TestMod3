@@ -1,9 +1,8 @@
 package choonster.testmod3.world.item;
 
 import choonster.testmod3.text.TestMod3Lang;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,7 +25,7 @@ public class BlockDestroyerItem extends Item {
 	public boolean mineBlock(final ItemStack stack, final Level level, final BlockState state, final BlockPos pos, final LivingEntity entityLiving) {
 		if (!level.isClientSide) {
 			if (state.getBlock() == Blocks.WHEAT && state.getValue(CropBlock.AGE) >= 6) {
-				entityLiving.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_BLOCK_DESTROYER_DESTROY.getTranslationKey()), Util.NIL_UUID);
+				entityLiving.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_BLOCK_DESTROYER_DESTROY.getTranslationKey()));
 			}
 		}
 

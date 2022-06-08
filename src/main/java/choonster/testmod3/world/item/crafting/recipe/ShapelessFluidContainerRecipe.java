@@ -16,7 +16,6 @@ import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -76,7 +75,7 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 		return remainingItems;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ShapelessFluidContainerRecipe> {
+	public static class Serializer implements RecipeSerializer<ShapelessFluidContainerRecipe> {
 		@Override
 		public ShapelessFluidContainerRecipe fromJson(final ResourceLocation recipeId, final JsonObject json) {
 			final String group = GsonHelper.getAsString(json, "group", "");

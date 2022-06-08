@@ -45,7 +45,7 @@ public class BannerFeature extends Feature<BannerFeatureConfig> {
 	protected ListTag createPatternList(final List<Pair<BannerPattern, DyeColor>> patterns) {
 		final ListTag patternList = new ListTag();
 
-		for (final Pair<BannerPattern, DyeColor> pattern : patterns) {
+		for (final var pattern : patterns) {
 			patternList.add(createPatternTag(pattern.getFirst(), pattern.getSecond()));
 		}
 

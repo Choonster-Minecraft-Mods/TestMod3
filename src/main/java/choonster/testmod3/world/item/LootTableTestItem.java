@@ -2,10 +2,8 @@ package choonster.testmod3.world.item;
 
 import choonster.testmod3.init.ModLootTables;
 import choonster.testmod3.text.TestMod3Lang;
-import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -76,11 +74,11 @@ public class LootTableTestItem extends Item {
 					lootMessage.append(getItemStackTextComponent(itemStacks.get(i)));
 				});
 
-				final Component chatMessage = new TranslatableComponent(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_BASE.getTranslationKey(), lootMessage);
+				final Component chatMessage = Component.translatable(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_BASE.getTranslationKey(), lootMessage);
 
-				player.sendMessage(chatMessage, Util.NIL_UUID);
+				player.sendSystemMessage(chatMessage);
 			} else {
-				player.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_NO_LOOT.getTranslationKey()), Util.NIL_UUID);
+				player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_NO_LOOT.getTranslationKey()));
 			}
 		}
 
@@ -94,6 +92,6 @@ public class LootTableTestItem extends Item {
 	 * @return The ITextComponent
 	 */
 	private MutableComponent getItemStackTextComponent(final ItemStack itemStack) {
-		return new TranslatableComponent(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_ITEM.getTranslationKey(), itemStack.getCount(), itemStack.getDisplayName());
+		return Component.translatable(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_ITEM.getTranslationKey(), itemStack.getCount(), itemStack.getDisplayName());
 	}
 }

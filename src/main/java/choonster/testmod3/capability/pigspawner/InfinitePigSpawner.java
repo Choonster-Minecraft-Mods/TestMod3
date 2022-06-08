@@ -3,8 +3,8 @@ package choonster.testmod3.capability.pigspawner;
 import choonster.testmod3.text.TestMod3Lang;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.INBTSerializable;
 
@@ -24,7 +24,7 @@ public class InfinitePigSpawner extends BasePigSpawner implements INBTSerializab
 
 	@Override
 	public List<MutableComponent> getTooltipLines() {
-		return ImmutableList.of(new TranslatableComponent(TestMod3Lang.PIG_SPAWNER_INFINITE_DESC.getTranslationKey()));
+		return ImmutableList.of(Component.translatable(TestMod3Lang.PIG_SPAWNER_INFINITE_DESC.getTranslationKey()));
 	}
 
 	@Override

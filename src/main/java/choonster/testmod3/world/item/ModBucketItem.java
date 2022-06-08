@@ -12,7 +12,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.locale.Language;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -82,7 +81,9 @@ public class ModBucketItem extends Item {
 
 	@Override
 	public void fillItemCategory(final CreativeModeTab group, final NonNullList<ItemStack> items) {
-		if (!allowdedIn(group)) return;
+		if (!allowedIn(group)) {
+			return;
+		}
 
 		items.add(empty);
 
@@ -106,18 +107,18 @@ public class ModBucketItem extends Item {
 
 		// If the bucket is empty, translate the translation key directly
 		if (fluidStack.isEmpty()) {
-			return new TranslatableComponent(translationKey);
+			return Component.translatable(translationKey);
 		}
 
 		// If there's a fluid-specific translation, use it
 		final String fluidTranslationKey = translationKey + ".filled." + fluidStack.getTranslationKey();
 
 		if (Language.getInstance().has(fluidTranslationKey)) {
-			return new TranslatableComponent(fluidTranslationKey);
+			return Component.translatable(fluidTranslationKey);
 		}
 
 		// Else translate the filled name directly, formatting it with the fluid name
-		return new TranslatableComponent(translationKey + ".filled", fluidStack.getDisplayName());
+		return Component.translatable(translationKey + ".filled", fluidStack.getDisplayName());
 	}
 
 	@Override

@@ -4,11 +4,9 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.Constants;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -55,9 +53,9 @@ public class PlayerEventHandler {
 			message = TestMod3Lang.MESSAGE_LOGIN_FREE_APPLE;
 		}
 
-		final Component textComponent = new TranslatableComponent(message.getTranslationKey());
+		final Component textComponent = Component.translatable(message.getTranslationKey());
 		textComponent.getStyle().withColor(ChatFormatting.LIGHT_PURPLE);
-		player.sendMessage(textComponent, Util.NIL_UUID);
+		player.sendSystemMessage(textComponent);
 	}
 
 	/**
@@ -69,7 +67,7 @@ public class PlayerEventHandler {
 	public static void livingDeath(final LivingDeathEvent event) {
 		if (event.getEntity() instanceof final Player player && !event.getEntity().getCommandSenderWorld().isClientSide) {
 			final BlockPos pos = player.blockPosition();
-			player.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_DEATH_COORDINATES.getTranslationKey(), pos.getX(), pos.getY(), pos.getZ(), player.level.dimension()), Util.NIL_UUID);
+			player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_DEATH_COORDINATES.getTranslationKey(), pos.getX(), pos.getY(), pos.getZ(), player.level.dimension()));
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package choonster.testmod3.world.level.block;
 
 import choonster.testmod3.capability.pigspawner.PigSpawnerCapability;
+import choonster.testmod3.util.RegistryUtil;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -38,16 +39,10 @@ public class ItemDebuggerBlock extends Block {
 			logCapability(stack, PigSpawnerCapability.PIG_SPAWNER_CAPABILITY, Direction.NORTH);
 			logFluidHandler(stack);
 
-			final String modName;
-			final ResourceLocation registryName = stack.getItem().getRegistryName();
-			if (registryName != null) {
-
-				modName = ModList.get().getModContainerById(registryName.getNamespace())
-						.map(modContainer -> modContainer.getModInfo().getDisplayName())
-						.orElse("Unknown - No ModContainer");
-			} else {
-				modName = "Unknown - No Registry Name";
-			}
+			final ResourceLocation key = RegistryUtil.getKey(stack.getItem());
+			final String modName = ModList.get().getModContainerById(key.getNamespace())
+					.map(modContainer -> modContainer.getModInfo().getDisplayName())
+					.orElse("Unknown - No ModContainer");
 
 			LOGGER.info("Mod Name: {}", modName);
 		}
@@ -61,7 +56,7 @@ public class ItemDebuggerBlock extends Block {
 
 	private void logFluidHandler(final ItemStack stack) {
 		FluidUtil.getFluidContained(stack).ifPresent(fluidStack ->
-				LOGGER.info("Fluid: {} - {}", fluidStack.getFluid().getRegistryName(), fluidStack.getAmount())
+				LOGGER.info("Fluid: {} - {}", RegistryUtil.getKey(fluidStack.getFluid()), fluidStack.getAmount())
 		);
 	}
 

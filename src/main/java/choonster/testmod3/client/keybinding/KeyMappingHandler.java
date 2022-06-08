@@ -3,14 +3,12 @@ package choonster.testmod3.client.keybinding;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.client.init.ModKeyMappings;
 import choonster.testmod3.text.TestMod3Lang;
-import net.minecraft.Util;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -43,7 +41,9 @@ public class KeyMappingHandler {
 	 */
 	@SubscribeEvent
 	public static void clientTick(final TickEvent.ClientTickEvent event) {
-		if (event.phase != TickEvent.Phase.END) return;
+		if (event.phase != TickEvent.Phase.END) {
+			return;
+		}
 
 		if (ModKeyMappings.PLACE_HELD_BLOCK.isDown()) {
 			placeHeldBlock();
@@ -72,7 +72,7 @@ public class KeyMappingHandler {
 			final BlockPos pos = clientPlayer.blockPosition().below();
 			final BlockHitResult rayTraceResult = new BlockHitResult(new Vec3(0, 0, 0), Direction.UP, pos, false);
 
-			final InteractionResult actionResult = MINECRAFT.gameMode.useItemOn(clientPlayer, MINECRAFT.level, hand, rayTraceResult);
+			final InteractionResult actionResult = MINECRAFT.gameMode.useItemOn(clientPlayer, hand, rayTraceResult);
 
 			if (actionResult == InteractionResult.SUCCESS) {
 				clientPlayer.swing(hand);
@@ -101,19 +101,19 @@ public class KeyMappingHandler {
 				final Collection<MobEffectInstance> activePotionEffects = ((LivingEntity) rayTraceResult.getEntity()).getActiveEffects();
 
 				if (activePotionEffects.isEmpty()) {
-					clientPlayer.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_POTIONS.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()), Util.NIL_UUID);
+					clientPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_POTIONS.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()));
 				} else {
-					clientPlayer.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_PRINT_POTIONS_POTIONS.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()), Util.NIL_UUID);
+					clientPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_PRINT_POTIONS_POTIONS.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()));
 
 					activePotionEffects.forEach(
-							potionEffect -> clientPlayer.sendMessage(new TextComponent(potionEffect.toString()), Util.NIL_UUID)
+							potionEffect -> clientPlayer.sendSystemMessage(Component.literal(potionEffect.toString()))
 					);
 				}
 			} else {
-				clientPlayer.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_PRINT_POTIONS_NOT_LIVING.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()), Util.NIL_UUID);
+				clientPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_PRINT_POTIONS_NOT_LIVING.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()));
 			}
 		} else {
-			clientPlayer.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_ENTITY.getTranslationKey()), Util.NIL_UUID);
+			clientPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_ENTITY.getTranslationKey()));
 		}
 	}
 }

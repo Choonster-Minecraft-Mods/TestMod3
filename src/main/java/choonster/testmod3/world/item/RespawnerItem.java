@@ -1,9 +1,8 @@
 package choonster.testmod3.world.item;
 
 import choonster.testmod3.text.TestMod3Lang;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -37,7 +36,7 @@ public class RespawnerItem extends Item {
 			final float respawnAngle = serverPlayer.getRespawnAngle();
 
 			if (respawnPosition == null || respawnLevel == null) {
-				serverPlayer.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_RESPAWNER_NO_SPAWN_LOCATION.getTranslationKey()), Util.NIL_UUID);
+				serverPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_RESPAWNER_NO_SPAWN_LOCATION.getTranslationKey()));
 				return new InteractionResultHolder<>(InteractionResult.FAIL, heldItem);
 			}
 
@@ -54,7 +53,7 @@ public class RespawnerItem extends Item {
 							serverPlayer.setPos(serverPlayer.getX(), serverPlayer.getY() + 1, serverPlayer.getZ());
 						}
 
-						player.sendMessage(new TranslatableComponent(TestMod3Lang.MESSAGE_RESPAWNER_TELEPORTING.getTranslationKey(), spawnLocation.x(), spawnLocation.y(), spawnLocation.z(), respawnLevel.dimension()), Util.NIL_UUID);
+						player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_RESPAWNER_TELEPORTING.getTranslationKey(), spawnLocation.x(), spawnLocation.y(), spawnLocation.z(), respawnLevel.dimension()));
 
 						return new InteractionResultHolder<>(InteractionResult.SUCCESS, heldItem);
 					})

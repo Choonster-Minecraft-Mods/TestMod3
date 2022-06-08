@@ -107,7 +107,7 @@ public class FluidContainerIngredient extends AbstractIngredient {
 		final JsonObject object = new JsonObject();
 
 		object.addProperty("type", new ResourceLocation(TestMod3.MODID, "fluid_container").toString());
-		object.addProperty("fluid", RegistryUtil.getRequiredRegistryName(fluidStack.getFluid()).toString());
+		object.addProperty("fluid", RegistryUtil.getKey(fluidStack.getFluid()).toString());
 		object.addProperty("amount", fluidStack.getAmount());
 
 		if (fluidStack.hasTag()) {

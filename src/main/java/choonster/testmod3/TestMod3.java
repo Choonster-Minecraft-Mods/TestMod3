@@ -58,6 +58,7 @@ public class TestMod3 {
 		ModPlacementModifierTypes.initialise(modEventBus);
 		ModLootConditionTypes.initialise(modEventBus);
 		ModLootFunctionTypes.initialise(modEventBus);
+		ModArgumentTypes.initialise(modEventBus);
 	}
 
 	@SubscribeEvent

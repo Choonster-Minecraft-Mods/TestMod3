@@ -1,7 +1,6 @@
 package choonster.testmod3.registry;
 
 import net.minecraft.util.StringRepresentable;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collection;
@@ -10,7 +9,7 @@ import java.util.Iterator;
 /**
  * @author Choonster
  */
-public interface IVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentable, BASE extends IForgeRegistryEntry<BASE>, ENTRY extends BASE> {
+public interface IVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentable, BASE, ENTRY extends BASE> {
 	/**
 	 * Gets the name of this group.
 	 *

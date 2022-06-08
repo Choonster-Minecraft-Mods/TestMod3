@@ -1,6 +1,7 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.util.RegistryUtil;
 import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredientSerializer;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
 import choonster.testmod3.world.item.crafting.ingredient.IngredientNever;
@@ -84,7 +85,7 @@ public class ModCrafting {
 				ADD_MIX.invoke(null, standardPotionType, Items.REDSTONE, longPotionType);
 				ADD_MIX.invoke(null, standardPotionType, Items.GLOWSTONE_DUST, strongPotionType);
 			} catch (final IllegalAccessException | InvocationTargetException e) {
-				LOGGER.error("Failed to add potion recipes for potion type {}/ingredient item {}", standardPotionType.getRegistryName(), ingredient.getRegistryName(), e);
+				LOGGER.error("Failed to add potion recipes for potion type {}/ingredient item {}", RegistryUtil.getKey(standardPotionType), RegistryUtil.getKey(ingredient), e);
 			}
 		}
 	}

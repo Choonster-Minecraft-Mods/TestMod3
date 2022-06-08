@@ -2,10 +2,8 @@ package choonster.testmod3.world.item;
 
 import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -47,14 +45,14 @@ public class RitualCheckerItem extends Item {
 			final Optional<BlockPos> invalidPosition = checkRitual(playerIn);
 			if (invalidPosition.isPresent()) {
 				final BlockPos pos = invalidPosition.get();
-				textComponent = new TranslatableComponent(TestMod3Lang.MESSAGE_RITUAL_CHECKER_FAILURE.getTranslationKey(), pos.getX(), pos.getY(), pos.getZ());
+				textComponent = Component.translatable(TestMod3Lang.MESSAGE_RITUAL_CHECKER_FAILURE.getTranslationKey(), pos.getX(), pos.getY(), pos.getZ());
 				textComponent.getStyle().withColor(ChatFormatting.RED);
 			} else {
-				textComponent = new TranslatableComponent(TestMod3Lang.MESSAGE_RITUAL_CHECKER_SUCCESS.getTranslationKey());
+				textComponent = Component.translatable(TestMod3Lang.MESSAGE_RITUAL_CHECKER_SUCCESS.getTranslationKey());
 				textComponent.getStyle().withColor(ChatFormatting.GREEN);
 			}
 
-			playerIn.sendMessage(textComponent, Util.NIL_UUID);
+			playerIn.sendSystemMessage(textComponent);
 		}
 
 		return new InteractionResultHolder<>(InteractionResult.SUCCESS, playerIn.getItemInHand(hand));
@@ -71,8 +69,9 @@ public class RitualCheckerItem extends Item {
 		final BlockPos playerPos = player.blockPosition();
 
 		// The block under the player must be obsidian
-		if (!(world.getBlockState(playerPos.below()).getBlock() == Blocks.OBSIDIAN))
+		if (!(world.getBlockState(playerPos.below()).getBlock() == Blocks.OBSIDIAN)) {
 			return Optional.of(playerPos.below());
+		}
 
 		// Iterate from -2,0,-2 to +2,0,+2
 		for (int x = -2; x <= 2; x++) {
@@ -86,10 +85,14 @@ public class RitualCheckerItem extends Item {
 				final Block block = world.getBlockState(pos).getBlock();
 
 				if (Math.abs(x) == 2 || Math.abs(z) == 2) { // If this is the outer layer, the block must be air
-					if (block != Blocks.AIR) return Optional.of(pos);
+					if (block != Blocks.AIR) {
+						return Optional.of(pos);
+					}
 
 				} else { // If this is the inner layer, the block must be redstone
-					if (block != Blocks.REDSTONE_WIRE) return Optional.of(pos);
+					if (block != Blocks.REDSTONE_WIRE) {
+						return Optional.of(pos);
+					}
 
 				}
 			}

@@ -9,7 +9,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 
 import java.util.Collection;
 
@@ -21,7 +21,7 @@ import java.util.Collection;
 public class AxisArgument implements ArgumentType<Direction.Axis> {
 	private static final Collection<String> EXAMPLES = ImmutableList.of("x", "y", "z");
 	private static final SimpleCommandExceptionType INVALID_AXIS_EXCEPTION = new SimpleCommandExceptionType(
-			new TranslatableComponent(TestMod3Lang.ARGUMENT_AXIS_INVALID.getTranslationKey())
+			Component.translatable(TestMod3Lang.ARGUMENT_AXIS_INVALID.getTranslationKey())
 	);
 
 	public static AxisArgument axis() {
