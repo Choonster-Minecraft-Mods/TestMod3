@@ -43,16 +43,8 @@ public class OpenClientScreenMessage {
 
 	public static void handle(final OpenClientScreenMessage message, final Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() ->
-				DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientScreenManager.openScreen(message.getId(), message.getAdditionalData()))
+				DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientScreenManager.openScreen(message.id, message.additionalData))
 		);
 		ctx.get().setPacketHandled(true);
-	}
-
-	public ResourceLocation getId() {
-		return id;
-	}
-
-	public FriendlyByteBuf getAdditionalData() {
-		return additionalData;
 	}
 }

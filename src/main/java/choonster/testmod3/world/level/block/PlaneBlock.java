@@ -26,10 +26,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -69,7 +68,7 @@ public class PlaneBlock extends Block {
 		// Create the bounding boxes for the default rotation pair (horizontal = north, vertical = up)
 		final List<AABB> boundingBoxes = IntStream.range(0, numBoundingBoxes)
 				.mapToObj(i -> new AABB(0, i * increment, 0, 1, (i + 1) * increment, 1 - (i * increment)))
-				.collect(Collectors.toList());
+				.toList();
 
 		// For each horizontal and vertical rotation pair,
 		for (final Direction horizontalRotation : HORIZONTAL_ROTATION.getPossibleValues()) {

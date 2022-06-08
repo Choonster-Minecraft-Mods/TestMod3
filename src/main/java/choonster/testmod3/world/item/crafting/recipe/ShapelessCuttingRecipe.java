@@ -76,9 +76,7 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 			final int numIngredients = buffer.readVarInt();
 			final NonNullList<Ingredient> ingredients = NonNullList.withSize(numIngredients, Ingredient.EMPTY);
 
-			for (int j = 0; j < ingredients.size(); ++j) {
-				ingredients.set(j, Ingredient.fromNetwork(buffer));
-			}
+			ingredients.replaceAll(ignored -> Ingredient.fromNetwork(buffer));
 
 			final ItemStack result = buffer.readItem();
 

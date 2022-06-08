@@ -70,9 +70,7 @@ public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
 			final String group = buffer.readUtf(Short.MAX_VALUE);
 			final NonNullList<Ingredient> ingredients = NonNullList.withSize(width * height, Ingredient.EMPTY);
 
-			for (int i = 0; i < ingredients.size(); ++i) {
-				ingredients.set(i, Ingredient.fromNetwork(buffer));
-			}
+			ingredients.replaceAll(ignored -> Ingredient.fromNetwork(buffer));
 
 			final ItemStack result = buffer.readItem();
 

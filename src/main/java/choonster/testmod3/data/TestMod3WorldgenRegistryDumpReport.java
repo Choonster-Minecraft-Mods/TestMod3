@@ -39,9 +39,8 @@ public class TestMod3WorldgenRegistryDumpReport implements DataProvider {
 		final RegistryAccess registryAccess = RegistryAccess.BUILTIN.get();
 		final DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, registryAccess);
 
-		RegistryAccess.knownRegistries().forEach((registryData) -> {
-			dumpRegistryCap(cache, outputFolder, registryAccess, ops, registryData);
-		});
+		RegistryAccess.knownRegistries()
+				.forEach((registryData) -> dumpRegistryCap(cache, outputFolder, registryAccess, ops, registryData));
 	}
 
 	private <T> void dumpRegistryCap(final CachedOutput cache, final Path outputFolder, final RegistryAccess registryAccess, final DynamicOps<JsonElement> ops, final RegistryAccess.RegistryData<T> registryData) {

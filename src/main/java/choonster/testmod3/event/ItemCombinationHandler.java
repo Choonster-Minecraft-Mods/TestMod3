@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
@@ -61,7 +60,6 @@ public class ItemCombinationHandler {
 			StreamSupport.stream(((ServerLevel) world).getAllEntities().spliterator(), false)
 					.filter(isMatchingItemEntity(INPUTS))
 					.map(entity -> (ItemEntity) entity)
-					.collect(Collectors.toList())
 					.forEach(ItemCombinationHandler::handleEntity);
 		}
 	}
@@ -73,7 +71,9 @@ public class ItemCombinationHandler {
 	 */
 	private static void handleEntity(final ItemEntity entityItem) {
 		// If the item entity is removed, do nothing
-		if (!entityItem.isAlive()) return;
+		if (!entityItem.isAlive()) {
+			return;
+		}
 
 		final Level world = entityItem.getCommandSenderWorld();
 

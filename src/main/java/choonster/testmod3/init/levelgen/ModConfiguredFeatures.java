@@ -80,7 +80,7 @@ public class ModConfiguredFeatures {
 			throw new IllegalStateException("Already initialised");
 		}
 
-		CONFIGURED_FEATURES.<Feature<?>>register(modEventBus);
+		CONFIGURED_FEATURES.register(modEventBus);
 
 		isInitialised = true;
 	}

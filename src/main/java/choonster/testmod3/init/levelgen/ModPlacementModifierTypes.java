@@ -3,7 +3,6 @@ package choonster.testmod3.init.levelgen;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.level.levelgen.placement.InChunksDivisibleBy16Filter;
 import net.minecraft.core.Registry;
-import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -40,7 +39,7 @@ public class ModPlacementModifierTypes {
 			throw new IllegalStateException("Already initialised");
 		}
 
-		PLACEMENT_MODIFIER_TYPES.<Feature<?>>register(modEventBus);
+		PLACEMENT_MODIFIER_TYPES.register(modEventBus);
 
 		isInitialised = true;
 	}
