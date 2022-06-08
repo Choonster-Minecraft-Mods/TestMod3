@@ -1,6 +1,7 @@
 package choonster.testmod3.api.capability.hiddenblockrevealer;
 
-import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A capability to reveal hidden blocks.

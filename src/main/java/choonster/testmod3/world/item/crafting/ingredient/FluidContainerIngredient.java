@@ -22,8 +22,8 @@ import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
 /**
@@ -40,6 +40,7 @@ import java.util.stream.Stream;
  */
 public class FluidContainerIngredient extends AbstractIngredient {
 	private final FluidStack fluidStack;
+	@Nullable
 	private ItemStack[] matchingStacks;
 
 	protected FluidContainerIngredient(final FluidStack fluidStack) {

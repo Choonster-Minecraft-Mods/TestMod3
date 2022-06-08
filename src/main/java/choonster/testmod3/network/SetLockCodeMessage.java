@@ -12,8 +12,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 /**
@@ -23,6 +23,7 @@ import java.util.function.Supplier;
  */
 public class SetLockCodeMessage {
 	private final BlockPos pos;
+	@Nullable
 	private final Direction facing;
 	private final String lockCode;
 

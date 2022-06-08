@@ -18,8 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**
@@ -30,7 +30,9 @@ import java.util.Optional;
 public class FluidContainerItemPredicate extends ItemPredicate {
 	public static final ResourceLocation TYPE = new ResourceLocation(TestMod3.MODID, "fluid_container");
 
+	@Nullable
 	private final TagKey<Fluid> tag;
+	@Nullable
 	private final Fluid fluid;
 	private final MinMaxBounds.Ints amount;
 	private final NbtPredicate nbt;
@@ -114,7 +116,9 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 	}
 
 	public static class Builder {
+		@Nullable
 		private Fluid fluid;
+		@Nullable
 		private TagKey<Fluid> tag;
 		private MinMaxBounds.Ints amount = MinMaxBounds.Ints.ANY;
 		private NbtPredicate nbt = NbtPredicate.ANY;

@@ -4,7 +4,7 @@ import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockReveale
 import net.minecraft.nbt.ByteTag;
 import net.minecraftforge.common.util.INBTSerializable;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Default implementation of {@link IHiddenBlockRevealer}

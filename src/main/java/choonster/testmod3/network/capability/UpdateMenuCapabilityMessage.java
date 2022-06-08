@@ -7,8 +7,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.network.NetworkEvent;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 /**
@@ -48,6 +48,7 @@ public abstract class UpdateMenuCapabilityMessage<HANDLER, DATA> {
 	/**
 	 * The capability data instance.
 	 */
+	@Nullable
 	final DATA capabilityData;
 
 	public UpdateMenuCapabilityMessage(

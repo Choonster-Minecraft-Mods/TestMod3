@@ -4,7 +4,7 @@ import choonster.testmod3.api.capability.pigspawner.IPigSpawner;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
 import net.minecraft.network.FriendlyByteBuf;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Functions used by the {@link IPigSpawner} capability update message.

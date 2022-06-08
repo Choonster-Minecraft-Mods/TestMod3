@@ -12,6 +12,7 @@ import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A group consisting of a still and flowing fluid, a fluid block and a bucket item.
@@ -30,6 +31,7 @@ public class StandardFluidGroup extends FluidGroup<FlowingFluid, FlowingFluid, L
 	}
 
 	public static class Builder extends FluidGroup.Builder<FlowingFluid, FlowingFluid, LiquidBlock, Item> {
+		@Nullable
 		private Material blockMaterial;
 
 		public Builder(final String name, final DeferredRegister<Fluid> fluids, final DeferredRegister<Block> blocks, final DeferredRegister<Item> items) {

@@ -13,9 +13,8 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
-
-import javax.annotation.Nullable;
 
 /**
  * Allows a player to lock an {@link ILock}.
@@ -36,11 +35,13 @@ public class LockScreen extends Screen {
 	/**
 	 * The facing.
 	 */
+	@Nullable
 	private final Direction facing;
 
 	/**
 	 * The lock code text field.
 	 */
+	@Nullable
 	private EditBox lockCodeTextField;
 
 	public LockScreen(final ILock lock, final BlockPos pos, @Nullable final Direction facing) {

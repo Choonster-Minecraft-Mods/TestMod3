@@ -4,7 +4,7 @@ import choonster.testmod3.api.capability.lastusetime.ILastUseTime;
 import net.minecraft.nbt.LongTag;
 import net.minecraftforge.common.util.INBTSerializable;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Default implementation of {@link ILastUseTime}.

@@ -19,6 +19,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -43,6 +44,7 @@ public class EnhancedShapelessRecipeBuilder<
 
 	protected final ItemStack result;
 	protected final RecipeSerializer<? extends RECIPE> serializer;
+	@Nullable
 	protected String itemGroup;
 
 	protected EnhancedShapelessRecipeBuilder(final ItemStack result, final RecipeSerializer<? extends RECIPE> serializer) {
@@ -102,7 +104,7 @@ public class EnhancedShapelessRecipeBuilder<
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER group(final String group) {
+	public BUILDER group(@Nullable final String group) {
 		return (BUILDER) super.group(group);
 	}
 

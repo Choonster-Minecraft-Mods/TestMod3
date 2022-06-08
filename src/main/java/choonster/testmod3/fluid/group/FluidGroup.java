@@ -12,6 +12,7 @@ import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -76,13 +77,19 @@ public class FluidGroup<STILL extends Fluid, FLOWING extends Fluid, BLOCK extend
 
 		protected final String name;
 
+		@Nullable
 		protected IFluidFactory<STILL> stillFactory;
+		@Nullable
 		protected IFluidFactory<FLOWING> flowingFactory;
+		@Nullable
 		protected IBlockFactory<STILL, BLOCK> blockFactory;
+		@Nullable
 		protected IBucketFactory<STILL, BUCKET> bucketFactory;
 
+		@Nullable
 		protected FluidAttributes.Builder attributes;
 
+		@Nullable
 		protected ForgeFlowingFluid.Properties properties;
 
 		public Builder(final String name, final DeferredRegister<Fluid> fluids, final DeferredRegister<Block> blocks, final DeferredRegister<Item> items) {

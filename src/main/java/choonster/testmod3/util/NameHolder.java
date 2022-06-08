@@ -4,8 +4,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Nameable;
 import net.minecraftforge.common.util.INBTSerializable;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
@@ -22,6 +22,7 @@ public class NameHolder implements Nameable, INBTSerializable<CompoundTag> {
 	/**
 	 * The custom name, if any.
 	 */
+	@Nullable
 	private Component customName;
 
 	public NameHolder(final Component defaultName) {
@@ -30,7 +31,7 @@ public class NameHolder implements Nameable, INBTSerializable<CompoundTag> {
 
 	@Override
 	public Component getName() {
-		return hasCustomName() ? customName : defaultName;
+		return customName != null ? customName : defaultName;
 	}
 
 	@Override

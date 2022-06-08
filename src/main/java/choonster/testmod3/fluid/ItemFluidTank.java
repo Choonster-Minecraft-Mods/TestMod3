@@ -6,9 +6,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An implementation of {@link IFluidHandlerItem} that stores its contents as a {@link FluidStack} in memory rather than
@@ -53,7 +51,6 @@ public class ItemFluidTank extends FluidTank implements IFluidHandlerItem, INBTS
 		return super.drain(resource, action);
 	}
 
-	@Nonnull
 	@Override
 	public FluidStack drain(final int maxDrain, final FluidAction action) {
 		if (container.getCount() != 1 || maxDrain <= 0) {
@@ -65,8 +62,12 @@ public class ItemFluidTank extends FluidTank implements IFluidHandlerItem, INBTS
 
 	@Override
 	public boolean equals(@Nullable final Object obj) {
-		if (this == obj) return true;
-		if (obj == null || getClass() != obj.getClass()) return false;
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
 
 		final FluidTank that = ((FluidTank) obj);
 

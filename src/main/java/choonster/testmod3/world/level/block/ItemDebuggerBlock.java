@@ -19,7 +19,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.ModList;
 import org.slf4j.Logger;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A Block that prints the current state of the player's held {@link ItemStack}s on the client and server when left- or right-clicked.

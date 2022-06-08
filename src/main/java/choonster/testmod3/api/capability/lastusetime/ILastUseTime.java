@@ -1,6 +1,7 @@
 package choonster.testmod3.api.capability.lastusetime;
 
-import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A capability to track the last use time of something.

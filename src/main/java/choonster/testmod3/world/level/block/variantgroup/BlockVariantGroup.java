@@ -10,6 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -152,11 +153,15 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 		private final DeferredRegister<Block> blocks;
 		private final DeferredRegister<Item> items;
 
+		@Nullable
 		private String groupName;
 		private boolean isSuffix;
+		@Nullable
 		private Iterable<VARIANT> variants;
 
+		@Nullable
 		private Function<VARIANT, Block.Properties> blockPropertiesFactory;
+		@Nullable
 		private BlockFactory<VARIANT, BLOCK> blockFactory;
 
 		private Function<VARIANT, Item.Properties> itemPropertiesFactory = variant -> new Item.Properties().tab(TestMod3.CREATIVE_MODE_TAB);

@@ -19,8 +19,8 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -46,6 +46,7 @@ public class EnhancedShapedRecipeBuilder<
 
 	protected final ItemStack result;
 	protected final RecipeSerializer<? extends RECIPE> serializer;
+	@Nullable
 	protected String itemGroup;
 
 	protected EnhancedShapedRecipeBuilder(final ItemStack result, final RecipeSerializer<? extends RECIPE> serializer) {

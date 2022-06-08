@@ -1,7 +1,9 @@
-@ParametersAreNonnullByDefault
+@FieldsAreNonnullByDefault
 @MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 package choonster.testmod3.network.capability.lastusetime;
 
+import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.MethodsReturnNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;

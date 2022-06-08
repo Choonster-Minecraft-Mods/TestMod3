@@ -10,9 +10,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.common.util.INBTSerializable;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.UUID;
@@ -38,6 +38,7 @@ public class MaxHealth implements IMaxHealth, INBTSerializable<FloatTag> {
 	/**
 	 * The entity this is attached to.
 	 */
+	@Nullable
 	private final LivingEntity entity;
 
 	/**

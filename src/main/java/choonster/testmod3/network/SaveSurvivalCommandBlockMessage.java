@@ -20,9 +20,9 @@ import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 /**
@@ -48,6 +48,7 @@ public class SaveSurvivalCommandBlockMessage {
 	/**
 	 * The Survival Command Block's {@link BlockPos}. {@code null} if {@link #type} is not {@link SurvivalCommandBlock.Type#BLOCK}.
 	 */
+	@Nullable
 	private BlockPos blockPos;
 
 	/**

@@ -17,8 +17,8 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 /**
@@ -39,6 +39,7 @@ public class LootItemHandler extends ItemStackHandler {
 	 * <p>
 	 * This will be {@code null} if no {@link LootTable} has been set or loot has already been generated.
 	 */
+	@Nullable
 	protected ResourceLocation lootTableLocation;
 
 	/**

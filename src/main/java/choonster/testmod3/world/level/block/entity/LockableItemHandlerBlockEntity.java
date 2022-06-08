@@ -15,7 +15,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A {@link BlockEntity} with a single {@link IItemHandler} inventory, locked with an {@link ILock}.

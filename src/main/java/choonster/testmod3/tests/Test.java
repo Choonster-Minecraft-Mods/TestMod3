@@ -4,7 +4,7 @@ package choonster.testmod3.tests;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A class that runs various tests from {@link #runTest()}.
