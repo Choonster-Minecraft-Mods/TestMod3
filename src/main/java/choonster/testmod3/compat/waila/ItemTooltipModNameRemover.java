@@ -1,6 +1,14 @@
 package choonster.testmod3.compat.waila;
 
+import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModItems;
+import net.minecraft.network.chat.Component;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import snownee.jade.Jade;
 
 /**
  * Removes the mod name added by Waila to the tooltip of {@link ModItems#NO_MOD_NAME}.
@@ -10,15 +18,13 @@ import choonster.testmod3.init.ModItems;
  *
  * @author Choonster
  */
-/*
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = TestMod3.MODID)
 public class ItemTooltipModNameRemover {
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void itemTooltip(final ItemTooltipEvent event) {
 		if (event.getItemStack().getItem() == ModItems.NO_MOD_NAME.get()) {
-			final String name = String.format(Waila.CONFIG.get().getFormatting().getModName(), TestMod3.NAME);
+			final String name = String.format(Jade.CONFIG.get().getFormatting().getModName(), TestMod3.NAME);
 			event.getToolTip().remove(Component.literal(name));
 		}
 	}
 }
-*/
