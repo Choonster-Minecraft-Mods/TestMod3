@@ -23,7 +23,7 @@ public record BannerFeatureConfig(
 
 					VanillaCodecs.DYE_COLOR
 							.fieldOf("color")
-							.forGetter(config -> config.color),
+							.forGetter(BannerFeatureConfig::color),
 
 					Codec.mapPair(
 									Registry.BANNER_PATTERN.byNameCodec().fieldOf("pattern"),
@@ -32,7 +32,7 @@ public record BannerFeatureConfig(
 							.codec()
 							.listOf()
 							.fieldOf("patterns")
-							.forGetter(config -> config.patterns)
+							.forGetter(BannerFeatureConfig::patterns)
 
 			).apply(builder, BannerFeatureConfig::new)
 	);
