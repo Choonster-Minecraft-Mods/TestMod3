@@ -1,0 +1,6 @@
+{
+  "type": "testmod3:add_features",
+  "biomes": "#minecraft:is_end",
+  "features": "testmod3:ore_iron_end",
+  "step": "underground_ores"
+}

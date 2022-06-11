@@ -1,0 +1,11 @@
+{
+  "type": "testmod3:add_mob_spawn",
+  "biomes": "#minecraft:is_ocean",
+  "category": "water_creature",
+  "spawner": {
+    "type": "minecraft:guardian",
+    "maxCount": 20,
+    "minCount": 5,
+    "weight": 100
+  }
+}

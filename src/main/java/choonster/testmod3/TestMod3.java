@@ -59,6 +59,7 @@ public class TestMod3 {
 		ModLootConditionTypes.initialise(modEventBus);
 		ModLootFunctionTypes.initialise(modEventBus);
 		ModArgumentTypes.initialise(modEventBus);
+		ModBiomeModifierSerializers.initialise(modEventBus);
 	}
 
 	@SubscribeEvent

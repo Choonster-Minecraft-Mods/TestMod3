@@ -1,0 +1,6 @@
+{
+  "type": "testmod3:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": "testmod3:banner",
+  "step": "surface_structures"
+}
