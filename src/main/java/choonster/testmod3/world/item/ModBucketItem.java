@@ -41,7 +41,6 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -56,7 +55,6 @@ import org.jetbrains.annotations.Nullable;
  * @author Choonster
  */
 public class ModBucketItem extends Item {
-	private final ItemStack empty = new ItemStack(this);
 	private final int capacity;
 
 	public ModBucketItem(final Item.Properties properties) {
@@ -85,7 +83,7 @@ public class ModBucketItem extends Item {
 			return;
 		}
 
-		items.add(empty);
+		items.add(empty());
 
 		if (CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY == null) {
 			return;
@@ -128,7 +126,7 @@ public class ModBucketItem extends Item {
 
 	@Override
 	public ItemStack getContainerItem(final ItemStack stack) {
-		return empty.copy();
+		return empty();
 	}
 
 	@Override
@@ -194,7 +192,7 @@ public class ModBucketItem extends Item {
 			}
 
 			// Return an empty bucket, or the original held item if the player is in Creative Mode
-			result = !player.getAbilities().instabuild ? empty.copy() : heldItem;
+			result = !player.getAbilities().instabuild ? empty() : heldItem;
 		}
 
 		player.awardStat(Stats.ITEM_USED.get(this));
@@ -212,7 +210,7 @@ public class ModBucketItem extends Item {
 
 			fluid.getAttributes().vaporize(player, world, pos, fluidStack);
 
-			return Pair.of(new FluidActionResult(empty.copy()), pos);
+			return Pair.of(new FluidActionResult(empty()), pos);
 		}
 
 		// If the fluid is a flowing fluid,
@@ -227,7 +225,7 @@ public class ModBucketItem extends Item {
 				final SoundEvent soundEvent = fluid.getAttributes().getEmptySound(fluidStack);
 				world.playSound(player, pos, soundEvent, SoundSource.BLOCKS, 1, 1);
 
-				return Pair.of(new FluidActionResult(empty.copy()), pos);
+				return Pair.of(new FluidActionResult(empty()), pos);
 			}
 		}
 
@@ -280,5 +278,9 @@ public class ModBucketItem extends Item {
 				null,
 				new UniversalBucketFluidHandler(stack, capacity)
 		);
+	}
+
+	private ItemStack empty() {
+		return new ItemStack(this);
 	}
 }
