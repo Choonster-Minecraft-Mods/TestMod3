@@ -1,6 +1,5 @@
 package choonster.testmod3.compat.waila;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.world.level.block.RestrictedFluidTankBlock;
 import choonster.testmod3.world.level.block.entity.RestrictedFluidTankBlockEntity;
@@ -18,8 +17,12 @@ import snownee.jade.api.config.IPluginConfig;
  *
  * @author Choonster
  */
-public class RestrictedFluidTankEnabledFacingsHUDHandler implements IBlockComponentProvider {
-	private final ResourceLocation uid = new ResourceLocation(TestMod3.MODID, "restricted_fluid_tank_enabled_facings");
+public class RestrictedFluidTankEnabledFacingsProvider implements IBlockComponentProvider {
+	private final ResourceLocation uid;
+
+	public RestrictedFluidTankEnabledFacingsProvider(final ResourceLocation uid) {
+		this.uid = uid;
+	}
 
 	@Override
 	public ResourceLocation getUid() {

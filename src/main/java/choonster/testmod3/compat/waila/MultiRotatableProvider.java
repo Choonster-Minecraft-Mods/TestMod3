@@ -1,6 +1,5 @@
 package choonster.testmod3.compat.waila;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.EnumFaceRotation;
 import net.minecraft.resources.ResourceLocation;
@@ -12,10 +11,10 @@ import snownee.jade.api.TooltipPosition;
  *
  * @author Choonster
  */
-public class MultiRotatableHUDHandler extends EnumPropertyHUDHandler<EnumFaceRotation> {
-	public MultiRotatableHUDHandler(final Property<EnumFaceRotation> property) {
+public class MultiRotatableProvider extends EnumPropertyProvider<EnumFaceRotation> {
+	public MultiRotatableProvider(final ResourceLocation uid, final Property<EnumFaceRotation> property) {
 		super(
-				new ResourceLocation(TestMod3.MODID, "multi_rotatable_face_rotation"),
+				uid,
 				TooltipPosition.BODY,
 				property,
 				TestMod3Lang.DESC_MULTI_ROTATABLE_FACE_ROTATION.getTranslationKey(),

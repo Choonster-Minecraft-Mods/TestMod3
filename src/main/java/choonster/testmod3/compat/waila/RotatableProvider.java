@@ -1,6 +1,5 @@
 package choonster.testmod3.compat.waila;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -12,14 +11,14 @@ import snownee.jade.api.TooltipPosition;
  *
  * @author Choonster
  */
-public class RotatableHUDHandler extends EnumPropertyHUDHandler<Direction> {
-	public RotatableHUDHandler(final Property<Direction> property) {
-		this(property, TestMod3Lang.DESC_ROTATABLE_FACING.getTranslationKey());
+public class RotatableProvider extends EnumPropertyProvider<Direction> {
+	public RotatableProvider(final ResourceLocation uid, final Property<Direction> property) {
+		this(uid, property, TestMod3Lang.DESC_ROTATABLE_FACING.getTranslationKey());
 	}
 
-	public RotatableHUDHandler(final Property<Direction> property, final String tooltipTranslationKey) {
+	public RotatableProvider(final ResourceLocation uid, final Property<Direction> property, final String tooltipTranslationKey) {
 		super(
-				new ResourceLocation(TestMod3.MODID, "rotatable_facing"),
+				uid,
 				TooltipPosition.BODY,
 				property,
 				tooltipTranslationKey,

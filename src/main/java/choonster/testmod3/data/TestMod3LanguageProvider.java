@@ -1,6 +1,7 @@
 package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.compat.waila.WailaCompat;
 import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.init.*;
 import choonster.testmod3.text.TestMod3Lang;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.data.LanguageProvider;
 import org.apache.commons.lang3.StringUtils;
+import snownee.jade.api.IJadeProvider;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +56,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		addConfig();
 		addChatMessages();
 		addSubtitles();
+		addJadeProviders();
 		addMisc();
 	}
 
@@ -323,6 +326,16 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		add(TestMod3Lang.SUBTITLE_ACTION_SADDLE, "Mod saddle equips");
 	}
 
+	private void addJadeProviders() {
+		add(WailaCompat.COLORED_ROTATABLE_BLOCK_FACING, "Colored Rotatable Block Facing");
+		add(WailaCompat.COLORED_MULTI_ROTATABLE_BLOCK_FACE_ROTATION, "Colored Multi-Rotatable");
+		add(WailaCompat.ROTATABLE_LAMP_FACING, "Rotatable Lamp Facing");
+		add(WailaCompat.CHEST_FACING, "Mod Chest Facing");
+		add(WailaCompat.PLANE_HORIZONTAL_ROTATION, "Plane Horizontal Rotation");
+		add(WailaCompat.PLANE_VERTICAL_ROTATION, "Plane Vertical Rotation");
+		add(WailaCompat.RESTRICTED_FLUID_TANK_ENABLED_FACINGS, "Restricted Fluid Tank Enabled Facings");
+	}
+
 	private void addMisc() {
 		add("itemGroup." + TestMod3.MODID, "TestMod3");
 
@@ -383,6 +396,11 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 	private String getPotionItemTranslationKey(final Supplier<? extends Potion> potion, final Item item) {
 		final ItemStack stack = PotionUtils.setPotion(new ItemStack(item), potion.get());
 		return stack.getItem().getDescriptionId(stack);
+	}
+
+	private void add(final IJadeProvider provider, final String name) {
+		final var uid = provider.getUid();
+		add("config.jade.plugin_%s.%s".formatted(uid.getNamespace(), uid.getPath()), name);
 	}
 
 	private void add(final TestMod3Lang lang, final String value) {

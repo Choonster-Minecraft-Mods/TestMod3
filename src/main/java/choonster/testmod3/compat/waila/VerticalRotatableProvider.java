@@ -1,6 +1,5 @@
 package choonster.testmod3.compat.waila;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.world.level.block.PlaneBlock;
 import net.minecraft.resources.ResourceLocation;
@@ -12,10 +11,10 @@ import snownee.jade.api.TooltipPosition;
  *
  * @author Choonster
  */
-public class VerticalRotatableHUDHandler extends EnumPropertyHUDHandler<PlaneBlock.VerticalRotation> {
-	public VerticalRotatableHUDHandler(final Property<PlaneBlock.VerticalRotation> property) {
+public class VerticalRotatableProvider extends EnumPropertyProvider<PlaneBlock.VerticalRotation> {
+	public VerticalRotatableProvider(final ResourceLocation uid, final Property<PlaneBlock.VerticalRotation> property) {
 		super(
-				new ResourceLocation(TestMod3.MODID, "plane_vertical_rotation"),
+				uid,
 				TooltipPosition.BODY,
 				property,
 				TestMod3Lang.BLOCK_DESC_PLANE_VERTICAL_ROTATION.getTranslationKey(),
