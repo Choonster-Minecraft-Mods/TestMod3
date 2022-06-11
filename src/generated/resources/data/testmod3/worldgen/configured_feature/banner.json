@@ -1,16 +1,16 @@
 {
+  "type": "testmod3:banner",
   "config": {
     "color": "pink",
     "patterns": [
       {
         "color": "magenta",
-        "pattern": "gru"
+        "pattern": "minecraft:gradient_up"
       },
       {
         "color": "black",
-        "pattern": "flo"
+        "pattern": "minecraft:flower"
       }
     ]
-  },
-  "type": "testmod3:banner"
+  }
 }

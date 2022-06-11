@@ -1,14 +1,14 @@
 {
+  "type": "testmod3:loot_table",
   "conditions": [
     {
-      "condition": "minecraft:random_chance",
-      "chance": 0.5
+      "chance": 0.5,
+      "condition": "minecraft:random_chance"
     },
     {
       "condition": "forge:loot_table_id",
       "loot_table_id": "minecraft:chests/simple_dungeon"
     }
   ],
-  "loot_table": "testmod3:loot_table_test",
-  "type": "testmod3:loot_table"
+  "loot_table": "testmod3:loot_table_test"
 }

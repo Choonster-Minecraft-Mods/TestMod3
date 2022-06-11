@@ -2,34 +2,26 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
           "name": "testmod3:right_click_test"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
+      "rolls": 1.0
     },
     {
-      "name": "ender_eye",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:ender_eye"
-        }
-      ],
       "conditions": [
         {
-          "condition": "minecraft:block_state_property",
           "block": "testmod3:right_click_test",
+          "condition": "minecraft:block_state_property",
           "properties": {
             "has_ender_eye": "true"
           }
@@ -37,7 +29,15 @@
         {
           "condition": "minecraft:survives_explosion"
         }
-      ]
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:ender_eye"
+        }
+      ],
+      "name": "ender_eye",
+      "rolls": 1.0
     }
   ]
 }

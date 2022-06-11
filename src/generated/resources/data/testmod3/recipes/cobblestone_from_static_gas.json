@@ -3,18 +3,18 @@
   "ingredients": [
     {
       "type": "testmod3:fluid_container",
-      "fluid": "testmod3:static_gas",
-      "amount": 1000
+      "amount": 1000,
+      "fluid": "testmod3:static_gas"
     },
     {
       "type": "testmod3:fluid_container",
-      "fluid": "testmod3:static_gas",
-      "amount": 1000
+      "amount": 1000,
+      "fluid": "testmod3:static_gas"
     },
     {
       "type": "testmod3:fluid_container",
-      "fluid": "testmod3:static_gas",
-      "amount": 1000
+      "amount": 1000,
+      "fluid": "testmod3:static_gas"
     }
   ],
   "result": {

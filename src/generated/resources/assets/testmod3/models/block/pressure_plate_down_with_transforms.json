@@ -2,23 +2,19 @@
   "parent": "minecraft:block/thin_block",
   "elements": [
     {
-      "from": [
-        1,
-        0,
-        1
-      ],
-      "to": [
-        15,
-        0.5,
-        15
-      ],
       "faces": {
         "down": {
-          "texture": "#texture",
-          "cullface": "down"
-        },
-        "up": {
+          "cullface": "down",
           "texture": "#texture"
+        },
+        "east": {
+          "texture": "#texture",
+          "uv": [
+            1.0,
+            15.0,
+            15.0,
+            15.5
+          ]
         },
         "north": {
           "texture": "#texture",
@@ -38,6 +34,9 @@
             15.5
           ]
         },
+        "up": {
+          "texture": "#texture"
+        },
         "west": {
           "texture": "#texture",
           "uv": [
@@ -46,17 +45,18 @@
             15.0,
             15.5
           ]
-        },
-        "east": {
-          "texture": "#texture",
-          "uv": [
-            1.0,
-            15.0,
-            15.0,
-            15.5
-          ]
         }
-      }
+      },
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        0.5,
+        15
+      ]
     }
   ]
 }

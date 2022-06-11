@@ -1,28 +1,28 @@
 {
   "parent": "testmod3:item/simple_model",
-  "textures": {
-    "layer0": "minecraft:item/bow"
-  },
   "overrides": [
     {
+      "model": "testmod3:item/bow_0",
       "predicate": {
         "minecraft:pulling": 1.0
-      },
-      "model": "testmod3:item/bow_0"
+      }
     },
     {
+      "model": "testmod3:item/bow_1",
       "predicate": {
-        "minecraft:pulling": 1.0,
-        "minecraft:pull": 0.65
-      },
-      "model": "testmod3:item/bow_1"
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
     },
     {
+      "model": "testmod3:item/bow_2",
       "predicate": {
-        "minecraft:pulling": 1.0,
-        "minecraft:pull": 0.9
-      },
-      "model": "testmod3:item/bow_2"
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "minecraft:item/bow"
+  }
 }

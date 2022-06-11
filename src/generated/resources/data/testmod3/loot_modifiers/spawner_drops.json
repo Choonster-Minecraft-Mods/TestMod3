@@ -1,8 +1,9 @@
 {
+  "type": "testmod3:tile_entity_nbt",
   "conditions": [
     {
-      "condition": "minecraft:block_state_property",
-      "block": "minecraft:spawner"
+      "block": "minecraft:spawner",
+      "condition": "minecraft:block_state_property"
     },
     {
       "condition": "minecraft:match_tool",
@@ -17,6 +18,5 @@
         ]
       }
     }
-  ],
-  "type": "testmod3:tile_entity_nbt"
+  ]
 }

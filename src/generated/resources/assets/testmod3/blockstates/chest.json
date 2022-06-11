@@ -1,5 +1,9 @@
 {
   "variants": {
+    "facing=east": {
+      "model": "testmod3:block/chest",
+      "y": 90
+    },
     "facing=north": {
       "model": "testmod3:block/chest"
     },
@@ -10,10 +14,6 @@
     "facing=west": {
       "model": "testmod3:block/chest",
       "y": 270
-    },
-    "facing=east": {
-      "model": "testmod3:block/chest",
-      "y": 90
     }
   }
 }

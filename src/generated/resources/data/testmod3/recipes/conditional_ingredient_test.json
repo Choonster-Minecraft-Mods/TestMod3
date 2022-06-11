@@ -1,8 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "Cc"
-  ],
   "key": {
     "C": {
       "type": "testmod3:conditional",
@@ -19,6 +16,9 @@
       "item": "minecraft:cobblestone"
     }
   },
+  "pattern": [
+    "Cc"
+  ],
   "result": {
     "item": "minecraft:cobblestone"
   }

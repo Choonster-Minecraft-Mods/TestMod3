@@ -2,6 +2,38 @@
   "parent": "minecraft:block/block",
   "elements": [
     {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "rotation": 270,
+          "texture": "#down"
+        },
+        "east": {
+          "cullface": "east",
+          "rotation": 270,
+          "texture": "#east"
+        },
+        "north": {
+          "cullface": "north",
+          "rotation": 270,
+          "texture": "#north"
+        },
+        "south": {
+          "cullface": "south",
+          "rotation": 270,
+          "texture": "#south"
+        },
+        "up": {
+          "cullface": "up",
+          "rotation": 270,
+          "texture": "#up"
+        },
+        "west": {
+          "cullface": "west",
+          "rotation": 270,
+          "texture": "#west"
+        }
+      },
       "from": [
         0,
         0,
@@ -11,39 +43,7 @@
         16,
         16,
         16
-      ],
-      "faces": {
-        "down": {
-          "texture": "#down",
-          "cullface": "down",
-          "rotation": 270
-        },
-        "up": {
-          "texture": "#up",
-          "cullface": "up",
-          "rotation": 270
-        },
-        "north": {
-          "texture": "#north",
-          "cullface": "north",
-          "rotation": 270
-        },
-        "south": {
-          "texture": "#south",
-          "cullface": "south",
-          "rotation": 270
-        },
-        "west": {
-          "texture": "#west",
-          "cullface": "west",
-          "rotation": 270
-        },
-        "east": {
-          "texture": "#east",
-          "cullface": "east",
-          "rotation": 270
-        }
-      }
+      ]
     }
   ]
 }
