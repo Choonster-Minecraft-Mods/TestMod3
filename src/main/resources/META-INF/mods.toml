@@ -68,7 +68,7 @@ issueTrackerURL="https://github.com/Choonster-Minecraft-Mods/TestMod3" #optional
 		mandatory=true
 
 		# The version range of the dependency
-		versionRange="[1.19.1,1.20)"
+		versionRange="[1.19,1.20)"
 
 	   	# An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
 		ordering="NONE"
