@@ -49,6 +49,7 @@ public record CopyMobSpawnsBiomeModifier(
 						spawnerData.minCount,
 						spawnerData.maxCount
 				))
+				.toList()
 				.forEach(spawnerData -> builder.getMobSpawnSettings().addSpawn(destination.category, spawnerData));
 	}
 
