@@ -10,7 +10,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -19,8 +18,8 @@ import org.jetbrains.annotations.Nullable;
  * @author Choonster
  */
 public class TestMod3BlockTagsProvider extends BlockTagsProvider {
-	public TestMod3BlockTagsProvider(final DataGenerator generatorIn, @Nullable final ExistingFileHelper existingFileHelper) {
-		super(generatorIn, TestMod3.MODID, existingFileHelper);
+	public TestMod3BlockTagsProvider(final DataGenerator dataGenerator, @Nullable final ExistingFileHelper existingFileHelper) {
+		super(dataGenerator, TestMod3.MODID, existingFileHelper);
 	}
 
 	@Override
