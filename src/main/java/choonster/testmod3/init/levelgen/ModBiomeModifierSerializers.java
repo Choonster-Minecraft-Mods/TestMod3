@@ -1,17 +1,12 @@
 package choonster.testmod3.init.levelgen;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.world.level.biome.modifier.AddFeaturesBiomeModifier;
-import choonster.testmod3.world.level.biome.modifier.AddMobSpawnBiomeModifier;
 import choonster.testmod3.world.level.biome.modifier.AddMobSpawnCostBiomeModifier;
 import choonster.testmod3.world.level.biome.modifier.CopyMobSpawnsBiomeModifier;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -28,39 +23,18 @@ public class ModBiomeModifierSerializers {
 
 	private static boolean isInitialised = false;
 
-	public static final RegistryObject<Codec<AddMobSpawnBiomeModifier>> ADD_MOB_SPAWN = SERIALIZERS.register(
-			"add_mob_spawn",
-			() -> RecordCodecBuilder.create(builder ->
-					builder.group(
-
-							Biome.LIST_CODEC
-									.fieldOf("biomes")
-									.forGetter(AddMobSpawnBiomeModifier::biomes),
-
-							MobCategory.CODEC
-									.fieldOf("category")
-									.forGetter(AddMobSpawnBiomeModifier::category),
-
-							MobSpawnSettings.SpawnerData.CODEC
-									.fieldOf("spawner")
-									.forGetter(AddMobSpawnBiomeModifier::spawnerData)
-
-					).apply(builder, AddMobSpawnBiomeModifier::new)
-			)
-	);
-
 	public static final RegistryObject<Codec<CopyMobSpawnsBiomeModifier>> COPY_MOB_SPAWNS = SERIALIZERS.register(
 			"copy_mob_spawns",
 			() -> RecordCodecBuilder.create(builder ->
 					builder.group(
-							
-							CopyMobSpawnsBiomeModifier.CategoryAndType.CODEC
-									.fieldOf("source")
-									.forGetter(CopyMobSpawnsBiomeModifier::source),
 
-							CopyMobSpawnsBiomeModifier.CategoryAndType.CODEC
-									.fieldOf("destination")
-									.forGetter(CopyMobSpawnsBiomeModifier::destination)
+							ForgeRegistries.ENTITIES.getCodec()
+									.fieldOf("sourceType")
+									.forGetter(CopyMobSpawnsBiomeModifier::sourceType),
+
+							ForgeRegistries.ENTITIES.getCodec()
+									.fieldOf("destinationType")
+									.forGetter(CopyMobSpawnsBiomeModifier::destinationType)
 
 					).apply(builder, CopyMobSpawnsBiomeModifier::new)
 			)
@@ -84,27 +58,6 @@ public class ModBiomeModifierSerializers {
 									.forGetter(AddMobSpawnCostBiomeModifier::spawnCost)
 
 					).apply(builder, AddMobSpawnCostBiomeModifier::new)
-			)
-	);
-
-	public static final RegistryObject<Codec<AddFeaturesBiomeModifier>> ADD_FEATURES = SERIALIZERS.register(
-			"add_features",
-			() -> RecordCodecBuilder.create(builder ->
-					builder.group(
-
-							Biome.LIST_CODEC
-									.fieldOf("biomes")
-									.forGetter(AddFeaturesBiomeModifier::biomes),
-
-							PlacedFeature.LIST_CODEC
-									.fieldOf("features")
-									.forGetter(AddFeaturesBiomeModifier::features),
-
-							GenerationStep.Decoration.CODEC
-									.fieldOf("step")
-									.forGetter(AddFeaturesBiomeModifier::step)
-
-					).apply(builder, AddFeaturesBiomeModifier::new)
 			)
 	);
 

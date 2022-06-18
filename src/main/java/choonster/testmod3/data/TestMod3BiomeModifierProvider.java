@@ -3,14 +3,10 @@ package choonster.testmod3.data;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModEntities;
 import choonster.testmod3.init.levelgen.ModPlacedFeatures;
-import choonster.testmod3.world.level.biome.modifier.AddFeaturesBiomeModifier;
-import choonster.testmod3.world.level.biome.modifier.AddMobSpawnBiomeModifier;
 import choonster.testmod3.world.level.biome.modifier.CopyMobSpawnsBiomeModifier;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
-import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
-import cpw.mods.modlauncher.api.LamdbaExceptionUtils;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -18,19 +14,23 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.server.packs.PackType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.common.data.JsonCodecProvider;
 import net.minecraftforge.common.world.BiomeModifier;
+import net.minecraftforge.common.world.ForgeBiomeModifiers.AddFeaturesBiomeModifier;
+import net.minecraftforge.common.world.ForgeBiomeModifiers.AddSpawnsBiomeModifier;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.slf4j.Logger;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,13 +38,13 @@ import java.util.Map;
  * @author Choonster
  */
 public class TestMod3BiomeModifierProvider implements DataProvider {
-	private static final Logger LOGGER = LogUtils.getLogger();
-
 	private final DataGenerator generator;
-	private final Map<String, BiomeModifier> toSerialize = new HashMap<>();
+	private final ExistingFileHelper existingFileHelper;
+	private final Map<ResourceLocation, BiomeModifier> toSerialize = new HashMap<>();
 
-	public TestMod3BiomeModifierProvider(final DataGenerator generator) {
+	public TestMod3BiomeModifierProvider(final DataGenerator generator, final ExistingFileHelper existingFileHelper) {
 		this.generator = generator;
+		this.existingFileHelper = existingFileHelper;
 	}
 
 	protected void addModifiers(final RegistryOps<JsonElement> ops) {
@@ -53,22 +53,21 @@ public class TestMod3BiomeModifierProvider implements DataProvider {
 
 		addModifier(
 				"add_guardian_spawn_to_oceans",
-				AddMobSpawnBiomeModifier.create(
+				AddSpawnsBiomeModifier.singleSpawn(
 						tag(biomeRegistry, BiomeTags.IS_OCEAN),
-						MobCategory.WATER_CREATURE,
-						EntityType.GUARDIAN,
-						100,
-						5,
-						20
+						new MobSpawnSettings.SpawnerData(
+								EntityType.GUARDIAN,
+								100,
+								5,
+								20
+						)
 				)
 		);
 
 		addModifier(
 				"copy_creeper_spawns_for_player_avoiding_creeper",
 				CopyMobSpawnsBiomeModifier.create(
-						MobCategory.MONSTER,
 						EntityType.CREEPER,
-						MobCategory.MONSTER,
 						ModEntities.PLAYER_AVOIDING_CREEPER.get()
 				)
 		);
@@ -82,7 +81,7 @@ public class TestMod3BiomeModifierProvider implements DataProvider {
 		*/
 		addModifier(
 				"banners_in_chunks_divisible_by_16",
-				AddFeaturesBiomeModifier.create(
+				new AddFeaturesBiomeModifier(
 						tag(biomeRegistry, BiomeTags.IS_OVERWORLD),
 						feature(featureRegistry, ModPlacedFeatures.BANNER),
 						GenerationStep.Decoration.SURFACE_STRUCTURES
@@ -91,7 +90,7 @@ public class TestMod3BiomeModifierProvider implements DataProvider {
 
 		addModifier(
 				"ore_iron_nether",
-				AddFeaturesBiomeModifier.create(
+				new AddFeaturesBiomeModifier(
 						tag(biomeRegistry, BiomeTags.IS_NETHER),
 						feature(featureRegistry, ModPlacedFeatures.ORE_IRON_NETHER),
 						GenerationStep.Decoration.UNDERGROUND_ORES
@@ -100,7 +99,7 @@ public class TestMod3BiomeModifierProvider implements DataProvider {
 
 		addModifier(
 				"ore_iron_end",
-				AddFeaturesBiomeModifier.create(
+				new AddFeaturesBiomeModifier(
 						tag(biomeRegistry, BiomeTags.IS_END),
 						feature(featureRegistry, ModPlacedFeatures.ORE_IRON_END),
 						GenerationStep.Decoration.UNDERGROUND_ORES
@@ -109,38 +108,25 @@ public class TestMod3BiomeModifierProvider implements DataProvider {
 	}
 
 	@Override
-	public void run(final CachedOutput cache) {
+	public void run(final CachedOutput cache) throws IOException {
 		final var ops = RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy());
 
 		addModifiers(ops);
 
-		final var outputFolder = generator.getOutputFolder();
-		final var directory = PackType.SERVER_DATA.getDirectory();
+		final JsonCodecProvider<BiomeModifier> provider = JsonCodecProvider.forDatapackRegistry(
+				generator,
+				existingFileHelper,
+				TestMod3.MODID,
+				ops,
+				ForgeRegistries.Keys.BIOME_MODIFIERS,
+				toSerialize
+		);
 
-		final var biomeModifiersRegistryID = ForgeRegistries.Keys.BIOME_MODIFIERS.location();
-		final var biomeModifiersNamespace = biomeModifiersRegistryID.getNamespace();
-		final var biomeModifiersPath = biomeModifiersRegistryID.getPath();
-
-		toSerialize.forEach((modifier, instance) -> {
-			final var pathString = String.join(
-					"/",
-					directory,
-					TestMod3.MODID,
-					biomeModifiersNamespace,
-					biomeModifiersPath,
-					modifier + ".json"
-			);
-
-			final var path = outputFolder.resolve(pathString);
-
-			BiomeModifier.DIRECT_CODEC.encodeStart(ops, instance)
-					.resultOrPartial(msg -> LOGGER.error("Failed to encode {}: {}", path, msg))
-					.ifPresent(LamdbaExceptionUtils.rethrowConsumer(json -> DataProvider.saveStable(cache, json, path)));
-		});
+		provider.run(cache);
 	}
 
 	protected <T extends BiomeModifier> void addModifier(final String modifier, final T instance) {
-		toSerialize.put(modifier, instance);
+		toSerialize.put(new ResourceLocation(TestMod3.MODID, modifier), instance);
 	}
 
 	@Override

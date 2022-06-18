@@ -1,11 +1,5 @@
 {
   "type": "testmod3:copy_mob_spawns",
-  "destination": {
-    "type": "testmod3:player_avoiding_creeper",
-    "category": "monster"
-  },
-  "source": {
-    "type": "minecraft:creeper",
-    "category": "monster"
-  }
+  "destinationType": "testmod3:player_avoiding_creeper",
+  "sourceType": "minecraft:creeper"
 }
