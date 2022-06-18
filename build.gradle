@@ -2,7 +2,7 @@ plugins {
     id 'eclipse'
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '5.1.+'
-    id 'org.ajoberstar.grgit' version '1.7.2'
+    id 'org.ajoberstar.grgit' version '5.0.0'
 }
 
 final commitId
@@ -164,14 +164,18 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
-//    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:${jei_version}")
-//    compileOnly fg.deobf("mezz.jei:jei-1.18.2:${jei_version}:api")
+    // compile against the JEI API but do not include it at runtime
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
+    // at runtime, use the full JEI
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-common:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
 
     embed "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
 
     implementation fg.deobf("curse.maven:jade-324717:${jade_file_id}")
 
-    implementation fg.deobf("curse.maven:the-one-probe-245211:${top_file_id}")
+    compileOnly fg.deobf("curse.maven:the-one-probe-245211:${top_file_id}")
 
     // Examples using mod jars from ./libs
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
