@@ -24,8 +24,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 
 import java.util.function.Consumer;
 
@@ -151,7 +151,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 
 		// Craft Cobblestone from three Buckets of Static Gas
 		{
-			final FluidStack staticGas = new FluidStack(ModFluids.STATIC_GAS.getStill().get(), FluidAttributes.BUCKET_VOLUME);
+			final FluidStack staticGas = new FluidStack(ModFluids.STATIC_GAS.getStill().get(), FluidType.BUCKET_VOLUME);
 			final FluidContainerIngredient staticGasContainer = FluidContainerIngredient.fromFluidStack(staticGas);
 
 			ShapelessFluidContainerRecipeBuilder.shapelessFluidContainerRecipe(Blocks.COBBLESTONE)

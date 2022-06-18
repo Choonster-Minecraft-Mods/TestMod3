@@ -40,5 +40,6 @@ public class ModDataProviders {
 		dataGenerator.addProvider(event.includeServer(), blockTagsProvider);
 		dataGenerator.addProvider(event.includeServer(), new TestMod3ItemTagsProvider(dataGenerator, blockTagsProvider, existingFileHelper));
 		dataGenerator.addProvider(event.includeServer(), new TestMod3BiomeTagsProvider(dataGenerator, existingFileHelper));
+		dataGenerator.addProvider(event.includeServer(), new TestMod3FluidTagsProvider(dataGenerator, existingFileHelper));
 	}
 }

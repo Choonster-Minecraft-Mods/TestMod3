@@ -32,11 +32,12 @@ import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -58,7 +59,7 @@ public class ModBucketItem extends Item {
 	private final int capacity;
 
 	public ModBucketItem(final Item.Properties properties) {
-		this(FluidAttributes.BUCKET_VOLUME, properties);
+		this(FluidType.BUCKET_VOLUME, properties);
 	}
 
 	public ModBucketItem(final int capacity, final Item.Properties properties) {
@@ -206,9 +207,9 @@ public class ModBucketItem extends Item {
 	) {
 		final Fluid fluid = fluidStack.getFluid();
 
-		if (world.dimensionType().ultraWarm() && fluid.getAttributes().doesVaporize(world, pos, fluidStack)) {
+		if (world.dimensionType().ultraWarm() && fluid.getFluidType().isVaporizedOnPlacement(world, pos, fluidStack)) {
 
-			fluid.getAttributes().vaporize(player, world, pos, fluidStack);
+			fluid.getFluidType().onVaporize(player, world, pos, fluidStack);
 
 			return Pair.of(new FluidActionResult(empty()), pos);
 		}
@@ -222,8 +223,10 @@ public class ModBucketItem extends Item {
 			if (destBlock instanceof LiquidBlockContainer && ((LiquidBlockContainer) destBlock).canPlaceLiquid(world, pos, destState, fluid)) {
 				((LiquidBlockContainer) destBlock).placeLiquid(world, pos, destState, ((FlowingFluid) fluid).getSource(false));
 
-				final SoundEvent soundEvent = fluid.getAttributes().getEmptySound(fluidStack);
-				world.playSound(player, pos, soundEvent, SoundSource.BLOCKS, 1, 1);
+				final SoundEvent soundEvent = fluid.getFluidType().getSound(fluidStack, SoundActions.BUCKET_EMPTY);
+				if (soundEvent != null) {
+					world.playSound(player, pos, soundEvent, SoundSource.BLOCKS, 1, 1);
+				}
 
 				return Pair.of(new FluidActionResult(empty()), pos);
 			}

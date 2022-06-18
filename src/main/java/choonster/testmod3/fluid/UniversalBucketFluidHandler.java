@@ -2,13 +2,13 @@ package choonster.testmod3.fluid;
 
 import choonster.testmod3.util.ModFluidUtil;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 /**
  * An {@link IFluidHandlerItem} implementation that only allows complete filling/draining and can only be filled with
- * fluids that have a bucket registered ({@link FluidAttributes#getBucket(FluidStack)}).
+ * fluids that have a bucket registered ({@link Fluid#getBucket()}).
  *
  * @author Choonster
  */

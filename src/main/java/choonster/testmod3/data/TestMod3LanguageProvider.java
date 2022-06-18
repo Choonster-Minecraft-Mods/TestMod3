@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.data.LanguageProvider;
+import net.minecraftforge.fluids.FluidType;
 import org.apache.commons.lang3.StringUtils;
 import snownee.jade.api.IJadeProvider;
 
@@ -375,13 +376,13 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 	}
 
 	private <
+			TYPE extends FluidType,
 			STILL extends Fluid, FLOWING extends Fluid,
 			BLOCK extends LiquidBlock, BUCKET extends Item,
-			GROUP extends FluidGroup<STILL, FLOWING, BLOCK, BUCKET>
+			GROUP extends FluidGroup<TYPE, STILL, FLOWING, BLOCK, BUCKET>
 			>
 	void addFluidGroup(final GROUP group, final String name) {
-		add(group.getStill().get().getAttributes().getTranslationKey(), name);
-		add(group.getFlowing().get().getAttributes().getTranslationKey(), String.format("Flowing %s", name));
+		add(group.getType().get().getDescriptionId(), name);
 		addBlock(group.getBlock(), name);
 		addItem(group.getBucket(), String.format("%s Bucket", name));
 	}

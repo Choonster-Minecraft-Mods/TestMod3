@@ -353,7 +353,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 		withExistingParent(name(item), mcLoc("template_spawn_egg"));
 	}
 
-	private void bucketItem(final FluidGroup<?, ?, ?, ?> fluidGroup) {
+	private void bucketItem(final FluidGroup<?, ?, ?, ?, ?> fluidGroup) {
 		final Item item = fluidGroup.getBucket().get();
 		final Fluid fluid = item instanceof BucketItem ? ((BucketItem) item).getFluid() : Fluids.EMPTY;
 

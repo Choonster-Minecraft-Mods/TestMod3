@@ -1,6 +1,7 @@
 package choonster.testmod3.util;
 
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
@@ -22,7 +23,7 @@ public class ModFluidUtil {
 	 * @return true if the fluid has a bucket and its default state is a source; otherwise, false
 	 */
 	public static boolean hasBucket(final FluidStack fluidStack) {
-		return !fluidStack.getFluid().getAttributes().getBucket(fluidStack).isEmpty() &&
+		return fluidStack.getFluid().getBucket() != Items.AIR &&
 				fluidStack.getFluid().defaultFluidState().isSource();
 	}
 

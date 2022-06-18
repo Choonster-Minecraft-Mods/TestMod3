@@ -1,0 +1,8 @@
+{
+  "values": [
+    "testmod3:static_gas",
+    "testmod3:flowing_static_gas",
+    "testmod3:normal_gas",
+    "testmod3:flowing_normal_gas"
+  ]
+}

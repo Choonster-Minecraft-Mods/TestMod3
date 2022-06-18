@@ -1,6 +1,7 @@
 package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.fluid.BasicFluidType;
 import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.init.ModFluids;
@@ -687,10 +688,16 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 				});
 	}
 
-	private void fluidBlock(final FluidGroup<?, ?, ?, ?> fluidGroup) {
+	private void fluidBlock(final FluidGroup<?, ?, ?, ?, ?> fluidGroup) {
+		// We can't use the RenderProperties for the fluid type as they're not initialised in datagen
+		if (!(fluidGroup.getType().get() instanceof BasicFluidType basicFluidType)) {
+			throw new IllegalArgumentException("Fluid type must extend BasicFluidType");
+		}
+
 		final var block = fluidGroup.getBlock().get();
+
 		final var model = models().getBuilder(name(block))
-				.texture("particle", fluidGroup.getStill().get().getAttributes().getStillTexture());
+				.texture("particle", basicFluidType.getStillTexture());
 
 		simpleBlock(block, model);
 	}

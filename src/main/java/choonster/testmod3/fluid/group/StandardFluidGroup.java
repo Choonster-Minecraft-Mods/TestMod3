@@ -8,34 +8,37 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
 /**
- * A group consisting of a still and flowing fluid, a fluid block and a bucket item.
+ * A group consisting of a fluid type, a still and flowing fluid, a fluid block and a bucket item.
  * <p>
  * This class restricts the still and flowing fluids to subclasses of {@link FlowingFluid} and provides default
  * still, flowing, block and bucket factories.
  * <p>
- * The only required inputs are the {@link FluidAttributes} ({@link StandardFluidGroup.Builder#attributes(FluidAttributes.Builder)})
+ * The only required inputs are the {@link FluidType} factory ({@link StandardFluidGroup.Builder#typeFactory(Supplier)} )})
  * and the block's {@link Material} ({@link StandardFluidGroup.Builder#blockMaterial(Material)}).
  *
  * @author Choonster
  */
-public class StandardFluidGroup extends FluidGroup<FlowingFluid, FlowingFluid, LiquidBlock, Item> {
-	private StandardFluidGroup(final RegistryObject<FlowingFluid> still, final RegistryObject<FlowingFluid> flowing, final RegistryObject<LiquidBlock> block, final RegistryObject<Item> bucket) {
-		super(still, flowing, block, bucket);
+public class StandardFluidGroup extends FluidGroup<FluidType, FlowingFluid, FlowingFluid, LiquidBlock, Item> {
+	private StandardFluidGroup(final RegistryObject<FluidType> type, final RegistryObject<FlowingFluid> still, final RegistryObject<FlowingFluid> flowing, final RegistryObject<LiquidBlock> block, final RegistryObject<Item> bucket) {
+		super(type, still, flowing, block, bucket);
 	}
 
-	public static class Builder extends FluidGroup.Builder<FlowingFluid, FlowingFluid, LiquidBlock, Item> {
+	public static class Builder extends FluidGroup.Builder<FluidType, FlowingFluid, FlowingFluid, LiquidBlock, Item> {
 		@Nullable
 		private Material blockMaterial;
 
-		public Builder(final String name, final DeferredRegister<Fluid> fluids, final DeferredRegister<Block> blocks, final DeferredRegister<Item> items) {
-			super(name, fluids, blocks, items);
+		public Builder(final String name, final DeferredRegister<FluidType> fluidTypes, final DeferredRegister<Fluid> fluids, final DeferredRegister<Block> blocks, final DeferredRegister<Item> items) {
+			super(name, fluidTypes, fluids, blocks, items);
 
 			stillFactory = ForgeFlowingFluid.Source::new;
 			flowingFactory = ForgeFlowingFluid.Flowing::new;
@@ -52,6 +55,11 @@ public class StandardFluidGroup extends FluidGroup<FlowingFluid, FlowingFluid, L
 		public Builder blockMaterial(final Material blockMaterial) {
 			this.blockMaterial = blockMaterial;
 			return this;
+		}
+
+		@Override
+		public Builder typeFactory(final Supplier<FluidType> typeFactory) {
+			return (Builder) super.typeFactory(typeFactory);
 		}
 
 		@Override
@@ -75,8 +83,8 @@ public class StandardFluidGroup extends FluidGroup<FlowingFluid, FlowingFluid, L
 		}
 
 		@Override
-		public Builder attributes(final FluidAttributes.Builder attributes) {
-			return (Builder) super.attributes(attributes);
+		public Builder propertiesCustomiser(final Consumer<ForgeFlowingFluid.Properties> propertiesCustomiser) {
+			return (Builder) super.propertiesCustomiser(propertiesCustomiser);
 		}
 
 		@Override
