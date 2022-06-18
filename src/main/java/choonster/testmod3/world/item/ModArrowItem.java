@@ -7,7 +7,6 @@ import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
@@ -38,6 +37,6 @@ public class ModArrowItem extends ArrowItem {
 
 	@Override
 	public boolean isInfinite(final ItemStack stack, final ItemStack bow, final Player player) {
-		return EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, bow) > 0;
+		return bow.getEnchantmentLevel(Enchantments.INFINITY_ARROWS) > 0;
 	}
 }

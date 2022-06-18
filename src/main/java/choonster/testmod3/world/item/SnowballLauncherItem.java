@@ -11,7 +11,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
@@ -54,7 +53,7 @@ public class SnowballLauncherItem extends ProjectileWeaponItem {
 	 * @return True if the player is not in creative mode and the launcher doesn't have the Infinity enchantment
 	 */
 	private boolean isAmmoRequired(final ItemStack stack, final Player player) {
-		return !player.getAbilities().instabuild && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) == 0;
+		return !player.getAbilities().instabuild && stack.getEnchantmentLevel(Enchantments.INFINITY_ARROWS) == 0;
 	}
 
 	@Override

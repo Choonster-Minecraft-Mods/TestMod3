@@ -10,7 +10,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -36,7 +35,7 @@ public class ModBowItem extends BowItem {
 	 * @return Is ammunition required?
 	 */
 	protected boolean isAmmoRequired(final ItemStack bow, final Player shooter) {
-		return !shooter.getAbilities().instabuild && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, bow) == 0;
+		return !shooter.getAbilities().instabuild && bow.getEnchantmentLevel(Enchantments.INFINITY_ARROWS) == 0;
 	}
 
 	/**
@@ -52,7 +51,9 @@ public class ModBowItem extends BowItem {
 		final boolean hasAmmo = !shooter.getProjectile(bow).isEmpty();
 
 		final InteractionResultHolder<ItemStack> ret = ForgeEventFactory.onArrowNock(bow, world, shooter, hand, hasAmmo);
-		if (ret != null) return ret;
+		if (ret != null) {
+			return ret;
+		}
 
 		if (isAmmoRequired(bow, shooter) && !hasAmmo) {
 			return new InteractionResultHolder<>(InteractionResult.FAIL, bow);
@@ -71,13 +72,17 @@ public class ModBowItem extends BowItem {
 	 * @param charge  The charge of the arrow
 	 */
 	void fireArrow(final ItemStack bow, final Level level, final LivingEntity shooter, int charge) {
-		if (!(shooter instanceof final Player player)) return;
+		if (!(shooter instanceof final Player player)) {
+			return;
+		}
 
 		final boolean ammoRequired = isAmmoRequired(bow, player);
 		ItemStack ammo = player.getProjectile(bow);
 
 		charge = ForgeEventFactory.onArrowLoose(bow, level, player, charge, !ammo.isEmpty() || !ammoRequired);
-		if (charge < 0) return;
+		if (charge < 0) {
+			return;
+		}
 
 		if (!ammo.isEmpty() || !ammoRequired) {
 			if (ammo.isEmpty()) {
@@ -100,17 +105,17 @@ public class ModBowItem extends BowItem {
 						arrowEntity.setCritArrow(true);
 					}
 
-					final int powerLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, bow);
+					final int powerLevel = bow.getEnchantmentLevel(Enchantments.POWER_ARROWS);
 					if (powerLevel > 0) {
 						arrowEntity.setBaseDamage(arrowEntity.getBaseDamage() + (double) powerLevel * 0.5D + 0.5D);
 					}
 
-					final int punchLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, bow);
+					final int punchLevel = bow.getEnchantmentLevel(Enchantments.PUNCH_ARROWS);
 					if (punchLevel > 0) {
 						arrowEntity.setKnockback(punchLevel);
 					}
 
-					if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, bow) > 0) {
+					if (bow.getEnchantmentLevel(Enchantments.FLAMING_ARROWS) > 0) {
 						arrowEntity.setSecondsOnFire(100);
 					}
 
