@@ -29,13 +29,13 @@ public class ClientPlayerNetworkEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void clientConnectedToServer(final ClientPlayerNetworkEvent.LoggedInEvent event) {
+	public static void clientConnectedToServer(final ClientPlayerNetworkEvent.LoggingIn event) {
 		final ServerData serverData = Minecraft.getInstance().getCurrentServer();
 		final Connection connection = event.getConnection();
 
 		LOGGER.info(
 				"Server Connected! Local? {} - Address: {}",
-				connection != null ? String.valueOf(connection.isMemoryConnection()) : "<No Connection>",
+				connection.isMemoryConnection(),
 				serverData != null ? serverData.ip : "<No ServerData>"
 		);
 	}

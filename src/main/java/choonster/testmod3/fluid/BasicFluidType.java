@@ -1,7 +1,7 @@
 package choonster.testmod3.fluid;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.IFluidTypeRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidType;
 
 import java.util.function.Consumer;
@@ -30,8 +30,8 @@ public class BasicFluidType extends FluidType {
 	}
 
 	@Override
-	public void initializeClient(final Consumer<IFluidTypeRenderProperties> consumer) {
-		consumer.accept(new IFluidTypeRenderProperties() {
+	public void initializeClient(final Consumer<IClientFluidTypeExtensions> consumer) {
+		consumer.accept(new IClientFluidTypeExtensions() {
 			@Override
 			public ResourceLocation getStillTexture() {
 				return stillTexture;

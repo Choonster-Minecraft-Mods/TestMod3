@@ -5,13 +5,12 @@ import choonster.testmod3.init.ModBlocks;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColor;
-import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.GrassColor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -30,9 +29,7 @@ public class ModColourManager {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void registerBlockColourHandlers(final ColorHandlerEvent.Block event) {
-		final BlockColors blockColors = event.getBlockColors();
-
+	public static void registerBlockColourHandlers(final RegisterColorHandlersEvent.Block event) {
 		// Use the grass colour of the biome or the default grass colour
 		final BlockColor grassColourHandler = (state, blockAccess, pos, tintIndex) -> {
 			if (blockAccess != null && pos != null) {
@@ -42,7 +39,7 @@ public class ModColourManager {
 			return GrassColor.get(0.5d, 1.0d);
 		};
 
-		blockColors.register(grassColourHandler, ModBlocks.WATER_GRASS.get());
+		event.register(grassColourHandler, ModBlocks.WATER_GRASS.get());
 	}
 
 	/**
@@ -51,9 +48,8 @@ public class ModColourManager {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void registerItemColourHandlers(final ColorHandlerEvent.Item event) {
+	public static void registerItemColourHandlers(final RegisterColorHandlersEvent.Item event) {
 		final BlockColors blockColors = event.getBlockColors();
-		final ItemColors itemColors = event.getItemColors();
 
 		// Use the Block's colour handler for an ItemBlock
 		final ItemColor itemBlockColourHandler = (stack, tintIndex) -> {
@@ -61,6 +57,6 @@ public class ModColourManager {
 			return blockColors.getColor(state, null, null, tintIndex);
 		};
 
-		itemColors.register(itemBlockColourHandler, ModBlocks.WATER_GRASS.get());
+		event.register(itemBlockColourHandler, ModBlocks.WATER_GRASS.get());
 	}
 }

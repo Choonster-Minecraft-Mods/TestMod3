@@ -46,7 +46,7 @@ public class ChunkEnergyCapability {
 	/**
 	 * The ID of this capability.
 	 */
-	private static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "chunk_energy");
+	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "chunk_energy");
 
 	public static void register(final RegisterCapabilitiesEvent event) {
 		event.register(IChunkEnergy.class);
