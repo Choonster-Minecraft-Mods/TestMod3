@@ -3,6 +3,7 @@ package choonster.testmod3.world.level.block;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.maxhealth.MaxHealthCapability;
 import choonster.testmod3.text.TestMod3Lang;
+import choonster.testmod3.util.CapabilityNotPresentException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -27,13 +28,21 @@ public class MaxHealthSetterBlock extends Block {
 	@Override
 	public InteractionResult use(final BlockState state, final Level world, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult rayTraceResult) {
 		if (!world.isClientSide) {
-			MaxHealthCapability.getMaxHealth(player).ifPresent(maxHealth -> {
-				final float healthToAdd = player.isShiftKeyDown() ? -1.0f : 1.0f;
+			final var maxHealth = MaxHealthCapability
+					.getMaxHealth(player)
+					.orElseThrow(CapabilityNotPresentException::new);
 
-				maxHealth.addBonusMaxHealth(healthToAdd);
+			final float healthToAdd = player.isShiftKeyDown() ? -1.0f : 1.0f;
 
-				player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_MAX_HEALTH_ADD.getTranslationKey(), player.getDisplayName(), healthToAdd));
-			});
+			maxHealth.addBonusMaxHealth(healthToAdd);
+
+			player.sendSystemMessage(
+					Component.translatable(
+							TestMod3Lang.MESSAGE_MAX_HEALTH_ADD.getTranslationKey(),
+							player.getDisplayName(),
+							healthToAdd
+					)
+			);
 		}
 
 		return InteractionResult.SUCCESS;

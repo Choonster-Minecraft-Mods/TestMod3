@@ -3,6 +3,7 @@ package choonster.testmod3.command.maxhealth;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.maxhealth.MaxHealthCapability;
 import choonster.testmod3.text.TestMod3Lang;
+import choonster.testmod3.util.CapabilityNotPresentException;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -39,16 +40,18 @@ public class GetMaxHealthCommand {
 			throw INVALID_ENTITY_EXCEPTION.create();
 		}
 
-		MaxHealthCapability.getMaxHealth(livingEntity).ifPresent(maxHealth ->
-				context.getSource().sendSuccess(
-						Component.translatable(
-								TestMod3Lang.MESSAGE_MAX_HEALTH_GET.getTranslationKey(),
-								entity.getDisplayName(),
-								MaxHealthCapability.formatMaxHealth(livingEntity.getMaxHealth()),
-								MaxHealthCapability.formatMaxHealth(maxHealth.getBonusMaxHealth())
-						),
-						true
-				)
+		final var maxHealth = MaxHealthCapability
+				.getMaxHealth(livingEntity)
+				.orElseThrow(CapabilityNotPresentException::new);
+
+		context.getSource().sendSuccess(
+				Component.translatable(
+						TestMod3Lang.MESSAGE_MAX_HEALTH_GET.getTranslationKey(),
+						entity.getDisplayName(),
+						MaxHealthCapability.formatMaxHealth(livingEntity.getMaxHealth()),
+						MaxHealthCapability.formatMaxHealth(maxHealth.getBonusMaxHealth())
+				),
+				true
 		);
 
 		return 0;

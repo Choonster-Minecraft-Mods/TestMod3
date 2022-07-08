@@ -4,9 +4,9 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.capability.SerializableCapabilityProvider;
 import choonster.testmod3.network.UpdateChunkEnergyValueMessage;
+import choonster.testmod3.util.CapabilityNotPresentException;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -90,10 +90,10 @@ public class ChunkEnergyCapability {
 		 */
 		@SubscribeEvent
 		public static void chunkWatch(final ChunkWatchEvent.Watch event) {
-			final ServerPlayer player = event.getPlayer();
+			final var player = event.getPlayer();
+			final var chunkEnergy = getChunkEnergy(event.getWorld(), event.getPos()).orElseThrow(CapabilityNotPresentException::new);
 
-			getChunkEnergy(event.getWorld(), event.getPos())
-					.ifPresent((chunkEnergy) -> TestMod3.network.send(PacketDistributor.PLAYER.with(() -> player), new UpdateChunkEnergyValueMessage(chunkEnergy)));
+			TestMod3.network.send(PacketDistributor.PLAYER.with(() -> player), new UpdateChunkEnergyValueMessage(chunkEnergy));
 		}
 	}
 }

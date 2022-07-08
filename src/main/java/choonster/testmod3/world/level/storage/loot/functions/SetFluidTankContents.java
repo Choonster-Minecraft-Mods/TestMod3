@@ -1,6 +1,7 @@
 package choonster.testmod3.world.level.storage.loot.functions;
 
 import choonster.testmod3.init.ModLootFunctionTypes;
+import choonster.testmod3.util.CapabilityNotPresentException;
 import choonster.testmod3.world.item.FluidStackItem;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonDeserializationContext;
@@ -52,13 +53,14 @@ public class SetFluidTankContents extends LootItemConditionalFunction {
 				)
 		);
 
-		stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)
-				.ifPresent(fluidHandler ->
-						itemStacks.stream()
-								.filter(itemStack -> itemStack.getItem() instanceof FluidStackItem)
-								.map(itemStack -> ((FluidStackItem) itemStack.getItem()).getFluidStack(itemStack))
-								.forEach(fluidStack -> fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE))
-				);
+		final var fluidHandler = stack
+				.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)
+				.orElseThrow(CapabilityNotPresentException::new);
+
+		itemStacks.stream()
+				.filter(itemStack -> itemStack.getItem() instanceof FluidStackItem)
+				.map(itemStack -> ((FluidStackItem) itemStack.getItem()).getFluidStack(itemStack))
+				.forEach(fluidStack -> fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE));
 
 		return stack;
 	}

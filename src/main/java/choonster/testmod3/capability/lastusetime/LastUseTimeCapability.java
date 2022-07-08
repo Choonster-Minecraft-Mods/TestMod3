@@ -4,11 +4,11 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.lastusetime.ILastUseTime;
 import choonster.testmod3.capability.CapabilityContainerListenerManager;
 import choonster.testmod3.capability.SerializableCapabilityProvider;
+import choonster.testmod3.util.CapabilityNotPresentException;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -60,11 +60,9 @@ public final class LastUseTimeCapability {
 	 * @param itemStack The held ItemStack
 	 */
 	public static void updateLastUseTime(final Player player, final ItemStack itemStack) {
-		getLastUseTime(itemStack).ifPresent((lastUseTime) -> {
-			final Level world = player.getCommandSenderWorld();
-
-			lastUseTime.set(world.getGameTime());
-		});
+		getLastUseTime(itemStack)
+				.orElseThrow(CapabilityNotPresentException::new)
+				.set(player.getCommandSenderWorld().getGameTime());
 	}
 
 	/**

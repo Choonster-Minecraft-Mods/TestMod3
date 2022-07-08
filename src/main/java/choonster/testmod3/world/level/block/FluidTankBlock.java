@@ -5,6 +5,7 @@ import choonster.testmod3.fluid.FluidTankSnapshot;
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.network.FluidTankContentsMessage;
 import choonster.testmod3.text.TestMod3Lang;
+import choonster.testmod3.util.CapabilityNotPresentException;
 import choonster.testmod3.world.level.block.entity.BaseFluidTankBlockEntity;
 import choonster.testmod3.world.level.block.entity.FluidTankBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -30,7 +31,6 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.network.PacketDistributor;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -52,17 +52,18 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 	@SuppressWarnings("deprecation")
 	@Override
 	public List<ItemStack> getDrops(final BlockState state, final LootContext.Builder builder) {
-		final BlockEntity blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+		final var blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
 
 		if (blockEntity != null) {
-			blockEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)
-					.ifPresent(fluidHandler ->
-							builder.withDynamicDrop(FLUID_TANK_CONTENTS, (context, stackConsumer) ->
-									Stream.of(FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler))
-											.map(fluidTankSnapshot -> ModItems.FLUID_STACK_ITEM.get().withFluidStack(fluidTankSnapshot.contents()))
-											.forEach(stackConsumer)
-							)
-					);
+			final var fluidHandler = blockEntity
+					.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)
+					.orElseThrow(CapabilityNotPresentException::new);
+
+			builder.withDynamicDrop(FLUID_TANK_CONTENTS, (context, stackConsumer) ->
+					Stream.of(FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler))
+							.map(fluidTankSnapshot -> ModItems.FLUID_STACK_ITEM.get().withFluidStack(fluidTankSnapshot.contents()))
+							.forEach(stackConsumer)
+			);
 		}
 
 		return super.getDrops(state, builder);
@@ -81,9 +82,8 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 
 	@Override
 	public void setPlacedBy(final Level level, final BlockPos pos, final BlockState state, @Nullable final LivingEntity placer, final ItemStack stack) {
-		getFluidHandler(level, pos).ifPresent(fluidHandler ->
-				FluidUtil.tryEmptyContainer(stack, fluidHandler, Integer.MAX_VALUE, null, true)
-		);
+		final var fluidHandler = getFluidHandler(level, pos).orElseThrow(CapabilityNotPresentException::new);
+		FluidUtil.tryEmptyContainer(stack, fluidHandler, Integer.MAX_VALUE, null, true);
 	}
 
 	@Nullable

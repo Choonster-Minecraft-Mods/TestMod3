@@ -3,6 +3,7 @@ package choonster.testmod3.world.item;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.maxhealth.MaxHealthCapability;
 import choonster.testmod3.text.TestMod3Lang;
+import choonster.testmod3.util.CapabilityNotPresentException;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -24,13 +25,18 @@ public class MaxHealthSetterItem extends Item {
 	@Override
 	public InteractionResult interactLivingEntity(final ItemStack stack, final Player player, final LivingEntity target, final InteractionHand hand) {
 		if (!player.level.isClientSide) {
-			MaxHealthCapability.getMaxHealth(target).ifPresent(maxHealth -> {
-				final float healthToAdd = player.isShiftKeyDown() ? -1.0f : 1.0f;
+			final var maxHealth = MaxHealthCapability.getMaxHealth(target).orElseThrow(CapabilityNotPresentException::new);
+			final var healthToAdd = player.isShiftKeyDown() ? -1.0f : 1.0f;
 
-				maxHealth.addBonusMaxHealth(healthToAdd);
+			maxHealth.addBonusMaxHealth(healthToAdd);
 
-				player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_MAX_HEALTH_ADD.getTranslationKey(), target.getDisplayName(), healthToAdd));
-			});
+			player.sendSystemMessage(
+					Component.translatable(
+							TestMod3Lang.MESSAGE_MAX_HEALTH_ADD.getTranslationKey(),
+							target.getDisplayName(),
+							healthToAdd
+					)
+			);
 		}
 
 		return InteractionResult.SUCCESS;

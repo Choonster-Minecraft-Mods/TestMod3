@@ -3,6 +3,7 @@ package choonster.testmod3.network;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.capability.chunkenergy.ChunkEnergy;
 import choonster.testmod3.capability.chunkenergy.ChunkEnergyCapability;
+import choonster.testmod3.util.CapabilityNotPresentException;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -56,15 +57,15 @@ public class UpdateChunkEnergyValueMessage {
 		ctx.get().enqueueWork(() -> {
 			final Optional<Level> optionalLevel = LogicalSidedProvider.CLIENTWORLD.get(ctx.get().getDirection().getReceptionSide());
 
-			optionalLevel.ifPresent(world ->
-					ChunkEnergyCapability.getChunkEnergy(world, message.chunkPos).ifPresent(chunkEnergy -> {
-						if (!(chunkEnergy instanceof ChunkEnergy)) {
-							return;
-						}
+			optionalLevel.ifPresent(world -> {
+				final var iChunkEnergy = ChunkEnergyCapability
+						.getChunkEnergy(world, message.chunkPos)
+						.orElseThrow(CapabilityNotPresentException::new);
 
-						((ChunkEnergy) chunkEnergy).setEnergy(message.energy);
-					})
-			);
+				if (iChunkEnergy instanceof ChunkEnergy chunkEnergy) {
+					chunkEnergy.setEnergy(message.energy);
+				}
+			});
 		});
 
 		ctx.get().setPacketHandled(true);

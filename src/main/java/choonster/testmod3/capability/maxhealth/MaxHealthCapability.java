@@ -3,6 +3,7 @@ package choonster.testmod3.capability.maxhealth;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.SerializableCapabilityProvider;
+import choonster.testmod3.util.CapabilityNotPresentException;
 import choonster.testmod3.util.ModLogUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -103,11 +104,10 @@ public final class MaxHealthCapability {
 		 */
 		@SubscribeEvent
 		public static void playerClone(final PlayerEvent.Clone event) {
-			getMaxHealth(event.getOriginal()).ifPresent(oldMaxHealth ->
-					getMaxHealth(event.getPlayer()).ifPresent(newMaxHealth ->
-							newMaxHealth.setBonusMaxHealth(oldMaxHealth.getBonusMaxHealth())
-					)
-			);
+			final var oldMaxHealth = getMaxHealth(event.getOriginal()).orElseThrow(CapabilityNotPresentException::new);
+			final var newMaxHealth = getMaxHealth(event.getPlayer()).orElseThrow(CapabilityNotPresentException::new);
+
+			newMaxHealth.setBonusMaxHealth(oldMaxHealth.getBonusMaxHealth());
 		}
 
 		/**
@@ -118,7 +118,8 @@ public final class MaxHealthCapability {
 		@SubscribeEvent
 		public static void playerChangeDimension(final PlayerEvent.PlayerChangedDimensionEvent event) {
 			getMaxHealth(event.getPlayer())
-					.ifPresent(IMaxHealth::synchronise);
+					.orElseThrow(CapabilityNotPresentException::new)
+					.synchronise();
 		}
 	}
 }

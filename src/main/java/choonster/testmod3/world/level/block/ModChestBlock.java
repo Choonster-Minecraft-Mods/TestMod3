@@ -1,5 +1,6 @@
 package choonster.testmod3.world.level.block;
 
+import choonster.testmod3.util.CapabilityNotPresentException;
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.world.level.block.entity.ModChestBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -28,7 +29,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.items.CapabilityItemHandler;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -148,12 +148,14 @@ public class ModChestBlock extends BaseEntityBlock<ModChestBlockEntity> {
 	@Override
 	public void onRemove(final BlockState state, final Level world, final BlockPos pos, final BlockState newState, final boolean isMoving) {
 		if (state.getBlock() != newState.getBlock()) {
-			final ModChestBlockEntity blockEntity = getBlockEntity(world, pos);
+			final var blockEntity = getBlockEntity(world, pos);
 			if (blockEntity != null) {
-				blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent(itemHandler -> {
-					InventoryUtils.dropItemHandlerContents(world, pos, itemHandler);
-					world.updateNeighbourForOutputSignal(pos, this);
-				});
+				final var itemHandler = blockEntity
+						.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)
+						.orElseThrow(CapabilityNotPresentException::new);
+
+				InventoryUtils.dropItemHandlerContents(world, pos, itemHandler);
+				world.updateNeighbourForOutputSignal(pos, this);
 			}
 
 			super.onRemove(state, world, pos, newState, isMoving);

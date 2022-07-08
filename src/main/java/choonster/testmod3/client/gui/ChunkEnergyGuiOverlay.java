@@ -4,6 +4,7 @@ import choonster.testmod3.capability.chunkenergy.ChunkEnergyCapability;
 import choonster.testmod3.config.TestMod3Config;
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.text.TestMod3Lang;
+import choonster.testmod3.util.CapabilityNotPresentException;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -34,11 +35,12 @@ public class ChunkEnergyGuiOverlay implements IGuiOverlay {
 			return;
 		}
 
-		ChunkEnergyCapability.getChunkEnergy(minecraft.level.getChunkAt(minecraft.player.blockPosition()))
-				.ifPresent(chunkEnergy -> {
-					final var text = I18n.get(TestMod3Lang.CHUNK_ENERGY_HUD.getTranslationKey(), chunkEnergy.getEnergyStored(), chunkEnergy.getMaxEnergyStored());
-					final var hudPos = TestMod3Config.CLIENT.chunkEnergyHUDPos;
-					GuiComponent.drawString(poseStack, minecraft.font, text, hudPos.x.get(), hudPos.y.get(), 0xFFFFFF);
-				});
+		final var chunkEnergy = ChunkEnergyCapability
+				.getChunkEnergy(minecraft.level.getChunkAt(minecraft.player.blockPosition()))
+				.orElseThrow(CapabilityNotPresentException::new);
+
+		final var text = I18n.get(TestMod3Lang.CHUNK_ENERGY_HUD.getTranslationKey(), chunkEnergy.getEnergyStored(), chunkEnergy.getMaxEnergyStored());
+		final var hudPos = TestMod3Config.CLIENT.chunkEnergyHUDPos;
+		GuiComponent.drawString(poseStack, minecraft.font, text, hudPos.x.get(), hudPos.y.get(), 0xFFFFFF);
 	}
 }
