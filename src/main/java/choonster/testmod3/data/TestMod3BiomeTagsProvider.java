@@ -4,11 +4,16 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.levelgen.ModBiomes;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BiomeTagsProvider;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
 /**
+ * Generates this mod's biome tags.
+ *
  * @author Choonster
  */
 public class TestMod3BiomeTagsProvider extends BiomeTagsProvider {
@@ -18,20 +23,13 @@ public class TestMod3BiomeTagsProvider extends BiomeTagsProvider {
 
 	@Override
 	protected void addTags() {
-		tag(Tags.Biomes.IS_HOT).add(
-				ModBiomes.DESERT_TEST.get()
-		);
+		tag(ModBiomes.DESERT_TEST, Tags.Biomes.IS_HOT_OVERWORLD, Tags.Biomes.IS_DRY_OVERWORLD, Tags.Biomes.IS_SANDY);
+	}
 
-		tag(Tags.Biomes.IS_DRY).add(
-				ModBiomes.DESERT_TEST.get()
-		);
-
-		tag(Tags.Biomes.IS_SANDY).add(
-				ModBiomes.DESERT_TEST.get()
-		);
-
-		tag(Tags.Biomes.IS_OVERWORLD).add(
-				ModBiomes.DESERT_TEST.get()
-		);
+	@SafeVarargs
+	private void tag(final RegistryObject<Biome> biome, final TagKey<Biome>... tags) {
+		for (final var key : tags) {
+			tag(key).add(biome.get());
+		}
 	}
 }

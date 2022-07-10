@@ -1,7 +1,6 @@
 package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.init.ModLootModifierSerializers;
 import choonster.testmod3.init.ModLootTables;
 import choonster.testmod3.world.level.storage.loot.modifiers.BlockEntityNBTLootModifier;
 import choonster.testmod3.world.level.storage.loot.modifiers.ItemLootModifier;
@@ -45,7 +44,7 @@ public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
 	protected void start() {
 		// Test for this thread:
 		// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2781780-chest-loot
-		add("loot_table_test", ModLootModifierSerializers.LOOT_TABLE.get(), new LootTableLootModifier(
+		add("loot_table_test", new LootTableLootModifier(
 				new LootItemCondition[]{
 						LootItemRandomChanceCondition.randomChance(0.5f).build(),
 						LootTableIdCondition.builder(BuiltInLootTables.SIMPLE_DUNGEON).build(),
@@ -56,7 +55,7 @@ public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
 		// Allows Mob Spawners to be dropped when broken with a Silk Touch pickaxe.
 		// Test for this thread:
 		// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2677402-unable-to-get-current-blocks-tile-entity-metadata
-		add("spawner_drops", ModLootModifierSerializers.TILE_ENTITY_NBT.get(), new BlockEntityNBTLootModifier(
+		add("spawner_drops", new BlockEntityNBTLootModifier(
 				new LootItemCondition[]{
 						LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.SPAWNER).build(),
 						SILK_TOUCH.build(),
@@ -64,7 +63,7 @@ public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
 		));
 
 		// Drops two sticks when the player harvests leaves
-		add("two_sticks_from_leaves", ModLootModifierSerializers.ITEM.get(), new ItemLootModifier(
+		add("two_sticks_from_leaves", new ItemLootModifier(
 				new LootItemCondition[]{
 						MatchBlockTag.builder(BlockTags.LEAVES).build(),
 				},
