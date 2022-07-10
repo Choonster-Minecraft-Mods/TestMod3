@@ -8,9 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.LockCode;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,9 +32,9 @@ public class SetLockCodeMessage {
 	}
 
 	public static SetLockCodeMessage decode(final FriendlyByteBuf buffer) {
-		final BlockPos pos = BlockPos.of(buffer.readLong());
-		final Direction facing = NetworkUtil.readNullableFacing(buffer);
-		final String lockCode = buffer.readUtf(Short.MAX_VALUE);
+		final var pos = BlockPos.of(buffer.readLong());
+		final var facing = NetworkUtil.readNullableFacing(buffer);
+		final var lockCode = buffer.readUtf(Short.MAX_VALUE);
 
 		return new SetLockCodeMessage(pos, facing, lockCode);
 	}
@@ -47,26 +45,20 @@ public class SetLockCodeMessage {
 		buffer.writeUtf(message.lockCode);
 	}
 
-
 	public static void handle(final SetLockCodeMessage message, final Supplier<NetworkEvent.Context> ctx) {
-		ctx.get().enqueueWork(() -> {
-			final ServerPlayer player = ctx.get().getSender();
-			final Level world = player.level;
+		final var player = ctx.get().getSender();
+		final var world = player.level;
 
-			player.resetLastActionTime();
+		player.resetLastActionTime();
 
-			if (world.isAreaLoaded(message.pos, 1)) {
-				LockCapability.getLock(world, message.pos, message.facing).ifPresent((lock) -> {
-					if (lock.isLocked()) {
-						player.sendSystemMessage(Component.translatable(TestMod3Lang.LOCK_ALREADY_LOCKED.getTranslationKey()));
-					}
+		if (world.isAreaLoaded(message.pos, 1)) {
+			LockCapability.getLock(world, message.pos, message.facing).ifPresent((lock) -> {
+				if (lock.isLocked()) {
+					player.sendSystemMessage(Component.translatable(TestMod3Lang.LOCK_ALREADY_LOCKED.getTranslationKey()));
+				}
 
-					lock.setLockCode(new LockCode(message.lockCode));
-				});
-			}
-		});
-
-		ctx.get().setPacketHandled(true);
+				lock.setLockCode(new LockCode(message.lockCode));
+			});
+		}
 	}
-
 }

@@ -4,7 +4,6 @@ import choonster.testmod3.client.util.ClientUtil;
 import choonster.testmod3.fluid.FluidTankSnapshot;
 import choonster.testmod3.world.level.block.FluidTankBlock;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -23,13 +22,13 @@ public class FluidTankContentsMessage {
 	}
 
 	public static FluidTankContentsMessage decode(final FriendlyByteBuf buffer) {
-		final int numTanks = buffer.readInt();
-		final FluidTankSnapshot[] fluidTankSnapshots = new FluidTankSnapshot[numTanks];
+		final var numTanks = buffer.readInt();
+		final var fluidTankSnapshots = new FluidTankSnapshot[numTanks];
 
-		for (int i = 0; i < numTanks; i++) {
-			final FluidStack contents = FluidStack.readFromPacket(buffer);
+		for (var i = 0; i < numTanks; i++) {
+			final var contents = FluidStack.readFromPacket(buffer);
 
-			final int capacity = buffer.readInt();
+			final var capacity = buffer.readInt();
 
 			fluidTankSnapshots[i] = new FluidTankSnapshot(contents, capacity);
 		}
@@ -40,8 +39,8 @@ public class FluidTankContentsMessage {
 	public static void encode(final FluidTankContentsMessage message, final FriendlyByteBuf buffer) {
 		buffer.writeInt(message.fluidTankSnapshots.length);
 
-		for (final FluidTankSnapshot snapshot : message.fluidTankSnapshots) {
-			final FluidStack contents = snapshot.contents();
+		for (final var snapshot : message.fluidTankSnapshots) {
+			final var contents = snapshot.contents();
 			contents.writeToPacket(buffer);
 
 			buffer.writeInt(snapshot.capacity());
@@ -49,17 +48,13 @@ public class FluidTankContentsMessage {
 	}
 
 	public static void handle(final FluidTankContentsMessage message, final Supplier<NetworkEvent.Context> ctx) {
-		ctx.get().enqueueWork(() -> {
-			final Player player = ClientUtil.getClientPlayer();
+		final var player = ClientUtil.getClientPlayer();
 
-			if (player == null) {
-				return;
-			}
+		if (player == null) {
+			return;
+		}
 
-			FluidTankBlock.getFluidDataForDisplay(message.fluidTankSnapshots)
-					.forEach(player::sendSystemMessage);
-		});
-
-		ctx.get().setPacketHandled(true);
+		FluidTankBlock.getFluidDataForDisplay(message.fluidTankSnapshots)
+				.forEach(player::sendSystemMessage);
 	}
 }

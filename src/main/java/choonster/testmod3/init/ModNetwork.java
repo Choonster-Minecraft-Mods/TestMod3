@@ -25,55 +25,55 @@ public class ModNetwork {
 		channel.messageBuilder(SaveSurvivalCommandBlockMessage.class, 1)
 				.decoder(SaveSurvivalCommandBlockMessage::decode)
 				.encoder(SaveSurvivalCommandBlockMessage::encode)
-				.consumer(SaveSurvivalCommandBlockMessage::handle)
+				.consumerMainThread(SaveSurvivalCommandBlockMessage::handle)
 				.add();
 
 		channel.messageBuilder(FluidTankContentsMessage.class, 2)
 				.decoder(FluidTankContentsMessage::decode)
 				.encoder(FluidTankContentsMessage::encode)
-				.consumer(FluidTankContentsMessage::handle)
+				.consumerMainThread(FluidTankContentsMessage::handle)
 				.add();
 
 		channel.messageBuilder(SetLockCodeMessage.class, 3)
 				.decoder(SetLockCodeMessage::decode)
 				.encoder(SetLockCodeMessage::encode)
-				.consumer(SetLockCodeMessage::handle)
+				.consumerMainThread(SetLockCodeMessage::handle)
 				.add();
 
 		channel.messageBuilder(UpdateChunkEnergyValueMessage.class, 4)
 				.decoder(UpdateChunkEnergyValueMessage::decode)
 				.encoder(UpdateChunkEnergyValueMessage::encode)
-				.consumer(UpdateChunkEnergyValueMessage::handle)
+				.consumerMainThread(UpdateChunkEnergyValueMessage::handle)
 				.add();
 
 		channel.messageBuilder(UpdateMenuFluidTankMessage.class, 6)
 				.decoder(UpdateMenuFluidTankMessage::decode)
 				.encoder(UpdateMenuFluidTankMessage::encode)
-				.consumer(UpdateMenuFluidTankMessage::handle)
+				.consumerMainThread(UpdateMenuFluidTankMessage::handle)
 				.add();
 
 		channel.messageBuilder(UpdateMenuHiddenBlockRevealerMessage.class, 8)
 				.decoder(UpdateMenuHiddenBlockRevealerMessage::decode)
 				.encoder(UpdateMenuHiddenBlockRevealerMessage::encode)
-				.consumer(UpdateMenuHiddenBlockRevealerMessage::handle)
+				.consumerMainThread(UpdateMenuHiddenBlockRevealerMessage::handle)
 				.add();
 
 		channel.messageBuilder(UpdateMenuLastUseTimeMessage.class, 10)
 				.decoder(UpdateMenuLastUseTimeMessage::decode)
 				.encoder(UpdateMenuLastUseTimeMessage::encode)
-				.consumer(UpdateMenuLastUseTimeMessage::handle)
+				.consumerMainThread(UpdateMenuLastUseTimeMessage::handle)
 				.add();
 
 		channel.messageBuilder(UpdateMenuPigSpawnerFiniteMessage.class, 12)
 				.decoder(UpdateMenuPigSpawnerFiniteMessage::decode)
 				.encoder(UpdateMenuPigSpawnerFiniteMessage::encode)
-				.consumer(UpdateMenuPigSpawnerFiniteMessage::handle)
+				.consumerMainThread(UpdateMenuPigSpawnerFiniteMessage::handle)
 				.add();
 
 		channel.messageBuilder(OpenClientScreenMessage.class, 13)
 				.decoder(OpenClientScreenMessage::decode)
 				.encoder(OpenClientScreenMessage::encode)
-				.consumer(OpenClientScreenMessage::handle)
+				.consumerMainThread(OpenClientScreenMessage::handle)
 				.add();
 
 		return channel;

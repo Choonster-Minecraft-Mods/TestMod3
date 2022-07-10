@@ -29,7 +29,6 @@ public class UpdateChunkEnergyValueMessage {
 	 */
 	private final int energy;
 
-
 	public UpdateChunkEnergyValueMessage(final IChunkEnergy chunkEnergy) {
 		chunkPos = chunkEnergy.getChunkPos();
 		energy = chunkEnergy.getEnergyStored();
@@ -54,20 +53,16 @@ public class UpdateChunkEnergyValueMessage {
 	}
 
 	public static void handle(final UpdateChunkEnergyValueMessage message, final Supplier<NetworkEvent.Context> ctx) {
-		ctx.get().enqueueWork(() -> {
-			final Optional<Level> optionalLevel = LogicalSidedProvider.CLIENTWORLD.get(ctx.get().getDirection().getReceptionSide());
+		final Optional<Level> optionalLevel = LogicalSidedProvider.CLIENTWORLD.get(ctx.get().getDirection().getReceptionSide());
 
-			optionalLevel.ifPresent(world -> {
-				final var iChunkEnergy = ChunkEnergyCapability
-						.getChunkEnergy(world, message.chunkPos)
-						.orElseThrow(CapabilityNotPresentException::new);
+		optionalLevel.ifPresent(world -> {
+			final var iChunkEnergy = ChunkEnergyCapability
+					.getChunkEnergy(world, message.chunkPos)
+					.orElseThrow(CapabilityNotPresentException::new);
 
-				if (iChunkEnergy instanceof ChunkEnergy chunkEnergy) {
-					chunkEnergy.setEnergy(message.energy);
-				}
-			});
+			if (iChunkEnergy instanceof ChunkEnergy chunkEnergy) {
+				chunkEnergy.setEnergy(message.energy);
+			}
 		});
-
-		ctx.get().setPacketHandled(true);
 	}
 }

@@ -3,7 +3,6 @@ package choonster.testmod3.network.capability;
 import choonster.testmod3.client.util.ClientUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.network.NetworkEvent;
@@ -114,7 +113,7 @@ public abstract class UpdateMenuCapabilityMessage<HANDLER, DATA> {
 			final CapabilityMenuUpdateMessageUtils.CapabilityDataDecoder<DATA> capabilityDataDecoder,
 			final MessageFactory<HANDLER, DATA, MESSAGE> messageFactory
 	) {
-		final boolean hasFacing = buffer.readBoolean();
+		final var hasFacing = buffer.readBoolean();
 		final Direction facing;
 		if (hasFacing) {
 			facing = buffer.readEnum(Direction.class);
@@ -122,11 +121,11 @@ public abstract class UpdateMenuCapabilityMessage<HANDLER, DATA> {
 			facing = null;
 		}
 
-		final int windowID = buffer.readInt();
-		final int stateID = buffer.readInt();
-		final int slotNumber = buffer.readInt();
+		final var windowID = buffer.readInt();
+		final var stateID = buffer.readInt();
+		final var slotNumber = buffer.readInt();
 
-		final boolean hasData = buffer.readBoolean();
+		final var hasData = buffer.readBoolean();
 		final DATA capabilityData;
 		if (hasData) {
 			capabilityData = capabilityDataDecoder.decode(buffer);
@@ -157,7 +156,7 @@ public abstract class UpdateMenuCapabilityMessage<HANDLER, DATA> {
 			final FriendlyByteBuf buffer,
 			final CapabilityMenuUpdateMessageUtils.CapabilityDataEncoder<DATA> capabilityDataEncoder
 	) {
-		final boolean hasFacing = message.facing != null;
+		final var hasFacing = message.facing != null;
 		buffer.writeBoolean(hasFacing);
 
 		if (hasFacing) {
@@ -168,7 +167,7 @@ public abstract class UpdateMenuCapabilityMessage<HANDLER, DATA> {
 		buffer.writeInt(message.stateID);
 		buffer.writeInt(message.slotNumber);
 
-		final boolean hasData = message.hasData();
+		final var hasData = message.hasData();
 		buffer.writeBoolean(hasData);
 
 		if (hasData) {
@@ -196,39 +195,30 @@ public abstract class UpdateMenuCapabilityMessage<HANDLER, DATA> {
 			final Supplier<NetworkEvent.Context> ctx,
 			final CapabilityMenuUpdateMessageUtils.CapabilityDataApplier<HANDLER, DATA> capabilityDataApplier
 	) {
-		if (!message.hasData()) { // Don't do anything if no data was sent
-			ctx.get().setPacketHandled(true);
+		final var player = ClientUtil.getClientPlayer();
+
+		if (player == null) {
 			return;
 		}
 
-		ctx.get().enqueueWork(() -> {
-			final Player player = ClientUtil.getClientPlayer();
+		final AbstractContainerMenu container;
+		if (message.containerID == 0) {
+			container = player.inventoryMenu;
+		} else if (message.containerID == player.containerMenu.containerId) {
+			container = player.containerMenu;
+		} else {
+			return;
+		}
 
-			if (player == null) {
-				return;
-			}
-
-			final AbstractContainerMenu container;
-			if (message.containerID == 0) {
-				container = player.inventoryMenu;
-			} else if (message.containerID == player.containerMenu.containerId) {
-				container = player.containerMenu;
-			} else {
-				return;
-			}
-
-			CapabilityMenuUpdateMessageUtils.applyCapabilityDataToMenuSlot(
-					container,
-					message.slotNumber,
-					message.stateID,
-					message.capability,
-					message.facing,
-					message.capabilityData,
-					capabilityDataApplier
-			);
-		});
-
-		ctx.get().setPacketHandled(true);
+		CapabilityMenuUpdateMessageUtils.applyCapabilityDataToMenuSlot(
+				container,
+				message.slotNumber,
+				message.stateID,
+				message.capability,
+				message.facing,
+				message.capabilityData,
+				capabilityDataApplier
+		);
 	}
 
 	/**

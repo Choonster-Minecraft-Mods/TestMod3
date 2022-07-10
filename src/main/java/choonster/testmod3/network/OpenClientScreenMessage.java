@@ -42,9 +42,6 @@ public class OpenClientScreenMessage {
 	}
 
 	public static void handle(final OpenClientScreenMessage message, final Supplier<NetworkEvent.Context> ctx) {
-		ctx.get().enqueueWork(() ->
-				DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientScreenManager.openScreen(message.id, message.additionalData))
-		);
-		ctx.get().setPacketHandled(true);
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientScreenManager.openScreen(message.id, message.additionalData));
 	}
 }

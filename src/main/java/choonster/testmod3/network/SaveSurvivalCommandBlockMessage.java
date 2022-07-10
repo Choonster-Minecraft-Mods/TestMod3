@@ -6,18 +6,12 @@ import choonster.testmod3.world.level.block.entity.SurvivalCommandBlock;
 import choonster.testmod3.world.level.block.entity.SurvivalCommandBlockEntity;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.StringUtil;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CommandBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
@@ -78,10 +72,10 @@ public class SaveSurvivalCommandBlockMessage {
 	}
 
 	public static SaveSurvivalCommandBlockMessage decode(final FriendlyByteBuf buffer) {
-		final SurvivalCommandBlock.Type type = buffer.readEnum(SurvivalCommandBlock.Type.class);
+		final var type = buffer.readEnum(SurvivalCommandBlock.Type.class);
 
 		BlockPos blockPos = null;
-		int minecartEntityID = -1;
+		var minecartEntityID = -1;
 
 		switch (type) {
 			case BLOCK -> blockPos = buffer.readBlockPos();
@@ -116,65 +110,61 @@ public class SaveSurvivalCommandBlockMessage {
 	}
 
 	public static void handle(final SaveSurvivalCommandBlockMessage message, final Supplier<NetworkEvent.Context> ctx) {
-		ctx.get().enqueueWork(() -> {
-			final Player player = ctx.get().getSender();
-			final Level world = player.level;
-			final MinecraftServer minecraftServer = world.getServer();
+		final var player = ctx.get().getSender();
+		final var world = player.level;
+		final var minecraftServer = world.getServer();
 
-			if (minecraftServer != null && !minecraftServer.isCommandBlockEnabled()) {
-				player.sendSystemMessage(Component.translatable("advMode.notEnabled"));
-			} else if (!player.hasPermissions(2)) {
-				player.sendSystemMessage(Component.translatable("advMode.notAllowed"));
-			} else {
-				try {
-					SurvivalCommandBlock survivalCommandBlock = null;
+		if (minecraftServer != null && !minecraftServer.isCommandBlockEnabled()) {
+			player.sendSystemMessage(Component.translatable("advMode.notEnabled"));
+		} else if (!player.hasPermissions(2)) {
+			player.sendSystemMessage(Component.translatable("advMode.notAllowed"));
+		} else {
+			try {
+				SurvivalCommandBlock survivalCommandBlock = null;
 
-					if (message.type == SurvivalCommandBlock.Type.BLOCK) {
-						final RegistryObject<? extends Block> newBlock = switch (message.commandBlockMode) {
-							case SEQUENCE -> ModBlocks.CHAIN_SURVIVAL_COMMAND_BLOCK;
-							case AUTO -> ModBlocks.REPEATING_SURVIVAL_COMMAND_BLOCK;
-							default -> ModBlocks.SURVIVAL_COMMAND_BLOCK;
-						};
+				if (message.type == SurvivalCommandBlock.Type.BLOCK) {
+					final RegistryObject<? extends Block> newBlock = switch (message.commandBlockMode) {
+						case SEQUENCE -> ModBlocks.CHAIN_SURVIVAL_COMMAND_BLOCK;
+						case AUTO -> ModBlocks.REPEATING_SURVIVAL_COMMAND_BLOCK;
+						default -> ModBlocks.SURVIVAL_COMMAND_BLOCK;
+					};
 
-						final BlockEntity existingBlockEntity = world.getBlockEntity(message.blockPos);
+					final var existingBlockEntity = world.getBlockEntity(message.blockPos);
 
-						final Direction facing = world.getBlockState(message.blockPos).getValue(CommandBlock.FACING);
-						final BlockState newState = newBlock.get().defaultBlockState().setValue(CommandBlock.FACING, facing).setValue(CommandBlock.CONDITIONAL, message.conditional);
-						world.setBlockAndUpdate(message.blockPos, newState);
+					final var facing = world.getBlockState(message.blockPos).getValue(CommandBlock.FACING);
+					final var newState = newBlock.get().defaultBlockState().setValue(CommandBlock.FACING, facing).setValue(CommandBlock.CONDITIONAL, message.conditional);
+					world.setBlockAndUpdate(message.blockPos, newState);
 
-						final BlockEntity newBlockEntity = world.getBlockEntity(message.blockPos);
-						if (
-								existingBlockEntity instanceof SurvivalCommandBlockEntity &&
-										newBlockEntity instanceof final SurvivalCommandBlockEntity newSurvivalCommandBlockEntity
-						) {
-							newSurvivalCommandBlockEntity.deserializeNBT(existingBlockEntity.serializeNBT());
-							survivalCommandBlock = newSurvivalCommandBlockEntity.getCommandBlock();
-							newSurvivalCommandBlockEntity.setAutomatic(message.automatic);
-						}
-					} else if (message.type == SurvivalCommandBlock.Type.MINECART) {
-						// no-op
+					final var newBlockEntity = world.getBlockEntity(message.blockPos);
+					if (
+							existingBlockEntity instanceof SurvivalCommandBlockEntity &&
+									newBlockEntity instanceof final SurvivalCommandBlockEntity newSurvivalCommandBlockEntity
+					) {
+						newSurvivalCommandBlockEntity.deserializeNBT(existingBlockEntity.serializeNBT());
+						survivalCommandBlock = newSurvivalCommandBlockEntity.getCommandBlock();
+						newSurvivalCommandBlockEntity.setAutomatic(message.automatic);
 					}
-
-					if (survivalCommandBlock != null) {
-						survivalCommandBlock.setCommand(message.command);
-						survivalCommandBlock.setTrackOutput(message.shouldTrackOutput);
-
-						if (!message.shouldTrackOutput) {
-							survivalCommandBlock.setLastOutput(null);
-						}
-
-						survivalCommandBlock.onUpdated();
-
-						if (!StringUtil.isNullOrEmpty(message.command)) {
-							player.sendSystemMessage(Component.translatable("advMode.setCommand.success", message.command));
-						}
-					}
-				} catch (final Exception e) {
-					LOGGER.error("Couldn't set survival command block", e);
+				} else if (message.type == SurvivalCommandBlock.Type.MINECART) {
+					// no-op
 				}
-			}
-		});
 
-		ctx.get().setPacketHandled(true);
+				if (survivalCommandBlock != null) {
+					survivalCommandBlock.setCommand(message.command);
+					survivalCommandBlock.setTrackOutput(message.shouldTrackOutput);
+
+					if (!message.shouldTrackOutput) {
+						survivalCommandBlock.setLastOutput(null);
+					}
+
+					survivalCommandBlock.onUpdated();
+
+					if (!StringUtil.isNullOrEmpty(message.command)) {
+						player.sendSystemMessage(Component.translatable("advMode.setCommand.success", message.command));
+					}
+				}
+			} catch (final Exception e) {
+				LOGGER.error("Couldn't set survival command block", e);
+			}
+		}
 	}
 }
