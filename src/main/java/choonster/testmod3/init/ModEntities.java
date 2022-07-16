@@ -20,7 +20,7 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.function.Supplier;
 
 public class ModEntities {
-	private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, TestMod3.MODID);
+	private static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, TestMod3.MODID);
 
 	private static boolean isInitialised;
 
@@ -51,7 +51,7 @@ public class ModEntities {
 			throw new IllegalStateException("Already initialised");
 		}
 
-		ENTITIES.register(modEventBus);
+		ENTITY_TYPES.register(modEventBus);
 
 		isInitialised = true;
 	}
@@ -64,7 +64,7 @@ public class ModEntities {
 	 * @return A RegistryObject reference to the entity type
 	 */
 	private static <T extends Entity> RegistryObject<EntityType<T>> registerEntityType(final String name, final Supplier<EntityType.Builder<T>> factory) {
-		return ENTITIES.register(name,
+		return ENTITY_TYPES.register(name,
 				() -> factory.get().build(new ResourceLocation(TestMod3.MODID, name).toString())
 		);
 	}

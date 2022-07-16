@@ -87,11 +87,11 @@ public final class LastUseTimeCapability {
 		 */
 		@SubscribeEvent
 		public static void playerInteract(final PlayerInteractEvent.RightClickItem event) {
-			final ItemStack itemStack = event.getItemStack();
+			final var itemStack = event.getItemStack();
 
 			getLastUseTime(itemStack).ifPresent(lastUseTime -> {
 				if (lastUseTime.automaticUpdates()) {
-					updateLastUseTime(event.getPlayer(), itemStack);
+					updateLastUseTime(event.getEntity(), itemStack);
 				}
 			});
 		}

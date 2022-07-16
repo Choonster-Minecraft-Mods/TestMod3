@@ -26,7 +26,6 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -95,10 +94,10 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 	public static List<Component> getFluidDataForDisplay(final FluidTankSnapshot[] fluidTankSnapshots) {
 		final List<Component> data = new ArrayList<>();
 
-		boolean hasFluid = false;
+		var hasFluid = false;
 
-		for (final FluidTankSnapshot snapshot : fluidTankSnapshots) {
-			final FluidStack contents = snapshot.contents();
+		for (final var snapshot : fluidTankSnapshots) {
+			final var contents = snapshot.contents();
 			if (!contents.isEmpty()) {
 				hasFluid = true;
 				data.add(Component.translatable(TestMod3Lang.BLOCK_DESC_FLUID_TANK_FLUID.getTranslationKey(), contents.getDisplayName(), contents.getAmount(), snapshot.capacity()));
@@ -115,15 +114,15 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 	@SuppressWarnings("deprecation")
 	@Override
 	public InteractionResult use(final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult rayTraceResult) {
-		final ItemStack heldItem = player.getItemInHand(hand);
+		final var heldItem = player.getItemInHand(hand);
 		return getFluidHandler(level, pos)
 				.map(fluidHandler -> {
 					// Try fill/empty the held fluid container from the tank
-					final boolean success = FluidUtil.interactWithFluidHandler(player, hand, level, pos, rayTraceResult.getDirection());
+					final var success = FluidUtil.interactWithFluidHandler(player, hand, level, pos, rayTraceResult.getDirection());
 
 					// If the contents changed or this is the off hand, send a chat message to the player
 					if (!level.isClientSide && (success || hand == InteractionHand.OFF_HAND)) {
-						final FluidTankSnapshot[] fluidTankSnapshots = FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler);
+						final var fluidTankSnapshots = FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler);
 						TestMod3.network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new FluidTankContentsMessage(fluidTankSnapshots));
 					}
 

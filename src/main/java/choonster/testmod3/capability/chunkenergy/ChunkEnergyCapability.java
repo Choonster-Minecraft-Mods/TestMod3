@@ -16,7 +16,7 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.world.ChunkWatchEvent;
+import net.minecraftforge.event.level.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
@@ -78,8 +78,8 @@ public class ChunkEnergyCapability {
 	private static class EventHandler {
 		@SubscribeEvent
 		public static void attachChunkCapabilities(final AttachCapabilitiesEvent<LevelChunk> event) {
-			final LevelChunk chunk = event.getObject();
-			final IChunkEnergy chunkEnergy = new ChunkEnergy(DEFAULT_CAPACITY, chunk.getLevel(), chunk.getPos());
+			final var chunk = event.getObject();
+			final var chunkEnergy = new ChunkEnergy(DEFAULT_CAPACITY, chunk.getLevel(), chunk.getPos());
 			event.addCapability(ID, new SerializableCapabilityProvider<>(CHUNK_ENERGY_CHUNK_CAPABILITY, DEFAULT_FACING, chunkEnergy));
 		}
 
@@ -91,7 +91,7 @@ public class ChunkEnergyCapability {
 		@SubscribeEvent
 		public static void chunkWatch(final ChunkWatchEvent.Watch event) {
 			final var player = event.getPlayer();
-			final var chunkEnergy = getChunkEnergy(event.getWorld(), event.getPos()).orElseThrow(CapabilityNotPresentException::new);
+			final var chunkEnergy = getChunkEnergy(event.getLevel(), event.getPos()).orElseThrow(CapabilityNotPresentException::new);
 
 			TestMod3.network.send(PacketDistributor.PLAYER.with(() -> player), new UpdateChunkEnergyValueMessage(chunkEnergy));
 		}

@@ -11,16 +11,11 @@ import net.minecraft.commands.CommandSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.LazyOptional;
@@ -29,10 +24,8 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.slf4j.Marker;
-
 import org.jetbrains.annotations.Nullable;
-import java.util.List;
+import org.slf4j.Marker;
 
 /**
  * Capability for {@link IPigSpawner}.
@@ -111,7 +104,7 @@ public final class PigSpawnerCapability {
 		 * If there's an {@link IPigSpawnerInteractable}, call {@link IPigSpawnerInteractable#interact} on it.
 		 *
 		 * @param pigSpawner      The pig spawner
-		 * @param world           The level
+		 * @param level           The level
 		 * @param x               The x position to spawn the pig at
 		 * @param y               The y position to spawn the pig at
 		 * @param z               The z position to spawn the pig at
@@ -119,19 +112,19 @@ public final class PigSpawnerCapability {
 		 * @param interactablePos The position of the IPigSpawnerInteractable
 		 * @param commandSource   The command source, if any
 		 */
-		private static void trySpawnPig(final IPigSpawner pigSpawner, final Level world, final double x, final double y, final double z, @Nullable final IPigSpawnerInteractable interactable, final BlockPos interactablePos, @Nullable final CommandSource commandSource) {
-			if (world.isClientSide) {
+		private static void trySpawnPig(final IPigSpawner pigSpawner, final Level level, final double x, final double y, final double z, @Nullable final IPigSpawnerInteractable interactable, final BlockPos interactablePos, @Nullable final CommandSource commandSource) {
+			if (level.isClientSide) {
 				return;
 			}
 
-			boolean shouldSpawnPig = true;
+			var shouldSpawnPig = true;
 
 			if (interactable != null) {
-				shouldSpawnPig = !interactable.interact(pigSpawner, world, interactablePos, commandSource);
+				shouldSpawnPig = !interactable.interact(pigSpawner, level, interactablePos, commandSource);
 			}
 
-			if (shouldSpawnPig && pigSpawner.canSpawnPig(world, x, y, z)) {
-				pigSpawner.spawnPig(world, x, y, z);
+			if (shouldSpawnPig && pigSpawner.canSpawnPig(level, x, y, z)) {
+				pigSpawner.spawnPig(level, x, y, z);
 			}
 		}
 
@@ -144,20 +137,20 @@ public final class PigSpawnerCapability {
 		 */
 		@SubscribeEvent
 		public static void playerInteract(final PlayerInteractEvent.RightClickBlock event) {
-			final Direction facing = event.getFace();
+			final var facing = event.getFace();
 			assert facing != null;
 
-			final BlockPos spawnPos = event.getPos().relative(facing);
+			final var spawnPos = event.getPos().relative(facing);
 			final double x = spawnPos.getX() + 0.5, y = spawnPos.getY() + 0.5, z = spawnPos.getZ() + 0.5;
 
-			final Level world = event.getWorld();
-			final Block block = world.getBlockState(event.getPos()).getBlock();
-			final IPigSpawnerInteractable interactable = block instanceof IPigSpawnerInteractable ? (IPigSpawnerInteractable) block : null;
+			final var level = event.getLevel();
+			final var block = level.getBlockState(event.getPos()).getBlock();
+			final var interactable = block instanceof IPigSpawnerInteractable ? (IPigSpawnerInteractable) block : null;
 
-			final Player player = event.getPlayer();
+			final var player = event.getEntity();
 
 			getPigSpawner(event.getItemStack())
-					.ifPresent(pigSpawner -> trySpawnPig(pigSpawner, world, x, y, z, interactable, event.getPos(), player));
+					.ifPresent(pigSpawner -> trySpawnPig(pigSpawner, level, x, y, z, interactable, event.getPos(), player));
 		}
 
 		/**
@@ -169,16 +162,16 @@ public final class PigSpawnerCapability {
 		 */
 		@SubscribeEvent
 		public static void entityInteract(final PlayerInteractEvent.EntityInteract event) {
-			final Level world = event.getPlayer().getCommandSenderWorld();
+			final var level = event.getLevel();
 
-			final Entity target = event.getTarget();
+			final var target = event.getTarget();
 			final double x = target.getX(), y = target.getY(), z = target.getZ();
-			final IPigSpawnerInteractable interactable = target instanceof IPigSpawnerInteractable ? (IPigSpawnerInteractable) target : null;
+			final var interactable = target instanceof IPigSpawnerInteractable ? (IPigSpawnerInteractable) target : null;
 
-			final InteractionHand hand = event.getHand();
+			final var hand = event.getHand();
 
-			getPigSpawner(event.getPlayer().getItemInHand(hand))
-					.ifPresent(pigSpawner -> trySpawnPig(pigSpawner, world, x, y, z, interactable, target.blockPosition(), event.getPlayer()));
+			getPigSpawner(event.getEntity().getItemInHand(hand))
+					.ifPresent(pigSpawner -> trySpawnPig(pigSpawner, level, x, y, z, interactable, target.blockPosition(), event.getEntity()));
 		}
 
 	}
@@ -193,9 +186,9 @@ public final class PigSpawnerCapability {
 		@SubscribeEvent
 		public static void itemTooltip(final ItemTooltipEvent event) {
 			getPigSpawner(event.getItemStack()).ifPresent(pigSpawner -> {
-				final Style style = Style.EMPTY.withColor(ChatFormatting.LIGHT_PURPLE);
+				final var style = Style.EMPTY.withColor(ChatFormatting.LIGHT_PURPLE);
 
-				final List<MutableComponent> tooltipLines = pigSpawner
+				final var tooltipLines = pigSpawner
 						.getTooltipLines()
 						.stream()
 						.map(textComponent -> textComponent.setStyle(style))

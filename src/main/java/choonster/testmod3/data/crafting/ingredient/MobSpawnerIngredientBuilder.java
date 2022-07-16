@@ -72,7 +72,7 @@ public class MobSpawnerIngredientBuilder {
 			throw new IllegalStateException("Mob spawner ingredient " + spawner + " has no EntityType");
 		}
 
-		if (ForgeRegistries.ENTITIES.getKey(entityType) == null) {
+		if (ForgeRegistries.ENTITY_TYPES.getKey(entityType) == null) {
 			throw new IllegalStateException("Mob spawner ingredient " + spawner + " has EntityType with no registry name");
 		}
 	}

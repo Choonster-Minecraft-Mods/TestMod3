@@ -48,6 +48,6 @@ public class TestMod3EntityLootTables extends EntityLoot {
 
 	@Override
 	protected Iterable<EntityType<?>> getKnownEntities() {
-		return RegistryUtil.getModRegistryEntries(ForgeRegistries.ENTITIES);
+		return RegistryUtil.getModRegistryEntries(ForgeRegistries.ENTITY_TYPES);
 	}
 }

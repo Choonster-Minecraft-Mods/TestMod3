@@ -6,12 +6,10 @@ import choonster.testmod3.world.level.block.entity.RestrictedFluidTankBlockEntit
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -31,11 +29,11 @@ public class RestrictedFluidTankEnabledFacingsProbeInfoProvider<BLOCK extends Re
 			final ProbeMode mode, final IProbeInfo probeInfo, final Player player,
 			final Level world, final BlockState blockState, final IProbeHitData data
 	) {
-		final BlockPos pos = data.getPos();
-		final BlockEntity tileEntity = world.getBlockEntity(pos);
+		final var pos = data.getPos();
+		final var blockEntity = world.getBlockEntity(pos);
 
-		if (tileEntity instanceof RestrictedFluidTankBlockEntity) {
-			final String enabledFacingsString = ((RestrictedFluidTankBlock) blockState.getBlock())
+		if (blockEntity instanceof RestrictedFluidTankBlockEntity) {
+			final var enabledFacingsString = ((RestrictedFluidTankBlock) blockState.getBlock())
 					.getEnabledFacingsString(world, pos);
 
 			probeInfo.text(Component.translatable(

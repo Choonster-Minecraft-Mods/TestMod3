@@ -6,7 +6,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -33,7 +33,7 @@ public class BlockEventHandler {
 	 */
 	@SubscribeEvent
 	public static void breakSpeed(final PlayerEvent.BreakSpeed event) {
-		if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getPlayer())) {
+		if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getEntity())) {
 			event.setCanceled(true);
 		}
 	}

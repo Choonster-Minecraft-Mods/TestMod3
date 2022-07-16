@@ -15,11 +15,8 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.fluids.FluidActionResult;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -36,29 +33,29 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(final CraftingContainer inv) {
-		final Set<FluidContainerIngredient> fluidContainerIngredients = getIngredients()
+		final var fluidContainerIngredients = getIngredients()
 				.stream()
 				.filter(ingredient -> ingredient instanceof FluidContainerIngredient)
 				.map(ingredient -> (FluidContainerIngredient) ingredient)
 				.collect(Collectors.toSet());
 
-		final NonNullList<ItemStack> remainingItems = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
+		final var remainingItems = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
 
-		for (int i = 0; i < remainingItems.size(); ++i) {
-			final ItemStack stack = inv.getItem(i);
+		for (var i = 0; i < remainingItems.size(); ++i) {
+			final var stack = inv.getItem(i);
 
 			if (stack.isEmpty()) {
 				continue;
 			}
 
-			final Optional<FluidContainerIngredient> matchingIngredient = fluidContainerIngredients
+			final var matchingIngredient = fluidContainerIngredients
 					.stream()
 					.filter(ingredient -> ingredient.test(stack))
 					.findFirst();
 
 			if (matchingIngredient.isPresent()) {
-				final FluidContainerIngredient ingredient = matchingIngredient.get();
-				final FluidActionResult drainResult = ModFluidUtil.drainContainer(stack, ingredient.getFluidStack());
+				final var ingredient = matchingIngredient.get();
+				final var drainResult = ModFluidUtil.drainContainer(stack, ingredient.getFluidStack());
 
 				if (drainResult.isSuccess()) {
 					remainingItems.set(i, drainResult.getResult());
@@ -69,7 +66,7 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 				}
 			}
 
-			remainingItems.set(i, ForgeHooks.getContainerItem(stack));
+			remainingItems.set(i, ForgeHooks.getCraftingRemainingItem(stack));
 		}
 
 		return remainingItems;
@@ -78,9 +75,9 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 	public static class Serializer implements RecipeSerializer<ShapelessFluidContainerRecipe> {
 		@Override
 		public ShapelessFluidContainerRecipe fromJson(final ResourceLocation recipeId, final JsonObject json) {
-			final String group = GsonHelper.getAsString(json, "group", "");
-			final NonNullList<Ingredient> ingredients = RecipeUtil.parseShapeless(json);
-			final ItemStack result = CraftingHelper.getItemStack(GsonHelper.getAsJsonObject(json, "result"), true);
+			final var group = GsonHelper.getAsString(json, "group", "");
+			final var ingredients = RecipeUtil.parseShapeless(json);
+			final var result = CraftingHelper.getItemStack(GsonHelper.getAsJsonObject(json, "result"), true);
 
 			ingredients
 					.stream()
@@ -94,13 +91,13 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 		@Nullable
 		@Override
 		public ShapelessFluidContainerRecipe fromNetwork(final ResourceLocation recipeId, final FriendlyByteBuf buffer) {
-			final String group = buffer.readUtf(Short.MAX_VALUE);
-			final int numIngredients = buffer.readVarInt();
-			final NonNullList<Ingredient> ingredients = NonNullList.withSize(numIngredients, Ingredient.EMPTY);
+			final var group = buffer.readUtf(Short.MAX_VALUE);
+			final var numIngredients = buffer.readVarInt();
+			final var ingredients = NonNullList.withSize(numIngredients, Ingredient.EMPTY);
 
 			ingredients.replaceAll(ignored -> Ingredient.fromNetwork(buffer));
 
-			final ItemStack result = buffer.readItem();
+			final var result = buffer.readItem();
 
 			return new ShapelessFluidContainerRecipe(recipeId, group, result, ingredients);
 		}
@@ -110,7 +107,7 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 			buffer.writeUtf(recipe.getGroup());
 			buffer.writeVarInt(recipe.getIngredients().size());
 
-			for (final Ingredient ingredient : recipe.getIngredients()) {
+			for (final var ingredient : recipe.getIngredients()) {
 				ingredient.toNetwork(buffer);
 			}
 

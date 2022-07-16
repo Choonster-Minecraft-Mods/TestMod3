@@ -14,7 +14,7 @@ import net.minecraftforge.registries.RegistryObject;
  * @author Choonster
  */
 public class ModMenuTypes {
-	private static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, TestMod3.MODID);
+	private static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, TestMod3.MODID);
 
 	private static boolean isInitialised;
 

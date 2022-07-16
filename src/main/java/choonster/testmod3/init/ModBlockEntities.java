@@ -11,7 +11,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class ModBlockEntities {
-	private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, TestMod3.MODID);
+	private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, TestMod3.MODID);
 
 	private static boolean isInitialised;
 
@@ -76,7 +76,7 @@ public class ModBlockEntities {
 		return BLOCK_ENTITY_TYPES.register(name, () -> {
 			@SuppressWarnings("ConstantConditions")
 			// dataFixerType will always be null until mod data fixers are implemented
-			final BlockEntityType<T> blockEntityType = BlockEntityType.Builder
+			final var blockEntityType = BlockEntityType.Builder
 					.of(blockEntitySupplier, validBlock.get())
 					.build(null);
 

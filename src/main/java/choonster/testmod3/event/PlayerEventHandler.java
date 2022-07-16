@@ -4,8 +4,6 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.Constants;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -34,13 +32,13 @@ public class PlayerEventHandler {
 	 */
 	@SubscribeEvent
 	public static void playerLoggedIn(final PlayerEvent.PlayerLoggedInEvent event) {
-		final Player player = event.getPlayer();
+		final var player = event.getEntity();
 
-		final CompoundTag entityData = player.getPersistentData();
-		final CompoundTag persistedData = entityData.getCompound(Player.PERSISTED_NBT_TAG);
+		final var entityData = player.getPersistentData();
+		final var persistedData = entityData.getCompound(Player.PERSISTED_NBT_TAG);
 		entityData.put(Player.PERSISTED_NBT_TAG, persistedData);
 
-		final String key = Constants.RESOURCE_PREFIX + "ReceivedItems";
+		final var key = Constants.RESOURCE_PREFIX + "ReceivedItems";
 		final TestMod3Lang message;
 
 		if (persistedData.getBoolean(key)) {
@@ -66,7 +64,7 @@ public class PlayerEventHandler {
 	@SubscribeEvent
 	public static void livingDeath(final LivingDeathEvent event) {
 		if (event.getEntity() instanceof final Player player && !event.getEntity().getCommandSenderWorld().isClientSide) {
-			final BlockPos pos = player.blockPosition();
+			final var pos = player.blockPosition();
 			player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_DEATH_COORDINATES.getTranslationKey(), pos.getX(), pos.getY(), pos.getZ(), player.level.dimension()));
 		}
 	}

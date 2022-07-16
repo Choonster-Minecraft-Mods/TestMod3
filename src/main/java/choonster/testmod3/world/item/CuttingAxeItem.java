@@ -18,14 +18,14 @@ public class CuttingAxeItem extends AxeItem {
 	}
 
 	@Override
-	public boolean hasContainerItem(final ItemStack stack) {
+	public boolean hasCraftingRemainingItem(final ItemStack stack) {
 		return true;
 	}
 
 	@Override
-	public ItemStack getContainerItem(ItemStack stack) {
-		stack = stack.copy();
-		stack.hurt(1, random, null);
-		return stack;
+	public ItemStack getCraftingRemainingItem(final ItemStack itemStack) {
+		final var remainingItem = itemStack.copy();
+		remainingItem.hurt(1, random, null);
+		return remainingItem;
 	}
 }

@@ -7,7 +7,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
@@ -29,7 +28,7 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 	}
 
 	private ItemStack damageAxe(final ItemStack stack) {
-		final Player craftingPlayer = ForgeHooks.getCraftingPlayer();
+		final var craftingPlayer = ForgeHooks.getCraftingPlayer();
 		if (stack.hurt(1, craftingPlayer.getCommandSenderWorld().random, craftingPlayer instanceof ServerPlayer ? (ServerPlayer) craftingPlayer : null)) {
 			ForgeEventFactory.onPlayerDestroyItem(craftingPlayer, stack, null);
 			return ItemStack.EMPTY;
@@ -40,15 +39,15 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(final CraftingContainer inv) {
-		final NonNullList<ItemStack> remainingItems = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
+		final var remainingItems = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
 
-		for (int i = 0; i < remainingItems.size(); ++i) {
-			final ItemStack itemstack = inv.getItem(i);
+		for (var i = 0; i < remainingItems.size(); ++i) {
+			final var stack = inv.getItem(i);
 
-			if (!itemstack.isEmpty() && itemstack.getItem() instanceof AxeItem) {
-				remainingItems.set(i, damageAxe(itemstack.copy()));
+			if (!stack.isEmpty() && stack.getItem() instanceof AxeItem) {
+				remainingItems.set(i, damageAxe(stack.copy()));
 			} else {
-				remainingItems.set(i, ForgeHooks.getContainerItem(itemstack));
+				remainingItems.set(i, ForgeHooks.getCraftingRemainingItem(stack));
 			}
 		}
 
@@ -63,22 +62,22 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 	public static class Serializer implements RecipeSerializer<ShapelessCuttingRecipe> {
 		@Override
 		public ShapelessCuttingRecipe fromJson(final ResourceLocation recipeID, final JsonObject json) {
-			final String group = GsonHelper.getAsString(json, "group", "");
-			final NonNullList<Ingredient> ingredients = RecipeUtil.parseShapeless(json);
-			final ItemStack result = CraftingHelper.getItemStack(GsonHelper.getAsJsonObject(json, "result"), true);
+			final var group = GsonHelper.getAsString(json, "group", "");
+			final var ingredients = RecipeUtil.parseShapeless(json);
+			final var result = CraftingHelper.getItemStack(GsonHelper.getAsJsonObject(json, "result"), true);
 
 			return new ShapelessCuttingRecipe(recipeID, group, result, ingredients);
 		}
 
 		@Override
 		public ShapelessCuttingRecipe fromNetwork(final ResourceLocation recipeID, final FriendlyByteBuf buffer) {
-			final String group = buffer.readUtf(Short.MAX_VALUE);
-			final int numIngredients = buffer.readVarInt();
-			final NonNullList<Ingredient> ingredients = NonNullList.withSize(numIngredients, Ingredient.EMPTY);
+			final var group = buffer.readUtf(Short.MAX_VALUE);
+			final var numIngredients = buffer.readVarInt();
+			final var ingredients = NonNullList.withSize(numIngredients, Ingredient.EMPTY);
 
 			ingredients.replaceAll(ignored -> Ingredient.fromNetwork(buffer));
 
-			final ItemStack result = buffer.readItem();
+			final var result = buffer.readItem();
 
 			return new ShapelessCuttingRecipe(recipeID, group, result, ingredients);
 		}
@@ -88,7 +87,7 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 			buffer.writeUtf(recipe.getGroup());
 			buffer.writeVarInt(recipe.getIngredients().size());
 
-			for (final Ingredient ingredient : recipe.getIngredients()) {
+			for (final var ingredient : recipe.getIngredients()) {
 				ingredient.toNetwork(buffer);
 			}
 

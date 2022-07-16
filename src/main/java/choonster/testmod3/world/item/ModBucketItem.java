@@ -13,7 +13,6 @@ import net.minecraft.locale.Language;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -25,12 +24,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -68,14 +64,14 @@ public class ModBucketItem extends Item {
 	}
 
 	public ItemStack getFilledBucket(final FluidStack fluidStack) {
-		final ItemStack stack = new ItemStack(this);
-		final FluidActionResult fillResult = ModFluidUtil.fillContainer(stack, fluidStack);
+		final var stack = new ItemStack(this);
+		final var fillResult = ModFluidUtil.fillContainer(stack, fluidStack);
 		return fillResult.isSuccess() ? fillResult.getResult() : ItemStack.EMPTY;
 	}
 
 	@Override
-	public int getItemStackLimit(final ItemStack stack) {
-		return getFluid(stack).isEmpty() ? super.getItemStackLimit(stack) : 1;
+	public int getMaxStackSize(final ItemStack stack) {
+		return getFluid(stack).isEmpty() ? super.getMaxStackSize(stack) : 1;
 	}
 
 	@Override
@@ -101,8 +97,8 @@ public class ModBucketItem extends Item {
 
 	@Override
 	public Component getName(final ItemStack stack) {
-		final FluidStack fluidStack = getFluid(stack);
-		final String translationKey = getDescriptionId(stack);
+		final var fluidStack = getFluid(stack);
+		final var translationKey = getDescriptionId(stack);
 
 		// If the bucket is empty, translate the translation key directly
 		if (fluidStack.isEmpty()) {
@@ -110,7 +106,7 @@ public class ModBucketItem extends Item {
 		}
 
 		// If there's a fluid-specific translation, use it
-		final String fluidTranslationKey = translationKey + ".filled." + fluidStack.getTranslationKey();
+		final var fluidTranslationKey = translationKey + ".filled." + fluidStack.getTranslationKey();
 
 		if (Language.getInstance().has(fluidTranslationKey)) {
 			return Component.translatable(fluidTranslationKey);
@@ -121,24 +117,24 @@ public class ModBucketItem extends Item {
 	}
 
 	@Override
-	public boolean hasContainerItem(final ItemStack stack) {
+	public boolean hasCraftingRemainingItem(final ItemStack stack) {
 		return !getFluid(stack).isEmpty();
 	}
 
 	@Override
-	public ItemStack getContainerItem(final ItemStack stack) {
+	public ItemStack getCraftingRemainingItem(final ItemStack itemStack) {
 		return empty();
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(final Level world, final Player player, final InteractionHand hand) {
-		final ItemStack heldItem = player.getItemInHand(hand);
-		final FluidStack fluidStack = getFluid(heldItem);
-		final boolean isEmpty = fluidStack.isEmpty();
+	public InteractionResultHolder<ItemStack> use(final Level level, final Player player, final InteractionHand hand) {
+		final var heldItem = player.getItemInHand(hand);
+		final var fluidStack = getFluid(heldItem);
+		final var isEmpty = fluidStack.isEmpty();
 
-		final BlockHitResult rayTrace = getPlayerPOVHitResult(world, player, isEmpty ? ClipContext.Fluid.SOURCE_ONLY : ClipContext.Fluid.NONE);
+		final var rayTrace = getPlayerPOVHitResult(level, player, isEmpty ? ClipContext.Fluid.SOURCE_ONLY : ClipContext.Fluid.NONE);
 
-		final InteractionResultHolder<ItemStack> eventResult = ForgeEventFactory.onBucketUse(player, world, heldItem, rayTrace);
+		final var eventResult = ForgeEventFactory.onBucketUse(player, level, heldItem, rayTrace);
 		if (eventResult != null) {
 			return eventResult;
 		}
@@ -147,48 +143,48 @@ public class ModBucketItem extends Item {
 			return InteractionResultHolder.pass(heldItem);
 		}
 
-		final BlockPos pos = rayTrace.getBlockPos();
-		final Direction direction = rayTrace.getDirection();
-		final BlockPos adjacentPos = pos.relative(direction);
+		final var pos = rayTrace.getBlockPos();
+		final var direction = rayTrace.getDirection();
+		final var adjacentPos = pos.relative(direction);
 
-		if (!world.mayInteract(player, pos) || !player.mayUseItemAt(adjacentPos, direction, heldItem)) {
+		if (!level.mayInteract(player, pos) || !player.mayUseItemAt(adjacentPos, direction, heldItem)) {
 			return InteractionResultHolder.fail(heldItem);
 		}
 
 		final ItemStack result;
 
 		if (isEmpty) {
-			final FluidActionResult pickUpResult = FluidUtil.tryPickUpFluid(heldItem, player, world, pos, direction);
+			final var pickUpResult = FluidUtil.tryPickUpFluid(heldItem, player, level, pos, direction);
 
 			if (!pickUpResult.isSuccess()) {
 				return InteractionResultHolder.fail(heldItem);
 			}
 
-			final ItemStack filledBucket = pickUpResult.getResult();
+			final var filledBucket = pickUpResult.getResult();
 
-			if (!world.isClientSide()) {
+			if (!level.isClientSide()) {
 				CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer) player, filledBucket);
 			}
 
 			// Add the filled bucket to the player's inventory, or replace this stack if this was the last empty bucket
 			result = ItemUtils.createFilledResult(heldItem, player, filledBucket);
 		} else {
-			final BlockState destState = world.getBlockState(pos);
-			final BlockPos destPos = canBlockContainFluid(world, pos, direction, destState, fluidStack) ? pos : adjacentPos;
+			final var destState = level.getBlockState(pos);
+			final var destPos = canBlockContainFluid(level, pos, direction, destState, fluidStack) ? pos : adjacentPos;
 
-			final Pair<FluidActionResult, BlockPos> placeResultPair = tryPlaceContainedFluid(
+			final var placeResultPair = tryPlaceContainedFluid(
 					player, hand, heldItem, fluidStack,
-					world, destPos, pos, direction, true
+					level, destPos, pos, direction, true
 			);
 
-			final FluidActionResult placeResult = placeResultPair.getFirst();
-			final BlockPos placePos = placeResultPair.getSecond();
+			final var placeResult = placeResultPair.getFirst();
+			final var placePos = placeResultPair.getSecond();
 
 			if (!placeResult.isSuccess()) {
 				return InteractionResultHolder.fail(heldItem);
 			}
 
-			if (!world.isClientSide()) {
+			if (!level.isClientSide()) {
 				CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayer) player, placePos, heldItem);
 			}
 
@@ -198,42 +194,42 @@ public class ModBucketItem extends Item {
 
 		player.awardStat(Stats.ITEM_USED.get(this));
 
-		return InteractionResultHolder.sidedSuccess(result, world.isClientSide());
+		return InteractionResultHolder.sidedSuccess(result, level.isClientSide());
 	}
 
 	private Pair<FluidActionResult, BlockPos> tryPlaceContainedFluid(
 			@Nullable final Player player, final InteractionHand hand, final ItemStack container, final FluidStack fluidStack,
-			final Level world, final BlockPos pos, final BlockPos originalPos, final Direction direction, final boolean tryAdjacentBlock
+			final Level level, final BlockPos pos, final BlockPos originalPos, final Direction direction, final boolean tryAdjacentBlock
 	) {
-		final Fluid fluid = fluidStack.getFluid();
+		final var fluid = fluidStack.getFluid();
 
-		if (world.dimensionType().ultraWarm() && fluid.getFluidType().isVaporizedOnPlacement(world, pos, fluidStack)) {
+		if (level.dimensionType().ultraWarm() && fluid.getFluidType().isVaporizedOnPlacement(level, pos, fluidStack)) {
 
-			fluid.getFluidType().onVaporize(player, world, pos, fluidStack);
+			fluid.getFluidType().onVaporize(player, level, pos, fluidStack);
 
 			return Pair.of(new FluidActionResult(empty()), pos);
 		}
 
 		// If the fluid is a flowing fluid,
 		if (fluid instanceof FlowingFluid) {
-			final BlockState destState = world.getBlockState(pos);
-			final Block destBlock = destState.getBlock();
+			final var destState = level.getBlockState(pos);
+			final var destBlock = destState.getBlock();
 
 			// Try to place the fluid in a Vanilla ILiquidContainer block
-			if (destBlock instanceof LiquidBlockContainer && ((LiquidBlockContainer) destBlock).canPlaceLiquid(world, pos, destState, fluid)) {
-				((LiquidBlockContainer) destBlock).placeLiquid(world, pos, destState, ((FlowingFluid) fluid).getSource(false));
+			if (destBlock instanceof LiquidBlockContainer && ((LiquidBlockContainer) destBlock).canPlaceLiquid(level, pos, destState, fluid)) {
+				((LiquidBlockContainer) destBlock).placeLiquid(level, pos, destState, ((FlowingFluid) fluid).getSource(false));
 
-				final SoundEvent soundEvent = fluid.getFluidType().getSound(fluidStack, SoundActions.BUCKET_EMPTY);
+				final var soundEvent = fluid.getFluidType().getSound(fluidStack, SoundActions.BUCKET_EMPTY);
 				if (soundEvent != null) {
-					world.playSound(player, pos, soundEvent, SoundSource.BLOCKS, 1, 1);
+					level.playSound(player, pos, soundEvent, SoundSource.BLOCKS, 1, 1);
 				}
 
 				return Pair.of(new FluidActionResult(empty()), pos);
 			}
 		}
 
-		// Try place the fluid in world or in an IFluidHandler block
-		final FluidActionResult placeResult = FluidUtil.tryPlaceFluid(player, world, hand, pos, container, fluidStack);
+		// Try place the fluid in level or in an IFluidHandler block
+		final var placeResult = FluidUtil.tryPlaceFluid(player, level, hand, pos, container, fluidStack);
 
 		if (placeResult.isSuccess()) {
 			return Pair.of(placeResult, pos);
@@ -243,7 +239,7 @@ public class ModBucketItem extends Item {
 		if (tryAdjacentBlock) {
 			return tryPlaceContainedFluid(
 					player, hand, container, fluidStack,
-					world, originalPos.relative(direction), originalPos, direction, false
+					level, originalPos.relative(direction), originalPos, direction, false
 			);
 		}
 

@@ -28,11 +28,11 @@ public class ModBiomeModifierSerializers {
 			() -> RecordCodecBuilder.create(builder ->
 					builder.group(
 
-							ForgeRegistries.ENTITIES.getCodec()
+							ForgeRegistries.ENTITY_TYPES.getCodec()
 									.fieldOf("sourceType")
 									.forGetter(CopyMobSpawnsBiomeModifier::sourceType),
 
-							ForgeRegistries.ENTITIES.getCodec()
+							ForgeRegistries.ENTITY_TYPES.getCodec()
 									.fieldOf("destinationType")
 									.forGetter(CopyMobSpawnsBiomeModifier::destinationType)
 
@@ -49,7 +49,7 @@ public class ModBiomeModifierSerializers {
 									.fieldOf("biomes")
 									.forGetter(AddMobSpawnCostBiomeModifier::biomes),
 
-							ForgeRegistries.ENTITIES.getCodec()
+							ForgeRegistries.ENTITY_TYPES.getCodec()
 									.fieldOf("type")
 									.forGetter(AddMobSpawnCostBiomeModifier::type),
 

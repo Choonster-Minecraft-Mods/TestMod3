@@ -80,7 +80,7 @@ public class RegistryUtil {
 	 * @see #getKey(IForgeRegistry, Object)
 	 */
 	public static ResourceLocation getKey(final EntityType<?> entityType) {
-		return getKey(ForgeRegistries.ENTITIES, entityType);
+		return getKey(ForgeRegistries.ENTITY_TYPES, entityType);
 	}
 
 	/**

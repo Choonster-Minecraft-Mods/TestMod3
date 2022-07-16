@@ -6,18 +6,14 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.scores.PlayerTeam;
-import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.scores.Team;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ComputeFovModifierEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -28,7 +24,7 @@ public class ClientEventHandler {
 	@SubscribeEvent
 	public static void onFOVUpdate(final ComputeFovModifierEvent event) {
 		if (event.getPlayer().isUsingItem() && event.getPlayer().getUseItem().getItem() instanceof ModBowItem) {
-			float fovModifier = event.getPlayer().getTicksUsingItem() / 20.0f;
+			var fovModifier = event.getPlayer().getTicksUsingItem() / 20.0f;
 
 			if (fovModifier > 1.0f) {
 				fovModifier = 1.0f;
@@ -67,14 +63,14 @@ public class ClientEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void entityJoinWorld(final EntityJoinWorldEvent event) {
-		final Level level = event.getWorld();
-		final Entity entity = event.getEntity();
+	public static void entityJoinWorld(final EntityJoinLevelEvent event) {
+		final var level = event.getLevel();
+		final var entity = event.getEntity();
 
 		if (level.isClientSide && entity instanceof AbstractMinecart) {
-			final Scoreboard scoreboard = level.getScoreboard();
+			final var scoreboard = level.getScoreboard();
 
-			PlayerTeam team = scoreboard.getPlayerTeam(TestMod3.MODID);
+			var team = scoreboard.getPlayerTeam(TestMod3.MODID);
 			if (team == null) {
 				team = scoreboard.addPlayerTeam(TestMod3.MODID);
 				team.setPlayerPrefix(Component.literal("").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_AQUA)));

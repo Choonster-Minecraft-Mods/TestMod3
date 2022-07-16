@@ -9,7 +9,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -72,8 +71,8 @@ public class RestrictedFluidTankBlockEntity extends BaseFluidTankBlockEntity {
 
 		enabledFacings.clear();
 
-		final int[] enabledFacingIndices = tag.getIntArray("EnabledFacings");
-		for (final int index : enabledFacingIndices) {
+		final var enabledFacingIndices = tag.getIntArray("EnabledFacings");
+		for (final var index : enabledFacingIndices) {
 			enabledFacings.add(Direction.from3DDataValue(index));
 		}
 	}
@@ -82,7 +81,7 @@ public class RestrictedFluidTankBlockEntity extends BaseFluidTankBlockEntity {
 	protected void saveAdditional(final CompoundTag tag) {
 		super.saveAdditional(tag);
 
-		final int[] enabledFacingIndices = enabledFacings.stream()
+		final var enabledFacingIndices = enabledFacings.stream()
 				.mapToInt(Direction::get3DDataValue)
 				.toArray();
 
