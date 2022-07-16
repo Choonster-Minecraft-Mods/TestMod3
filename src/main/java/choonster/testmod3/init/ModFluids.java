@@ -26,8 +26,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.function.Supplier;
+import net.minecraftforge.registries.RegistryObject;
 
 public class ModFluids {
 	private static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(ForgeRegistries.Keys.FLUID_TYPES, TestMod3.MODID);
@@ -161,15 +160,18 @@ public class ModFluids {
 		 * Register this mod's tanks.
 		 */
 		private static void registerFluidContainers() {
-			registerTank(() -> Fluids.WATER);
-			registerTank(() -> Fluids.LAVA);
+			registerTank(Fluids.WATER);
+			registerTank(Fluids.LAVA);
 
-			FLUIDS.getEntries().forEach(RegistrationHandler::registerTank);
+			FLUIDS.getEntries()
+					.stream()
+					.map(RegistryObject::get)
+					.filter(fluid -> fluid.isSource(fluid.defaultFluidState()))
+					.forEach(RegistrationHandler::registerTank);
 		}
 
-		private static void registerTank(final Supplier<Fluid> fluid) {
-			final Fluid fluid1 = fluid.get();
-			final FluidStack fluidStack = new FluidStack(fluid1, FluidTankBlockEntity.CAPACITY);
+		private static void registerTank(final Fluid fluid) {
+			final FluidStack fluidStack = new FluidStack(fluid, FluidTankBlockEntity.CAPACITY);
 
 			final Item item = ModBlocks.FLUID_TANK.get().asItem();
 			assert item instanceof FluidTankItem;
