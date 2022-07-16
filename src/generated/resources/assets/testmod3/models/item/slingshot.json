@@ -10,7 +10,7 @@
     {
       "model": "testmod3:item/slingshot",
       "predicate": {
-        "testmod3:ticks_since_last_use": 20.0
+        "testmod3:ticks_since_last_use": 1.0
       }
     }
   ],

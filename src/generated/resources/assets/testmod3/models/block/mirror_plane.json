@@ -1,5 +1,6 @@
 {
   "parent": "testmod3:block/plane",
+  "render_type": "minecraft:cutout",
   "textures": {
     "base": "testmod3:block/mirror_plane_base",
     "plane": "testmod3:block/mirror_plane_plane",

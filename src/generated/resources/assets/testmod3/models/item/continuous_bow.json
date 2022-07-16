@@ -2,20 +2,20 @@
   "parent": "testmod3:item/simple_model",
   "overrides": [
     {
-      "model": "testmod3:item/continuous_bow_0",
+      "model": "testmod3:item/continuous_bow_pulling_0",
       "predicate": {
         "minecraft:pulling": 1.0
       }
     },
     {
-      "model": "testmod3:item/continuous_bow_1",
+      "model": "testmod3:item/continuous_bow_pulling_1",
       "predicate": {
         "minecraft:pull": 0.65,
         "minecraft:pulling": 1.0
       }
     },
     {
-      "model": "testmod3:item/continuous_bow_2",
+      "model": "testmod3:item/continuous_bow_pulling_2",
       "predicate": {
         "minecraft:pull": 0.9,
         "minecraft:pulling": 1.0

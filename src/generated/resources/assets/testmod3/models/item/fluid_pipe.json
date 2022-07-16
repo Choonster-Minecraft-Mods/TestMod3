@@ -1,5 +1,6 @@
 {
   "parent": "testmod3:item/pipe/inventory",
+  "render_type": "minecraft:cutout",
   "textures": {
     "all": "minecraft:block/glass"
   }

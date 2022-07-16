@@ -1,3 +1,4 @@
 {
-  "parent": "minecraft:item/dark_oak_sapling"
+  "parent": "minecraft:item/dark_oak_sapling",
+  "render_type": "minecraft:cutout"
 }

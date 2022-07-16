@@ -1,3 +1,4 @@
 {
-  "parent": "minecraft:block/spruce_sapling"
+  "parent": "minecraft:block/spruce_sapling",
+  "render_type": "minecraft:cutout"
 }

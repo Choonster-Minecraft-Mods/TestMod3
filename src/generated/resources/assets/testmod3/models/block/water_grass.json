@@ -1,3 +1,4 @@
 {
-  "parent": "minecraft:block/grass"
+  "parent": "minecraft:block/grass",
+  "render_type": "minecraft:cutout"
 }

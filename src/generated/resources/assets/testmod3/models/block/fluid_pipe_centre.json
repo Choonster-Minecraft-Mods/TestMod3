@@ -1,5 +1,6 @@
 {
   "parent": "testmod3:block/pipe/pipe_centre",
+  "render_type": "minecraft:cutout",
   "textures": {
     "centre": "minecraft:block/glass"
   }

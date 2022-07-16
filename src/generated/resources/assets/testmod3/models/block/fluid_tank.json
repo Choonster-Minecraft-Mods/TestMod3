@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/cube_bottom_top",
+  "render_type": "minecraft:cutout",
   "textures": {
     "bottom": "minecraft:block/iron_block",
     "side": "minecraft:block/glass",
