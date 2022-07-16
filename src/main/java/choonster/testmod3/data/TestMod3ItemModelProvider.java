@@ -367,9 +367,12 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 	}
 
 	private void bucketItem(final Item item) {
+		final var baseTexture = itemTexture(item) + "_base";
+
 		getBuilder(name(item))
 				.parent(getExistingFile(new ResourceLocation("forge", "bucket")))
-				.texture("base", itemTexture(item) + "_base")
+				.texture("base", baseTexture)
+				.texture("particle", baseTexture)
 				.customLoader(DynamicFluidContainerModelBuilder::begin)
 				.fluid(Fluids.EMPTY)
 				.flipGas(true)
