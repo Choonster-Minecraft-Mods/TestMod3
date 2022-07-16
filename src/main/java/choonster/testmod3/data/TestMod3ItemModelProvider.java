@@ -13,7 +13,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -24,7 +23,6 @@ import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
@@ -103,12 +101,12 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 
 		// Create the parent model
-		final ItemModelBuilder modelTest = withSimpleParent(ModItems.MODEL_TEST.get(), itemTexture(ModItems.MODEL_TEST.get()) + "_standby");
+		final var modelTest = withSimpleParent(ModItems.MODEL_TEST.get(), itemTexture(ModItems.MODEL_TEST.get()) + "_standby");
 
 		// Create three child models and add them as overrides that display when the ticks since last use is >= index * 20
 		IntStream.range(0, 3)
 				.mapToObj(index -> {
-					final ItemModelBuilder model = withSimpleParent(name(ModItems.MODEL_TEST.get()) + "_" + index)
+					final var model = withSimpleParent(name(ModItems.MODEL_TEST.get()) + "_" + index)
 							.texture(LAYER_0, itemTexture(ModItems.MODEL_TEST.get()) + "_" + index);
 
 					return Pair.of(index, model);
@@ -204,10 +202,10 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 
 		// Create the parent model
-		final ItemModelBuilder hiddenBlockRevealer = withGeneratedParentAndDefaultTexture(ModItems.HIDDEN_BLOCK_REVEALER.get());
+		final var hiddenBlockRevealer = withGeneratedParentAndDefaultTexture(ModItems.HIDDEN_BLOCK_REVEALER.get());
 
 		// Create the child model and add it as an override that's displayed when hidden blocks are being revealed
-		final ItemModelBuilder hiddenBlockRevealerActive = getBuilder(name(ModItems.HIDDEN_BLOCK_REVEALER.get()) + "_active")
+		final var hiddenBlockRevealerActive = getBuilder(name(ModItems.HIDDEN_BLOCK_REVEALER.get()) + "_active")
 				.parent(hiddenBlockRevealer)
 				.texture(LAYER_0, itemTexture(ModItems.HIDDEN_BLOCK_REVEALER.get()) + "_active");
 
@@ -282,7 +280,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 	}
 
 	private ResourceLocation itemTexture(final Item item) {
-		final ResourceLocation name = key(item);
+		final var name = key(item);
 		return new ResourceLocation(name.getNamespace(), ITEM_FOLDER + "/" + name.getPath());
 	}
 
@@ -355,8 +353,8 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 	}
 
 	private void bucketItem(final FluidGroup<?, ?, ?, ?, ?> fluidGroup) {
-		final Item item = fluidGroup.getBucket().get();
-		final Fluid fluid = item instanceof BucketItem ? ((BucketItem) item).getFluid() : Fluids.EMPTY;
+		final var item = fluidGroup.getBucket().get();
+		final var fluid = item instanceof BucketItem ? ((BucketItem) item).getFluid() : Fluids.EMPTY;
 
 		getBuilder(name(item))
 				.parent(getExistingFile(new ResourceLocation("forge", "bucket")))
