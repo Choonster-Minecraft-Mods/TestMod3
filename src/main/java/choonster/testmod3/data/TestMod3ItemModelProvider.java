@@ -319,12 +319,12 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 	private void bowItem(final Item item) {
 		// Create the parent model
-		final ItemModelBuilder bow = withSimpleParent(item, itemTexture(Items.BOW));
+		final var bow = withSimpleParent(item, itemTexture(Items.BOW));
 
 		// Create three child models
-		final List<ItemModelBuilder> bowPullingModels = IntStream.range(0, 3)
+		final var bowPullingModels = IntStream.range(0, 3)
 				.mapToObj(index ->
-						getBuilder(name(item) + "_" + index)
+						getBuilder(name(item) + "_pulling_" + index)
 								.parent(bow)
 								.texture(LAYER_0, itemTexture(Items.BOW) + "_pulling_" + index)
 				)
