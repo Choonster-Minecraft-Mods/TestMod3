@@ -436,19 +436,19 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 		simpleBlockWithExistingParent(ModBlocks.OAK_SAPLING.get(), Blocks.OAK_SAPLING, RENDER_TYPE_CUTOUT);
 		simpleBlockItemWithExistingParent(ModBlocks.OAK_SAPLING.get(), Items.OAK_SAPLING, RENDER_TYPE_CUTOUT);
 
-		simpleBlockWithExistingParent(ModBlocks.SPRUCE_SAPLING.get(), Blocks.SPRUCE_SAPLING);
+		simpleBlockWithExistingParent(ModBlocks.SPRUCE_SAPLING.get(), Blocks.SPRUCE_SAPLING, RENDER_TYPE_CUTOUT);
 		simpleBlockItemWithExistingParent(ModBlocks.SPRUCE_SAPLING.get(), Items.SPRUCE_SAPLING, RENDER_TYPE_CUTOUT);
 
-		simpleBlockWithExistingParent(ModBlocks.BIRCH_SAPLING.get(), Blocks.BIRCH_SAPLING);
+		simpleBlockWithExistingParent(ModBlocks.BIRCH_SAPLING.get(), Blocks.BIRCH_SAPLING, RENDER_TYPE_CUTOUT);
 		simpleBlockItemWithExistingParent(ModBlocks.BIRCH_SAPLING.get(), Items.BIRCH_SAPLING, RENDER_TYPE_CUTOUT);
 
-		simpleBlockWithExistingParent(ModBlocks.JUNGLE_SAPLING.get(), Blocks.JUNGLE_SAPLING);
+		simpleBlockWithExistingParent(ModBlocks.JUNGLE_SAPLING.get(), Blocks.JUNGLE_SAPLING, RENDER_TYPE_CUTOUT);
 		simpleBlockItemWithExistingParent(ModBlocks.JUNGLE_SAPLING.get(), Items.JUNGLE_SAPLING, RENDER_TYPE_CUTOUT);
 
 		simpleBlockWithExistingParent(ModBlocks.ACACIA_SAPLING.get(), Blocks.ACACIA_SAPLING, RENDER_TYPE_CUTOUT);
 		simpleBlockItemWithExistingParent(ModBlocks.ACACIA_SAPLING.get(), Items.ACACIA_SAPLING, RENDER_TYPE_CUTOUT);
 
-		simpleBlockWithExistingParent(ModBlocks.DARK_OAK_SAPLING.get(), Blocks.DARK_OAK_SAPLING);
+		simpleBlockWithExistingParent(ModBlocks.DARK_OAK_SAPLING.get(), Blocks.DARK_OAK_SAPLING, RENDER_TYPE_CUTOUT);
 		simpleBlockItemWithExistingParent(ModBlocks.DARK_OAK_SAPLING.get(), Items.DARK_OAK_SAPLING, RENDER_TYPE_CUTOUT);
 
 		simpleBlockWithExistingParent(ModBlocks.INVISIBLE.get(), Blocks.STONE);
