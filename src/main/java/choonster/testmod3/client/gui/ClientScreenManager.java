@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Handles this mod's client-side GUI factories
+ * Handles this mod's client-side screen factories
  *
  * @author Choonster
  */
@@ -32,7 +32,7 @@ public class ClientScreenManager {
 	}
 
 	public static <T extends AbstractContainerMenu> Optional<IScreenConstructor<?>> getScreenConstructor(final ResourceLocation id) {
-		final IScreenConstructor<?> constructor = CONSTRUCTORS.get(id);
+		final var constructor = CONSTRUCTORS.get(id);
 
 		if (constructor == null) {
 			LOGGER.warn("Failed to create screen for id: {}", id);
@@ -43,7 +43,7 @@ public class ClientScreenManager {
 	}
 
 	public static <S extends Screen> void registerScreenConstructor(final ResourceLocation id, final IScreenConstructor<S> constructor) {
-		final IScreenConstructor<?> oldConstructor = CONSTRUCTORS.put(id, constructor);
+		final var oldConstructor = CONSTRUCTORS.put(id, constructor);
 
 		if (oldConstructor != null) {
 			throw new IllegalStateException("Duplicate registration for " + id);
@@ -53,7 +53,7 @@ public class ClientScreenManager {
 	@FunctionalInterface
 	public interface IScreenConstructor<S extends Screen> {
 		default void createAndOpenScreen(final ResourceLocation id, final FriendlyByteBuf additionalData, final Minecraft mc) {
-			final S screen = create(id, additionalData);
+			final var screen = create(id, additionalData);
 			mc.setScreen(screen);
 		}
 

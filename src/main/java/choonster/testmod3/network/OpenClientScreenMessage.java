@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 /**
  * Sent by the server to open a client-side {@link Screen}.
  * <p>
- * This is similar to {@link NetworkHooks#openGui} for GUIs without an {@link AbstractContainerMenu}.
+ * This is similar to {@link NetworkHooks#openScreen} for GUIs without an {@link AbstractContainerMenu}.
  *
  * @author Choonster
  */
@@ -30,8 +30,8 @@ public class OpenClientScreenMessage {
 	}
 
 	public static OpenClientScreenMessage decode(final FriendlyByteBuf buffer) {
-		final ResourceLocation id = buffer.readResourceLocation();
-		final FriendlyByteBuf additionalData = new FriendlyByteBuf(Unpooled.wrappedBuffer(buffer.readByteArray(32600)));
+		final var id = buffer.readResourceLocation();
+		final var additionalData = new FriendlyByteBuf(Unpooled.wrappedBuffer(buffer.readByteArray(32600)));
 
 		return new OpenClientScreenMessage(id, additionalData);
 	}

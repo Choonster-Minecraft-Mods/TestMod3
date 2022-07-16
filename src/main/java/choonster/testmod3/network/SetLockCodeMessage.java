@@ -33,7 +33,7 @@ public class SetLockCodeMessage {
 
 	public static SetLockCodeMessage decode(final FriendlyByteBuf buffer) {
 		final var pos = BlockPos.of(buffer.readLong());
-		final var facing = NetworkUtil.readNullableFacing(buffer);
+		final var facing = NetworkUtil.readNullableDirection(buffer);
 		final var lockCode = buffer.readUtf(Short.MAX_VALUE);
 
 		return new SetLockCodeMessage(pos, facing, lockCode);
@@ -41,7 +41,7 @@ public class SetLockCodeMessage {
 
 	public static void encode(final SetLockCodeMessage message, final FriendlyByteBuf buffer) {
 		buffer.writeLong(message.pos.asLong());
-		NetworkUtil.writeNullableFacing(message.facing, buffer);
+		NetworkUtil.writeNullableDirection(message.facing, buffer);
 		buffer.writeUtf(message.lockCode);
 	}
 

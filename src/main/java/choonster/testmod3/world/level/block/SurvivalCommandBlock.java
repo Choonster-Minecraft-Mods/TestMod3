@@ -1,12 +1,11 @@
 package choonster.testmod3.world.level.block;
 
-import choonster.testmod3.client.gui.GuiIDs;
+import choonster.testmod3.client.gui.ClientScreenIds;
 import choonster.testmod3.util.NetworkUtil;
 import choonster.testmod3.world.level.block.entity.SurvivalCommandBlockEntity;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
@@ -52,18 +51,18 @@ public class SurvivalCommandBlock extends CommandBlock {
 
 	@Override
 	public BlockEntity newBlockEntity(final BlockPos pos, final BlockState state) {
-		final SurvivalCommandBlockEntity blockEntity = new SurvivalCommandBlockEntity(pos, state);
+		final var blockEntity = new SurvivalCommandBlockEntity(pos, state);
 		blockEntity.setAutomatic(getCommandBlockMode() == CommandBlockEntity.Mode.SEQUENCE);
 		return blockEntity;
 	}
 
 	@Override
 	public InteractionResult use(final BlockState state, final Level world, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult hit) {
-		final BlockEntity blockEntity = world.getBlockEntity(pos);
+		final var blockEntity = world.getBlockEntity(pos);
 		if (blockEntity instanceof SurvivalCommandBlockEntity) {
 			if (!player.getCommandSenderWorld().isClientSide) {
-				final ServerPlayer serverPlayer = (ServerPlayer) player;
-				NetworkUtil.openClientGui(serverPlayer, GuiIDs.Client.SURVIVAL_COMMAND_BLOCK, pos);
+				final var serverPlayer = (ServerPlayer) player;
+				NetworkUtil.openClientScreen(serverPlayer, ClientScreenIds.SURVIVAL_COMMAND_BLOCK, pos);
 				serverPlayer.connection.send(ClientboundBlockEntityDataPacket.create(blockEntity, BlockEntity::saveWithoutMetadata));
 			}
 
@@ -76,9 +75,9 @@ public class SurvivalCommandBlock extends CommandBlock {
 
 	@Override
 	public void setPlacedBy(final Level level, final BlockPos pos, final BlockState state, final LivingEntity placer, final ItemStack stack) {
-		final BlockEntity blockEntity = level.getBlockEntity(pos);
+		final var blockEntity = level.getBlockEntity(pos);
 		if (blockEntity instanceof final SurvivalCommandBlockEntity survivalCommandBlockEntity && !level.isClientSide) {
-			final CompoundTag tagCompound = stack.getTag();
+			final var tagCompound = stack.getTag();
 			if (tagCompound == null || !tagCompound.contains("BlockEntityTag", Tag.TAG_COMPOUND)) {
 				survivalCommandBlockEntity.setAutomatic(getCommandBlockMode() == CommandBlockEntity.Mode.SEQUENCE);
 			}
@@ -99,13 +98,13 @@ public class SurvivalCommandBlock extends CommandBlock {
 	 */
 	@Override
 	public void tick(final BlockState state, final ServerLevel world, final BlockPos pos, final RandomSource random) {
-		final BlockEntity blockEntity = world.getBlockEntity(pos);
+		final var blockEntity = world.getBlockEntity(pos);
 
 		if (blockEntity instanceof final CommandBlockEntity commandBlockEntity) {
-			final BaseCommandBlock commandBlock = commandBlockEntity.getCommandBlock();
-			final boolean hasCommand = !StringUtil.isNullOrEmpty(commandBlock.getCommand());
-			final CommandBlockEntity.Mode mode = commandBlockEntity.getMode();
-			final boolean conditionMet = commandBlockEntity.wasConditionMet();
+			final var commandBlock = commandBlockEntity.getCommandBlock();
+			final var hasCommand = !StringUtil.isNullOrEmpty(commandBlock.getCommand());
+			final var mode = commandBlockEntity.getMode();
+			final var conditionMet = commandBlockEntity.wasConditionMet();
 
 			if (mode == CommandBlockEntity.Mode.AUTO) {
 				commandBlockEntity.markConditionMet();
@@ -161,8 +160,8 @@ public class SurvivalCommandBlock extends CommandBlock {
 	 * @param facing The direction of the neighbour to update
 	 */
 	private static void executeChain(final Level world, final BlockPos pos, Direction facing) {
-		final BlockPos.MutableBlockPos neighbourPos = pos.mutable();
-		final GameRules gameRules = world.getGameRules();
+		final var neighbourPos = pos.mutable();
+		final var gameRules = world.getGameRules();
 
 		int i;
 		BlockState neighbourState;
@@ -171,8 +170,8 @@ public class SurvivalCommandBlock extends CommandBlock {
 			neighbourPos.move(facing);
 			neighbourState = world.getBlockState(neighbourPos);
 
-			final Block block = neighbourState.getBlock();
-			final BlockEntity neighbourBlockEntity = world.getBlockEntity(neighbourPos);
+			final var block = neighbourState.getBlock();
+			final var neighbourBlockEntity = world.getBlockEntity(neighbourPos);
 
 			if (!(neighbourBlockEntity instanceof final CommandBlockEntity neighbourCommandBlockEntity)) {
 				break;
@@ -183,7 +182,7 @@ public class SurvivalCommandBlock extends CommandBlock {
 			}
 
 			if (neighbourCommandBlockEntity.isPowered() || neighbourCommandBlockEntity.isAutomatic()) {
-				final BaseCommandBlock neighbourCommandBlockLogic = neighbourCommandBlockEntity.getCommandBlock();
+				final var neighbourCommandBlockLogic = neighbourCommandBlockEntity.getCommandBlock();
 
 				if (neighbourCommandBlockEntity.markConditionMet()) {
 					if (!neighbourCommandBlockLogic.performCommand(world)) {
@@ -198,7 +197,7 @@ public class SurvivalCommandBlock extends CommandBlock {
 		}
 
 		if (i <= 0) {
-			final int maxCommandChainLength = Math.max(gameRules.getInt(GameRules.RULE_MAX_COMMAND_CHAIN_LENGTH), 0);
+			final var maxCommandChainLength = Math.max(gameRules.getInt(GameRules.RULE_MAX_COMMAND_CHAIN_LENGTH), 0);
 			LOGGER.warn("Command Block chain tried to execute more than {} steps!", maxCommandChainLength);
 		}
 	}

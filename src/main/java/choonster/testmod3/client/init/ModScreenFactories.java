@@ -1,9 +1,8 @@
 package choonster.testmod3.client.init;
 
-import choonster.testmod3.api.capability.lock.ILock;
 import choonster.testmod3.capability.lock.LockCapability;
+import choonster.testmod3.client.gui.ClientScreenIds;
 import choonster.testmod3.client.gui.ClientScreenManager;
-import choonster.testmod3.client.gui.GuiIDs;
 import choonster.testmod3.client.gui.LockScreen;
 import choonster.testmod3.client.gui.SurvivalCommandBlockEditScreen;
 import choonster.testmod3.client.gui.inventory.ModChestScreen;
@@ -43,18 +42,18 @@ public class ModScreenFactories {
 	}
 
 	private static void registerClientScreenConstructors() {
-		ClientScreenManager.registerScreenConstructor(GuiIDs.Client.SURVIVAL_COMMAND_BLOCK, (id, additionalData) -> {
-			final BlockPos pos = additionalData.readBlockPos();
-			final SurvivalCommandBlockEntity blockEntity = getBlockEntity(pos, SurvivalCommandBlockEntity.class);
+		ClientScreenManager.registerScreenConstructor(ClientScreenIds.SURVIVAL_COMMAND_BLOCK, (id, additionalData) -> {
+			final var pos = additionalData.readBlockPos();
+			final var blockEntity = getBlockEntity(pos, SurvivalCommandBlockEntity.class);
 
 			return new SurvivalCommandBlockEditScreen(blockEntity);
 		});
 
-		ClientScreenManager.registerScreenConstructor(GuiIDs.Client.LOCK, (id, additionalData) -> {
-			final ClientLevel world = getClientLevel();
+		ClientScreenManager.registerScreenConstructor(ClientScreenIds.LOCK, (id, additionalData) -> {
+			final var world = getClientLevel();
 
-			final BlockPos pos = additionalData.readBlockPos();
-			final boolean hasFacing = additionalData.readBoolean();
+			final var pos = additionalData.readBlockPos();
+			final var hasFacing = additionalData.readBoolean();
 
 			final Direction facing;
 			if (hasFacing) {
@@ -63,7 +62,7 @@ public class ModScreenFactories {
 				facing = null;
 			}
 
-			final ILock lock = LockCapability.getLock(world, pos, facing)
+			final var lock = LockCapability.getLock(world, pos, facing)
 					.orElseThrow(CapabilityNotPresentException::new);
 
 			return new LockScreen(lock, pos, facing);
@@ -72,9 +71,9 @@ public class ModScreenFactories {
 
 	@SuppressWarnings("unchecked")
 	private static <T extends BlockEntity> T getBlockEntity(final BlockPos pos, final Class<T> blockEntityClass) {
-		final ClientLevel level = getClientLevel();
+		final var level = getClientLevel();
 
-		final BlockEntity blockEntity = level.getBlockEntity(pos);
+		final var blockEntity = level.getBlockEntity(pos);
 
 		Preconditions.checkNotNull(blockEntity, "No BlockEntity found at %s", pos);
 		Preconditions.checkState(blockEntityClass.isInstance(blockEntity), "Invalid BlockEntity at %s: expected %s, got %s", pos, blockEntityClass, blockEntity.getClass());
