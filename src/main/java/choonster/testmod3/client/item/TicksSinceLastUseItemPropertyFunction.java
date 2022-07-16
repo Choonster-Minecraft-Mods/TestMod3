@@ -12,7 +12,8 @@ import net.minecraft.world.level.Level;
 /**
  * {@link ClampedItemPropertyFunction} to get the ticks since the last use of the item, as recorded by the item's {@link ILastUseTime} capability.
  * <p>
- * Returns {@link Float#MAX_VALUE} if the required information isn't available.
+ * Returns 0.0 if the item was last used 0 ticks ago and 1.0 if the item was last used 20 or more ticks ago.
+ * Returns 1.0 if the required information isn't available.
  */
 public class TicksSinceLastUseItemPropertyFunction {
 	/**
@@ -23,17 +24,17 @@ public class TicksSinceLastUseItemPropertyFunction {
 	/**
 	 * The function.
 	 */
-	private static final ClampedItemPropertyFunction GETTER = (stack, level, entity, seed) -> // TODO: This may be clamped
+	private static final ClampedItemPropertyFunction GETTER = (stack, level, entity, seed) ->
 	{
 		final Level world = level != null ? level : entity != null ? entity.getCommandSenderWorld() : null;
 
 		if (world == null) {
-			return Float.MAX_VALUE;
+			return 1.0f;
 		}
 
 		return LastUseTimeCapability.getLastUseTime(stack)
-				.map(lastUseTime -> (float) world.getGameTime() - lastUseTime.get())
-				.orElse(Float.MAX_VALUE);
+				.map(lastUseTime -> (world.getGameTime() - lastUseTime.get()) / 20.0f)
+				.orElse(1.0f);
 	};
 
 	/**

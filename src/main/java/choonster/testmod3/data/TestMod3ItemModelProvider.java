@@ -133,10 +133,11 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 
 		// Create the parent model
-		final ItemModelBuilder slingshot = withSimpleParentAndDefaultTexture(ModItems.SLINGSHOT.get());
+		final var slingshot = withSimpleParentAndDefaultTexture(ModItems.SLINGSHOT.get());
 
 		// Create the child model
-		final ItemModelBuilder slingshotPulled = getBuilder(name(ModItems.SLINGSHOT.get()) + "_pulled")
+		final var slingshotPulled = getBuilder(name(ModItems.SLINGSHOT.get()) + "_pulled")
+				.parent(slingshot)
 				.texture(LAYER_0, itemTexture(ModItems.SLINGSHOT.get()) + "_pulled");
 
 		// Add the child as an override that displays when the ticks since last use is >= 0 and < 20
@@ -149,7 +150,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 		// Add the parent as a fallback that displays when the ticks since last use is >= 20
 		slingshot
 				.override()
-				.predicate(TicksSinceLastUseItemPropertyFunction.ID, 20)
+				.predicate(TicksSinceLastUseItemPropertyFunction.ID, 1)
 				.model(slingshot)
 				.end();
 
