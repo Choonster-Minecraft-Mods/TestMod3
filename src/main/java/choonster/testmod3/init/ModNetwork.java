@@ -76,6 +76,12 @@ public class ModNetwork {
 				.consumerMainThread(OpenClientScreenMessage::handle)
 				.add();
 
+		channel.messageBuilder(LeftClickEmptyMessage.class, 14)
+				.decoder(LeftClickEmptyMessage::decode)
+				.encoder(LeftClickEmptyMessage::encode)
+				.consumerMainThread(LeftClickEmptyMessage::handle)
+				.add();
+
 		return channel;
 	}
 }

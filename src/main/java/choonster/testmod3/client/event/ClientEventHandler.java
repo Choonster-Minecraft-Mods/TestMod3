@@ -1,6 +1,8 @@
 package choonster.testmod3.client.event;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.network.LeftClickEmptyMessage;
+import choonster.testmod3.world.item.ILeftClickEmpty;
 import choonster.testmod3.world.item.ModBowItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -14,6 +16,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ComputeFovModifierEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -80,5 +83,26 @@ public class ClientEventHandler {
 			scoreboard.addPlayerToTeam(entity.getStringUUID(), team);
 			entity.setGlowingTag(true); // TODO: Doesn't look like this will work on the client
 		}
+	}
+
+	/**
+	 * When a {@link ILeftClickEmpty} item is left-clicked on empty space, call {@link ILeftClickEmpty#onLeftClickEmpty}
+	 * and send {@link LeftClickEmptyMessage} to the server.
+	 *
+	 * @param event The event
+	 */
+	@SuppressWarnings("InstantiationOfUtilityClass")
+	@SubscribeEvent
+	public static void leftClickEmpty(final PlayerInteractEvent.LeftClickEmpty event) {
+		final var player = event.getEntity();
+		final var mainHand = player.getMainHandItem();
+
+		if (!(mainHand.getItem() instanceof ILeftClickEmpty leftClickEmpty)) {
+			return;
+		}
+
+		leftClickEmpty.onLeftClickEmpty(mainHand, player);
+
+		TestMod3.network.sendToServer(new LeftClickEmptyMessage());
 	}
 }

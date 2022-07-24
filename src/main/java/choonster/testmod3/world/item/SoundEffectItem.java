@@ -2,7 +2,6 @@ package choonster.testmod3.world.item;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -17,7 +16,7 @@ import java.util.function.Supplier;
  *
  * @author Choonster
  */
-public class SoundEffectItem extends Item {
+public class SoundEffectItem extends Item implements ILeftClickEmpty {
 	/**
 	 * The {@link SoundEvent} to play when left-clicked.
 	 */
@@ -28,18 +27,8 @@ public class SoundEffectItem extends Item {
 		this.soundEvent = soundEvent;
 	}
 
-	/**
-	 * Called when an entity tries to play the 'swing' animation.
-	 *
-	 * @param entity The entity swinging the item.
-	 * @param stack  The Item stack
-	 * @return True to cancel any further processing by EntityLiving
-	 */
 	@Override
-	public boolean onEntitySwing(final ItemStack stack, final LivingEntity entity) {
-		final Player player = entity instanceof Player ? ((Player) entity) : null;
-		entity.level.playSound(player, entity.getX(), entity.getY(), entity.getZ(), soundEvent.get(), SoundSource.PLAYERS, 0.5F, 1.0f);
-
-		return false;
+	public void onLeftClickEmpty(final ItemStack stack, final Player player) {
+		player.level.playSound(player, player.getX(), player.getY(), player.getZ(), soundEvent.get(), SoundSource.PLAYERS, 0.5F, 1.0f);
 	}
 }

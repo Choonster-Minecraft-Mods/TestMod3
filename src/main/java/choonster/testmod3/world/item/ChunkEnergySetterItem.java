@@ -7,7 +7,6 @@ import choonster.testmod3.util.CapabilityNotPresentException;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,7 +17,7 @@ import net.minecraft.world.level.Level;
  *
  * @author Choonster
  */
-public class ChunkEnergySetterItem extends Item {
+public class ChunkEnergySetterItem extends Item implements ILeftClickEmpty {
 	public ChunkEnergySetterItem(final Item.Properties properties) {
 		super(properties);
 	}
@@ -55,12 +54,10 @@ public class ChunkEnergySetterItem extends Item {
 	}
 
 	@Override
-	public boolean onEntitySwing(final ItemStack stack, final LivingEntity entity) {
-		final Level world = entity.getCommandSenderWorld();
-		if (!world.isClientSide && entity instanceof Player) {
-			addRemoveChunkEnergy(world, (Player) entity, 100);
+	public void onLeftClickEmpty(final ItemStack stack, final Player player) {
+		final var level = player.getCommandSenderWorld();
+		if (!level.isClientSide) {
+			addRemoveChunkEnergy(level, player, 100);
 		}
-
-		return false;
 	}
 }
