@@ -206,7 +206,6 @@
   "message.testmod3.block_destroyer.destroy": "Destroyed Wheat with Age >= 6",
   "message.testmod3.chunk_energy.add": "Added %d energy to chunk %s",
   "message.testmod3.chunk_energy.get": "Chunk %s contains %d energy",
-  "message.testmod3.chunk_energy.not_found": "No chunk energy found for chunk %s",
   "message.testmod3.chunk_energy.remove": "Removed %d energy from chunk %s",
   "message.testmod3.clearer.cleared": "Chunk cleared",
   "message.testmod3.clearer.clearing": "Clearing the chunk at %s, %s",

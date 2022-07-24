@@ -83,7 +83,6 @@ public enum TestMod3Lang {
 	MESSAGE_BLOCK_DESTROYER_DESTROY("message", "block_destroyer.destroy"),
 	MESSAGE_CHUNK_ENERGY_ADD("message", "chunk_energy.add"),
 	MESSAGE_CHUNK_ENERGY_GET("message", "chunk_energy.get"),
-	MESSAGE_CHUNK_ENERGY_NOT_FOUND("message", "chunk_energy.not_found"),
 	MESSAGE_CHUNK_ENERGY_REMOVE("message", "chunk_energy.remove"),
 	MESSAGE_CLEARER_CLEARED("message", "clearer.cleared"),
 	MESSAGE_CLEARER_CLEARING("message", "clearer.clearing"),

@@ -292,7 +292,6 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		add(TestMod3Lang.MESSAGE_CHUNK_ENERGY_ADD, "Added %d energy to chunk %s");
 		add(TestMod3Lang.MESSAGE_CHUNK_ENERGY_REMOVE, "Removed %d energy from chunk %s");
 		add(TestMod3Lang.MESSAGE_CHUNK_ENERGY_GET, "Chunk %s contains %d energy");
-		add(TestMod3Lang.MESSAGE_CHUNK_ENERGY_NOT_FOUND, "No chunk energy found for chunk %s");
 		add(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_POTIONS, "No active potions on %s");
 		add(TestMod3Lang.MESSAGE_PRINT_POTIONS_POTIONS, "Active potions on %s:");
 		add(TestMod3Lang.MESSAGE_PRINT_POTIONS_NOT_LIVING, "%s isn't a living entity");
