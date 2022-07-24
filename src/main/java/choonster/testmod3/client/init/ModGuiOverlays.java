@@ -7,17 +7,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 /**
- * Registers this mod's {@link  IGuiOverlay}s.
+ * Registers this mod's {@link IGuiOverlay}s.
  *
  * @author Choonster
  */
 @Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD, value = Dist.CLIENT)
 public class ModGuiOverlays {
+	@SubscribeEvent
 	public static void registerGuiOverlays(final RegisterGuiOverlaysEvent event) {
-		event.registerAboveAll(ChunkEnergyCapability.ID.toString(), new ChunkEnergyGuiOverlay(Minecraft.getInstance()));
+		event.registerAboveAll(ChunkEnergyCapability.ID.getPath(), new ChunkEnergyGuiOverlay(Minecraft.getInstance()));
 	}
 }
