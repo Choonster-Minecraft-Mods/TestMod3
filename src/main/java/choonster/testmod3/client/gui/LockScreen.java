@@ -5,7 +5,7 @@ import choonster.testmod3.api.capability.lock.ILock;
 import choonster.testmod3.network.SetLockCodeMessage;
 import choonster.testmod3.text.TestMod3Lang;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.chat.NarratorChatListener;
+import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -45,7 +45,7 @@ public class LockScreen extends Screen {
 	private EditBox lockCodeTextField;
 
 	public LockScreen(final ILock lock, final BlockPos pos, @Nullable final Direction facing) {
-		super(NarratorChatListener.NO_TITLE);
+		super(GameNarrator.NO_TITLE);
 		this.lock = lock;
 		this.pos = pos;
 		this.facing = facing;

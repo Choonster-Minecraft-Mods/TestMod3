@@ -47,7 +47,7 @@ public class ModItems {
 	 * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2408066-try-creating-a-music-disc-in-my-1-8-mod-please
 	 */
 	public static final RegistryObject<RecordItem> RECORD_SOLARIS = ITEMS.register("record_solaris",
-			() -> new RecordItem(13, ModSoundEvents.RECORD_SOLARIS, defaultItemProperties())
+			() -> new RecordItem(13, ModSoundEvents.RECORD_SOLARIS, defaultItemProperties(), 9085)
 	);
 
 	public static final RegistryObject<HeavyItem> HEAVY = ITEMS.register("heavy",
