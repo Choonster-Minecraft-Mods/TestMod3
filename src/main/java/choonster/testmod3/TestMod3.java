@@ -3,7 +3,9 @@ package choonster.testmod3;
 import choonster.testmod3.compat.theoneprobe.TheOneProbeCompat;
 import choonster.testmod3.config.TestMod3Config;
 import choonster.testmod3.init.*;
-import choonster.testmod3.init.levelgen.*;
+import choonster.testmod3.init.levelgen.ModBiomeModifierSerializers;
+import choonster.testmod3.init.levelgen.ModFeatures;
+import choonster.testmod3.init.levelgen.ModPlacementModifierTypes;
 import choonster.testmod3.tests.Tests;
 import choonster.testmod3.util.BlockDumper;
 import com.mojang.logging.LogUtils;
@@ -40,7 +42,6 @@ public class TestMod3 {
 		ModFluids.initialise(modEventBus);
 		ModBlocks.initialise(modEventBus);
 		ModItems.initialise(modEventBus);
-		ModBiomes.initialise(modEventBus);
 		ModMenuTypes.initialise(modEventBus);
 		ModMobEffects.initialise(modEventBus);
 		ModEntities.initialise(modEventBus);
@@ -51,8 +52,6 @@ public class TestMod3 {
 		ModSoundEvents.initialise(modEventBus);
 		ModBlockEntities.initialise(modEventBus);
 		ModTestRegistryEntries.initialise(modEventBus);
-		ModConfiguredFeatures.initialise(modEventBus);
-		ModPlacedFeatures.initialise(modEventBus);
 		ModPlacementModifierTypes.initialise(modEventBus);
 		ModLootConditionTypes.initialise(modEventBus);
 		ModLootFunctionTypes.initialise(modEventBus);
