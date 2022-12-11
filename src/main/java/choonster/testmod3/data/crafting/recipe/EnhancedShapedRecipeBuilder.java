@@ -1,17 +1,16 @@
 package choonster.testmod3.data.crafting.recipe;
 
 import choonster.testmod3.util.RegistryUtil;
-import com.google.common.base.Preconditions;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -29,8 +28,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * An extension of {@link ShapedRecipeBuilder} that allows the recipe result to have NBT and a custom group name for
- * the recipe advancement.
+ * An extension of {@link ShapedRecipeBuilder} that allows the recipe result to have NBT.
  *
  * @author Choonster
  */
@@ -39,6 +37,7 @@ public class EnhancedShapedRecipeBuilder<
 		BUILDER extends EnhancedShapedRecipeBuilder<RECIPE, BUILDER>
 		> extends ShapedRecipeBuilder {
 	private static final Method ENSURE_VALID = ObfuscationReflectionHelper.findMethod(ShapedRecipeBuilder.class, /* ensureValid */ "m_126143_", ResourceLocation.class);
+	private static final Field CATEGORY = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* category */ "f_243672_ ");
 	private static final Field ADVANCEMENT = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* advancement */ "f_126110_");
 	private static final Field GROUP = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* group */ "f_126111_");
 	private static final Field ROWS = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* rows */ "f_126108_");
@@ -49,8 +48,8 @@ public class EnhancedShapedRecipeBuilder<
 	@Nullable
 	protected String itemGroup;
 
-	protected EnhancedShapedRecipeBuilder(final ItemStack result, final RecipeSerializer<? extends RECIPE> serializer) {
-		super(result.getItem(), result.getCount());
+	protected EnhancedShapedRecipeBuilder(final RecipeCategory category, final ItemStack result, final RecipeSerializer<? extends RECIPE> serializer) {
+		super(category, result.getItem(), result.getCount());
 		this.result = result;
 		this.serializer = serializer;
 	}
@@ -124,7 +123,7 @@ public class EnhancedShapedRecipeBuilder<
 	 */
 	@Override
 	public void save(final Consumer<FinishedRecipe> consumer) {
-		final Item item = result.getItem();
+		final var item = result.getItem();
 		save(consumer, RegistryUtil.getKey(item));
 	}
 
@@ -134,7 +133,7 @@ public class EnhancedShapedRecipeBuilder<
 	 */
 	@Override
 	public void save(final Consumer<FinishedRecipe> consumer, final String save) {
-		final ResourceLocation key = RegistryUtil.getKey(result.getItem());
+		final var key = RegistryUtil.getKey(result.getItem());
 		if (new ResourceLocation(save).equals(key)) {
 			throw new IllegalStateException("Shaped Recipe " + save + " should remove its 'save' argument");
 		} else {
@@ -143,14 +142,11 @@ public class EnhancedShapedRecipeBuilder<
 	}
 
 	/**
-	 * Validates that the recipe result has NBT or a custom group has been specified.
+	 * Override to validate the recipe's ingredients, result or other conditions.
 	 *
 	 * @param id The recipe ID
 	 */
 	protected void ensureValid(final ResourceLocation id) {
-		if (itemGroup == null && result.getItem().getItemCategory() == null) {
-			throw new IllegalStateException("Enhanced Shaped Recipe " + id + " has result " + result + " with no item group - use EnhancedShapedRecipeBuilder.itemGroup to specify one");
-		}
 	}
 
 	/**
@@ -165,35 +161,35 @@ public class EnhancedShapedRecipeBuilder<
 			// Perform our validation
 			ensureValid(id);
 
-			// We can't call the super method directly because it throws an exception when the result is an item that
-			// doesn't belong to an item group (e.g. Mob Spawners).
-
-			final Advancement.Builder advancementBuilder = ((Advancement.Builder) ADVANCEMENT.get(this))
+			final var advancement = ((Advancement.Builder) ADVANCEMENT.get(this))
 					.parent(new ResourceLocation("minecraft", "recipes/root"))
 					.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
 					.rewards(AdvancementRewards.Builder.recipe(id))
 					.requirements(RequirementsStrategy.OR);
 
-			String group = (String) GROUP.get(this);
+			var group = (String) GROUP.get(this);
 			if (group == null) {
 				group = "";
 			}
 
-			@SuppressWarnings("unchecked")
-			final List<String> rows = (List<String>) ROWS.get(this);
+			final var category = (RecipeCategory) CATEGORY.get(this);
 
 			@SuppressWarnings("unchecked")
-			final Map<Character, Ingredient> key = (Map<Character, Ingredient>) KEY.get(this);
+			final var rows = (List<String>) ROWS.get(this);
 
-			String itemGroupName = itemGroup;
-			if (itemGroupName == null) {
-				final CreativeModeTab itemGroup = Preconditions.checkNotNull(result.getItem().getItemCategory());
-				itemGroupName = itemGroup.getRecipeFolderName();
-			}
+			@SuppressWarnings("unchecked")
+			final var key = (Map<Character, Ingredient>) KEY.get(this);
 
-			final ResourceLocation advancementID = new ResourceLocation(id.getNamespace(), "recipes/" + itemGroupName + "/" + id.getPath());
-
-			final Result baseRecipe = new Result(id, result.getItem(), result.getCount(), group, rows, key, advancementBuilder, advancementID);
+			final var baseRecipe = new Result(id,
+					result.getItem(),
+					result.getCount(),
+					group,
+					determineBookCategory(category),
+					rows,
+					key,
+					advancement,
+					id.withPrefix("recipes/" + category.getFolderName() + "/")
+			);
 
 			consumer.accept(new SimpleFinishedRecipe(baseRecipe, result, serializer));
 		} catch (final IllegalAccessException | InvocationTargetException e) {
@@ -202,8 +198,8 @@ public class EnhancedShapedRecipeBuilder<
 	}
 
 	public static class Vanilla extends EnhancedShapedRecipeBuilder<ShapedRecipe, Vanilla> {
-		private Vanilla(final ItemStack result) {
-			super(result, RecipeSerializer.SHAPED_RECIPE);
+		private Vanilla(final RecipeCategory category, final ItemStack result) {
+			super(category, result, RecipeSerializer.SHAPED_RECIPE);
 		}
 
 		/**
@@ -212,8 +208,8 @@ public class EnhancedShapedRecipeBuilder<
 		 * @param result The recipe result
 		 * @return The builder
 		 */
-		public static Vanilla shapedRecipe(final ItemStack result) {
-			return new Vanilla(result);
+		public static Vanilla shapedRecipe(final RecipeCategory category, final ItemStack result) {
+			return new Vanilla(category, result);
 		}
 
 		@Override

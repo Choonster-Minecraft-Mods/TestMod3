@@ -6,7 +6,7 @@ import choonster.testmod3.network.capability.fluidhandler.UpdateMenuFluidTankMes
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
@@ -18,7 +18,7 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 public class FluidTankContainerListener extends CapabilityContainerListener<IFluidHandlerItem> {
 
 	public FluidTankContainerListener(final ServerPlayer player) {
-		super(player, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+		super(player, ForgeCapabilities.FLUID_HANDLER_ITEM, null);
 	}
 
 	@Override

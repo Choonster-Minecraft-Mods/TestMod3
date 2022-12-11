@@ -51,7 +51,7 @@ public class LootTableTestItem extends Item {
 					.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player)
 					.withParameter(LootContextParams.KILLER_ENTITY, player)
 					.withParameter(LootContextParams.DIRECT_KILLER_ENTITY, player)
-					.withParameter(LootContextParams.DAMAGE_SOURCE, DamageSource.ANVIL)
+					.withParameter(LootContextParams.DAMAGE_SOURCE, DamageSource.GENERIC)
 					.withParameter(LootContextParams.TOOL, player.getMainHandItem())
 					.withParameter(LootContextParams.ORIGIN, player.position())
 					.withParameter(LootContextParams.BLOCK_STATE, state)

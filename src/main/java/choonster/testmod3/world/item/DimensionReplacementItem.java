@@ -6,7 +6,7 @@ import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -18,9 +18,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -71,7 +71,7 @@ public class DimensionReplacementItem extends Item {
 	private Optional<ItemStack> getReplacement(final Level level) {
 		return level
 				.registryAccess()
-				.registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY)
+				.registryOrThrow(Registries.DIMENSION_TYPE)
 				.getResourceKey(level.dimensionType())
 				.map(replacements::get)
 				.map(Supplier::get);

@@ -16,9 +16,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.PlayerArmorInvWrapper;
 import net.minecraftforge.items.wrapper.PlayerOffhandInvWrapper;
@@ -157,7 +157,7 @@ public class InventoryUtils {
 	 */
 	public static LazyOptional<IItemHandler> getMainInventory(final Entity entity) {
 		if (entity instanceof Player) {
-			return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP);
+			return entity.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.UP);
 		}
 
 		return LazyOptional.empty();
@@ -176,7 +176,7 @@ public class InventoryUtils {
 			return LazyOptional.of(() -> new PlayerOffhandInvWrapper(((Player) entity).getInventory()));
 		}
 
-		return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP);
+		return entity.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.UP);
 	}
 
 	/**
@@ -192,7 +192,7 @@ public class InventoryUtils {
 			return LazyOptional.of(() -> new PlayerArmorInvWrapper(((Player) entity).getInventory()));
 		}
 
-		return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.NORTH);
+		return entity.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.NORTH);
 	}
 
 	/**

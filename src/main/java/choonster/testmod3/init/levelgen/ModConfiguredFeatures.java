@@ -4,8 +4,7 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.level.levelgen.feature.BannerFeature;
 import choonster.testmod3.world.level.levelgen.feature.BannerFeatureConfig;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.core.Registry;
-import net.minecraft.data.worldgen.features.OreFeatures;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPatterns;
@@ -28,7 +27,7 @@ import java.util.function.Supplier;
  */
 public class ModConfiguredFeatures {
 	private static final DeferredRegister<ConfiguredFeature<?, ?>> CONFIGURED_FEATURES =
-			DeferredRegister.create(Registry.CONFIGURED_FEATURE_REGISTRY, TestMod3.MODID);
+			DeferredRegister.create(Registries.CONFIGURED_FEATURE, TestMod3.MODID);
 
 	private static boolean isInitialised = false;
 
@@ -50,7 +49,7 @@ public class ModConfiguredFeatures {
 			Feature.ORE,
 			() -> new OreConfiguration(
 					List.of(OreConfiguration.target(
-							OreFeatures.NETHER_ORE_REPLACEABLES,
+							new BlockMatchTest(Blocks.NETHERRACK),
 							Blocks.IRON_ORE.defaultBlockState()
 					)),
 					9

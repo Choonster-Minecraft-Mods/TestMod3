@@ -18,7 +18,9 @@ public class ModDataProviders {
 	@SubscribeEvent
 	public static void registerDataProviders(final GatherDataEvent event) {
 		final var dataGenerator = event.getGenerator();
+		final var output = dataGenerator.getPackOutput();
 		final var existingFileHelper = event.getExistingFileHelper();
+		final var lookupProvider = event.getLookupProvider();
 
 		dataGenerator.addProvider(event.includeClient(), new TestMod3LanguageProvider(dataGenerator));
 
@@ -28,16 +30,16 @@ public class ModDataProviders {
 		// Let blockstate provider see generated item models by passing its existing file helper
 		dataGenerator.addProvider(event.includeClient(), new TestMod3BlockStateProvider(dataGenerator, itemModelProvider.existingFileHelper));
 
-		dataGenerator.addProvider(event.includeServer(), new TestMod3RecipeProvider(dataGenerator));
-		dataGenerator.addProvider(event.includeServer(), new TestMod3LootTableProvider(dataGenerator));
-		dataGenerator.addProvider(event.includeServer(), new TestMod3WorldgenRegistryDumpReport(dataGenerator));
+		dataGenerator.addProvider(event.includeServer(), new TestMod3RecipeProvider(output));
+		dataGenerator.addProvider(event.includeServer(), TestMod3LootTableProvider.create(output));
+//		dataGenerator.addProvider(event.includeServer(), new TestMod3WorldgenRegistryDumpReport(dataGenerator));
 		dataGenerator.addProvider(event.includeServer(), new TestMod3LootModifierProvider(dataGenerator));
-		dataGenerator.addProvider(event.includeServer(), new TestMod3BiomeModifierProvider(dataGenerator, existingFileHelper));
+		dataGenerator.addProvider(event.includeServer(), new TestMod3BiomeModifierProvider(dataGenerator, existingFileHelper, lookupProvider));
 
-		final var blockTagsProvider = new TestMod3BlockTagsProvider(dataGenerator, existingFileHelper);
+		final var blockTagsProvider = new TestMod3BlockTagsProvider(output, lookupProvider, existingFileHelper);
 		dataGenerator.addProvider(event.includeServer(), blockTagsProvider);
-		dataGenerator.addProvider(event.includeServer(), new TestMod3ItemTagsProvider(dataGenerator, blockTagsProvider, existingFileHelper));
-		dataGenerator.addProvider(event.includeServer(), new TestMod3BiomeTagsProvider(dataGenerator, existingFileHelper));
-		dataGenerator.addProvider(event.includeServer(), new TestMod3FluidTagsProvider(dataGenerator, existingFileHelper));
+		dataGenerator.addProvider(event.includeServer(), new TestMod3ItemTagsProvider(output, lookupProvider, blockTagsProvider, existingFileHelper));
+		dataGenerator.addProvider(event.includeServer(), new TestMod3BiomeTagsProvider(output, lookupProvider, existingFileHelper));
+		dataGenerator.addProvider(event.includeServer(), new TestMod3FluidTagsProvider(output, lookupProvider, existingFileHelper));
 	}
 }

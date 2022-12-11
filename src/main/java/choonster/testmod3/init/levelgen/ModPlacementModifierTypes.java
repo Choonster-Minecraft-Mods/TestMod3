@@ -2,7 +2,7 @@ package choonster.testmod3.init.levelgen;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.level.levelgen.placement.InChunksDivisibleBy16Filter;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -18,7 +18,7 @@ import java.util.function.Supplier;
  */
 public class ModPlacementModifierTypes {
 	private static final DeferredRegister<PlacementModifierType<?>> PLACEMENT_MODIFIER_TYPES =
-			DeferredRegister.create(Registry.PLACEMENT_MODIFIER_REGISTRY, TestMod3.MODID);
+			DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, TestMod3.MODID);
 
 	private static boolean isInitialised = false;
 

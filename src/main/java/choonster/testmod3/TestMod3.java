@@ -30,8 +30,6 @@ public class TestMod3 {
 	public static final String MODID = "testmod3";
 	public static final String NAME = "Test Mod 3";
 
-	public static final TestMod3CreativeModeTab CREATIVE_MODE_TAB = new TestMod3CreativeModeTab();
-
 	public static final SimpleChannel network = ModNetwork.getNetworkChannel();
 
 	public TestMod3() {

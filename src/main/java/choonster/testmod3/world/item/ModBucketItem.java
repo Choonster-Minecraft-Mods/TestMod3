@@ -8,7 +8,6 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.locale.Language;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -29,13 +28,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.SoundActions;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.MutableHashedLinkedMap;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
@@ -74,17 +74,8 @@ public class ModBucketItem extends Item {
 		return getFluid(stack).isEmpty() ? super.getMaxStackSize(stack) : 1;
 	}
 
-	@Override
-	public void fillItemCategory(final CreativeModeTab group, final NonNullList<ItemStack> items) {
-		if (!allowedIn(group)) {
-			return;
-		}
-
-		items.add(empty());
-
-		if (CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY == null) {
-			return;
-		}
+	public void fillCreativeModeTab(final MutableHashedLinkedMap<ItemStack, CreativeModeTab.TabVisibility> entries) {
+		final var empty = empty();
 
 		// Add all fluids that the bucket can be filled with
 		RegistryUtil.stream(ForgeRegistries.FLUIDS)
@@ -92,7 +83,7 @@ public class ModBucketItem extends Item {
 				.filter(ModFluidUtil::hasBucket)
 				.map(this::getFilledBucket)
 				.filter(stack -> !stack.isEmpty())
-				.forEach(items::add);
+				.forEach(stack -> entries.putAfter(empty, stack, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS));
 	}
 
 	@Override
@@ -268,12 +259,12 @@ public class ModBucketItem extends Item {
 	@Nullable
 	@Override
 	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final CompoundTag nbt) {
-		if (CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY == null) {
+		if (ForgeCapabilities.FLUID_HANDLER_ITEM == null) {
 			return null;
 		}
 
 		return new SerializableCapabilityProvider<>(
-				CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
+				ForgeCapabilities.FLUID_HANDLER_ITEM,
 				null,
 				new UniversalBucketFluidHandler(stack, capacity)
 		);

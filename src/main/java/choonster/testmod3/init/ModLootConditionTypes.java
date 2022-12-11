@@ -3,7 +3,7 @@ package choonster.testmod3.init;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.level.storage.loot.predicates.IsChestLoot;
 import choonster.testmod3.world.level.storage.loot.predicates.MatchBlockTag;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.Serializer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
@@ -20,7 +20,7 @@ import java.util.function.Supplier;
  */
 public class ModLootConditionTypes {
 	private static final DeferredRegister<LootItemConditionType> LOOT_ITEM_CONDITION_TYPES =
-			DeferredRegister.create(Registry.LOOT_ITEM_REGISTRY, TestMod3.MODID);
+			DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, TestMod3.MODID);
 
 	private static boolean isInitialised = false;
 

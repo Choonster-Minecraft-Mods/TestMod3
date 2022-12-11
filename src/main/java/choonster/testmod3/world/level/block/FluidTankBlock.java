@@ -25,9 +25,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
@@ -55,7 +55,7 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 
 		if (blockEntity != null) {
 			final var fluidHandler = blockEntity
-					.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)
+					.getCapability(ForgeCapabilities.FLUID_HANDLER, null)
 					.orElseThrow(CapabilityNotPresentException::new);
 
 			builder.withDynamicDrop(FLUID_TANK_CONTENTS, (context, stackConsumer) ->
@@ -76,7 +76,7 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 	 * @return A lazy optional containing the IFluidHandler, if it exists
 	 */
 	private LazyOptional<IFluidHandler> getFluidHandler(final BlockGetter level, final BlockPos pos) {
-		return getBlockEntity(level, pos).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+		return getBlockEntity(level, pos).getCapability(ForgeCapabilities.FLUID_HANDLER, null);
 	}
 
 	@Override
@@ -127,7 +127,7 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 					}
 
 					// If the held item is a fluid container, stop processing here so it doesn't try to place its contents
-					return heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent() ? InteractionResult.SUCCESS : InteractionResult.PASS;
+					return heldItem.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent() ? InteractionResult.SUCCESS : InteractionResult.PASS;
 				})
 				.orElse(InteractionResult.PASS);
 	}

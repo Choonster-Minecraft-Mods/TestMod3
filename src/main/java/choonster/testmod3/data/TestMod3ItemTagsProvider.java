@@ -4,14 +4,17 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModBlocks;
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.init.ModTags;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
-
 import org.jetbrains.annotations.Nullable;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Generates this mod's item tags.
@@ -19,12 +22,17 @@ import org.jetbrains.annotations.Nullable;
  * @author Choonster
  */
 public class TestMod3ItemTagsProvider extends ItemTagsProvider {
-	public TestMod3ItemTagsProvider(final DataGenerator dataGenerator, final BlockTagsProvider blockTagProvider, @Nullable final ExistingFileHelper existingFileHelper) {
-		super(dataGenerator, blockTagProvider, TestMod3.MODID, existingFileHelper);
+	public TestMod3ItemTagsProvider(
+			final PackOutput output,
+			final CompletableFuture<HolderLookup.Provider> holderLookup,
+			final TagsProvider<Block> blockTagsProvider,
+			@Nullable final ExistingFileHelper existingFileHelper
+	) {
+		super(output, holderLookup, blockTagsProvider, TestMod3.MODID, existingFileHelper);
 	}
 
 	@Override
-	protected void addTags() {
+	protected void addTags(final HolderLookup.Provider p_256380_) {
 		tag(ItemTags.ARROWS).add(
 				ModItems.ARROW.get(),
 				ModItems.BLOCK_DETECTION_ARROW.get()

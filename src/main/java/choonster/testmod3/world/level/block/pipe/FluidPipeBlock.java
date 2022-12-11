@@ -8,8 +8,8 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.IFluidBlock;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 /**
  * A fluid pipe.
@@ -37,7 +37,7 @@ public class FluidPipeBlock extends BasePipeBlock {
 		// Connect if the neighbouring block has a BlockEntity with an IFluidHandler for the adjacent face
 		if (neighbourBlock instanceof EntityBlock) {
 			final BlockEntity blockEntity = world.getBlockEntity(neighbourPos);
-			return blockEntity != null && blockEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, neighbourDirection.getOpposite()).isPresent();
+			return blockEntity != null && blockEntity.getCapability(ForgeCapabilities.FLUID_HANDLER, neighbourDirection.getOpposite()).isPresent();
 		}
 
 		// Connect if the neighbouring block is a fluid, FluidUtil.getFluidHandler will provide an IFluidHandler wrapper to drain from it

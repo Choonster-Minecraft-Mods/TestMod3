@@ -1,7 +1,6 @@
 package choonster.testmod3.world.level.block;
 
 import choonster.testmod3.util.VectorUtils;
-import com.mojang.math.Quaternion;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,8 +26,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
 
-import java.util.List;
 import java.util.stream.IntStream;
 
 /**
@@ -59,34 +58,34 @@ public class PlaneBlock extends Block {
 	 * The VoxelShapes for each possible rotation.
 	 */
 	private static final VoxelShape[] SHAPES = Util.make(() -> {
-		final VoxelShape[] combinedShapes = new VoxelShape[12];
+		final var combinedShapes = new VoxelShape[12];
 
 		// The number of bounding boxes to create
-		final int numBoundingBoxes = 8;
-		final double increment = 1.0 / numBoundingBoxes;
+		final var numBoundingBoxes = 8;
+		final var increment = 1.0 / numBoundingBoxes;
 
 		// Create the bounding boxes for the default rotation pair (horizontal = north, vertical = up)
-		final List<AABB> boundingBoxes = IntStream.range(0, numBoundingBoxes)
+		final var boundingBoxes = IntStream.range(0, numBoundingBoxes)
 				.mapToObj(i -> new AABB(0, i * increment, 0, 1, (i + 1) * increment, 1 - (i * increment)))
 				.toList();
 
 		// For each horizontal and vertical rotation pair,
-		for (final Direction horizontalRotation : HORIZONTAL_ROTATION.getPossibleValues()) {
-			for (final VerticalRotation verticalRotation : VERTICAL_ROTATION.getPossibleValues()) {
+		for (final var horizontalRotation : HORIZONTAL_ROTATION.getPossibleValues()) {
+			for (final var verticalRotation : VERTICAL_ROTATION.getPossibleValues()) {
 				// Get the horizontal (around the y-axis) rotation angle and quaternion
 				// Needs to be negated to perform correct rotation.
-				final double horizontalRotationAngle = -VectorUtils.getHorizontalRotation(horizontalRotation);
-				final Quaternion horizontalRotationQuaternion = VectorUtils.getRotationQuaternion(Direction.Axis.Y, (float) horizontalRotationAngle);
+				final var horizontalRotationAngle = -VectorUtils.getHorizontalRotation(horizontalRotation);
+				final var horizontalRotationQuaternion = VectorUtils.getRotationQuaternion(Direction.Axis.Y, (float) horizontalRotationAngle);
 
 				// Get the vertical (around the z-axis) rotation angle and quaternion
 				// Needs to be negated to perform correct rotation.
-				final double verticalRotationAngle = -verticalRotation.getAngle();
-				final Quaternion verticalRotationQuaternion = VectorUtils.getRotationQuaternion(Direction.Axis.Z, (float) verticalRotationAngle);
+				final var verticalRotationAngle = -verticalRotation.getAngle();
+				final var verticalRotationQuaternion = VectorUtils.getRotationQuaternion(Direction.Axis.Z, (float) verticalRotationAngle);
 
-				final Quaternion combinedRotationQuaternion = new Quaternion(horizontalRotationQuaternion);
+				final var combinedRotationQuaternion = new Quaternionf(horizontalRotationQuaternion);
 				combinedRotationQuaternion.mul(verticalRotationQuaternion);
 
-				final VoxelShape combinedShape = boundingBoxes
+				final var combinedShape = boundingBoxes
 						.stream()
 						.map(aabb -> VectorUtils.rotateAABB(aabb, combinedRotationQuaternion)) // Rotate the AABBs
 						.map(VectorUtils::adjustAABBForVoxelShape) // Round/offset them
@@ -118,15 +117,15 @@ public class PlaneBlock extends Block {
 	}
 
 	private static InteractionResult rotateBlock(final Level level, final BlockPos pos, final Direction axis) {
-		final Direction.Axis axisToRotate = axis.getAxis();
+		final var axisToRotate = axis.getAxis();
 
-		BlockState state = level.getBlockState(pos);
+		var state = level.getBlockState(pos);
 
 		switch (axisToRotate) {
 			case X, Z -> state = state.cycle(VERTICAL_ROTATION);
 			case Y -> {
-				final Direction originalRotation = state.getValue(HORIZONTAL_ROTATION);
-				final Direction newRotation = axis.getAxisDirection() == Direction.AxisDirection.POSITIVE ? originalRotation.getClockWise() : originalRotation.getCounterClockWise();
+				final var originalRotation = state.getValue(HORIZONTAL_ROTATION);
+				final var newRotation = axis.getAxisDirection() == Direction.AxisDirection.POSITIVE ? originalRotation.getClockWise() : originalRotation.getCounterClockWise();
 				state = state.setValue(HORIZONTAL_ROTATION, newRotation);
 			}
 		}
@@ -143,8 +142,8 @@ public class PlaneBlock extends Block {
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(final BlockPlaceContext context) {
-		final Direction horizontalRotation = context.getHorizontalDirection();
-		final VerticalRotation verticalRotation = VerticalRotation.fromDirection(context.getClickedFace());
+		final var horizontalRotation = context.getHorizontalDirection();
+		final var verticalRotation = VerticalRotation.fromDirection(context.getClickedFace());
 
 		return defaultBlockState()
 				.setValue(HORIZONTAL_ROTATION, horizontalRotation)

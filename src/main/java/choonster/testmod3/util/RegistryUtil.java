@@ -28,16 +28,26 @@ public class RegistryUtil {
 	 *
 	 * @param registry The registry
 	 * @param <T>      The registry type
-	 * @return A Set containing the registry entries
+	 * @return A Stream containing the registry entries
 	 */
-	public static <T> Set<T> getModRegistryEntries(final IForgeRegistry<T> registry) {
+	public static <T> Stream<T> getModRegistryEntriesStream(final IForgeRegistry<T> registry) {
 		return stream(registry)
 				.filter(entry ->
 						Optional.ofNullable(registry.getKey(entry))
 								.filter(key -> key.getNamespace().equals(TestMod3.MODID))
 								.isPresent()
-				)
-				.collect(Collectors.toSet());
+				);
+	}
+
+	/**
+	 * Get all of this mod's registry entries from the provided registry.
+	 *
+	 * @param registry The registry
+	 * @param <T>      The registry type
+	 * @return A Set containing the registry entries
+	 */
+	public static <T> Set<T> getModRegistryEntries(final IForgeRegistry<T> registry) {
+		return getModRegistryEntriesStream(registry).collect(Collectors.toSet());
 	}
 
 	/**

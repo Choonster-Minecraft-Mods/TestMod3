@@ -5,11 +5,10 @@ import choonster.testmod3.network.capability.UpdateMenuCapabilityMessage;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.network.NetworkEvent;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
@@ -28,7 +27,7 @@ public class UpdateMenuFluidTankMessage extends UpdateMenuCapabilityMessage<IFlu
 			final IFluidHandlerItem fluidHandler
 	) {
 		super(
-				CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
+				ForgeCapabilities.FLUID_HANDLER_ITEM,
 				facing, containerID, stateID, slotNumber, fluidHandler,
 				FluidHandlerFunctions::convertFluidHandlerToFluidTankSnapshot
 		);
@@ -42,7 +41,7 @@ public class UpdateMenuFluidTankMessage extends UpdateMenuCapabilityMessage<IFlu
 			final FluidTankSnapshot capabilityData
 	) {
 		super(
-				CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
+				ForgeCapabilities.FLUID_HANDLER_ITEM,
 				facing, containerID, stateID, slotNumber, capabilityData
 		);
 	}

@@ -6,8 +6,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
 
@@ -90,7 +90,7 @@ public class RestrictedFluidTankBlockEntity extends BaseFluidTankBlockEntity {
 
 	@Override
 	public <T> LazyOptional<T> getCapability(final Capability<T> capability, @Nullable final Direction facing) {
-		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && !isFacingEnabled(facing)) {
+		if (capability == ForgeCapabilities.FLUID_HANDLER && !isFacingEnabled(facing)) {
 			return LazyOptional.empty();
 		}
 

@@ -13,7 +13,7 @@ import choonster.testmod3.init.ModItems;
 import choonster.testmod3.util.RegistryUtil;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
 import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -35,15 +35,15 @@ import java.util.function.Consumer;
  * @author Choonster
  */
 public class TestMod3RecipeProvider extends RecipeProvider {
-	public TestMod3RecipeProvider(final DataGenerator dataGenerator) {
-		super(dataGenerator);
+	public TestMod3RecipeProvider(final PackOutput output) {
+		super(output);
 	}
 
 	@Override
-	protected void buildCraftingRecipes(final Consumer<FinishedRecipe> recipeConsumer) {
+	protected void buildRecipes(final Consumer<FinishedRecipe> recipeConsumer) {
 		// Craft a Dimension Replacement item from a Subscripts item and a Superscripts item
 		{
-			ShapelessRecipeBuilder.shapeless(ModItems.DIMENSION_REPLACEMENT.get())
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.DIMENSION_REPLACEMENT.get())
 					.requires(ModItems.SUBSCRIPTS.get())
 					.requires(ModItems.SUPERSCRIPTS.get())
 					.unlockedBy("has_subscripts", has(ModItems.SUBSCRIPTS.get()))
@@ -53,7 +53,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 
 		// Craft a Dimension Replacement item by smelting a Subscripts item
 		{
-			SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModItems.SUBSCRIPTS.get()), ModItems.DIMENSION_REPLACEMENT.get(), 0.35f, 200)
+			SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModItems.SUBSCRIPTS.get()), RecipeCategory.MISC, ModItems.DIMENSION_REPLACEMENT.get(), 0.35f, 200)
 					.unlockedBy("has_subscripts", has(ModItems.SUBSCRIPTS.get()))
 					.save(recipeConsumer, new ResourceLocation(TestMod3.MODID, "dimension_replacement_from_subscripts"));
 		}
@@ -61,7 +61,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 		// A recipe with a conditional ingredient whose conditions are never met.
 		// https://github.com/MinecraftForge/MinecraftForge/issues/4359
 		{
-			ShapedRecipeBuilder.shaped(Blocks.COBBLESTONE)
+			ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, Blocks.COBBLESTONE)
 					.pattern("Cc")
 					.define(
 							'C',
@@ -77,7 +77,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 		// Craft eight Raw Cod from a Guardian Spawner
 		// Test for MobSpawnerIngredientSerializer
 		{
-			ShapelessRecipeBuilder.shapeless(Items.COD, 8)
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, Items.COD, 8)
 					.requires(
 							MobSpawnerIngredientBuilder.mobSpawnerIngredient(Blocks.SPAWNER)
 									.entity(EntityType.GUARDIAN)
@@ -90,18 +90,18 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 		// Craft a Guardian Spawner from a Raw Cod surrounded by Sticks
 		// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2424619-help-needed-creating-non-pig-mob-spawners
 		{
-			final ItemStack guardianSpawner = new ItemStack(Blocks.SPAWNER);
-			final CompoundTag blockEntityTag = guardianSpawner.getOrCreateTagElement("BlockEntityTag");
+			final var guardianSpawner = new ItemStack(Blocks.SPAWNER);
+			final var blockEntityTag = guardianSpawner.getOrCreateTagElement("BlockEntityTag");
 
-			final CompoundTag spawnData = new CompoundTag();
+			final var spawnData = new CompoundTag();
 
 			spawnData.putString("id", RegistryUtil.getKey(EntityType.GUARDIAN).toString());
 			blockEntityTag.put("SpawnData", spawnData);
 
-			final ListTag spawnPotentials = new ListTag();
+			final var spawnPotentials = new ListTag();
 			blockEntityTag.put("SpawnPotentials", spawnPotentials);
 
-			EnhancedShapedRecipeBuilder.Vanilla.shapedRecipe(guardianSpawner)
+			EnhancedShapedRecipeBuilder.Vanilla.shapedRecipe(RecipeCategory.MISC, guardianSpawner)
 					.pattern("SSS")
 					.pattern("SCS")
 					.pattern("SSS")
@@ -116,7 +116,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 		// Upgrade an Iron Helmet to a Golden Helmet while preserving its damage
 		// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2513998-help-needed-creating-crafting-recipe-with-damaged
 		{
-			ShapedArmourUpgradeRecipeBuilder.shapedArmourUpgradeRecipe(Items.GOLDEN_HELMET)
+			ShapedArmourUpgradeRecipeBuilder.shapedArmourUpgradeRecipe(RecipeCategory.COMBAT, Items.GOLDEN_HELMET)
 					.pattern("GGG")
 					.pattern("GHG")
 					.pattern("GGG")
@@ -129,7 +129,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 
 		// Cut an Oak Log into two Oak Planks with a Cutting Axe, damaging the axe
 		{
-			ShapelessRecipeBuilder.shapeless(Blocks.OAK_PLANKS, 2)
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, Blocks.OAK_PLANKS, 2)
 					.group(new ResourceLocation("minecraft", "planks").toString())
 					.requires(ModItems.WOODEN_AXE.get())
 					.requires(Blocks.OAK_LOG)
@@ -140,7 +140,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 
 		// Cut an Oak Log into two Oak Planks with a Wooden Axe, damaging the axe
 		{
-			ShapelessCuttingRecipeBuilder.shapelessCuttingRecipe(Blocks.OAK_PLANKS, 2)
+			ShapelessCuttingRecipeBuilder.shapelessCuttingRecipe(RecipeCategory.BUILDING_BLOCKS, Blocks.OAK_PLANKS, 2)
 					.group(new ResourceLocation("minecraft", "planks").toString())
 					.requires(Items.WOODEN_AXE)
 					.requires(Blocks.OAK_LOG)
@@ -151,10 +151,10 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 
 		// Craft Cobblestone from three Buckets of Static Gas
 		{
-			final FluidStack staticGas = new FluidStack(ModFluids.STATIC_GAS.getStill().get(), FluidType.BUCKET_VOLUME);
-			final FluidContainerIngredient staticGasContainer = FluidContainerIngredient.fromFluidStack(staticGas);
+			final var staticGas = new FluidStack(ModFluids.STATIC_GAS.getStill().get(), FluidType.BUCKET_VOLUME);
+			final var staticGasContainer = FluidContainerIngredient.fromFluidStack(staticGas);
 
-			ShapelessFluidContainerRecipeBuilder.shapelessFluidContainerRecipe(Blocks.COBBLESTONE)
+			ShapelessFluidContainerRecipeBuilder.shapelessFluidContainerRecipe(RecipeCategory.BUILDING_BLOCKS, Blocks.COBBLESTONE)
 					.requires(staticGasContainer)
 					.requires(staticGasContainer)
 					.requires(staticGasContainer)
@@ -166,10 +166,5 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					))
 					.save(recipeConsumer, new ResourceLocation(TestMod3.MODID, "cobblestone_from_static_gas"));
 		}
-	}
-
-	@Override
-	public String getName() {
-		return "TestMod3Recipes";
 	}
 }

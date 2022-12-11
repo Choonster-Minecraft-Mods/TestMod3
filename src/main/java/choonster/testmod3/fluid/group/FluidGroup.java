@@ -1,7 +1,6 @@
 package choonster.testmod3.fluid.group;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -200,8 +199,7 @@ public class FluidGroup<TYPE extends FluidType, STILL extends Fluid, FLOWING ext
 	public static Item.Properties defaultBucketProperties() {
 		return new Item.Properties()
 				.craftRemainder(Items.BUCKET)
-				.stacksTo(1)
-				.tab(CreativeModeTab.TAB_MISC);
+				.stacksTo(1);
 	}
 
 	@FunctionalInterface

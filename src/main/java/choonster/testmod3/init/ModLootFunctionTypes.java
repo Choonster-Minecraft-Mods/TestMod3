@@ -2,7 +2,7 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.level.storage.loot.functions.SetFluidTankContents;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.Serializer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
@@ -18,7 +18,8 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class ModLootFunctionTypes {
-	private static final DeferredRegister<LootItemFunctionType> LOOT_ITEM_FUNCTION_TYPES = DeferredRegister.create(Registry.LOOT_FUNCTION_REGISTRY, TestMod3.MODID);
+	private static final DeferredRegister<LootItemFunctionType> LOOT_ITEM_FUNCTION_TYPES =
+			DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, TestMod3.MODID);
 
 	private static boolean isInitialised = false;
 

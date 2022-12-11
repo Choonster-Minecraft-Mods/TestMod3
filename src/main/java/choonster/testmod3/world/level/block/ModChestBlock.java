@@ -28,7 +28,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -151,7 +151,7 @@ public class ModChestBlock extends BaseEntityBlock<ModChestBlockEntity> {
 			final var blockEntity = getBlockEntity(world, pos);
 			if (blockEntity != null) {
 				final var itemHandler = blockEntity
-						.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)
+						.getCapability(ForgeCapabilities.ITEM_HANDLER, null)
 						.orElseThrow(CapabilityNotPresentException::new);
 
 				InventoryUtils.dropItemHandlerContents(world, pos, itemHandler);

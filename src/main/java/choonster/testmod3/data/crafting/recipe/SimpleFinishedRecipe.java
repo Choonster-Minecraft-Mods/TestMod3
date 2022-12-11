@@ -6,6 +6,7 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A {@link FinishedRecipe} that allows the recipe result to have NBT.
@@ -15,6 +16,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
  */
 public class SimpleFinishedRecipe extends DelegateFinishedRecipe {
 	private final RecipeSerializer<?> serializer;
+	@Nullable
 	private final CompoundTag resultNBT;
 
 	public SimpleFinishedRecipe(final FinishedRecipe baseRecipe, final ItemStack result, final RecipeSerializer<?> serializer) {

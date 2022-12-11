@@ -2,6 +2,7 @@ package choonster.testmod3.data.crafting.recipe;
 
 import choonster.testmod3.init.ModCrafting;
 import choonster.testmod3.world.item.crafting.recipe.ShapelessCuttingRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 
@@ -11,8 +12,8 @@ import net.minecraft.world.level.ItemLike;
  * @author Choonster
  */
 public class ShapelessCuttingRecipeBuilder extends EnhancedShapelessRecipeBuilder<ShapelessCuttingRecipe, ShapelessCuttingRecipeBuilder> {
-	protected ShapelessCuttingRecipeBuilder(final ItemStack result) {
-		super(result, ModCrafting.Recipes.CUTTING_SHAPELESS.get());
+	protected ShapelessCuttingRecipeBuilder(final RecipeCategory category, final ItemStack result) {
+		super(category, result, ModCrafting.Recipes.CUTTING_SHAPELESS.get());
 	}
 
 	/**
@@ -21,8 +22,8 @@ public class ShapelessCuttingRecipeBuilder extends EnhancedShapelessRecipeBuilde
 	 * @param result The recipe result item
 	 * @return The builder
 	 */
-	public static ShapelessCuttingRecipeBuilder shapelessCuttingRecipe(final ItemLike result) {
-		return shapelessCuttingRecipe(new ItemStack(result));
+	public static ShapelessCuttingRecipeBuilder shapelessCuttingRecipe(final RecipeCategory category, final ItemLike result) {
+		return shapelessCuttingRecipe(category, new ItemStack(result));
 	}
 
 	/**
@@ -32,8 +33,8 @@ public class ShapelessCuttingRecipeBuilder extends EnhancedShapelessRecipeBuilde
 	 * @param count  The recipe result count
 	 * @return The builder
 	 */
-	public static ShapelessCuttingRecipeBuilder shapelessCuttingRecipe(final ItemLike result, final int count) {
-		return shapelessCuttingRecipe(new ItemStack(result, count));
+	public static ShapelessCuttingRecipeBuilder shapelessCuttingRecipe(final RecipeCategory category, final ItemLike result, final int count) {
+		return shapelessCuttingRecipe(category, new ItemStack(result, count));
 	}
 
 	/**
@@ -42,7 +43,7 @@ public class ShapelessCuttingRecipeBuilder extends EnhancedShapelessRecipeBuilde
 	 * @param result The recipe result
 	 * @return The builder
 	 */
-	public static ShapelessCuttingRecipeBuilder shapelessCuttingRecipe(final ItemStack result) {
-		return new ShapelessCuttingRecipeBuilder(result);
+	public static ShapelessCuttingRecipeBuilder shapelessCuttingRecipe(final RecipeCategory category, final ItemStack result) {
+		return new ShapelessCuttingRecipeBuilder(category, result);
 	}
 }

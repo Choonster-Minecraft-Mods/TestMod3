@@ -3,10 +3,11 @@ package choonster.testmod3.data.loot;
 import choonster.testmod3.init.ModEntities;
 import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.data.loot.EntityLoot;
+import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -20,14 +21,20 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.stream.Stream;
+
 /**
  * Generates this mod's entity loot tables.
  *
  * @author Choonster
  */
-public class TestMod3EntityLootTables extends EntityLoot {
+public class TestMod3EntityLoot extends EntityLootSubProvider {
+	public TestMod3EntityLoot() {
+		super(FeatureFlags.REGISTRY.allFlags());
+	}
+
 	@Override
-	protected void addTables() {
+	public void generate() {
 		add(ModEntities.PLAYER_AVOIDING_CREEPER.get(),
 				LootTable.lootTable()
 						.withPool(
@@ -47,7 +54,7 @@ public class TestMod3EntityLootTables extends EntityLoot {
 	}
 
 	@Override
-	protected Iterable<EntityType<?>> getKnownEntities() {
-		return RegistryUtil.getModRegistryEntries(ForgeRegistries.ENTITY_TYPES);
+	protected Stream<EntityType<?>> getKnownEntityTypes() {
+		return RegistryUtil.getModRegistryEntriesStream(ForgeRegistries.ENTITY_TYPES);
 	}
 }

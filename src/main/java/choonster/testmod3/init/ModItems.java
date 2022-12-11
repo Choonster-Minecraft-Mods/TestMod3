@@ -25,6 +25,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Collection;
 import java.util.function.Supplier;
 
 public class ModItems {
@@ -330,11 +331,19 @@ public class ModItems {
 	}
 
 	/**
-	 * Gets an {@link Item.Properties} instance with the {@link CreativeModeTab} set to {@link TestMod3#CREATIVE_MODE_TAB}.
+	 * @return A collection of this mod's items in the order of their registration.
+	 */
+	/* package-private */
+	static Collection<RegistryObject<Item>> orderedItems() {
+		return ITEMS.getEntries();
+	}
+
+	/**
+	 * Gets an {@link Item.Properties} instance with the default item properties.
 	 *
 	 * @return The item properties
 	 */
 	private static Item.Properties defaultItemProperties() {
-		return new Item.Properties().tab(TestMod3.CREATIVE_MODE_TAB);
+		return new Item.Properties();
 	}
 }

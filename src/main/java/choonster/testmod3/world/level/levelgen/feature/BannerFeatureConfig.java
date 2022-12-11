@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BannerPattern;
@@ -26,7 +26,7 @@ public record BannerFeatureConfig(
 							.forGetter(BannerFeatureConfig::color),
 
 					Codec.mapPair(
-									Registry.BANNER_PATTERN.byNameCodec().fieldOf("pattern"),
+									BuiltInRegistries.BANNER_PATTERN.byNameCodec().fieldOf("pattern"),
 									VanillaCodecs.DYE_COLOR.fieldOf("color")
 							)
 							.codec()
@@ -47,7 +47,7 @@ public record BannerFeatureConfig(
 		return new BannerFeatureConfig(
 				color,
 				Arrays.stream(patterns)
-						.map(pair -> Pair.of(Registry.BANNER_PATTERN.get(pair.getFirst()), pair.getSecond()))
+						.map(pair -> Pair.of(BuiltInRegistries.BANNER_PATTERN.get(pair.getFirst()), pair.getSecond()))
 						.toList()
 		);
 	}

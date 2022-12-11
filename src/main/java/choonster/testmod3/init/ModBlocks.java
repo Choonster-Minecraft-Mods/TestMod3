@@ -8,7 +8,10 @@ import choonster.testmod3.world.level.block.pipe.BasicPipeBlock;
 import choonster.testmod3.world.level.block.pipe.FluidPipeBlock;
 import choonster.testmod3.world.level.block.slab.ColouredSlabBlock;
 import choonster.testmod3.world.level.block.variantgroup.BlockVariantGroup;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -251,12 +254,12 @@ public class ModBlocks {
 	}
 
 	/**
-	 * Gets an {@link Item.Properties} instance with the {@link CreativeModeTab} set to {@link TestMod3#CREATIVE_MODE_TAB}.
+	 * Gets an {@link Item.Properties} instance with the default item properties.
 	 *
 	 * @return The item properties
 	 */
 	private static Item.Properties defaultItemProperties() {
-		return new Item.Properties().tab(TestMod3.CREATIVE_MODE_TAB);
+		return new Item.Properties();
 	}
 
 	/**

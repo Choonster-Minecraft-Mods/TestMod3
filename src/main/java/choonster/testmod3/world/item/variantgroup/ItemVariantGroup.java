@@ -1,10 +1,8 @@
 package choonster.testmod3.world.item.variantgroup;
 
-import choonster.testmod3.TestMod3;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -142,7 +140,7 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentabl
 		@Nullable
 		private Iterable<VARIANT> variants;
 
-		private Function<VARIANT, Item.Properties> itemPropertiesFactory = variant -> new Item.Properties().tab(TestMod3.CREATIVE_MODE_TAB);
+		private Function<VARIANT, Item.Properties> itemPropertiesFactory = variant -> new Item.Properties();
 		@Nullable
 		private ItemFactory<VARIANT, ITEM> itemFactory;
 
@@ -213,8 +211,7 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentabl
 		/**
 		 * Sets the factory function used to create the properties for each item.
 		 * <p>
-		 * If no item properties factory is specified, a factory producing item properties with the {@link CreativeModeTab}
-		 * set to {@link TestMod3#CREATIVE_MODE_TAB} is used.
+		 * If no item properties factory is specified, the default item properties are used.
 		 *
 		 * @param itemPropertiesFactory The item properties factory function
 		 * @return This builder

@@ -2,6 +2,7 @@ package choonster.testmod3.data.crafting.recipe;
 
 import choonster.testmod3.init.ModCrafting;
 import choonster.testmod3.world.item.crafting.recipe.ShapedArmourUpgradeRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -12,8 +13,8 @@ import net.minecraft.world.level.ItemLike;
  * @author Choonster
  */
 public class ShapedArmourUpgradeRecipeBuilder extends EnhancedShapedRecipeBuilder<ShapedArmourUpgradeRecipe, ShapedArmourUpgradeRecipeBuilder> {
-	protected ShapedArmourUpgradeRecipeBuilder(final ItemStack result) {
-		super(result, ModCrafting.Recipes.ARMOUR_UPGRADE_SHAPED.get());
+	protected ShapedArmourUpgradeRecipeBuilder(final RecipeCategory category, final ItemStack result) {
+		super(category, result, ModCrafting.Recipes.ARMOUR_UPGRADE_SHAPED.get());
 	}
 
 	/**
@@ -22,8 +23,8 @@ public class ShapedArmourUpgradeRecipeBuilder extends EnhancedShapedRecipeBuilde
 	 * @param result The recipe result item
 	 * @return The builder
 	 */
-	public static ShapedArmourUpgradeRecipeBuilder shapedArmourUpgradeRecipe(final ItemLike result) {
-		return shapedArmourUpgradeRecipe(new ItemStack(result));
+	public static ShapedArmourUpgradeRecipeBuilder shapedArmourUpgradeRecipe(final RecipeCategory category, final ItemLike result) {
+		return shapedArmourUpgradeRecipe(category, new ItemStack(result));
 	}
 
 	/**
@@ -32,8 +33,8 @@ public class ShapedArmourUpgradeRecipeBuilder extends EnhancedShapedRecipeBuilde
 	 * @param result The recipe result
 	 * @return The builder
 	 */
-	public static ShapedArmourUpgradeRecipeBuilder shapedArmourUpgradeRecipe(final ItemStack result) {
-		return new ShapedArmourUpgradeRecipeBuilder(result);
+	public static ShapedArmourUpgradeRecipeBuilder shapedArmourUpgradeRecipe(final RecipeCategory category, final ItemStack result) {
+		return new ShapedArmourUpgradeRecipeBuilder(category, result);
 	}
 
 	/**

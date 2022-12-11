@@ -12,6 +12,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -59,11 +60,17 @@ public class LockScreen extends Screen {
 
 	@Override
 	protected void init() {
-		minecraft.keyboardHandler.setSendRepeatsToGui(true);
+		addRenderableWidget(
+				Button.builder(CommonComponents.GUI_DONE, button -> onDone())
+						.bounds(width / 2 - 4 - 150, height / 4 + 120 + 12, 150, 20)
+						.build()
+		);
 
-		addRenderableWidget(new Button(width / 2 - 4 - 150, height / 4 + 120 + 12, 150, 20, Component.translatable("gui.done"), button -> done()));
-
-		addRenderableWidget(new Button(width / 2 + 4, height / 4 + 120 + 12, 150, 20, Component.translatable("gui.cancel"), button -> removed()));
+		addRenderableWidget(
+				Button.builder(CommonComponents.GUI_CANCEL, button -> onClose())
+						.bounds(width / 2 + 4, height / 4 + 120 + 12, 150, 20)
+						.build()
+		);
 
 		lockCodeTextField = new EditBox(font, width / 2 - 150, 50, 300, 20, Component.translatable("gui.testmod3.lock.lock_code"));
 		lockCodeTextField.setMaxLength(32500);
@@ -71,14 +78,9 @@ public class LockScreen extends Screen {
 		addWidget(lockCodeTextField);
 	}
 
-	private void done() {
+	private void onDone() {
 		TestMod3.network.sendToServer(new SetLockCodeMessage(pos, facing, lockCodeTextField.getValue()));
 		minecraft.setScreen(null);
-	}
-
-	@Override
-	public void removed() {
-		minecraft.keyboardHandler.setSendRepeatsToGui(false);
 	}
 
 	@Override
@@ -86,7 +88,7 @@ public class LockScreen extends Screen {
 		if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
 			return super.keyPressed(keyCode, scanCode, modifiers);
 		} else if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) {
-			done();
+			onDone();
 			return true;
 		}
 

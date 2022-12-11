@@ -18,7 +18,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.functions.SetContainerContents;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import java.util.Arrays;
@@ -49,12 +49,12 @@ public class SetFluidTankContents extends LootItemConditionalFunction {
 
 		lootEntries.forEach(lootEntry ->
 				lootEntry.expand(context, lootGenerator ->
-						lootGenerator.createItemStack(LootTable.createStackSplitter(itemStacks::add), context)
+						lootGenerator.createItemStack(LootTable.createStackSplitter(context, itemStacks::add), context)
 				)
 		);
 
 		final var fluidHandler = stack
-				.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)
+				.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM, null)
 				.orElseThrow(CapabilityNotPresentException::new);
 
 		itemStacks.stream()

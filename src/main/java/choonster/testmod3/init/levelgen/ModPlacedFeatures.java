@@ -3,7 +3,7 @@ package choonster.testmod3.init.levelgen;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.level.levelgen.placement.InChunksDivisibleBy16Filter;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class ModPlacedFeatures {
 	private static final DeferredRegister<PlacedFeature> PLACED_FEATURES =
-			DeferredRegister.create(Registry.PLACED_FEATURE_REGISTRY, TestMod3.MODID);
+			DeferredRegister.create(Registries.PLACED_FEATURE, TestMod3.MODID);
 
 	private static boolean isInitialised = false;
 
