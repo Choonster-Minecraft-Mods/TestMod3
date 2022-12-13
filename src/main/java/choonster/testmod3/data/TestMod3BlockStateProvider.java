@@ -14,7 +14,7 @@ import com.google.common.collect.Sets;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.core.Direction;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -177,8 +177,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 					.end()
 	);
 
-	public TestMod3BlockStateProvider(final DataGenerator gen, final ExistingFileHelper exFileHelper) {
-		super(gen, TestMod3.MODID, exFileHelper);
+	public TestMod3BlockStateProvider(final PackOutput output, final ExistingFileHelper exFileHelper) {
+		super(output, TestMod3.MODID, exFileHelper);
 	}
 
 	@Override

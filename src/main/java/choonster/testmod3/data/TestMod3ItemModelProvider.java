@@ -8,7 +8,7 @@ import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
@@ -69,8 +69,8 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 	);
 
 
-	public TestMod3ItemModelProvider(final DataGenerator generator, final ExistingFileHelper existingFileHelper) {
-		super(generator, TestMod3.MODID, existingFileHelper);
+	public TestMod3ItemModelProvider(final PackOutput output, final ExistingFileHelper existingFileHelper) {
+		super(output, TestMod3.MODID, existingFileHelper);
 	}
 
 	/**

@@ -11,8 +11,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -38,13 +38,13 @@ import java.util.concurrent.CompletableFuture;
  * @author Choonster
  */
 public class TestMod3BiomeModifierProvider implements DataProvider {
-	private final DataGenerator generator;
+	private final PackOutput output;
 	private final ExistingFileHelper existingFileHelper;
 	private final CompletableFuture<HolderLookup.Provider> lookupProvider;
 	private final Map<ResourceLocation, BiomeModifier> toSerialize = new HashMap<>();
 
-	public TestMod3BiomeModifierProvider(final DataGenerator generator, final ExistingFileHelper existingFileHelper, final CompletableFuture<HolderLookup.Provider> lookupProvider) {
-		this.generator = generator;
+	public TestMod3BiomeModifierProvider(final PackOutput output, final ExistingFileHelper existingFileHelper, final CompletableFuture<HolderLookup.Provider> lookupProvider) {
+		this.output = output;
 		this.existingFileHelper = existingFileHelper;
 		this.lookupProvider = lookupProvider;
 	}
@@ -117,7 +117,7 @@ public class TestMod3BiomeModifierProvider implements DataProvider {
 			addModifiers(lookupProvider);
 
 			final JsonCodecProvider<BiomeModifier> provider = JsonCodecProvider.forDatapackRegistry(
-					generator,
+					output,
 					existingFileHelper,
 					TestMod3.MODID,
 					ops,

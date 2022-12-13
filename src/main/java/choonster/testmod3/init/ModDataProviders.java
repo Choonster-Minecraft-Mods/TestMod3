@@ -44,18 +44,18 @@ public class ModDataProviders {
 		final var existingFileHelper = event.getExistingFileHelper();
 		final var lookupProvider = event.getLookupProvider().thenApply(ModDataProviders::createLookup);
 
-		dataGenerator.addProvider(event.includeClient(), new TestMod3LanguageProvider(dataGenerator));
+		dataGenerator.addProvider(event.includeClient(), new TestMod3LanguageProvider(output));
 
-		final var itemModelProvider = new TestMod3ItemModelProvider(dataGenerator, existingFileHelper);
+		final var itemModelProvider = new TestMod3ItemModelProvider(output, existingFileHelper);
 		dataGenerator.addProvider(event.includeClient(), itemModelProvider);
 
 		// Let blockstate provider see generated item models by passing its existing file helper
-		dataGenerator.addProvider(event.includeClient(), new TestMod3BlockStateProvider(dataGenerator, itemModelProvider.existingFileHelper));
+		dataGenerator.addProvider(event.includeClient(), new TestMod3BlockStateProvider(output, itemModelProvider.existingFileHelper));
 
 		dataGenerator.addProvider(event.includeServer(), new TestMod3RecipeProvider(output));
 		dataGenerator.addProvider(event.includeServer(), TestMod3LootTableProvider.create(output));
-		dataGenerator.addProvider(event.includeServer(), new TestMod3LootModifierProvider(dataGenerator));
-		dataGenerator.addProvider(event.includeServer(), new TestMod3BiomeModifierProvider(dataGenerator, existingFileHelper, lookupProvider));
+		dataGenerator.addProvider(event.includeServer(), new TestMod3LootModifierProvider(output));
+		dataGenerator.addProvider(event.includeServer(), new TestMod3BiomeModifierProvider(output, existingFileHelper, lookupProvider));
 
 		final var blockTagsProvider = new TestMod3BlockTagsProvider(output, lookupProvider, existingFileHelper);
 		dataGenerator.addProvider(event.includeServer(), blockTagsProvider);
@@ -86,9 +86,7 @@ public class ModDataProviders {
 					}
 			));
 
-			final var lookupProvider = builder.buildPatch(registryAccess, vanillaLookupProvider);
-
-			return lookupProvider;
+			return builder.buildPatch(registryAccess, vanillaLookupProvider);
 		} catch (final IllegalAccessException e) {
 			throw new RuntimeException("Failed to create holder lookup", e);
 		}

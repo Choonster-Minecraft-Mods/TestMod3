@@ -9,7 +9,7 @@ import choonster.testmod3.world.level.storage.loot.predicates.MatchBlockTag;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -36,8 +36,8 @@ public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
 					.hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1)))
 	);
 
-	public TestMod3LootModifierProvider(final DataGenerator gen) {
-		super(gen, TestMod3.MODID);
+	public TestMod3LootModifierProvider(final PackOutput output) {
+		super(output, TestMod3.MODID);
 	}
 
 	@Override

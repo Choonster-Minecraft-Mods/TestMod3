@@ -10,7 +10,7 @@ import choonster.testmod3.world.item.ModBucketItem;
 import choonster.testmod3.world.level.block.PlaneBlock;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
@@ -39,8 +39,8 @@ import java.util.function.Supplier;
 public class TestMod3LanguageProvider extends LanguageProvider {
 	private final Map<EntityType<?>, String> ENTITY_TYPE_NAMES = new HashMap<>();
 
-	public TestMod3LanguageProvider(final DataGenerator gen) {
-		super(gen, TestMod3.MODID, "en_us");
+	public TestMod3LanguageProvider(final PackOutput output) {
+		super(output, TestMod3.MODID, "en_us");
 	}
 
 	@Override
