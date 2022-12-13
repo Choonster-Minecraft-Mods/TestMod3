@@ -7,6 +7,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import snownee.jade.Jade;
 
@@ -22,7 +23,7 @@ import snownee.jade.Jade;
 public class ItemTooltipModNameRemover {
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void itemTooltip(final ItemTooltipEvent event) {
-		if (event.getItemStack().getItem() == ModItems.NO_MOD_NAME.get()) {
+		if (event.getItemStack().getItem() == ModItems.NO_MOD_NAME.get() && ModList.get().isLoaded("waila")) {
 			final String name = String.format(Jade.CONFIG.get().getFormatting().getModName(), TestMod3.NAME);
 			event.getToolTip().remove(Component.literal(name));
 		}
