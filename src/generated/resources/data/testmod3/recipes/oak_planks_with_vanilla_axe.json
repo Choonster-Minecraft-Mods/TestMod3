@@ -1,5 +1,6 @@
 {
   "type": "testmod3:cutting_shapeless",
+  "category": "building",
   "group": "minecraft:planks",
   "ingredients": [
     {

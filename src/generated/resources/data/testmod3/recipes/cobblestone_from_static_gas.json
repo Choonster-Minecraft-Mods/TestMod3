@@ -1,5 +1,6 @@
 {
   "type": "testmod3:fluid_container_shapeless",
+  "category": "building",
   "ingredients": [
     {
       "type": "testmod3:fluid_container",

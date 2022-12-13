@@ -1,5 +1,6 @@
 {
   "type": "testmod3:armour_upgrade_shaped",
+  "category": "equipment",
   "key": {
     "G": {
       "item": "minecraft:gold_block"
