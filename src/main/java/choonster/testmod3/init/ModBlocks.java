@@ -23,6 +23,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Collection;
 import java.util.function.Supplier;
 
 public class ModBlocks {
@@ -222,6 +223,13 @@ public class ModBlocks {
 		ITEMS.register(modEventBus);
 
 		isInitialised = true;
+	}
+
+	/**
+	 * @return A collection of this mod's block items in the order of their registration.
+	 */
+	static Collection<RegistryObject<Item>> orderedItems() {
+		return ITEMS.getEntries();
 	}
 
 	/**

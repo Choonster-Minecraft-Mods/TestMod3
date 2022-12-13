@@ -28,6 +28,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Collection;
+
 public class ModFluids {
 	private static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(ForgeRegistries.Keys.FLUID_TYPES, TestMod3.MODID);
 	private static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, TestMod3.MODID);
@@ -142,6 +144,13 @@ public class ModFluids {
 		ITEMS.register(modEventBus);
 
 		isInitialised = true;
+	}
+
+	/**
+	 * @return A collection of this mod's fluid-related items in the order of their registration.
+	 */
+	static Collection<RegistryObject<Item>> orderedItems() {
+		return ITEMS.getEntries();
 	}
 
 	private static StandardFluidGroup.Builder standardGroup(final String name) {

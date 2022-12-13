@@ -333,7 +333,6 @@ public class ModItems {
 	/**
 	 * @return A collection of this mod's items in the order of their registration.
 	 */
-	/* package-private */
 	static Collection<RegistryObject<Item>> orderedItems() {
 		return ITEMS.getEntries();
 	}

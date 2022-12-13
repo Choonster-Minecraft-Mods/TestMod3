@@ -3,8 +3,10 @@ package choonster.testmod3.init;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.util.SwordUpgrades;
 import choonster.testmod3.world.item.block.FluidTankItem;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.event.CreativeModeTabEvent;
@@ -12,7 +14,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.function.Supplier;
 
 /**
@@ -22,6 +26,7 @@ import java.util.function.Supplier;
  */
 @Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 public class ModCreativeTabs {
+	@Nullable
 	private static CreativeModeTab TAB;
 
 	@SubscribeEvent
@@ -30,16 +35,25 @@ public class ModCreativeTabs {
 
 		TAB = event.registerCreativeModeTab(
 				new ResourceLocation(TestMod3.MODID, "tab"),
-				builder -> builder.icon(sword)
+				builder -> builder
+						.title(Component.translatable("itemGroup.testmod3"))
+						.icon(sword)
 						.displayItems((enabledFeatures, output, hasPermissions) -> {
 							output.accept(sword.get());
 
-							ModItems.orderedItems()
-									.stream()
-									.map(RegistryObject::get)
-									.forEach(output::accept);
+							add(output, ModBlocks.orderedItems());
+
+							add(output, ModItems.orderedItems());
+
+							add(output, ModFluids.orderedItems());
 						})
 		);
+	}
+
+	private static void add(final CreativeModeTab.Output output, final Collection<RegistryObject<Item>> items) {
+		items.stream()
+				.map(RegistryObject::get)
+				.forEach(output::accept);
 	}
 
 	@SubscribeEvent
