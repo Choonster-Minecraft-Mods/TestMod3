@@ -8,6 +8,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.level.block.Blocks;
@@ -16,16 +17,29 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ComputeFovModifierEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = TestMod3.MODID)
 public class ClientEventHandler {
+	@SuppressWarnings("DataFlowIssue")
+	private static final int FLAG_GLOWING = ObfuscationReflectionHelper.getPrivateValue(Entity.class, null, /* FLAG_GLOWING */ "f_146806_");
+	private static final Method SET_SHARED_FLAG = ObfuscationReflectionHelper.findMethod(Entity.class, /* setSharedFlag */"m_20115_", int.class, boolean.class);
+
 	private static final Minecraft MINECRAFT = Minecraft.getInstance();
 
+	private static final List<AbstractMinecart> glowingMinecarts = new ArrayList<>();
+
 	@SubscribeEvent
-	public static void onFOVUpdate(final ComputeFovModifierEvent event) {
+	public static void computeFovModifier(final ComputeFovModifierEvent event) {
 		if (event.getPlayer().isUsingItem() && event.getPlayer().getUseItem().getItem() instanceof ModBowItem) {
 			var fovModifier = event.getPlayer().getTicksUsingItem() / 20.0f;
 
@@ -48,7 +62,7 @@ public class ClientEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void onClientTick(final TickEvent.ClientTickEvent event) {
+	public static void clientPostTick(final TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.END && MINECRAFT.player != null && MINECRAFT.level != null) {
 			final Player player = MINECRAFT.player;
 			if (MINECRAFT.level.getBlockState(player.blockPosition().below()).getBlock() == Blocks.IRON_BLOCK) {
@@ -66,11 +80,10 @@ public class ClientEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void entityJoinWorld(final EntityJoinLevelEvent event) {
+	public static void entityJoinLevel(final EntityJoinLevelEvent event) {
 		final var level = event.getLevel();
-		final var entity = event.getEntity();
 
-		if (level.isClientSide && entity instanceof AbstractMinecart) {
+		if (level.isClientSide && event.getEntity() instanceof AbstractMinecart minecart) {
 			final var scoreboard = level.getScoreboard();
 
 			var team = scoreboard.getPlayerTeam(TestMod3.MODID);
@@ -80,8 +93,38 @@ public class ClientEventHandler {
 				team.setColor(ChatFormatting.DARK_AQUA);
 			}
 
-			scoreboard.addPlayerToTeam(entity.getStringUUID(), team);
-			entity.setGlowingTag(true); // TODO: Doesn't look like this will work on the client
+			scoreboard.addPlayerToTeam(minecart.getStringUUID(), team);
+			glowingMinecarts.add(minecart);
+		}
+	}
+
+	/**
+	 * When an {@link AbstractMinecart} is despawned on the client side, remove it from the list of glowing minecarts.
+	 */
+	@SubscribeEvent
+	public static void entityLeaveWorld(final EntityLeaveLevelEvent event) {
+		final var level = event.getLevel();
+
+		if (level.isClientSide && event.getEntity() instanceof AbstractMinecart minecart) {
+			glowingMinecarts.remove(minecart);
+		}
+	}
+
+	/**
+	 * Makes {@link AbstractMinecart} entities glow on the client.
+	 */
+	@SubscribeEvent
+	public static void clientPreTick(final TickEvent.ClientTickEvent event) {
+		if (event.phase != TickEvent.Phase.START) {
+			return;
+		}
+
+		try {
+			for (final var minecart : glowingMinecarts) {
+				SET_SHARED_FLAG.invoke(minecart, FLAG_GLOWING, true);
+			}
+		} catch (final IllegalAccessException | InvocationTargetException e) {
+			throw new RuntimeException("Failed to set glowing flag for Minecart", e);
 		}
 	}
 
