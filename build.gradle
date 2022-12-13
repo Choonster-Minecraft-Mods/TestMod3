@@ -161,12 +161,12 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.19.2-common-api:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-1.19.2-forge-api:${jei_version}")
     // at runtime, use the full JEI
-    runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-common:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-forge:${jei_version}")
+//    runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-common:${jei_version}")
+//    runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-forge:${jei_version}")
 
     embed "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
 
-    implementation fg.deobf("curse.maven:jade-324717:${jade_file_id}")
+    compileOnly fg.deobf("curse.maven:jade-324717:${jade_file_id}")
 
     implementation fg.deobf("curse.maven:the-one-probe-245211:${top_file_id}")
 
