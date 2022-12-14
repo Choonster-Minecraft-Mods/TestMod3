@@ -13,7 +13,7 @@ import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.registries.VanillaRegistries;
+import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.ResourceKey;
 import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -21,11 +21,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.minecraftforge.registries.DataPackRegistriesHooks;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Registers this mod's {@link DataProvider}s.
@@ -34,7 +35,6 @@ import java.util.Set;
  */
 @Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 public class ModDataProviders {
-	private static final Field BUILDER = ObfuscationReflectionHelper.findField(VanillaRegistries.class, /* BUILDER */ "f_254635_");
 	private static final Method WRAP_CONTEXT_LOOKUP = ObfuscationReflectionHelper.findMethod(RegistrySetBuilder.class, /* wrapContextLookup */ "m_254882_", HolderLookup.RegistryLookup.class);
 
 	@SubscribeEvent
@@ -67,29 +67,30 @@ public class ModDataProviders {
 	}
 
 	private static HolderLookup.Provider createLookup(final HolderLookup.Provider vanillaLookupProvider) {
-		try {
-			final var registryAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
+		final var registryAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
 
-			final var builder = new RegistrySetBuilder()
-					.add(Registries.CONFIGURED_FEATURE, ModConfiguredFeatures::bootstrap)
-					.add(Registries.PLACED_FEATURE, ModPlacedFeatures::bootstrap)
-					.add(Registries.BIOME, ModBiomes::bootstrap);
+		final var builder = new RegistrySetBuilder()
+				.add(Registries.CONFIGURED_FEATURE, ModConfiguredFeatures::bootstrap)
+				.add(Registries.PLACED_FEATURE, ModPlacedFeatures::bootstrap)
+				.add(Registries.BIOME, ModBiomes::bootstrap);
 
-			final var vanillaKeys = Set.copyOf(((RegistrySetBuilder) BUILDER.get(null)).getEntryKeys());
-			final var modKeys = Set.copyOf(builder.getEntryKeys());
+		@SuppressWarnings("UnstableApiUsage")
+		final var allKeys = DataPackRegistriesHooks.getDataPackRegistries()
+				.stream()
+				.map(RegistryDataLoader.RegistryData::key)
+				.collect(Collectors.toSet());
 
-			final var missingKeys = Sets.difference(vanillaKeys, modKeys);
+		final var modKeys = Set.copyOf(builder.getEntryKeys());
 
-			missingKeys.forEach(key -> builder.add(
-					ResourceKey.create(ResourceKey.createRegistryKey(key.registry()), key.location()),
-					context -> {
-					}
-			));
+		final var missingKeys = Sets.difference(allKeys, modKeys);
 
-			return builder.buildPatch(registryAccess, vanillaLookupProvider);
-		} catch (final IllegalAccessException e) {
-			throw new RuntimeException("Failed to create holder lookup", e);
-		}
+		missingKeys.forEach(key -> builder.add(
+				ResourceKey.create(ResourceKey.createRegistryKey(key.registry()), key.location()),
+				context -> {
+				}
+		));
+
+		return builder.buildPatch(registryAccess, vanillaLookupProvider);
 	}
 
 	@SuppressWarnings("unchecked")
