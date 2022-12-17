@@ -47,10 +47,9 @@ public class ModArrow extends Arrow implements IEntityAdditionalSpawnData {
 		return new ItemStack(ModItems.ARROW.get());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return (Packet<ClientGamePacketListener>) NetworkHooks.getEntitySpawningPacket(this);
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 	@Override
