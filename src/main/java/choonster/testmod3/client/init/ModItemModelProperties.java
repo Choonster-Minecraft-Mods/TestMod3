@@ -4,7 +4,7 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.client.item.RevealHiddenBlocksItemPropertyFunction;
 import choonster.testmod3.client.item.TicksSinceLastUseItemPropertyFunction;
 import choonster.testmod3.init.ModItems;
-import net.minecraft.client.renderer.item.ItemPropertyFunction;
+import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 /**
- * Registers this mod's {@link ItemPropertyFunction}s.
+ * Registers this mod's {@link ClampedItemPropertyFunction}s.
  *
  * @author Choonster
  */

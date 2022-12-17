@@ -178,20 +178,20 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
     options.compilerArgs.addAll(['-Xlint:unchecked', '-Xlint:deprecation'])
 }
 
-tasks.withType(Javadoc) {
+tasks.withType(Javadoc).configureEach {
     options.encoding = 'UTF-8'
     options.addStringOption("tag", "apiNote:a:API Note:")
     options.addBooleanOption("Xdoclint:all,-missing", true)
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
+tasks.register('javadocJar', Jar) {
     from javadoc.destinationDir
-
+    
     archiveClassifier = 'javadoc'
 }
 

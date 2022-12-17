@@ -4,7 +4,6 @@ import choonster.testmod3.TestMod3;
 import com.google.common.base.Charsets;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -23,13 +22,13 @@ public class BlockDumper {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
 	public static void dump() {
-		try (final PrintWriter writer = new PrintWriter("TestMod3_BlockDump_" + (FMLEnvironment.dist.isClient() ? "Client" : "Server") + ".txt", Charsets.UTF_8.toString())) {
+		try (final var writer = new PrintWriter("TestMod3_BlockDump_" + (FMLEnvironment.dist.isClient() ? "Client" : "Server") + ".txt", Charsets.UTF_8)) {
 			writer.println("Name - toString");
 
 			RegistryUtil.stream(ForgeRegistries.BLOCKS)
 					.filter(block -> RegistryUtil.getKey(block).getNamespace().equals(TestMod3.MODID))
 					.forEach(block -> {
-						final Item item = block.asItem();
+						final var item = block.asItem();
 						if (item != Items.AIR) {
 							writer.printf("%s - %s\n", item.getDescriptionId(), item);
 						}

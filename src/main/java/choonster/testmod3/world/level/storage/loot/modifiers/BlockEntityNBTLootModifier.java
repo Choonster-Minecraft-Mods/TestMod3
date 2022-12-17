@@ -23,7 +23,7 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class BlockEntityNBTLootModifier extends LootModifier {
-	public static Supplier<Codec<BlockEntityNBTLootModifier>> CODEC = Suppliers.memoize(() ->
+	public static final Supplier<Codec<BlockEntityNBTLootModifier>> CODEC = Suppliers.memoize(() ->
 			RecordCodecBuilder.create(inst ->
 					codecStart(inst)
 							.apply(inst, BlockEntityNBTLootModifier::new)
