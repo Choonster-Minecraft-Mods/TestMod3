@@ -128,6 +128,9 @@ public enum TestMod3Lang {
 	SUBTITLE_ACTION_SADDLE("subtitles.action", "saddle"),
 	SUBTITLE_ITEM_GUN_FIRE("subtitles.item", "gun.fire"),
 
+	// Pack Descriptions
+	PACK_DESCRIPTION_TESTMOD3("pack", "description"),
+
 	;
 
 	private final String key;

@@ -338,6 +338,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 
 	private void addMisc() {
 		add("itemGroup." + TestMod3.MODID, "TestMod3");
+		add(TestMod3Lang.PACK_DESCRIPTION_TESTMOD3, "Resources and data for TestMod3");
 
 		add(TestMod3Lang.DESC_ROTATABLE_FACING, "Facing: %s");
 		add(TestMod3Lang.DESC_MULTI_ROTATABLE_FACE_ROTATION, "Face Rotation: %s");

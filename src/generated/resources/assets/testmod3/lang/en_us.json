@@ -243,6 +243,7 @@
   "message.testmod3.respawner.teleporting": "Teleporting to %d,%d,%d in dimension %d",
   "message.testmod3.ritual_checker.failure": "Ritual pattern is invalid at %d,%d,%d!",
   "message.testmod3.ritual_checker.success": "Ritual pattern is valid!",
+  "pack.testmod3.description": "Resources and data for TestMod3",
   "subtitles.action.testmod3.saddle": "Mod saddle equips",
   "subtitles.item.testmod3.gun.fire": "Gun fires",
   "testmod3.chunk_energy.hud": "Chunk Energy: %d/%d",

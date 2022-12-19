@@ -40,6 +40,8 @@ public class ModDataProviders {
 		final var existingFileHelper = event.getExistingFileHelper();
 		final var lookupProvider = event.getLookupProvider().thenApply(ModDataProviders::createLookup);
 
+		dataGenerator.addProvider(true, TestMod3PackMetadataGenerator.create(output));
+
 		dataGenerator.addProvider(event.includeClient(), new TestMod3LanguageProvider(output));
 
 		final var itemModelProvider = new TestMod3ItemModelProvider(output, existingFileHelper);
