@@ -2,11 +2,11 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.data.*;
+import choonster.testmod3.data.worldgen.ModBiomeModifiers;
 import choonster.testmod3.data.worldgen.ModBiomes;
 import choonster.testmod3.data.worldgen.ModConfiguredFeatures;
 import choonster.testmod3.data.worldgen.ModPlacedFeatures;
 import com.google.common.collect.Sets;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistrySetBuilder;
@@ -20,11 +20,9 @@ import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.DataPackRegistriesHooks;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,8 +33,6 @@ import java.util.stream.Collectors;
  */
 @Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 public class ModDataProviders {
-	private static final Method WRAP_CONTEXT_LOOKUP = ObfuscationReflectionHelper.findMethod(RegistrySetBuilder.class, /* wrapContextLookup */ "m_254882_", HolderLookup.RegistryLookup.class);
-
 	@SubscribeEvent
 	public static void registerDataProviders(final GatherDataEvent event) {
 		final var dataGenerator = event.getGenerator();
@@ -55,7 +51,6 @@ public class ModDataProviders {
 		dataGenerator.addProvider(event.includeServer(), new TestMod3RecipeProvider(output));
 		dataGenerator.addProvider(event.includeServer(), TestMod3LootTableProvider.create(output));
 		dataGenerator.addProvider(event.includeServer(), new TestMod3LootModifierProvider(output));
-		dataGenerator.addProvider(event.includeServer(), new TestMod3BiomeModifierProvider(output, existingFileHelper, lookupProvider));
 
 		final var blockTagsProvider = new TestMod3BlockTagsProvider(output, lookupProvider, existingFileHelper);
 		dataGenerator.addProvider(event.includeServer(), blockTagsProvider);
@@ -63,7 +58,7 @@ public class ModDataProviders {
 		dataGenerator.addProvider(event.includeServer(), new TestMod3BiomeTagsProvider(output, lookupProvider, existingFileHelper));
 		dataGenerator.addProvider(event.includeServer(), new TestMod3FluidTagsProvider(output, lookupProvider, existingFileHelper));
 
-		dataGenerator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(output, lookupProvider::join));
+		dataGenerator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(output, lookupProvider, Set.of(TestMod3.MODID)));
 	}
 
 	private static HolderLookup.Provider createLookup(final HolderLookup.Provider vanillaLookupProvider) {
@@ -72,7 +67,8 @@ public class ModDataProviders {
 		final var builder = new RegistrySetBuilder()
 				.add(Registries.CONFIGURED_FEATURE, ModConfiguredFeatures::bootstrap)
 				.add(Registries.PLACED_FEATURE, ModPlacedFeatures::bootstrap)
-				.add(Registries.BIOME, ModBiomes::bootstrap);
+				.add(Registries.BIOME, ModBiomes::bootstrap)
+				.add(ForgeRegistries.Keys.BIOME_MODIFIERS, ModBiomeModifiers::bootstrap);
 
 		@SuppressWarnings("UnstableApiUsage")
 		final var allKeys = DataPackRegistriesHooks.getDataPackRegistries()
@@ -91,14 +87,5 @@ public class ModDataProviders {
 		));
 
 		return builder.buildPatch(registryAccess, vanillaLookupProvider);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> HolderGetter<T> wrapContextLookup(final HolderLookup.RegistryLookup<T> lookup) {
-		try {
-			return (HolderGetter<T>) WRAP_CONTEXT_LOOKUP.invoke(null, lookup);
-		} catch (final IllegalAccessException | InvocationTargetException e) {
-			throw new RuntimeException("Failed to wrap context lookup", e);
-		}
 	}
 }

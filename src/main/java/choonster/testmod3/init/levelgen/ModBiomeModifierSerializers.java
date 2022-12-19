@@ -14,7 +14,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
- * Registers this mod's {@link BiomeModifier}s.
+ * Registers this mod's {@link BiomeModifier} serializers.
  *
  * @author Choonster
  */
