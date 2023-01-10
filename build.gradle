@@ -166,7 +166,7 @@ dependencies {
 
     embed "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
 
-    compileOnly fg.deobf("curse.maven:jade-324717:${jade_file_id}")
+    implementation fg.deobf("curse.maven:jade-324717:${jade_file_id}")
 
     implementation fg.deobf("curse.maven:the-one-probe-245211:${top_file_id}")
 
@@ -191,7 +191,7 @@ tasks.withType(Javadoc).configureEach {
 
 tasks.register('javadocJar', Jar) {
     from javadoc.destinationDir
-    
+
     archiveClassifier = 'javadoc'
 }
 
