@@ -128,7 +128,24 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
     // Put repositories for dependencies here
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
-    maven { url = "https://dvs1.progwml6.com/files/maven/" }
+
+    maven {
+        // Location of the maven that hosts JEI files before January 2023
+        name = "Progwml6's maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+
+    maven {
+        // Location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+
+    maven {
+        // Location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
 
     maven {
         url "https://www.cursemaven.com"
@@ -158,11 +175,10 @@ dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
     // compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei-1.19.2-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-1.19.2-forge-api:${jei_version}")
-    // at runtime, use the full JEI
-//    runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-common:${jei_version}")
-//    runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-forge:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.19.3-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.19.3-forge-api:${jei_version}")
+    // at runtime, use the full JEI jar for Forge
+    runtimeOnly fg.deobf("mezz.jei:jei-1.19.3-forge:${jei_version}")
 
     embed "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
 
