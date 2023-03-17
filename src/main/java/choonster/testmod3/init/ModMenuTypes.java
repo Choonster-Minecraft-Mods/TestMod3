@@ -3,6 +3,7 @@ package choonster.testmod3.init;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.inventory.menu.ModChestMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -19,7 +20,7 @@ public class ModMenuTypes {
 	private static boolean isInitialised;
 
 	public static final RegistryObject<MenuType<ModChestMenu>> CHEST = MENU_TYPES.register("chest",
-			() -> new MenuType<>(new ModChestMenu.Factory())
+			() -> IForgeMenuType.create(new ModChestMenu.Factory())
 	);
 
 	/**

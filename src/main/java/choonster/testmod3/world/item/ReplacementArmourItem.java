@@ -1,7 +1,6 @@
 package choonster.testmod3.world.item;
 
 import choonster.testmod3.text.TestMod3Lang;
-import choonster.testmod3.util.Constants;
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import com.google.common.collect.ImmutableSet;
@@ -22,15 +21,15 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * An armour item that replaces your other armour when equipped and restores it when unequipped.
@@ -53,8 +52,8 @@ public class ReplacementArmourItem extends ArmorItem {
 	 */
 	private final Set<Supplier<ItemStack>> replacementItems;
 
-	public ReplacementArmourItem(final ArmorMaterial material, final EquipmentSlot slot, final Properties properties, final Collection<Supplier<ItemStack>> replacementItems) {
-		super(material, slot, properties);
+	public ReplacementArmourItem(final ArmorMaterial material, final ArmorItem.Type type, final Properties properties, final Collection<Supplier<ItemStack>> replacementItems) {
+		super(material, type, properties);
 
 		this.replacementItems = ImmutableSet.copyOf(
 				replacementItems
@@ -90,19 +89,20 @@ public class ReplacementArmourItem extends ArmorItem {
 	 * @param entity The entity
 	 */
 	private void replaceArmour(final ItemStack stack, final LivingEntity entity) {
-		final CompoundTag stackTagCompound = stack.getOrCreateTag();
-		final ListTag replacedArmour = new ListTag();
+		final var stackTagCompound = stack.getOrCreateTag();
+		final var replacedArmour = new ListTag();
 
 		// Create a mutable copy of the replacements
-		final Set<ItemStack> replacements = replacementItems
+		final var replacements = replacementItems
 				.stream()
 				.map(Supplier::get)
 				.collect(Collectors.toSet());
 
-		Constants.ARMOUR_SLOTS.stream() // For each armour type,
-				.filter(equipmentSlot -> equipmentSlot != getSlot()) // If it's not this item's equipment slot,
-				.forEach(equipmentSlot -> {
-					final Optional<ItemStack> optionalReplacement = replacements.stream()
+		Stream.of(ArmorItem.Type.values()) // For each armour type,
+				.filter(type -> type != getType()) // If it's not this item's armour type,
+				.forEach(type -> {
+					final var equipmentSlot = type.getSlot();
+					final var optionalReplacement = replacements.stream()
 							.filter(replacementStack -> replacementStack.getItem().canEquip(replacementStack, equipmentSlot, entity))
 							.findFirst();
 
@@ -110,18 +110,18 @@ public class ReplacementArmourItem extends ArmorItem {
 						replacements.remove(replacement); // Don't use it for any other armour type
 
 						// Create a compound tag to store the original and add it to the list of replaced armour
-						final CompoundTag compoundNBT = new CompoundTag();
-						replacedArmour.add(compoundNBT);
-						compoundNBT.putByte(KEY_SLOT, (byte) equipmentSlot.getFilterFlag());
+						final var compoundTag = new CompoundTag();
+						replacedArmour.add(compoundTag);
+						compoundTag.putByte(KEY_SLOT, (byte) equipmentSlot.getIndex());
 
 						// If the original item exists, add it to the compound tag
-						final ItemStack original = entity.getItemBySlot(equipmentSlot);
+						final var original = entity.getItemBySlot(equipmentSlot);
 						if (!original.isEmpty()) {
-							compoundNBT.put(KEY_STACK, original.serializeNBT());
+							compoundTag.put(KEY_STACK, original.serializeNBT());
 						}
 
 						entity.setItemSlot(equipmentSlot, replacement.copy()); // Equip a copy of the replacement
-						LOGGER.info("Equipped replacement {} to {}, replacing {}", replacement, equipmentSlot, original);
+						LOGGER.info("Equipped replacement {} to {}, replacing {}", replacement, type, original);
 					});
 				});
 
@@ -135,18 +135,18 @@ public class ReplacementArmourItem extends ArmorItem {
 	 * @param entity The entity
 	 */
 	private void restoreArmour(final ItemStack stack, final LivingEntity entity) {
-		final CompoundTag stackTagCompound = stack.getOrCreateTag();
-		final ListTag replacedArmour = stackTagCompound.getList(KEY_REPLACED_ARMOUR, Tag.TAG_COMPOUND);
+		final var stackTagCompound = stack.getOrCreateTag();
+		final var replacedArmour = stackTagCompound.getList(KEY_REPLACED_ARMOUR, Tag.TAG_COMPOUND);
 
-		for (int i = 0; i < replacedArmour.size(); i++) { // For each saved armour item,
-			final CompoundTag replacedTagCompound = replacedArmour.getCompound(i);
-			final ItemStack original = ItemStack.of(replacedTagCompound.getCompound(KEY_STACK)); // Load the original ItemStack from the NBT
+		for (var i = 0; i < replacedArmour.size(); i++) { // For each saved armour item,
+			final var replacedTagCompound = replacedArmour.getCompound(i);
+			final var original = ItemStack.of(replacedTagCompound.getCompound(KEY_STACK)); // Load the original ItemStack from the NBT
 
-			final EquipmentSlot equipmentSlot = InventoryUtils.getEquipmentSlotFromIndex(replacedTagCompound.getByte(KEY_SLOT)); // Get the armour slot
-			final ItemStack current = entity.getItemBySlot(equipmentSlot);
+			final var equipmentSlot = EquipmentSlot.byTypeAndIndex(EquipmentSlot.Type.ARMOR, replacedTagCompound.getByte(KEY_SLOT)); // Get the armour slot
+			final var current = entity.getItemBySlot(equipmentSlot);
 
 			// Is the item currently in the slot one of the replacements defined for this item?
-			final boolean isReplacement = replacementItems
+			final var isReplacement = replacementItems
 					.stream()
 					.map(Supplier::get)
 					.anyMatch(replacement -> ItemStack.matches(replacement, current));

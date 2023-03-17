@@ -3,7 +3,7 @@
     "description": {
       "translate": "pack.testmod3.description"
     },
-    "forge:data_pack_format": 10,
-    "pack_format": 12
+    "forge:server_data_pack_format": 12,
+    "pack_format": 13
   }
 }

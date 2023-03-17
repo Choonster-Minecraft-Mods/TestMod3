@@ -184,7 +184,7 @@ dependencies {
 
     implementation fg.deobf("curse.maven:jade-324717:${jade_file_id}")
 
-    implementation fg.deobf("curse.maven:the-one-probe-245211:${top_file_id}")
+//    implementation fg.deobf("curse.maven:the-one-probe-245211:${top_file_id}")
 
     // Examples using mod jars from ./libs
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
@@ -208,7 +208,7 @@ tasks.withType(Javadoc).configureEach {
 tasks.register('javadocJar', Jar) {
     from javadoc.destinationDir
 
-    archiveClassifier = 'javadoc'
+    archiveClassifier.set('javadoc')
 }
 
 artifacts {

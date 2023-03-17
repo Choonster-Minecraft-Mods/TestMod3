@@ -24,14 +24,17 @@ import net.minecraftforge.event.ForgeEventFactory;
  * @author Choonster
  */
 public class ShapelessCuttingRecipe extends ShapelessRecipe {
+	private final ItemStack result;
+
 	private ShapelessCuttingRecipe(
 			final ResourceLocation id,
 			final String group,
 			final CraftingBookCategory category,
-			final ItemStack recipeOutput,
+			final ItemStack result,
 			final NonNullList<Ingredient> ingredients
 	) {
-		super(id, group, category, recipeOutput, ingredients);
+		super(id, group, category, result, ingredients);
+		this.result = result;
 	}
 
 	private ItemStack damageAxe(final ItemStack stack) {
@@ -101,7 +104,7 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 				ingredient.toNetwork(buffer);
 			}
 
-			buffer.writeItem(recipe.getResultItem());
+			buffer.writeItem(recipe.result);
 		}
 	}
 }

@@ -24,11 +24,11 @@ import java.util.concurrent.CompletableFuture;
 public class TestMod3ItemTagsProvider extends ItemTagsProvider {
 	public TestMod3ItemTagsProvider(
 			final PackOutput output,
-			final CompletableFuture<HolderLookup.Provider> holderLookup,
-			final TagsProvider<Block> blockTagsProvider,
+			final CompletableFuture<HolderLookup.Provider> lookupProvider,
+			final CompletableFuture<TagsProvider.TagLookup<Block>> blockTags,
 			@Nullable final ExistingFileHelper existingFileHelper
 	) {
-		super(output, holderLookup, blockTagsProvider, TestMod3.MODID, existingFileHelper);
+		super(output, lookupProvider, blockTags, TestMod3.MODID, existingFileHelper);
 	}
 
 	@Override

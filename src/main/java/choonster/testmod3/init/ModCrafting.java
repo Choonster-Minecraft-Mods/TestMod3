@@ -13,10 +13,10 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionBrewing;
@@ -149,7 +149,7 @@ public class ModCrafting {
 		 */
 		@SubscribeEvent
 		public static void removeRecipes(final ServerStartedEvent event) {
-			final RecipeManager recipeManager = event.getServer().getRecipeManager();
+			final var recipeManager = event.getServer().getRecipeManager();
 			removeRecipes(recipeManager, FireworkRocketRecipe.class);
 			removeRecipes(recipeManager, FireworkStarRecipe.class);
 			removeRecipes(recipeManager, FireworkStarFadeRecipe.class);
@@ -164,8 +164,8 @@ public class ModCrafting {
 		 * @param tag           The tag
 		 */
 		private static void removeRecipes(final RecipeManager recipeManager, final TagKey<Item> tag) {
-			final int recipesRemoved = removeRecipes(recipeManager, recipe -> {
-				final ItemStack resultItem = recipe.getResultItem();
+			final var recipesRemoved = removeRecipes(recipeManager, recipe -> {
+				final var resultItem = recipe.getResultItem(RegistryAccess.EMPTY);
 				return !resultItem.isEmpty() && resultItem.is(tag);
 			});
 
@@ -182,7 +182,7 @@ public class ModCrafting {
 		 * @param recipeClass   The recipe class
 		 */
 		private static void removeRecipes(final RecipeManager recipeManager, final Class<? extends Recipe<?>> recipeClass) {
-			final int recipesRemoved = removeRecipes(recipeManager, recipeClass::isInstance);
+			final var recipesRemoved = removeRecipes(recipeManager, recipeClass::isInstance);
 
 			LOGGER.info("Removed {} recipe(s) for class {}", recipesRemoved, recipeClass);
 		}
@@ -198,7 +198,7 @@ public class ModCrafting {
 			final Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> existingRecipes;
 			try {
 				@SuppressWarnings("unchecked")
-				final Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> recipesMap = (Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>>) RECIPES.get(recipeManager);
+				final var recipesMap = (Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>>) RECIPES.get(recipeManager);
 				existingRecipes = recipesMap;
 			} catch (final IllegalAccessException e) {
 				throw new RuntimeException("Couldn't get recipes map while removing recipes", e);
@@ -218,7 +218,7 @@ public class ModCrafting {
 				newRecipes.put(recipeType, newRecipesForType);
 			});
 
-			final int removedCount = removedCounts.values().intStream().reduce(0, Integer::sum);
+			final var removedCount = removedCounts.values().intStream().reduce(0, Integer::sum);
 
 			try {
 				RECIPES.set(recipeManager, newRecipes.build());

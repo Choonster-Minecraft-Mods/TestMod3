@@ -38,7 +38,7 @@ public class ModCreativeTabs {
 				builder -> builder
 						.title(Component.translatable("itemGroup.testmod3"))
 						.icon(sword)
-						.displayItems((enabledFeatures, output, hasPermissions) -> {
+						.displayItems((parameters, output) -> {
 							output.accept(sword.get());
 
 							add(output, ModBlocks.orderedItems());

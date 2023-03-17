@@ -33,11 +33,11 @@ public class VanillaCodecs {
 							IGlobalLootModifier.getJson(d),
 							LootItemFunction[].class
 					);
-					
+
 					return DataResult.success(functions);
 				} catch (JsonSyntaxException e) {
 					LOGGER.warn("Unable to decode loot functions", e);
-					return DataResult.error(e.getMessage());
+					return DataResult.error(e::getMessage);
 				}
 			},
 			functions -> {
@@ -46,7 +46,7 @@ public class VanillaCodecs {
 					return DataResult.success(new Dynamic<>(JsonOps.INSTANCE, element));
 				} catch (JsonSyntaxException e) {
 					LOGGER.warn("Unable to encode loot functions", e);
-					return DataResult.error(e.getMessage());
+					return DataResult.error(e::getMessage);
 				}
 			}
 	);
@@ -65,9 +65,9 @@ public class VanillaCodecs {
 			final Function<E, String> toNameFunction
 	) {
 		return name -> {
-			final E[] elements = elementsSupplier.get();
+			final var elements = elementsSupplier.get();
 
-			for (final E element : elements) {
+			for (final var element : elements) {
 				if (toNameFunction.apply(element).equals(name)) {
 					return element;
 				}
@@ -122,7 +122,7 @@ public class VanillaCodecs {
 						.flatMap(name ->
 								Optional.ofNullable(fromNameFunction.apply(name))
 										.map(DataResult::success)
-										.orElseGet(() -> DataResult.error("Unknown element name: " + name))
+										.orElseGet(() -> DataResult.error(() -> "Unknown element name: " + name))
 						)
 						.map(serializable -> Pair.of(serializable, ops.empty()));
 			}

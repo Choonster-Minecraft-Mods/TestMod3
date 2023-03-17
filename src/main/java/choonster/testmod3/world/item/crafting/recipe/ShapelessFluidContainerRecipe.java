@@ -28,14 +28,17 @@ import java.util.stream.Collectors;
  * @author Choonster
  */
 public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
+	private final ItemStack result;
+
 	private ShapelessFluidContainerRecipe(
 			final ResourceLocation id,
 			final String group,
 			final CraftingBookCategory category,
-			final ItemStack recipeOutput,
+			final ItemStack result,
 			final NonNullList<Ingredient> ingredients
 	) {
-		super(id, group, category, recipeOutput, ingredients);
+		super(id, group, category, result, ingredients);
+		this.result = result;
 	}
 
 	@Override
@@ -121,7 +124,7 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 				ingredient.toNetwork(buffer);
 			}
 
-			buffer.writeItem(recipe.getResultItem());
+			buffer.writeItem(recipe.result);
 		}
 	}
 }

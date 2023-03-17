@@ -7,11 +7,11 @@ import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.util.RegistryUtil;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
@@ -41,25 +41,25 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 			withGeneratedParent("simple_model")
 					.transforms()
 
-					.transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND)
+					.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
 					.rotation(-80, 260, -40)
 					.translation(-1, -2, 2.5f)
 					.scale(0.9f, 0.9f, 0.9f)
 					.end()
 
-					.transform(ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND)
+					.transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND)
 					.rotation(-80, -280, 40)
 					.translation(-1, -2, 2.5f)
 					.scale(0.9f, 0.9f, 0.9f)
 					.end()
 
-					.transform(ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND)
+					.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
 					.rotation(0, -90, 25)
 					.translation(1.13f, 3.2f, 1.13f)
 					.scale(0.68f, 0.68f, 0.68f)
 					.end()
 
-					.transform(ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND)
+					.transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND)
 					.rotation(0, 90, -25)
 					.translation(1.13f, 3.2f, 1.13f)
 					.scale(0.68f, 0.68f, 0.68f)

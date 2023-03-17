@@ -3,6 +3,7 @@ package choonster.testmod3.world.item.crafting.recipe;
 import choonster.testmod3.init.ModCrafting;
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -25,6 +26,8 @@ import net.minecraftforge.common.crafting.CraftingHelper;
  * @author Choonster
  */
 public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
+	private final ItemStack result;
+
 	private ShapedArmourUpgradeRecipe(
 			final ResourceLocation id,
 			final String group,
@@ -35,11 +38,12 @@ public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
 			final ItemStack result
 	) {
 		super(id, group, category, width, height, ingredients, result);
+		this.result = result;
 	}
 
 	@Override
-	public ItemStack assemble(final CraftingContainer inv) {
-		final var output = super.assemble(inv); // Get the default output
+	public ItemStack assemble(final CraftingContainer inv, final RegistryAccess registryAccess) {
+		final var output = super.assemble(inv, registryAccess); // Get the default output
 
 		if (!output.isEmpty()) {
 			for (var i = 0; i < inv.getContainerSize(); i++) { // For each slot in the crafting inventory,
@@ -99,7 +103,7 @@ public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
 				ingredient.toNetwork(buffer);
 			}
 
-			buffer.writeItem(recipe.getResultItem());
+			buffer.writeItem(recipe.result);
 		}
 	}
 }

@@ -9,7 +9,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -40,22 +39,6 @@ public class InventoryUtils {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
 	/**
-	 * Get the {@link EquipmentSlot} with the specified index (as returned by {@link EquipmentSlot#getIndex()}).
-	 *
-	 * @param index The index
-	 * @return The equipment slot
-	 */
-	public static EquipmentSlot getEquipmentSlotFromIndex(final int index) {
-		for (final EquipmentSlot equipmentSlot : EquipmentSlot.values()) {
-			if (equipmentSlot.getIndex() == index) {
-				return equipmentSlot;
-			}
-		}
-
-		throw new IllegalArgumentException(String.format("Invalid equipment slot index %d", index));
-	}
-
-	/**
 	 * A reference to {@code LootTable#shuffleAndSplitItems}.
 	 */
 	private static final Method SHUFFLE_AND_SPLIT_ITEMS = ObfuscationReflectionHelper.findMethod(LootTable.class, /* shuffleAndSplitItems */ "m_79138_", List.class, int.class, Random.class);
@@ -70,9 +53,9 @@ public class InventoryUtils {
 	 * @param context     The LootContext to use in the loot generation
 	 */
 	public static void fillItemHandlerWithLoot(final IItemHandler itemHandler, final LootTable lootTable, final LootContext context) {
-		final RandomSource random = context.getRandom();
+		final var random = context.getRandom();
 		final List<ItemStack> items = lootTable.getRandomItems(context);
-		final List<Integer> emptySlots = getAvailableSlots(itemHandler, random);
+		final var emptySlots = getAvailableSlots(itemHandler, random);
 
 		try {
 			SHUFFLE_AND_SPLIT_ITEMS.invoke(lootTable, items, emptySlots.size(), random);
@@ -80,14 +63,14 @@ public class InventoryUtils {
 			throw new RuntimeException("Failed to shuffle items while generating loot", throwable);
 		}
 
-		for (final ItemStack itemStack : items) {
+		for (final var itemStack : items) {
 			if (emptySlots.isEmpty()) {
 				LOGGER.warn("Tried to over-fill {} while generating loot.", itemHandler);
 				return;
 			}
 
 			final int slot = emptySlots.remove(emptySlots.size() - 1);
-			final ItemStack remainder = itemHandler.insertItem(slot, itemStack, false);
+			final var remainder = itemHandler.insertItem(slot, itemStack, false);
 			if (!remainder.isEmpty()) {
 				LOGGER.warn("Couldn't fully insert {} into slot {} of {}, {} items remain.", itemStack, slot, itemHandler, remainder.getCount());
 			}
@@ -106,7 +89,7 @@ public class InventoryUtils {
 	private static List<Integer> getAvailableSlots(final IItemHandler itemHandler, final RandomSource random) {
 		final var emptySlots = new ObjectArrayList<Integer>();
 
-		for (int slot = 0; slot < itemHandler.getSlots(); ++slot) {
+		for (var slot = 0; slot < itemHandler.getSlots(); ++slot) {
 			if (itemHandler.getStackInSlot(slot).isEmpty()) {
 				emptySlots.add(slot);
 			}
@@ -127,8 +110,8 @@ public class InventoryUtils {
 	 * @param itemHandler The inventory to drop the contents of
 	 */
 	public static void dropItemHandlerContents(final Level level, final BlockPos pos, final IItemHandler itemHandler) {
-		for (int slot = 0; slot < itemHandler.getSlots(); slot++) {
-			final ItemStack stack = itemHandler.extractItem(slot, Integer.MAX_VALUE, false);
+		for (var slot = 0; slot < itemHandler.getSlots(); slot++) {
+			final var stack = itemHandler.extractItem(slot, Integer.MAX_VALUE, false);
 			Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
 		}
 	}
@@ -172,8 +155,8 @@ public class InventoryUtils {
 	 * @return A lazy optional containing the hand inventory, if any
 	 */
 	public static LazyOptional<IItemHandler> getHandInventory(final Entity entity) {
-		if (entity instanceof Player) {
-			return LazyOptional.of(() -> new PlayerOffhandInvWrapper(((Player) entity).getInventory()));
+		if (entity instanceof final Player player) {
+			return LazyOptional.of(() -> new PlayerOffhandInvWrapper(player.getInventory()));
 		}
 
 		return entity.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.UP);
@@ -188,8 +171,8 @@ public class InventoryUtils {
 	 * @return A lazy optional containing the inventory, if any
 	 */
 	public static LazyOptional<IItemHandler> getArmourInventory(final Entity entity) {
-		if (entity instanceof Player) {
-			return LazyOptional.of(() -> new PlayerArmorInvWrapper(((Player) entity).getInventory()));
+		if (entity instanceof final Player player) {
+			return LazyOptional.of(() -> new PlayerArmorInvWrapper(player.getInventory()));
 		}
 
 		return entity.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.NORTH);
@@ -223,7 +206,7 @@ public class InventoryUtils {
 	 * @return The inventory type of the first successful operation, or null if all operations failed
 	 */
 	public static Optional<EntityInventoryType> forEachEntityInventory(final Entity entity, final Predicate<IItemHandler> operation, final EntityInventoryType... inventoryTypes) {
-		for (final EntityInventoryType inventoryType : inventoryTypes) {
+		for (final var inventoryType : inventoryTypes) {
 			final boolean result = getInventoryForType(entity, inventoryType)
 					.map(operation::test)
 					.orElse(false);

@@ -74,7 +74,7 @@ public class LockScreen extends Screen {
 
 		lockCodeTextField = new EditBox(font, width / 2 - 150, 50, 300, 20, Component.translatable("gui.testmod3.lock.lock_code"));
 		lockCodeTextField.setMaxLength(32500);
-		lockCodeTextField.setFocus(true);
+		lockCodeTextField.setFocused(true);
 		addWidget(lockCodeTextField);
 	}
 

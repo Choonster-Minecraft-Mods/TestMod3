@@ -6,14 +6,13 @@ import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import com.mojang.logging.LogUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
@@ -27,8 +26,8 @@ import java.util.List;
 public class RestrictedArmourItem extends ArmorItem {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-	public RestrictedArmourItem(final ArmorMaterial material, final EquipmentSlot equipmentSlot, final Item.Properties properties) {
-		super(material, equipmentSlot, properties);
+	public RestrictedArmourItem(final ArmorMaterial material, final ArmorItem.Type type, final Item.Properties properties) {
+		super(material, type, properties);
 	}
 
 	/**

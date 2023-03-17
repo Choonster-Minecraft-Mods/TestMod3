@@ -42,6 +42,7 @@ public class EnhancedShapedRecipeBuilder<
 	private static final Field GROUP = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* group */ "f_126111_");
 	private static final Field ROWS = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* rows */ "f_126108_");
 	private static final Field KEY = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* key */ "f_126109_");
+	private static final Field SHOW_NOTIFICATION = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* showNotification */ "f_271093_");
 
 	protected final ItemStack result;
 	protected final RecipeSerializer<? extends RECIPE> serializer;
@@ -180,6 +181,8 @@ public class EnhancedShapedRecipeBuilder<
 			@SuppressWarnings("unchecked")
 			final var key = (Map<Character, Ingredient>) KEY.get(this);
 
+			final var showNotification = (boolean) SHOW_NOTIFICATION.get(this);
+
 			final var baseRecipe = new Result(id,
 					result.getItem(),
 					result.getCount(),
@@ -188,7 +191,8 @@ public class EnhancedShapedRecipeBuilder<
 					rows,
 					key,
 					advancement,
-					id.withPrefix("recipes/" + category.getFolderName() + "/")
+					id.withPrefix("recipes/" + category.getFolderName() + "/"),
+					showNotification
 			);
 
 			consumer.accept(new SimpleFinishedRecipe(baseRecipe, result, serializer));

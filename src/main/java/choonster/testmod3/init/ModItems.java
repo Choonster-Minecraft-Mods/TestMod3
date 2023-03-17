@@ -14,7 +14,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
@@ -243,7 +242,12 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<PotionEffectArmourItem> SATURATION_HELMET = ITEMS.register("saturation_helmet",
-			() -> new PotionEffectArmourItem(ArmorMaterials.CHAIN, EquipmentSlot.HEAD, new MobEffectInstance(MobEffects.SATURATION, 1, 0, true, false), defaultItemProperties())
+			() -> new PotionEffectArmourItem(
+					ArmorMaterials.CHAIN,
+					ArmorItem.Type.HELMET,
+					new MobEffectInstance(MobEffects.SATURATION, 1, 0, true, false),
+					defaultItemProperties()
+			)
 	);
 
 	public static final RegistryObject<EntityCheckerItem> ENTITY_CHECKER = ITEMS.register("entity_checker",
@@ -258,22 +262,22 @@ public class ModItems {
 	public static final RegistryObject<ReplacementArmourItem> REPLACEMENT_HELMET;
 
 	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_CHESTPLATE = ITEMS.register("replacement_chestplate",
-			() -> new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, EquipmentSlot.CHEST, defaultItemProperties())
+			() -> new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, ArmorItem.Type.CHESTPLATE, defaultItemProperties())
 	);
 
 	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_LEGGINGS = ITEMS.register("replacement_leggings",
-			() -> new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, EquipmentSlot.LEGS, defaultItemProperties())
+			() -> new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, ArmorItem.Type.LEGGINGS, defaultItemProperties())
 	);
 
 	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_BOOTS = ITEMS.register("replacement_boots",
-			() -> new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, EquipmentSlot.FEET, defaultItemProperties())
+			() -> new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, ArmorItem.Type.BOOTS, defaultItemProperties())
 	);
 
 	static {
 		REPLACEMENT_HELMET = ITEMS.register("replacement_helmet",
 				() -> new ReplacementArmourItem(
 						ModArmourMaterial.REPLACEMENT,
-						EquipmentSlot.HEAD,
+						ArmorItem.Type.HELMET,
 						defaultItemProperties(),
 						ImmutableSet.of(
 								() -> {

@@ -12,11 +12,11 @@ import choonster.testmod3.world.level.block.pipe.BasePipeBlock;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -125,7 +125,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 							.transforms()
 
-							.transform(ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND)
+							.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
 							.rotation(0, 135, 0)
 							.scale(0.40f)
 							.end()

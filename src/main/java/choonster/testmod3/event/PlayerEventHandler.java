@@ -2,9 +2,9 @@ package choonster.testmod3.event;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.text.TestMod3Lang;
-import choonster.testmod3.util.Constants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -38,7 +38,7 @@ public class PlayerEventHandler {
 		final var persistedData = entityData.getCompound(Player.PERSISTED_NBT_TAG);
 		entityData.put(Player.PERSISTED_NBT_TAG, persistedData);
 
-		final var key = Constants.RESOURCE_PREFIX + "ReceivedItems";
+		final var key = new ResourceLocation(TestMod3.MODID, "ReceivedItems").toString();
 		final TestMod3Lang message;
 
 		if (persistedData.getBoolean(key)) {

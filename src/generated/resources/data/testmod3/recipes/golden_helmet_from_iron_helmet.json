@@ -19,5 +19,6 @@
     "nbt": {
       "Damage": 0
     }
-  }
+  },
+  "show_notification": true
 }

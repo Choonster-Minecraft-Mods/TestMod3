@@ -23,7 +23,7 @@ public record AddMobSpawnCostBiomeModifier(
 	@Override
 	public void modify(final Holder<Biome> biome, final Phase phase, final ModifiableBiomeInfo.BiomeInfo.Builder builder) {
 		if (phase == Phase.ADD && biomes.contains(biome)) {
-			builder.getMobSpawnSettings().addMobCharge(type, spawnCost.getEnergyBudget(), spawnCost.getCharge());
+			builder.getMobSpawnSettings().addMobCharge(type, spawnCost.energyBudget(), spawnCost.charge());
 		}
 	}
 
