@@ -175,10 +175,10 @@ dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
     // compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei-1.19.3-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-1.19.3-forge-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.19.4-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.19.4-forge-api:${jei_version}")
     // at runtime, use the full JEI jar for Forge
-    runtimeOnly fg.deobf("mezz.jei:jei-1.19.3-forge:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.19.4-forge:${jei_version}")
 
     embed "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
 
