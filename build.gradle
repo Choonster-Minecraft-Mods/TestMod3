@@ -4,6 +4,7 @@ plugins {
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.ajoberstar.grgit' version '5.2.0'
+    id 'org.spongepowered.mixin' version '0.7.+'
 }
 
 final commitId
