@@ -55,6 +55,7 @@ public class TestMod3 {
 		ModLootFunctionTypes.initialise(modEventBus);
 		ModArgumentTypes.initialise(modEventBus);
 		ModBiomeModifierSerializers.initialise(modEventBus);
+		ModCreativeTabs.initialise(modEventBus);
 	}
 
 	@SubscribeEvent
