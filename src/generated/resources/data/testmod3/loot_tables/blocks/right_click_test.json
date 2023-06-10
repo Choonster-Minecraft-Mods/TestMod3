@@ -36,8 +36,8 @@
           "name": "minecraft:ender_eye"
         }
       ],
-      "name": "ender_eye",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "testmod3:blocks/right_click_test"
 }

@@ -20,12 +20,14 @@ public class EntityKillerItem extends Item {
 		super(properties);
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public boolean onLeftClickEntity(final ItemStack stack, final Player player, final Entity entity) {
-		if (!player.level.isClientSide) {
+		if (!player.level().isClientSide) {
 			final Entity entityToKill;
-			if (entity instanceof EnderDragonPart) { // If it's a part of an Ender Dragon, kill the main Ender Dragon entity
-				entityToKill = ((EnderDragonPart) entity).parentMob;
+
+			if (entity instanceof final EnderDragonPart enderDragonPart) { // If it's a part of an Ender Dragon, kill the main Ender Dragon entity
+				entityToKill = enderDragonPart.parentMob;
 			} else {
 				entityToKill = entity;
 			}

@@ -30,5 +30,6 @@
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "testmod3:blocks/light_gray_terracotta_slab"
 }

@@ -41,5 +41,6 @@
     "recipes": [
       "testmod3:guardian_spawner_from_fish_and_sticks"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

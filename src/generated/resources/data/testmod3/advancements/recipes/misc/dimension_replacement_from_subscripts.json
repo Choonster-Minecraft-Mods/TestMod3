@@ -30,5 +30,6 @@
     "recipes": [
       "testmod3:dimension_replacement_from_subscripts"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

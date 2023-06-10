@@ -59,6 +59,11 @@ public class SurvivalCommandBlockEntity extends CommandBlockEntity {
 					null
 			);
 		}
+
+		@Override
+		public boolean isValid() {
+			return !isRemoved();
+		}
 	};
 
 	public SurvivalCommandBlockEntity(final BlockPos pos, final BlockState state) {

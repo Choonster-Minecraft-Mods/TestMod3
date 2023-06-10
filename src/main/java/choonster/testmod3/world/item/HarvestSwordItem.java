@@ -1,7 +1,6 @@
 package choonster.testmod3.world.item;
 
 import choonster.testmod3.init.ModTags;
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,12 +10,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 
-import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -34,7 +31,7 @@ public class HarvestSwordItem extends DiggerItem {
 	private static final float DIG_SPEED_COBWEB = 15.0f;
 
 	/**
-	 * The speed at which Sword-effective {@link Material}s are harvested
+	 * The speed at which Sword-efficient blocks are harvested
 	 */
 	private static final float DIG_SPEED_SWORD = 1.5f;
 
@@ -52,13 +49,6 @@ public class HarvestSwordItem extends DiggerItem {
 	 * The attack speed
 	 */
 	private static final float ATTACK_SPEED = -2.4f;
-
-	/**
-	 * The vegetation {@link Material}s that Swords are effective on.
-	 */
-	private static final Set<Material> VEGETATION_MATERIALS = ImmutableSet.of(
-			Material.PLANT, Material.REPLACEABLE_PLANT, Material.VEGETABLE
-	);
 
 	public HarvestSwordItem(final Tier tier, final Item.Properties properties) {
 		super(BASE_DAMAGE, ATTACK_SPEED, tier, ModTags.Blocks.EMPTY, properties);
@@ -93,7 +83,7 @@ public class HarvestSwordItem extends DiggerItem {
 			return speed;
 		}
 
-		if (isVegetation(state)) {
+		if (state.is(BlockTags.SWORD_EFFICIENT)) {
 			return DIG_SPEED_SWORD;
 		}
 
@@ -114,9 +104,5 @@ public class HarvestSwordItem extends DiggerItem {
 				BlockTags.MINEABLE_WITH_PICKAXE,
 				BlockTags.MINEABLE_WITH_SHOVEL
 		).anyMatch(state::is);
-	}
-
-	private boolean isVegetation(final BlockState state) {
-		return state.is(BlockTags.LEAVES) || VEGETATION_MATERIALS.contains(state.getMaterial());
 	}
 }

@@ -1,9 +1,7 @@
 package choonster.testmod3.world.item;
 
 import choonster.testmod3.text.TestMod3Lang;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -23,24 +21,25 @@ public class RespawnerItem extends Item {
 		super(properties);
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public InteractionResultHolder<ItemStack> use(final Level world, final Player player, final InteractionHand hand) {
-		final ItemStack heldItem = player.getItemInHand(hand);
+		final var heldItem = player.getItemInHand(hand);
 
 		if (!world.isClientSide) {
-			final ServerPlayer serverPlayer = (ServerPlayer) player;
+			final var serverPlayer = (ServerPlayer) player;
 
-			final BlockPos respawnPosition = serverPlayer.getRespawnPosition();
-			final ServerLevel respawnLevel = serverPlayer.server.getLevel(serverPlayer.getRespawnDimension());
-			final boolean respawnForced = serverPlayer.isRespawnForced();
-			final float respawnAngle = serverPlayer.getRespawnAngle();
+			final var respawnPosition = serverPlayer.getRespawnPosition();
+			final var respawnLevel = serverPlayer.server.getLevel(serverPlayer.getRespawnDimension());
+			final var respawnForced = serverPlayer.isRespawnForced();
+			final var respawnAngle = serverPlayer.getRespawnAngle();
 
 			if (respawnPosition == null || respawnLevel == null) {
 				serverPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_RESPAWNER_NO_SPAWN_LOCATION.getTranslationKey()));
 				return new InteractionResultHolder<>(InteractionResult.FAIL, heldItem);
 			}
 
-			if (respawnLevel != serverPlayer.getLevel()) {
+			if (respawnLevel != serverPlayer.level()) {
 				player.changeDimension(respawnLevel);
 			}
 

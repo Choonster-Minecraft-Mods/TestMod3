@@ -41,7 +41,7 @@ public class LootTableLootModifier extends LootModifier {
 
 	@Override
 	protected @NotNull ObjectArrayList<ItemStack> doApply(final ObjectArrayList<ItemStack> generatedLoot, final LootContext context) {
-		final var lootTable = context.getLootTable(lootTableID);
+		final var lootTable = context.getResolver().getLootTable(lootTableID);
 
 		// Generate additional loot without applying loot modifiers, otherwise each modifier would run multiple times
 		// for the same loot generation.

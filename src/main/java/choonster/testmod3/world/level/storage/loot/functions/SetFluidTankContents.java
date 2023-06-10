@@ -45,11 +45,11 @@ public class SetFluidTankContents extends LootItemConditionalFunction {
 			return stack;
 		}
 
-		final NonNullList<ItemStack> itemStacks = NonNullList.create();
+		final var itemStacks = NonNullList.<ItemStack>create();
 
 		lootEntries.forEach(lootEntry ->
 				lootEntry.expand(context, lootGenerator ->
-						lootGenerator.createItemStack(LootTable.createStackSplitter(context, itemStacks::add), context)
+						lootGenerator.createItemStack(LootTable.createStackSplitter(context.getLevel(), itemStacks::add), context)
 				)
 		);
 
@@ -102,7 +102,7 @@ public class SetFluidTankContents extends LootItemConditionalFunction {
 
 		@Override
 		public SetFluidTankContents deserialize(final JsonObject object, final JsonDeserializationContext deserializationContext, final LootItemCondition[] conditions) {
-			final LootPoolEntryContainer[] lootEntries = GsonHelper.getAsObject(object, "entries", deserializationContext, LootPoolEntryContainer[].class);
+			final var lootEntries = GsonHelper.getAsObject(object, "entries", deserializationContext, LootPoolEntryContainer[].class);
 			return new SetFluidTankContents(conditions, Arrays.asList(lootEntries));
 		}
 	}

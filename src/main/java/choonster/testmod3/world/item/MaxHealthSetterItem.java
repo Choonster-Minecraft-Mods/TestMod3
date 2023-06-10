@@ -22,9 +22,10 @@ public class MaxHealthSetterItem extends Item {
 		super(properties);
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public InteractionResult interactLivingEntity(final ItemStack stack, final Player player, final LivingEntity target, final InteractionHand hand) {
-		if (!player.level.isClientSide) {
+		if (!player.level().isClientSide) {
 			final var maxHealth = MaxHealthCapability.getMaxHealth(target).orElseThrow(CapabilityNotPresentException::new);
 			final var healthToAdd = player.isShiftKeyDown() ? -1.0f : 1.0f;
 

@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.LiquidBlockContainer;
@@ -13,7 +12,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
@@ -36,12 +34,14 @@ public abstract class PortalDisplacementFluid extends ForgeFlowingFluid {
 		super(properties);
 	}
 
+	// TODO: Override getSlopeDistance and getSpread to call modified version of canPassThrough
+
 	@Override
 	protected boolean canSpreadTo(final BlockGetter level, final BlockPos fromPos, final BlockState fromBlockState, final Direction direction, final BlockPos toPos, final BlockState toBlockState, final FluidState toFluidState, final Fluid fluidIn) {
 		try {
 			return toFluidState.canBeReplacedWith(level, toPos, fluidIn, direction) &&
 					(boolean) CAN_PASS_THROUGH_WALL.invoke(this, direction, level, fromPos, fromBlockState, toPos, toBlockState) &&
-					isNotBlocked(level, toPos, toBlockState, fluidIn);
+					canHoldFluid(level, toPos, toBlockState, fluidIn);
 		} catch (final IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException("Failed to invoke FlowingFluid.canPassThroughWall", e);
 		}
@@ -49,7 +49,7 @@ public abstract class PortalDisplacementFluid extends ForgeFlowingFluid {
 
 	@Override
 	protected boolean canBeReplacedWith(final FluidState state, final BlockGetter world, final BlockPos pos, final Fluid fluidIn, final Direction direction) {
-		final BlockState blockState = world.getBlockState(pos);
+		final var blockState = world.getBlockState(pos);
 
 		if (blockState.getBlock() == Blocks.NETHER_PORTAL || blockState.getBlock() == Blocks.END_PORTAL || blockState.getBlock() == Blocks.END_GATEWAY) {
 			return true;
@@ -58,18 +58,17 @@ public abstract class PortalDisplacementFluid extends ForgeFlowingFluid {
 		return super.canBeReplacedWith(state, world, pos, fluidIn, direction);
 	}
 
-	private static boolean isNotBlocked(final BlockGetter world, final BlockPos pos, final BlockState state, final Fluid fluid) {
-		final Block block = state.getBlock();
+	@SuppressWarnings("deprecation")
+	private static boolean canHoldFluid(final BlockGetter world, final BlockPos pos, final BlockState state, final Fluid fluid) {
+		final var block = state.getBlock();
 
-		if (block instanceof LiquidBlockContainer) {
-			return ((LiquidBlockContainer) block).canPlaceLiquid(world, pos, state, fluid);
+		if (block instanceof final LiquidBlockContainer liquidBlockContainer) {
+			return liquidBlockContainer.canPlaceLiquid(world, pos, state, fluid);
 		}
 
-		if (!(block instanceof DoorBlock) && !state.is(BlockTags.SIGNS) && block != Blocks.LADDER && block != Blocks.SUGAR_CANE && block != Blocks.BUBBLE_COLUMN) {
-			final Material material = state.getMaterial();
-
-			if (material != Material.STRUCTURAL_AIR && material != Material.WATER_PLANT && material != Material.REPLACEABLE_WATER_PLANT) {
-				return !material.blocksMotion();
+		if (!(block instanceof DoorBlock) && !state.is(BlockTags.SIGNS) && !state.is(Blocks.LADDER) && !state.is(Blocks.SUGAR_CANE) && !state.is(Blocks.BUBBLE_COLUMN)) {
+			if (!state.is(Blocks.STRUCTURE_VOID)) {
+				return !state.blocksMotion();
 			}
 
 			return false;

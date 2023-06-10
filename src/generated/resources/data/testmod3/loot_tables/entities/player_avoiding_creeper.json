@@ -50,5 +50,6 @@
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "testmod3:entities/player_avoiding_creeper"
 }

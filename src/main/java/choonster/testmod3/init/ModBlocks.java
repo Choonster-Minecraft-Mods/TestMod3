@@ -17,7 +17,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraft.world.level.block.grower.*;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -33,96 +36,97 @@ public class ModBlocks {
 	private static boolean isInitialised = false;
 
 	public static final RegistryObject<WaterGrassBlock> WATER_GRASS = registerBlock("water_grass",
-			() -> new WaterGrassBlock(Block.Properties.of(Material.REPLACEABLE_WATER_PLANT).noCollission().instabreak().sound(SoundType.WET_GRASS))
+			() -> new WaterGrassBlock(Block.Properties.copy(Blocks.SEAGRASS))
 	);
 
 	public static final RegistryObject<LargeCollisionTestBlock> LARGE_COLLISION_TEST = registerBlock("large_collision_test",
-			() -> new LargeCollisionTestBlock(Block.Properties.of(Material.WOOL))
+			() -> new LargeCollisionTestBlock(wool())
 	);
 
+
 	public static final RegistryObject<RightClickTestBlock> RIGHT_CLICK_TEST = registerBlock("right_click_test",
-			() -> new RightClickTestBlock(Block.Properties.of(Material.GLASS))
+			() -> new RightClickTestBlock(Block.Properties.of().instrument(NoteBlockInstrument.HAT))
 	);
 
 	public static final RegistryObject<ClientPlayerRightClickBlock> CLIENT_PLAYER_RIGHT_CLICK = registerBlock("client_player_right_click",
-			() -> new ClientPlayerRightClickBlock(Block.Properties.of(Material.STONE))
+			() -> new ClientPlayerRightClickBlock(stone().pushReaction(PushReaction.DESTROY))
 	);
 
 	public static final RegistryObject<RotatableLampBlock> ROTATABLE_LAMP = registerBlock("rotatable_lamp",
-			() -> new RotatableLampBlock(Block.Properties.of(Material.BUILDABLE_GLASS))
+			() -> new RotatableLampBlock(Block.Properties.of())
 	);
 
 	public static final RegistryObject<ItemCollisionTestBlock> ITEM_COLLISION_TEST = registerBlock("item_collision_test",
-			() -> new ItemCollisionTestBlock(Block.Properties.of(Material.WOOL))
+			() -> new ItemCollisionTestBlock(wool())
 	);
 
 	public static final RegistryObject<FluidTankBlock<BaseFluidTankBlockEntity>> FLUID_TANK = registerBlock("fluid_tank",
-			() -> new FluidTankBlock<>(Block.Properties.of(Material.GLASS).sound(SoundType.GLASS).strength(0.3f).noOcclusion()),
+			() -> new FluidTankBlock<>(Block.Properties.of().instrument(NoteBlockInstrument.HAT).sound(SoundType.GLASS).strength(0.3f).noOcclusion()),
 			(block) -> new FluidTankItem(block, defaultItemProperties().stacksTo(1))
 	);
 
 	public static final RegistryObject<ItemDebuggerBlock> ITEM_DEBUGGER = registerBlock("item_debugger",
-			() -> new ItemDebuggerBlock(Block.Properties.of(Material.METAL).strength(-1, 3600000))
+			() -> new ItemDebuggerBlock(Block.Properties.of().mapColor(MapColor.METAL).strength(-1, 3600000))
 	);
 
 	public static final RegistryObject<Block> END_PORTAL_FRAME_FULL = registerBlock("end_portal_frame_full",
-			() -> new Block(Block.Properties.of(Material.STONE))
+			() -> new Block(stone())
 	);
 
 	public static final RegistryObject<PotionEffectBlock> POTION_EFFECT = registerBlock("potion_effect",
-			() -> new PotionEffectBlock(Block.Properties.of(Material.STONE))
+			() -> new PotionEffectBlock(stone())
 	);
 
 	public static final RegistryObject<ClientPlayerRotationBlock> CLIENT_PLAYER_ROTATION = registerBlock("client_player_rotation",
-			() -> new ClientPlayerRotationBlock(Block.Properties.of(Material.STONE))
+			() -> new ClientPlayerRotationBlock(stone().pushReaction(PushReaction.DESTROY))
 	);
 
 	public static final RegistryObject<PigSpawnerRefillerBlock> PIG_SPAWNER_REFILLER = registerBlock("pig_spawner_refiller",
-			() -> new PigSpawnerRefillerBlock(Block.Properties.of(Material.METAL))
+			() -> new PigSpawnerRefillerBlock(metal())
 	);
 
 	public static final RegistryObject<PlaneBlock> MIRROR_PLANE = registerBlock("mirror_plane",
-			() -> new PlaneBlock(Block.Properties.of(Material.METAL).noOcclusion().isRedstoneConductor((state, world, pos) -> false))
+			() -> new PlaneBlock(Block.Properties.of().mapColor(MapColor.METAL).noOcclusion().isRedstoneConductor((state, world, pos) -> false))
 	);
 
 	public static final RegistryObject<Block> VANILLA_MODEL_TEST = registerBlock("vanilla_model_test",
-			() -> new Block(Block.Properties.of(Material.METAL))
+			() -> new Block(metal())
 	);
 
 	public static final RegistryObject<Block> FULLBRIGHT = registerBlock("fullbright",
-			() -> new Block(Block.Properties.of(Material.STONE).lightLevel((state) -> 15))
+			() -> new Block(stone().lightLevel((state) -> 15))
 	);
 
 	public static final RegistryObject<Block> NORMAL_BRIGHTNESS = registerBlock("normal_brightness",
-			() -> new Block(Block.Properties.of(Material.STONE))
+			() -> new Block(stone())
 	);
 
 	public static final RegistryObject<MaxHealthSetterBlock> MAX_HEALTH_SETTER = registerBlock("max_health_setter",
-			() -> new MaxHealthSetterBlock(Block.Properties.of(Material.METAL))
+			() -> new MaxHealthSetterBlock(metal())
 	);
 
 	public static final RegistryObject<MaxHealthGetterBlock> MAX_HEALTH_GETTER = registerBlock("max_health_getter",
-			() -> new MaxHealthGetterBlock(Block.Properties.of(Material.METAL))
+			() -> new MaxHealthGetterBlock(metal())
 	);
 
 	public static final RegistryObject<SmallCollisionTestBlock> SMALL_COLLISION_TEST = registerBlock("small_collision_test",
-			() -> new SmallCollisionTestBlock(Block.Properties.of(Material.METAL))
+			() -> new SmallCollisionTestBlock(metal())
 	);
 
 	public static final RegistryObject<ModChestBlock> CHEST = registerBlock("chest",
-			() -> new ModChestBlock(Block.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(2.5f))
+			() -> new ModChestBlock(Block.Properties.copy(Blocks.CHEST))
 	);
 
 	public static final RegistryObject<HiddenBlock> HIDDEN = registerBlock("hidden",
-			() -> new HiddenBlock(Block.Properties.of(Material.STONE))
+			() -> new HiddenBlock(stone())
 	);
 
 	public static final RegistryObject<BasicPipeBlock> BASIC_PIPE = registerBlock("basic_pipe",
-			() -> new BasicPipeBlock(Block.Properties.of(Material.METAL))
+			() -> new BasicPipeBlock(metal())
 	);
 
 	public static final RegistryObject<FluidPipeBlock> FLUID_PIPE = registerBlock("fluid_pipe",
-			() -> new FluidPipeBlock(Block.Properties.of(Material.METAL))
+			() -> new FluidPipeBlock(metal())
 	);
 
 	public static final RegistryObject<SurvivalCommandBlock> SURVIVAL_COMMAND_BLOCK = registerBlock("survival_command_block",
@@ -165,30 +169,30 @@ public class ModBlocks {
 	);
 
 	public static final RegistryObject<InvisibleBlock> INVISIBLE = registerBlock("invisible",
-			() -> new InvisibleBlock(Block.Properties.of(Material.STONE))
+			() -> new InvisibleBlock(stone())
 	);
 
 	public static final RegistryObject<RestrictedFluidTankBlock> FLUID_TANK_RESTRICTED = registerBlock("fluid_tank_restricted",
-			() -> new RestrictedFluidTankBlock(Block.Properties.of(Material.GLASS).sound(SoundType.GLASS).strength(0.3f).noOcclusion()),
+			() -> new RestrictedFluidTankBlock(Block.Properties.of().instrument(NoteBlockInstrument.HAT).sound(SoundType.GLASS).strength(0.3f).noOcclusion()),
 			(block) -> new FluidTankItem(block, defaultItemProperties())
 	);
 
 	public static final RegistryObject<Block> PLANKS = registerBlock("planks",
-			() -> new Block(Block.Properties.of(Material.WOOD))
+			() -> new Block(Block.Properties.copy(Blocks.OAK_PLANKS))
 	);
 
 
 	public static final BlockVariantGroup<DyeColor, ColoredRotatableBlock> COLORED_ROTATABLE_BLOCKS = BlockVariantGroup.Builder.<DyeColor, ColoredRotatableBlock>create(BLOCKS, ITEMS)
 			.groupName("rotatable_block")
 			.variants(DyeColor.values())
-			.blockPropertiesFactory(color -> Block.Properties.of(Material.WOOL, color))
+			.blockPropertiesFactory(color -> wool().mapColor(color))
 			.blockFactory(ColoredRotatableBlock::new)
 			.build();
 
 	public static final BlockVariantGroup<DyeColor, ColoredMultiRotatableBlock> COLORED_MULTI_ROTATABLE_BLOCKS = BlockVariantGroup.Builder.<DyeColor, ColoredMultiRotatableBlock>create(BLOCKS, ITEMS)
 			.groupName("multi_rotatable_block")
 			.variants(DyeColor.values())
-			.blockPropertiesFactory(color -> Block.Properties.of(Material.WOOL, color))
+			.blockPropertiesFactory(color -> wool().mapColor(color))
 			.blockFactory(ColoredMultiRotatableBlock::new)
 			.build();
 
@@ -196,14 +200,14 @@ public class ModBlocks {
 			.groupName("variants_block")
 			.suffix()
 			.variants(VariantsBlock.EnumType.values())
-			.blockPropertiesFactory(type -> Block.Properties.of(Material.METAL))
+			.blockPropertiesFactory(type -> metal())
 			.blockFactory(VariantsBlock::new)
 			.build();
 
 	public static final BlockVariantGroup<DyeColor, ColouredSlabBlock> TERRACOTTA_SLABS = BlockVariantGroup.Builder.<DyeColor, ColouredSlabBlock>create(BLOCKS, ITEMS)
 			.groupName("terracotta_slab")
 			.variants(DyeColor.values())
-			.blockPropertiesFactory(color -> Block.Properties.of(Material.STONE, color))
+			.blockPropertiesFactory(color -> stone().mapColor(color))
 			.blockFactory(ColouredSlabBlock::new)
 			.build();
 
@@ -259,6 +263,33 @@ public class ModBlocks {
 		ITEMS.register(name, () -> itemFactory.create(block.get()));
 
 		return block;
+	}
+
+	/**
+	 * Gets a {@link BlockBehaviour.Properties} instance with the default wool block properties.
+	 *
+	 * @return The block properties
+	 */
+	private static BlockBehaviour.Properties wool() {
+		return Block.Properties.of().mapColor(MapColor.WOOL).ignitedByLava();
+	}
+
+	/**
+	 * Gets a {@link BlockBehaviour.Properties} instance with the default stone block properties.
+	 *
+	 * @return The block properties
+	 */
+	private static BlockBehaviour.Properties stone() {
+		return Block.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM);
+	}
+
+	/**
+	 * Gets a {@link BlockBehaviour.Properties} instance with the default metal block properties.
+	 *
+	 * @return The block properties
+	 */
+	private static BlockBehaviour.Properties metal() {
+		return Block.Properties.of().mapColor(MapColor.METAL);
 	}
 
 	/**

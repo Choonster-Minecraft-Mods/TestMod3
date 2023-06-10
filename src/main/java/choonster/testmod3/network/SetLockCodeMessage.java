@@ -47,12 +47,12 @@ public class SetLockCodeMessage {
 
 	public static void handle(final SetLockCodeMessage message, final Supplier<NetworkEvent.Context> ctx) {
 		final var player = ctx.get().getSender();
-		final var world = player.level;
+		final var level = player.level();
 
 		player.resetLastActionTime();
 
-		if (world.isAreaLoaded(message.pos, 1)) {
-			LockCapability.getLock(world, message.pos, message.facing).ifPresent((lock) -> {
+		if (level.isAreaLoaded(message.pos, 1)) {
+			LockCapability.getLock(level, message.pos, message.facing).ifPresent((lock) -> {
 				if (lock.isLocked()) {
 					player.sendSystemMessage(Component.translatable(TestMod3Lang.LOCK_ALREADY_LOCKED.getTranslationKey()));
 				}

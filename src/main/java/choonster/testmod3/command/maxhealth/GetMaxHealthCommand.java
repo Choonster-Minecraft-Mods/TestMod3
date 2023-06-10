@@ -45,7 +45,7 @@ public class GetMaxHealthCommand {
 				.orElseThrow(CapabilityNotPresentException::new);
 
 		context.getSource().sendSuccess(
-				Component.translatable(
+				() -> Component.translatable(
 						TestMod3Lang.MESSAGE_MAX_HEALTH_GET.getTranslationKey(),
 						entity.getDisplayName(),
 						MaxHealthCapability.formatMaxHealth(livingEntity.getMaxHealth()),

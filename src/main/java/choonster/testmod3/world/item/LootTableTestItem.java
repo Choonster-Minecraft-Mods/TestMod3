@@ -14,13 +14,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
@@ -40,11 +39,11 @@ public class LootTableTestItem extends Item {
 	@Override
 	public InteractionResultHolder<ItemStack> use(final Level level, final Player player, final InteractionHand hand) {
 		if (!level.isClientSide) {
-			final var lootTable = Objects.requireNonNull(level.getServer()).getLootTables().get(ModLootTables.LOOT_TABLE_TEST);
+			final var lootTable = Objects.requireNonNull(level.getServer()).getLootData().getLootTable(ModLootTables.LOOT_TABLE_TEST);
 
 			final var state = Blocks.CHEST.defaultBlockState();
 
-			final var lootContext = new LootContext.Builder((ServerLevel) level)
+			final var lootParams = new LootParams.Builder((ServerLevel) level)
 					.withParameter(LootContextParams.THIS_ENTITY, player)
 					.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player)
 					.withParameter(LootContextParams.KILLER_ENTITY, player)
@@ -57,7 +56,7 @@ public class LootTableTestItem extends Item {
 					.withParameter(LootContextParams.EXPLOSION_RADIUS, 99.0f)
 					.create(LootContextParamSets.ALL_PARAMS);
 
-			final List<ItemStack> itemStacks = lootTable.getRandomItems(lootContext);
+			final var itemStacks = lootTable.getRandomItems(lootParams);
 			for (final var itemStack : itemStacks) {
 				ItemHandlerHelper.giveItemToPlayer(player, itemStack);
 			}

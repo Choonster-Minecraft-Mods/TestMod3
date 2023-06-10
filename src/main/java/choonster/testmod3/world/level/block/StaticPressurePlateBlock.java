@@ -8,7 +8,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -48,11 +47,5 @@ public abstract class StaticPressurePlateBlock extends Block {
 	@Override
 	public VoxelShape getCollisionShape(final BlockState state, final BlockGetter world, final BlockPos pos, final CollisionContext context) {
 		return Shapes.empty();
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public PushReaction getPistonPushReaction(final BlockState state) {
-		return PushReaction.DESTROY;
 	}
 }

@@ -16,5 +16,6 @@
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "testmod3:blocks/black_multi_rotatable_block"
 }

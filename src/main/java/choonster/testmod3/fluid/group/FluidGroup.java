@@ -5,8 +5,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.DeferredRegister;
@@ -102,6 +104,8 @@ public class FluidGroup<TYPE extends FluidType, STILL extends Fluid, FLOWING ext
 		protected IBucketFactory<STILL, BUCKET> bucketFactory;
 		@Nullable
 		protected Consumer<ForgeFlowingFluid.Properties> propertiesCustomiser;
+		@Nullable
+		protected Consumer<BlockBehaviour.Properties> blockPropertiesCustomiser;
 
 		@Nullable
 		protected ForgeFlowingFluid.Properties properties;
@@ -150,6 +154,12 @@ public class FluidGroup<TYPE extends FluidType, STILL extends Fluid, FLOWING ext
 			return this;
 		}
 
+		public Builder<TYPE, STILL, FLOWING, BLOCK, BUCKET> blockPropertiesCustomiser(final Consumer<BlockBehaviour.Properties> blockPropertiesCustomiser) {
+			Preconditions.checkNotNull(blockPropertiesCustomiser, "blockPropertiesCustomiser");
+			this.blockPropertiesCustomiser = blockPropertiesCustomiser;
+			return this;
+		}
+
 		public FluidGroup<TYPE, STILL, FLOWING, BLOCK, BUCKET> build() {
 			return buildImpl(FluidGroup::new);
 		}
@@ -161,13 +171,19 @@ public class FluidGroup<TYPE extends FluidType, STILL extends Fluid, FLOWING ext
 			Preconditions.checkState(blockFactory != null, "Block Factory not provided");
 			Preconditions.checkState(bucketFactory != null, "Bucket Factory not provided");
 
-			final RegistryObject<TYPE> type = fluidTypes.register(name, typeFactory);
+			final var type = fluidTypes.register(name, typeFactory);
 
-			final RegistryObject<STILL> still = fluids.register(name, () -> stillFactory.create(Objects.requireNonNull(properties)));
-			final RegistryObject<FLOWING> flowing = fluids.register("flowing_" + name, () -> flowingFactory.create(Objects.requireNonNull(properties)));
+			final var still = fluids.register(name, () -> stillFactory.create(Objects.requireNonNull(properties)));
+			final var flowing = fluids.register("flowing_" + name, () -> flowingFactory.create(Objects.requireNonNull(properties)));
 
-			final RegistryObject<BLOCK> block = blocks.register(name, () -> blockFactory.create(still));
-			final RegistryObject<BUCKET> bucket = items.register(name + "_bucket", () -> bucketFactory.create(still));
+			final var blockProperties = defaultBlockProperties();
+
+			if (blockPropertiesCustomiser != null) {
+				blockPropertiesCustomiser.accept(blockProperties);
+			}
+
+			final var block = blocks.register(name, () -> blockFactory.create(still, blockProperties));
+			final var bucket = items.register(name + "_bucket", () -> bucketFactory.create(still));
 
 			properties = new ForgeFlowingFluid.Properties(type, still, flowing)
 					.block(block)
@@ -189,11 +205,15 @@ public class FluidGroup<TYPE extends FluidType, STILL extends Fluid, FLOWING ext
 		}
 	}
 
-	public static Block.Properties defaultBlockProperties(final Material material) {
-		return Block.Properties.of(material)
+	public static Block.Properties defaultBlockProperties() {
+		return Block.Properties.of()
+				.replaceable()
 				.noCollission()
 				.strength(100)
-				.noLootTable();
+				.pushReaction(PushReaction.DESTROY)
+				.noLootTable()
+				.liquid()
+				.sound(SoundType.EMPTY);
 	}
 
 	public static Item.Properties defaultBucketProperties() {
@@ -209,7 +229,7 @@ public class FluidGroup<TYPE extends FluidType, STILL extends Fluid, FLOWING ext
 
 	@FunctionalInterface
 	public interface IBlockFactory<STILL extends Fluid, BLOCK extends Block> {
-		BLOCK create(Supplier<? extends STILL> fluid);
+		BLOCK create(Supplier<? extends STILL> fluid, BlockBehaviour.Properties properties);
 	}
 
 	@FunctionalInterface

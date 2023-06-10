@@ -5,9 +5,8 @@ import choonster.testmod3.config.TestMod3Config;
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.CapabilityNotPresentException;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
@@ -25,7 +24,7 @@ public class ChunkEnergyGuiOverlay implements IGuiOverlay {
 	}
 
 	@Override
-	public void render(final ForgeGui gui, final PoseStack poseStack, final float partialTick, final int width, final int height) {
+	public void render(final ForgeGui gui, final GuiGraphics guiGraphics, final float partialTick, final int screenWidth, final int screenHeight) {
 		if (minecraft.level == null || minecraft.player == null) {
 			return;
 		}
@@ -41,6 +40,6 @@ public class ChunkEnergyGuiOverlay implements IGuiOverlay {
 
 		final var text = I18n.get(TestMod3Lang.CHUNK_ENERGY_HUD.getTranslationKey(), chunkEnergy.getEnergyStored(), chunkEnergy.getMaxEnergyStored());
 		final var hudPos = TestMod3Config.CLIENT.chunkEnergyHUDPos;
-		GuiComponent.drawString(poseStack, minecraft.font, text, hudPos.x.get(), hudPos.y.get(), 0xFFFFFF);
+		guiGraphics.drawString(minecraft.font, text, hudPos.x.get(), hudPos.y.get(), 0xFFFFFF);
 	}
 }

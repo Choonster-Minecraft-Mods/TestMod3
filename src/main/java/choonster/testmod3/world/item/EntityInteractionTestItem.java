@@ -28,10 +28,11 @@ public class EntityInteractionTestItem extends Item {
 		return stack.getOrCreateTag().getInt("Count");
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public InteractionResult interactLivingEntity(final ItemStack stack, final Player player, final LivingEntity target, final InteractionHand hand) {
-		if (!player.level.isClientSide) {
-			final int count = getInteractCount(stack) + 1;
+		if (!player.level().isClientSide) {
+			final var count = getInteractCount(stack) + 1;
 			stack.getOrCreateTag().putInt("Count", count);
 
 			player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_ENTITY_INTERACT_COUNT.getTranslationKey(), count));
@@ -40,12 +41,13 @@ public class EntityInteractionTestItem extends Item {
 		return InteractionResult.SUCCESS;
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public InteractionResultHolder<ItemStack> use(final Level world, final Player player, final InteractionHand hand) {
-		final ItemStack heldItem = player.getItemInHand(hand);
+		final var heldItem = player.getItemInHand(hand);
 
-		if (!player.level.isClientSide) {
-			final int count = getInteractCount(heldItem);
+		if (!player.level().isClientSide) {
+			final var count = getInteractCount(heldItem);
 
 			player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_ENTITY_INTERACT_COUNT.getTranslationKey(), count));
 		}

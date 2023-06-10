@@ -4,8 +4,8 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.lock.ILock;
 import choonster.testmod3.network.SetLockCodeMessage;
 import choonster.testmod3.text.TestMod3Lang;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.GameNarrator;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -101,13 +101,13 @@ public class LockScreen extends Screen {
 	}
 
 	@Override
-	public void render(final PoseStack matrixStack, final int mouseX, final int mouseY, final float partialTicks) {
-		renderBackground(matrixStack);
-		drawCenteredString(matrixStack, font, I18n.get(TestMod3Lang.LOCK_SET_LOCK_CODE.getTranslationKey()), width / 2, 20, 0xffffff);
-		drawString(matrixStack, font, I18n.get(TestMod3Lang.LOCK_LOCK_CODE.getTranslationKey()), width / 2 - 150, 37, 0xa0a0a0);
-		lockCodeTextField.render(matrixStack, mouseX, mouseY, partialTicks);
-		drawString(matrixStack, font, "", width / 2 - 150, 75 * font.lineHeight, 0xa0a0a0);
+	public void render(final GuiGraphics guiGraphics, final int mouseX, final int mouseY, final float partialTicks) {
+		renderBackground(guiGraphics);
+		guiGraphics.drawCenteredString(font, I18n.get(TestMod3Lang.LOCK_SET_LOCK_CODE.getTranslationKey()), width / 2, 20, 0xffffff);
+		guiGraphics.drawString(font, I18n.get(TestMod3Lang.LOCK_LOCK_CODE.getTranslationKey()), width / 2 - 150, 37, 0xa0a0a0);
+		lockCodeTextField.render(guiGraphics, mouseX, mouseY, partialTicks);
+		guiGraphics.drawString(font, "", width / 2 - 150, 75 * font.lineHeight, 0xa0a0a0);
 
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 }

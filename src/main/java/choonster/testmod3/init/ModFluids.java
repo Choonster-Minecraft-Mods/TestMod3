@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -52,7 +53,7 @@ public class ModFluids {
 			))
 			.stillFactory(StaticFluid.Source::new)
 			.flowingFactory(StaticFluid.Flowing::new)
-			.blockMaterial(ModMaterials.STATIC)
+			.blockPropertiesCustomiser(properties -> properties.mapColor(MapColor.COLOR_BROWN))
 			.build();
 
 	// TODO: Implement gases
@@ -70,7 +71,7 @@ public class ModFluids {
 			))
 			.stillFactory(StaticFluid.Source::new)
 			.flowingFactory(StaticFluid.Flowing::new)
-			.blockMaterial(ModMaterials.STATIC_GAS)
+			.blockPropertiesCustomiser(properties -> properties.mapColor(MapColor.COLOR_BROWN))
 			.build();
 
 	public static final FluidGroup<FluidType, FlowingFluid, FlowingFluid, LiquidBlock, Item> NORMAL = standardGroup("normal")
@@ -85,7 +86,7 @@ public class ModFluids {
 							.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
 							.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH)
 			))
-			.blockMaterial(ModMaterials.NORMAL)
+			.blockPropertiesCustomiser(properties -> properties.mapColor(MapColor.COLOR_ORANGE))
 			.build();
 
 	public static final FluidGroup<FluidType, FlowingFluid, FlowingFluid, LiquidBlock, Item> NORMAL_GAS = standardGroup("normal_gas")
@@ -100,7 +101,7 @@ public class ModFluids {
 							.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
 							.sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH)
 			))
-			.blockMaterial(ModMaterials.NORMAL_GAS)
+			.blockPropertiesCustomiser(properties -> properties.mapColor(MapColor.COLOR_ORANGE))
 			.build();
 
 	public static final FluidGroup<FluidType, FlowingFluid, FlowingFluid, LiquidBlock, Item> PORTAL_DISPLACEMENT = standardGroup("portal_displacement")
@@ -117,7 +118,7 @@ public class ModFluids {
 			))
 			.stillFactory(PortalDisplacementFluid.Source::new)
 			.flowingFactory(PortalDisplacementFluid.Flowing::new)
-			.blockMaterial(ModMaterials.PORTAL_DISPLACEMENT)
+			.blockPropertiesCustomiser(properties -> properties.mapColor(MapColor.DIAMOND))
 			.build();
 
 	// TODO: Finite fluid implementation?
@@ -180,9 +181,9 @@ public class ModFluids {
 		}
 
 		private static void registerTank(final Fluid fluid) {
-			final FluidStack fluidStack = new FluidStack(fluid, FluidTankBlockEntity.CAPACITY);
+			final var fluidStack = new FluidStack(fluid, FluidTankBlockEntity.CAPACITY);
 
-			final Item item = ModBlocks.FLUID_TANK.get().asItem();
+			final var item = ModBlocks.FLUID_TANK.get().asItem();
 			assert item instanceof FluidTankItem;
 
 			((FluidTankItem) item).addFluid(fluidStack);

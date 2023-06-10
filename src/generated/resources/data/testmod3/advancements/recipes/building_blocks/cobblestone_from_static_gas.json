@@ -32,5 +32,6 @@
     "recipes": [
       "testmod3:cobblestone_from_static_gas"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

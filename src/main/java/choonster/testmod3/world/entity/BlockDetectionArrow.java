@@ -2,14 +2,11 @@ package choonster.testmod3.world.entity;
 
 import choonster.testmod3.init.ModEntities;
 import choonster.testmod3.init.ModItems;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
@@ -40,17 +37,18 @@ public class BlockDetectionArrow extends ModArrow {
 		return new ItemStack(ModItems.BLOCK_DETECTION_ARROW.get());
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	protected void onHit(final HitResult result) {
 		super.onHit(result);
 
-		final Entity shooter = getOwner();
+		final var shooter = getOwner();
 
 		if (result.getType() == HitResult.Type.BLOCK && shooter != null) {
-			final BlockPos pos = ((BlockHitResult) result).getBlockPos();
-			final BlockState state = level.getBlockState(pos);
+			final var pos = ((BlockHitResult) result).getBlockPos();
+			final var state = level().getBlockState(pos);
 
-			shooter.sendSystemMessage(Component.translatable("[%s] Block at %s,%s,%s: %s", level.isClientSide ? "CLIENT" : "SERVER", pos.getX(), pos.getY(), pos.getZ(), state));
+			shooter.sendSystemMessage(Component.translatable("[%s] Block at %s,%s,%s: %s", level().isClientSide ? "CLIENT" : "SERVER", pos.getX(), pos.getY(), pos.getZ(), state));
 		}
 	}
 }

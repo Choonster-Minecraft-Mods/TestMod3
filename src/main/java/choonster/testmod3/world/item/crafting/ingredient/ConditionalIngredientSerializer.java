@@ -41,7 +41,7 @@ public class ConditionalIngredientSerializer implements IIngredientSerializer<In
 	@Override
 	public Ingredient parse(final JsonObject json) {
 		if (CraftingHelper.processConditions(json, "conditions", context)) {
-			return CraftingHelper.getIngredient(json.get("ingredient"));
+			return CraftingHelper.getIngredient(json.get("ingredient"), false);
 		}
 
 		return IngredientNever.INSTANCE;

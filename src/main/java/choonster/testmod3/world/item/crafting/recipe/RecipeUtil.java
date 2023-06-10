@@ -1,7 +1,6 @@
 package choonster.testmod3.world.item.crafting.recipe;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.core.NonNullList;
@@ -38,16 +37,14 @@ public class RecipeUtil {
 	 */
 	public static ShapedPrimer parseShaped(final JsonObject json) {
 		try {
-			@SuppressWarnings("unchecked")
-			final Map<String, Ingredient> key = (Map<String, Ingredient>) KEY_FROM_JSON.invoke(null, GsonHelper.getAsJsonObject(json, "key"));
+			@SuppressWarnings("unchecked") final var key = (Map<String, Ingredient>) KEY_FROM_JSON.invoke(null, GsonHelper.getAsJsonObject(json, "key"));
 
-			final String[] pattern = (String[]) SHRINK.invoke(null, PATTERN_FROM_JSON.invoke(null, GsonHelper.getAsJsonArray(json, "pattern")));
+			final var pattern = (String[]) SHRINK.invoke(null, PATTERN_FROM_JSON.invoke(null, GsonHelper.getAsJsonArray(json, "pattern")));
 
-			final int recipeWidth = pattern[0].length();
-			final int recipeHeight = pattern.length;
+			final var recipeWidth = pattern[0].length();
+			final var recipeHeight = pattern.length;
 
-			@SuppressWarnings("unchecked")
-			final NonNullList<Ingredient> ingredients = (NonNullList<Ingredient>) DISSOLVE_PATTERN.invoke(null, pattern, key, recipeWidth, recipeHeight);
+			@SuppressWarnings("unchecked") final var ingredients = (NonNullList<Ingredient>) DISSOLVE_PATTERN.invoke(null, pattern, key, recipeWidth, recipeHeight);
 
 			return new ShapedPrimer(ingredients, recipeWidth, recipeHeight);
 		} catch (final IllegalAccessException | InvocationTargetException e) {
@@ -62,12 +59,14 @@ public class RecipeUtil {
 	 * @return A NonNullList containing the ingredients specified in the JSON object
 	 */
 	public static NonNullList<Ingredient> parseShapeless(final JsonObject json) {
-		final NonNullList<Ingredient> ingredients = NonNullList.create();
-		for (final JsonElement element : GsonHelper.getAsJsonArray(json, "ingredients"))
-			ingredients.add(CraftingHelper.getIngredient(element));
+		final var ingredients = NonNullList.<Ingredient>create();
+		for (final var element : GsonHelper.getAsJsonArray(json, "ingredients")) {
+			ingredients.add(CraftingHelper.getIngredient(element, false));
+		}
 
-		if (ingredients.isEmpty())
+		if (ingredients.isEmpty()) {
 			throw new JsonParseException("No ingredients for shapeless recipe");
+		}
 
 		return ingredients;
 	}

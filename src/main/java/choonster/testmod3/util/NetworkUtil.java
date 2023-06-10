@@ -67,10 +67,12 @@ public class NetworkUtil {
 	 * @param id              The ID of the screen to open.
 	 * @param extraDataWriter Consumer to write any additional data required by the screen
 	 */
+	@SuppressWarnings("resource")
 	public static void openClientScreen(final ServerPlayer player, final ResourceLocation id, final Consumer<FriendlyByteBuf> extraDataWriter) {
-		if (player.level.isClientSide) {
+		if (player.level().isClientSide) {
 			return;
 		}
+		
 		player.closeContainer();
 		player.containerMenu = player.inventoryMenu;
 

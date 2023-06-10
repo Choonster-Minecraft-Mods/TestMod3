@@ -14,6 +14,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -50,11 +51,15 @@ public class InventoryUtils {
 	 *
 	 * @param itemHandler The inventory to fill with loot
 	 * @param lootTable   The LootTable to generate loot from
-	 * @param context     The LootContext to use in the loot generation
+	 * @param params      The LootParams to use in the loot generation
 	 */
-	public static void fillItemHandlerWithLoot(final IItemHandler itemHandler, final LootTable lootTable, final LootContext context) {
+	public static void fillItemHandlerWithLoot(final IItemHandler itemHandler, final LootTable lootTable, final LootParams params, final long seed) {
+		final var context = new LootContext.Builder(params)
+				.withOptionalRandomSeed(seed)
+				.create(lootTable.getLootTableId());
+
 		final var random = context.getRandom();
-		final List<ItemStack> items = lootTable.getRandomItems(context);
+		final var items = lootTable.getRandomItems(params, seed);
 		final var emptySlots = getAvailableSlots(itemHandler, random);
 
 		try {

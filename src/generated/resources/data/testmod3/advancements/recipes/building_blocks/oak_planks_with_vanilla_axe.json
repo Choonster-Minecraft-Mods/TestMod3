@@ -43,5 +43,6 @@
     "recipes": [
       "testmod3:oak_planks_with_vanilla_axe"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

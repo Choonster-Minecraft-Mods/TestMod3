@@ -27,8 +27,9 @@ public class SoundEffectItem extends Item implements ILeftClickEmpty {
 		this.soundEvent = soundEvent;
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public void onLeftClickEmpty(final ItemStack stack, final Player player) {
-		player.level.playSound(player, player.getX(), player.getY(), player.getZ(), soundEvent.get(), SoundSource.PLAYERS, 0.5F, 1.0f);
+		player.level().playSound(player, player.getX(), player.getY(), player.getZ(), soundEvent.get(), SoundSource.PLAYERS, 0.5F, 1.0f);
 	}
 }

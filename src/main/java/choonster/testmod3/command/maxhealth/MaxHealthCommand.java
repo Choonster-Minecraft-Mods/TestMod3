@@ -68,11 +68,11 @@ public class MaxHealthCommand {
 		final var maxHealth = MaxHealthCapability
 				.getMaxHealth(livingEntity)
 				.orElseThrow(CapabilityNotPresentException::new);
-		
+
 		processor.process(livingEntity, maxHealth, amount);
 
 		context.getSource()
-				.sendSuccess(Component.translatable(successMessage, entity.getDisplayName(), MaxHealthCapability.formatMaxHealth(amount)), true);
+				.sendSuccess(() -> Component.translatable(successMessage, entity.getDisplayName(), MaxHealthCapability.formatMaxHealth(amount)), true);
 
 		return 0;
 	}

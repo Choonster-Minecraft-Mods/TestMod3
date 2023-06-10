@@ -22,7 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -50,7 +50,7 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public List<ItemStack> getDrops(final BlockState state, final LootContext.Builder builder) {
+	public List<ItemStack> getDrops(final BlockState state, final LootParams.Builder builder) {
 		final var blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
 
 		if (blockEntity != null) {
@@ -58,7 +58,7 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 					.getCapability(ForgeCapabilities.FLUID_HANDLER, null)
 					.orElseThrow(CapabilityNotPresentException::new);
 
-			builder.withDynamicDrop(FLUID_TANK_CONTENTS, (context, stackConsumer) ->
+			builder.withDynamicDrop(FLUID_TANK_CONTENTS, (stackConsumer) ->
 					Stream.of(FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler))
 							.map(fluidTankSnapshot -> ModItems.FLUID_STACK_ITEM.get().withFluidStack(fluidTankSnapshot.contents()))
 							.forEach(stackConsumer)

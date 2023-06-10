@@ -17,9 +17,9 @@ class RunTestsCommand {
 		return Commands.literal("runtests")
 				.executes(context -> {
 					if (Tests.runTests()) {
-						context.getSource().sendSuccess(Component.translatable(TestMod3Lang.COMMAND_RUN_TESTS_TESTS_PASSED.getTranslationKey()), true);
+						context.getSource().sendSuccess(() -> Component.translatable(TestMod3Lang.COMMAND_RUN_TESTS_TESTS_PASSED.getTranslationKey()), true);
 					} else {
-						context.getSource().sendSuccess(Component.translatable(TestMod3Lang.COMMAND_RUN_TESTS_TESTS_FAILED.getTranslationKey()), true);
+						context.getSource().sendSuccess(() -> Component.translatable(TestMod3Lang.COMMAND_RUN_TESTS_TESTS_FAILED.getTranslationKey()), true);
 					}
 
 					return 0;

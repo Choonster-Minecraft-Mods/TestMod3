@@ -5,7 +5,6 @@ import choonster.testmod3.init.ModItems;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Arrow;
@@ -54,13 +53,14 @@ public class ModArrow extends Arrow implements IEntityAdditionalSpawnData {
 
 	@Override
 	public void writeSpawnData(final FriendlyByteBuf buffer) {
-		final Entity shooter = getOwner();
+		final var shooter = getOwner();
 		buffer.writeVarInt(shooter == null ? 0 : shooter.getId());
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public void readSpawnData(final FriendlyByteBuf additionalData) {
-		final Entity shooter = level.getEntity(additionalData.readVarInt());
+		final var shooter = level().getEntity(additionalData.readVarInt());
 		if (shooter != null) {
 			setOwner(shooter);
 		}

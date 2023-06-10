@@ -61,11 +61,18 @@ public class PlayerEventHandler {
 	 *
 	 * @param event The event
 	 */
+	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void livingDeath(final LivingDeathEvent event) {
 		if (event.getEntity() instanceof final Player player && !event.getEntity().getCommandSenderWorld().isClientSide) {
 			final var pos = player.blockPosition();
-			player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_DEATH_COORDINATES.getTranslationKey(), pos.getX(), pos.getY(), pos.getZ(), player.level.dimension()));
+			player.sendSystemMessage(Component.translatable(
+					TestMod3Lang.MESSAGE_DEATH_COORDINATES.getTranslationKey(),
+					pos.getX(),
+					pos.getY(),
+					pos.getZ(),
+					player.level().dimension()
+			));
 		}
 	}
 }

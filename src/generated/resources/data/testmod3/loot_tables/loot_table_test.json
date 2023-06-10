@@ -72,12 +72,12 @@
           "name": "minecraft:wooden_axe"
         }
       ],
-      "name": "main",
       "rolls": {
         "type": "minecraft:uniform",
         "max": 4.0,
         "min": 1.0
       }
     }
-  ]
+  ],
+  "random_sequence": "testmod3:loot_table_test"
 }

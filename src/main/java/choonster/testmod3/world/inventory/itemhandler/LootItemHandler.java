@@ -6,13 +6,12 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -99,7 +98,7 @@ public class LootItemHandler extends ItemStackHandler {
 
 	@Override
 	public CompoundTag serializeNBT() {
-		final CompoundTag tagCompound = super.serializeNBT();
+		final var tagCompound = super.serializeNBT();
 
 		if (checkLootAndWrite(tagCompound)) { // If the LootTable location exists, don't write the inventory contents to NBT
 			tagCompound.remove("Items");
@@ -126,14 +125,13 @@ public class LootItemHandler extends ItemStackHandler {
 	 * @param player The player generating the loot.
 	 */
 	public void fillWithLoot(@Nullable final Player player) {
-		final Level level = levelSupplier.get();
+		final var level = levelSupplier.get();
 		if (lootTableLocation != null && level != null && !level.isClientSide) {
-			final MinecraftServer server = Preconditions.checkNotNull(level.getServer());
-			final LootTable lootTable = server.getLootTables().get(lootTableLocation);
+			final var server = Preconditions.checkNotNull(level.getServer());
+			final var lootTable = server.getLootData().getLootTable(lootTableLocation);
 			lootTableLocation = null;
 
-			final LootContext.Builder builder = new LootContext.Builder((ServerLevel) level)
-					.withOptionalRandomSeed(lootTableSeed);
+			final var builder = new LootParams.Builder((ServerLevel) level);
 
 			if (player != null) {
 				builder.withLuck(player.getLuck())
@@ -142,17 +140,17 @@ public class LootItemHandler extends ItemStackHandler {
 
 			addAdditionalLootParameters(player, builder);
 
-			InventoryUtils.fillItemHandlerWithLoot(this, lootTable, builder.create(LootContextParamSets.CHEST));
+			InventoryUtils.fillItemHandlerWithLoot(this, lootTable, builder.create(LootContextParamSets.CHEST), lootTableSeed);
 		}
 	}
 
 	/**
-	 * Adds additional parameters to the loot context builder before loot is generated.
+	 * Adds additional parameters to the loot params builder before loot is generated.
 	 *
 	 * @param player  The player generating the loot.
-	 * @param builder The loot context builder
+	 * @param builder The loot params builder
 	 */
-	protected void addAdditionalLootParameters(@Nullable final Player player, final LootContext.Builder builder) {
+	protected void addAdditionalLootParameters(@Nullable final Player player, final LootParams.Builder builder) {
 
 	}
 

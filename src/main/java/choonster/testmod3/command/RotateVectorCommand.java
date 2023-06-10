@@ -12,7 +12,6 @@ import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 /**
@@ -40,12 +39,12 @@ public class RotateVectorCommand {
 	}
 
 	private static int execute(final CommandContext<CommandSourceStack> context, final Vec3 inputVector, final Direction.Axis axis, final int degrees) {
-		final Quaternionf rotationQuaternion = VectorUtils.getRotationQuaternion(axis, (float) Math.toRadians(degrees));
+		final var rotationQuaternion = VectorUtils.getRotationQuaternion(axis, (float) Math.toRadians(degrees));
 
-		final Vector3f outputVector = new Vector3f((float) inputVector.x, (float) inputVector.y, (float) inputVector.z);
+		final var outputVector = new Vector3f((float) inputVector.x, (float) inputVector.y, (float) inputVector.z);
 		outputVector.rotate(rotationQuaternion);
 
-		context.getSource().sendSuccess(Component.translatable(TestMod3Lang.COMMAND_ROTATE_VECTOR_RESULT.getTranslationKey(), outputVector.x(), outputVector.y(), outputVector.z()), true);
+		context.getSource().sendSuccess(() -> Component.translatable(TestMod3Lang.COMMAND_ROTATE_VECTOR_RESULT.getTranslationKey(), outputVector.x(), outputVector.y(), outputVector.z()), true);
 
 		return 0;
 	}

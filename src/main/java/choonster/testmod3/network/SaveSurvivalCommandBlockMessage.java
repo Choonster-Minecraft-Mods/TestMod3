@@ -109,10 +109,11 @@ public class SaveSurvivalCommandBlockMessage {
 		buffer.writeBoolean(message.automatic);
 	}
 
+	@SuppressWarnings("resource")
 	public static void handle(final SaveSurvivalCommandBlockMessage message, final Supplier<NetworkEvent.Context> ctx) {
 		final var player = ctx.get().getSender();
-		final var world = player.level;
-		final var minecraftServer = world.getServer();
+		final var level = player.level();
+		final var minecraftServer = level.getServer();
 
 		if (minecraftServer != null && !minecraftServer.isCommandBlockEnabled()) {
 			player.sendSystemMessage(Component.translatable("advMode.notEnabled"));
@@ -129,13 +130,13 @@ public class SaveSurvivalCommandBlockMessage {
 						default -> ModBlocks.SURVIVAL_COMMAND_BLOCK;
 					};
 
-					final var existingBlockEntity = world.getBlockEntity(message.blockPos);
+					final var existingBlockEntity = level.getBlockEntity(message.blockPos);
 
-					final var facing = world.getBlockState(message.blockPos).getValue(CommandBlock.FACING);
+					final var facing = level.getBlockState(message.blockPos).getValue(CommandBlock.FACING);
 					final var newState = newBlock.get().defaultBlockState().setValue(CommandBlock.FACING, facing).setValue(CommandBlock.CONDITIONAL, message.conditional);
-					world.setBlockAndUpdate(message.blockPos, newState);
+					level.setBlockAndUpdate(message.blockPos, newState);
 
-					final var newBlockEntity = world.getBlockEntity(message.blockPos);
+					final var newBlockEntity = level.getBlockEntity(message.blockPos);
 					if (
 							existingBlockEntity instanceof SurvivalCommandBlockEntity &&
 									newBlockEntity instanceof final SurvivalCommandBlockEntity newSurvivalCommandBlockEntity
