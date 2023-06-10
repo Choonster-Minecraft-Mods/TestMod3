@@ -150,22 +150,25 @@ public class ModCrafting {
 		@SubscribeEvent
 		public static void removeRecipes(final ServerStartedEvent event) {
 			final var recipeManager = event.getServer().getRecipeManager();
+			final var registryAccess = event.getServer().registryAccess();
+
 			removeRecipes(recipeManager, FireworkRocketRecipe.class);
 			removeRecipes(recipeManager, FireworkStarRecipe.class);
 			removeRecipes(recipeManager, FireworkStarFadeRecipe.class);
-			removeRecipes(recipeManager, ModTags.Items.VANILLA_DYES);
-			removeRecipes(recipeManager, ModTags.Items.VANILLA_TERRACOTTA);
+			removeRecipes(recipeManager, registryAccess, ModTags.Items.VANILLA_DYES);
+			removeRecipes(recipeManager, registryAccess, ModTags.Items.VANILLA_TERRACOTTA);
 		}
 
 		/**
 		 * Removes all crafting recipes with an output item contained in the specified tag.
 		 *
-		 * @param recipeManager The recipe manager
-		 * @param tag           The tag
+		 * @param recipeManager  The recipe manager
+		 * @param registryAccess The registry access
+		 * @param tag            The tag
 		 */
-		private static void removeRecipes(final RecipeManager recipeManager, final TagKey<Item> tag) {
+		private static void removeRecipes(final RecipeManager recipeManager, final RegistryAccess registryAccess, final TagKey<Item> tag) {
 			final var recipesRemoved = removeRecipes(recipeManager, recipe -> {
-				final var resultItem = recipe.getResultItem(RegistryAccess.EMPTY);
+				final var resultItem = recipe.getResultItem(registryAccess);
 				return !resultItem.isEmpty() && resultItem.is(tag);
 			});
 
@@ -197,8 +200,7 @@ public class ModCrafting {
 		private static int removeRecipes(final RecipeManager recipeManager, final Predicate<Recipe<?>> predicate) {
 			final Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> existingRecipes;
 			try {
-				@SuppressWarnings("unchecked")
-				final var recipesMap = (Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>>) RECIPES.get(recipeManager);
+				@SuppressWarnings("unchecked") final var recipesMap = (Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>>) RECIPES.get(recipeManager);
 				existingRecipes = recipesMap;
 			} catch (final IllegalAccessException e) {
 				throw new RuntimeException("Couldn't get recipes map while removing recipes", e);
