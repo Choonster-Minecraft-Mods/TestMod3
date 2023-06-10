@@ -38,7 +38,7 @@ public class PlayerEventHandler {
 		final var persistedData = entityData.getCompound(Player.PERSISTED_NBT_TAG);
 		entityData.put(Player.PERSISTED_NBT_TAG, persistedData);
 
-		final var key = new ResourceLocation(TestMod3.MODID, "ReceivedItems").toString();
+		final var key = new ResourceLocation(TestMod3.MODID, "received_items").toString();
 		final TestMod3Lang message;
 
 		if (persistedData.getBoolean(key)) {
