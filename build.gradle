@@ -208,16 +208,16 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     // compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei-1.20-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-1.20-forge-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge-api:${jei_version}")
     // at runtime, use the full JEI jar for Forge
-    runtimeOnly fg.deobf("mezz.jei:jei-1.20-forge:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.20.1-forge:${jei_version}")
 
     embed "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
 
     implementation fg.deobf("curse.maven:jade-324717:${jade_file_id}")
 
-//    implementation fg.deobf("curse.maven:the-one-probe-245211:${top_file_id}")
+    implementation fg.deobf("curse.maven:the-one-probe-245211:${top_file_id}")
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar

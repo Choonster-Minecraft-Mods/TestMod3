@@ -1,5 +1,6 @@
 package choonster.testmod3;
 
+import choonster.testmod3.compat.theoneprobe.TheOneProbeCompat;
 import choonster.testmod3.config.TestMod3Config;
 import choonster.testmod3.init.*;
 import choonster.testmod3.init.levelgen.ModBiomeModifierSerializers;
@@ -10,6 +11,7 @@ import choonster.testmod3.util.BlockDumper;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -79,7 +81,7 @@ public class TestMod3 {
 		final String theOneProbe = "theoneprobe";
 
 		if (ModList.get().isLoaded(theOneProbe)) {
-//			InterModComms.sendTo(theOneProbe, "getTheOneProbe", TheOneProbeCompat::new);
+			InterModComms.sendTo(theOneProbe, "getTheOneProbe", TheOneProbeCompat::new);
 		}
 	}
 }
