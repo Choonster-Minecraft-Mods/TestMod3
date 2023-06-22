@@ -33,6 +33,7 @@ public class TestMod3GenericLoot implements LootTableSubProvider {
 				LootTable.lootTable()
 						.withPool(
 								LootPool.lootPool()
+										.name("main")
 										.setRolls(UniformGenerator.between(1, 4))
 										.add(
 												LootItem.lootTableItem(Items.PORKCHOP)

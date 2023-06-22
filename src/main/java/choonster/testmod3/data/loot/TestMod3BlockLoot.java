@@ -39,6 +39,7 @@ public class TestMod3BlockLoot extends BlockLootSubProvider {
 				createSingleItemTable(block)
 						.withPool(
 								applyExplosionCondition(Items.ENDER_EYE, LootPool.lootPool()
+										.name("ender_eye")
 										.when(
 												LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
 														.setProperties(
