@@ -39,6 +39,7 @@ public class LootTableLootModifier extends LootModifier {
 		this.lootTableID = lootTableID;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected @NotNull ObjectArrayList<ItemStack> doApply(final ObjectArrayList<ItemStack> generatedLoot, final LootContext context) {
 		final var lootTable = context.getResolver().getLootTable(lootTableID);
