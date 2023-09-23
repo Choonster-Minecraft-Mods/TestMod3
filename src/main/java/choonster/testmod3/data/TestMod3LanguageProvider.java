@@ -243,7 +243,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 	private void addCommands() {
 		add(TestMod3Lang.ARGUMENT_AXIS_INVALID, "Invalid axis, expected 'x', 'y' or 'z'");
 
-		add(TestMod3Lang.COMMAND_MAX_HEALTH_INVALID_ENTITY, "Invalid entityType, only living entities (e.g. players, animals, monsters) are supported");
+		add(TestMod3Lang.COMMAND_MAX_HEALTH_INVALID_ENTITY, "Invalid entity, only living entities (e.g. players, animals, monsters) are supported");
 		add(TestMod3Lang.COMMAND_ROTATE_VECTOR_RESULT, "Rotated vector: [%s, %s, %s]");
 		add(TestMod3Lang.COMMAND_RUN_TESTS_TESTS_PASSED, "All tests passed.");
 		add(TestMod3Lang.COMMAND_RUN_TESTS_TESTS_FAILED, "Tests failed. See log for more details.");
@@ -292,8 +292,8 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		add(TestMod3Lang.MESSAGE_CHUNK_ENERGY_GET, "Chunk %s contains %d energy");
 		add(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_POTIONS, "No active potions on %s");
 		add(TestMod3Lang.MESSAGE_PRINT_POTIONS_POTIONS, "Active potions on %s:");
-		add(TestMod3Lang.MESSAGE_PRINT_POTIONS_NOT_LIVING, "%s isn't a living entityType");
-		add(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_ENTITY, "You must look at an entityType");
+		add(TestMod3Lang.MESSAGE_PRINT_POTIONS_NOT_LIVING, "%s isn't a living entity");
+		add(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_ENTITY, "You must look at an entity");
 		add(TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_FACING_ENABLED, "Enabled access from facing %s");
 		add(TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_FACING_DISABLED, "Disabled access from facing %s");
 		add(TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_ENABLED_FACINGS, "Enabled facings: %s");

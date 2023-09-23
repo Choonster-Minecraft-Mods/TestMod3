@@ -15,12 +15,12 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * An ingredient serializer that produces a mob spawner of the specified entityType.
+ * An ingredient serializer that produces a mob spawner of the specified entity.
  * <p>
  * JSON Properties:
  * <ul>
  * <li>All properties used by {@link CraftingHelper#getItemStack} (including NBT)</li>
- * <li><code>entityType</code> - The registry name of the {@link EntityType} (required string)</li>
+ * <li><code>entity</code> - The registry name of the {@link EntityType} (required string)</li>
  * </ul>
  *
  * @author Choonster
