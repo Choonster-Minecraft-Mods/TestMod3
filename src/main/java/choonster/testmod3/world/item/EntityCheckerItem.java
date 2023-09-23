@@ -18,9 +18,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**

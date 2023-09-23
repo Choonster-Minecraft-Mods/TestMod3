@@ -1,7 +1,6 @@
 package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.compat.waila.WailaCompat;
 import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.init.*;
 import choonster.testmod3.text.TestMod3Lang;
@@ -25,7 +24,6 @@ import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.fluids.FluidType;
 import org.apache.commons.lang3.StringUtils;
-import snownee.jade.api.IJadeProvider;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,7 +55,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		addConfig();
 		addChatMessages();
 		addSubtitles();
-		addJadeProviders();
+//		addJadeProviders();
 		addMisc();
 	}
 
@@ -245,7 +243,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 	private void addCommands() {
 		add(TestMod3Lang.ARGUMENT_AXIS_INVALID, "Invalid axis, expected 'x', 'y' or 'z'");
 
-		add(TestMod3Lang.COMMAND_MAX_HEALTH_INVALID_ENTITY, "Invalid entity, only living entities (e.g. players, animals, monsters) are supported");
+		add(TestMod3Lang.COMMAND_MAX_HEALTH_INVALID_ENTITY, "Invalid entityType, only living entities (e.g. players, animals, monsters) are supported");
 		add(TestMod3Lang.COMMAND_ROTATE_VECTOR_RESULT, "Rotated vector: [%s, %s, %s]");
 		add(TestMod3Lang.COMMAND_RUN_TESTS_TESTS_PASSED, "All tests passed.");
 		add(TestMod3Lang.COMMAND_RUN_TESTS_TESTS_FAILED, "Tests failed. See log for more details.");
@@ -294,8 +292,8 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		add(TestMod3Lang.MESSAGE_CHUNK_ENERGY_GET, "Chunk %s contains %d energy");
 		add(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_POTIONS, "No active potions on %s");
 		add(TestMod3Lang.MESSAGE_PRINT_POTIONS_POTIONS, "Active potions on %s:");
-		add(TestMod3Lang.MESSAGE_PRINT_POTIONS_NOT_LIVING, "%s isn't a living entity");
-		add(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_ENTITY, "You must look at an entity");
+		add(TestMod3Lang.MESSAGE_PRINT_POTIONS_NOT_LIVING, "%s isn't a living entityType");
+		add(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_ENTITY, "You must look at an entityType");
 		add(TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_FACING_ENABLED, "Enabled access from facing %s");
 		add(TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_FACING_DISABLED, "Disabled access from facing %s");
 		add(TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_ENABLED_FACINGS, "Enabled facings: %s");
@@ -326,6 +324,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		add(TestMod3Lang.SUBTITLE_ACTION_SADDLE, "Mod saddle equips");
 	}
 
+/*
 	private void addJadeProviders() {
 		add(WailaCompat.COLORED_ROTATABLE_BLOCK_FACING, "Colored Rotatable Block Facing");
 		add(WailaCompat.COLORED_MULTI_ROTATABLE_BLOCK_FACE_ROTATION, "Colored Multi-Rotatable");
@@ -335,6 +334,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		add(WailaCompat.PLANE_VERTICAL_ROTATION, "Plane Vertical Rotation");
 		add(WailaCompat.RESTRICTED_FLUID_TANK_ENABLED_FACINGS, "Restricted Fluid Tank Enabled Facings");
 	}
+*/
 
 	private void addMisc() {
 		add("itemGroup." + TestMod3.MODID, "TestMod3");
@@ -399,10 +399,12 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		return stack.getItem().getDescriptionId(stack);
 	}
 
+/*
 	private void add(final IJadeProvider provider, final String name) {
 		final var uid = provider.getUid();
 		add("config.jade.plugin_%s.%s".formatted(uid.getNamespace(), uid.getPath()), name);
 	}
+*/
 
 	private void add(final TestMod3Lang lang, final String value) {
 		add(lang.getTranslationKey(), value);

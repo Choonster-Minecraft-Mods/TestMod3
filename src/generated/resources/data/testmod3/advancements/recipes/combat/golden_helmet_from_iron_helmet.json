@@ -34,9 +34,9 @@
   },
   "requirements": [
     [
+      "has_the_recipe",
       "has_gold_block",
-      "has_iron_helmet",
-      "has_the_recipe"
+      "has_iron_helmet"
     ]
   ],
   "rewards": {

@@ -11,7 +11,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.common.extensions.IForgeServerPlayer;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,7 +29,7 @@ public class NetworkUtil {
 	 * <p>
 	 * The factories are registered with {@link ClientScreenManager} in {@link ModScreenFactories}.
 	 * <p>
-	 * This is similar to {@link NetworkHooks#openScreen} for screens without an {@link AbstractContainerMenu}.
+	 * This is similar to {@link IForgeServerPlayer#openMenu} for screens without an {@link AbstractContainerMenu}.
 	 *
 	 * @param player The player to open the screen for
 	 * @param id     The ID of the screen to open.
@@ -44,7 +44,7 @@ public class NetworkUtil {
 	 * <p>
 	 * The factories are registered with {@link ClientScreenManager} in {@link ModScreenFactories}.
 	 * <p>
-	 * This is similar to {@link NetworkHooks#openScreen} for screens without an {@link AbstractContainerMenu}.
+	 * This is similar to {@link IForgeServerPlayer#openMenu} for screens without an {@link AbstractContainerMenu}.
 	 *
 	 * @param player The player to open the screen for
 	 * @param id     The ID of the screen to open.
@@ -59,7 +59,7 @@ public class NetworkUtil {
 	 * <p>
 	 * The factories are registered with {@link ClientScreenManager} in {@link ModScreenFactories}.
 	 * <p>
-	 * This is similar to {@link NetworkHooks#openScreen} for screens without an {@link AbstractContainerMenu}.
+	 * This is similar to {@link IForgeServerPlayer#openMenu} for screens without an {@link AbstractContainerMenu}.
 	 * <p>
 	 * The maximum size for {@code extraDataWriter} is 32600 bytes.
 	 *
@@ -72,7 +72,7 @@ public class NetworkUtil {
 		if (player.level().isClientSide) {
 			return;
 		}
-		
+
 		player.closeContainer();
 		player.containerMenu = player.inventoryMenu;
 
@@ -89,7 +89,7 @@ public class NetworkUtil {
 		}
 
 		final var message = new OpenClientScreenMessage(id, output);
-		TestMod3.network.send(PacketDistributor.PLAYER.with(() -> player), message);
+		TestMod3.network.send(message, PacketDistributor.PLAYER.with(player));
 	}
 
 	/**

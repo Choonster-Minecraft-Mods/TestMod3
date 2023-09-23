@@ -5,7 +5,6 @@ import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.network.UpdateChunkEnergyValueMessage;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.network.PacketDistributor;
 
@@ -44,7 +43,7 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy {
 
 	@Override
 	public int receiveEnergy(final int maxReceive, final boolean simulate) {
-		final int energyReceived = super.receiveEnergy(maxReceive, simulate);
+		final var energyReceived = super.receiveEnergy(maxReceive, simulate);
 
 		if (!simulate && energyReceived != 0) {
 			onEnergyChanged();
@@ -55,7 +54,7 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy {
 
 	@Override
 	public int extractEnergy(final int maxExtract, final boolean simulate) {
-		final int energyExtracted = super.extractEnergy(maxExtract, simulate);
+		final var energyExtracted = super.extractEnergy(maxExtract, simulate);
 
 		if (!simulate && energyExtracted != 0) {
 			onEnergyChanged();
@@ -78,17 +77,17 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy {
 	 * Called when the energy value changes.
 	 */
 	protected void onEnergyChanged() {
-		final Level level = getLevel();
-		final ChunkPos chunkPos = getChunkPos();
+		final var level = getLevel();
+		final var chunkPos = getChunkPos();
 
 		if (level.isClientSide) {
 			return;
 		}
 
 		if (level.hasChunk(chunkPos.x, chunkPos.z)) {  // Don't load the chunk when reading from NBT
-			final LevelChunk chunk = level.getChunk(chunkPos.x, chunkPos.z);
+			final var chunk = level.getChunk(chunkPos.x, chunkPos.z);
 			chunk.setUnsaved(true);
-			TestMod3.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> chunk), new UpdateChunkEnergyValueMessage(this));
+			TestMod3.network.send(new UpdateChunkEnergyValueMessage(this), PacketDistributor.TRACKING_CHUNK.with(chunk));
 		}
 	}
 }

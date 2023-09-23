@@ -196,21 +196,6 @@ public class ReplacementArmourItem extends ArmorItem {
 	}
 
 	/**
-	 * Called every tick while the item is worn by a player.
-	 *
-	 * @param stack  The ItemStack of this item
-	 * @param world  The player's world
-	 * @param player The player
-	 */
-	@Override
-	public void onArmorTick(final ItemStack stack, final Level world, final Player player) {
-		if (!world.isClientSide && !hasReplacedArmour(stack)) { // If this is the server and the player's armour hasn't been replaced,
-			replaceArmour(stack, player); // Replace the player's armour
-			player.inventoryMenu.broadcastChanges(); // Sync the player's inventory with the client
-		}
-	}
-
-	/**
 	 * Called every tick while the item is in a player's inventory (including while worn).
 	 *
 	 * @param stack      The ItemStack of this item
@@ -221,13 +206,20 @@ public class ReplacementArmourItem extends ArmorItem {
 	 */
 	@Override
 	public void inventoryTick(final ItemStack stack, final Level world, final Entity entity, final int itemSlot, final boolean isSelected) {
-		// If this is the server, the entity is living and the entity's armour has been replaced,
-		if (!world.isClientSide && entity instanceof LivingEntity && hasReplacedArmour(stack)) {
+		// If this isn't the server or the entity isn't living, do nothing
+		if (world.isClientSide || !(entity instanceof final LivingEntity livingEntity)) {
+			return;
+		}
 
+		if (livingEntity.getItemBySlot(getEquipmentSlot()) == stack) { // If the item is equipped as armour,
+			if (!hasReplacedArmour(stack)) { // And the entity's armour hasn't been replaced,
+				replaceArmour(stack, livingEntity); // Replace the entity's armour
+			}
+		} else if (hasReplacedArmour(stack)) { // Else if the entity's armour has been replaced,
 			// Try to restore the entity's armour
 			InventoryUtils.forEachEntityInventory(
 					entity,
-					inventory -> tryRestoreArmour(inventory, itemSlot, stack, (LivingEntity) entity),
+					inventory -> tryRestoreArmour(inventory, itemSlot, stack, livingEntity),
 					EntityInventoryType.MAIN, EntityInventoryType.HAND
 			).ifPresent(successfulInventoryType ->
 					LOGGER.info("Restored saved armour for slot {} of {}'s {} inventory", itemSlot, entity.getName(), successfulInventoryType)

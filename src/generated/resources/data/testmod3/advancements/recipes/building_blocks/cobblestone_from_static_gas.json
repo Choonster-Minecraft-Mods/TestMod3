@@ -1,15 +1,13 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_static_gas_container": {
+    "has_static_gas_bucket": {
       "conditions": {
         "items": [
           {
-            "type": "testmod3:fluid_container",
-            "amount": {
-              "min": 1000
-            },
-            "fluid": "testmod3:static_gas"
+            "items": [
+              "testmod3:static_gas_bucket"
+            ]
           }
         ]
       },
@@ -24,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_static_gas_container",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_static_gas_bucket"
     ]
   ],
   "rewards": {

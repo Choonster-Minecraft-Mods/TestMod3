@@ -37,7 +37,6 @@ public class ModChestScreen extends AbstractContainerScreen<ModChestMenu> {
 
 	@Override
 	public void render(final GuiGraphics guiGraphics, final int mouseX, final int mouseY, final float partialTicks) {
-		renderBackground(guiGraphics);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		renderTooltip(guiGraphics, mouseX, mouseY);
 	}

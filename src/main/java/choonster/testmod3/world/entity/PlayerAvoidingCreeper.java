@@ -11,7 +11,6 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
@@ -43,8 +42,7 @@ public class PlayerAvoidingCreeper extends Creeper {
 		final Set<WrappedGoal> targetSelectorGoals;
 
 		try {
-			@SuppressWarnings("unchecked")
-			final Set<WrappedGoal> availableGoals = (Set<WrappedGoal>) AVAILABLE_GOALS.get(targetSelector);
+			@SuppressWarnings("unchecked") final Set<WrappedGoal> availableGoals = (Set<WrappedGoal>) AVAILABLE_GOALS.get(targetSelector);
 			targetSelectorGoals = availableGoals;
 		} catch (final IllegalAccessException e) {
 			throw new RuntimeException("Unable to access target goals", e);

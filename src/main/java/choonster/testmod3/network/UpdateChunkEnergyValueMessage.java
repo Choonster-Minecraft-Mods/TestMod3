@@ -8,10 +8,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LogicalSidedProvider;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 /**
  * Sent from the server to update the energy value of an {@link IChunkEnergy}.
@@ -52,15 +51,15 @@ public class UpdateChunkEnergyValueMessage {
 		buffer.writeInt(message.energy);
 	}
 
-	public static void handle(final UpdateChunkEnergyValueMessage message, final Supplier<NetworkEvent.Context> ctx) {
-		final Optional<Level> optionalLevel = LogicalSidedProvider.CLIENTWORLD.get(ctx.get().getDirection().getReceptionSide());
+	public static void handle(final UpdateChunkEnergyValueMessage message, final CustomPayloadEvent.Context ctx) {
+		final Optional<Level> optionalLevel = LogicalSidedProvider.CLIENTWORLD.get(ctx.getDirection().getReceptionSide());
 
 		optionalLevel.ifPresent(world -> {
 			final var iChunkEnergy = ChunkEnergyCapability
 					.getChunkEnergy(world, message.chunkPos)
 					.orElseThrow(CapabilityNotPresentException::new);
 
-			if (iChunkEnergy instanceof ChunkEnergy chunkEnergy) {
+			if (iChunkEnergy instanceof final ChunkEnergy chunkEnergy) {
 				chunkEnergy.setEnergy(message.energy);
 			}
 		});

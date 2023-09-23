@@ -2,15 +2,13 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.level.storage.loot.functions.SetFluidTankContents;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.storage.loot.Serializer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
-
-import java.util.function.Supplier;
 
 /**
  * Registers this mod's {@link LootItemFunctionType}s.
@@ -24,7 +22,7 @@ public class ModLootFunctionTypes {
 	private static boolean isInitialised = false;
 
 	public static final RegistryObject<LootItemFunctionType> SET_FLUID_TANK_CONTENTS = register("set_fluid_tank_contents",
-			SetFluidTankContents.Serializer::new
+			SetFluidTankContents.CODEC
 	);
 
 	/**
@@ -44,7 +42,7 @@ public class ModLootFunctionTypes {
 		isInitialised = true;
 	}
 
-	private static RegistryObject<LootItemFunctionType> register(final String name, final Supplier<Serializer<? extends LootItemFunction>> serializerFactory) {
-		return LOOT_ITEM_FUNCTION_TYPES.register(name, () -> new LootItemFunctionType(serializerFactory.get()));
+	private static RegistryObject<LootItemFunctionType> register(final String name, final Codec<? extends LootItemFunction> codec) {
+		return LOOT_ITEM_FUNCTION_TYPES.register(name, () -> new LootItemFunctionType(codec));
 	}
 }

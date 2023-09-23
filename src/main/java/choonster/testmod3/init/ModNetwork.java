@@ -7,19 +7,20 @@ import choonster.testmod3.network.capability.hiddenblock.UpdateMenuHiddenBlockRe
 import choonster.testmod3.network.capability.lastusetime.UpdateMenuLastUseTimeMessage;
 import choonster.testmod3.network.capability.pigspawner.UpdateMenuPigSpawnerFiniteMessage;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.network.Channel;
+import net.minecraftforge.network.ChannelBuilder;
+import net.minecraftforge.network.SimpleChannel;
 
 public class ModNetwork {
 	public static final ResourceLocation CHANNEL_NAME = new ResourceLocation(TestMod3.MODID, "network");
 
-	public static final String NETWORK_VERSION = new ResourceLocation(TestMod3.MODID, "2").toString();
+	public static final int NETWORK_VERSION = 3;
 
 	public static SimpleChannel getNetworkChannel() {
-		final SimpleChannel channel = NetworkRegistry.ChannelBuilder.named(CHANNEL_NAME)
-				.clientAcceptedVersions(version -> true)
-				.serverAcceptedVersions(version -> true)
-				.networkProtocolVersion(() -> NETWORK_VERSION)
+		final SimpleChannel channel = ChannelBuilder.named(CHANNEL_NAME)
+				.clientAcceptedVersions(Channel.VersionTest.exact(NETWORK_VERSION))
+				.serverAcceptedVersions(Channel.VersionTest.exact(NETWORK_VERSION))
+				.networkProtocolVersion(NETWORK_VERSION)
 				.simpleChannel();
 
 		channel.messageBuilder(SaveSurvivalCommandBlockMessage.class, 1)

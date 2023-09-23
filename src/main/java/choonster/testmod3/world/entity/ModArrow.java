@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
 
 /**
  * An arrow entity that behaves like the vanilla arrow but renders with a different texture.
@@ -48,7 +47,7 @@ public class ModArrow extends Arrow implements IEntityAdditionalSpawnData {
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
+		return super.getAddEntityPacket(); // TODO: NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 	@Override

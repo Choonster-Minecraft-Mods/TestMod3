@@ -63,7 +63,7 @@ public abstract class PortalDisplacementFluid extends ForgeFlowingFluid {
 		final var block = state.getBlock();
 
 		if (block instanceof final LiquidBlockContainer liquidBlockContainer) {
-			return liquidBlockContainer.canPlaceLiquid(world, pos, state, fluid);
+			return liquidBlockContainer.canPlaceLiquid(null, world, pos, state, fluid);
 		}
 
 		if (!(block instanceof DoorBlock) && !state.is(BlockTags.SIGNS) && !state.is(Blocks.LADDER) && !state.is(Blocks.SUGAR_CANE) && !state.is(Blocks.BUBBLE_COLUMN)) {

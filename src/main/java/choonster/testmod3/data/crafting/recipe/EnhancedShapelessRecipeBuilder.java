@@ -1,13 +1,13 @@
 package choonster.testmod3.data.crafting.recipe;
 
 import choonster.testmod3.util.RegistryUtil;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.CriterionTriggerInstance;
-import net.minecraft.advancements.RequirementsStrategy;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -24,7 +24,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.Map;
 
 /**
  * An extension of {@link ShapelessRecipeBuilder} that allows the recipe result to have NBT.
@@ -37,9 +37,9 @@ public class EnhancedShapelessRecipeBuilder<
 		> extends ShapelessRecipeBuilder {
 	private static final Method ENSURE_VALID = ObfuscationReflectionHelper.findMethod(ShapelessRecipeBuilder.class, /* ensureValid */ "m_126207_", ResourceLocation.class);
 	private static final Field CATEGORY = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* category */ "f_244182_");
-	private static final Field ADVANCEMENT = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* advancement */ "f_126176_");
 	private static final Field GROUP = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* group */ "f_126177_");
 	private static final Field INGREDIENTS = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* ingredients */ "f_126175_");
+	private static final Field CRITERIA = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* criteria */ "f_291209_");
 
 	protected final ItemStack result;
 	protected final RecipeSerializer<? extends RECIPE> serializer;
@@ -84,7 +84,7 @@ public class EnhancedShapelessRecipeBuilder<
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER unlockedBy(final String name, final CriterionTriggerInstance criterionIn) {
+	public BUILDER unlockedBy(final String name, final Criterion<?> criterionIn) {
 		return (BUILDER) super.unlockedBy(name, criterionIn);
 	}
 
@@ -97,38 +97,38 @@ public class EnhancedShapelessRecipeBuilder<
 	/**
 	 * Builds this recipe into a {@link FinishedRecipe}.
 	 *
-	 * @param consumer The recipe consumer
+	 * @param output The recipe output
 	 */
 	@Override
-	public void save(final Consumer<FinishedRecipe> consumer) {
-		save(consumer, RegistryUtil.getKey(result.getItem()));
+	public void save(final RecipeOutput output) {
+		save(output, RegistryUtil.getKey(result.getItem()));
 	}
 
 	/**
-	 * Builds this recipe into a {@link FinishedRecipe}. Use {@link #save(Consumer)} if save is the same as the ID for
+	 * Builds this recipe into a {@link FinishedRecipe}. Use {@link #save(RecipeOutput)} if save is the same as the ID for
 	 * the result.
 	 *
-	 * @param consumer The recipe consumer
-	 * @param save     The ID to use for the recipe
+	 * @param output The recipe output
+	 * @param save   The ID to use for the recipe
 	 */
 	@Override
-	public void save(final Consumer<FinishedRecipe> consumer, final String save) {
-		final ResourceLocation key = RegistryUtil.getKey(result.getItem());
+	public void save(final RecipeOutput output, final String save) {
+		final var key = RegistryUtil.getKey(result.getItem());
 		if (new ResourceLocation(save).equals(key)) {
 			throw new IllegalStateException("Enhanced Shapeless Recipe " + save + " should remove its 'save' argument");
 		} else {
-			save(consumer, new ResourceLocation(save));
+			save(output, new ResourceLocation(save));
 		}
 	}
 
 	/**
 	 * Builds this recipe into a {@link FinishedRecipe}.
 	 *
-	 * @param consumer The recipe consumer
-	 * @param id       The ID to use for the recipe
+	 * @param output The recipe output
+	 * @param id     The ID to use for the recipe
 	 */
 	@Override
-	public void save(final Consumer<FinishedRecipe> consumer, final ResourceLocation id) {
+	public void save(final RecipeOutput output, final ResourceLocation id) {
 		try {
 			// Perform the super class's validation
 			ENSURE_VALID.invoke(this, id);
@@ -136,24 +136,35 @@ public class EnhancedShapelessRecipeBuilder<
 			// Perform our validation
 			validate(id);
 
-			final Advancement.Builder advancement = ((Advancement.Builder) ADVANCEMENT.get(this))
-					.parent(new ResourceLocation("minecraft", "recipes/root"))
+			final var advancement = output
+					.advancement()
 					.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
 					.rewards(AdvancementRewards.Builder.recipe(id))
-					.requirements(RequirementsStrategy.OR);
+					.requirements(AdvancementRequirements.Strategy.OR);
 
-			String group = (String) GROUP.get(this);
+			@SuppressWarnings("unchecked") final var criteria = (Map<String, Criterion<?>>) CRITERIA.get(this);
+			criteria.forEach(advancement::addCriterion);
+
+			var group = (String) GROUP.get(this);
 			if (group == null) {
 				group = "";
 			}
 
 			final var category = (RecipeCategory) CATEGORY.get(this);
 
-			final List<Ingredient> ingredients = getIngredients();
+			final var ingredients = getIngredients();
 
-			final var baseRecipe = new Result(id, result.getItem(), result.getCount(), group, determineBookCategory(category), ingredients, advancement, id.withPrefix("recipes/" + category.getFolderName() + "/"));
+			final var baseRecipe = new Result(
+					id,
+					result.getItem(),
+					result.getCount(),
+					group,
+					determineBookCategory(category),
+					ingredients,
+					advancement.build(id.withPrefix("recipes/" + category.getFolderName() + "/"))
+			);
 
-			consumer.accept(new SimpleFinishedRecipe(baseRecipe, result, serializer));
+			output.accept(new SimpleFinishedRecipe(baseRecipe, result, serializer));
 		} catch (final IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException("Failed to build Enhanced Shapeless Recipe " + id, e);
 		}

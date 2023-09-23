@@ -1,32 +1,11 @@
 package choonster.testmod3.advancements.criterion;
 
-import choonster.testmod3.TestMod3;
-import choonster.testmod3.util.ModJsonUtil;
-import choonster.testmod3.util.RegistryUtil;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.advancements.critereon.NbtPredicate;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
-
 /**
  * An item predicate that matches a container filled with the specified fluid.
  *
  * @author Choonster
  */
+/*
 public class FluidContainerItemPredicate extends ItemPredicate {
 	public static final ResourceLocation TYPE = new ResourceLocation(TestMod3.MODID, "fluid_container");
 
@@ -155,3 +134,4 @@ public class FluidContainerItemPredicate extends ItemPredicate {
 		}
 	}
 }
+*/

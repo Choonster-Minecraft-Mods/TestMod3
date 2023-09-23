@@ -35,7 +35,7 @@ public class SimpleFinishedRecipe extends DelegateFinishedRecipe {
 	}
 
 	@Override
-	public RecipeSerializer<?> getType() {
+	public RecipeSerializer<?> type() {
 		return serializer;
 	}
 }

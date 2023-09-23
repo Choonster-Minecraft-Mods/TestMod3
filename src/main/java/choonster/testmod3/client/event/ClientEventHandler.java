@@ -22,6 +22,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -83,7 +84,7 @@ public class ClientEventHandler {
 	public static void entityJoinLevel(final EntityJoinLevelEvent event) {
 		final var level = event.getLevel();
 
-		if (level.isClientSide && event.getEntity() instanceof AbstractMinecart minecart) {
+		if (level.isClientSide && event.getEntity() instanceof final AbstractMinecart minecart) {
 			final var scoreboard = level.getScoreboard();
 
 			var team = scoreboard.getPlayerTeam(TestMod3.MODID);
@@ -105,7 +106,7 @@ public class ClientEventHandler {
 	public static void entityLeaveWorld(final EntityLeaveLevelEvent event) {
 		final var level = event.getLevel();
 
-		if (level.isClientSide && event.getEntity() instanceof AbstractMinecart minecart) {
+		if (level.isClientSide && event.getEntity() instanceof final AbstractMinecart minecart) {
 			glowingMinecarts.remove(minecart);
 		}
 	}
@@ -140,12 +141,12 @@ public class ClientEventHandler {
 		final var player = event.getEntity();
 		final var mainHand = player.getMainHandItem();
 
-		if (!(mainHand.getItem() instanceof ILeftClickEmpty leftClickEmpty)) {
+		if (!(mainHand.getItem() instanceof final ILeftClickEmpty leftClickEmpty)) {
 			return;
 		}
 
 		leftClickEmpty.onLeftClickEmpty(mainHand, player);
 
-		TestMod3.network.sendToServer(new LeftClickEmptyMessage());
+		TestMod3.network.send(new LeftClickEmptyMessage(), PacketDistributor.SERVER.noArg());
 	}
 }

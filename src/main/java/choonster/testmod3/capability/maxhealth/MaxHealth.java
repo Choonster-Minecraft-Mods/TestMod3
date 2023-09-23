@@ -131,7 +131,7 @@ public class MaxHealth implements IMaxHealth, INBTSerializable<FloatTag> {
 
 		final AttributeModifier oldModifier = entityMaxHealthAttribute.getModifier(MODIFIER_ID);
 		if (oldModifier != null) {
-			entityMaxHealthAttribute.removeModifier(oldModifier);
+			entityMaxHealthAttribute.removeModifier(MODIFIER_ID);
 
 			oldAmount = (float) oldModifier.getAmount();
 

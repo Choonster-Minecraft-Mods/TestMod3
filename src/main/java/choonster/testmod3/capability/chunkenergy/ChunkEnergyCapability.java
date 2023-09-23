@@ -93,7 +93,7 @@ public class ChunkEnergyCapability {
 			final var player = event.getPlayer();
 			final var chunkEnergy = getChunkEnergy(event.getLevel(), event.getPos()).orElseThrow(CapabilityNotPresentException::new);
 
-			TestMod3.network.send(PacketDistributor.PLAYER.with(() -> player), new UpdateChunkEnergyValueMessage(chunkEnergy));
+			TestMod3.network.send(new UpdateChunkEnergyValueMessage(chunkEnergy), PacketDistributor.PLAYER.with(player));
 		}
 	}
 }

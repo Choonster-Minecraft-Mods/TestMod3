@@ -123,7 +123,7 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 					// If the contents changed or this is the off hand, send a chat message to the player
 					if (!level.isClientSide && (success || hand == InteractionHand.OFF_HAND)) {
 						final var fluidTankSnapshots = FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler);
-						TestMod3.network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new FluidTankContentsMessage(fluidTankSnapshots));
+						TestMod3.network.send(new FluidTankContentsMessage(fluidTankSnapshots), PacketDistributor.PLAYER.with((ServerPlayer) player));
 					}
 
 					// If the held item is a fluid container, stop processing here so it doesn't try to place its contents

@@ -1,29 +1,22 @@
 package choonster.testmod3.world.item.crafting.ingredient;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.init.ModCrafting;
+import choonster.testmod3.serialization.VanillaCodecs;
 import choonster.testmod3.util.ModFluidUtil;
-import choonster.testmod3.util.ModJsonUtil;
 import choonster.testmod3.util.RegistryUtil;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.crafting.AbstractIngredient;
-import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
 /**
@@ -38,7 +31,25 @@ import java.util.stream.Stream;
  *
  * @author Choonster
  */
-public class FluidContainerIngredient extends AbstractIngredient {
+public class FluidContainerIngredient extends Ingredient {
+	private static final ResourceLocation TYPE = new ResourceLocation(TestMod3.MODID, "fluid_container");
+
+	public static Codec<FluidContainerIngredient> CODEC = RecordCodecBuilder.<FluidStack>create(instance ->
+			VanillaCodecs.fluidStack(instance)
+					.and(
+							
+							ResourceLocation.CODEC
+									.fieldOf("type")
+									.forGetter((x) -> TYPE)
+
+					)
+					.apply(instance, (fluid, amount, tag, type) -> {
+						final var stack = new FluidStack(fluid, amount);
+						tag.ifPresent(stack::setTag);
+						return stack;
+					})
+	).xmap(FluidContainerIngredient::new, FluidContainerIngredient::getFluidStack);
+
 	private final FluidStack fluidStack;
 	@Nullable
 	private ItemStack[] matchingStacks;
@@ -104,55 +115,11 @@ public class FluidContainerIngredient extends AbstractIngredient {
 	}
 
 	@Override
-	public JsonElement toJson() {
-		final JsonObject object = new JsonObject();
-
-		object.addProperty("type", new ResourceLocation(TestMod3.MODID, "fluid_container").toString());
-		object.addProperty("fluid", RegistryUtil.getKey(fluidStack.getFluid()).toString());
-		object.addProperty("amount", fluidStack.getAmount());
-
-		if (fluidStack.hasTag()) {
-			ModJsonUtil.setCompoundTag(object, "nbt", fluidStack.getTag());
-		}
-
-		return object;
+	public JsonElement toJson(final boolean allowEmpty) {
+		return IngredientUtil.toJson(CODEC, this);
 	}
 
 	public FluidStack getFluidStack() {
 		return fluidStack;
-	}
-
-	@Override
-	public IIngredientSerializer<? extends Ingredient> getSerializer() {
-		return ModCrafting.Ingredients.FLUID_CONTAINER;
-	}
-
-	public static class Serializer implements IIngredientSerializer<FluidContainerIngredient> {
-		@Override
-		public FluidContainerIngredient parse(final JsonObject json) {
-			final Fluid fluid = ModJsonUtil.getFluid(json, "fluid");
-
-			final int amount = GsonHelper.getAsInt(json, "amount");
-
-			if (amount <= 0) {
-				throw new JsonSyntaxException("amount must be positive");
-			}
-
-			final CompoundTag nbt = ModJsonUtil.getCompoundTag(json, "nbt");
-
-			return new FluidContainerIngredient(new FluidStack(fluid, amount, nbt));
-		}
-
-		@Override
-		public FluidContainerIngredient parse(final FriendlyByteBuf buffer) {
-			final FluidStack fluidStack = buffer.readFluidStack();
-
-			return new FluidContainerIngredient(fluidStack);
-		}
-
-		@Override
-		public void write(final FriendlyByteBuf buffer, final FluidContainerIngredient ingredient) {
-			buffer.writeFluidStack(ingredient.fluidStack);
-		}
 	}
 }

@@ -15,7 +15,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -24,6 +23,8 @@ import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
 import net.minecraftforge.common.loot.LootTableIdCondition;
+
+import java.util.List;
 
 /**
  * Generates this mod's global loot modifier JSON files.
@@ -68,9 +69,9 @@ public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
 						MatchBlockTag.builder(BlockTags.LEAVES).build(),
 				},
 				Items.STICK,
-				new LootItemFunction[]{
-						SetItemCountFunction.setCount(ConstantValue.exactly(2)).build(),
-				}
+				List.of(
+						SetItemCountFunction.setCount(ConstantValue.exactly(2)).build()
+				)
 		));
 	}
 

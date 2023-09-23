@@ -16,7 +16,6 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -59,7 +58,7 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler & IN
 	 */
 	public void openGUI(final ServerPlayer player) {
 		if (!level.isClientSide) {
-			NetworkHooks.openScreen(player, this, getBlockPos());
+			player.openMenu(this, getBlockPos());
 		}
 	}
 

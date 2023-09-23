@@ -1,14 +1,12 @@
 package choonster.testmod3.data.crafting.ingredient;
 
-import choonster.testmod3.TestMod3;
-import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredientSerializer;
-import com.google.gson.JsonArray;
+import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredientCodec;
+import choonster.testmod3.world.item.crafting.ingredient.IngredientUtil;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.common.crafting.conditions.ICondition;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,17 +15,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Builds an {@link Ingredient} that can be deserialised by {@link ConditionalIngredientSerializer}.
+ * Builds an {@link Ingredient} that can be deserialised by {@link ConditionalIngredientCodec}.
  *
  * @author Choonster
  */
 public class ConditionalIngredientBuilder {
+	private final List<ICondition> conditions = new ArrayList<>();
 	private final Ingredient ingredient;
-	private final List<Condition> conditions;
 
 	private ConditionalIngredientBuilder(final Ingredient ingredient) {
 		this.ingredient = ingredient;
-		conditions = new ArrayList<>();
 	}
 
 	/**
@@ -53,22 +50,11 @@ public class ConditionalIngredientBuilder {
 	/**
 	 * Adds a condition without any extra data.
 	 *
-	 * @param type The condition type
+	 * @param condition The condition
 	 * @return This builder
 	 */
-	public ConditionalIngredientBuilder addCondition(final ResourceLocation type) {
-		return addCondition(type, new JsonObject());
-	}
-
-	/**
-	 * Adds a condition with extra data.
-	 *
-	 * @param type The condition type
-	 * @param data The data
-	 * @return This builder
-	 */
-	public ConditionalIngredientBuilder addCondition(final ResourceLocation type, final JsonObject data) {
-		conditions.add(new Condition(type, data));
+	public ConditionalIngredientBuilder addCondition(final ICondition condition) {
+		conditions.add(condition);
 		return this;
 	}
 
@@ -77,7 +63,7 @@ public class ConditionalIngredientBuilder {
 	 */
 	private void validate() {
 		if (conditions.isEmpty()) {
-			final String stacks = Arrays.stream(ingredient.getItems())
+			final var stacks = Arrays.stream(ingredient.getItems())
 					.map(ItemStack::toString)
 					.collect(Collectors.joining(","));
 
@@ -92,47 +78,29 @@ public class ConditionalIngredientBuilder {
 	 */
 	public Result build() {
 		validate();
-		return new Result(ingredient, conditions);
+		return new Result(conditions, ingredient);
 	}
 
 	/**
-	 * Represents a condition type and its accompanying data.
-	 */
-	private record Condition(ResourceLocation type, JsonObject data) {
-		public JsonElement serialize() {
-			data.addProperty("type", type.toString());
-			return data;
-		}
-	}
-
-	/**
-	 * An {@link Ingredient} that serialises into JSON that can be deserialised by {@link ConditionalIngredientSerializer}.
+	 * An {@link Ingredient} that serialises into JSON that can be deserialised by ConditionalIngredientSerializer.
 	 * <p>
 	 * Note: This is only intended for use during recipe generation, it won't match any items if used in a recipe during gameplay.
 	 */
 	public static class Result extends Ingredient {
+		private final List<ICondition> conditions;
 		private final Ingredient ingredient;
-		private final List<Condition> conditions;
 
-		private Result(final Ingredient ingredient, final List<Condition> conditions) {
+		private Result(final List<ICondition> conditions, final Ingredient ingredient) {
 			super(Stream.empty());
-			this.ingredient = ingredient;
 			this.conditions = conditions;
+			this.ingredient = ingredient;
 		}
 
 		@Override
-		public JsonElement toJson() {
-			final JsonObject rootObject = new JsonObject();
-			rootObject.addProperty("type", new ResourceLocation(TestMod3.MODID, "conditional").toString());
+		public JsonElement toJson(final boolean allowEmpty) {
+			final var data = new ConditionalIngredientCodec.Data(conditions, ingredient);
 
-			final JsonArray conditionsArray = new JsonArray();
-			conditions.forEach(condition -> conditionsArray.add(condition.serialize()));
-			rootObject.add("conditions", conditionsArray);
-
-			final JsonElement ingredientObject = ingredient.toJson();
-			rootObject.add("ingredient", ingredientObject);
-
-			return rootObject;
+			return IngredientUtil.toJson(ConditionalIngredientCodec.DATA_CODEC, data);
 		}
 	}
 }

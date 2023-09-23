@@ -6,12 +6,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.network.NetworkEvent;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Supplier;
 
 /**
  * Updates the {@link FluidTank} for a single slot of an {@link AbstractContainerMenu}.
@@ -62,7 +60,7 @@ public class UpdateMenuFluidTankMessage extends UpdateMenuCapabilityMessage<IFlu
 		);
 	}
 
-	public static void handle(final UpdateMenuFluidTankMessage message, final Supplier<NetworkEvent.Context> ctx) {
+	public static void handle(final UpdateMenuFluidTankMessage message, final CustomPayloadEvent.Context ctx) {
 		UpdateMenuCapabilityMessage.handle(
 				message,
 				ctx,

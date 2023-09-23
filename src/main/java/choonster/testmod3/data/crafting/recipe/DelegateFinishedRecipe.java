@@ -1,10 +1,10 @@
 package choonster.testmod3.data.crafting.recipe;
 
 import com.google.gson.JsonObject;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -24,35 +24,19 @@ public class DelegateFinishedRecipe implements FinishedRecipe {
 		baseRecipe.serializeRecipeData(json);
 	}
 
-	/**
-	 * Gets the ID for the recipe.
-	 */
 	@Override
-	public ResourceLocation getId() {
-		return baseRecipe.getId();
+	public ResourceLocation id() {
+		return baseRecipe.id();
 	}
 
 	@Override
-	public RecipeSerializer<?> getType() {
-		return baseRecipe.getType();
+	public RecipeSerializer<?> type() {
+		return baseRecipe.type();
 	}
 
-	/**
-	 * Gets the JSON for the advancement that unlocks this recipe. Null if there is no advancement.
-	 */
-	@Override
 	@Nullable
-	public JsonObject serializeAdvancement() {
-		return baseRecipe.serializeAdvancement();
-	}
-
-	/**
-	 * Gets the ID for the advancement associated with this recipe. Should not be null if {@link #serializeAdvancement()} is
-	 * non-null.
-	 */
 	@Override
-	@Nullable
-	public ResourceLocation getAdvancementId() {
-		return baseRecipe.getAdvancementId();
+	public AdvancementHolder advancement() {
+		return baseRecipe.advancement();
 	}
 }

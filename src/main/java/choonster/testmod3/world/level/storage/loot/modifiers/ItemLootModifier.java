@@ -1,6 +1,5 @@
 package choonster.testmod3.world.level.storage.loot.modifiers;
 
-import choonster.testmod3.serialization.VanillaCodecs;
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -15,6 +14,7 @@ import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -34,7 +34,8 @@ public class ItemLootModifier extends LootModifier {
 											.forGetter(m -> m.item)
 							)
 							.and(
-									VanillaCodecs.LOOT_FUNCTIONS_CODEC
+									LootItemFunctions.CODEC
+											.listOf()
 											.fieldOf("functions")
 											.forGetter(m -> m.functions)
 							)
@@ -43,10 +44,10 @@ public class ItemLootModifier extends LootModifier {
 	);
 
 	private final Item item;
-	private final LootItemFunction[] functions;
+	private final List<LootItemFunction> functions;
 	private final BiFunction<ItemStack, LootContext, ItemStack> compositeFunction;
 
-	public ItemLootModifier(final LootItemCondition[] conditions, final Item item, final LootItemFunction[] functions) {
+	public ItemLootModifier(final LootItemCondition[] conditions, final Item item, final List<LootItemFunction> functions) {
 		super(conditions);
 		this.item = item;
 		this.functions = functions;

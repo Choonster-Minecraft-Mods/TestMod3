@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
@@ -24,6 +25,8 @@ import net.minecraftforge.items.wrapper.PlayerArmorInvWrapper;
 import net.minecraftforge.items.wrapper.PlayerOffhandInvWrapper;
 import org.slf4j.Logger;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Locale;
@@ -39,10 +42,8 @@ import java.util.function.Predicate;
 public class InventoryUtils {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-	/**
-	 * A reference to {@code LootTable#shuffleAndSplitItems}.
-	 */
-	private static final Method SHUFFLE_AND_SPLIT_ITEMS = ObfuscationReflectionHelper.findMethod(LootTable.class, /* shuffleAndSplitItems */ "m_79138_", List.class, int.class, Random.class);
+	private static final Field RANDOM_SEQUENCE = ObfuscationReflectionHelper.findField(LootTable.class, /* randomSequence */ "f_286958_");
+	private static final Method SHUFFLE_AND_SPLIT_ITEMS = ObfuscationReflectionHelper.findMethod(LootTable.class, /* shuffleAndSplitItems */ "m_79138_", ObjectArrayList.class, int.class, Random.class);
 
 	/**
 	 * Fill an {@link IItemHandler} with random loot from a {@link LootTable}.
@@ -54,9 +55,18 @@ public class InventoryUtils {
 	 * @param params      The LootParams to use in the loot generation
 	 */
 	public static void fillItemHandlerWithLoot(final IItemHandler itemHandler, final LootTable lootTable, final LootParams params, final long seed) {
+		final Optional<ResourceLocation> randomSequence;
+
+		try {
+			@SuppressWarnings("unchecked") final var localRandomSequence = (Optional<ResourceLocation>) RANDOM_SEQUENCE.get(lootTable);
+			randomSequence = localRandomSequence;
+		} catch (final IllegalAccessException e) {
+			throw new RuntimeException("Failed to get random sequence while generating loot", e);
+		}
+
 		final var context = new LootContext.Builder(params)
 				.withOptionalRandomSeed(seed)
-				.create(lootTable.getLootTableId());
+				.create(randomSequence);
 
 		final var random = context.getRandom();
 		final var items = lootTable.getRandomItems(params, seed);
@@ -64,8 +74,8 @@ public class InventoryUtils {
 
 		try {
 			SHUFFLE_AND_SPLIT_ITEMS.invoke(lootTable, items, emptySlots.size(), random);
-		} catch (final Throwable throwable) {
-			throw new RuntimeException("Failed to shuffle items while generating loot", throwable);
+		} catch (final IllegalAccessException | InvocationTargetException e) {
+			throw new RuntimeException("Failed to shuffle items while generating loot", e);
 		}
 
 		for (final var itemStack : items) {

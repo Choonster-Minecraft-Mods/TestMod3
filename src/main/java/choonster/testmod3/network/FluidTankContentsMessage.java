@@ -4,10 +4,8 @@ import choonster.testmod3.client.util.ClientUtil;
 import choonster.testmod3.fluid.FluidTankSnapshot;
 import choonster.testmod3.world.level.block.FluidTankBlock;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 /**
  * Sent by {@link FluidTankBlock} to notify the player of the tank's contents.
@@ -47,7 +45,7 @@ public class FluidTankContentsMessage {
 		}
 	}
 
-	public static void handle(final FluidTankContentsMessage message, final Supplier<NetworkEvent.Context> ctx) {
+	public static void handle(final FluidTankContentsMessage message, final CustomPayloadEvent.Context ctx) {
 		final var player = ClientUtil.getClientPlayer();
 
 		if (player == null) {

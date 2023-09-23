@@ -45,7 +45,7 @@ public class TestMod3GenericLoot implements LootTableSubProvider {
 																				LootItemEntityPropertyCondition.hasProperties(
 																						LootContext.EntityTarget.THIS,
 																						EntityPredicate.Builder.entity()
-																								.flags(EntityFlagsPredicate.Builder.flags().setOnFire(true).build())
+																								.flags(EntityFlagsPredicate.Builder.flags().setOnFire(true))
 																				)
 																		)
 														)

@@ -1,7 +1,8 @@
 package choonster.testmod3.world.item;
 
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
@@ -25,9 +26,13 @@ public class PotionEffectArmourItem extends ArmorItem {
 	}
 
 	@Override
-	public void onArmorTick(final ItemStack stack, final Level world, final Player player) {
-		if (!player.hasEffect(mobEffectInstance.getEffect())) { // If the effect isn't currently active,
-			player.addEffect(new MobEffectInstance(mobEffectInstance)); // Apply a copy of the effect to the player
+	public void inventoryTick(final ItemStack stack, final Level level, final Entity entity, final int itemSlot, final boolean isSelected) {
+		if (
+				entity instanceof final LivingEntity livingEntity && // If the entity is living,
+						!livingEntity.hasEffect(mobEffectInstance.getEffect()) && // The effect isn't currently active,
+						livingEntity.getItemBySlot(getEquipmentSlot()) == stack // And the item is equipped as armour
+		) {
+			livingEntity.addEffect(new MobEffectInstance(mobEffectInstance)); // Apply a copy of the effect to the entity
 		}
 	}
 }

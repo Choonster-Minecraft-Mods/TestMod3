@@ -1,17 +1,13 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
-import net.minecraft.core.Direction;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -39,14 +35,14 @@ public class ModDispenseBehaviors {
 				protected ItemStack execute(final BlockSource source, final ItemStack stack) {
 					setSuccess(true);
 
-					final Direction facing = source.getBlockState().getValue(DispenserBlock.FACING);
-					final BlockPos neighbourPos = source.getPos().relative(facing);
-					final Level world = source.getLevel();
-					final BlockState neighbourState = world.getBlockState(neighbourPos);
+					final var facing = source.state().getValue(DispenserBlock.FACING);
+					final var neighbourPos = source.pos().relative(facing);
+					final var level = source.level();
+					final var neighbourState = level.getBlockState(neighbourPos);
 
 					setSuccess(
 							neighbourState.isAir() &&
-									world.setBlockAndUpdate(neighbourPos, Blocks.BLACK_WOOL.defaultBlockState())
+									level.setBlockAndUpdate(neighbourPos, Blocks.BLACK_WOOL.defaultBlockState())
 					);
 
 					if (isSuccess()) {

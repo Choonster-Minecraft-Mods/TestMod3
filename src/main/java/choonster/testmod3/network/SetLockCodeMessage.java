@@ -9,10 +9,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.LockCode;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Supplier;
 
 /**
  * Sent to the server by {@link LockScreen} to set the new lock code.
@@ -45,8 +43,8 @@ public class SetLockCodeMessage {
 		buffer.writeUtf(message.lockCode);
 	}
 
-	public static void handle(final SetLockCodeMessage message, final Supplier<NetworkEvent.Context> ctx) {
-		final var player = ctx.get().getSender();
+	public static void handle(final SetLockCodeMessage message, final CustomPayloadEvent.Context ctx) {
+		final var player = ctx.getSender();
 		final var level = player.level();
 
 		player.resetLastActionTime();

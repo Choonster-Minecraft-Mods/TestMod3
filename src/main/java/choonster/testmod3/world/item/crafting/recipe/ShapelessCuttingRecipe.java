@@ -1,12 +1,10 @@
 package choonster.testmod3.world.item.crafting.recipe;
 
 import choonster.testmod3.init.ModCrafting;
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
@@ -15,8 +13,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.ForgeEventFactory;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A shapeless recipe that damages any {@link AxeItem} ingredients.
@@ -27,13 +25,12 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 	private final ItemStack result;
 
 	private ShapelessCuttingRecipe(
-			final ResourceLocation id,
 			final String group,
 			final CraftingBookCategory category,
 			final ItemStack result,
 			final NonNullList<Ingredient> ingredients
 	) {
-		super(id, group, category, result, ingredients);
+		super(group, category, result, ingredients);
 		this.result = result;
 	}
 
@@ -70,18 +67,19 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 	}
 
 	public static class Serializer implements RecipeSerializer<ShapelessCuttingRecipe> {
-		@Override
-		public ShapelessCuttingRecipe fromJson(final ResourceLocation recipeID, final JsonObject json) {
-			final var group = GsonHelper.getAsString(json, "group", "");
-			final var category = CraftingBookCategory.CODEC.byName(GsonHelper.getAsString(json, "category", null), CraftingBookCategory.MISC);
-			final var ingredients = RecipeUtil.parseShapeless(json);
-			final var result = CraftingHelper.getItemStack(GsonHelper.getAsJsonObject(json, "result"), true);
+		private static final Codec<ShapelessCuttingRecipe> CODEC = RecipeUtil.shapelessRecipeCodec(
+				ShapelessCuttingRecipe::new,
+				recipe -> recipe.result
+		);
 
-			return new ShapelessCuttingRecipe(recipeID, group, category, result, ingredients);
+		@Override
+		public Codec<ShapelessCuttingRecipe> codec() {
+			return CODEC;
 		}
 
+		@Nullable
 		@Override
-		public ShapelessCuttingRecipe fromNetwork(final ResourceLocation recipeID, final FriendlyByteBuf buffer) {
+		public ShapelessCuttingRecipe fromNetwork(final FriendlyByteBuf buffer) {
 			final var group = buffer.readUtf(Short.MAX_VALUE);
 			final var category = buffer.readEnum(CraftingBookCategory.class);
 			final var numIngredients = buffer.readVarInt();
@@ -91,7 +89,7 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 
 			final var result = buffer.readItem();
 
-			return new ShapelessCuttingRecipe(recipeID, group, category, result, ingredients);
+			return new ShapelessCuttingRecipe(group, category, result, ingredients);
 		}
 
 		@Override

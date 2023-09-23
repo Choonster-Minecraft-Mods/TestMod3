@@ -6,10 +6,8 @@ import choonster.testmod3.network.capability.UpdateMenuCapabilityMessage;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.network.NetworkEvent;
-
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import org.jetbrains.annotations.Nullable;
-import java.util.function.Supplier;
 
 /**
  * Updates the {@link IHiddenBlockRevealer} for a single slot of an {@link AbstractContainerMenu}.
@@ -60,7 +58,7 @@ public class UpdateMenuHiddenBlockRevealerMessage extends UpdateMenuCapabilityMe
 		);
 	}
 
-	public static void handle(final UpdateMenuHiddenBlockRevealerMessage message, final Supplier<NetworkEvent.Context> ctx) {
+	public static void handle(final UpdateMenuHiddenBlockRevealerMessage message, final CustomPayloadEvent.Context ctx) {
 		UpdateMenuCapabilityMessage.handle(
 				message,
 				ctx,

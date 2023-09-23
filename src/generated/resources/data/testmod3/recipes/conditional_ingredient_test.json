@@ -6,7 +6,8 @@
       "type": "testmod3:conditional",
       "conditions": [
         {
-          "type": "forge:false"
+          "type": "forge:false",
+          "value": {}
         }
       ],
       "ingredient": {

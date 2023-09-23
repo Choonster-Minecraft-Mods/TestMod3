@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
@@ -53,12 +54,6 @@ public class LockScreen extends Screen {
 	}
 
 	@Override
-	public void tick() {
-		lockCodeTextField.tick();
-	}
-
-
-	@Override
 	protected void init() {
 		addRenderableWidget(
 				Button.builder(CommonComponents.GUI_DONE, button -> onDone())
@@ -79,7 +74,7 @@ public class LockScreen extends Screen {
 	}
 
 	private void onDone() {
-		TestMod3.network.sendToServer(new SetLockCodeMessage(pos, facing, lockCodeTextField.getValue()));
+		TestMod3.network.send(new SetLockCodeMessage(pos, facing, lockCodeTextField.getValue()), PacketDistributor.SERVER.noArg());
 		minecraft.setScreen(null);
 	}
 
@@ -102,12 +97,11 @@ public class LockScreen extends Screen {
 
 	@Override
 	public void render(final GuiGraphics guiGraphics, final int mouseX, final int mouseY, final float partialTicks) {
-		renderBackground(guiGraphics);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+
 		guiGraphics.drawCenteredString(font, I18n.get(TestMod3Lang.LOCK_SET_LOCK_CODE.getTranslationKey()), width / 2, 20, 0xffffff);
 		guiGraphics.drawString(font, I18n.get(TestMod3Lang.LOCK_LOCK_CODE.getTranslationKey()), width / 2 - 150, 37, 0xa0a0a0);
 		lockCodeTextField.render(guiGraphics, mouseX, mouseY, partialTicks);
 		guiGraphics.drawString(font, "", width / 2 - 150, 75 * font.lineHeight, 0xa0a0a0);
-
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 }

@@ -7,16 +7,14 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.extensions.IForgeServerPlayer;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkHooks;
-
-import java.util.function.Supplier;
 
 /**
  * Sent by the server to open a client-side {@link Screen}.
  * <p>
- * This is similar to {@link NetworkHooks#openScreen} for GUIs without an {@link AbstractContainerMenu}.
+ * This is similar to {@link IForgeServerPlayer#openMenu} for GUIs without an {@link AbstractContainerMenu}.
  *
  * @author Choonster
  */
@@ -41,7 +39,7 @@ public class OpenClientScreenMessage {
 		buffer.writeByteArray(message.additionalData.readByteArray());
 	}
 
-	public static void handle(final OpenClientScreenMessage message, final Supplier<NetworkEvent.Context> ctx) {
+	public static void handle(final OpenClientScreenMessage message, final CustomPayloadEvent.Context ctx) {
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientScreenManager.openScreen(message.id, message.additionalData));
 	}
 }

@@ -34,9 +34,9 @@
   },
   "requirements": [
     [
+      "has_the_recipe",
       "has_subscripts",
-      "has_superscripts",
-      "has_the_recipe"
+      "has_superscripts"
     ]
   ],
   "rewards": {

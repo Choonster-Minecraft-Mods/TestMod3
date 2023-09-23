@@ -4,14 +4,13 @@ import choonster.testmod3.init.ModLootFunctionTypes;
 import choonster.testmod3.util.CapabilityNotPresentException;
 import choonster.testmod3.world.item.FluidStackItem;
 import com.google.common.collect.Lists;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.NonNullList;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntries;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -21,7 +20,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -32,9 +30,20 @@ import java.util.List;
  * @author Choonster
  */
 public class SetFluidTankContents extends LootItemConditionalFunction {
+	public static final Codec<SetFluidTankContents> CODEC = RecordCodecBuilder.create(builder ->
+			commonFields(builder).and(
+
+					LootPoolEntries.CODEC
+							.listOf()
+							.fieldOf("entries")
+							.forGetter(instance -> instance.lootEntries)
+
+			).apply(builder, SetFluidTankContents::new)
+	);
+
 	private final List<LootPoolEntryContainer> lootEntries;
 
-	public SetFluidTankContents(final LootItemCondition[] conditions, final List<LootPoolEntryContainer> lootEntries) {
+	public SetFluidTankContents(final List<LootItemCondition> conditions, final List<LootPoolEntryContainer> lootEntries) {
 		super(conditions);
 		this.lootEntries = lootEntries;
 	}
@@ -90,20 +99,6 @@ public class SetFluidTankContents extends LootItemConditionalFunction {
 		@Override
 		public LootItemFunction build() {
 			return new SetFluidTankContents(getConditions(), lootEntries);
-		}
-	}
-
-	public static class Serializer extends LootItemConditionalFunction.Serializer<SetFluidTankContents> {
-		@Override
-		public void serialize(final JsonObject object, final SetFluidTankContents function, final JsonSerializationContext serializationContext) {
-			super.serialize(object, function, serializationContext);
-			object.add("entries", serializationContext.serialize(function.lootEntries));
-		}
-
-		@Override
-		public SetFluidTankContents deserialize(final JsonObject object, final JsonDeserializationContext deserializationContext, final LootItemCondition[] conditions) {
-			final var lootEntries = GsonHelper.getAsObject(object, "entries", deserializationContext, LootPoolEntryContainer[].class);
-			return new SetFluidTankContents(conditions, Arrays.asList(lootEntries));
 		}
 	}
 }

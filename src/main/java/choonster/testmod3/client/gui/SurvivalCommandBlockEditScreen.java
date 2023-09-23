@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screens.inventory.CommandBlockEditScreen;
 import net.minecraft.world.level.BaseCommandBlock;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.minecraftforge.network.PacketDistributor;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Field;
@@ -34,7 +35,16 @@ public class SurvivalCommandBlockEditScreen extends CommandBlockEditScreen {
 			final boolean conditional = (boolean) CONDITIONAL.get(this);
 			final boolean autoexec = (boolean) AUTOEXEC.get(this);
 
-			TestMod3.network.sendToServer(new SaveSurvivalCommandBlockMessage(survivalCommandBlock, commandEdit.getValue(), mode, conditional, autoexec));
+			TestMod3.network.send(
+					new SaveSurvivalCommandBlockMessage(
+							survivalCommandBlock,
+							commandEdit.getValue(),
+							mode,
+							conditional,
+							autoexec
+					),
+					PacketDistributor.SERVER.noArg()
+			);
 		} catch (final IllegalAccessException e) {
 			LOGGER.error("Couldn't set survival command block", e);
 		}

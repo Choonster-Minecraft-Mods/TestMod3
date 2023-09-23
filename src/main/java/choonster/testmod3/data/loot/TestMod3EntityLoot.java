@@ -24,7 +24,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.stream.Stream;
 
 /**
- * Generates this mod's entity loot tables.
+ * Generates this mod's entityType loot tables.
  *
  * @author Choonster
  */

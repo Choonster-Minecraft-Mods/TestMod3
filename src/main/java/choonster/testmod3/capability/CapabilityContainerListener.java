@@ -9,7 +9,6 @@ import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.network.PacketDistributor;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -48,9 +47,9 @@ public abstract class CapabilityContainerListener<HANDLER> implements ContainerL
 		}
 
 		stack.getCapability(capability, facing).ifPresent(handler -> {
-			final UpdateMenuCapabilityMessage<HANDLER, ?> message = createUpdateMessage(menu.containerId, menu.incrementStateId(), slotNumber, handler);
+			final var message = createUpdateMessage(menu.containerId, menu.incrementStateId(), slotNumber, handler);
 			if (message.hasData()) { // Don't send the message if there's nothing to update
-				TestMod3.network.send(PacketDistributor.PLAYER.with(() -> player), message);
+				TestMod3.network.send(message, PacketDistributor.PLAYER.with(player));
 			}
 		});
 	}

@@ -1,6 +1,5 @@
 package choonster.testmod3.world.level.levelgen.feature;
 
-import choonster.testmod3.serialization.VanillaCodecs;
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
@@ -21,13 +20,13 @@ public record BannerFeatureConfig(
 	public static final Codec<BannerFeatureConfig> CODEC = RecordCodecBuilder.create((builder) ->
 			builder.group(
 
-					VanillaCodecs.DYE_COLOR
+					DyeColor.CODEC
 							.fieldOf("color")
 							.forGetter(BannerFeatureConfig::color),
 
 					Codec.mapPair(
 									BuiltInRegistries.BANNER_PATTERN.byNameCodec().fieldOf("pattern"),
-									VanillaCodecs.DYE_COLOR.fieldOf("color")
+									DyeColor.CODEC.fieldOf("color")
 							)
 							.codec()
 							.listOf()

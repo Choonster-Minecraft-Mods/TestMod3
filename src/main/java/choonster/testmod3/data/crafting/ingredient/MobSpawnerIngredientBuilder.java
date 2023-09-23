@@ -1,22 +1,19 @@
 package choonster.testmod3.data.crafting.ingredient;
 
-import choonster.testmod3.TestMod3;
-import choonster.testmod3.util.RegistryUtil;
-import choonster.testmod3.world.item.crafting.ingredient.MobSpawnerIngredientSerializer;
+import choonster.testmod3.world.item.crafting.ingredient.IngredientUtil;
+import choonster.testmod3.world.item.crafting.ingredient.MobSpawnerIngredientCodec;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
 /**
- * Builds an {@link Ingredient} that can be deserialised by {@link MobSpawnerIngredientSerializer}.
+ * Builds an {@link Ingredient} that can be deserialised by {MobSpawnerIngredientSerializer}.
  *
  * @author Choonster
  */
@@ -88,26 +85,25 @@ public class MobSpawnerIngredientBuilder {
 	}
 
 	/**
-	 * An {@link Ingredient} that serialises into JSON that can be deserialised by {@link MobSpawnerIngredientSerializer}.
+	 * An {@link Ingredient} that serialises into JSON that can be deserialised by {@link MobSpawnerIngredientCodec}.
 	 * <p>
 	 * Note: This is only intended for use during recipe generation, it won't match any items if used in a recipe during gameplay.
 	 */
 	public static class Result extends Ingredient {
+		private final ItemStack spawner;
 		private final EntityType<?> entityType;
 
 		private Result(final ItemStack spawner, final EntityType<?> entityType) {
-			super(Stream.of(new ItemValue(spawner)));
+			super(Stream.empty());
+			this.spawner = spawner;
 			this.entityType = entityType;
 		}
 
 		@Override
-		public JsonElement toJson() {
-			final JsonObject rootObject = super.toJson().getAsJsonObject();
+		public JsonElement toJson(final boolean p_299391_) {
+			final var data = new MobSpawnerIngredientCodec.Data(spawner, entityType);
 
-			rootObject.addProperty("type", new ResourceLocation(TestMod3.MODID, "mob_spawner").toString());
-			rootObject.addProperty("entity", RegistryUtil.getKey(entityType).toString());
-
-			return rootObject;
+			return IngredientUtil.toJson(MobSpawnerIngredientCodec.DATA_CODEC, data);
 		}
 	}
 }

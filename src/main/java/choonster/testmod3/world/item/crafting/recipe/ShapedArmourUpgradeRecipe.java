@@ -1,12 +1,10 @@
 package choonster.testmod3.world.item.crafting.recipe;
 
 import choonster.testmod3.init.ModCrafting;
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ArmorItem;
@@ -15,7 +13,6 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
-import net.minecraftforge.common.crafting.CraftingHelper;
 
 /**
  * A shaped recipe class that copies the item damage of the first armour ingredient to the output. The damage is clamped to the output item's damage range.
@@ -29,15 +26,15 @@ public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
 	private final ItemStack result;
 
 	private ShapedArmourUpgradeRecipe(
-			final ResourceLocation id,
 			final String group,
 			final CraftingBookCategory category,
 			final int width,
 			final int height,
 			final NonNullList<Ingredient> ingredients,
-			final ItemStack result
+			final ItemStack result,
+			final boolean showNotification
 	) {
-		super(id, group, category, width, height, ingredients, result);
+		super(group, category, width, height, ingredients, result, showNotification);
 		this.result = result;
 	}
 
@@ -67,18 +64,15 @@ public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
 	}
 
 	public static class Serializer implements RecipeSerializer<ShapedArmourUpgradeRecipe> {
-		@Override
-		public ShapedArmourUpgradeRecipe fromJson(final ResourceLocation recipeID, final JsonObject json) {
-			final var group = GsonHelper.getAsString(json, "group", "");
-			final var category = CraftingBookCategory.CODEC.byName(GsonHelper.getAsString(json, "category", null), CraftingBookCategory.MISC);
-			final var primer = RecipeUtil.parseShaped(json);
-			final var result = CraftingHelper.getItemStack(GsonHelper.getAsJsonObject(json, "result"), true);
+		private static final Codec<ShapedArmourUpgradeRecipe> CODEC = RecipeUtil.shapedRecipeCodec(ShapedArmourUpgradeRecipe::new);
 
-			return new ShapedArmourUpgradeRecipe(recipeID, group, category, primer.recipeWidth(), primer.recipeHeight(), primer.ingredients(), result);
+		@Override
+		public Codec<ShapedArmourUpgradeRecipe> codec() {
+			return CODEC;
 		}
-
+		
 		@Override
-		public ShapedArmourUpgradeRecipe fromNetwork(final ResourceLocation recipeID, final FriendlyByteBuf buffer) {
+		public ShapedArmourUpgradeRecipe fromNetwork(final FriendlyByteBuf buffer) {
 			final var width = buffer.readVarInt();
 			final var height = buffer.readVarInt();
 			final var group = buffer.readUtf(Short.MAX_VALUE);
@@ -88,8 +82,9 @@ public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
 			ingredients.replaceAll(ignored -> Ingredient.fromNetwork(buffer));
 
 			final var result = buffer.readItem();
+			final var showNotification = buffer.readBoolean();
 
-			return new ShapedArmourUpgradeRecipe(recipeID, group, category, width, height, ingredients, result);
+			return new ShapedArmourUpgradeRecipe(group, category, width, height, ingredients, result, showNotification);
 		}
 
 		@Override
@@ -104,6 +99,7 @@ public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
 			}
 
 			buffer.writeItem(recipe.result);
+			buffer.writeBoolean(recipe.showNotification());
 		}
 	}
 }

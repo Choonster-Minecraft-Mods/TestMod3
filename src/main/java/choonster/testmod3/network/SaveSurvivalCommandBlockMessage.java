@@ -12,12 +12,10 @@ import net.minecraft.util.StringUtil;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CommandBlock;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
-
-import java.util.function.Supplier;
 
 /**
  * Sent by {@link SurvivalCommandBlockEditScreen} to save changes made to a Survival Command Block.
@@ -110,8 +108,8 @@ public class SaveSurvivalCommandBlockMessage {
 	}
 
 	@SuppressWarnings("resource")
-	public static void handle(final SaveSurvivalCommandBlockMessage message, final Supplier<NetworkEvent.Context> ctx) {
-		final var player = ctx.get().getSender();
+	public static void handle(final SaveSurvivalCommandBlockMessage message, final CustomPayloadEvent.Context ctx) {
+		final var player = ctx.getSender();
 		final var level = player.level();
 		final var minecraftServer = level.getServer();
 

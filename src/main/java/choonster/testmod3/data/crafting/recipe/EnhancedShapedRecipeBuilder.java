@@ -1,13 +1,13 @@
 package choonster.testmod3.data.crafting.recipe;
 
 import choonster.testmod3.util.RegistryUtil;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.CriterionTriggerInstance;
-import net.minecraft.advancements.RequirementsStrategy;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -25,7 +25,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 /**
  * An extension of {@link ShapedRecipeBuilder} that allows the recipe result to have NBT.
@@ -38,10 +37,10 @@ public class EnhancedShapedRecipeBuilder<
 		> extends ShapedRecipeBuilder {
 	private static final Method ENSURE_VALID = ObfuscationReflectionHelper.findMethod(ShapedRecipeBuilder.class, /* ensureValid */ "m_126143_", ResourceLocation.class);
 	private static final Field CATEGORY = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* category */ "f_243672_");
-	private static final Field ADVANCEMENT = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* advancement */ "f_126110_");
 	private static final Field GROUP = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* group */ "f_126111_");
 	private static final Field ROWS = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* rows */ "f_126108_");
 	private static final Field KEY = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* key */ "f_126109_");
+	private static final Field CRITERIA = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* criteria */ "f_291506_");
 	private static final Field SHOW_NOTIFICATION = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* showNotification */ "f_271093_");
 
 	protected final ItemStack result;
@@ -109,7 +108,7 @@ public class EnhancedShapedRecipeBuilder<
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER unlockedBy(final String name, final CriterionTriggerInstance criterion) {
+	public BUILDER unlockedBy(final String name, final Criterion<?> criterion) {
 		return (BUILDER) super.unlockedBy(name, criterion);
 	}
 
@@ -123,22 +122,22 @@ public class EnhancedShapedRecipeBuilder<
 	 * Builds this recipe into a {@link FinishedRecipe}.
 	 */
 	@Override
-	public void save(final Consumer<FinishedRecipe> consumer) {
+	public void save(final RecipeOutput output) {
 		final var item = result.getItem();
-		save(consumer, RegistryUtil.getKey(item));
+		save(output, RegistryUtil.getKey(item));
 	}
 
 	/**
-	 * Builds this recipe into a {@link FinishedRecipe}. Use {@link #save(Consumer)} if save is the same as the ID for
+	 * Builds this recipe into a {@link FinishedRecipe}. Use {@link #save(RecipeOutput)} if {@code save} is the same as the ID for
 	 * the result.
 	 */
 	@Override
-	public void save(final Consumer<FinishedRecipe> consumer, final String save) {
+	public void save(final RecipeOutput output, final String save) {
 		final var key = RegistryUtil.getKey(result.getItem());
 		if (new ResourceLocation(save).equals(key)) {
 			throw new IllegalStateException("Shaped Recipe " + save + " should remove its 'save' argument");
 		} else {
-			save(consumer, new ResourceLocation(save));
+			save(output, new ResourceLocation(save));
 		}
 	}
 
@@ -154,7 +153,7 @@ public class EnhancedShapedRecipeBuilder<
 	 * Builds this recipe into a {@link FinishedRecipe}.
 	 */
 	@Override
-	public void save(final Consumer<FinishedRecipe> consumer, final ResourceLocation id) {
+	public void save(final RecipeOutput output, final ResourceLocation id) {
 		try {
 			// Perform the super class's validation
 			ENSURE_VALID.invoke(this, id);
@@ -162,11 +161,13 @@ public class EnhancedShapedRecipeBuilder<
 			// Perform our validation
 			ensureValid(id);
 
-			final var advancement = ((Advancement.Builder) ADVANCEMENT.get(this))
-					.parent(new ResourceLocation("minecraft", "recipes/root"))
+			final var advancement = output.advancement()
 					.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
 					.rewards(AdvancementRewards.Builder.recipe(id))
-					.requirements(RequirementsStrategy.OR);
+					.requirements(AdvancementRequirements.Strategy.OR);
+
+			@SuppressWarnings("unchecked") final var criteria = (Map<String, Criterion<?>>) CRITERIA.get(this);
+			criteria.forEach(advancement::addCriterion);
 
 			var group = (String) GROUP.get(this);
 			if (group == null) {
@@ -175,11 +176,9 @@ public class EnhancedShapedRecipeBuilder<
 
 			final var category = (RecipeCategory) CATEGORY.get(this);
 
-			@SuppressWarnings("unchecked")
-			final var rows = (List<String>) ROWS.get(this);
+			@SuppressWarnings("unchecked") final var rows = (List<String>) ROWS.get(this);
 
-			@SuppressWarnings("unchecked")
-			final var key = (Map<Character, Ingredient>) KEY.get(this);
+			@SuppressWarnings("unchecked") final var key = (Map<Character, Ingredient>) KEY.get(this);
 
 			final var showNotification = (boolean) SHOW_NOTIFICATION.get(this);
 
@@ -190,12 +189,11 @@ public class EnhancedShapedRecipeBuilder<
 					determineBookCategory(category),
 					rows,
 					key,
-					advancement,
-					id.withPrefix("recipes/" + category.getFolderName() + "/"),
+					advancement.build(id.withPrefix("recipes/" + category.getFolderName() + "/")),
 					showNotification
 			);
 
-			consumer.accept(new SimpleFinishedRecipe(baseRecipe, result, serializer));
+			output.accept(new SimpleFinishedRecipe(baseRecipe, result, serializer));
 		} catch (final IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException("Failed to build Enhanced Shaped Recipe " + id, e);
 		}

@@ -1,7 +1,6 @@
 package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.advancements.criterion.FluidContainerItemPredicate;
 import choonster.testmod3.data.crafting.ingredient.ConditionalIngredientBuilder;
 import choonster.testmod3.data.crafting.ingredient.MobSpawnerIngredientBuilder;
 import choonster.testmod3.data.crafting.recipe.EnhancedShapedRecipeBuilder;
@@ -12,7 +11,6 @@ import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.util.RegistryUtil;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
-import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.nbt.CompoundTag;
@@ -24,10 +22,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.crafting.conditions.FalseCondition;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
-
-import java.util.function.Consumer;
 
 /**
  * Generates this mod's recipes.
@@ -40,7 +37,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 	}
 
 	@Override
-	protected void buildRecipes(final Consumer<FinishedRecipe> recipeConsumer) {
+	protected void buildRecipes(final RecipeOutput output) {
 		// Craft a Dimension Replacement item from a Subscripts item and a Superscripts item
 		{
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.DIMENSION_REPLACEMENT.get())
@@ -48,14 +45,14 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.requires(ModItems.SUPERSCRIPTS.get())
 					.unlockedBy("has_subscripts", has(ModItems.SUBSCRIPTS.get()))
 					.unlockedBy("has_superscripts", has(ModItems.SUPERSCRIPTS.get()))
-					.save(recipeConsumer);
+					.save(output);
 		}
 
 		// Craft a Dimension Replacement item by smelting a Subscripts item
 		{
 			SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModItems.SUBSCRIPTS.get()), RecipeCategory.MISC, ModItems.DIMENSION_REPLACEMENT.get(), 0.35f, 200)
 					.unlockedBy("has_subscripts", has(ModItems.SUBSCRIPTS.get()))
-					.save(recipeConsumer, new ResourceLocation(TestMod3.MODID, "dimension_replacement_from_subscripts"));
+					.save(output, new ResourceLocation(TestMod3.MODID, "dimension_replacement_from_subscripts"));
 		}
 
 		// A recipe with a conditional ingredient whose conditions are never met.
@@ -66,12 +63,12 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.define(
 							'C',
 							ConditionalIngredientBuilder.conditionalIngredient(Blocks.COBBLESTONE)
-									.addCondition(new ResourceLocation("forge", "false"))
+									.addCondition(FalseCondition.INSTANCE)
 									.build()
 					)
 					.define('c', Blocks.COBBLESTONE)
 					.unlockedBy("has_cobblestone", has(Blocks.COBBLESTONE))
-					.save(recipeConsumer, new ResourceLocation(TestMod3.MODID, "conditional_ingredient_test"));
+					.save(output, new ResourceLocation(TestMod3.MODID, "conditional_ingredient_test"));
 		}
 
 		// Craft eight Raw Cod from a Guardian Spawner
@@ -84,7 +81,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 									.build()
 					)
 					.unlockedBy("has_spawner", has(Blocks.SPAWNER))
-					.save(recipeConsumer, new ResourceLocation(TestMod3.MODID, "fish_from_guardian_spawner"));
+					.save(output, new ResourceLocation(TestMod3.MODID, "fish_from_guardian_spawner"));
 		}
 
 		// Craft a Guardian Spawner from a Raw Cod surrounded by Sticks
@@ -110,7 +107,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.itemGroup("ungrouped")
 					.unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
 					.unlockedBy("has_cod", has(Items.COD))
-					.save(recipeConsumer, new ResourceLocation(TestMod3.MODID, "guardian_spawner_from_fish_and_sticks"));
+					.save(output, new ResourceLocation(TestMod3.MODID, "guardian_spawner_from_fish_and_sticks"));
 		}
 
 		// Upgrade an Iron Helmet to a Golden Helmet while preserving its damage
@@ -124,7 +121,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.define('H', Items.IRON_HELMET)
 					.unlockedBy("has_gold_block", has(Blocks.GOLD_BLOCK))
 					.unlockedBy("has_iron_helmet", has(Items.IRON_HELMET))
-					.save(recipeConsumer, new ResourceLocation(TestMod3.MODID, "golden_helmet_from_iron_helmet"));
+					.save(output, new ResourceLocation(TestMod3.MODID, "golden_helmet_from_iron_helmet"));
 		}
 
 		// Cut an Oak Log into two Oak Planks with a Cutting Axe, damaging the axe
@@ -135,7 +132,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.requires(Blocks.OAK_LOG)
 					.unlockedBy("has_axe", has(ModItems.WOODEN_AXE.get()))
 					.unlockedBy("has_log", has(Blocks.OAK_LOG))
-					.save(recipeConsumer, new ResourceLocation(TestMod3.MODID, "oak_planks_with_mod_axe"));
+					.save(output, new ResourceLocation(TestMod3.MODID, "oak_planks_with_mod_axe"));
 		}
 
 		// Cut an Oak Log into two Oak Planks with a Wooden Axe, damaging the axe
@@ -146,7 +143,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.requires(Blocks.OAK_LOG)
 					.unlockedBy("has_axe", has(Items.WOODEN_AXE))
 					.unlockedBy("has_log", has(Blocks.OAK_LOG))
-					.save(recipeConsumer, new ResourceLocation(TestMod3.MODID, "oak_planks_with_vanilla_axe"));
+					.save(output, new ResourceLocation(TestMod3.MODID, "oak_planks_with_vanilla_axe"));
 		}
 
 		// Craft Cobblestone from three Buckets of Static Gas
@@ -158,13 +155,16 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.requires(staticGasContainer)
 					.requires(staticGasContainer)
 					.requires(staticGasContainer)
+					.unlockedBy("has_static_gas_bucket", has(ModFluids.STATIC_GAS.getBucket().get()))
+					/*
 					.unlockedBy("has_static_gas_container", inventoryTrigger(
 							FluidContainerItemPredicate.Builder.create()
 									.fluid(staticGas.getFluid())
 									.amount(MinMaxBounds.Ints.atLeast(staticGas.getAmount()))
 									.build()
 					))
-					.save(recipeConsumer, new ResourceLocation(TestMod3.MODID, "cobblestone_from_static_gas"));
+					*/
+					.save(output, new ResourceLocation(TestMod3.MODID, "cobblestone_from_static_gas"));
 		}
 	}
 }

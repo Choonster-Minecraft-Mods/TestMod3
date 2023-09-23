@@ -1,6 +1,5 @@
 package choonster.testmod3;
 
-import choonster.testmod3.compat.theoneprobe.TheOneProbeCompat;
 import choonster.testmod3.config.TestMod3Config;
 import choonster.testmod3.init.*;
 import choonster.testmod3.init.levelgen.ModBiomeModifierSerializers;
@@ -9,17 +8,14 @@ import choonster.testmod3.init.levelgen.ModPlacementModifierTypes;
 import choonster.testmod3.tests.Tests;
 import choonster.testmod3.util.BlockDumper;
 import com.mojang.logging.LogUtils;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.network.SimpleChannel;
 import org.slf4j.Logger;
 
 import java.util.UUID;
@@ -37,7 +33,7 @@ public class TestMod3 {
 	public TestMod3() {
 		TestMod3Config.register(ModLoadingContext.get());
 
-		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		final var modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
 		ModFluids.initialise(modEventBus);
 		ModBlocks.initialise(modEventBus);
@@ -67,7 +63,8 @@ public class TestMod3 {
 		LOGGER.warn("****************************************");
 
 		event.enqueueWork(() -> {
-			ModCrafting.Ingredients.register();
+			// TODO: Custom Ingredients
+//			ModCrafting.Ingredients.register();
 			ModCriterion.register();
 			ModLootTables.registerLootTables();
 
@@ -78,10 +75,10 @@ public class TestMod3 {
 
 	@SubscribeEvent
 	public static void enqueue(final InterModEnqueueEvent event) {
-		final String theOneProbe = "theoneprobe";
+		final var theOneProbe = "theoneprobe";
 
-		if (ModList.get().isLoaded(theOneProbe)) {
-			InterModComms.sendTo(theOneProbe, "getTheOneProbe", TheOneProbeCompat::new);
-		}
+//		if (ModList.get().isLoaded(theOneProbe)) {
+//			InterModComms.sendTo(theOneProbe, "getTheOneProbe", TheOneProbeCompat::new);
+//		}
 	}
 }

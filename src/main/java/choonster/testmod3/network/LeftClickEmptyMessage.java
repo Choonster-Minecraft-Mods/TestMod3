@@ -2,10 +2,9 @@ package choonster.testmod3.network;
 
 import choonster.testmod3.world.item.ILeftClickEmpty;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 import java.util.Objects;
-import java.util.function.Supplier;
 
 /**
  * Sent to the server when a player left-clicks empty space with an {@link ILeftClickEmpty} item.
@@ -20,11 +19,11 @@ public class LeftClickEmptyMessage {
 		// No-op
 	}
 
-	public static void handle(final LeftClickEmptyMessage message, final Supplier<NetworkEvent.Context> ctx) {
-		final var player = Objects.requireNonNull(ctx.get().getSender());
+	public static void handle(final LeftClickEmptyMessage message, final CustomPayloadEvent.Context ctx) {
+		final var player = Objects.requireNonNull(ctx.getSender());
 
 		final var mainHand = player.getMainHandItem();
-		if (!(mainHand.getItem() instanceof ILeftClickEmpty leftClickEmpty)) {
+		if (!(mainHand.getItem() instanceof final ILeftClickEmpty leftClickEmpty)) {
 			return;
 		}
 

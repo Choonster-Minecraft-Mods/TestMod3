@@ -5,10 +5,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Supplier;
 
 /**
  * Base class for messages that update capability data for a single slot of an {@link AbstractContainerMenu}.
@@ -192,7 +190,7 @@ public abstract class UpdateMenuCapabilityMessage<HANDLER, DATA> {
 			>
 	void handle(
 			final MESSAGE message,
-			final Supplier<NetworkEvent.Context> ctx,
+			final CustomPayloadEvent.Context ctx,
 			final CapabilityMenuUpdateMessageUtils.CapabilityDataApplier<HANDLER, DATA> capabilityDataApplier
 	) {
 		final var player = ClientUtil.getClientPlayer();

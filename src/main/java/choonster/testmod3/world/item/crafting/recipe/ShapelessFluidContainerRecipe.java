@@ -2,12 +2,10 @@ package choonster.testmod3.world.item.crafting.recipe;
 
 import choonster.testmod3.util.ModFluidUtil;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -15,7 +13,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Collectors;
@@ -31,13 +28,12 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 	private final ItemStack result;
 
 	private ShapelessFluidContainerRecipe(
-			final ResourceLocation id,
 			final String group,
 			final CraftingBookCategory category,
 			final ItemStack result,
 			final NonNullList<Ingredient> ingredients
 	) {
-		super(id, group, category, result, ingredients);
+		super(group, category, result, ingredients);
 		this.result = result;
 	}
 
@@ -83,25 +79,25 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 	}
 
 	public static class Serializer implements RecipeSerializer<ShapelessFluidContainerRecipe> {
+		private static final Codec<ShapelessFluidContainerRecipe> CODEC = RecipeUtil.shapelessRecipeCodec(
+				ShapelessFluidContainerRecipe::new,
+				recipe -> recipe.result,
+				recipe -> recipe.getIngredients()
+						.stream()
+						.filter(ingredient -> ingredient instanceof FluidContainerIngredient)
+						.findFirst()
+						.map(ingredient -> DataResult.success(recipe))
+						.orElseGet(() -> DataResult.error(() -> "Recipe must have at least one testmod3:fluid_container ingredient"))
+		);
+
 		@Override
-		public ShapelessFluidContainerRecipe fromJson(final ResourceLocation recipeId, final JsonObject json) {
-			final var group = GsonHelper.getAsString(json, "group", "");
-			final var category = CraftingBookCategory.CODEC.byName(GsonHelper.getAsString(json, "category", null), CraftingBookCategory.MISC);
-			final var ingredients = RecipeUtil.parseShapeless(json);
-			final var result = CraftingHelper.getItemStack(GsonHelper.getAsJsonObject(json, "result"), true);
-
-			ingredients
-					.stream()
-					.filter(ingredient -> ingredient instanceof FluidContainerIngredient)
-					.findFirst()
-					.orElseThrow(() -> new JsonSyntaxException("Recipe must have at least one testmod3:fluid_container ingredient"));
-
-			return new ShapelessFluidContainerRecipe(recipeId, group, category, result, ingredients);
+		public Codec<ShapelessFluidContainerRecipe> codec() {
+			return CODEC;
 		}
 
 		@Nullable
 		@Override
-		public ShapelessFluidContainerRecipe fromNetwork(final ResourceLocation recipeId, final FriendlyByteBuf buffer) {
+		public ShapelessFluidContainerRecipe fromNetwork(final FriendlyByteBuf buffer) {
 			final var group = buffer.readUtf(Short.MAX_VALUE);
 			final var category = buffer.readEnum(CraftingBookCategory.class);
 			final var numIngredients = buffer.readVarInt();
@@ -111,7 +107,7 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 
 			final var result = buffer.readItem();
 
-			return new ShapelessFluidContainerRecipe(recipeId, group, category, result, ingredients);
+			return new ShapelessFluidContainerRecipe(group, category, result, ingredients);
 		}
 
 		@Override

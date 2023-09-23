@@ -1,20 +1,11 @@
 package choonster.testmod3.compat.waila;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.Property;
-import snownee.jade.api.BlockAccessor;
-import snownee.jade.api.IBlockComponentProvider;
-import snownee.jade.api.ITooltip;
-import snownee.jade.api.config.IPluginConfig;
-
 /**
  * Adds a line to the Waila tooltip body displaying the current value of an enum property.
  *
  * @author Choonster
  */
+/*
 public class EnumPropertyProvider<T extends Enum<T> & StringRepresentable> implements IBlockComponentProvider {
 	protected final ResourceLocation uid;
 	protected final int defaultPriority;
@@ -50,3 +41,4 @@ public class EnumPropertyProvider<T extends Enum<T> & StringRepresentable> imple
 		tooltip.add(Component.translatable(tooltipTranslationKey, Component.translatable(valueTranslationKey)));
 	}
 }
+*/

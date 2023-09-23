@@ -1,55 +1,64 @@
 package choonster.testmod3.serialization;
 
-import com.google.gson.JsonSyntaxException;
+import com.mojang.datafixers.Products;
 import com.mojang.datafixers.util.Pair;
-import com.mojang.logging.LogUtils;
-import com.mojang.serialization.*;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipeCodecs;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.IExtensibleEnum;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.common.loot.LootModifierManager;
-import org.slf4j.Logger;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * {@link Codec} implementations for various Vanilla classes.
+ * {@link Codec} implementations for various Vanilla and Forge classes.
  *
  * @author Choonster
  */
 public class VanillaCodecs {
-	private static final Logger LOGGER = LogUtils.getLogger();
-
-	public static final Codec<DyeColor> DYE_COLOR = StringRepresentable.fromEnum(DyeColor::values);
-
-	public static final Codec<LootItemFunction[]> LOOT_FUNCTIONS_CODEC = Codec.PASSTHROUGH.flatXmap(
-			d -> {
-				try {
-					var functions = LootModifierManager.GSON_INSTANCE.fromJson(
-							IGlobalLootModifier.getJson(d),
-							LootItemFunction[].class
-					);
-
-					return DataResult.success(functions);
-				} catch (JsonSyntaxException e) {
-					LOGGER.warn("Unable to decode loot functions", e);
-					return DataResult.error(e::getMessage);
-				}
-			},
-			functions -> {
-				try {
-					var element = LootModifierManager.GSON_INSTANCE.toJsonTree(functions);
-					return DataResult.success(new Dynamic<>(JsonOps.INSTANCE, element));
-				} catch (JsonSyntaxException e) {
-					LOGGER.warn("Unable to encode loot functions", e);
-					return DataResult.error(e::getMessage);
-				}
-			}
+	/**
+	 * Copy of the value from {@link CraftingRecipeCodecs}.
+	 */
+	public static final Codec<ItemStack> ITEMSTACK_NONAIR_CODEC = Objects.requireNonNull(
+			ObfuscationReflectionHelper.getPrivateValue(CraftingRecipeCodecs.class, null,  /* ITEMSTACK_NONAIR_CODEC */ "f_291030_")
 	);
+
+	/**
+	 * Prepares a Codec for {@link FluidStack} that uses lowercase field names, suitable for use in recipes/ingredients.
+	 */
+	public static Products.P3<
+			RecordCodecBuilder.Mu<FluidStack>,
+			Fluid,
+			Integer,
+			Optional<CompoundTag>
+			> fluidStack(final RecordCodecBuilder.Instance<FluidStack> instance) {
+		return instance.group(
+
+				ForgeRegistries.FLUIDS.getCodec()
+						.fieldOf("fluid")
+						.forGetter(FluidStack::getFluid),
+
+				Codec.INT
+						.fieldOf("amount")
+						.forGetter(FluidStack::getAmount),
+
+				CompoundTag.CODEC
+						.optionalFieldOf("nbt")
+						.forGetter(stack -> Optional.ofNullable(stack.getTag()))
+
+		);
+	}
 
 	/**
 	 * Creates a function that converts a name to its corresponding enum value by iterating through the array returned

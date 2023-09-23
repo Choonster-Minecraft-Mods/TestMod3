@@ -1,13 +1,13 @@
 package choonster.testmod3.world.item.crafting.ingredient;
 
 import choonster.testmod3.TestMod3;
-import com.google.gson.JsonObject;
-import net.minecraft.network.FriendlyByteBuf;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -15,9 +15,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 /**
- * An ingredient serializer that produces another {@link Ingredient} type, but only if the
+ * An ingredient codec that produces another {@link Ingredient} type, but only if the
  * specified conditions are met. If they aren't, it produces {@link IngredientNever#INSTANCE} instead.
  * <p>
  * JSON Properties:
@@ -33,28 +34,42 @@ import java.lang.reflect.Field;
  *
  * @author Choonster
  */
-public class ConditionalIngredientSerializer implements IIngredientSerializer<Ingredient> {
+public class ConditionalIngredientCodec {
+	public static final ResourceLocation TYPE = new ResourceLocation(TestMod3.MODID, "conditional");
 	private static final Field CONTEXT = ObfuscationReflectionHelper.findField(RecipeManager.class, "context");
 
 	private static ICondition.IContext context = ICondition.IContext.EMPTY;
 
-	@Override
-	public Ingredient parse(final JsonObject json) {
-		if (CraftingHelper.processConditions(json, "conditions", context)) {
-			return CraftingHelper.getIngredient(json.get("ingredient"), false);
-		}
+	public static final Codec<Data> DATA_CODEC = RecordCodecBuilder.<Data>create(builder -> builder.group(
 
-		return IngredientNever.INSTANCE;
-	}
+					ICondition.CODEC
+							.listOf()
+							.fieldOf("conditions")
+							.forGetter(Data::conditions),
 
-	@Override
-	public Ingredient parse(final FriendlyByteBuf buffer) {
-		throw new UnsupportedOperationException("Can't parse from PacketBuffer, use the Ingredient's own IIngredientSerializer instead");
-	}
+					Ingredient.CODEC_NONEMPTY
+							.fieldOf("ingredient")
+							.forGetter(Data::ingredient),
 
-	@Override
-	public void write(final FriendlyByteBuf buffer, final Ingredient ingredient) {
-		throw new UnsupportedOperationException("Can't write to PacketBuffer, use the Ingredient's own IIngredientSerializer instead");
+					ResourceLocation.CODEC
+							.fieldOf("type")
+							.forGetter((_data) -> TYPE)
+
+			).apply(builder, (conditions, ingredient, _type) -> new Data(conditions, ingredient))
+	);
+
+	public static Codec<Ingredient> CODEC = DATA_CODEC.flatComapMap(
+			data -> {
+				var conditionsMatch = data.conditions
+						.stream()
+						.allMatch(condition -> condition.test(context));
+
+				return conditionsMatch ? data.ingredient() : IngredientNever.INSTANCE;
+			},
+			ingredient -> DataResult.error(() -> "Can't convert Ingredient back to ConditionalIngredientCodec.Data")
+	);
+
+	public record Data(List<ICondition> conditions, Ingredient ingredient) {
 	}
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)

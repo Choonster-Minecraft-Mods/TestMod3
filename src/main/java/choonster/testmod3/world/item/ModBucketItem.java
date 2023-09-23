@@ -161,7 +161,7 @@ public class ModBucketItem extends Item {
 			result = ItemUtils.createFilledResult(heldItem, player, filledBucket);
 		} else {
 			final var destState = level.getBlockState(pos);
-			final var destPos = canBlockContainFluid(level, pos, direction, destState, fluidStack) ? pos : adjacentPos;
+			final var destPos = canBlockContainFluid(player, level, pos, direction, destState, fluidStack) ? pos : adjacentPos;
 
 			final var placeResultPair = tryPlaceContainedFluid(
 					player, hand, heldItem, fluidStack,
@@ -195,20 +195,19 @@ public class ModBucketItem extends Item {
 		final var fluid = fluidStack.getFluid();
 
 		if (level.dimensionType().ultraWarm() && fluid.getFluidType().isVaporizedOnPlacement(level, pos, fluidStack)) {
-
 			fluid.getFluidType().onVaporize(player, level, pos, fluidStack);
 
 			return Pair.of(new FluidActionResult(empty()), pos);
 		}
 
 		// If the fluid is a flowing fluid,
-		if (fluid instanceof FlowingFluid) {
+		if (fluid instanceof final FlowingFluid flowingFluid) {
 			final var destState = level.getBlockState(pos);
 			final var destBlock = destState.getBlock();
 
-			// Try to place the fluid in a Vanilla ILiquidContainer block
-			if (destBlock instanceof LiquidBlockContainer && ((LiquidBlockContainer) destBlock).canPlaceLiquid(level, pos, destState, fluid)) {
-				((LiquidBlockContainer) destBlock).placeLiquid(level, pos, destState, ((FlowingFluid) fluid).getSource(false));
+			// Try to place the fluid in a Vanilla LiquidBlockContainer block
+			if (destBlock instanceof final LiquidBlockContainer block && block.canPlaceLiquid(player, level, pos, destState, fluid)) {
+				block.placeLiquid(level, pos, destState, flowingFluid.getSource(false));
 
 				final var soundEvent = fluid.getFluidType().getSound(fluidStack, SoundActions.BUCKET_EMPTY);
 				if (soundEvent != null) {
@@ -242,12 +241,12 @@ public class ModBucketItem extends Item {
 	}
 
 	private boolean canBlockContainFluid(
-			final Level level, final BlockPos posIn, final Direction direction,
-			final BlockState blockState, final FluidStack fluidStack
+			final Player player, final Level level, final BlockPos posIn,
+			final Direction direction, final BlockState blockState, final FluidStack fluidStack
 	) {
-		// If the block implements ILiquidContainer, check if it can contain the fluid
-		if (blockState.getBlock() instanceof LiquidBlockContainer) {
-			return ((LiquidBlockContainer) blockState.getBlock()).canPlaceLiquid(level, posIn, blockState, fluidStack.getFluid());
+		// If the block implements LiquidBlockContainer, check if it can contain the fluid
+		if (blockState.getBlock() instanceof final LiquidBlockContainer block) {
+			return block.canPlaceLiquid(player, level, posIn, blockState, fluidStack.getFluid());
 		}
 
 		// Otherwise, check if there's an IFluidHandler that can be filled with the entire FluidStack

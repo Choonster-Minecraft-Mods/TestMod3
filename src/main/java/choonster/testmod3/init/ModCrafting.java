@@ -2,16 +2,11 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.util.RegistryUtil;
-import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredientSerializer;
-import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
-import choonster.testmod3.world.item.crafting.ingredient.IngredientNever;
-import choonster.testmod3.world.item.crafting.ingredient.MobSpawnerIngredientSerializer;
 import choonster.testmod3.world.item.crafting.recipe.ShapedArmourUpgradeRecipe;
 import choonster.testmod3.world.item.crafting.recipe.ShapelessCuttingRecipe;
 import choonster.testmod3.world.item.crafting.recipe.ShapelessFluidContainerRecipe;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
@@ -22,9 +17,6 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.*;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.minecraftforge.common.crafting.PartialNBTIngredient;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -90,6 +82,7 @@ public class ModCrafting {
 		}
 	}
 
+/*
 	public static class Ingredients {
 		public static final IIngredientSerializer<Ingredient> CONDITIONAL = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "conditional"), new ConditionalIngredientSerializer());
 		public static final IIngredientSerializer<FluidContainerIngredient> FLUID_CONTAINER = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "fluid_container"), new FluidContainerIngredient.Serializer());
@@ -100,6 +93,7 @@ public class ModCrafting {
 			// No-op method to ensure that this class is loaded and its static initialisers are run
 		}
 	}
+*/
 
 	public static class Recipes {
 		private static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, TestMod3.MODID);
@@ -198,22 +192,22 @@ public class ModCrafting {
 		 * @return The number of recipes removed
 		 */
 		private static int removeRecipes(final RecipeManager recipeManager, final Predicate<Recipe<?>> predicate) {
-			final Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> existingRecipes;
+			final Map<RecipeType<?>, Map<ResourceLocation, RecipeHolder<?>>> existingRecipes;
 			try {
-				@SuppressWarnings("unchecked") final var recipesMap = (Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>>) RECIPES.get(recipeManager);
+				@SuppressWarnings("unchecked") final var recipesMap = (Map<RecipeType<?>, Map<ResourceLocation, RecipeHolder<?>>>) RECIPES.get(recipeManager);
 				existingRecipes = recipesMap;
 			} catch (final IllegalAccessException e) {
 				throw new RuntimeException("Couldn't get recipes map while removing recipes", e);
 			}
 
-			final Object2IntMap<RecipeType<?>> removedCounts = new Object2IntOpenHashMap<>();
-			final ImmutableMap.Builder<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> newRecipes = ImmutableMap.builder();
+			final var removedCounts = new Object2IntOpenHashMap<RecipeType<?>>();
+			final var newRecipes = ImmutableMap.<RecipeType<?>, Map<ResourceLocation, RecipeHolder<?>>>builder();
 
 			// For each recipe type, create a new map that doesn't contain the recipes to be removed
 			existingRecipes.forEach((recipeType, existingRecipesForType) -> {
-				final ImmutableMap<ResourceLocation, Recipe<?>> newRecipesForType = existingRecipesForType.entrySet()
+				final ImmutableMap<ResourceLocation, RecipeHolder<?>> newRecipesForType = existingRecipesForType.entrySet()
 						.stream()
-						.filter(entry -> !predicate.test(entry.getValue()))
+						.filter(entry -> !predicate.test(entry.getValue().value()))
 						.collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, Map.Entry::getValue));
 
 				removedCounts.put(recipeType, existingRecipesForType.size() - newRecipesForType.size());

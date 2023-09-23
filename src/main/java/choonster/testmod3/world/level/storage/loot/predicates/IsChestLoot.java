@@ -1,11 +1,8 @@
 package choonster.testmod3.world.level.storage.loot.predicates;
 
 import choonster.testmod3.init.ModLootConditionTypes;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
+import com.mojang.serialization.Codec;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.Serializer;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
@@ -17,6 +14,8 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
  */
 public class IsChestLoot implements LootItemCondition {
 	private static final IsChestLoot INSTANCE = new IsChestLoot();
+
+	public static final Codec<IsChestLoot> CODEC = Codec.unit(INSTANCE);
 
 	private IsChestLoot() {
 	}
@@ -43,17 +42,5 @@ public class IsChestLoot implements LootItemCondition {
 
 	public static LootItemCondition.Builder builder() {
 		return () -> INSTANCE;
-	}
-
-	public static class ConditionSerializer implements Serializer<IsChestLoot> {
-		@Override
-		public void serialize(final JsonObject object, final IsChestLoot instance, final JsonSerializationContext context) {
-			// No-op
-		}
-
-		@Override
-		public IsChestLoot deserialize(final JsonObject object, final JsonDeserializationContext context) {
-			return IsChestLoot.INSTANCE;
-		}
 	}
 }
