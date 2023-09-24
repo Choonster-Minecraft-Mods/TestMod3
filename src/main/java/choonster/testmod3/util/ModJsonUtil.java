@@ -16,7 +16,7 @@ public class ModJsonUtil {
 	 *
 	 * @param codec The codec
 	 * @param input The input
-	 * @param <T>   The ingredient type
+	 * @param <T>   The input type
 	 * @return The serialised JSON
 	 */
 	public static <T> JsonElement toJson(final Codec<T> codec, final T input) {
