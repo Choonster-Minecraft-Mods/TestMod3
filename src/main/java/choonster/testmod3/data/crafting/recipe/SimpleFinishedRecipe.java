@@ -30,7 +30,7 @@ public class SimpleFinishedRecipe extends DelegateFinishedRecipe {
 		super.serializeRecipeData(json);
 
 		if (resultNBT != null) {
-			ModJsonUtil.setCompoundTag(json.getAsJsonObject("result"), "nbt", resultNBT);
+			json.add("nbt", ModJsonUtil.toJson(CompoundTag.CODEC, resultNBT));
 		}
 	}
 

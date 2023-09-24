@@ -3,6 +3,7 @@ package choonster.testmod3.world.item.crafting.ingredient;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.serialization.VanillaCodecs;
 import choonster.testmod3.util.ModFluidUtil;
+import choonster.testmod3.util.ModJsonUtil;
 import choonster.testmod3.util.RegistryUtil;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
@@ -37,7 +38,7 @@ public class FluidContainerIngredient extends Ingredient {
 	public static Codec<FluidContainerIngredient> CODEC = RecordCodecBuilder.<FluidStack>create(instance ->
 			VanillaCodecs.fluidStack(instance)
 					.and(
-							
+
 							ResourceLocation.CODEC
 									.fieldOf("type")
 									.forGetter((x) -> TYPE)
@@ -116,7 +117,7 @@ public class FluidContainerIngredient extends Ingredient {
 
 	@Override
 	public JsonElement toJson(final boolean allowEmpty) {
-		return IngredientUtil.toJson(CODEC, this);
+		return ModJsonUtil.toJson(CODEC, this);
 	}
 
 	public FluidStack getFluidStack() {

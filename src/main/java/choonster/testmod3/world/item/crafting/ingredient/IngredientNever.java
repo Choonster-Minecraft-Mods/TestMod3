@@ -1,6 +1,7 @@
 package choonster.testmod3.world.item.crafting.ingredient;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.util.ModJsonUtil;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -49,6 +50,6 @@ public class IngredientNever extends Ingredient {
 
 	@Override
 	public JsonElement toJson(final boolean allowEmpty) {
-		return IngredientUtil.toJson(CODEC, this);
+		return ModJsonUtil.toJson(CODEC, this);
 	}
 }

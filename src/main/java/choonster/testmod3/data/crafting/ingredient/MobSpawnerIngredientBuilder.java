@@ -1,6 +1,6 @@
 package choonster.testmod3.data.crafting.ingredient;
 
-import choonster.testmod3.world.item.crafting.ingredient.IngredientUtil;
+import choonster.testmod3.util.ModJsonUtil;
 import choonster.testmod3.world.item.crafting.ingredient.MobSpawnerIngredientCodec;
 import com.google.gson.JsonElement;
 import net.minecraft.world.entity.EntityType;
@@ -103,7 +103,7 @@ public class MobSpawnerIngredientBuilder {
 		public JsonElement toJson(final boolean p_299391_) {
 			final var data = new MobSpawnerIngredientCodec.Data(spawner, entityType);
 
-			return IngredientUtil.toJson(MobSpawnerIngredientCodec.DATA_CODEC, data);
+			return ModJsonUtil.toJson(MobSpawnerIngredientCodec.DATA_CODEC, data);
 		}
 	}
 }

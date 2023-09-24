@@ -1,7 +1,7 @@
 package choonster.testmod3.data.crafting.ingredient;
 
+import choonster.testmod3.util.ModJsonUtil;
 import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredientCodec;
-import choonster.testmod3.world.item.crafting.ingredient.IngredientUtil;
 import com.google.gson.JsonElement;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -100,7 +100,7 @@ public class ConditionalIngredientBuilder {
 		public JsonElement toJson(final boolean allowEmpty) {
 			final var data = new ConditionalIngredientCodec.Data(conditions, ingredient);
 
-			return IngredientUtil.toJson(ConditionalIngredientCodec.DATA_CODEC, data);
+			return ModJsonUtil.toJson(ConditionalIngredientCodec.DATA_CODEC, data);
 		}
 	}
 }
