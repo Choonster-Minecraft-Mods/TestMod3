@@ -1,17 +1,17 @@
 package choonster.testmod3.world.item.crafting.ingredient;
 
-import choonster.testmod3.TestMod3;
+import choonster.testmod3.init.ModCrafting;
 import choonster.testmod3.serialization.VanillaCodecs;
 import choonster.testmod3.util.ModFluidUtil;
-import choonster.testmod3.util.ModJsonUtil;
 import choonster.testmod3.util.RegistryUtil;
-import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.common.crafting.ingredients.AbstractIngredient;
+import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -32,23 +32,16 @@ import java.util.stream.Stream;
  *
  * @author Choonster
  */
-public class FluidContainerIngredient extends Ingredient {
-	private static final ResourceLocation TYPE = new ResourceLocation(TestMod3.MODID, "fluid_container");
-
+public class FluidContainerIngredient extends AbstractIngredient {
 	public static Codec<FluidContainerIngredient> CODEC = RecordCodecBuilder.<FluidStack>create(instance ->
+
 			VanillaCodecs.fluidStack(instance)
-					.and(
-
-							ResourceLocation.CODEC
-									.fieldOf("type")
-									.forGetter((x) -> TYPE)
-
-					)
-					.apply(instance, (fluid, amount, tag, type) -> {
+					.apply(instance, (fluid, amount, tag) -> {
 						final var stack = new FluidStack(fluid, amount);
 						tag.ifPresent(stack::setTag);
 						return stack;
 					})
+
 	).xmap(FluidContainerIngredient::new, FluidContainerIngredient::getFluidStack);
 
 	private final FluidStack fluidStack;
@@ -67,6 +60,11 @@ public class FluidContainerIngredient extends Ingredient {
 	@Override
 	public boolean isSimple() {
 		return false;
+	}
+
+	@Override
+	public IIngredientSerializer<? extends Ingredient> serializer() {
+		return ModCrafting.Ingredients.FLUID_CONTAINER.get();
 	}
 
 	@Override
@@ -115,12 +113,26 @@ public class FluidContainerIngredient extends Ingredient {
 				.isPresent();
 	}
 
-	@Override
-	public JsonElement toJson(final boolean allowEmpty) {
-		return ModJsonUtil.toJson(CODEC, this);
-	}
-
 	public FluidStack getFluidStack() {
 		return fluidStack;
+	}
+
+	public static class Serializer implements IIngredientSerializer<FluidContainerIngredient> {
+		@Override
+		public Codec<? extends FluidContainerIngredient> codec() {
+			return CODEC;
+		}
+
+		@Override
+		public FluidContainerIngredient read(final FriendlyByteBuf buffer) {
+			final FluidStack fluidStack = buffer.readFluidStack();
+
+			return new FluidContainerIngredient(fluidStack);
+		}
+
+		@Override
+		public void write(final FriendlyByteBuf buffer, final FluidContainerIngredient ingredient) {
+			buffer.writeFluidStack(ingredient.fluidStack);
+		}
 	}
 }

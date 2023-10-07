@@ -63,7 +63,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.define(
 							'C',
 							ConditionalIngredientBuilder.conditionalIngredient(Blocks.COBBLESTONE)
-									.addCondition(FalseCondition.INSTANCE)
+									.condition(FalseCondition.INSTANCE)
 									.build()
 					)
 					.define('c', Blocks.COBBLESTONE)

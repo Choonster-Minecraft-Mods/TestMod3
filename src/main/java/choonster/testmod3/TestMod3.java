@@ -44,6 +44,7 @@ public class TestMod3 {
 		ModFeatures.initialise(modEventBus);
 		ModLootModifierSerializers.initialise(modEventBus);
 		ModPotions.initialise(modEventBus);
+		ModCrafting.Ingredients.initialise(modEventBus);
 		ModCrafting.Recipes.initialise(modEventBus);
 		ModSoundEvents.initialise(modEventBus);
 		ModBlockEntities.initialise(modEventBus);
@@ -63,8 +64,6 @@ public class TestMod3 {
 		LOGGER.warn("****************************************");
 
 		event.enqueueWork(() -> {
-			// TODO: Custom Ingredients
-//			ModCrafting.Ingredients.register();
 			ModCriterion.register();
 			ModLootTables.registerLootTables();
 

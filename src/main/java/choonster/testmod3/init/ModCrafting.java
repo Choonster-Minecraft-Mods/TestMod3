@@ -2,6 +2,10 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.util.RegistryUtil;
+import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredientSerializer;
+import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
+import choonster.testmod3.world.item.crafting.ingredient.IngredientNever;
+import choonster.testmod3.world.item.crafting.ingredient.MobSpawnerIngredientSerializer;
 import choonster.testmod3.world.item.crafting.recipe.ShapedArmourUpgradeRecipe;
 import choonster.testmod3.world.item.crafting.recipe.ShapelessCuttingRecipe;
 import choonster.testmod3.world.item.crafting.recipe.ShapelessFluidContainerRecipe;
@@ -17,6 +21,7 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.*;
+import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -82,18 +87,44 @@ public class ModCrafting {
 		}
 	}
 
-/*
 	public static class Ingredients {
-		public static final IIngredientSerializer<Ingredient> CONDITIONAL = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "conditional"), new ConditionalIngredientSerializer());
-		public static final IIngredientSerializer<FluidContainerIngredient> FLUID_CONTAINER = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "fluid_container"), new FluidContainerIngredient.Serializer());
-		public static final IIngredientSerializer<PartialNBTIngredient> MOB_SPAWNER = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "mob_spawner"), new MobSpawnerIngredientSerializer());
-		public static final IIngredientSerializer<IngredientNever> NEVER = CraftingHelper.register(new ResourceLocation(TestMod3.MODID, "never"), new IngredientNever.Serializer());
+		private static final DeferredRegister<IIngredientSerializer<?>> INGREDIENT_SERIALIZERS = DeferredRegister.create(ForgeRegistries.INGREDIENT_SERIALIZERS, TestMod3.MODID);
 
-		public static void register() {
-			// No-op method to ensure that this class is loaded and its static initialisers are run
+		private static boolean isInitialised;
+
+		public static final RegistryObject<IIngredientSerializer<Ingredient>> CONDITIONAL = INGREDIENT_SERIALIZERS.register("conditional",
+				ConditionalIngredientSerializer::new
+		);
+
+		public static final RegistryObject<IIngredientSerializer<FluidContainerIngredient>> FLUID_CONTAINER = INGREDIENT_SERIALIZERS.register("fluid_container",
+				FluidContainerIngredient.Serializer::new
+		);
+
+		public static final RegistryObject<MobSpawnerIngredientSerializer> MOB_SPAWNER = INGREDIENT_SERIALIZERS.register("mob_spawner",
+				MobSpawnerIngredientSerializer::new
+		);
+
+		public static final RegistryObject<IngredientNever.Serializer> NEVER = INGREDIENT_SERIALIZERS.register("never",
+				IngredientNever.Serializer::new
+		);
+
+		/**
+		 * Registers the {@link DeferredRegister} instance with the mod event bus.
+		 * <p>
+		 * This should be called during mod construction.
+		 *
+		 * @param modEventBus The mod event bus
+		 */
+		public static void initialise(final IEventBus modEventBus) {
+			if (isInitialised) {
+				throw new IllegalStateException("Already initialised");
+			}
+
+			INGREDIENT_SERIALIZERS.register(modEventBus);
+
+			isInitialised = true;
 		}
 	}
-*/
 
 	public static class Recipes {
 		private static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, TestMod3.MODID);

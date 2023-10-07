@@ -1,26 +1,30 @@
 package choonster.testmod3.data.crafting.ingredient;
 
+import choonster.testmod3.init.ModCrafting;
 import choonster.testmod3.util.ModJsonUtil;
-import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredientCodec;
+import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredientSerializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.crafting.conditions.ICondition;
+import net.minecraftforge.common.crafting.ingredients.AbstractIngredient;
+import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Builds an {@link Ingredient} that can be deserialised by {@link ConditionalIngredientCodec}.
+ * Builds an {@link Ingredient} that can be deserialised by {@link ConditionalIngredientSerializer}.
  *
  * @author Choonster
  */
 public class ConditionalIngredientBuilder {
-	private final List<ICondition> conditions = new ArrayList<>();
+	@Nullable
+	private ICondition condition = null;
 	private final Ingredient ingredient;
 
 	private ConditionalIngredientBuilder(final Ingredient ingredient) {
@@ -48,27 +52,18 @@ public class ConditionalIngredientBuilder {
 	}
 
 	/**
-	 * Adds a condition without any extra data.
+	 * Sets the condition for the ingredient.
 	 *
 	 * @param condition The condition
 	 * @return This builder
 	 */
-	public ConditionalIngredientBuilder addCondition(final ICondition condition) {
-		conditions.add(condition);
-		return this;
-	}
-
-	/**
-	 * Validates that the ingredient has at least one condition.
-	 */
-	private void validate() {
-		if (conditions.isEmpty()) {
-			final var stacks = Arrays.stream(ingredient.getItems())
-					.map(ItemStack::toString)
-					.collect(Collectors.joining(","));
-
-			throw new IllegalStateException("Conditional ingredient producing [" + stacks + "] has no conditions");
+	public ConditionalIngredientBuilder condition(final ICondition condition) {
+		if (this.condition != null) {
+			throw new IllegalStateException("Attempted to override condition");
 		}
+
+		this.condition = condition;
+		return this;
 	}
 
 	/**
@@ -77,8 +72,15 @@ public class ConditionalIngredientBuilder {
 	 * @return The Ingredient
 	 */
 	public Result build() {
-		validate();
-		return new Result(conditions, ingredient);
+		if (condition == null) {
+			final var stacks = Arrays.stream(ingredient.getItems())
+					.map(ItemStack::toString)
+					.collect(Collectors.joining(","));
+
+			throw new IllegalStateException("Conditional ingredient producing [" + stacks + "] has no conditions");
+		}
+
+		return new Result(condition, ingredient);
 	}
 
 	/**
@@ -86,21 +88,35 @@ public class ConditionalIngredientBuilder {
 	 * <p>
 	 * Note: This is only intended for use during recipe generation, it won't match any items if used in a recipe during gameplay.
 	 */
-	public static class Result extends Ingredient {
-		private final List<ICondition> conditions;
+	public static class Result extends AbstractIngredient {
+		private final ICondition condition;
 		private final Ingredient ingredient;
 
-		private Result(final List<ICondition> conditions, final Ingredient ingredient) {
+		private Result(final ICondition condition, final Ingredient ingredient) {
 			super(Stream.empty());
-			this.conditions = conditions;
+			this.condition = condition;
 			this.ingredient = ingredient;
 		}
 
 		@Override
-		public JsonElement toJson(final boolean allowEmpty) {
-			final var data = new ConditionalIngredientCodec.Data(conditions, ingredient);
+		public boolean isSimple() {
+			return false;
+		}
 
-			return ModJsonUtil.toJson(ConditionalIngredientCodec.DATA_CODEC, data);
+		@Override
+		public IIngredientSerializer<? extends Ingredient> serializer() {
+			return ModCrafting.Ingredients.CONDITIONAL.get();
+		}
+
+		@Override
+		public JsonElement toJson(final boolean allowEmpty) {
+			final var output = (JsonObject) ModJsonUtil.toJson(ConditionalIngredientSerializer.CODEC, ingredient);
+
+			// Manually add the type and condition to the output
+			output.addProperty("type", ModCrafting.Ingredients.CONDITIONAL.getId().toString());
+			output.add(ICondition.DEFAULT_FIELD, ModJsonUtil.toJson(ICondition.CODEC, condition));
+
+			return output;
 		}
 	}
 }

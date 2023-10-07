@@ -1,13 +1,12 @@
 package choonster.testmod3.world.item.crafting.ingredient;
 
-import choonster.testmod3.TestMod3;
-import choonster.testmod3.util.ModJsonUtil;
-import com.google.gson.JsonElement;
+import choonster.testmod3.init.ModCrafting;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.common.crafting.ingredients.AbstractIngredient;
+import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
 
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
@@ -21,18 +20,10 @@ import java.util.stream.Stream;
  * @author Choonster
  */
 @SuppressWarnings("unused")
-public class IngredientNever extends Ingredient {
-	private static final ResourceLocation TYPE = new ResourceLocation(TestMod3.MODID, "never");
+public class IngredientNever extends AbstractIngredient {
 	public static final IngredientNever INSTANCE = new IngredientNever();
 
-	public static Codec<IngredientNever> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-
-					ResourceLocation.CODEC
-							.fieldOf("type")
-							.forGetter((x) -> TYPE)
-
-			).apply(instance, (_type) -> INSTANCE)
-	);
+	public static Codec<IngredientNever> CODEC = Codec.unit(INSTANCE);
 
 	private IngredientNever() {
 		super(Stream.empty());
@@ -49,7 +40,24 @@ public class IngredientNever extends Ingredient {
 	}
 
 	@Override
-	public JsonElement toJson(final boolean allowEmpty) {
-		return ModJsonUtil.toJson(CODEC, this);
+	public IIngredientSerializer<? extends Ingredient> serializer() {
+		return ModCrafting.Ingredients.NEVER.get();
+	}
+
+	public static class Serializer implements IIngredientSerializer<IngredientNever> {
+		@Override
+		public Codec<? extends IngredientNever> codec() {
+			return CODEC;
+		}
+
+		@Override
+		public IngredientNever read(final FriendlyByteBuf buffer) {
+			return IngredientNever.INSTANCE;
+		}
+
+		@Override
+		public void write(final FriendlyByteBuf buffer, final IngredientNever ingredient) {
+			// No-op
+		}
 	}
 }
