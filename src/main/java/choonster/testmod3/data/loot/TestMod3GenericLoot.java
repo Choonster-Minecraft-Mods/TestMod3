@@ -17,6 +17,8 @@ import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
 import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraftforge.common.crafting.conditions.FalseCondition;
+import net.minecraftforge.common.crafting.conditions.TrueCondition;
 
 import java.util.function.BiConsumer;
 
@@ -60,6 +62,27 @@ public class TestMod3GenericLoot implements LootTableSubProvider {
 												LootItem.lootTableItem(Items.WOODEN_AXE)
 														.setWeight(1)
 														.apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.28f, 0.28f)))
+										)
+						)
+		);
+
+		consumer.accept(
+				ModLootTables.CONDITIONAL_TEST,
+				LootTable.lootTable()
+						.withPool(
+								LootPool.lootPool()
+										.name("conditional_false")
+										.when(FalseCondition.INSTANCE)
+										.add(
+												LootItem.lootTableItem(Items.COBBLESTONE)
+										)
+						)
+						.withPool(
+								LootPool.lootPool()
+										.name("conditional_true")
+										.when(TrueCondition.INSTANCE)
+										.add(
+												LootItem.lootTableItem(Items.ENDER_EYE)
 										)
 						)
 		);

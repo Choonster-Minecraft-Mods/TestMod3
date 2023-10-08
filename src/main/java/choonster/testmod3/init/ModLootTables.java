@@ -19,6 +19,8 @@ import static choonster.testmod3.init.ModLootTables.RegistrationHandler.register
 public class ModLootTables {
 	public static final ResourceLocation LOOT_TABLE_TEST = register("loot_table_test");
 
+	public static final ResourceLocation CONDITIONAL_TEST = register("conditional_test");
+
 	public static void registerLootTables() {
 		// No-op method to ensure that this class is loaded and its static initialisers are run
 	}

@@ -1,0 +1,35 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:cobblestone"
+        }
+      ],
+      "forge:condition": {
+        "type": "forge:false",
+        "value": {}
+      },
+      "name": "conditional_false",
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:ender_eye"
+        }
+      ],
+      "forge:condition": {
+        "type": "forge:true",
+        "value": {}
+      },
+      "name": "conditional_true",
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "testmod3:conditional_test"
+}
