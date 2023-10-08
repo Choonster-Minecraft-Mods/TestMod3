@@ -1,30 +1,23 @@
 package choonster.testmod3.data.crafting.ingredient;
 
-import choonster.testmod3.init.ModCrafting;
-import choonster.testmod3.util.ModJsonUtil;
-import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredientSerializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredient;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.ingredients.AbstractIngredient;
-import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
- * Builds an {@link Ingredient} that can be deserialised by {@link ConditionalIngredientSerializer}.
+ * Builder for {@link ConditionalIngredient}.
  *
  * @author Choonster
  */
 public class ConditionalIngredientBuilder {
 	@Nullable
-	private ICondition condition = null;
+	private ICondition condition;
 	private final Ingredient ingredient;
 
 	private ConditionalIngredientBuilder(final Ingredient ingredient) {
@@ -71,7 +64,7 @@ public class ConditionalIngredientBuilder {
 	 *
 	 * @return The Ingredient
 	 */
-	public Result build() {
+	public ConditionalIngredient build() {
 		if (condition == null) {
 			final var stacks = Arrays.stream(ingredient.getItems())
 					.map(ItemStack::toString)
@@ -80,43 +73,6 @@ public class ConditionalIngredientBuilder {
 			throw new IllegalStateException("Conditional ingredient producing [" + stacks + "] has no conditions");
 		}
 
-		return new Result(condition, ingredient);
-	}
-
-	/**
-	 * An {@link Ingredient} that serialises into JSON that can be deserialised by ConditionalIngredientSerializer.
-	 * <p>
-	 * Note: This is only intended for use during recipe generation, it won't match any items if used in a recipe during gameplay.
-	 */
-	public static class Result extends AbstractIngredient {
-		private final ICondition condition;
-		private final Ingredient ingredient;
-
-		private Result(final ICondition condition, final Ingredient ingredient) {
-			super(Stream.empty());
-			this.condition = condition;
-			this.ingredient = ingredient;
-		}
-
-		@Override
-		public boolean isSimple() {
-			return false;
-		}
-
-		@Override
-		public IIngredientSerializer<? extends Ingredient> serializer() {
-			return ModCrafting.Ingredients.CONDITIONAL.get();
-		}
-
-		@Override
-		public JsonElement toJson(final boolean allowEmpty) {
-			final var output = (JsonObject) ModJsonUtil.toJson(ConditionalIngredientSerializer.CODEC, ingredient);
-
-			// Manually add the type and condition to the output
-			output.addProperty("type", ModCrafting.Ingredients.CONDITIONAL.getId().toString());
-			output.add(ICondition.DEFAULT_FIELD, ModJsonUtil.toJson(ICondition.CODEC, condition));
-
-			return output;
-		}
+		return new ConditionalIngredient(condition, ingredient);
 	}
 }

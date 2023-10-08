@@ -2,10 +2,10 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.util.RegistryUtil;
-import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredientSerializer;
+import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredient;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
 import choonster.testmod3.world.item.crafting.ingredient.IngredientNever;
-import choonster.testmod3.world.item.crafting.ingredient.MobSpawnerIngredientSerializer;
+import choonster.testmod3.world.item.crafting.ingredient.MobSpawnerIngredient;
 import choonster.testmod3.world.item.crafting.recipe.ShapedArmourUpgradeRecipe;
 import choonster.testmod3.world.item.crafting.recipe.ShapelessCuttingRecipe;
 import choonster.testmod3.world.item.crafting.recipe.ShapelessFluidContainerRecipe;
@@ -93,15 +93,15 @@ public class ModCrafting {
 		private static boolean isInitialised;
 
 		public static final RegistryObject<IIngredientSerializer<Ingredient>> CONDITIONAL = INGREDIENT_SERIALIZERS.register("conditional",
-				ConditionalIngredientSerializer::new
+				() -> ConditionalIngredient.SERIALIZER
 		);
 
 		public static final RegistryObject<IIngredientSerializer<FluidContainerIngredient>> FLUID_CONTAINER = INGREDIENT_SERIALIZERS.register("fluid_container",
 				FluidContainerIngredient.Serializer::new
 		);
 
-		public static final RegistryObject<MobSpawnerIngredientSerializer> MOB_SPAWNER = INGREDIENT_SERIALIZERS.register("mob_spawner",
-				MobSpawnerIngredientSerializer::new
+		public static final RegistryObject<MobSpawnerIngredient.Serializer> MOB_SPAWNER = INGREDIENT_SERIALIZERS.register("mob_spawner",
+				() -> MobSpawnerIngredient.SERIALIZER
 		);
 
 		public static final RegistryObject<IngredientNever.Serializer> NEVER = INGREDIENT_SERIALIZERS.register("never",

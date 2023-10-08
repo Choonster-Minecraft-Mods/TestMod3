@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "forge:condition": {
+    "type": "forge:false",
+    "value": {}
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:wooden_axe"
+    },
+    {
+      "item": "minecraft:wooden_axe"
+    }
+  ],
+  "result": {
+    "item": "minecraft:oak_log"
+  }
+}

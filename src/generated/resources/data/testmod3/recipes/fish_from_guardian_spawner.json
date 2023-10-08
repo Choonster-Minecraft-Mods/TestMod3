@@ -4,8 +4,10 @@
   "ingredients": [
     {
       "type": "testmod3:mob_spawner",
-      "entity": "minecraft:guardian",
-      "item": "minecraft:spawner"
+      "value": {
+        "entity": "minecraft:guardian",
+        "item": "minecraft:spawner"
+      }
     }
   ],
   "result": {

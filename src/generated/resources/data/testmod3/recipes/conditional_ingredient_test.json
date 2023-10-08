@@ -4,14 +4,14 @@
   "key": {
     "C": {
       "type": "testmod3:conditional",
-      "conditions": [
-        {
+      "value": {
+        "forge:condition": {
           "type": "forge:false",
           "value": {}
+        },
+        "ingredient": {
+          "item": "minecraft:cobblestone"
         }
-      ],
-      "ingredient": {
-        "item": "minecraft:cobblestone"
       }
     },
     "c": {

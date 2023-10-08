@@ -71,8 +71,18 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.save(output, new ResourceLocation(TestMod3.MODID, "conditional_ingredient_test"));
 		}
 
+		// A recipe whose conditions are never met
+		{
+			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, Blocks.OAK_LOG)
+					.condition(FalseCondition.INSTANCE)
+					.requires(Items.WOODEN_AXE)
+					.requires(Items.WOODEN_AXE)
+					.unlockedBy("has_axe", has(Items.WOODEN_AXE))
+					.save(output, new ResourceLocation(TestMod3.MODID, "conditional_recipe_test"));
+		}
+
 		// Craft eight Raw Cod from a Guardian Spawner
-		// Test for MobSpawnerIngredientSerializer
+		// Test for MobSpawnerIngredient
 		{
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, Items.COD, 8)
 					.requires(
