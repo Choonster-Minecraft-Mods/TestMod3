@@ -11,6 +11,7 @@ import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 
 /**
@@ -45,9 +46,10 @@ public class ModArrow extends Arrow implements IEntityAdditionalSpawnData {
 		return new ItemStack(ModItems.ARROW.get());
 	}
 
+	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return super.getAddEntityPacket(); // TODO: NetworkHooks.getEntitySpawningPacket(this);
+		return ForgeHooks.getEntitySpawnPacket(this);
 	}
 
 	@Override
