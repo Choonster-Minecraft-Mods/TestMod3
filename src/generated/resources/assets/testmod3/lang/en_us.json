@@ -109,6 +109,7 @@
   "fluid_type.testmod3.portal_displacement": "Portal Displacement Fluid",
   "fluid_type.testmod3.static": "Static Fluid",
   "fluid_type.testmod3.static_gas": "Static Gas",
+  "ingredient.testmod3.never": "Never Ingredient - Uncraftable",
   "item.minecraft.lingering_potion.effect.testmod3.test": "Lingering Potion of Testing",
   "item.minecraft.potion.effect.testmod3.test": "Potion of Testing",
   "item.minecraft.splash_potion.effect.testmod3.test": "Splash Potion of Testing",

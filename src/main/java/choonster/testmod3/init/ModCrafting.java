@@ -4,8 +4,8 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.util.RegistryUtil;
 import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredient;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
-import choonster.testmod3.world.item.crafting.ingredient.IngredientNever;
 import choonster.testmod3.world.item.crafting.ingredient.MobSpawnerIngredient;
+import choonster.testmod3.world.item.crafting.ingredient.NeverIngredient;
 import choonster.testmod3.world.item.crafting.recipe.ShapedArmourUpgradeRecipe;
 import choonster.testmod3.world.item.crafting.recipe.ShapelessCuttingRecipe;
 import choonster.testmod3.world.item.crafting.recipe.ShapelessFluidContainerRecipe;
@@ -104,8 +104,8 @@ public class ModCrafting {
 				() -> MobSpawnerIngredient.SERIALIZER
 		);
 
-		public static final RegistryObject<IngredientNever.Serializer> NEVER = INGREDIENT_SERIALIZERS.register("never",
-				IngredientNever.Serializer::new
+		public static final RegistryObject<NeverIngredient.Serializer> NEVER = INGREDIENT_SERIALIZERS.register("never",
+				NeverIngredient.Serializer::new
 		);
 
 		/**

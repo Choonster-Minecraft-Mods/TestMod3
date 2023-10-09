@@ -1,9 +1,13 @@
 package choonster.testmod3.world.item.crafting.ingredient;
 
 import choonster.testmod3.init.ModCrafting;
+import choonster.testmod3.text.TestMod3Lang;
 import com.mojang.serialization.Codec;
+import net.minecraft.Util;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.ingredients.AbstractIngredient;
 import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
@@ -19,14 +23,18 @@ import java.util.stream.Stream;
  *
  * @author Choonster
  */
-@SuppressWarnings("unused")
-public class IngredientNever extends AbstractIngredient {
-	public static final IngredientNever INSTANCE = new IngredientNever();
+public class NeverIngredient extends AbstractIngredient {
+	public static final NeverIngredient INSTANCE = new NeverIngredient();
 
-	public static Codec<IngredientNever> CODEC = Codec.unit(INSTANCE);
+	public static final Codec<NeverIngredient> CODEC = Codec.unit(INSTANCE);
 
-	private IngredientNever() {
-		super(Stream.empty());
+	private NeverIngredient() {
+		super(Stream.of(
+				new ItemValue(Util.make(
+						new ItemStack(Items.BARRIER),
+						stack -> stack.setHoverName(Component.translatable(TestMod3Lang.INGREDIENT_NEVER_BARRIER_NAME.getTranslationKey()))
+				))
+		));
 	}
 
 	@Override
@@ -44,19 +52,19 @@ public class IngredientNever extends AbstractIngredient {
 		return ModCrafting.Ingredients.NEVER.get();
 	}
 
-	public static class Serializer implements IIngredientSerializer<IngredientNever> {
+	public static class Serializer implements IIngredientSerializer<NeverIngredient> {
 		@Override
-		public Codec<? extends IngredientNever> codec() {
+		public Codec<? extends NeverIngredient> codec() {
 			return CODEC;
 		}
 
 		@Override
-		public IngredientNever read(final FriendlyByteBuf buffer) {
-			return IngredientNever.INSTANCE;
+		public NeverIngredient read(final FriendlyByteBuf buffer) {
+			return NeverIngredient.INSTANCE;
 		}
 
 		@Override
-		public void write(final FriendlyByteBuf buffer, final IngredientNever ingredient) {
+		public void write(final FriendlyByteBuf buffer, final NeverIngredient ingredient) {
 			// No-op
 		}
 	}

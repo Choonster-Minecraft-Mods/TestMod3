@@ -46,6 +46,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		addEntities();
 		addBlocks();
 		addItems();
+		addIngredients();
 		addFluids();
 		addPotions();
 		addContainers();
@@ -214,6 +215,10 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		ModItems.VARIANTS_ITEMS
 				.getItems()
 				.forEach(item -> addItem(item, String.format("Variants Item - %s", StringUtils.capitalize(item.get().getType().getSerializedName()))));
+	}
+
+	private void addIngredients() {
+		add(TestMod3Lang.INGREDIENT_NEVER_BARRIER_NAME, "Never Ingredient - Uncraftable");
 	}
 
 	private void addFluids() {

@@ -51,6 +51,9 @@ public enum TestMod3Lang {
 	DESC_MULTI_ROTATABLE_FACE_ROTATION(prefix() + "multi_rotatable.face_rotation.desc"),
 	DESC_ROTATABLE_FACING(prefix() + "rotatable.facing.desc"),
 
+	// Ingredients
+	INGREDIENT_NEVER_BARRIER_NAME("ingredient", "never"),
+
 	// Item descriptions
 	ITEM_DESC_ARMOUR_REPLACEMENT_EQUIP("item", "armour_replacement.equip.desc"),
 	ITEM_DESC_ARMOUR_REPLACEMENT_UNEQUIP("item", "armour_replacement.unequip.desc"),

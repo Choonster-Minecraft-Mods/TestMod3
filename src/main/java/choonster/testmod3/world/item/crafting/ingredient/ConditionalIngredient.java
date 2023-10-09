@@ -11,7 +11,7 @@ import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
 
 /**
  * An {@link Ingredient} that produces another {@link Ingredient} type, but only if the
- * specified conditions are met. If they aren't, it produces {@link IngredientNever#INSTANCE} instead.
+ * specified conditions are met. If they aren't, it produces {@link NeverIngredient#INSTANCE} instead.
  * <p>
  * Test for this thread:
  * https://www.minecraftforge.net/forum/topic/59744-112-how-to-disable-some-mod-recipe-files-via-config-file/
@@ -39,7 +39,7 @@ public class ConditionalIngredient extends AbstractDelegatingIngredient {
 							DataResult.success(conditionalIngredient) :
 							DataResult.error(() -> "Can't convert Ingredient to ConditionalIngredient")
 			),
-			() -> IngredientNever.INSTANCE
+			() -> NeverIngredient.INSTANCE
 	);
 
 	public static final AbstractDelegatingIngredient.Serializer SERIALIZER = new AbstractDelegatingIngredient.Serializer(CODEC);
