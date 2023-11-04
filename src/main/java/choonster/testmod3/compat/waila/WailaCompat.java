@@ -1,46 +1,53 @@
 package choonster.testmod3.compat.waila;
 
+import choonster.testmod3.compat.HudProvider;
+import choonster.testmod3.text.TestMod3Lang;
+import choonster.testmod3.world.level.block.*;
+import snownee.jade.api.IBlockComponentProvider;
+import snownee.jade.api.IWailaClientRegistration;
+import snownee.jade.api.IWailaPlugin;
+import snownee.jade.api.WailaPlugin;
+
 /**
  * Waila compatibility.
  *
  * @author Choonster
  */
-/*
 @WailaPlugin
 public class WailaCompat implements IWailaPlugin {
 	public static final IBlockComponentProvider COLORED_ROTATABLE_BLOCK_FACING = new RotatableProvider(
-			uid("colored_rotatable_block_facing"),
+			HudProvider.COLORED_ROTATABLE_BLOCK_FACING.getId(),
 			ColoredRotatableBlock.FACING
 	);
 
 	public static final IBlockComponentProvider COLORED_MULTI_ROTATABLE_BLOCK_FACE_ROTATION = new MultiRotatableProvider(
-			uid("colored_multi_rotatable_block_face_rotation"),
+			HudProvider.COLORED_MULTI_ROTATABLE_BLOCK_FACE_ROTATION.getId(),
 			ColoredMultiRotatableBlock.FACE_ROTATION
 	);
 
 	public static final IBlockComponentProvider ROTATABLE_LAMP_FACING = new RotatableProvider(
-			uid("rotatable_lamp_facing"),
+			HudProvider.ROTATABLE_LAMP_FACING.getId(),
 			RotatableLampBlock.FACING
 	);
 
 	public static final IBlockComponentProvider CHEST_FACING = new RotatableProvider(
-			uid("chest_facing"),
+			HudProvider.CHEST_FACING.getId(),
 			ModChestBlock.FACING
 	);
 
 	public static final IBlockComponentProvider PLANE_HORIZONTAL_ROTATION = new RotatableProvider(
-			uid("plane_horizontal_rotation"),
+			HudProvider.PLANE_HORIZONTAL_ROTATION.getId(),
 			PlaneBlock.HORIZONTAL_ROTATION,
 			TestMod3Lang.BLOCK_DESC_PLANE_HORIZONTAL_ROTATION.getTranslationKey()
 	);
 
 	public static final IBlockComponentProvider PLANE_VERTICAL_ROTATION = new VerticalRotatableProvider(
-			uid("plane_vertical_rotation"),
+			HudProvider.PLANE_VERTICAL_ROTATION.getId(),
 			PlaneBlock.VERTICAL_ROTATION
 	);
 
 	public static final IBlockComponentProvider RESTRICTED_FLUID_TANK_ENABLED_FACINGS = new RestrictedFluidTankEnabledFacingsProvider(
-			uid("restricted_fluid_tank_enabled_facings")
+			HudProvider.RESTRICTED_FLUID_TANK_ENABLED_FACINGS.getId()
 	);
 
 	@Override
@@ -56,9 +63,4 @@ public class WailaCompat implements IWailaPlugin {
 
 		registration.registerBlockComponent(RESTRICTED_FLUID_TANK_ENABLED_FACINGS, RestrictedFluidTankBlock.class);
 	}
-
-	private static ResourceLocation uid(final String name) {
-		return new ResourceLocation(TestMod3.MODID, name);
-	}
 }
-*/

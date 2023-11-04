@@ -1,13 +1,16 @@
 package choonster.testmod3.compat.waila;
 
+import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.world.level.block.PlaneBlock;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.properties.Property;
+import snownee.jade.api.TooltipPosition;
 
 /**
  * Adds a line to the Waila tooltip body displaying the current value of an {@link PlaneBlock.VerticalRotation} property.
  *
  * @author Choonster
  */
-/*
 public class VerticalRotatableProvider extends EnumPropertyProvider<PlaneBlock.VerticalRotation> {
 	public VerticalRotatableProvider(final ResourceLocation uid, final Property<PlaneBlock.VerticalRotation> property) {
 		super(
@@ -19,4 +22,3 @@ public class VerticalRotatableProvider extends EnumPropertyProvider<PlaneBlock.V
 		);
 	}
 }
-*/

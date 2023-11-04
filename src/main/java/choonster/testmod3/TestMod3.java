@@ -26,7 +26,6 @@ public class TestMod3 {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
 	public static final String MODID = "testmod3";
-	public static final String NAME = "Test Mod 3";
 
 	public static final SimpleChannel network = ModNetwork.getNetworkChannel();
 
