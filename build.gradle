@@ -180,7 +180,7 @@ dependencies {
 
     embed "org.apache.httpcomponents:fluent-hc:${httpclient_version}"
 
-//    implementation fg.deobf("curse.maven:jade-324717:${jade_file_id}")
+    implementation fg.deobf("curse.maven:jade-324717:${jade_file_id}")
 
 //    implementation fg.deobf("curse.maven:the-one-probe-245211:${top_file_id}")
 
