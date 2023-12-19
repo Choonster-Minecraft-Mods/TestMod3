@@ -188,8 +188,8 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 	@Override
 	protected void registerStatesAndModels() {
-		simpleBlockWithExistingParent(ModBlocks.WATER_GRASS.get(), Blocks.GRASS, RENDER_TYPE_CUTOUT);
-		simpleBlockItemWithExistingParent(ModBlocks.WATER_GRASS.get(), Items.GRASS, RENDER_TYPE_CUTOUT);
+		simpleBlockWithExistingParent(ModBlocks.WATER_GRASS.get(), Blocks.SHORT_GRASS, RENDER_TYPE_CUTOUT);
+		simpleBlockItemWithExistingParent(ModBlocks.WATER_GRASS.get(), Items.SHORT_GRASS, RENDER_TYPE_CUTOUT);
 
 		simpleBlockWithExistingParent(ModBlocks.LARGE_COLLISION_TEST.get(), Blocks.WHITE_WOOL);
 		simpleBlockItem(ModBlocks.LARGE_COLLISION_TEST.get());
@@ -739,7 +739,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 
 	private void fluidBlock(final FluidGroup<?, ?, ?, ?, ?> fluidGroup) {
 		// We can't use the RenderProperties for the fluid type as they're not initialised in datagen
-		if (!(fluidGroup.getType().get() instanceof BasicFluidType basicFluidType)) {
+		if (!(fluidGroup.getType().get() instanceof final BasicFluidType basicFluidType)) {
 			throw new IllegalArgumentException("Fluid type must extend BasicFluidType");
 		}
 

@@ -8,14 +8,13 @@ import choonster.testmod3.data.worldgen.ModConfiguredFeatures;
 import choonster.testmod3.data.worldgen.ModPlacedFeatures;
 import com.google.common.collect.Sets;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistrySetBuilder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.registries.RegistriesDatapackGenerator;
+import net.minecraft.data.registries.RegistryPatchGenerator;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.ResourceKey;
-import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -24,6 +23,7 @@ import net.minecraftforge.registries.DataPackRegistriesHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -38,7 +38,8 @@ public class ModDataProviders {
 		final var dataGenerator = event.getGenerator();
 		final var output = dataGenerator.getPackOutput();
 		final var existingFileHelper = event.getExistingFileHelper();
-		final var lookupProvider = event.getLookupProvider().thenApply(ModDataProviders::createLookup);
+		final var patchedRegistries = createLookup(event.getLookupProvider());
+		final var lookupProvider = patchedRegistries.thenApply(RegistrySetBuilder.PatchedRegistries::full);
 
 		dataGenerator.addProvider(true, TestMod3PackMetadataGenerator.create(output));
 
@@ -60,20 +61,17 @@ public class ModDataProviders {
 		dataGenerator.addProvider(event.includeServer(), new TestMod3BiomeTagsProvider(output, lookupProvider, existingFileHelper));
 		dataGenerator.addProvider(event.includeServer(), new TestMod3FluidTagsProvider(output, lookupProvider, existingFileHelper));
 
-		dataGenerator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(output, lookupProvider, Set.of(TestMod3.MODID)));
+		dataGenerator.addProvider(event.includeServer(), new RegistriesDatapackGenerator(output, lookupProvider, Set.of(TestMod3.MODID)));
 	}
 
-	private static HolderLookup.Provider createLookup(final HolderLookup.Provider vanillaLookupProvider) {
-		final var registryAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
-
+	private static CompletableFuture<RegistrySetBuilder.PatchedRegistries> createLookup(final CompletableFuture<HolderLookup.Provider> vanillaLookupProvider) {
 		final var builder = new RegistrySetBuilder()
 				.add(Registries.CONFIGURED_FEATURE, ModConfiguredFeatures::bootstrap)
 				.add(Registries.PLACED_FEATURE, ModPlacedFeatures::bootstrap)
 				.add(Registries.BIOME, ModBiomes::bootstrap)
 				.add(ForgeRegistries.Keys.BIOME_MODIFIERS, ModBiomeModifiers::bootstrap);
 
-		@SuppressWarnings("UnstableApiUsage")
-		final var allKeys = DataPackRegistriesHooks.getDataPackRegistries()
+		@SuppressWarnings("UnstableApiUsage") final var allKeys = DataPackRegistriesHooks.getDataPackRegistries()
 				.stream()
 				.map(RegistryDataLoader.RegistryData::key)
 				.collect(Collectors.toSet());
@@ -88,6 +86,6 @@ public class ModDataProviders {
 				}
 		));
 
-		return builder.buildPatch(registryAccess, vanillaLookupProvider);
+		return RegistryPatchGenerator.createLookup(vanillaLookupProvider, builder);
 	}
 }
