@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * @author Choonster
  */
 public class ClearerItem extends Item {
-	private static final ImmutableList<Block> whitelist = ImmutableList.of(Blocks.STONE, Blocks.DIRT, Blocks.GRASS, Blocks.GRAVEL, Blocks.SAND, Blocks.WATER, Blocks.LAVA, Blocks.ICE);
+	private static final ImmutableList<Block> whitelist = ImmutableList.of(Blocks.STONE, Blocks.DIRT, Blocks.SHORT_GRASS, Blocks.GRAVEL, Blocks.SAND, Blocks.WATER, Blocks.LAVA, Blocks.ICE);
 
 	private static final int MODE_WHITELIST = 0;
 	private static final int MODE_ALL = 1;

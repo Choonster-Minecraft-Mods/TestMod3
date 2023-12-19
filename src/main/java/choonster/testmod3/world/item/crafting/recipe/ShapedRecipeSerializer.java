@@ -31,7 +31,7 @@ public class ShapedRecipeSerializer<T extends ShapedRecipe> implements RecipeSer
 	public ShapedRecipeSerializer(final ShapedRecipeFactory<T> factory) {
 		this.factory = factory;
 
-		codec = RecordCodecBuilder.create(builder -> builder.group(
+		codec = RecordCodecBuilder.create(instance -> instance.group(
 
 				ExtraCodecs.strictOptionalField(Codec.STRING, "group", "")
 						.forGetter(ShapedRecipe::getGroup),
@@ -50,7 +50,7 @@ public class ShapedRecipeSerializer<T extends ShapedRecipe> implements RecipeSer
 				ExtraCodecs.strictOptionalField(Codec.BOOL, "show_notification", true)
 						.forGetter(ShapedRecipe::showNotification)
 
-		).apply(builder, factory::createRecipe));
+		).apply(instance, factory::createRecipe));
 	}
 
 	public ShapedRecipeFactory<T> factory() {

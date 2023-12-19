@@ -31,7 +31,7 @@ public class ShapelessRecipeSerializer<T extends ShapelessRecipe> implements Rec
 	public ShapelessRecipeSerializer(final ShapelessRecipeFactory<T> factory) {
 		this.factory = factory;
 
-		codec = RecordCodecBuilder.create(p_309257_ -> p_309257_.group(
+		codec = RecordCodecBuilder.create(instance -> instance.group(
 
 				ExtraCodecs.strictOptionalField(Codec.STRING, "group", "")
 						.forGetter(ShapelessRecipe::getGroup),
@@ -68,7 +68,7 @@ public class ShapelessRecipeSerializer<T extends ShapelessRecipe> implements Rec
 						}, DataResult::success)
 						.forGetter(ShapelessRecipe::getIngredients)
 
-		).apply(p_309257_, factory::createRecipe));
+		).apply(instance, factory::createRecipe));
 	}
 
 	public ShapelessRecipeFactory<T> factory() {
