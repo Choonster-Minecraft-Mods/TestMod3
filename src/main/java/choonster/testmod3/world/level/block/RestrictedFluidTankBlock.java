@@ -2,6 +2,7 @@ package choonster.testmod3.world.level.block;
 
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.world.level.block.entity.RestrictedFluidTankBlockEntity;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -27,8 +28,15 @@ import java.util.stream.Collectors;
  * @author Choonster
  */
 public class RestrictedFluidTankBlock extends FluidTankBlock<RestrictedFluidTankBlockEntity> {
+	public static final MapCodec<RestrictedFluidTankBlock> CODEC = simpleCodec(RestrictedFluidTankBlock::new);
+
 	public RestrictedFluidTankBlock(final Block.Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return CODEC;
 	}
 
 	@Nullable

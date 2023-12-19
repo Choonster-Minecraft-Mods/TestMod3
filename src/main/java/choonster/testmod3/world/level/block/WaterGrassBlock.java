@@ -1,5 +1,6 @@
 package choonster.testmod3.world.level.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
@@ -24,8 +25,15 @@ public class WaterGrassBlock extends BaseCoralPlantTypeBlock implements SimpleWa
 		return box(8 - size, 0, 8 - size, 8 + size, 12.8, 8 + size);
 	});
 
+	public static final MapCodec<WaterGrassBlock> CODEC = simpleCodec(WaterGrassBlock::new);
+
 	public WaterGrassBlock(final BlockBehaviour.Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends BaseCoralPlantTypeBlock> codec() {
+		return CODEC;
 	}
 
 	@Override

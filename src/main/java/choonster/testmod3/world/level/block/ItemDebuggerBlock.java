@@ -3,6 +3,7 @@ package choonster.testmod3.world.level.block;
 import choonster.testmod3.capability.pigspawner.PigSpawnerCapability;
 import choonster.testmod3.util.RegistryUtil;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -17,9 +18,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.ModList;
-import org.slf4j.Logger;
-
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 /**
  * A Block that prints the current state of the player's held {@link ItemStack}s on the client and server when left- or right-clicked.
@@ -29,8 +29,15 @@ import org.jetbrains.annotations.Nullable;
 public class ItemDebuggerBlock extends Block {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
+	public static final MapCodec<ItemDebuggerBlock> CODEC = simpleCodec(ItemDebuggerBlock::new);
+
 	public ItemDebuggerBlock(final Block.Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return CODEC;
 	}
 
 	private void logItem(final ItemStack stack) {

@@ -14,9 +14,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
-import net.minecraft.world.level.block.grower.*;
+import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
@@ -36,7 +37,7 @@ public class ModBlocks {
 	private static boolean isInitialised = false;
 
 	public static final RegistryObject<WaterGrassBlock> WATER_GRASS = registerBlock("water_grass",
-			() -> new WaterGrassBlock(Block.Properties.copy(Blocks.SEAGRASS))
+			() -> new WaterGrassBlock(Block.Properties.ofFullCopy(Blocks.SEAGRASS))
 	);
 
 	public static final RegistryObject<LargeCollisionTestBlock> LARGE_COLLISION_TEST = registerBlock("large_collision_test",
@@ -114,7 +115,7 @@ public class ModBlocks {
 	);
 
 	public static final RegistryObject<ModChestBlock> CHEST = registerBlock("chest",
-			() -> new ModChestBlock(Block.Properties.copy(Blocks.CHEST))
+			() -> new ModChestBlock(Block.Properties.ofFullCopy(Blocks.CHEST))
 	);
 
 	public static final RegistryObject<HiddenBlock> HIDDEN = registerBlock("hidden",
@@ -130,42 +131,42 @@ public class ModBlocks {
 	);
 
 	public static final RegistryObject<SurvivalCommandBlock> SURVIVAL_COMMAND_BLOCK = registerBlock("survival_command_block",
-			() -> new SurvivalCommandBlock(CommandBlockEntity.Mode.REDSTONE, Block.Properties.copy(Blocks.COMMAND_BLOCK), false),
+			() -> new SurvivalCommandBlock(CommandBlockEntity.Mode.REDSTONE, false, Block.Properties.ofFullCopy(Blocks.COMMAND_BLOCK)),
 			(block) -> new BlockItem(block, defaultItemProperties().rarity(Rarity.EPIC))
 	);
 
 	public static final RegistryObject<SurvivalCommandBlock> REPEATING_SURVIVAL_COMMAND_BLOCK = registerBlock("repeating_survival_command_block",
-			() -> new SurvivalCommandBlock(CommandBlockEntity.Mode.AUTO, Block.Properties.copy(Blocks.REPEATING_COMMAND_BLOCK), false),
+			() -> new SurvivalCommandBlock(CommandBlockEntity.Mode.AUTO, false, Block.Properties.ofFullCopy(Blocks.REPEATING_COMMAND_BLOCK)),
 			(block) -> new BlockItem(block, defaultItemProperties().rarity(Rarity.EPIC))
 	);
 
 	public static final RegistryObject<SurvivalCommandBlock> CHAIN_SURVIVAL_COMMAND_BLOCK = registerBlock("chain_survival_command_block",
-			() -> new SurvivalCommandBlock(CommandBlockEntity.Mode.SEQUENCE, Block.Properties.copy(Blocks.CHAIN_COMMAND_BLOCK), true),
+			() -> new SurvivalCommandBlock(CommandBlockEntity.Mode.SEQUENCE, true, Block.Properties.ofFullCopy(Blocks.CHAIN_COMMAND_BLOCK)),
 			(block) -> new BlockItem(block, defaultItemProperties().rarity(Rarity.EPIC))
 	);
 
-	public static final RegistryObject<TestMod3SaplingBlock> OAK_SAPLING = registerBlock("oak_sapling",
-			() -> new TestMod3SaplingBlock(new OakTreeGrower(), Block.Properties.copy(Blocks.OAK_SAPLING))
+	public static final RegistryObject<SaplingBlock> OAK_SAPLING = registerBlock("oak_sapling",
+			() -> new SaplingBlock(TreeGrower.OAK, Block.Properties.ofFullCopy(Blocks.OAK_SAPLING))
 	);
 
-	public static final RegistryObject<TestMod3SaplingBlock> SPRUCE_SAPLING = registerBlock("spruce_sapling",
-			() -> new TestMod3SaplingBlock(new SpruceTreeGrower(), Block.Properties.copy(Blocks.SPRUCE_SAPLING))
+	public static final RegistryObject<SaplingBlock> SPRUCE_SAPLING = registerBlock("spruce_sapling",
+			() -> new SaplingBlock(TreeGrower.SPRUCE, Block.Properties.ofFullCopy(Blocks.SPRUCE_SAPLING))
 	);
 
-	public static final RegistryObject<TestMod3SaplingBlock> BIRCH_SAPLING = registerBlock("birch_sapling",
-			() -> new TestMod3SaplingBlock(new BirchTreeGrower(), Block.Properties.copy(Blocks.BIRCH_SAPLING))
+	public static final RegistryObject<SaplingBlock> BIRCH_SAPLING = registerBlock("birch_sapling",
+			() -> new SaplingBlock(TreeGrower.BIRCH, Block.Properties.ofFullCopy(Blocks.BIRCH_SAPLING))
 	);
 
-	public static final RegistryObject<TestMod3SaplingBlock> JUNGLE_SAPLING = registerBlock("jungle_sapling",
-			() -> new TestMod3SaplingBlock(new JungleTreeGrower(), Block.Properties.copy(Blocks.JUNGLE_SAPLING))
+	public static final RegistryObject<SaplingBlock> JUNGLE_SAPLING = registerBlock("jungle_sapling",
+			() -> new SaplingBlock(TreeGrower.JUNGLE, Block.Properties.ofFullCopy(Blocks.JUNGLE_SAPLING))
 	);
 
-	public static final RegistryObject<TestMod3SaplingBlock> ACACIA_SAPLING = registerBlock("acacia_sapling",
-			() -> new TestMod3SaplingBlock(new AcaciaTreeGrower(), Block.Properties.copy(Blocks.ACACIA_SAPLING))
+	public static final RegistryObject<SaplingBlock> ACACIA_SAPLING = registerBlock("acacia_sapling",
+			() -> new SaplingBlock(TreeGrower.ACACIA, Block.Properties.ofFullCopy(Blocks.ACACIA_SAPLING))
 	);
 
-	public static final RegistryObject<TestMod3SaplingBlock> DARK_OAK_SAPLING = registerBlock("dark_oak_sapling",
-			() -> new TestMod3SaplingBlock(new DarkOakTreeGrower(), Block.Properties.copy(Blocks.DARK_OAK_SAPLING))
+	public static final RegistryObject<SaplingBlock> DARK_OAK_SAPLING = registerBlock("dark_oak_sapling",
+			() -> new SaplingBlock(TreeGrower.DARK_OAK, Block.Properties.ofFullCopy(Blocks.DARK_OAK_SAPLING))
 	);
 
 	public static final RegistryObject<InvisibleBlock> INVISIBLE = registerBlock("invisible",
@@ -178,7 +179,7 @@ public class ModBlocks {
 	);
 
 	public static final RegistryObject<Block> PLANKS = registerBlock("planks",
-			() -> new Block(Block.Properties.copy(Blocks.OAK_PLANKS))
+			() -> new Block(Block.Properties.ofFullCopy(Blocks.OAK_PLANKS))
 	);
 
 

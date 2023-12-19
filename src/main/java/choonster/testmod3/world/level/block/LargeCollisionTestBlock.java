@@ -1,5 +1,6 @@
 package choonster.testmod3.world.level.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
@@ -18,8 +19,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class LargeCollisionTestBlock extends Block {
 	private static final VoxelShape SHAPE = box(-16, -16, -16, 32, 32, 32);
 
+	public static final MapCodec<LargeCollisionTestBlock> CODEC = simpleCodec(LargeCollisionTestBlock::new);
+
 	public LargeCollisionTestBlock(final Block.Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return CODEC;
 	}
 
 	@SuppressWarnings("deprecation")

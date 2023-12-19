@@ -1,6 +1,8 @@
 package choonster.testmod3.world.level.block;
 
 import choonster.testmod3.world.level.block.variantgroup.BlockVariantGroup;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -19,7 +21,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -32,11 +33,29 @@ public class ColoredRotatableBlock extends Block {
 
 	private final BlockVariantGroup<DyeColor, ? extends ColoredRotatableBlock> variantGroup;
 	private final DyeColor color;
+	private final MapCodec<ColoredRotatableBlock> codec;
 
 	public ColoredRotatableBlock(final DyeColor color, final BlockVariantGroup<DyeColor, ? extends ColoredRotatableBlock> variantGroup, final Block.Properties properties) {
 		super(properties);
 		this.color = color;
 		this.variantGroup = variantGroup;
+
+		codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
+
+				DyeColor.CODEC
+						.fieldOf("color")
+						.forGetter(ColoredRotatableBlock::getColor),
+
+				variantGroup.codec(),
+
+				propertiesCodec()
+
+		).apply(instance, ColoredRotatableBlock::new));
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return codec;
 	}
 
 	@Override

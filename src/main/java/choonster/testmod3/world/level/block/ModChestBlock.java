@@ -3,6 +3,7 @@ package choonster.testmod3.world.level.block;
 import choonster.testmod3.util.CapabilityNotPresentException;
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.world.level.block.entity.ModChestBlockEntity;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -42,10 +43,17 @@ public class ModChestBlock extends BaseEntityBlock<ModChestBlockEntity> {
 	 */
 	private static final VoxelShape SHAPE = box(1, 0, 1, 15, 14, 15);
 
+	public static final MapCodec<ModChestBlock> CODEC = simpleCodec(ModChestBlock::new);
+
 	public static final Property<Direction> FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
 
 	public ModChestBlock(final Block.Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return CODEC;
 	}
 
 	@Override

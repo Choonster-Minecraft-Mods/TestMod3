@@ -1,5 +1,6 @@
 package choonster.testmod3.world.level.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -32,8 +33,15 @@ public class SmallCollisionTestBlock extends Block {
 		return box(min, min, min, max, max, max);
 	});
 
+	public static final MapCodec<SmallCollisionTestBlock> CODEC = simpleCodec(SmallCollisionTestBlock::new);
+
 	public SmallCollisionTestBlock(final Block.Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return CODEC;
 	}
 
 	@SuppressWarnings("deprecation")

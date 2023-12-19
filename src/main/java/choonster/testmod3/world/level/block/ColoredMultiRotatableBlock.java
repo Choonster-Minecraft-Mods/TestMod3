@@ -2,6 +2,8 @@ package choonster.testmod3.world.level.block;
 
 import choonster.testmod3.util.EnumFaceRotation;
 import choonster.testmod3.world.level.block.variantgroup.BlockVariantGroup;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,8 +28,27 @@ import net.minecraft.world.phys.BlockHitResult;
 public class ColoredMultiRotatableBlock extends ColoredRotatableBlock {
 	public static final Property<EnumFaceRotation> FACE_ROTATION = EnumProperty.create("face_rotation", EnumFaceRotation.class);
 
+	private final MapCodec<ColoredMultiRotatableBlock> codec;
+
 	public ColoredMultiRotatableBlock(final DyeColor color, final BlockVariantGroup<DyeColor, ? extends ColoredMultiRotatableBlock> variantGroup, final Block.Properties properties) {
 		super(color, variantGroup, properties);
+
+		codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
+
+				DyeColor.CODEC
+						.fieldOf("color")
+						.forGetter(ColoredRotatableBlock::getColor),
+
+				variantGroup.codec(),
+
+				propertiesCodec()
+
+		).apply(instance, ColoredMultiRotatableBlock::new));
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return codec;
 	}
 
 	@Override

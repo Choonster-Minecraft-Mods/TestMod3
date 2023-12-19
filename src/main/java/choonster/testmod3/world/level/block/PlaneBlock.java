@@ -1,6 +1,7 @@
 package choonster.testmod3.world.level.block;
 
 import choonster.testmod3.util.VectorUtils;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -39,6 +40,8 @@ import java.util.stream.IntStream;
  * @author Choonster
  */
 public class PlaneBlock extends Block {
+	public static final MapCodec<PlaneBlock> CODEC = simpleCodec(PlaneBlock::new);
+
 	/**
 	 * The block's rotation around the y-axis.
 	 */
@@ -52,6 +55,11 @@ public class PlaneBlock extends Block {
 	public PlaneBlock(final Block.Properties properties) {
 		super(properties);
 		registerDefaultState(getStateDefinition().any().setValue(HORIZONTAL_ROTATION, Direction.NORTH).setValue(VERTICAL_ROTATION, VerticalRotation.UP));
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return CODEC;
 	}
 
 	/**

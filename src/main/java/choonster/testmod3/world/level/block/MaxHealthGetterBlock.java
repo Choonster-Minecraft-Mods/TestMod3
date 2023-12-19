@@ -4,6 +4,7 @@ import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import choonster.testmod3.capability.maxhealth.MaxHealthCapability;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.CapabilityNotPresentException;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -20,8 +21,15 @@ import net.minecraft.world.phys.BlockHitResult;
  * @author Choonster
  */
 public class MaxHealthGetterBlock extends Block {
+	public static final MapCodec<MaxHealthGetterBlock> CODEC = simpleCodec(MaxHealthGetterBlock::new);
+
 	public MaxHealthGetterBlock(final Block.Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return CODEC;
 	}
 
 	@SuppressWarnings("deprecation")

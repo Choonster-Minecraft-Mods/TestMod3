@@ -10,8 +10,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-import java.util.List;
-
 /**
  * A BlockEntity that applies a potion effect to all entities within a certain distance of it.
  * <p>
@@ -29,8 +27,8 @@ public class PotionEffectBlockEntity extends BlockEntity {
 
 	public static void tick(final Level level, final BlockPos pos, final BlockState state, final PotionEffectBlockEntity blockEntity) {
 		if (!level.isClientSide) {
-			final AABB areaToSearch = new AABB(pos.offset(-RADIUS, -RADIUS, -RADIUS), pos.offset(RADIUS, RADIUS, RADIUS));
-			final List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, areaToSearch);
+			final var areaToSearch = new AABB(pos).inflate(RADIUS);
+			final var entities = level.getEntitiesOfClass(LivingEntity.class, areaToSearch);
 
 			entities.stream()
 					.filter(entity -> !entity.hasEffect(MobEffects.POISON))

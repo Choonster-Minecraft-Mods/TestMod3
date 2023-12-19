@@ -2,6 +2,7 @@ package choonster.testmod3.world.level.block;
 
 import choonster.testmod3.client.util.ClientUtil;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -26,6 +27,8 @@ import org.slf4j.Logger;
 public class ClientPlayerRotationBlock extends StaticPressurePlateBlock {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
+	public static final MapCodec<ClientPlayerRotationBlock> CODEC = simpleCodec(ClientPlayerRotationBlock::new);
+
 	/**
 	 * The yaw rotation in degrees to add to the player each tick. Positive values rotate clockwise, negative values rotate anticlockwise.
 	 */
@@ -36,16 +39,21 @@ public class ClientPlayerRotationBlock extends StaticPressurePlateBlock {
 	 */
 	private static final float ROTATION_PITCH = 2.0f;
 
-	public ClientPlayerRotationBlock(final Block.Properties properties) {
-		super(properties);
-	}
-
 	/**
 	 * Is the player currently pitching upwards?
 	 * <p>
 	 * This can safely be stored as a field because its value is determined by the client player's pitch.
 	 */
 	private boolean isPitchingUp;
+
+	public ClientPlayerRotationBlock(final Block.Properties properties) {
+		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return CODEC;
+	}
 
 	@SuppressWarnings("deprecation")
 	@Override

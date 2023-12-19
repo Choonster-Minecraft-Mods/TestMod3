@@ -2,6 +2,7 @@ package choonster.testmod3.world.level.block.variantgroup;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -90,6 +91,16 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 	 */
 	public RegistryObject<BLOCK> getBlock(final VARIANT variant) {
 		return blocks.get(variant);
+	}
+
+	/**
+	 * Gets the codec for this group.
+	 *
+	 * @return The codec
+	 */
+	public <CODEC_BLOCK extends Block> RecordCodecBuilder<CODEC_BLOCK, BlockVariantGroup<VARIANT, BLOCK>> codec() {
+		// TODO: Figure out a real codec for this when block codecs are used somewhere
+		return RecordCodecBuilder.point(this);
 	}
 
 	/**

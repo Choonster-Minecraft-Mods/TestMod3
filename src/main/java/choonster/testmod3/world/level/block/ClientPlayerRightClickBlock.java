@@ -3,6 +3,7 @@ package choonster.testmod3.world.level.block;
 import choonster.testmod3.client.block.ClientOnlyBlockMethods;
 import choonster.testmod3.client.util.ClientUtil;
 import choonster.testmod3.text.TestMod3Lang;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -22,8 +23,15 @@ import net.minecraftforge.fml.DistExecutor;
  * @author Choonster
  */
 public class ClientPlayerRightClickBlock extends StaticPressurePlateBlock {
+	public static final MapCodec<ClientPlayerRightClickBlock> CODEC = simpleCodec(ClientPlayerRightClickBlock::new);
+
 	public ClientPlayerRightClickBlock(final Block.Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return CODEC;
 	}
 
 	@SuppressWarnings("deprecation")

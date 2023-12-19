@@ -1,9 +1,13 @@
 package choonster.testmod3.world.level.block;
 
 import choonster.testmod3.client.gui.ClientScreenIds;
+import choonster.testmod3.serialization.VanillaCodecs;
 import choonster.testmod3.util.NetworkUtil;
 import choonster.testmod3.world.level.block.entity.SurvivalCommandBlockEntity;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.Tag;
@@ -20,7 +24,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BaseCommandBlock;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CommandBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
@@ -42,11 +45,27 @@ import org.slf4j.Logger;
 public class SurvivalCommandBlock extends CommandBlock {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-	private final CommandBlockEntity.Mode commandBlockMode;
+	public static final MapCodec<SurvivalCommandBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 
-	public SurvivalCommandBlock(final CommandBlockEntity.Mode commandBlockMode, final Block.Properties properties, final boolean automatic) {
-		super(properties, automatic);
+			VanillaCodecs.COMMAND_BLOCK_MODE
+					.fieldOf("command_block_mode")
+					.forGetter(SurvivalCommandBlock::getCommandBlockMode),
+
+			Codec.BOOL
+					.fieldOf("automatic")
+					.forGetter(block -> block.automatic),
+
+			propertiesCodec()
+
+	).apply(instance, SurvivalCommandBlock::new));
+
+	private final CommandBlockEntity.Mode commandBlockMode;
+	private final boolean automatic;
+
+	public SurvivalCommandBlock(final CommandBlockEntity.Mode commandBlockMode, final boolean automatic, final Properties properties) {
+		super(automatic, properties);
 		this.commandBlockMode = commandBlockMode;
+		this.automatic = automatic;
 	}
 
 	@Override

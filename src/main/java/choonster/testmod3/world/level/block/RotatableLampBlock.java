@@ -1,5 +1,6 @@
 package choonster.testmod3.world.level.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -15,7 +16,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -27,12 +27,18 @@ import org.jetbrains.annotations.Nullable;
  * @author Choonster
  */
 public class RotatableLampBlock extends Block {
+	public static final MapCodec<RotatableLampBlock> CODEC = simpleCodec(RotatableLampBlock::new);
 	public static final Property<Direction> FACING = DirectionProperty.create("facing", facing -> true);
 	public static final Property<Boolean> LIT = BooleanProperty.create("lit");
 
 	public RotatableLampBlock(final Block.Properties properties) {
 		super(properties);
 		registerDefaultState(getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(LIT, false));
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return CODEC;
 	}
 
 	@Override

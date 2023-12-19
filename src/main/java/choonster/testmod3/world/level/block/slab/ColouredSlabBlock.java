@@ -1,6 +1,8 @@
 package choonster.testmod3.world.level.block.slab;
 
 import choonster.testmod3.world.level.block.variantgroup.BlockVariantGroup;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -11,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
@@ -23,6 +26,8 @@ import net.minecraft.world.phys.BlockHitResult;
  * @author Choonster
  */
 public class ColouredSlabBlock extends TestMod3SlabBlock<DyeColor, ColouredSlabBlock> {
+	private final MapCodec<ColouredSlabBlock> codec;
+
 	/**
 	 * Create a coloured slab block.
 	 *
@@ -32,6 +37,23 @@ public class ColouredSlabBlock extends TestMod3SlabBlock<DyeColor, ColouredSlabB
 	 */
 	public ColouredSlabBlock(final DyeColor variant, final BlockVariantGroup<DyeColor, ColouredSlabBlock> variantGroup, final Block.Properties properties) {
 		super(variant, variantGroup, properties);
+
+		codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
+
+				DyeColor.CODEC
+						.fieldOf("variant")
+						.forGetter(TestMod3SlabBlock::getVariant),
+
+				variantGroup.codec(),
+
+				propertiesCodec()
+
+		).apply(instance, ColouredSlabBlock::new));
+	}
+
+	@Override
+	public MapCodec<? extends SlabBlock> codec() {
+		return codec;
 	}
 
 	private boolean recolorBlock(final BlockState state, final LevelAccessor world, final BlockPos pos, final Direction facing, final DyeColor colour) {

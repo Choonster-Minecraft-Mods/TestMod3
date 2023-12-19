@@ -1,6 +1,7 @@
 package choonster.testmod3.world.level.block;
 
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -24,6 +25,8 @@ import org.slf4j.Logger;
 public class ItemCollisionTestBlock extends Block {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
+	public static final MapCodec<ItemCollisionTestBlock> CODEC = simpleCodec(ItemCollisionTestBlock::new);
+
 	private static final VoxelShape SHAPE = Util.make(() -> {
 		// A small value to offset each side of the block's bounding box by to allow entities to collide with the block
 		// and thus call onEntityCollidedWithBlock
@@ -35,6 +38,11 @@ public class ItemCollisionTestBlock extends Block {
 
 	public ItemCollisionTestBlock(final Block.Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return CODEC;
 	}
 
 	@SuppressWarnings("deprecation")

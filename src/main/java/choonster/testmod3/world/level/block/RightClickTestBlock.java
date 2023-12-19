@@ -1,5 +1,6 @@
 package choonster.testmod3.world.level.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -8,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.GlassBlock;
+import net.minecraft.world.level.block.TransparentBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -23,12 +24,18 @@ import net.minecraft.world.phys.BlockHitResult;
  *
  * @author Choonster
  */
-public class RightClickTestBlock extends GlassBlock {
+public class RightClickTestBlock extends TransparentBlock {
+	public static final MapCodec<RightClickTestBlock> CODEC = simpleCodec(RightClickTestBlock::new);
 	public static final Property<Boolean> HAS_ENDER_EYE = BooleanProperty.create("has_ender_eye");
 
 	public RightClickTestBlock(final Block.Properties properties) {
 		super(properties);
 		registerDefaultState(getStateDefinition().any().setValue(HAS_ENDER_EYE, false));
+	}
+
+	@Override
+	protected MapCodec<? extends TransparentBlock> codec() {
+		return CODEC;
 	}
 
 	@Override

@@ -1,11 +1,13 @@
 package choonster.testmod3.world.level.block.pipe;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -20,8 +22,15 @@ import net.minecraftforge.fluids.IFluidBlock;
  * @author Choonster
  */
 public class FluidPipeBlock extends BasePipeBlock {
+	public static final MapCodec<FluidPipeBlock> CODEC = simpleCodec(FluidPipeBlock::new);
+
 	public FluidPipeBlock(final Block.Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends PipeBlock> codec() {
+		return CODEC;
 	}
 
 	@Override

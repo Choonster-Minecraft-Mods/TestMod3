@@ -1,5 +1,6 @@
 package choonster.testmod3.world.level.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -23,6 +24,9 @@ public abstract class StaticPressurePlateBlock extends Block {
 	public StaticPressurePlateBlock(final Block.Properties properties) {
 		super(properties);
 	}
+
+	@Override
+	protected abstract MapCodec<? extends Block> codec();
 
 	@SuppressWarnings("deprecation")
 	@Override

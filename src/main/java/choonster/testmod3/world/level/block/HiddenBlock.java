@@ -3,6 +3,7 @@ package choonster.testmod3.world.level.block;
 import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockRevealer;
 import choonster.testmod3.init.ModBlockEntities;
 import choonster.testmod3.world.level.block.entity.HiddenBlockEntity;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -13,7 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.Property;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -25,6 +25,8 @@ import org.jetbrains.annotations.Nullable;
  * @author Choonster
  */
 public class HiddenBlock extends BaseEntityBlock<HiddenBlockEntity> {
+	public static final MapCodec<HiddenBlock> CODEC = simpleCodec(HiddenBlock::new);
+
 	/**
 	 * Is this block hidden?
 	 * <p>
@@ -35,6 +37,11 @@ public class HiddenBlock extends BaseEntityBlock<HiddenBlockEntity> {
 	public HiddenBlock(final Block.Properties properties) {
 		super(properties);
 		registerDefaultState(getStateDefinition().any().setValue(HIDDEN, true));
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return CODEC;
 	}
 
 	@Override

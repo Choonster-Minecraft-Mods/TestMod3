@@ -1,6 +1,7 @@
 package choonster.testmod3.world.level.block.slab;
 
 import choonster.testmod3.world.level.block.variantgroup.BlockVariantGroup;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
@@ -40,6 +41,9 @@ public abstract class TestMod3SlabBlock<
 		this.variant = variant;
 		this.variantGroup = variantGroup;
 	}
+
+	@Override
+	public abstract MapCodec<? extends SlabBlock> codec();
 
 	public VARIANT getVariant() {
 		return variant;

@@ -1,6 +1,7 @@
 package choonster.testmod3.world.level.block.pipe;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -23,7 +24,7 @@ import java.util.function.BiFunction;
  *
  * @author Choonster
  */
-public class BasePipeBlock extends PipeBlock {
+public abstract class BasePipeBlock extends PipeBlock {
 	private static final Direction[] FACING_VALUES = Direction.values();
 
 	protected final ImmutableList<VoxelShape> shapes;
@@ -47,6 +48,9 @@ public class BasePipeBlock extends PipeBlock {
 
 		shapes = makeShapes(coreSize, extensionWidth);
 	}
+
+	@Override
+	protected abstract MapCodec<? extends PipeBlock> codec();
 
 	@Override
 	protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {

@@ -1,5 +1,6 @@
 package choonster.testmod3.world.level.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,8 +14,15 @@ import net.minecraft.world.level.block.state.BlockState;
  * @author Choonster
  */
 public class InvisibleBlock extends Block {
+	public static final MapCodec<InvisibleBlock> CODEC = simpleCodec(InvisibleBlock::new);
+
 	public InvisibleBlock(final Block.Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return CODEC;
 	}
 
 	@SuppressWarnings("deprecation")

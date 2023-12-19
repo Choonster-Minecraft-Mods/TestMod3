@@ -1,6 +1,9 @@
 package choonster.testmod3.world.level.block;
 
 import choonster.testmod3.world.level.block.variantgroup.BlockVariantGroup;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
@@ -22,11 +25,29 @@ import net.minecraft.world.phys.BlockHitResult;
 public class VariantsBlock extends Block {
 	private final BlockVariantGroup<EnumType, ? extends VariantsBlock> variantGroup;
 	private final EnumType type;
+	private final MapCodec<VariantsBlock> codec;
 
 	public VariantsBlock(final EnumType type, final BlockVariantGroup<EnumType, ? extends VariantsBlock> variantGroup, final Block.Properties properties) {
 		super(properties);
 		this.type = type;
 		this.variantGroup = variantGroup;
+
+		codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
+
+				EnumType.CODEC
+						.fieldOf("variant")
+						.forGetter(VariantsBlock::getType),
+
+				variantGroup.codec(),
+
+				propertiesCodec()
+
+		).apply(instance, VariantsBlock::new));
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return codec;
 	}
 
 	public EnumType getType() {
@@ -47,6 +68,8 @@ public class VariantsBlock extends Block {
 	public enum EnumType implements StringRepresentable {
 		VARIANT_A("a"),
 		VARIANT_B("b");
+
+		public static final Codec<EnumType> CODEC = StringRepresentable.fromEnum(EnumType::values);
 
 		private final String name;
 

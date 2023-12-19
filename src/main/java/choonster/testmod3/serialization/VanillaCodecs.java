@@ -6,8 +6,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.IExtensibleEnum;
 import net.minecraftforge.fluids.FluidStack;
@@ -48,6 +51,16 @@ public class VanillaCodecs {
 
 		);
 	}
+
+	public static final Codec<CommandBlockEntity.Mode> COMMAND_BLOCK_MODE = Util.make(() -> {
+		final var values = CommandBlockEntity.Mode.values();
+
+		return ExtraCodecs.idResolverCodec(
+				CommandBlockEntity.Mode::ordinal,
+				ordinal -> ordinal >= 0 && ordinal < values.length ? values[ordinal] : null,
+				-1
+		);
+	});
 
 	/**
 	 * Creates a function that converts a name to its corresponding enum value by iterating through the array returned

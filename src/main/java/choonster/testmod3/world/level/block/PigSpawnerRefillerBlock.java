@@ -4,12 +4,12 @@ import choonster.testmod3.api.capability.pigspawner.IPigSpawner;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerInteractable;
 import choonster.testmod3.text.TestMod3Lang;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -18,8 +18,15 @@ import org.jetbrains.annotations.Nullable;
  * @author Choonster
  */
 public class PigSpawnerRefillerBlock extends Block implements IPigSpawnerInteractable {
+	public static final MapCodec<PigSpawnerRefillerBlock> CODEC = simpleCodec(PigSpawnerRefillerBlock::new);
+
 	public PigSpawnerRefillerBlock(final Block.Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return CODEC;
 	}
 
 	@Override

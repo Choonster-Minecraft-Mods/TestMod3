@@ -8,6 +8,7 @@ import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.CapabilityNotPresentException;
 import choonster.testmod3.world.level.block.entity.BaseFluidTankBlockEntity;
 import choonster.testmod3.world.level.block.entity.FluidTankBlockEntity;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -42,10 +43,17 @@ import java.util.stream.Stream;
  * @author Choonster
  */
 public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEntityBlock<TE> {
+	public static final MapCodec<FluidTankBlock<?>> CODEC = simpleCodec(FluidTankBlock::new);
+
 	public static final ResourceLocation FLUID_TANK_CONTENTS = new ResourceLocation(TestMod3.MODID, "fluid_tank_contents");
 
 	public FluidTankBlock(final Block.Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends Block> codec() {
+		return CODEC;
 	}
 
 	@SuppressWarnings("deprecation")
