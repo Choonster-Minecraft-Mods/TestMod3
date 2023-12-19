@@ -3,17 +3,17 @@ package choonster.testmod3.world.item;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tier;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
-import java.util.Collection;
-import java.util.Optional;
+import java.lang.reflect.Field;
 import java.util.UUID;
 
 /**
@@ -25,13 +25,15 @@ import java.util.UUID;
  * @author Choonster
  */
 public class SlowSwordItem extends SwordItem {
+	private static final Field NAME = ObfuscationReflectionHelper.findField(AttributeModifier.class, /* name */ "f_303575_");
+
 	public SlowSwordItem(final Tier tier, final Item.Properties properties) {
 		super(tier, 3, -2.4f, properties);
 	}
 
 	@Override
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(final EquipmentSlot slot, final ItemStack stack) {
-		final Multimap<Attribute, AttributeModifier> modifiers = ArrayListMultimap.create(super.getAttributeModifiers(slot, stack));
+		final var modifiers = ArrayListMultimap.create(super.getAttributeModifiers(slot, stack));
 
 		if (slot == EquipmentSlot.MAINHAND) {
 			replaceModifier(modifiers, Attributes.ATTACK_DAMAGE, BASE_ATTACK_DAMAGE_UUID, 2);
@@ -51,14 +53,22 @@ public class SlowSwordItem extends SwordItem {
 	 */
 	private void replaceModifier(final Multimap<Attribute, AttributeModifier> modifierMultimap, final Attribute attribute, final UUID id, final double multiplier) {
 		// Get the modifiers for the specified attribute
-		final Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute);
+		final var modifiers = modifierMultimap.get(attribute);
 
 		// Find the modifier with the specified ID, if any
-		final Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getId().equals(id)).findFirst();
+		final var modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getId().equals(id)).findFirst();
 
 		modifierOptional.ifPresent(modifier -> { // If it exists,
 			modifiers.remove(modifier); // Remove it
-			modifiers.add(new AttributeModifier(modifier.getId(), modifier.getName(), modifier.getAmount() * multiplier, modifier.getOperation())); // Add the new modifier
+			modifiers.add(new AttributeModifier(modifier.getId(), getName(modifier), modifier.getAmount() * multiplier, modifier.getOperation())); // Add the new modifier
 		});
+	}
+
+	private String getName(final AttributeModifier modifier) {
+		try {
+			return (String) NAME.get(modifier);
+		} catch (final IllegalAccessException e) {
+			throw new RuntimeException("Failed to get name of attribute modifier", e);
+		}
 	}
 }

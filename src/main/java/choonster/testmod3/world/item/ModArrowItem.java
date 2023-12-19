@@ -9,8 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-
-import java.util.function.BiFunction;
+import org.apache.commons.lang3.function.TriFunction;
 
 /**
  * An arrow item that spawns the arrow entity specified in the constructor.
@@ -21,16 +20,16 @@ public class ModArrowItem extends ArrowItem {
 	/**
 	 * A factory function to create the arrow entity.
 	 */
-	private final BiFunction<Level, LivingEntity, Arrow> entityFactory;
+	private final TriFunction<Level, LivingEntity, ItemStack, Arrow> entityFactory;
 
-	public ModArrowItem(final BiFunction<Level, LivingEntity, Arrow> entityFactory, final Item.Properties properties) {
+	public ModArrowItem(final TriFunction<Level, LivingEntity, ItemStack, Arrow> entityFactory, final Item.Properties properties) {
 		super(properties);
 		this.entityFactory = entityFactory;
 	}
 
 	@Override
 	public AbstractArrow createArrow(final Level level, final ItemStack stack, final LivingEntity shooter) {
-		final Arrow entityModArrow = entityFactory.apply(level, shooter);
+		final Arrow entityModArrow = entityFactory.apply(level, shooter, stack.copyWithCount(1));
 		entityModArrow.setEffectsFromItem(stack);
 		return entityModArrow;
 	}

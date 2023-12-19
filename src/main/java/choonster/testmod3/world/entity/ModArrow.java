@@ -23,12 +23,12 @@ import net.minecraftforge.entity.IEntityAdditionalSpawnData;
  * @author Choonster
  */
 public class ModArrow extends Arrow implements IEntityAdditionalSpawnData {
-	public ModArrow(final EntityType<? extends ModArrow> entityType, final Level world) {
-		super(entityType, world);
+	public ModArrow(final EntityType<? extends ModArrow> entityType, final Level level) {
+		super(entityType, level);
 	}
 
-	public ModArrow(final Level world, final LivingEntity shooter) {
-		super(world, shooter);
+	public ModArrow(final Level level, final LivingEntity shooter, final ItemStack pickupItemStack) {
+		super(level, shooter, pickupItemStack);
 	}
 
 	@Override

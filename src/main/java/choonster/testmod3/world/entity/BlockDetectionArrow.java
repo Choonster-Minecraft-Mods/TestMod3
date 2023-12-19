@@ -19,12 +19,12 @@ import net.minecraft.world.phys.HitResult;
  * @author Choonster
  */
 public class BlockDetectionArrow extends ModArrow {
-	public BlockDetectionArrow(final EntityType<? extends BlockDetectionArrow> entityType, final Level world) {
-		super(entityType, world);
+	public BlockDetectionArrow(final EntityType<? extends ModArrow> entityType, final Level level) {
+		super(entityType, level);
 	}
 
-	public BlockDetectionArrow(final Level world, final LivingEntity shooter) {
-		super(world, shooter);
+	public BlockDetectionArrow(final Level level, final LivingEntity shooter, final ItemStack pickupItemStack) {
+		super(level, shooter, pickupItemStack);
 	}
 
 	@Override
