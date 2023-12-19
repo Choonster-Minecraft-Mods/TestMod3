@@ -15,7 +15,7 @@ import net.minecraft.world.item.crafting.ShapelessRecipe;
  * @author Choonster
  */
 public class EnhancedShapelessRecipe extends ShapelessRecipe {
-	public EnhancedShapelessRecipe(
+	private EnhancedShapelessRecipe(
 			final String group,
 			final CraftingBookCategory category,
 			final ItemStack result,

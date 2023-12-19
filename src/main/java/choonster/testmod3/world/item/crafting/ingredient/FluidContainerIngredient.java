@@ -33,7 +33,7 @@ import java.util.stream.Stream;
  * @author Choonster
  */
 public class FluidContainerIngredient extends AbstractIngredient {
-	public static Codec<FluidContainerIngredient> CODEC = RecordCodecBuilder.<FluidStack>create(instance ->
+	public static final Codec<FluidContainerIngredient> CODEC = RecordCodecBuilder.<FluidStack>create(instance ->
 
 			VanillaCodecs.fluidStack(instance)
 					.apply(instance, (fluid, amount, tag) -> {

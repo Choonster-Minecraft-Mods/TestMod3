@@ -30,7 +30,7 @@ public class ModCreativeTabs {
 
 	private static boolean isInitialised = false;
 
-	public static RegistryObject<CreativeModeTab> TAB = CREATIVE_MODE_TABS.register("tab", () -> {
+	public static final RegistryObject<CreativeModeTab> TAB = CREATIVE_MODE_TABS.register("tab", () -> {
 				final Supplier<ItemStack> sword = () -> SwordUpgrades.upgradeSword(Items.STONE_SWORD);
 
 				return CreativeModeTab.builder()

@@ -43,18 +43,24 @@ public abstract class EnhancedShapelessRecipeBuilder<
 	private static final Field CRITERIA = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* criteria */ "f_291209_");
 
 	protected final ItemStack result;
-	protected final ShapelessRecipeSerializer<? extends RECIPE> serializer;
 	protected final ShapelessRecipeFactory<? extends RECIPE> factory;
+
+	protected EnhancedShapelessRecipeBuilder(
+			final RecipeCategory category,
+			final ItemStack result,
+			final ShapelessRecipeFactory<? extends RECIPE> factory
+	) {
+		super(category, result.getItem(), result.getCount());
+		this.result = result;
+		this.factory = factory;
+	}
 
 	protected EnhancedShapelessRecipeBuilder(
 			final RecipeCategory category,
 			final ItemStack result,
 			final ShapelessRecipeSerializer<? extends RECIPE> serializer
 	) {
-		super(category, result.getItem(), result.getCount());
-		this.result = result;
-		this.serializer = serializer;
-		factory = serializer.factory();
+		this(category, result, serializer.factory());
 	}
 
 	@SuppressWarnings("unchecked")

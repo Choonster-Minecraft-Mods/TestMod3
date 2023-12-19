@@ -63,7 +63,7 @@ public class LootTableTestItem extends Item {
 
 			player.inventoryMenu.broadcastChanges();
 
-			if (itemStacks.size() > 0) {
+			if (!itemStacks.isEmpty()) {
 				final var lootMessage = getItemStackTextComponent(itemStacks.get(0));
 
 				IntStream.range(1, itemStacks.size()).forEachOrdered(i -> {

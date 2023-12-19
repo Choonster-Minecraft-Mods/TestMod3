@@ -13,7 +13,7 @@ import net.minecraft.world.item.crafting.ShapedRecipePattern;
  * @author Choonster
  */
 public class EnhancedShapedRecipe extends ShapedRecipe {
-	public EnhancedShapedRecipe(
+	private EnhancedShapedRecipe(
 			final String group,
 			final CraftingBookCategory category,
 			final ShapedRecipePattern pattern,

@@ -44,18 +44,24 @@ public class EnhancedShapedRecipeBuilder<
 	private static final Field SHOW_NOTIFICATION = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* showNotification */ "f_271093_");
 
 	protected final ItemStack result;
-	protected final ShapedRecipeSerializer<? extends RECIPE> serializer;
 	protected final ShapedRecipeFactory<? extends RECIPE> factory;
+
+	protected EnhancedShapedRecipeBuilder(
+			final RecipeCategory category,
+			final ItemStack result,
+			final ShapedRecipeFactory<? extends RECIPE> factory
+	) {
+		super(category, result.getItem(), result.getCount());
+		this.result = result;
+		this.factory = factory;
+	}
 
 	protected EnhancedShapedRecipeBuilder(
 			final RecipeCategory category,
 			final ItemStack result,
 			final ShapedRecipeSerializer<? extends RECIPE> serializer
 	) {
-		super(category, result.getItem(), result.getCount());
-		this.result = result;
-		this.serializer = serializer;
-		factory = serializer.factory();
+		this(category, result, serializer.factory());
 	}
 
 	/**
