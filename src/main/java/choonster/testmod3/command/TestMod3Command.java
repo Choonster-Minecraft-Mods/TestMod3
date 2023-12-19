@@ -19,7 +19,6 @@ public class TestMod3Command {
 				Commands.literal("testmod3")
 						.then(RotateVectorCommand.register())
 						.then(MaxHealthCommand.register())
-						.then(RunTestsCommand.register())
 		);
 	}
 }
