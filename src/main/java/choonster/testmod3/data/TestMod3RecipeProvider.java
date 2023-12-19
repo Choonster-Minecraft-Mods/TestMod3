@@ -22,6 +22,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.conditions.FalseCondition;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
@@ -73,12 +74,15 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 
 		// A recipe whose conditions are never met
 		{
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, Blocks.OAK_LOG)
+			ConditionalRecipe.builder()
 					.condition(FalseCondition.INSTANCE)
-					.requires(Items.WOODEN_AXE)
-					.requires(Items.WOODEN_AXE)
-					.unlockedBy("has_axe", has(Items.WOODEN_AXE))
-					.save(output, new ResourceLocation(TestMod3.MODID, "conditional_recipe_test"));
+					.recipe(recipeOutput ->
+							ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, Blocks.OAK_LOG)
+									.requires(Items.WOODEN_AXE)
+									.requires(Items.WOODEN_AXE)
+									.unlockedBy("has_axe", has(Items.WOODEN_AXE))
+									.save(recipeOutput, new ResourceLocation(TestMod3.MODID, "conditional_recipe_test"))
+					);
 		}
 
 		// Craft eight Raw Cod from a Guardian Spawner
@@ -108,13 +112,12 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 			final var spawnPotentials = new ListTag();
 			blockEntityTag.put("SpawnPotentials", spawnPotentials);
 
-			EnhancedShapedRecipeBuilder.Vanilla.shapedRecipe(RecipeCategory.MISC, guardianSpawner)
+			EnhancedShapedRecipeBuilder.Enhanced.shapedRecipe(RecipeCategory.MISC, guardianSpawner)
 					.pattern("SSS")
 					.pattern("SCS")
 					.pattern("SSS")
 					.define('S', Tags.Items.RODS_WOODEN) // Sticks
 					.define('C', Items.COD)
-					.itemGroup("ungrouped")
 					.unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
 					.unlockedBy("has_cod", has(Items.COD))
 					.save(output, new ResourceLocation(TestMod3.MODID, "guardian_spawner_from_fish_and_sticks"));

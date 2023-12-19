@@ -5,15 +5,13 @@ import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredien
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraftforge.common.ForgeHooks;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Collectors;
 
@@ -25,8 +23,6 @@ import java.util.stream.Collectors;
  * @author Choonster
  */
 public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
-	private final ItemStack result;
-
 	private ShapelessFluidContainerRecipe(
 			final String group,
 			final CraftingBookCategory category,
@@ -34,7 +30,6 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 			final NonNullList<Ingredient> ingredients
 	) {
 		super(group, category, result, ingredients);
-		this.result = result;
 	}
 
 	@Override
@@ -78,49 +73,26 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 		return remainingItems;
 	}
 
-	public static class Serializer implements RecipeSerializer<ShapelessFluidContainerRecipe> {
-		private static final Codec<ShapelessFluidContainerRecipe> CODEC = RecipeUtil.shapelessRecipeCodec(
-				ShapelessFluidContainerRecipe::new,
-				recipe -> recipe.result,
-				recipe -> recipe.getIngredients()
-						.stream()
-						.filter(ingredient -> ingredient instanceof FluidContainerIngredient)
-						.findFirst()
-						.map(ingredient -> DataResult.success(recipe))
-						.orElseGet(() -> DataResult.error(() -> "Recipe must have at least one testmod3:fluid_container ingredient"))
-		);
+	public static class Serializer extends ShapelessRecipeSerializer<ShapelessFluidContainerRecipe> {
+		private final Codec<ShapelessFluidContainerRecipe> codec;
+
+		public Serializer() {
+			super(ShapelessFluidContainerRecipe::new);
+
+			codec = ExtraCodecs.validate(
+					super.codec(),
+					recipe -> recipe.getIngredients()
+							.stream()
+							.filter(ingredient -> ingredient instanceof FluidContainerIngredient)
+							.findFirst()
+							.map(ingredient -> DataResult.success(recipe))
+							.orElseGet(() -> DataResult.error(() -> "Recipe must have at least one testmod3:fluid_container ingredient"))
+			);
+		}
 
 		@Override
 		public Codec<ShapelessFluidContainerRecipe> codec() {
-			return CODEC;
-		}
-
-		@Nullable
-		@Override
-		public ShapelessFluidContainerRecipe fromNetwork(final FriendlyByteBuf buffer) {
-			final var group = buffer.readUtf(Short.MAX_VALUE);
-			final var category = buffer.readEnum(CraftingBookCategory.class);
-			final var numIngredients = buffer.readVarInt();
-			final var ingredients = NonNullList.withSize(numIngredients, Ingredient.EMPTY);
-
-			ingredients.replaceAll(ignored -> Ingredient.fromNetwork(buffer));
-
-			final var result = buffer.readItem();
-
-			return new ShapelessFluidContainerRecipe(group, category, result, ingredients);
-		}
-
-		@Override
-		public void toNetwork(final FriendlyByteBuf buffer, final ShapelessFluidContainerRecipe recipe) {
-			buffer.writeUtf(recipe.getGroup());
-			buffer.writeEnum(recipe.category());
-			buffer.writeVarInt(recipe.getIngredients().size());
-
-			for (final var ingredient : recipe.getIngredients()) {
-				ingredient.toNetwork(buffer);
-			}
-
-			buffer.writeItem(recipe.result);
+			return codec;
 		}
 	}
 }

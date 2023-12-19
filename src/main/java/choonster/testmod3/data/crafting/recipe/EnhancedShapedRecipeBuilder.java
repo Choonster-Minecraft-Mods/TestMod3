@@ -1,11 +1,14 @@
 package choonster.testmod3.data.crafting.recipe;
 
-import choonster.testmod3.util.RegistryUtil;
+import choonster.testmod3.init.ModCrafting;
+import choonster.testmod3.world.item.crafting.recipe.EnhancedShapedRecipe;
+import choonster.testmod3.world.item.crafting.recipe.ShapedRecipeFactory;
+import choonster.testmod3.world.item.crafting.recipe.ShapedRecipeSerializer;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -14,8 +17,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.jetbrains.annotations.Nullable;
@@ -23,11 +26,10 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Map;
 
 /**
- * An extension of {@link ShapedRecipeBuilder} that allows the recipe result to have NBT.
+ * An extension of {@link ShapedRecipeBuilder} that allows the recipe result to have NBT if the recipe type supports it.
  *
  * @author Choonster
  */
@@ -38,33 +40,22 @@ public class EnhancedShapedRecipeBuilder<
 	private static final Method ENSURE_VALID = ObfuscationReflectionHelper.findMethod(ShapedRecipeBuilder.class, /* ensureValid */ "m_126143_", ResourceLocation.class);
 	private static final Field CATEGORY = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* category */ "f_243672_");
 	private static final Field GROUP = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* group */ "f_126111_");
-	private static final Field ROWS = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* rows */ "f_126108_");
-	private static final Field KEY = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* key */ "f_126109_");
 	private static final Field CRITERIA = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* criteria */ "f_291506_");
 	private static final Field SHOW_NOTIFICATION = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* showNotification */ "f_271093_");
 
 	protected final ItemStack result;
-	protected final RecipeSerializer<? extends RECIPE> serializer;
-	@Nullable
-	protected String itemGroup;
+	protected final ShapedRecipeSerializer<? extends RECIPE> serializer;
+	protected final ShapedRecipeFactory<? extends RECIPE> factory;
 
-	protected EnhancedShapedRecipeBuilder(final RecipeCategory category, final ItemStack result, final RecipeSerializer<? extends RECIPE> serializer) {
+	protected EnhancedShapedRecipeBuilder(
+			final RecipeCategory category,
+			final ItemStack result,
+			final ShapedRecipeSerializer<? extends RECIPE> serializer
+	) {
 		super(category, result.getItem(), result.getCount());
 		this.result = result;
 		this.serializer = serializer;
-	}
-
-	/**
-	 * Sets the item group name to use for the recipe advancement. This allows the result to be an item without an
-	 * item group, e.g. minecraft:spawner.
-	 *
-	 * @param group The group name
-	 * @return This builder
-	 */
-	@SuppressWarnings("unchecked")
-	public BUILDER itemGroup(final String group) {
-		itemGroup = group;
-		return (BUILDER) this;
+		factory = serializer.factory();
 	}
 
 	/**
@@ -119,29 +110,6 @@ public class EnhancedShapedRecipeBuilder<
 	}
 
 	/**
-	 * Builds this recipe into a {@link FinishedRecipe}.
-	 */
-	@Override
-	public void save(final RecipeOutput output) {
-		final var item = result.getItem();
-		save(output, RegistryUtil.getKey(item));
-	}
-
-	/**
-	 * Builds this recipe into a {@link FinishedRecipe}. Use {@link #save(RecipeOutput)} if {@code save} is the same as the ID for
-	 * the result.
-	 */
-	@Override
-	public void save(final RecipeOutput output, final String save) {
-		final var key = RegistryUtil.getKey(result.getItem());
-		if (new ResourceLocation(save).equals(key)) {
-			throw new IllegalStateException("Shaped Recipe " + save + " should remove its 'save' argument");
-		} else {
-			save(output, new ResourceLocation(save));
-		}
-	}
-
-	/**
 	 * Override to validate the recipe's ingredients, result or other conditions.
 	 *
 	 * @param id The recipe ID
@@ -150,13 +118,13 @@ public class EnhancedShapedRecipeBuilder<
 	}
 
 	/**
-	 * Builds this recipe into a {@link FinishedRecipe}.
+	 * Saves this recipe to the {@link RecipeOutput}.
 	 */
 	@Override
 	public void save(final RecipeOutput output, final ResourceLocation id) {
 		try {
 			// Perform the super class's validation
-			ENSURE_VALID.invoke(this, id);
+			final var pattern = (ShapedRecipePattern) ENSURE_VALID.invoke(this, id);
 
 			// Perform our validation
 			ensureValid(id);
@@ -176,50 +144,43 @@ public class EnhancedShapedRecipeBuilder<
 
 			final var category = (RecipeCategory) CATEGORY.get(this);
 
-			@SuppressWarnings("unchecked") final var rows = (List<String>) ROWS.get(this);
-
-			@SuppressWarnings("unchecked") final var key = (Map<Character, Ingredient>) KEY.get(this);
-
 			final var showNotification = (boolean) SHOW_NOTIFICATION.get(this);
 
-			final var baseRecipe = new Result(id,
-					result.getItem(),
-					result.getCount(),
+			final var recipe = factory.createRecipe(
 					group,
-					determineBookCategory(category),
-					rows,
-					key,
-					advancement.build(id.withPrefix("recipes/" + category.getFolderName() + "/")),
+					RecipeBuilder.determineBookCategory(category),
+					pattern,
+					result,
 					showNotification
 			);
 
-			output.accept(new SimpleFinishedRecipe(baseRecipe, result, serializer));
+			output.accept(id, recipe, advancement.build(id.withPrefix("recipes/" + category.getFolderName() + "/")));
 		} catch (final IllegalAccessException | InvocationTargetException e) {
-			throw new RuntimeException("Failed to build Enhanced Shaped Recipe " + id, e);
+			throw new RuntimeException("Failed to save shaped recipe " + id, e);
 		}
 	}
 
-	public static class Vanilla extends EnhancedShapedRecipeBuilder<ShapedRecipe, Vanilla> {
-		private Vanilla(final RecipeCategory category, final ItemStack result) {
-			super(category, result, RecipeSerializer.SHAPED_RECIPE);
+	public static class Enhanced extends EnhancedShapedRecipeBuilder<EnhancedShapedRecipe, Enhanced> {
+		private Enhanced(final RecipeCategory category, final ItemStack result) {
+			super(category, result, ModCrafting.Recipes.ENHANCED_SHAPED.get());
 		}
 
 		/**
-		 * Creates a new builder for a Vanilla shaped recipe with NBT and/or a custom item group.
+		 * Creates a new builder for a basic shaped recipe with NBT.
 		 *
 		 * @param result The recipe result
 		 * @return The builder
 		 */
-		public static Vanilla shapedRecipe(final RecipeCategory category, final ItemStack result) {
-			return new Vanilla(category, result);
+		public static Enhanced shapedRecipe(final RecipeCategory category, final ItemStack result) {
+			return new Enhanced(category, result);
 		}
 
 		@Override
 		protected void ensureValid(final ResourceLocation id) {
 			super.ensureValid(id);
 
-			if (!result.hasTag() && itemGroup == null) {
-				throw new IllegalStateException("Vanilla Shaped Recipe " + id + " has no NBT and no custom item group - use ShapedRecipeBuilder instead");
+			if (!result.hasTag()) {
+				throw new IllegalStateException("Enhanced shaped recipe " + id + " has no NBT - use ShapedRecipeBuilder instead");
 			}
 		}
 	}

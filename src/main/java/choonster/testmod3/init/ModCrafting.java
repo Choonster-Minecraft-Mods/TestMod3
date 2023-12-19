@@ -6,9 +6,7 @@ import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredient;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
 import choonster.testmod3.world.item.crafting.ingredient.MobSpawnerIngredient;
 import choonster.testmod3.world.item.crafting.ingredient.NeverIngredient;
-import choonster.testmod3.world.item.crafting.recipe.ShapedArmourUpgradeRecipe;
-import choonster.testmod3.world.item.crafting.recipe.ShapelessCuttingRecipe;
-import choonster.testmod3.world.item.crafting.recipe.ShapelessFluidContainerRecipe;
+import choonster.testmod3.world.item.crafting.recipe.*;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -131,8 +129,16 @@ public class ModCrafting {
 
 		private static boolean isInitialised;
 
+		public static final RegistryObject<EnhancedShapedRecipe.Serializer> ENHANCED_SHAPED = RECIPE_SERIALIZERS.register("enhanced_shaped",
+				EnhancedShapedRecipe.Serializer::new
+		);
+
 		public static final RegistryObject<ShapedArmourUpgradeRecipe.Serializer> ARMOUR_UPGRADE_SHAPED = RECIPE_SERIALIZERS.register("armour_upgrade_shaped",
 				ShapedArmourUpgradeRecipe.Serializer::new
+		);
+
+		public static final RegistryObject<EnhancedShapelessRecipe.Serializer> ENHANCED_SHAPELESS = RECIPE_SERIALIZERS.register("enhanced_shapeless",
+				EnhancedShapelessRecipe.Serializer::new
 		);
 
 		public static final RegistryObject<ShapelessCuttingRecipe.Serializer> CUTTING_SHAPELESS = RECIPE_SERIALIZERS.register("cutting_shapeless",

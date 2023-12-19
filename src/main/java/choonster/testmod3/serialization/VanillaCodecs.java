@@ -8,15 +8,11 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingRecipeCodecs;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.IExtensibleEnum;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -27,13 +23,6 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class VanillaCodecs {
-	/**
-	 * Copy of the value from {@link CraftingRecipeCodecs}.
-	 */
-	public static final Codec<ItemStack> ITEMSTACK_NONAIR_CODEC = Objects.requireNonNull(
-			ObfuscationReflectionHelper.getPrivateValue(CraftingRecipeCodecs.class, null,  /* ITEMSTACK_NONAIR_CODEC */ "f_291030_")
-	);
-
 	/**
 	 * Prepares a Codec for {@link FluidStack} that uses lowercase field names, suitable for use in recipes/ingredients.
 	 */

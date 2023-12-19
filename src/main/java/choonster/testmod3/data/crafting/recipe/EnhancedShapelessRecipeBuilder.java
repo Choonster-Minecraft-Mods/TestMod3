@@ -1,11 +1,14 @@
 package choonster.testmod3.data.crafting.recipe;
 
-import choonster.testmod3.util.RegistryUtil;
+import choonster.testmod3.init.ModCrafting;
+import choonster.testmod3.world.item.crafting.recipe.ShapelessRecipeFactory;
+import choonster.testmod3.world.item.crafting.recipe.ShapelessRecipeSerializer;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.core.NonNullList;
+import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
@@ -14,7 +17,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
@@ -23,15 +25,14 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Map;
 
 /**
- * An extension of {@link ShapelessRecipeBuilder} that allows the recipe result to have NBT.
+ * An extension of {@link ShapelessRecipeBuilder} that allows the recipe result to have NBT if the recipe type supports it.
  *
  * @author Choonster
  */
-public class EnhancedShapelessRecipeBuilder<
+public abstract class EnhancedShapelessRecipeBuilder<
 		RECIPE extends ShapelessRecipe,
 		BUILDER extends EnhancedShapelessRecipeBuilder<RECIPE, BUILDER>
 		> extends ShapelessRecipeBuilder {
@@ -42,14 +43,18 @@ public class EnhancedShapelessRecipeBuilder<
 	private static final Field CRITERIA = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* criteria */ "f_291209_");
 
 	protected final ItemStack result;
-	protected final RecipeSerializer<? extends RECIPE> serializer;
-	@Nullable
-	protected String itemGroup;
+	protected final ShapelessRecipeSerializer<? extends RECIPE> serializer;
+	protected final ShapelessRecipeFactory<? extends RECIPE> factory;
 
-	protected EnhancedShapelessRecipeBuilder(final RecipeCategory category, final ItemStack result, final RecipeSerializer<? extends RECIPE> serializer) {
+	protected EnhancedShapelessRecipeBuilder(
+			final RecipeCategory category,
+			final ItemStack result,
+			final ShapelessRecipeSerializer<? extends RECIPE> serializer
+	) {
 		super(category, result.getItem(), result.getCount());
 		this.result = result;
 		this.serializer = serializer;
+		factory = serializer.factory();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -94,35 +99,9 @@ public class EnhancedShapelessRecipeBuilder<
 		return (BUILDER) super.group(group);
 	}
 
-	/**
-	 * Builds this recipe into a {@link FinishedRecipe}.
-	 *
-	 * @param output The recipe output
-	 */
-	@Override
-	public void save(final RecipeOutput output) {
-		save(output, RegistryUtil.getKey(result.getItem()));
-	}
 
 	/**
-	 * Builds this recipe into a {@link FinishedRecipe}. Use {@link #save(RecipeOutput)} if save is the same as the ID for
-	 * the result.
-	 *
-	 * @param output The recipe output
-	 * @param save   The ID to use for the recipe
-	 */
-	@Override
-	public void save(final RecipeOutput output, final String save) {
-		final var key = RegistryUtil.getKey(result.getItem());
-		if (new ResourceLocation(save).equals(key)) {
-			throw new IllegalStateException("Enhanced Shapeless Recipe " + save + " should remove its 'save' argument");
-		} else {
-			save(output, new ResourceLocation(save));
-		}
-	}
-
-	/**
-	 * Builds this recipe into a {@link FinishedRecipe}.
+	 * Saves this recipe to the {@link RecipeOutput}.
 	 *
 	 * @param output The recipe output
 	 * @param id     The ID to use for the recipe
@@ -154,26 +133,23 @@ public class EnhancedShapelessRecipeBuilder<
 
 			final var ingredients = getIngredients();
 
-			final var baseRecipe = new Result(
-					id,
-					result.getItem(),
-					result.getCount(),
+			final var recipe = factory.createRecipe(
 					group,
-					determineBookCategory(category),
-					ingredients,
-					advancement.build(id.withPrefix("recipes/" + category.getFolderName() + "/"))
+					RecipeBuilder.determineBookCategory(category),
+					result,
+					ingredients
 			);
 
-			output.accept(new SimpleFinishedRecipe(baseRecipe, result, serializer));
+			output.accept(id, recipe, advancement.build(id.withPrefix("recipes/" + category.getFolderName() + "/")));
 		} catch (final IllegalAccessException | InvocationTargetException e) {
-			throw new RuntimeException("Failed to build Enhanced Shapeless Recipe " + id, e);
+			throw new RuntimeException("Failed to save shapeless recipe " + id, e);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	protected List<Ingredient> getIngredients() {
+	protected NonNullList<Ingredient> getIngredients() {
 		try {
-			return (List<Ingredient>) INGREDIENTS.get(this);
+			return (NonNullList<Ingredient>) INGREDIENTS.get(this);
 		} catch (final IllegalAccessException e) {
 			throw new RuntimeException("Failed to get shapeless recipe ingredients", e);
 		}
@@ -182,27 +158,27 @@ public class EnhancedShapelessRecipeBuilder<
 	protected void validate(final ResourceLocation id) {
 	}
 
-	public static class Vanilla extends EnhancedShapelessRecipeBuilder<ShapelessRecipe, Vanilla> {
-		private Vanilla(final RecipeCategory category, final ItemStack result) {
-			super(category, result, RecipeSerializer.SHAPELESS_RECIPE);
+	public static class Enhanced extends EnhancedShapelessRecipeBuilder<ShapelessRecipe, Enhanced> {
+		private Enhanced(final RecipeCategory category, final ItemStack result) {
+			super(category, result, ModCrafting.Recipes.ENHANCED_SHAPELESS.get());
 		}
 
 		/**
-		 * Creates a new builder for a Vanilla shapeless recipe with NBT and/or a custom item group.
+		 * Creates a new builder for a basic shapeless recipe with NBT.
 		 *
 		 * @param result The recipe result
 		 * @return The builder
 		 */
-		public static Vanilla shapelessRecipe(final RecipeCategory category, final ItemStack result) {
-			return new Vanilla(category, result);
+		public static Enhanced shapelessRecipe(final RecipeCategory category, final ItemStack result) {
+			return new Enhanced(category, result);
 		}
 
 		@Override
 		protected void validate(final ResourceLocation id) {
 			super.validate(id);
 
-			if (!result.hasTag() && itemGroup == null) {
-				throw new IllegalStateException("Vanilla Shapeless Recipe " + id + " has no NBT and no custom item group - use ShapelessRecipeBuilder instead");
+			if (!result.hasTag()) {
+				throw new IllegalStateException("Enhanced shapeless recipe " + id + " has no NBT - use ShapelessRecipeBuilder instead");
 			}
 		}
 	}

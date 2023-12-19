@@ -1,9 +1,7 @@
 package choonster.testmod3.world.item.crafting.recipe;
 
 import choonster.testmod3.init.ModCrafting;
-import com.mojang.serialization.Codec;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.AxeItem;
@@ -14,7 +12,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * A shapeless recipe that damages any {@link AxeItem} ingredients.
@@ -22,8 +19,6 @@ import org.jetbrains.annotations.Nullable;
  * @author Choonster
  */
 public class ShapelessCuttingRecipe extends ShapelessRecipe {
-	private final ItemStack result;
-
 	private ShapelessCuttingRecipe(
 			final String group,
 			final CraftingBookCategory category,
@@ -31,12 +26,11 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 			final NonNullList<Ingredient> ingredients
 	) {
 		super(group, category, result, ingredients);
-		this.result = result;
 	}
 
 	private ItemStack damageAxe(final ItemStack stack) {
 		final var craftingPlayer = ForgeHooks.getCraftingPlayer();
-		if (stack.hurt(1, craftingPlayer.getCommandSenderWorld().random, craftingPlayer instanceof ServerPlayer ? (ServerPlayer) craftingPlayer : null)) {
+		if (stack.hurt(1, craftingPlayer.getCommandSenderWorld().random, craftingPlayer instanceof final ServerPlayer serverPlayer ? serverPlayer : null)) {
 			ForgeEventFactory.onPlayerDestroyItem(craftingPlayer, stack, null);
 			return ItemStack.EMPTY;
 		}
@@ -66,43 +60,9 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 		return ModCrafting.Recipes.CUTTING_SHAPELESS.get();
 	}
 
-	public static class Serializer implements RecipeSerializer<ShapelessCuttingRecipe> {
-		private static final Codec<ShapelessCuttingRecipe> CODEC = RecipeUtil.shapelessRecipeCodec(
-				ShapelessCuttingRecipe::new,
-				recipe -> recipe.result
-		);
-
-		@Override
-		public Codec<ShapelessCuttingRecipe> codec() {
-			return CODEC;
-		}
-
-		@Nullable
-		@Override
-		public ShapelessCuttingRecipe fromNetwork(final FriendlyByteBuf buffer) {
-			final var group = buffer.readUtf(Short.MAX_VALUE);
-			final var category = buffer.readEnum(CraftingBookCategory.class);
-			final var numIngredients = buffer.readVarInt();
-			final var ingredients = NonNullList.withSize(numIngredients, Ingredient.EMPTY);
-
-			ingredients.replaceAll(ignored -> Ingredient.fromNetwork(buffer));
-
-			final var result = buffer.readItem();
-
-			return new ShapelessCuttingRecipe(group, category, result, ingredients);
-		}
-
-		@Override
-		public void toNetwork(final FriendlyByteBuf buffer, final ShapelessCuttingRecipe recipe) {
-			buffer.writeUtf(recipe.getGroup());
-			buffer.writeEnum(recipe.category());
-			buffer.writeVarInt(recipe.getIngredients().size());
-
-			for (final var ingredient : recipe.getIngredients()) {
-				ingredient.toNetwork(buffer);
-			}
-
-			buffer.writeItem(recipe.result);
+	public static class Serializer extends ShapelessRecipeSerializer<ShapelessCuttingRecipe> {
+		public Serializer() {
+			super(ShapelessCuttingRecipe::new);
 		}
 	}
 }
