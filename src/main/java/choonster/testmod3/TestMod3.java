@@ -5,7 +5,6 @@ import choonster.testmod3.init.*;
 import choonster.testmod3.init.levelgen.ModBiomeModifierSerializers;
 import choonster.testmod3.init.levelgen.ModFeatures;
 import choonster.testmod3.init.levelgen.ModPlacementModifierTypes;
-import choonster.testmod3.tests.Tests;
 import choonster.testmod3.util.BlockDumper;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -67,7 +66,6 @@ public class TestMod3 {
 			ModLootTables.registerLootTables();
 
 			BlockDumper.dump();
-			Tests.runTests();
 		});
 	}
 
