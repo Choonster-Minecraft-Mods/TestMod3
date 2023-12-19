@@ -8,6 +8,8 @@ import choonster.testmod3.world.level.block.pipe.BasicPipeBlock;
 import choonster.testmod3.world.level.block.pipe.FluidPipeBlock;
 import choonster.testmod3.world.level.block.slab.ColouredSlabBlock;
 import choonster.testmod3.world.level.block.variantgroup.BlockVariantGroup;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -23,16 +25,22 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.function.Supplier;
 
 public class ModBlocks {
 	private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TestMod3.MODID);
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TestMod3.MODID);
+	private static final DeferredRegister<MapCodec<? extends Block>> BLOCK_TYPES = DeferredRegister.create(Registries.BLOCK_TYPE, TestMod3.MODID);
+
+	private static final Method CODEC = ObfuscationReflectionHelper.findMethod(Block.class, /* codec */ "m_304657_");
 
 	private static boolean isInitialised = false;
 
@@ -262,6 +270,20 @@ public class ModBlocks {
 		final RegistryObject<BLOCK> block = BLOCKS.register(name, blockFactory);
 
 		ITEMS.register(name, () -> itemFactory.create(block.get()));
+
+		BLOCK_TYPES.register(name, () -> {
+			try {
+				@SuppressWarnings("unchecked") final var codec = (MapCodec<? extends Block>) CODEC.invoke(block.get());
+
+				if (codec == Block.CODEC) {
+					throw new IllegalStateException("Block " + name + " must override Block.codec()");
+				}
+
+				return codec;
+			} catch (final IllegalAccessException | InvocationTargetException e) {
+				throw new RuntimeException("Failed to get get codec for block " + name, e);
+			}
+		});
 
 		return block;
 	}
