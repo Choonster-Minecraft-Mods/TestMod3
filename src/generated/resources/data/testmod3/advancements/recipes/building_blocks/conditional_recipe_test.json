@@ -1,35 +1,42 @@
 {
-  "parent": "minecraft:recipes/root",
-  "criteria": {
-    "has_axe": {
-      "conditions": {
-        "items": [
-          {
+  "advancements": [
+    {
+      "parent": "minecraft:recipes/root",
+      "criteria": {
+        "has_axe": {
+          "conditions": {
             "items": [
-              "minecraft:wooden_axe"
+              {
+                "items": [
+                  "minecraft:wooden_axe"
+                ]
+              }
             ]
-          }
+          },
+          "trigger": "minecraft:inventory_changed"
+        },
+        "has_the_recipe": {
+          "conditions": {
+            "recipe": "testmod3:conditional_recipe_test"
+          },
+          "trigger": "minecraft:recipe_unlocked"
+        }
+      },
+      "forge:condition": {
+        "type": "forge:false",
+        "value": {}
+      },
+      "requirements": [
+        [
+          "has_the_recipe",
+          "has_axe"
         ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "has_the_recipe": {
-      "conditions": {
-        "recipe": "testmod3:conditional_recipe_test"
-      },
-      "trigger": "minecraft:recipe_unlocked"
+      ],
+      "rewards": {
+        "recipes": [
+          "testmod3:conditional_recipe_test"
+        ]
+      }
     }
-  },
-  "requirements": [
-    [
-      "has_the_recipe",
-      "has_axe"
-    ]
-  ],
-  "rewards": {
-    "recipes": [
-      "testmod3:conditional_recipe_test"
-    ]
-  },
-  "sends_telemetry_event": false
+  ]
 }

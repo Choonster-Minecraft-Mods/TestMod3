@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "testmod3:enhanced_shaped",
   "category": "misc",
   "key": {
     "C": {
@@ -24,6 +24,5 @@
         "SpawnPotentials": []
       }
     }
-  },
-  "show_notification": true
+  }
 }

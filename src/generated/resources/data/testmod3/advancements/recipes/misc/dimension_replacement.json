@@ -43,6 +43,5 @@
     "recipes": [
       "testmod3:dimension_replacement"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

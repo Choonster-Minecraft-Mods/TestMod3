@@ -43,6 +43,5 @@
     "recipes": [
       "testmod3:golden_helmet_from_iron_helmet"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

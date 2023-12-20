@@ -30,6 +30,5 @@
     "recipes": [
       "testmod3:fish_from_guardian_spawner"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }
