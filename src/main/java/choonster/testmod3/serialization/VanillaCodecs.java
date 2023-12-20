@@ -7,9 +7,13 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.Util;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.IExtensibleEnum;
@@ -26,6 +30,31 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class VanillaCodecs {
+	private static final Codec<Item> ITEM_NON_AIR_CODEC = ExtraCodecs.validate(
+			ForgeRegistries.ITEMS.getCodec(),
+			item -> item == Items.AIR ?
+					DataResult.error(() -> "Item must not be minecraft:air") :
+					DataResult.success(item)
+	);
+
+	/**
+	 * A Codec for {@link  ItemStack} that uses lowercase field names, suitable for use in recipes.
+	 */
+	public static final Codec<ItemStack> RECIPE_RESULT = RecordCodecBuilder.create(instance -> instance.group(
+
+			ITEM_NON_AIR_CODEC
+					.fieldOf("item")
+					.forGetter(ItemStack::getItem),
+
+			ExtraCodecs.strictOptionalField(ExtraCodecs.POSITIVE_INT, "count", 1)
+					.forGetter(ItemStack::getCount),
+
+			CompoundTag.CODEC
+					.optionalFieldOf("nbt")
+					.forGetter(stack -> Optional.ofNullable(stack.getTag()))
+
+	).apply(instance, (item, count, tag) -> new ItemStack(Holder.direct(item), count, tag)));
+
 	/**
 	 * Prepares a Codec for {@link FluidStack} that uses lowercase field names, suitable for use in recipes/ingredients.
 	 */

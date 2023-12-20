@@ -1,5 +1,6 @@
 package choonster.testmod3.world.item.crafting.recipe;
 
+import choonster.testmod3.serialization.VanillaCodecs;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
@@ -44,7 +45,8 @@ public class ShapedRecipeSerializer<T extends ShapedRecipe> implements RecipeSer
 				ShapedRecipePattern.MAP_CODEC
 						.forGetter(ShapedRecipeSerializer::getPattern),
 
-				ItemStack.CODEC.fieldOf("result")
+				VanillaCodecs.RECIPE_RESULT
+						.fieldOf("result")
 						.forGetter(ShapedRecipeSerializer::getResult),
 
 				ExtraCodecs.strictOptionalField(Codec.BOOL, "show_notification", true)

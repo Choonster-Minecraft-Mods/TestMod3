@@ -74,15 +74,20 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 
 		// A recipe whose conditions are never met
 		{
+			final var category = RecipeCategory.BUILDING_BLOCKS;
+			final var id = new ResourceLocation(TestMod3.MODID, "conditional_recipe_test");
+
 			ConditionalRecipe.builder()
 					.condition(FalseCondition.INSTANCE)
 					.recipe(recipeOutput ->
-							ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, Blocks.OAK_LOG)
+							ShapelessRecipeBuilder.shapeless(category, Blocks.OAK_LOG)
 									.requires(Items.WOODEN_AXE)
 									.requires(Items.WOODEN_AXE)
 									.unlockedBy("has_axe", has(Items.WOODEN_AXE))
-									.save(recipeOutput, new ResourceLocation(TestMod3.MODID, "conditional_recipe_test"))
-					);
+									.save(recipeOutput, id)
+					)
+					.advancement(id.withPrefix("recipes/" + category.getFolderName() + "/"))
+					.save(output, id);
 		}
 
 		// Craft eight Raw Cod from a Guardian Spawner

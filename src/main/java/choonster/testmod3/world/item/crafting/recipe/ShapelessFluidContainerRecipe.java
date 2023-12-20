@@ -1,5 +1,6 @@
 package choonster.testmod3.world.item.crafting.recipe;
 
+import choonster.testmod3.init.ModCrafting;
 import choonster.testmod3.util.ModFluidUtil;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
 import com.mojang.serialization.Codec;
@@ -10,6 +11,7 @@ import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -71,6 +73,11 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 		}
 
 		return remainingItems;
+	}
+
+	@Override
+	public RecipeSerializer<?> getSerializer() {
+		return ModCrafting.Recipes.FLUID_CONTAINER_SHAPELESS.get();
 	}
 
 	public static class Serializer extends ShapelessRecipeSerializer<ShapelessFluidContainerRecipe> {

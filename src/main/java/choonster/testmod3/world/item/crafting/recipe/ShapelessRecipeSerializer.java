@@ -1,5 +1,6 @@
 package choonster.testmod3.world.item.crafting.recipe;
 
+import choonster.testmod3.serialization.VanillaCodecs;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -41,7 +42,7 @@ public class ShapelessRecipeSerializer<T extends ShapelessRecipe> implements Rec
 						.orElse(CraftingBookCategory.MISC)
 						.forGetter(ShapelessRecipe::category),
 
-				ItemStack.CODEC
+				VanillaCodecs.RECIPE_RESULT
 						.fieldOf("result")
 						.forGetter(ShapelessRecipeSerializer::getResult),
 
