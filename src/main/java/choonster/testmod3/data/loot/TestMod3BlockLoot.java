@@ -73,9 +73,6 @@ public class TestMod3BlockLoot extends BlockLootSubProvider {
 		dropSelf(ModBlocks.HIDDEN.get());
 		dropSelf(ModBlocks.BASIC_PIPE.get());
 		dropSelf(ModBlocks.FLUID_PIPE.get());
-		dropSelf(ModBlocks.SURVIVAL_COMMAND_BLOCK.get());
-		dropSelf(ModBlocks.REPEATING_SURVIVAL_COMMAND_BLOCK.get());
-		dropSelf(ModBlocks.CHAIN_SURVIVAL_COMMAND_BLOCK.get());
 		dropSelf(ModBlocks.OAK_SAPLING.get());
 		dropSelf(ModBlocks.SPRUCE_SAPLING.get());
 		dropSelf(ModBlocks.BIRCH_SAPLING.get());
