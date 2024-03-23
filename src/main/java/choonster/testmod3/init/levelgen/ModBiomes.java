@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 
 /**
- * Registers this mod's {@link Biome}s
+ * Stores the keys for this mod's {@link Biome Biomes}
  */
 public class ModBiomes {
 	/**

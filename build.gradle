@@ -176,6 +176,8 @@ dependencies {
 
     implementation fg.deobf("curse.maven:jade-324717:${jade_file_id}")
 
+    implementation fg.deobf("com.github.glitchfiend:TerraBlender-forge:1.20.4-${terrablender_version}")
+
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
