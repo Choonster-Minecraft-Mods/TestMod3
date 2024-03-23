@@ -12,7 +12,6 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.SimpleChannel;
 import org.slf4j.Logger;
@@ -67,14 +66,5 @@ public class TestMod3 {
 
 			BlockDumper.dump();
 		});
-	}
-
-	@SubscribeEvent
-	public static void enqueue(final InterModEnqueueEvent event) {
-		final var theOneProbe = "theoneprobe";
-
-//		if (ModList.get().isLoaded(theOneProbe)) {
-//			InterModComms.sendTo(theOneProbe, "getTheOneProbe", TheOneProbeCompat::new);
-//		}
 	}
 }

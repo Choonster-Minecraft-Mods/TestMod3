@@ -4,7 +4,7 @@ import choonster.testmod3.TestMod3;
 import net.minecraft.resources.ResourceLocation;
 
 /**
- * IDs for Jade and The One Probe providers.
+ * IDs for Jade providers.
  *
  * @author Choonster
  */
