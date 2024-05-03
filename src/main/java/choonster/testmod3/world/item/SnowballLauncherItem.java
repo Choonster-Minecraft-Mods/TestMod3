@@ -5,7 +5,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -13,6 +15,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
@@ -53,7 +56,7 @@ public class SnowballLauncherItem extends ProjectileWeaponItem {
 	 * @return True if the player is not in creative mode and the launcher doesn't have the Infinity enchantment
 	 */
 	private boolean isAmmoRequired(final ItemStack stack, final Player player) {
-		return !player.getAbilities().instabuild && stack.getEnchantmentLevel(Enchantments.INFINITY_ARROWS) == 0;
+		return !player.getAbilities().instabuild && stack.getEnchantmentLevel(Enchantments.INFINITY) == 0;
 	}
 
 	@Override
@@ -64,6 +67,11 @@ public class SnowballLauncherItem extends ProjectileWeaponItem {
 	@Override
 	public int getDefaultProjectileRange() {
 		return 15;
+	}
+
+	@Override
+	protected void shootProjectile(final LivingEntity shooter, final Projectile projectile, final int projectileNumber, final float p_335337_, final float p_332934_, final float yRot, @Nullable final LivingEntity target) {
+		projectile.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot() + yRot, 0.0F, p_335337_, p_332934_);
 	}
 
 	@Override

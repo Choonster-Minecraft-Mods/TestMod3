@@ -1,8 +1,8 @@
 package choonster.testmod3.world.item.crafting.ingredient;
 
 import choonster.testmod3.init.ModCrafting;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.conditions.ConditionCodec;
@@ -19,7 +19,7 @@ import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
  * @author Choonster
  */
 public class ConditionalIngredient extends AbstractDelegatingIngredient {
-	public static final Codec<ConditionalIngredient> DATA_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final MapCodec<ConditionalIngredient> DATA_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 
 					ICondition.CODEC
 							.fieldOf(ICondition.DEFAULT_FIELD)
@@ -32,8 +32,9 @@ public class ConditionalIngredient extends AbstractDelegatingIngredient {
 			).apply(instance, ConditionalIngredient::new)
 	);
 
-	public static final Codec<Ingredient> CODEC = ConditionCodec.checkingDecode(
-			DATA_CODEC.flatComapMap(
+	// TODO: Replace with MapCodec?
+	public static final MapCodec<Ingredient> CODEC = ConditionCodec.checkingDecode(
+			DATA_CODEC.codec().flatComapMap(
 					conditionalIngredient -> conditionalIngredient.ingredient,
 					ingredient -> ingredient instanceof ConditionalIngredient conditionalIngredient ?
 							DataResult.success(conditionalIngredient) :

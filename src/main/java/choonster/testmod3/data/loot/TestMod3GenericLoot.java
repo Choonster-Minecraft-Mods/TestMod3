@@ -4,8 +4,9 @@ import choonster.testmod3.init.ModItems;
 import choonster.testmod3.init.ModLootTables;
 import net.minecraft.advancements.critereon.EntityFlagsPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.LootTableSubProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -29,7 +30,7 @@ import java.util.function.BiConsumer;
  */
 public class TestMod3GenericLoot implements LootTableSubProvider {
 	@Override
-	public void generate(final BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
+	public void generate(HolderLookup.Provider lookupProvider, BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
 		consumer.accept(
 				ModLootTables.LOOT_TABLE_TEST,
 				LootTable.lootTable()
@@ -87,4 +88,6 @@ public class TestMod3GenericLoot implements LootTableSubProvider {
 						)
 		);
 	}
+
+
 }

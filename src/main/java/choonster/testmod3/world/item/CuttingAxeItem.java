@@ -13,8 +13,8 @@ import net.minecraft.world.item.Tier;
 public class CuttingAxeItem extends AxeItem {
 	private final RandomSource random = RandomSource.create();
 
-	public CuttingAxeItem(final Tier tier, final float attackDamage, final float attackSpeed, final Properties properties) {
-		super(tier, attackDamage, attackSpeed, properties);
+	public CuttingAxeItem(final Tier tier, final Properties properties) {
+		super(tier, properties);
 	}
 
 	@Override
@@ -25,7 +25,7 @@ public class CuttingAxeItem extends AxeItem {
 	@Override
 	public ItemStack getCraftingRemainingItem(final ItemStack itemStack) {
 		final var remainingItem = itemStack.copy();
-		remainingItem.hurt(1, random, null);
+		remainingItem.hurtAndBreak(1, random, null, () -> remainingItem.setCount(0));
 		return remainingItem;
 	}
 }

@@ -1,16 +1,15 @@
 package choonster.testmod3.world.item.crafting.recipe;
 
-import choonster.testmod3.serialization.VanillaCodecs;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.ExtraCodecs;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 
@@ -27,14 +26,15 @@ public class ShapelessRecipeSerializer<T extends ShapelessRecipe> implements Rec
 	private static final Field RESULT = ObfuscationReflectionHelper.findField(ShapelessRecipe.class, /* result */ "f_44243_");
 
 	private final ShapelessRecipeFactory<T> factory;
-	private final Codec<T> codec;
+	private final MapCodec<T> codec;
+	private final StreamCodec<RegistryFriendlyByteBuf, T> streamCodec;
 
 	public ShapelessRecipeSerializer(final ShapelessRecipeFactory<T> factory) {
 		this.factory = factory;
 
-		codec = RecordCodecBuilder.create(instance -> instance.group(
+		codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
 
-				ExtraCodecs.strictOptionalField(Codec.STRING, "group", "")
+				Codec.STRING.optionalFieldOf("group", "")
 						.forGetter(ShapelessRecipe::getGroup),
 
 				CraftingBookCategory.CODEC
@@ -42,7 +42,7 @@ public class ShapelessRecipeSerializer<T extends ShapelessRecipe> implements Rec
 						.orElse(CraftingBookCategory.MISC)
 						.forGetter(ShapelessRecipe::category),
 
-				VanillaCodecs.RECIPE_RESULT
+				ItemStack.STRICT_CODEC
 						.fieldOf("result")
 						.forGetter(ShapelessRecipeSerializer::getResult),
 
@@ -70,6 +70,8 @@ public class ShapelessRecipeSerializer<T extends ShapelessRecipe> implements Rec
 						.forGetter(ShapelessRecipe::getIngredients)
 
 		).apply(instance, factory::createRecipe));
+
+		streamCodec = StreamCodec.of(this::toNetwork, this::fromNetwork);
 	}
 
 	public ShapelessRecipeFactory<T> factory() {
@@ -77,35 +79,37 @@ public class ShapelessRecipeSerializer<T extends ShapelessRecipe> implements Rec
 	}
 
 	@Override
-	public Codec<T> codec() {
+	public MapCodec<T> codec() {
 		return codec;
 	}
 
-	@Nullable
 	@Override
-	public T fromNetwork(final FriendlyByteBuf buffer) {
+	public StreamCodec<RegistryFriendlyByteBuf, T> streamCodec() {
+		return streamCodec;
+	}
+
+	private T fromNetwork(final RegistryFriendlyByteBuf buffer) {
 		final var group = buffer.readUtf();
 		final var category = buffer.readEnum(CraftingBookCategory.class);
 		final var numIngredients = buffer.readVarInt();
 		final var ingredients = NonNullList.withSize(numIngredients, Ingredient.EMPTY);
 
-		ingredients.replaceAll(ignored -> Ingredient.fromNetwork(buffer));
+		ingredients.replaceAll(ignored -> Ingredient.CONTENTS_STREAM_CODEC.decode(buffer));
 
-		final var result = buffer.readItem();
+		final var result = ItemStack.STREAM_CODEC.decode(buffer);
 
 		return factory.createRecipe(group, category, result, ingredients);
 	}
 
-	@Override
-	public void toNetwork(final FriendlyByteBuf buffer, final T recipe) {
+	private void toNetwork(final RegistryFriendlyByteBuf buffer, final T recipe) {
 		buffer.writeUtf(recipe.getGroup());
 		buffer.writeEnum(recipe.category());
 		buffer.writeVarInt(recipe.getIngredients().size());
 
 		recipe.getIngredients()
-				.forEach(ingredient -> ingredient.toNetwork(buffer));
+				.forEach(ingredient -> Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, ingredient));
 
-		buffer.writeItem(getResult(recipe));
+		ItemStack.STREAM_CODEC.encode(buffer, getResult(recipe));
 	}
 
 	private static ItemStack getResult(final ShapelessRecipe recipe) {

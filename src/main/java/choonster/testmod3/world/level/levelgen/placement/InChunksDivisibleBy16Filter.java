@@ -1,7 +1,7 @@
 package choonster.testmod3.world.level.levelgen.placement;
 
 import choonster.testmod3.init.levelgen.ModPlacementModifierTypes;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
@@ -19,7 +19,7 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
  */
 public class InChunksDivisibleBy16Filter extends PlacementFilter {
 	private static final InChunksDivisibleBy16Filter INSTANCE = new InChunksDivisibleBy16Filter();
-	public static final Codec<InChunksDivisibleBy16Filter> CODEC = Codec.unit(() -> INSTANCE);
+	public static final MapCodec<InChunksDivisibleBy16Filter> CODEC = MapCodec.unit(() -> INSTANCE);
 
 	public static InChunksDivisibleBy16Filter instance() {
 		return INSTANCE;

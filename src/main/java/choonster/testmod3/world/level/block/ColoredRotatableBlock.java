@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -94,32 +94,28 @@ public class ColoredRotatableBlock extends Block {
 		return state.setValue(FACING, direction.rotate(state.getValue(FACING)));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public BlockState mirror(final BlockState state, final Mirror mirror) {
 		return state.setValue(FACING, mirror.mirror(state.getValue(FACING)));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public InteractionResult use(final BlockState state, final Level world, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult rayTraceResult) {
-		final ItemStack heldItem = player.getItemInHand(hand);
-
+	protected ItemInteractionResult useItemOn(final ItemStack heldItem, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
 		if (!heldItem.isEmpty()) { // If the player is holding dye, change the colour
 			final DyeColor dyeColour = DyeColor.getColor(heldItem);
 			if (dyeColour != null) {
-				final boolean success = recolorBlock(state, world, pos, dyeColour);
+				final boolean success = recolorBlock(state, level, pos, dyeColour);
 				if (success) {
 					heldItem.shrink(1);
-					return InteractionResult.SUCCESS;
+					return ItemInteractionResult.SUCCESS;
 				}
 			}
 
-			return InteractionResult.FAIL;
+			return ItemInteractionResult.FAIL;
 		} else { // Else rotate the block
-			world.setBlockAndUpdate(pos, rotate(state, world, pos, Rotation.CLOCKWISE_90));
+			level.setBlockAndUpdate(pos, rotate(state, level, pos, Rotation.CLOCKWISE_90));
 
-			return InteractionResult.SUCCESS;
+			return ItemInteractionResult.SUCCESS;
 		}
 	}
 }

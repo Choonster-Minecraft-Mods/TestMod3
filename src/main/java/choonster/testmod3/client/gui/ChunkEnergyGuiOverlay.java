@@ -7,16 +7,15 @@ import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.CapabilityNotPresentException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 /**
  * Displays the chunk energy in the player's current chunk.
  *
  * @author Choonster
  */
-public class ChunkEnergyGuiOverlay implements IGuiOverlay {
+public class ChunkEnergyGuiOverlay implements LayeredDraw.Layer {
 	private final Minecraft minecraft;
 
 	public ChunkEnergyGuiOverlay(final Minecraft minecraft) {
@@ -24,7 +23,7 @@ public class ChunkEnergyGuiOverlay implements IGuiOverlay {
 	}
 
 	@Override
-	public void render(final ForgeGui gui, final GuiGraphics guiGraphics, final float partialTick, final int screenWidth, final int screenHeight) {
+	public void render(final GuiGraphics guiGraphics, final float partialTick) {
 		if (minecraft.level == null || minecraft.player == null) {
 			return;
 		}

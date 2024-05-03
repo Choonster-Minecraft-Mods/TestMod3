@@ -1,5 +1,6 @@
 package choonster.testmod3.world.item;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,7 +21,7 @@ import net.minecraft.world.level.Level;
 public class PotionEffectArmourItem extends ArmorItem {
 	private final MobEffectInstance mobEffectInstance;
 
-	public PotionEffectArmourItem(final ArmorMaterial material, final ArmorItem.Type type, final MobEffectInstance mobEffectInstance, final Item.Properties properties) {
+	public PotionEffectArmourItem(final Holder<ArmorMaterial> material, final ArmorItem.Type type, final MobEffectInstance mobEffectInstance, final Item.Properties properties) {
 		super(material, type, properties);
 		this.mobEffectInstance = mobEffectInstance;
 	}

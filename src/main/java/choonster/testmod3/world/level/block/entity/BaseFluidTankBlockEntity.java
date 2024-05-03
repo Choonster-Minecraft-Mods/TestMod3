@@ -1,6 +1,7 @@
 package choonster.testmod3.world.level.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -18,8 +19,8 @@ public abstract class BaseFluidTankBlockEntity extends FluidHandlerBlockEntity {
 	}
 
 	@Override
-	public CompoundTag getUpdateTag() {
-		return saveWithoutMetadata();
+	public CompoundTag getUpdateTag(final HolderLookup.Provider registries) {
+		return saveWithoutMetadata(registries);
 	}
 
 	@Nullable

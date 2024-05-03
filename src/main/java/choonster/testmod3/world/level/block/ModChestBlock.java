@@ -6,9 +6,10 @@ import choonster.testmod3.world.level.block.entity.ModChestBlockEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
@@ -75,7 +76,7 @@ public class ModChestBlock extends BaseEntityBlock<ModChestBlockEntity> {
 
 	@Override
 	public void setPlacedBy(final Level level, final BlockPos pos, final BlockState state, @Nullable final LivingEntity placer, final ItemStack stack) {
-		if (stack.hasCustomHoverName()) {
+		if (stack.get(DataComponents.CUSTOM_NAME) != null) {
 			final ModChestBlockEntity blockEntity = getBlockEntity(level, pos);
 			if (blockEntity != null) {
 				blockEntity.setDisplayName(stack.getHoverName());
@@ -89,17 +90,16 @@ public class ModChestBlock extends BaseEntityBlock<ModChestBlockEntity> {
 		return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public InteractionResult use(final BlockState state, final Level world, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult rayTraceResult) {
-		if (!world.isClientSide && !isBlocked(world, pos)) {
-			final ModChestBlockEntity blockEntity = getBlockEntity(world, pos);
+	protected ItemInteractionResult useItemOn(final ItemStack stack, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
+		if (!level.isClientSide && !isBlocked(level, pos)) {
+			final ModChestBlockEntity blockEntity = getBlockEntity(level, pos);
 			if (blockEntity != null) {
 				blockEntity.openGUI((ServerPlayer) player);
 			}
 		}
 
-		return InteractionResult.SUCCESS;
+		return ItemInteractionResult.SUCCESS;
 	}
 
 	/**
@@ -146,13 +146,11 @@ public class ModChestBlock extends BaseEntityBlock<ModChestBlockEntity> {
 		return state.setValue(FACING, direction.rotate(state.getValue(FACING)));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public BlockState mirror(final BlockState state, final Mirror mirror) {
 		return state.setValue(FACING, mirror.mirror(state.getValue(FACING)));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onRemove(final BlockState state, final Level world, final BlockPos pos, final BlockState newState, final boolean isMoving) {
 		if (state.getBlock() != newState.getBlock()) {

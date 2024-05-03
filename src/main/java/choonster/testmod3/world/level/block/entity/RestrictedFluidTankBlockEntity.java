@@ -3,6 +3,7 @@ package choonster.testmod3.world.level.block.entity;
 import choonster.testmod3.init.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -66,8 +67,8 @@ public class RestrictedFluidTankBlockEntity extends BaseFluidTankBlockEntity {
 	}
 
 	@Override
-	public void load(final CompoundTag tag) {
-		super.load(tag);
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
 
 		enabledFacings.clear();
 
@@ -78,8 +79,8 @@ public class RestrictedFluidTankBlockEntity extends BaseFluidTankBlockEntity {
 	}
 
 	@Override
-	protected void saveAdditional(final CompoundTag tag) {
-		super.saveAdditional(tag);
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+		super.saveAdditional(tag, provider);
 
 		final var enabledFacingIndices = enabledFacings.stream()
 				.mapToInt(Direction::get3DDataValue)

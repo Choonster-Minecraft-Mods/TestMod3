@@ -4,6 +4,7 @@ import choonster.testmod3.api.capability.lock.ILock;
 import choonster.testmod3.capability.lock.LockCapability;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,7 +15,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -52,16 +52,17 @@ public abstract class LockableItemHandlerBlockEntity<
 	}
 
 	@Override
-	public void load(final CompoundTag nbt) {
-		super.load(nbt);
-		lock.deserializeNBT(nbt.getCompound("Lock"));
+	protected void loadAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
+
+		lock.deserializeNBT(tag.getCompound("Lock"));
 	}
 
 	@Override
-	protected void saveAdditional(final CompoundTag compound) {
-		super.saveAdditional(compound);
+	protected void saveAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
 
-		compound.put("Lock", lock.serializeNBT());
+		tag.put("Lock", lock.serializeNBT());
 	}
 
 	@Nullable

@@ -1,6 +1,7 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
+import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.alchemy.Potion;
@@ -8,7 +9,6 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
@@ -35,16 +35,17 @@ public class ModPotions {
 	private static final int HARMFUL_DURATION_STRONG = 900;
 
 	public static final RegistryObject<Potion> TEST = registerPotion("test",
-			() -> new MobEffectInstance(ModMobEffects.TEST.get(), HELPFUL_DURATION_STANDARD)
+			() -> new MobEffectInstance(holder(ModMobEffects.TEST), HELPFUL_DURATION_STANDARD)
 	);
 
+
 	public static final RegistryObject<Potion> LONG_TEST = registerPotion("test",
-			() -> new MobEffectInstance(ModMobEffects.TEST.get(), HELPFUL_DURATION_LONG),
+			() -> new MobEffectInstance(holder(ModMobEffects.TEST), HELPFUL_DURATION_LONG),
 			LONG_PREFIX
 	);
 
 	public static final RegistryObject<Potion> STRONG_TEST = registerPotion("test",
-			() -> new MobEffectInstance(ModMobEffects.TEST.get(), HELPFUL_DURATION_STRONG, 1),
+			() -> new MobEffectInstance(holder(ModMobEffects.TEST), HELPFUL_DURATION_STRONG, 1),
 			STRONG_PREFIX
 	);
 
@@ -97,5 +98,9 @@ public class ModPotions {
 
 			return new Potion(potionBaseName, effectInstanceFactory.get());
 		});
+	}
+
+	private static Holder<MobEffect> holder(final RegistryObject<MobEffect> mobEffect) {
+		return mobEffect.getHolder().orElseThrow();
 	}
 }

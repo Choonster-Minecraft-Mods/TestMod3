@@ -1,21 +1,23 @@
 package choonster.testmod3.data;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.data.loot.TestMod3BlockLoot;
 import choonster.testmod3.data.loot.TestMod3EntityLoot;
 import choonster.testmod3.data.loot.TestMod3GenericLoot;
+import choonster.testmod3.init.ModLootTables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.*;
+import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Generates this mod's loot tables.
@@ -23,34 +25,31 @@ import java.util.stream.Collectors;
  * @author Choonster
  */
 public class TestMod3LootTableProvider extends LootTableProvider {
-	private TestMod3LootTableProvider(final PackOutput output, final List<SubProviderEntry> subProviders) {
-		super(output, Set.of(), subProviders);
+	private TestMod3LootTableProvider(final PackOutput output, final List<SubProviderEntry> subProviders, final CompletableFuture<HolderLookup.Provider> registries) {
+		super(output, Set.of(), subProviders, registries);
 	}
 
-	public static TestMod3LootTableProvider create(final PackOutput output) {
+	public static TestMod3LootTableProvider create(final PackOutput output, final CompletableFuture<HolderLookup.Provider> registries) {
 		return new TestMod3LootTableProvider(output, ImmutableList.of(
 				new SubProviderEntry(TestMod3BlockLoot::new, LootContextParamSets.BLOCK),
 				new SubProviderEntry(TestMod3EntityLoot::new, LootContextParamSets.ENTITY),
 				new SubProviderEntry(TestMod3GenericLoot::new, LootContextParamSets.ALL_PARAMS)
-		));
+		), registries);
 	}
 
 	@Override
-	protected void validate(final Map<ResourceLocation, LootTable> map, final ValidationContext validationContext) {
-		final var modLootTableIds = BuiltInLootTables
-				.all()
-				.stream()
-				.filter(lootTable -> lootTable.getNamespace().equals(TestMod3.MODID))
-				.collect(Collectors.toSet());
+	protected void validate(Registry<LootTable> registry, ValidationContext validationContext, ProblemReporter problemReporter) {
 
-		for (final var id : Sets.difference(modLootTableIds, map.keySet())) {
+		final var modLootTableIds = ModLootTables.all();
+
+		for (final var id : Sets.difference(modLootTableIds, registry.keySet())) {
 			validationContext.reportProblem("Missing mod loot table: " + id);
 		}
 
-		map.forEach((id, lootTable) -> lootTable.validate(
+		registry.holders().forEach((lootTable) -> lootTable.value().validate(
 				validationContext
-						.setParams(lootTable.getParamSet())
-						.enterElement("{" + id + "}", new LootDataId<>(LootDataType.TABLE, id))
+						.setParams(lootTable.value().getParamSet())
+						.enterElement("{" + lootTable.key().location() + "}", lootTable.key())
 		));
 	}
 }

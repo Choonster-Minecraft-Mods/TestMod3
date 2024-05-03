@@ -6,7 +6,6 @@ import net.minecraft.nbt.FloatTag;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -88,8 +87,8 @@ public class MaxHealth implements IMaxHealth, INBTSerializable<FloatTag> {
 	@Override
 	public void synchronise() {
 		if (entity != null && !entity.getCommandSenderWorld().isClientSide) {
-			final AttributeInstance entityMaxHealthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
-			final ClientboundUpdateAttributesPacket packet = new ClientboundUpdateAttributesPacket(entity.getId(), Collections.singleton(entityMaxHealthAttribute));
+			final var entityMaxHealthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
+			final var packet = new ClientboundUpdateAttributesPacket(entity.getId(), Collections.singleton(entityMaxHealthAttribute));
 
 			((ServerLevel) entity.getCommandSenderWorld()).getChunkSource().broadcastAndSend(entity, packet);
 		}
@@ -111,7 +110,7 @@ public class MaxHealth implements IMaxHealth, INBTSerializable<FloatTag> {
 	 * @return The AttributeModifier
 	 */
 	protected AttributeModifier createModifier() {
-		return new AttributeModifier(MODIFIER_ID, MODIFIER_NAME, getBonusMaxHealth(), AttributeModifier.Operation.ADDITION);
+		return new AttributeModifier(MODIFIER_ID, MODIFIER_NAME, getBonusMaxHealth(), AttributeModifier.Operation.ADD_VALUE);
 	}
 
 	/**
@@ -122,18 +121,18 @@ public class MaxHealth implements IMaxHealth, INBTSerializable<FloatTag> {
 			return;
 		}
 
-		final AttributeInstance entityMaxHealthAttribute = Objects.requireNonNull(entity.getAttribute(Attributes.MAX_HEALTH));
+		final var entityMaxHealthAttribute = Objects.requireNonNull(entity.getAttribute(Attributes.MAX_HEALTH));
 
-		final AttributeModifier modifier = createModifier();
+		final var modifier = createModifier();
 
-		final float newAmount = getBonusMaxHealth();
+		final var newAmount = getBonusMaxHealth();
 		final float oldAmount;
 
-		final AttributeModifier oldModifier = entityMaxHealthAttribute.getModifier(MODIFIER_ID);
+		final var oldModifier = entityMaxHealthAttribute.getModifier(MODIFIER_ID);
 		if (oldModifier != null) {
 			entityMaxHealthAttribute.removeModifier(MODIFIER_ID);
 
-			oldAmount = (float) oldModifier.getAmount();
+			oldAmount = (float) oldModifier.amount();
 
 			LOGGER.debug(MaxHealthCapability.LOG_MARKER, "Max Health Changed! Entity: {} - Old: {} - New: {}", entity, MaxHealthCapability.formatMaxHealth(oldAmount), MaxHealthCapability.formatMaxHealth(newAmount));
 		} else {
@@ -144,7 +143,7 @@ public class MaxHealth implements IMaxHealth, INBTSerializable<FloatTag> {
 
 		entityMaxHealthAttribute.addTransientModifier(modifier);
 
-		final float amountToHeal = newAmount - oldAmount;
+		final var amountToHeal = newAmount - oldAmount;
 		if (amountToHeal > 0) {
 			entity.heal(amountToHeal);
 		}

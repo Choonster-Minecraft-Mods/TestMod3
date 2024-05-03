@@ -13,15 +13,14 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Lazy;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.items.IItemHandler;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -60,6 +59,8 @@ public class DimensionReplacementItem extends Item {
 						.map(entry -> Pair.of(entry.getKey(), Lazy.of(entry.getValue())))
 						.collect(Collectors.toMap(Pair::getFirst, Pair::getSecond))
 		);
+
+		MinecraftForge.EVENT_BUS.addListener(this::itemTooltip);
 	}
 
 	/**
@@ -83,6 +84,7 @@ public class DimensionReplacementItem extends Item {
 			return;
 		}
 
+		// TODO: DataComponents
 		final CompoundTag stackTagCompound = stack.getOrCreateTag();
 
 		if (!stackTagCompound.getBoolean(KEY_REPLACED)) { // If the replacement logic hasn't been run,
@@ -123,14 +125,16 @@ public class DimensionReplacementItem extends Item {
 		return false;
 	}
 
-	@Override
-	public void appendHoverText(final ItemStack stack, @Nullable final Level world, final List<Component> tooltip, final TooltipFlag flag) {
-		if (world == null) {
+	private void itemTooltip(final ItemTooltipEvent event) {
+		final var stack = event.getItemStack();
+		final var player = event.getEntity();
+
+		if (player == null || stack.getItem() != this) {
 			return;
 		}
 
-		tooltip.add(
-				getReplacement(world)
+		event.getToolTip().add(
+				getReplacement(player.level())
 						.map(replacement -> Component.translatable(TestMod3Lang.ITEM_DESC_DIMENSION_REPLACEMENT_REPLACEMENT.getTranslationKey(), replacement.getHoverName()))
 						.orElseGet(() -> Component.translatable(TestMod3Lang.ITEM_DESC_DIMENSION_REPLACEMENT_NO_REPLACEMENT.getTranslationKey()))
 		);

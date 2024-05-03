@@ -6,9 +6,8 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -40,14 +39,14 @@ public class ItemDebuggerBlock extends Block {
 		return CODEC;
 	}
 
-	private void logItem(final ItemStack stack) {
+	private void logItem(final Level level, final ItemStack stack) {
 		if (!stack.isEmpty()) {
-			LOGGER.info("ItemStack: {}", stack.serializeNBT());
+			LOGGER.info("ItemStack: {}", stack.save(level.registryAccess()));
 			logCapability(stack, PigSpawnerCapability.PIG_SPAWNER_CAPABILITY, Direction.NORTH);
 			logFluidHandler(stack);
 
-			final ResourceLocation key = RegistryUtil.getKey(stack.getItem());
-			final String modName = ModList.get().getModContainerById(key.getNamespace())
+			final var key = RegistryUtil.getKey(stack.getItem());
+			final var modName = ModList.get().getModContainerById(key.getNamespace())
 					.map(modContainer -> modContainer.getModInfo().getDisplayName())
 					.orElse("Unknown - No ModContainer");
 
@@ -67,19 +66,17 @@ public class ItemDebuggerBlock extends Block {
 		);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public InteractionResult use(final BlockState state, final Level world, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult rayTraceResult) {
-		logItem(player.getItemInHand(hand));
+	protected ItemInteractionResult useItemOn(final ItemStack stack, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
+		logItem(level, player.getItemInHand(hand));
 
-		return InteractionResult.SUCCESS;
+		return ItemInteractionResult.SUCCESS;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void attack(final BlockState state, final Level level, final BlockPos pos, final Player player) {
-		for (final InteractionHand hand : InteractionHand.values()) {
-			logItem(player.getItemInHand(hand));
+		for (final var hand : InteractionHand.values()) {
+			logItem(level, player.getItemInHand(hand));
 		}
 	}
 }

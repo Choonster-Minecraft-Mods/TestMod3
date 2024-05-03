@@ -11,7 +11,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -45,7 +44,7 @@ public class SlingshotItem extends SnowballLauncherItem {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(final Level level, final Player player, final InteractionHand hand) {
-		final InteractionResultHolder<ItemStack> result = super.use(level, player, hand);
+		final var result = super.use(level, player, hand);
 
 		if (result.getResult() == InteractionResult.SUCCESS) {
 			LastUseTimeCapability.updateLastUseTime(player, player.getItemInHand(hand));

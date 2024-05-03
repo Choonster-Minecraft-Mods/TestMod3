@@ -3,10 +3,9 @@ package choonster.testmod3.world.item.crafting.recipe;
 import choonster.testmod3.init.ModCrafting;
 import choonster.testmod3.util.ModFluidUtil;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.NonNullList;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -81,13 +80,12 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 	}
 
 	public static class Serializer extends ShapelessRecipeSerializer<ShapelessFluidContainerRecipe> {
-		private final Codec<ShapelessFluidContainerRecipe> codec;
+		private final MapCodec<ShapelessFluidContainerRecipe> codec;
 
 		public Serializer() {
 			super(ShapelessFluidContainerRecipe::new);
 
-			codec = ExtraCodecs.validate(
-					super.codec(),
+			codec = super.codec().validate(
 					recipe -> recipe.getIngredients()
 							.stream()
 							.filter(ingredient -> ingredient instanceof FluidContainerIngredient)
@@ -98,7 +96,7 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 		}
 
 		@Override
-		public Codec<ShapelessFluidContainerRecipe> codec() {
+		public MapCodec<ShapelessFluidContainerRecipe> codec() {
 			return codec;
 		}
 	}

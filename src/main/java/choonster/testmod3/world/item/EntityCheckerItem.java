@@ -2,7 +2,6 @@ package choonster.testmod3.world.item;
 
 import choonster.testmod3.text.TestMod3Lang;
 import com.mojang.logging.LogUtils;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -16,9 +15,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -60,9 +56,10 @@ public class EntityCheckerItem extends Item {
 	 * @return The new radius
 	 */
 	private static int incrementRadius(final ItemStack stack, final int amount) {
+		// TODO: DataComponents
 		final CompoundTag tag = stack.getOrCreateTag();
 
-		final int newRadius = Math.max(tag.getInt("Radius") + amount, 0); // Don't allow negative values
+		final var newRadius = Math.max(tag.getInt("Radius") + amount, 0); // Don't allow negative values
 		tag.putInt("Radius", newRadius);
 
 		return newRadius;
@@ -87,7 +84,7 @@ public class EntityCheckerItem extends Item {
 	private static boolean toggleCornerModeEnabled(final ItemStack stack) {
 		final CompoundTag tag = stack.getOrCreateTag();
 
-		final boolean cornerModeEnabled = !tag.getBoolean("CornerMode");
+		final var cornerModeEnabled = !tag.getBoolean("CornerMode");
 		tag.putBoolean("CornerMode", cornerModeEnabled);
 
 		return cornerModeEnabled;
@@ -95,10 +92,10 @@ public class EntityCheckerItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(final Level world, final Player player, final InteractionHand hand) {
-		final ItemStack heldItem = player.getItemInHand(hand);
+		final var heldItem = player.getItemInHand(hand);
 
 		if (!world.isClientSide) {
-			final int newRadius = incrementRadius(heldItem, player.isShiftKeyDown() ? -1 : 1);
+			final var newRadius = incrementRadius(heldItem, player.isShiftKeyDown() ? -1 : 1);
 			player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_ENTITY_CHECKER_RADIUS.getTranslationKey(), newRadius));
 		}
 
@@ -108,8 +105,8 @@ public class EntityCheckerItem extends Item {
 	@Override
 	public boolean onLeftClickEntity(final ItemStack stack, final Player player, final Entity entity) {
 		if (!player.getCommandSenderWorld().isClientSide) {
-			final boolean cornerModeEnabled = toggleCornerModeEnabled(stack);
-			final TestMod3Lang message = cornerModeEnabled ? TestMod3Lang.MESSAGE_ENTITY_CHECKER_MODE_CORNER : TestMod3Lang.MESSAGE_ENTITY_CHECKER_MODE_EDGE;
+			final var cornerModeEnabled = toggleCornerModeEnabled(stack);
+			final var message = cornerModeEnabled ? TestMod3Lang.MESSAGE_ENTITY_CHECKER_MODE_CORNER : TestMod3Lang.MESSAGE_ENTITY_CHECKER_MODE_EDGE;
 			player.sendSystemMessage(Component.translatable(message.getTranslationKey(), cornerModeEnabled));
 		}
 
@@ -119,11 +116,11 @@ public class EntityCheckerItem extends Item {
 	@Override
 	public InteractionResult useOn(final UseOnContext context) {
 		if (!context.getLevel().isClientSide) {
-			final Player player = context.getPlayer();
-			final ItemStack heldItem = context.getItemInHand();
-			final BlockPos clickedPos = context.getClickedPos();
+			final var player = context.getPlayer();
+			final var heldItem = context.getItemInHand();
+			final var clickedPos = context.getClickedPos();
 
-			final int radius = getRadius(heldItem);
+			final var radius = getRadius(heldItem);
 			final AABB boundingBox;
 
 			// Create the AABB based on whether corner mode is enabled.
@@ -136,7 +133,7 @@ public class EntityCheckerItem extends Item {
 				boundingBox = new AABB(clickedPos).expandTowards(radius, 1, radius);
 			}
 
-			final List<Entity> entities = context.getLevel().getEntities(player, boundingBox);
+			final var entities = context.getLevel().getEntities(player, boundingBox);
 
 			LOGGER.info("Bounding box: {}", boundingBox);
 			if (player != null) {
@@ -148,12 +145,11 @@ public class EntityCheckerItem extends Item {
 		return InteractionResult.SUCCESS;
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void appendHoverText(final ItemStack stack, @Nullable final Level level, final List<Component> tooltip, final TooltipFlag flagIn) {
+	public void appendHoverText(final ItemStack stack, final TooltipContext context, final List<Component> tooltip, final TooltipFlag flagIn) {
 		tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_RADIUS.getTranslationKey(), getRadius(stack)));
 
-		final TestMod3Lang cornerMode = isCornerModeEnabled(stack) ? TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_MODE_CORNER : TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_MODE_EDGE;
+		final var cornerMode = isCornerModeEnabled(stack) ? TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_MODE_CORNER : TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_MODE_EDGE;
 		tooltip.add(Component.translatable(cornerMode.getTranslationKey()));
 	}
 }

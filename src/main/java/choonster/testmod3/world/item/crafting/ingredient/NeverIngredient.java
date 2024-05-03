@@ -2,9 +2,10 @@ package choonster.testmod3.world.item.crafting.ingredient;
 
 import choonster.testmod3.init.ModCrafting;
 import choonster.testmod3.text.TestMod3Lang;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.Util;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -26,13 +27,13 @@ import java.util.stream.Stream;
 public class NeverIngredient extends AbstractIngredient {
 	public static final NeverIngredient INSTANCE = new NeverIngredient();
 
-	public static final Codec<NeverIngredient> CODEC = Codec.unit(INSTANCE);
+	public static final MapCodec<NeverIngredient> CODEC = MapCodec.unit(INSTANCE);
 
 	private NeverIngredient() {
 		super(Stream.of(
 				new ItemValue(Util.make(
 						new ItemStack(Items.BARRIER),
-						stack -> stack.setHoverName(Component.translatable(TestMod3Lang.INGREDIENT_NEVER_BARRIER_NAME.getTranslationKey()))
+						stack -> stack.set(DataComponents.CUSTOM_NAME, Component.translatable(TestMod3Lang.INGREDIENT_NEVER_BARRIER_NAME.getTranslationKey()))
 				))
 		));
 	}
@@ -54,18 +55,18 @@ public class NeverIngredient extends AbstractIngredient {
 
 	public static class Serializer implements IIngredientSerializer<NeverIngredient> {
 		@Override
-		public Codec<? extends NeverIngredient> codec() {
+		public MapCodec<? extends NeverIngredient> codec() {
 			return CODEC;
 		}
 
 		@Override
-		public NeverIngredient read(final FriendlyByteBuf buffer) {
-			return NeverIngredient.INSTANCE;
+		public void write(final RegistryFriendlyByteBuf buffer, final NeverIngredient value) {
+			// No-op
 		}
 
 		@Override
-		public void write(final FriendlyByteBuf buffer, final NeverIngredient ingredient) {
-			// No-op
+		public NeverIngredient read(final RegistryFriendlyByteBuf buffer) {
+			return NeverIngredient.INSTANCE;
 		}
 	}
 }

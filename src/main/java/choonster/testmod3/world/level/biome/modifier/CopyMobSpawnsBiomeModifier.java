@@ -1,7 +1,7 @@
 package choonster.testmod3.world.level.biome.modifier;
 
 import choonster.testmod3.init.levelgen.ModBiomeModifierSerializers;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
@@ -43,7 +43,7 @@ public record CopyMobSpawnsBiomeModifier(
 	}
 
 	@Override
-	public Codec<CopyMobSpawnsBiomeModifier> codec() {
+	public MapCodec<CopyMobSpawnsBiomeModifier> codec() {
 		return ModBiomeModifierSerializers.COPY_MOB_SPAWNS.get();
 	}
 }

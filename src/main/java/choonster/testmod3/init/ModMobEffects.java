@@ -19,7 +19,7 @@ public class ModMobEffects {
 
 	private static boolean isInitialised;
 
-	public static final RegistryObject<TestMod3MobEffect> TEST = EFFECTS.register("test",
+	public static final RegistryObject<MobEffect> TEST = EFFECTS.register("test",
 			() -> new TestMod3MobEffect(MobEffectCategory.BENEFICIAL, 2, 2, 2)
 	);
 

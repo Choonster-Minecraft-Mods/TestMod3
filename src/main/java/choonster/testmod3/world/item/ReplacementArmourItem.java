@@ -5,6 +5,7 @@ import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.logging.LogUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -21,7 +22,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.Collection;
@@ -52,7 +52,7 @@ public class ReplacementArmourItem extends ArmorItem {
 	 */
 	private final Set<Supplier<ItemStack>> replacementItems;
 
-	public ReplacementArmourItem(final ArmorMaterial material, final ArmorItem.Type type, final Properties properties, final Collection<Supplier<ItemStack>> replacementItems) {
+	public ReplacementArmourItem(final Holder<ArmorMaterial> material, final ArmorItem.Type type, final Properties properties, final Collection<Supplier<ItemStack>> replacementItems) {
 		super(material, type, properties);
 
 		this.replacementItems = ImmutableSet.copyOf(
@@ -79,6 +79,7 @@ public class ReplacementArmourItem extends ArmorItem {
 	 * @return Has this item replaced the other armour?
 	 */
 	public static boolean hasReplacedArmour(final ItemStack stack) {
+		// TODO: Replace with DataComponents
 		return stack.getOrCreateTag().contains(KEY_REPLACED_ARMOUR, Tag.TAG_LIST);
 	}
 
@@ -228,7 +229,7 @@ public class ReplacementArmourItem extends ArmorItem {
 	}
 
 	@Override
-	public void appendHoverText(final ItemStack stack, @Nullable final Level level, final List<Component> tooltip, final TooltipFlag flagIn) {
+	public void appendHoverText(final ItemStack stack, final TooltipContext context, final List<Component> tooltip, final TooltipFlag flag) {
 		tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_ARMOUR_REPLACEMENT_EQUIP.getTranslationKey()));
 		tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_ARMOUR_REPLACEMENT_UNEQUIP.getTranslationKey()));
 	}

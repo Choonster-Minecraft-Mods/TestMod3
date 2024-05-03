@@ -4,7 +4,7 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.level.storage.loot.modifiers.BlockEntityNBTLootModifier;
 import choonster.testmod3.world.level.storage.loot.modifiers.ItemLootModifier;
 import choonster.testmod3.world.level.storage.loot.modifiers.LootTableLootModifier;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -17,21 +17,21 @@ import net.minecraftforge.registries.RegistryObject;
  * @author Choonster
  */
 public class ModLootModifierSerializers {
-	private static final DeferredRegister<Codec<? extends IGlobalLootModifier>> SERIALIZERS = DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, TestMod3.MODID);
+	private static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> SERIALIZERS = DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, TestMod3.MODID);
 
 	private static boolean isInitialised;
 
-	public static final RegistryObject<Codec<LootTableLootModifier>> LOOT_TABLE = SERIALIZERS.register(
+	public static final RegistryObject<MapCodec<LootTableLootModifier>> LOOT_TABLE = SERIALIZERS.register(
 			"loot_table",
 			LootTableLootModifier.CODEC
 	);
 
-	public static final RegistryObject<Codec<BlockEntityNBTLootModifier>> TILE_ENTITY_NBT = SERIALIZERS.register(
+	public static final RegistryObject<MapCodec<BlockEntityNBTLootModifier>> TILE_ENTITY_NBT = SERIALIZERS.register(
 			"tile_entity_nbt",
 			BlockEntityNBTLootModifier.CODEC
 	);
 
-	public static final RegistryObject<Codec<ItemLootModifier>> ITEM = SERIALIZERS.register(
+	public static final RegistryObject<MapCodec<ItemLootModifier>> ITEM = SERIALIZERS.register(
 			"item",
 			ItemLootModifier.CODEC
 	);

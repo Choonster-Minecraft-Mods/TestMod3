@@ -6,7 +6,7 @@ import choonster.testmod3.world.level.biome.modifier.CopyMobSpawnsBiomeModifier;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
@@ -33,7 +33,7 @@ public class ModBiomeModifiers {
 	public static final ResourceKey<BiomeModifier> ORE_IRON_NETHER = key("ore_iron_nether");
 	public static final ResourceKey<BiomeModifier> ORE_IRON_END = key("ore_iron_end");
 
-	public static void bootstrap(final BootstapContext<BiomeModifier> context) {
+	public static void bootstrap(final BootstrapContext<BiomeModifier> context) {
 		final var biomes = context.lookup(Registries.BIOME);
 		final var features = context.lookup(Registries.PLACED_FEATURE);
 

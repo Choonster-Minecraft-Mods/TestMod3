@@ -3,13 +3,16 @@ package choonster.testmod3.data.worldgen;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.levelgen.ModFeatures;
 import choonster.testmod3.world.level.levelgen.feature.BannerFeatureConfig;
-import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BannerPatterns;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -35,12 +38,17 @@ public class ModConfiguredFeatures {
 	public static final ResourceKey<ConfiguredFeature<?, ?>> ORE_IRON_NETHER = key("ore_iron_nether");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> ORE_IRON_END = key("ore_iron_end");
 
-	public static void bootstrap(final BootstapContext<ConfiguredFeature<?, ?>> context) {
+	public static void bootstrap(final BootstrapContext<ConfiguredFeature<?, ?>> context) {
+		final var patterns = context.lookup(Registries.BANNER_PATTERN);
+
+
 		register(context, BANNER, ModFeatures.BANNER.get(),
-				BannerFeatureConfig.create(
+				new BannerFeatureConfig(
 						DyeColor.PINK,
-						Pair.of(BannerPatterns.GRADIENT_UP, DyeColor.MAGENTA),
-						Pair.of(BannerPatterns.FLOWER, DyeColor.BLACK)
+						new BannerPatternLayers.Builder()
+								.add(pattern(patterns, BannerPatterns.GRADIENT_UP), DyeColor.MAGENTA)
+								.add(pattern(patterns, BannerPatterns.FLOWER), DyeColor.BLACK)
+								.build()
 				)
 		);
 
@@ -63,6 +71,10 @@ public class ModConfiguredFeatures {
 						9
 				)
 		);
+	}
+
+	private static Holder<BannerPattern> pattern(final HolderGetter<BannerPattern> lookup, final ResourceKey<BannerPattern> key) {
+		return lookup.getOrThrow(key);
 	}
 
 	private static ResourceKey<ConfiguredFeature<?, ?>> key(final String name) {

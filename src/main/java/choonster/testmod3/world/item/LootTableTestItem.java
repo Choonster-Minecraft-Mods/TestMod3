@@ -2,6 +2,7 @@ package choonster.testmod3.world.item;
 
 import choonster.testmod3.init.ModLootTables;
 import choonster.testmod3.text.TestMod3Lang;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -39,7 +40,11 @@ public class LootTableTestItem extends Item {
 	@Override
 	public InteractionResultHolder<ItemStack> use(final Level level, final Player player, final InteractionHand hand) {
 		if (!level.isClientSide) {
-			final var lootTable = Objects.requireNonNull(level.getServer()).getLootData().getLootTable(ModLootTables.LOOT_TABLE_TEST);
+			final var lootTable = level
+					.registryAccess()
+					.registry(Registries.LOOT_TABLE)
+					.map(registry -> registry.get(ModLootTables.LOOT_TABLE_TEST))
+					.orElse(LootTable.EMPTY);
 
 			final var state = Blocks.CHEST.defaultBlockState();
 
@@ -64,7 +69,7 @@ public class LootTableTestItem extends Item {
 			player.inventoryMenu.broadcastChanges();
 
 			if (!itemStacks.isEmpty()) {
-				final var lootMessage = getItemStackTextComponent(itemStacks.get(0));
+				final var lootMessage = getItemStackTextComponent(itemStacks.getFirst());
 
 				IntStream.range(1, itemStacks.size()).forEachOrdered(i -> {
 					lootMessage.append(", ");

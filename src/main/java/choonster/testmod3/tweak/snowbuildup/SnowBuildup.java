@@ -58,8 +58,7 @@ public class SnowBuildup {
 
 		final Iterable<ChunkHolder> loadedChunks;
 		try {
-			@SuppressWarnings("unchecked")
-			final var chunks = (Iterable<ChunkHolder>) GET_CHUNKS.invoke(level.getChunkSource().chunkMap);
+			@SuppressWarnings("unchecked") final var chunks = (Iterable<ChunkHolder>) GET_CHUNKS.invoke(level.getChunkSource().chunkMap);
 			loadedChunks = chunks;
 		} catch (final IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException("Couldn't get loaded chunks for Snow Buildup", e);
@@ -69,8 +68,7 @@ public class SnowBuildup {
 		loadedChunks.forEach(chunkHolder ->
 				chunkHolder.getEntityTickingChunkFuture()
 						.getNow(ChunkHolder.UNLOADED_LEVEL_CHUNK)
-						.left()
-						.ifPresent(chunk -> {
+						.ifSuccess(chunk -> {
 							for (var x = 0; x < 16; x++) {
 								for (var z = 0; z < 16; z++) {
 									// Get the position of top block at the current x and z coordinates within the chunk

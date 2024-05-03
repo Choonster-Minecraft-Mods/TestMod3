@@ -46,9 +46,9 @@ public class ModDataProviders {
 		// Let blockstate provider see generated item models by passing its existing file helper
 		dataGenerator.addProvider(event.includeClient(), new TestMod3BlockStateProvider(output, itemModelProvider.existingFileHelper));
 
-		dataGenerator.addProvider(event.includeServer(), new TestMod3RecipeProvider(output));
-		dataGenerator.addProvider(event.includeServer(), TestMod3LootTableProvider.create(output));
-		dataGenerator.addProvider(event.includeServer(), new TestMod3LootModifierProvider(output));
+		dataGenerator.addProvider(event.includeServer(), new TestMod3RecipeProvider(output, lookupProvider));
+		dataGenerator.addProvider(event.includeServer(), TestMod3LootTableProvider.create(output, lookupProvider));
+		dataGenerator.addProvider(event.includeServer(), new TestMod3LootModifierProvider(output, lookupProvider));
 
 		final var blockTagsProvider = new TestMod3BlockTagsProvider(output, lookupProvider, existingFileHelper);
 		dataGenerator.addProvider(event.includeServer(), blockTagsProvider);

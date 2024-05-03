@@ -2,7 +2,7 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.level.storage.loot.functions.SetFluidTankContents;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
@@ -16,12 +16,12 @@ import net.minecraftforge.registries.RegistryObject;
  * @author Choonster
  */
 public class ModLootFunctionTypes {
-	private static final DeferredRegister<LootItemFunctionType> LOOT_ITEM_FUNCTION_TYPES =
+	private static final DeferredRegister<LootItemFunctionType<?>> LOOT_ITEM_FUNCTION_TYPES =
 			DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, TestMod3.MODID);
 
 	private static boolean isInitialised = false;
 
-	public static final RegistryObject<LootItemFunctionType> SET_FLUID_TANK_CONTENTS = register("set_fluid_tank_contents",
+	public static final RegistryObject<LootItemFunctionType<SetFluidTankContents>> SET_FLUID_TANK_CONTENTS = register("set_fluid_tank_contents",
 			SetFluidTankContents.CODEC
 	);
 
@@ -42,7 +42,7 @@ public class ModLootFunctionTypes {
 		isInitialised = true;
 	}
 
-	private static RegistryObject<LootItemFunctionType> register(final String name, final Codec<? extends LootItemFunction> codec) {
-		return LOOT_ITEM_FUNCTION_TYPES.register(name, () -> new LootItemFunctionType(codec));
+	private static <T extends LootItemFunction> RegistryObject<LootItemFunctionType<T>> register(final String name, final MapCodec<T> codec) {
+		return LOOT_ITEM_FUNCTION_TYPES.register(name, () -> new LootItemFunctionType<>(codec));
 	}
 }

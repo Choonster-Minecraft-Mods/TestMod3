@@ -11,7 +11,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.event.ForgeEventFactory;
 
 /**
  * A shapeless recipe that damages any {@link AxeItem} ingredients.
@@ -30,10 +29,7 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 
 	private ItemStack damageAxe(final ItemStack stack) {
 		final var craftingPlayer = ForgeHooks.getCraftingPlayer();
-		if (stack.hurt(1, craftingPlayer.getCommandSenderWorld().random, craftingPlayer instanceof final ServerPlayer serverPlayer ? serverPlayer : null)) {
-			ForgeEventFactory.onPlayerDestroyItem(craftingPlayer, stack, null);
-			return ItemStack.EMPTY;
-		}
+		stack.hurtAndBreak(1, craftingPlayer.getCommandSenderWorld().random, craftingPlayer instanceof final ServerPlayer serverPlayer ? serverPlayer : null, () -> stack.setCount(0));
 
 		return stack;
 	}

@@ -1,9 +1,9 @@
 package choonster.testmod3.util;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Nameable;
-import net.minecraftforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -13,7 +13,7 @@ import java.util.Objects;
  *
  * @author Choonster
  */
-public class NameHolder implements Nameable, INBTSerializable<CompoundTag> {
+public class NameHolder implements Nameable {
 	/**
 	 * The default name.
 	 */
@@ -54,21 +54,17 @@ public class NameHolder implements Nameable, INBTSerializable<CompoundTag> {
 		this.customName = customName.copy();
 	}
 
-	@Override
-	public CompoundTag serializeNBT() {
-		final CompoundTag nbt = new CompoundTag();
-
+	public CompoundTag save(final CompoundTag tag, final HolderLookup.Provider registries) {
 		if (hasCustomName()) {
-			nbt.putString("DisplayName", Component.Serializer.toJson(getDisplayName()));
+			tag.putString("DisplayName", Component.Serializer.toJson(getDisplayName(), registries));
 		}
 
-		return nbt;
+		return tag;
 	}
 
-	@Override
-	public void deserializeNBT(final CompoundTag nbt) {
-		if (nbt.contains("DisplayName")) {
-			final Component customName = Objects.requireNonNull(Component.Serializer.fromJson(nbt.getString("DisplayName")));
+	public void load(final CompoundTag tag, final HolderLookup.Provider registries) {
+		if (tag.contains("DisplayName")) {
+			final var customName = Objects.requireNonNull(Component.Serializer.fromJson(tag.getString("DisplayName"), registries));
 			setCustomName(customName);
 		}
 	}

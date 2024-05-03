@@ -1,7 +1,7 @@
 package choonster.testmod3.world.level.biome.modifier;
 
 import choonster.testmod3.init.levelgen.ModBiomeModifierSerializers;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.entity.EntityType;
@@ -28,7 +28,7 @@ public record AddMobSpawnCostBiomeModifier(
 	}
 
 	@Override
-	public Codec<AddMobSpawnCostBiomeModifier> codec() {
+	public MapCodec<AddMobSpawnCostBiomeModifier> codec() {
 		return ModBiomeModifierSerializers.ADD_MOB_SPAWN_COST.get();
 	}
 }

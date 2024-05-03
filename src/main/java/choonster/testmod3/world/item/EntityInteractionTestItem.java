@@ -25,6 +25,7 @@ public class EntityInteractionTestItem extends Item {
 	}
 
 	private int getInteractCount(final ItemStack stack) {
+		// TODO: Replace with DataComponent
 		return stack.getOrCreateTag().getInt("Count");
 	}
 

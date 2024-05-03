@@ -11,15 +11,20 @@ import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.util.RegistryUtil;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
@@ -27,14 +32,17 @@ import net.minecraftforge.common.crafting.conditions.FalseCondition;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+
 /**
  * Generates this mod's recipes.
  *
  * @author Choonster
  */
 public class TestMod3RecipeProvider extends RecipeProvider {
-	public TestMod3RecipeProvider(final PackOutput output) {
-		super(output);
+	public TestMod3RecipeProvider(final PackOutput output, final CompletableFuture<HolderLookup.Provider> registries) {
+		super(output, registries);
 	}
 
 	@Override
@@ -107,15 +115,25 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 		// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2424619-help-needed-creating-non-pig-mob-spawners
 		{
 			final var guardianSpawner = new ItemStack(Blocks.SPAWNER);
-			final var blockEntityTag = guardianSpawner.getOrCreateTagElement("BlockEntityTag");
+			
+			final var blockEntityTag = new CompoundTag();
 
-			final var spawnData = new CompoundTag();
+			final var entityToSpawn = new CompoundTag();
+			entityToSpawn.putString("id", RegistryUtil.getKey(EntityType.GUARDIAN).toString());
 
-			spawnData.putString("id", RegistryUtil.getKey(EntityType.GUARDIAN).toString());
-			blockEntityTag.put("SpawnData", spawnData);
+			final var spawnData = new SpawnData(entityToSpawn, Optional.empty(), Optional.empty());
+
+			blockEntityTag.put(
+					"SpawnData",
+					SpawnData.CODEC
+							.encodeStart(NbtOps.INSTANCE, spawnData)
+							.getOrThrow(message -> new IllegalStateException("Invalid SpawnData: " + message))
+			);
 
 			final var spawnPotentials = new ListTag();
 			blockEntityTag.put("SpawnPotentials", spawnPotentials);
+
+			guardianSpawner.set(DataComponents.BLOCK_ENTITY_DATA, CustomData.of(blockEntityTag));
 
 			EnhancedShapedRecipeBuilder.Enhanced.shapedRecipe(RecipeCategory.MISC, guardianSpawner)
 					.pattern("SSS")

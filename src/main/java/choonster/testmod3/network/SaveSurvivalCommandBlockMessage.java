@@ -112,6 +112,7 @@ public class SaveSurvivalCommandBlockMessage {
 		final var player = ctx.getSender();
 		final var level = player.level();
 		final var minecraftServer = level.getServer();
+		final var registries = level.registryAccess();
 
 		if (minecraftServer != null && !minecraftServer.isCommandBlockEnabled()) {
 			player.sendSystemMessage(Component.translatable("advMode.notEnabled"));
@@ -139,7 +140,7 @@ public class SaveSurvivalCommandBlockMessage {
 							existingBlockEntity instanceof SurvivalCommandBlockEntity &&
 									newBlockEntity instanceof final SurvivalCommandBlockEntity newSurvivalCommandBlockEntity
 					) {
-						newSurvivalCommandBlockEntity.deserializeNBT(existingBlockEntity.serializeNBT());
+						newSurvivalCommandBlockEntity.loadWithComponents(existingBlockEntity.saveWithoutMetadata(registries), registries);
 						survivalCommandBlock = newSurvivalCommandBlockEntity.getCommandBlock();
 						newSurvivalCommandBlockEntity.setAutomatic(message.automatic);
 					}

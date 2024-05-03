@@ -4,7 +4,7 @@ import choonster.testmod3.init.ModLootFunctionTypes;
 import choonster.testmod3.util.CapabilityNotPresentException;
 import choonster.testmod3.world.item.FluidStackItem;
 import com.google.common.collect.Lists;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +30,7 @@ import java.util.List;
  * @author Choonster
  */
 public class SetFluidTankContents extends LootItemConditionalFunction {
-	public static final Codec<SetFluidTankContents> CODEC = RecordCodecBuilder.create(builder ->
+	public static final MapCodec<SetFluidTankContents> CODEC = RecordCodecBuilder.mapCodec(builder ->
 			commonFields(builder).and(
 
 					LootPoolEntries.CODEC
@@ -75,7 +75,7 @@ public class SetFluidTankContents extends LootItemConditionalFunction {
 	}
 
 	@Override
-	public LootItemFunctionType getType() {
+	public LootItemFunctionType<SetFluidTankContents> getType() {
 		return ModLootFunctionTypes.SET_FLUID_TANK_CONTENTS.get();
 	}
 

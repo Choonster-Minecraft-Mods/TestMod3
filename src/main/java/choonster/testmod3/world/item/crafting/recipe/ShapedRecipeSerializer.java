@@ -1,17 +1,16 @@
 package choonster.testmod3.world.item.crafting.recipe;
 
-import choonster.testmod3.serialization.VanillaCodecs;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.ExtraCodecs;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 
@@ -23,18 +22,19 @@ import java.lang.reflect.Field;
  * @author Choonster
  */
 public class ShapedRecipeSerializer<T extends ShapedRecipe> implements RecipeSerializer<T> {
-	private static final Field PATTERN = ObfuscationReflectionHelper.findField(ShapedRecipe.class, /* pattern */ "f_302516_");
-	private static final Field RESULT = ObfuscationReflectionHelper.findField(ShapedRecipe.class, /* result */ "f_44149_");
+	private static final Field PATTERN = ObfuscationReflectionHelper.findField(ShapedRecipe.class, "pattern");
+	private static final Field RESULT = ObfuscationReflectionHelper.findField(ShapedRecipe.class, "result");
 
 	private final ShapedRecipeFactory<T> factory;
-	private final Codec<T> codec;
+	private final MapCodec<T> codec;
+	private final StreamCodec<RegistryFriendlyByteBuf, T> streamCodec;
 
 	public ShapedRecipeSerializer(final ShapedRecipeFactory<T> factory) {
 		this.factory = factory;
 
-		codec = RecordCodecBuilder.create(instance -> instance.group(
+		codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
 
-				ExtraCodecs.strictOptionalField(Codec.STRING, "group", "")
+				Codec.STRING.optionalFieldOf("group", "")
 						.forGetter(ShapedRecipe::getGroup),
 
 				CraftingBookCategory.CODEC
@@ -45,14 +45,16 @@ public class ShapedRecipeSerializer<T extends ShapedRecipe> implements RecipeSer
 				ShapedRecipePattern.MAP_CODEC
 						.forGetter(ShapedRecipeSerializer::getPattern),
 
-				VanillaCodecs.RECIPE_RESULT
+				ItemStack.STRICT_CODEC
 						.fieldOf("result")
 						.forGetter(ShapedRecipeSerializer::getResult),
 
-				ExtraCodecs.strictOptionalField(Codec.BOOL, "show_notification", true)
+				Codec.BOOL.optionalFieldOf("show_notification", true)
 						.forGetter(ShapedRecipe::showNotification)
 
 		).apply(instance, factory::createRecipe));
+
+		streamCodec = StreamCodec.of(this::toNetwork, this::fromNetwork);
 	}
 
 	public ShapedRecipeFactory<T> factory() {
@@ -60,29 +62,31 @@ public class ShapedRecipeSerializer<T extends ShapedRecipe> implements RecipeSer
 	}
 
 	@Override
-	public Codec<T> codec() {
+	public MapCodec<T> codec() {
 		return codec;
 	}
 
-	@Nullable
 	@Override
-	public T fromNetwork(final FriendlyByteBuf buffer) {
+	public StreamCodec<RegistryFriendlyByteBuf, T> streamCodec() {
+		return streamCodec;
+	}
+
+	private T fromNetwork(final RegistryFriendlyByteBuf buffer) {
 		final var group = buffer.readUtf();
 		final var category = buffer.readEnum(CraftingBookCategory.class);
-		final var pattern = ShapedRecipePattern.fromNetwork(buffer);
-		final var result = buffer.readItem();
+		final var pattern = ShapedRecipePattern.STREAM_CODEC.decode(buffer);
+		final var result = ItemStack.STREAM_CODEC.decode(buffer);
 		final var showNotification = buffer.readBoolean();
 
 		return factory.createRecipe(group, category, pattern, result, showNotification);
 	}
 
-	@Override
-	public void toNetwork(final FriendlyByteBuf p_44227_, final T p_44228_) {
-		p_44227_.writeUtf(p_44228_.getGroup());
-		p_44227_.writeEnum(p_44228_.category());
-		getPattern(p_44228_).toNetwork(p_44227_);
-		p_44227_.writeItem(getResult(p_44228_));
-		p_44227_.writeBoolean(p_44228_.showNotification());
+	private void toNetwork(final RegistryFriendlyByteBuf buffer, final T recipe) {
+		buffer.writeUtf(recipe.getGroup());
+		buffer.writeEnum(recipe.category());
+		ShapedRecipePattern.STREAM_CODEC.encode(buffer, getPattern(recipe));
+		ItemStack.STREAM_CODEC.encode(buffer, getResult(recipe));
+		buffer.writeBoolean(recipe.showNotification());
 	}
 
 	private static ShapedRecipePattern getPattern(final ShapedRecipe recipe) {

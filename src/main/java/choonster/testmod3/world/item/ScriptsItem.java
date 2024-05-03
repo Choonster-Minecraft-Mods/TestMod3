@@ -26,6 +26,7 @@ public abstract class ScriptsItem extends Item {
 	}
 
 	private static int getNumber(final ItemStack stack) {
+		// TODO: Replace with DataComponents
 		if (stack.hasTag()) {
 			return stack.getTag().getInt("Number");
 		} else {

@@ -6,7 +6,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -54,13 +53,12 @@ public class VariantsBlock extends Block {
 		return type;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public InteractionResult use(final BlockState state, final Level world, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult rayTraceResult) {
+	protected InteractionResult useWithoutItem(final BlockState state, final Level level, final BlockPos pos, final Player player, final BlockHitResult blockHitResult) {
 		final EnumType newType = variantGroup.cycleVariant(type);
 		final BlockState newState = variantGroup.getBlock(newType).get().defaultBlockState();
 
-		world.setBlockAndUpdate(pos, newState);
+		level.setBlockAndUpdate(pos, newState);
 
 		return InteractionResult.SUCCESS;
 	}

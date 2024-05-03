@@ -3,7 +3,7 @@ package choonster.testmod3.init.levelgen;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.level.biome.modifier.AddMobSpawnCostBiomeModifier;
 import choonster.testmod3.world.level.biome.modifier.CopyMobSpawnsBiomeModifier;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -19,13 +19,13 @@ import net.minecraftforge.registries.RegistryObject;
  * @author Choonster
  */
 public class ModBiomeModifierSerializers {
-	private static final DeferredRegister<Codec<? extends BiomeModifier>> SERIALIZERS = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, TestMod3.MODID);
+	private static final DeferredRegister<MapCodec<? extends BiomeModifier>> SERIALIZERS = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, TestMod3.MODID);
 
 	private static boolean isInitialised = false;
 
-	public static final RegistryObject<Codec<CopyMobSpawnsBiomeModifier>> COPY_MOB_SPAWNS = SERIALIZERS.register(
+	public static final RegistryObject<MapCodec<CopyMobSpawnsBiomeModifier>> COPY_MOB_SPAWNS = SERIALIZERS.register(
 			"copy_mob_spawns",
-			() -> RecordCodecBuilder.create(builder ->
+			() -> RecordCodecBuilder.mapCodec(builder ->
 					builder.group(
 
 							ForgeRegistries.ENTITY_TYPES.getCodec()
@@ -40,9 +40,9 @@ public class ModBiomeModifierSerializers {
 			)
 	);
 
-	public static final RegistryObject<Codec<AddMobSpawnCostBiomeModifier>> ADD_MOB_SPAWN_COST = SERIALIZERS.register(
+	public static final RegistryObject<MapCodec<AddMobSpawnCostBiomeModifier>> ADD_MOB_SPAWN_COST = SERIALIZERS.register(
 			"add_mob_spawn_cost",
-			() -> RecordCodecBuilder.create(builder ->
+			() -> RecordCodecBuilder.mapCodec(builder ->
 					builder.group(
 
 							Biome.LIST_CODEC

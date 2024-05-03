@@ -1,7 +1,7 @@
 package choonster.testmod3.world.level.storage.loot.predicates;
 
 import choonster.testmod3.init.ModLootConditionTypes;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -15,7 +15,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 public class IsChestLoot implements LootItemCondition {
 	private static final IsChestLoot INSTANCE = new IsChestLoot();
 
-	public static final Codec<IsChestLoot> CODEC = Codec.unit(INSTANCE);
+	public static final MapCodec<IsChestLoot> CODEC = MapCodec.unit(INSTANCE);
 
 	private IsChestLoot() {
 	}

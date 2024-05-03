@@ -12,7 +12,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.Lazy;
 
-import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -37,8 +36,8 @@ public class SwapTestItem extends Item {
 	}
 
 	@Override
-	public void appendHoverText(final ItemStack stack, @Nullable final Level world, final List<Component> tooltip, final TooltipFlag flag) {
-		final ItemStack otherItem = getOtherItem();
+	public void appendHoverText(final ItemStack stack, final TooltipContext context, final List<Component> tooltip, final TooltipFlag flag) {
+		final var otherItem = getOtherItem();
 
 		if (!otherItem.isEmpty()) {
 			tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_SWAP_TEST_WITH_ITEM.getTranslationKey(), otherItem.getHoverName()));
@@ -49,7 +48,7 @@ public class SwapTestItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(final Level level, final Player playerIn, final InteractionHand hand) {
-		final ItemStack otherItem = getOtherItem();
+		final var otherItem = getOtherItem();
 
 		if (!otherItem.isEmpty() && playerIn.isShiftKeyDown()) {
 			return new InteractionResultHolder<>(InteractionResult.SUCCESS, otherItem.copy());

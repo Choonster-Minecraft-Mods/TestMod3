@@ -21,6 +21,7 @@ public class FluidStackItem extends Item {
 	public ItemStack withFluidStack(final FluidStack fluidStack) {
 		final ItemStack itemStack = new ItemStack(this);
 
+		// TODO: Replace with DataComponents
 		itemStack.getOrCreateTag().put(FLUID_STACK, fluidStack.writeToNBT(new CompoundTag()));
 
 		return itemStack;

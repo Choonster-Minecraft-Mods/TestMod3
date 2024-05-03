@@ -9,7 +9,6 @@ import choonster.testmod3.world.level.block.entity.FluidTankBlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -46,11 +45,11 @@ public class FluidTankItem extends BlockItem {
 	}
 
 	@Override
-	public void appendHoverText(final ItemStack stack, @Nullable final Level world, final List<Component> tooltip, final TooltipFlag flag) {
+	public void appendHoverText(final ItemStack stack, final TooltipContext context, final List<Component> tooltip, final TooltipFlag flag) {
 		final var fluidHandler = FluidUtil.getFluidHandler(stack)
 				.orElseThrow(CapabilityNotPresentException::new);
 
-		final FluidTankSnapshot[] fluidTankSnapshots = FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler);
+		final var fluidTankSnapshots = FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler);
 		tooltip.addAll(FluidTankBlock.getFluidDataForDisplay(fluidTankSnapshots));
 	}
 

@@ -5,11 +5,11 @@ import choonster.testmod3.init.ModItems;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
@@ -37,8 +37,13 @@ public class ModArrow extends Arrow implements IEntityAdditionalSpawnData {
 	}
 
 	@Override
-	public void setEffectsFromItem(final ItemStack stack) {
-		super.setEffectsFromItem(new ItemStack(Items.ARROW)); // Mod arrows can't have potion effects
+	public void addEffect(final MobEffectInstance p_36871_) {
+		// Mod arrows can't have potion effects
+	}
+
+	@Override
+	protected void doPostHurtEffects(final LivingEntity p_36873_) {
+		// Mod arrows can't have potion effects
 	}
 
 	@Override

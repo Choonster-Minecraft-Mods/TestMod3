@@ -7,8 +7,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -118,13 +119,12 @@ public class PlaneBlock extends Block {
 		return state.setValue(HORIZONTAL_ROTATION, direction.rotate(state.getValue(HORIZONTAL_ROTATION)));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public BlockState mirror(final BlockState state, final Mirror mirror) {
 		return state.setValue(HORIZONTAL_ROTATION, mirror.mirror(state.getValue(HORIZONTAL_ROTATION)));
 	}
 
-	private static InteractionResult rotateBlock(final Level level, final BlockPos pos, final Direction axis) {
+	private static ItemInteractionResult rotateBlock(final Level level, final BlockPos pos, final Direction axis) {
 		final var axisToRotate = axis.getAxis();
 
 		var state = level.getBlockState(pos);
@@ -138,13 +138,12 @@ public class PlaneBlock extends Block {
 			}
 		}
 
-		return level.setBlockAndUpdate(pos, state) ? InteractionResult.SUCCESS : InteractionResult.FAIL;
+		return level.setBlockAndUpdate(pos, state) ? ItemInteractionResult.SUCCESS : ItemInteractionResult.FAIL;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public InteractionResult use(final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult rayTraceResult) {
-		return rotateBlock(level, pos, rayTraceResult.getDirection());
+	protected ItemInteractionResult useItemOn(final ItemStack stack, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
+		return rotateBlock(level, pos, blockHitResult.getDirection());
 	}
 
 	@Nullable
@@ -159,7 +158,6 @@ public class PlaneBlock extends Block {
 	}
 
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public VoxelShape getShape(final BlockState state, final BlockGetter level, final BlockPos pos, final CollisionContext context) {
 		return SHAPES[getShapeIndex(state.getValue(HORIZONTAL_ROTATION), state.getValue(VERTICAL_ROTATION))];

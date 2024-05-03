@@ -3,6 +3,7 @@ package choonster.testmod3.world.level.block.entity;
 import choonster.testmod3.util.NameHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -80,18 +81,19 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler & IN
 	}
 
 	@Override
-	public void load(final CompoundTag nbt) {
-		super.load(nbt);
-		inventory.deserializeNBT(nbt.getCompound("ItemHandler"));
-		nameHolder.deserializeNBT(nbt.getCompound("NameHolder"));
+	protected void loadAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
+
+		inventory.deserializeNBT(tag.getCompound("ItemHandler"));
+		nameHolder.load(tag.getCompound("NameHolder"), registries);
 	}
 
 	@Override
-	protected void saveAdditional(final CompoundTag compound) {
-		super.saveAdditional(compound);
+	protected void saveAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
 
-		compound.put("ItemHandler", inventory.serializeNBT());
-		compound.put("NameHolder", nameHolder.serializeNBT());
+		tag.put("ItemHandler", inventory.serializeNBT());
+		tag.put("NameHolder", nameHolder.save(new CompoundTag(), registries));
 	}
 
 	@Override

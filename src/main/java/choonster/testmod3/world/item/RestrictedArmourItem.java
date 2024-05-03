@@ -4,13 +4,13 @@ import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import com.mojang.logging.LogUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.List;
 public class RestrictedArmourItem extends ArmorItem {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-	public RestrictedArmourItem(final ArmorMaterial material, final ArmorItem.Type type, final Item.Properties properties) {
+	public RestrictedArmourItem(final Holder<ArmorMaterial> material, final ArmorItem.Type type, final Item.Properties properties) {
 		super(material, type, properties);
 	}
 
@@ -78,7 +78,7 @@ public class RestrictedArmourItem extends ArmorItem {
 	}
 
 	@Override
-	public void appendHoverText(final ItemStack stack, @Nullable final Level level, final List<Component> tooltip, final TooltipFlag flag) {
+	public void appendHoverText(final ItemStack stack, final TooltipContext context, final List<Component> tooltip, final TooltipFlag flag) {
 		tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_ARMOUR_RESTRICTED.getTranslationKey()));
 	}
 }

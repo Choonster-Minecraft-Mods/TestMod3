@@ -1,7 +1,7 @@
 package choonster.testmod3.data.worldgen;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.biome.OverworldBiomes;
 import net.minecraft.world.level.biome.Biome;
 
@@ -13,7 +13,7 @@ import static choonster.testmod3.init.levelgen.ModBiomes.DESERT_TEST;
  * @author Choonster
  */
 public class ModBiomes {
-	public static void bootstrap(final BootstapContext<Biome> context) {
+	public static void bootstrap(final BootstrapContext<Biome> context) {
 		final var placedFeatures = context.lookup(Registries.PLACED_FEATURE);
 		final var configuredWorldCarvers = context.lookup(Registries.CONFIGURED_CARVER);
 

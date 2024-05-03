@@ -4,10 +4,10 @@ import choonster.testmod3.init.ModCrafting;
 import choonster.testmod3.serialization.VanillaCodecs;
 import choonster.testmod3.util.ModFluidUtil;
 import choonster.testmod3.util.RegistryUtil;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.ingredients.AbstractIngredient;
@@ -33,7 +33,7 @@ import java.util.stream.Stream;
  * @author Choonster
  */
 public class FluidContainerIngredient extends AbstractIngredient {
-	public static final Codec<FluidContainerIngredient> CODEC = RecordCodecBuilder.<FluidStack>create(instance ->
+	public static final MapCodec<FluidContainerIngredient> CODEC = RecordCodecBuilder.<FluidStack>mapCodec(instance ->
 
 			VanillaCodecs.fluidStack(instance)
 					.apply(instance, (fluid, amount, tag) -> {
@@ -119,20 +119,20 @@ public class FluidContainerIngredient extends AbstractIngredient {
 
 	public static class Serializer implements IIngredientSerializer<FluidContainerIngredient> {
 		@Override
-		public Codec<? extends FluidContainerIngredient> codec() {
+		public MapCodec<? extends FluidContainerIngredient> codec() {
 			return CODEC;
 		}
 
 		@Override
-		public FluidContainerIngredient read(final FriendlyByteBuf buffer) {
-			final FluidStack fluidStack = buffer.readFluidStack();
-
-			return new FluidContainerIngredient(fluidStack);
+		public void write(final RegistryFriendlyByteBuf buffer, final FluidContainerIngredient value) {
+			VanillaCodecs.FLUID_STACK_STREAM_CODEC.encode(buffer, value.fluidStack);
 		}
 
 		@Override
-		public void write(final FriendlyByteBuf buffer, final FluidContainerIngredient ingredient) {
-			buffer.writeFluidStack(ingredient.fluidStack);
+		public FluidContainerIngredient read(final RegistryFriendlyByteBuf buffer) {
+			var fluidStack = VanillaCodecs.FLUID_STACK_STREAM_CODEC.decode(buffer);
+
+			return new FluidContainerIngredient(fluidStack);
 		}
 	}
 }

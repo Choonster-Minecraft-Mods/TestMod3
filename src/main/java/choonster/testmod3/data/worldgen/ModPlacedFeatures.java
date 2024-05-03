@@ -3,7 +3,7 @@ package choonster.testmod3.data.worldgen;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.level.levelgen.placement.InChunksDivisibleBy16Filter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +24,7 @@ public class ModPlacedFeatures {
 	public static final ResourceKey<PlacedFeature> ORE_IRON_NETHER = key("ore_iron_nether");
 	public static final ResourceKey<PlacedFeature> ORE_IRON_END = key("ore_iron_end");
 
-	public static void bootstrap(final BootstapContext<PlacedFeature> context) {
+	public static void bootstrap(final BootstrapContext<PlacedFeature> context) {
 		register(context, BANNER, ModConfiguredFeatures.BANNER,
 				CountPlacement.of(1),
 				InSquarePlacement.spread(),
@@ -46,7 +46,7 @@ public class ModPlacedFeatures {
 	}
 
 	private static void register(
-			final BootstapContext<PlacedFeature> context,
+			final BootstrapContext<PlacedFeature> context,
 			final ResourceKey<PlacedFeature> key,
 			final ResourceKey<ConfiguredFeature<?, ?>> feature,
 			final PlacementModifier... placement

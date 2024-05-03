@@ -1,19 +1,24 @@
 package choonster.testmod3.world.item;
 
-import choonster.testmod3.init.ModTags;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -24,7 +29,7 @@ import java.util.stream.Stream;
  *
  * @author Choonster
  */
-public class HarvestSwordItem extends DiggerItem {
+public class HarvestSwordItem extends TieredItem {
 	/**
 	 * The speed at which Cobwebs are harvested
 	 */
@@ -43,7 +48,7 @@ public class HarvestSwordItem extends DiggerItem {
 	/**
 	 * The base attack damage before the {@link Tier}'s attack damage is factored in
 	 */
-	private static final float BASE_DAMAGE = 3.0f;
+	private static final float BASE_ATTACK_DAMAGE = 3.0f;
 
 	/**
 	 * The attack speed
@@ -51,16 +56,22 @@ public class HarvestSwordItem extends DiggerItem {
 	private static final float ATTACK_SPEED = -2.4f;
 
 	public HarvestSwordItem(final Tier tier, final Item.Properties properties) {
-		super(BASE_DAMAGE, ATTACK_SPEED, tier, ModTags.Blocks.EMPTY, properties);
+		super(tier, properties.component(DataComponents.TOOL, createTool(tier)));
 	}
 
-	@Override
-	public boolean isCorrectToolForDrops(final ItemStack stack, final BlockState state) {
-		if (state.is(Blocks.COBWEB)) {
-			return true;
-		}
-
-		return isMineable(state) && TierSortingRegistry.isCorrectTierForDrops(getTier(), state);
+	public static ItemAttributeModifiers createAttributes(final Tier tier) {
+		return ItemAttributeModifiers.builder()
+				.add(
+						Attributes.ATTACK_DAMAGE,
+						new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", BASE_ATTACK_DAMAGE + tier.getAttackDamageBonus(), AttributeModifier.Operation.ADD_VALUE),
+						EquipmentSlotGroup.MAINHAND
+				)
+				.add(
+						Attributes.ATTACK_SPEED,
+						new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", ATTACK_SPEED, AttributeModifier.Operation.ADD_VALUE),
+						EquipmentSlotGroup.MAINHAND
+				)
+				.build();
 	}
 
 	@Override
@@ -74,35 +85,28 @@ public class HarvestSwordItem extends DiggerItem {
 	}
 
 	@Override
-	public float getDestroySpeed(final ItemStack stack, final BlockState state) {
-		if (state.is(Blocks.COBWEB)) {
-			return DIG_SPEED_COBWEB;
-		}
-
-		if (isMineable(state)) {
-			return speed;
-		}
-
-		if (state.is(BlockTags.SWORD_EFFICIENT)) {
-			return DIG_SPEED_SWORD;
-		}
-
-		return DIG_SPEED_DEFAULT;
-	}
-
-	@Override
 	public boolean hurtEnemy(final ItemStack itemStack, final LivingEntity target, final LivingEntity attacker) {
 		// Only reduce the durability by 1 point (like swords do) instead of 2 (like tools do)
-		itemStack.hurtAndBreak(1, attacker, (entity) -> entity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+		itemStack.hurtAndBreak(1, target, EquipmentSlot.MAINHAND);
 		return true;
 	}
 
-	private boolean isMineable(final BlockState state) {
-		return Stream.of(
+	private static Tool createTool(final Tier tier) {
+		final var rules = ImmutableList.<Tool.Rule>builder()
+				.add(Tool.Rule.deniesDrops(tier.getIncorrectBlocksForDrops()));
+
+		final var minesAndDrops = Stream.of(
 				BlockTags.MINEABLE_WITH_AXE,
 				BlockTags.MINEABLE_WITH_HOE,
 				BlockTags.MINEABLE_WITH_PICKAXE,
 				BlockTags.MINEABLE_WITH_SHOVEL
-		).anyMatch(state::is);
+		).map(tag -> Tool.Rule.minesAndDrops(BlockTags.MINEABLE_WITH_AXE, tier.getSpeed()));
+
+		rules.addAll(minesAndDrops.iterator());
+
+		rules.add(Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), DIG_SPEED_COBWEB));
+		rules.add(Tool.Rule.overrideSpeed(BlockTags.SWORD_EFFICIENT, DIG_SPEED_SWORD));
+
+		return new Tool(rules.build(), DIG_SPEED_DEFAULT, 1);
 	}
 }

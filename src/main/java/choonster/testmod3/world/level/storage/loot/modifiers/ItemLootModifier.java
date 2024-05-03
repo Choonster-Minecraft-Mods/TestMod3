@@ -1,9 +1,10 @@
 package choonster.testmod3.world.level.storage.loot.modifiers;
 
 import com.google.common.base.Suppliers;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -25,8 +26,8 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class ItemLootModifier extends LootModifier {
-	public static final Supplier<Codec<ItemLootModifier>> CODEC = Suppliers.memoize(() ->
-			RecordCodecBuilder.create(inst ->
+	public static final Supplier<MapCodec<ItemLootModifier>> CODEC = Suppliers.memoize(() ->
+			RecordCodecBuilder.mapCodec(inst ->
 					codecStart(inst)
 							.and(
 									ForgeRegistries.ITEMS.getCodec()
@@ -44,14 +45,18 @@ public class ItemLootModifier extends LootModifier {
 	);
 
 	private final Item item;
-	private final List<LootItemFunction> functions;
+	private final List<Holder<LootItemFunction>> functions;
 	private final BiFunction<ItemStack, LootContext, ItemStack> compositeFunction;
 
-	public ItemLootModifier(final LootItemCondition[] conditions, final Item item, final List<LootItemFunction> functions) {
+	private ItemLootModifier(final LootItemCondition[] conditions, final Item item, final List<Holder<LootItemFunction>> functions) {
 		super(conditions);
 		this.item = item;
 		this.functions = functions;
-		compositeFunction = LootItemFunctions.compose(functions);
+		compositeFunction = LootItemFunctions.compose(functions.stream().map(Holder::get).toList());
+	}
+
+	public static ItemLootModifier create(final LootItemCondition[] conditions, final Item item, final List<LootItemFunction> functions) {
+		return new ItemLootModifier(conditions, item, functions.stream().map(Holder::direct).toList());
 	}
 
 	@Override
@@ -66,7 +71,7 @@ public class ItemLootModifier extends LootModifier {
 	}
 
 	@Override
-	public Codec<? extends IGlobalLootModifier> codec() {
+	public MapCodec<? extends IGlobalLootModifier> codec() {
 		return CODEC.get();
 	}
 }

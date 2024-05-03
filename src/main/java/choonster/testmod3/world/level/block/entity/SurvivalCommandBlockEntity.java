@@ -3,6 +3,7 @@ package choonster.testmod3.world.level.block.entity;
 import choonster.testmod3.init.ModBlockEntities;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
@@ -81,17 +82,17 @@ public class SurvivalCommandBlockEntity extends CommandBlockEntity {
 	}
 
 	@Override
-	public void load(final CompoundTag tag) {
-		super.load(tag);
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
 
-		getCommandBlock().load(tag.getCompound("SurvivalCommandBlockLogic"));
+		getCommandBlock().load(tag.getCompound("SurvivalCommandBlockLogic"), registries);
 	}
 
 	@Override
-	protected void saveAdditional(final CompoundTag compound) {
-		super.saveAdditional(compound);
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
 
-		compound.put("SurvivalCommandBlockLogic", getCommandBlock().save(new CompoundTag()));
+		tag.put("SurvivalCommandBlockLogic", getCommandBlock().save(new CompoundTag(), registries));
 	}
 
 	@Override

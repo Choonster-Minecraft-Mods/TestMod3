@@ -1,7 +1,7 @@
 package choonster.testmod3.world.item.crafting.ingredient;
 
-import com.mojang.serialization.Codec;
-import net.minecraft.network.FriendlyByteBuf;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.ingredients.AbstractIngredient;
@@ -32,19 +32,19 @@ public abstract class AbstractDelegatingIngredient extends AbstractIngredient {
 	 *
 	 * @author Choonster
 	 */
-	public record Serializer(Codec<Ingredient> codec) implements IIngredientSerializer<Ingredient> {
+	public record Serializer(MapCodec<Ingredient> codec) implements IIngredientSerializer<Ingredient> {
 		@Override
-		public Codec<Ingredient> codec() {
+		public MapCodec<Ingredient> codec() {
 			return codec;
 		}
 
 		@Override
-		public void write(final FriendlyByteBuf buffer, final Ingredient value) {
+		public void write(RegistryFriendlyByteBuf buffer, Ingredient value) {
 			throw new UnsupportedOperationException("Can't write to FriendlyByteBuf, use the Ingredient's own IIngredientSerializer instead");
 		}
 
 		@Override
-		public Ingredient read(final FriendlyByteBuf buffer) {
+		public Ingredient read(RegistryFriendlyByteBuf buffer) {
 			throw new UnsupportedOperationException("Can't read from FriendlyByteBuf, use the Ingredient's own IIngredientSerializer instead");
 		}
 	}

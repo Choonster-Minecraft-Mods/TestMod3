@@ -1,8 +1,8 @@
 package choonster.testmod3.network.capability.fluidhandler;
 
 import choonster.testmod3.fluid.FluidTankSnapshot;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fluids.FluidStack;
+import choonster.testmod3.serialization.VanillaCodecs;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
@@ -16,16 +16,16 @@ class FluidHandlerFunctions {
 		return new FluidTankSnapshot(fluidHandlerItem.getFluidInTank(0), fluidHandlerItem.getTankCapacity(0));
 	}
 
-	static FluidTankSnapshot decodeFluidTankSnapshot(final FriendlyByteBuf buffer) {
-		final FluidStack contents = FluidStack.readFromPacket(buffer);
-		final int capacity = buffer.readInt();
+	static FluidTankSnapshot decodeFluidTankSnapshot(final RegistryFriendlyByteBuf buffer) {
+		final var contents = VanillaCodecs.FLUID_STACK_OPTIONAL_STREAM_CODEC.decode(buffer);
+		final var capacity = buffer.readInt();
 
 		return new FluidTankSnapshot(contents, capacity);
 	}
 
-	static void encodeFluidTankSnapshot(final FluidTankSnapshot fluidTankSnapshot, final FriendlyByteBuf buffer) {
-		final FluidStack contents = fluidTankSnapshot.contents();
-		contents.writeToPacket(buffer);
+	static void encodeFluidTankSnapshot(final FluidTankSnapshot fluidTankSnapshot, final RegistryFriendlyByteBuf buffer) {
+		final var contents = fluidTankSnapshot.contents();
+		VanillaCodecs.FLUID_STACK_OPTIONAL_STREAM_CODEC.encode(buffer, contents);
 
 		buffer.writeInt(fluidTankSnapshot.capacity());
 	}

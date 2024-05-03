@@ -6,9 +6,8 @@ import choonster.testmod3.world.level.storage.loot.modifiers.BlockEntityNBTLootM
 import choonster.testmod3.world.level.storage.loot.modifiers.ItemLootModifier;
 import choonster.testmod3.world.level.storage.loot.modifiers.LootTableLootModifier;
 import choonster.testmod3.world.level.storage.loot.predicates.MatchBlockTag;
-import net.minecraft.advancements.critereon.EnchantmentPredicate;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Items;
@@ -25,6 +24,7 @@ import net.minecraftforge.common.data.GlobalLootModifierProvider;
 import net.minecraftforge.common.loot.LootTableIdCondition;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Generates this mod's global loot modifier JSON files.
@@ -34,11 +34,16 @@ import java.util.List;
 public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
 	private final LootItemCondition.Builder SILK_TOUCH = MatchTool.toolMatches(
 			ItemPredicate.Builder.item()
-					.hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1)))
+					.withSubPredicate(
+							ItemSubPredicates.ENCHANTMENTS,
+							ItemEnchantmentsPredicate.enchantments(
+									List.of(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1)))
+							)
+					)
 	);
 
-	public TestMod3LootModifierProvider(final PackOutput output) {
-		super(output, TestMod3.MODID);
+	public TestMod3LootModifierProvider(final PackOutput output, final CompletableFuture<HolderLookup.Provider> registries) {
+		super(output, TestMod3.MODID, registries);
 	}
 
 	@Override
@@ -48,7 +53,7 @@ public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
 		add("loot_table_test", new LootTableLootModifier(
 				new LootItemCondition[]{
 						LootItemRandomChanceCondition.randomChance(0.5f).build(),
-						LootTableIdCondition.builder(BuiltInLootTables.SIMPLE_DUNGEON).build(),
+						LootTableIdCondition.builder(BuiltInLootTables.SIMPLE_DUNGEON.location()).build(),
 				},
 				ModLootTables.LOOT_TABLE_TEST
 		));
@@ -64,7 +69,7 @@ public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
 		));
 
 		// Drops two sticks when the player harvests leaves
-		add("two_sticks_from_leaves", new ItemLootModifier(
+		add("two_sticks_from_leaves", ItemLootModifier.create(
 				new LootItemCondition[]{
 						MatchBlockTag.builder(BlockTags.LEAVES).build(),
 				},

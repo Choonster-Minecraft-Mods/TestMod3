@@ -52,6 +52,7 @@ public class TestMod3 {
 		ModArgumentTypes.initialise(modEventBus);
 		ModBiomeModifierSerializers.initialise(modEventBus);
 		ModCreativeTabs.initialise(modEventBus);
+		ModArmorMaterials.initialise(modEventBus);
 	}
 
 	@SubscribeEvent
@@ -62,7 +63,6 @@ public class TestMod3 {
 
 		event.enqueueWork(() -> {
 			ModCriterion.register();
-			ModLootTables.registerLootTables();
 
 			BlockDumper.dump();
 		});

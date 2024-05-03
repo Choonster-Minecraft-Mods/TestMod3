@@ -35,7 +35,7 @@ public class ModBowItem extends BowItem {
 	 * @return Is ammunition required?
 	 */
 	protected boolean isAmmoRequired(final ItemStack bow, final Player shooter) {
-		return !shooter.getAbilities().instabuild && bow.getEnchantmentLevel(Enchantments.INFINITY_ARROWS) == 0;
+		return !shooter.getAbilities().instabuild && bow.getEnchantmentLevel(Enchantments.INFINITY) == 0;
 	}
 
 	/**
@@ -69,9 +69,10 @@ public class ModBowItem extends BowItem {
 	 * @param bow     The bow ItemStack
 	 * @param level   The firing player's level
 	 * @param shooter The player firing the bow
+	 * @param hand    The hand used to fire the bow
 	 * @param charge  The charge of the arrow
 	 */
-	void fireArrow(final ItemStack bow, final Level level, final LivingEntity shooter, int charge) {
+	void fireArrow(final ItemStack bow, final Level level, final LivingEntity shooter, final InteractionHand hand, int charge) {
 		if (!(shooter instanceof final Player player)) {
 			return;
 		}
@@ -105,21 +106,22 @@ public class ModBowItem extends BowItem {
 						arrowEntity.setCritArrow(true);
 					}
 
-					final int powerLevel = bow.getEnchantmentLevel(Enchantments.POWER_ARROWS);
+					final int powerLevel = bow.getEnchantmentLevel(Enchantments.POWER);
 					if (powerLevel > 0) {
 						arrowEntity.setBaseDamage(arrowEntity.getBaseDamage() + (double) powerLevel * 0.5D + 0.5D);
 					}
 
-					final int punchLevel = bow.getEnchantmentLevel(Enchantments.PUNCH_ARROWS);
+					final int punchLevel = bow.getEnchantmentLevel(Enchantments.PUNCH);
 					if (punchLevel > 0) {
 						arrowEntity.setKnockback(punchLevel);
 					}
 
-					if (bow.getEnchantmentLevel(Enchantments.FLAMING_ARROWS) > 0) {
-						arrowEntity.setSecondsOnFire(100);
+					if (bow.getEnchantmentLevel(Enchantments.FLAME) > 0) {
+						arrowEntity.igniteForSeconds(100);
 					}
 
-					bow.hurtAndBreak(1, player, (entity) -> entity.broadcastBreakEvent(player.getUsedItemHand()));
+					bow.hurtAndBreak(getDurabilityUse(bow), shooter, LivingEntity.getSlotForHand(hand));
+
 
 					if (isInfinite) {
 						arrowEntity.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
@@ -145,7 +147,7 @@ public class ModBowItem extends BowItem {
 	@Override
 	public void releaseUsing(final ItemStack stack, final Level level, final LivingEntity livingEntity, final int timeLeft) {
 		final int charge = stack.getUseDuration() - timeLeft;
-		fireArrow(stack, level, livingEntity, charge);
+		fireArrow(stack, level, livingEntity, livingEntity.getUsedItemHand(), charge);
 	}
 
 	@Override

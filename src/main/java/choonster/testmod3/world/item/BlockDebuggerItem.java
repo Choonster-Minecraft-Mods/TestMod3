@@ -29,7 +29,7 @@ public class BlockDebuggerItem extends Item {
 
 		final BlockEntity blockEntity = context.getLevel().getBlockEntity(pos);
 		if (blockEntity != null) {
-			LOGGER.info("BlockEntity data: {}", blockEntity.serializeNBT());
+			LOGGER.info("BlockEntity data: {}", blockEntity.saveWithFullMetadata(context.getLevel().registryAccess()));
 		}
 
 		return InteractionResult.SUCCESS;

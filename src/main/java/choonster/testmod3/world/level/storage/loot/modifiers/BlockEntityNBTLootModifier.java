@@ -1,13 +1,12 @@
 package choonster.testmod3.world.level.storage.loot.modifiers;
 
 import com.google.common.base.Suppliers;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -23,8 +22,8 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class BlockEntityNBTLootModifier extends LootModifier {
-	public static final Supplier<Codec<BlockEntityNBTLootModifier>> CODEC = Suppliers.memoize(() ->
-			RecordCodecBuilder.create(inst ->
+	public static final Supplier<MapCodec<BlockEntityNBTLootModifier>> CODEC = Suppliers.memoize(() ->
+			RecordCodecBuilder.mapCodec(inst ->
 					codecStart(inst)
 							.apply(inst, BlockEntityNBTLootModifier::new)
 			)
@@ -36,22 +35,16 @@ public class BlockEntityNBTLootModifier extends LootModifier {
 
 	@Override
 	protected ObjectArrayList<ItemStack> doApply(final ObjectArrayList<ItemStack> generatedLoot, final LootContext context) {
-		final BlockState state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
-		final BlockEntity blockEntity = context.getParamOrNull(LootContextParams.BLOCK_ENTITY);
+		final var state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
+		final var blockEntity = context.getParamOrNull(LootContextParams.BLOCK_ENTITY);
 
 		if (state != null && blockEntity != null) {
-			final ItemStack stack = new ItemStack(state.getBlock());
-
 			// Write the BlockEntity to NBT
-			final CompoundTag blockEntityTag = blockEntity.serializeNBT();
-
-			// Remove the coordinate tags so items of the same type from different positions stack
-			blockEntityTag.remove("x");
-			blockEntityTag.remove("y");
-			blockEntityTag.remove("z");
+			final var blockEntityTag = blockEntity.saveWithId(context.getLevel().registryAccess());
 
 			// Store the BlockEntity data in the ItemStack
-			stack.addTagElement("BlockEntityTag", blockEntityTag);
+			final var stack = new ItemStack(state.getBlock());
+			stack.set(DataComponents.BLOCK_ENTITY_DATA, CustomData.of(blockEntityTag));
 
 			generatedLoot.add(stack);
 		}
@@ -60,7 +53,7 @@ public class BlockEntityNBTLootModifier extends LootModifier {
 	}
 
 	@Override
-	public Codec<? extends IGlobalLootModifier> codec() {
+	public MapCodec<? extends IGlobalLootModifier> codec() {
 		return CODEC.get();
 	}
 }

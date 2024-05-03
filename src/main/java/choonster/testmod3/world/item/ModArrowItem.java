@@ -1,7 +1,6 @@
 package choonster.testmod3.world.item;
 
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ArrowItem;
@@ -29,13 +28,11 @@ public class ModArrowItem extends ArrowItem {
 
 	@Override
 	public AbstractArrow createArrow(final Level level, final ItemStack stack, final LivingEntity shooter) {
-		final Arrow entityModArrow = entityFactory.apply(level, shooter, stack.copyWithCount(1));
-		entityModArrow.setEffectsFromItem(stack);
-		return entityModArrow;
+		return entityFactory.apply(level, shooter, stack.copyWithCount(1));
 	}
 
 	@Override
-	public boolean isInfinite(final ItemStack stack, final ItemStack bow, final Player player) {
-		return bow.getEnchantmentLevel(Enchantments.INFINITY_ARROWS) > 0;
+	public boolean isInfinite(final ItemStack stack, final ItemStack bow, final LivingEntity owner) {
+		return bow.getEnchantmentLevel(Enchantments.INFINITY) > 0;
 	}
 }

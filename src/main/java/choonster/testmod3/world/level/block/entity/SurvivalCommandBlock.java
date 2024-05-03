@@ -8,7 +8,7 @@ public abstract class SurvivalCommandBlock extends BaseCommandBlock {
 
 	public SurvivalCommandBlock(final Type type) {
 		this.type = type;
-		setName(Component.literal("Server"));
+		setCustomName(Component.literal("Server"));
 	}
 
 	public Type getType() {

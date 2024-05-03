@@ -4,8 +4,9 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -52,9 +53,8 @@ public class RotatableLampBlock extends Block {
 		return defaultBlockState().setValue(FACING, context.getNearestLookingDirection());
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public InteractionResult use(final BlockState state, final Level world, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult rayTraceResult) {
+	protected ItemInteractionResult useItemOn(final ItemStack stack, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
 		final BlockState newState;
 
 		if (player.isShiftKeyDown()) {
@@ -63,9 +63,9 @@ public class RotatableLampBlock extends Block {
 			newState = state.cycle(LIT); // Cycle the lit state (true -> false -> true)
 		}
 
-		world.setBlockAndUpdate(pos, newState);
+		level.setBlockAndUpdate(pos, newState);
 
-		return InteractionResult.SUCCESS;
+		return ItemInteractionResult.SUCCESS;
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package choonster.testmod3.world.level.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -43,9 +43,8 @@ public class RightClickTestBlock extends TransparentBlock {
 		builder.add(HAS_ENDER_EYE);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public InteractionResult use(final BlockState state, final Level world, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult rayTraceResult) {
+	protected ItemInteractionResult useItemOn(final ItemStack stack, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
 		final ItemStack heldItem = player.getItemInHand(hand);
 
 		if (!heldItem.isEmpty() && heldItem.getItem() == Items.ENDER_EYE && !state.getValue(HAS_ENDER_EYE)) {
@@ -53,10 +52,10 @@ public class RightClickTestBlock extends TransparentBlock {
 				heldItem.shrink(1);
 			}
 
-			world.setBlockAndUpdate(pos, state.setValue(HAS_ENDER_EYE, true));
-			return InteractionResult.SUCCESS;
+			level.setBlockAndUpdate(pos, state.setValue(HAS_ENDER_EYE, true));
+			return ItemInteractionResult.SUCCESS;
 		}
 
-		return InteractionResult.FAIL;
+		return ItemInteractionResult.FAIL;
 	}
 }

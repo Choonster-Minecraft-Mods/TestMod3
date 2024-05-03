@@ -10,6 +10,8 @@ import choonster.testmod3.world.item.ModBucketItem;
 import choonster.testmod3.world.level.block.PlaneBlock;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.PackOutput;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EntityType;
@@ -18,7 +20,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.ForgeSpawnEggItem;
@@ -240,7 +242,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 
 	private void addPotions() {
 		addEffect(ModMobEffects.TEST, "Test");
-		addPotion(ModPotions.TEST, "Testing");
+		addPotion(ModPotions.TEST.getHolder().orElseThrow(), "Testing");
 	}
 
 	private void addContainers() {
@@ -392,16 +394,17 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		addItem(group.getBucket(), String.format("%s Bucket", name));
 	}
 
-	private void addPotion(final Supplier<? extends Potion> potion, final String name) {
+	private void addPotion(final Holder<Potion> potion, final String name) {
 		add(getPotionItemTranslationKey(potion, Items.TIPPED_ARROW), String.format("Arrow of %s", name));
 		add(getPotionItemTranslationKey(potion, Items.POTION), String.format("Potion of %s", name));
 		add(getPotionItemTranslationKey(potion, Items.SPLASH_POTION), String.format("Splash Potion of %s", name));
 		add(getPotionItemTranslationKey(potion, Items.LINGERING_POTION), String.format("Lingering Potion of %s", name));
 	}
 
-	private String getPotionItemTranslationKey(final Supplier<? extends Potion> potion, final Item item) {
-		final ItemStack stack = PotionUtils.setPotion(new ItemStack(item), potion.get());
-		return stack.getItem().getDescriptionId(stack);
+	private String getPotionItemTranslationKey(final Holder<Potion> potion, final Item item) {
+		final var stack = new ItemStack(item);
+		stack.set(DataComponents.POTION_CONTENTS, new PotionContents(potion));
+		return stack.getDescriptionId();
 	}
 
 	private void add(final IJadeProvider provider, final String name) {

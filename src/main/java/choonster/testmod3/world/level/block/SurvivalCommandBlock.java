@@ -10,13 +10,12 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringUtil;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -76,8 +75,8 @@ public class SurvivalCommandBlock extends CommandBlock {
 	}
 
 	@Override
-	public InteractionResult use(final BlockState state, final Level world, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult hit) {
-		final var blockEntity = world.getBlockEntity(pos);
+	protected InteractionResult useWithoutItem(final BlockState state, final Level level, final BlockPos pos, final Player player, final BlockHitResult blockHitResult) {
+		final var blockEntity = level.getBlockEntity(pos);
 		if (blockEntity instanceof SurvivalCommandBlockEntity) {
 			if (!player.getCommandSenderWorld().isClientSide) {
 				final var serverPlayer = (ServerPlayer) player;
@@ -85,20 +84,18 @@ public class SurvivalCommandBlock extends CommandBlock {
 				serverPlayer.connection.send(ClientboundBlockEntityDataPacket.create(blockEntity, BlockEntity::saveWithoutMetadata));
 			}
 
-			return InteractionResult.sidedSuccess(world.isClientSide);
+			return InteractionResult.sidedSuccess(level.isClientSide);
 		} else {
 			return InteractionResult.PASS;
 		}
-
 	}
 
 	@Override
 	public void setPlacedBy(final Level level, final BlockPos pos, final BlockState state, final LivingEntity placer, final ItemStack stack) {
-		final var blockEntity = level.getBlockEntity(pos);
-		if (blockEntity instanceof final SurvivalCommandBlockEntity survivalCommandBlockEntity && !level.isClientSide) {
-			final var tagCompound = stack.getTag();
-			if (tagCompound == null || !tagCompound.contains("BlockEntityTag", Tag.TAG_COMPOUND)) {
-				survivalCommandBlockEntity.setAutomatic(getCommandBlockMode() == CommandBlockEntity.Mode.SEQUENCE);
+		if (!level.isClientSide && level.getBlockEntity(pos) instanceof final SurvivalCommandBlockEntity survivalCommandBlockEntity) {
+			if (!stack.has(DataComponents.BLOCK_ENTITY_DATA)) {
+				survivalCommandBlockEntity.getCommandBlock().setTrackOutput(level.getGameRules().getBoolean(GameRules.RULE_SENDCOMMANDFEEDBACK));
+				survivalCommandBlockEntity.setAutomatic(automatic);
 			}
 		}
 

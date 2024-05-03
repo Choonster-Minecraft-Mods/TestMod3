@@ -4,6 +4,7 @@ import choonster.testmod3.init.ModCrafting;
 import choonster.testmod3.util.RegistryUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
@@ -19,7 +20,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  * @author Choonster
  */
 public class MobSpawnerIngredient extends AbstractDelegatingIngredient {
-	public static final Codec<MobSpawnerIngredient> DATA_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final MapCodec<MobSpawnerIngredient> DATA_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 
 					ForgeRegistries.ITEMS.getCodec()
 							.fieldOf("item")
@@ -32,6 +33,7 @@ public class MobSpawnerIngredient extends AbstractDelegatingIngredient {
 			).apply(instance, MobSpawnerIngredient::new)
 	);
 
+	// TODO: Convert to MapCodec?
 	public static final Codec<Ingredient> CODEC = DATA_CODEC.flatComapMap(
 			mobSpawnerIngredient -> PartialNBTIngredient.builder()
 					.item(mobSpawnerIngredient.item)

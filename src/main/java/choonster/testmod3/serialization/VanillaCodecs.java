@@ -6,14 +6,18 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.netty.handler.codec.DecoderException;
+import io.netty.handler.codec.EncoderException;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.IExtensibleEnum;
@@ -30,30 +34,11 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class VanillaCodecs {
-	private static final Codec<Item> ITEM_NON_AIR_CODEC = ExtraCodecs.validate(
-			ForgeRegistries.ITEMS.getCodec(),
-			item -> item == Items.AIR ?
-					DataResult.error(() -> "Item must not be minecraft:air") :
-					DataResult.success(item)
-	);
-
 	/**
-	 * A Codec for {@link  ItemStack} that uses lowercase field names, suitable for use in recipes.
+	 * Replace with {@link ItemStack#STRICT_CODEC}
 	 */
-	public static final Codec<ItemStack> RECIPE_RESULT = RecordCodecBuilder.create(instance -> instance.group(
-
-			ITEM_NON_AIR_CODEC
-					.fieldOf("item")
-					.forGetter(ItemStack::getItem),
-
-			ExtraCodecs.strictOptionalField(ExtraCodecs.POSITIVE_INT, "count", 1)
-					.forGetter(ItemStack::getCount),
-
-			CompoundTag.CODEC
-					.optionalFieldOf("nbt")
-					.forGetter(stack -> Optional.ofNullable(stack.getTag()))
-
-	).apply(instance, (item, count, tag) -> new ItemStack(Holder.direct(item), count, tag)));
+	@Deprecated(forRemoval = true)
+	public static final Codec<ItemStack> RECIPE_RESULT = ItemStack.STRICT_CODEC;
 
 	/**
 	 * Prepares a Codec for {@link FluidStack} that uses lowercase field names, suitable for use in recipes/ingredients.
@@ -80,6 +65,61 @@ public class VanillaCodecs {
 
 		);
 	}
+
+	public static final StreamCodec<RegistryFriendlyByteBuf, FluidStack> FLUID_STACK_OPTIONAL_STREAM_CODEC = new StreamCodec<>() {
+		private static final StreamCodec<RegistryFriendlyByteBuf, Holder<Fluid>> FLUID_STREAM_CODEC = ByteBufCodecs.holderRegistry(Registries.FLUID);
+
+		@Override
+		public FluidStack decode(final RegistryFriendlyByteBuf buffer) {
+			final var amount = buffer.readVarInt();
+			if (amount <= 0) {
+				return FluidStack.EMPTY;
+			} else {
+				final var fluidHolder = FLUID_STREAM_CODEC.decode(buffer);
+				final var tag = buffer.readNbt();
+
+				final var fluidStack = new FluidStack(fluidHolder.get(), amount);
+
+				if (tag != null) {
+					fluidStack.setTag(tag);
+				}
+
+				return fluidStack;
+			}
+		}
+
+		@Override
+		public void encode(final RegistryFriendlyByteBuf buffer, final FluidStack value) {
+			if (value.isEmpty()) {
+				buffer.writeVarInt(0);
+			} else {
+				buffer.writeVarInt(value.getAmount());
+				FLUID_STREAM_CODEC.encode(buffer, Holder.direct(value.getFluid()));
+				buffer.writeNbt(value.getTag());
+			}
+		}
+	};
+
+	public static final StreamCodec<RegistryFriendlyByteBuf, FluidStack> FLUID_STACK_STREAM_CODEC = new StreamCodec<>() {
+		@Override
+		public FluidStack decode(final RegistryFriendlyByteBuf buffer) {
+			final var fluidStack = FLUID_STACK_OPTIONAL_STREAM_CODEC.decode(buffer);
+			if (fluidStack.isEmpty()) {
+				throw new DecoderException("Empty FluidStack not allowed");
+			} else {
+				return fluidStack;
+			}
+		}
+
+		@Override
+		public void encode(final RegistryFriendlyByteBuf buffer, final FluidStack value) {
+			if (value.isEmpty()) {
+				throw new EncoderException("Empty FluidStack not allowed");
+			} else {
+				FLUID_STACK_OPTIONAL_STREAM_CODEC.encode(buffer, value);
+			}
+		}
+	};
 
 	public static final Codec<CommandBlockEntity.Mode> COMMAND_BLOCK_MODE = Util.make(() -> {
 		final var values = CommandBlockEntity.Mode.values();

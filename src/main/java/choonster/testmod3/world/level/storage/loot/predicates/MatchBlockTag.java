@@ -1,7 +1,7 @@
 package choonster.testmod3.world.level.storage.loot.predicates;
 
 import choonster.testmod3.init.ModLootConditionTypes;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
@@ -18,7 +18,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
  * @author Choonster
  */
 public record MatchBlockTag(TagKey<Block> tag) implements LootItemCondition {
-	public static final Codec<MatchBlockTag> CODEC = RecordCodecBuilder.create(builder ->
+	public static final MapCodec<MatchBlockTag> CODEC = RecordCodecBuilder.mapCodec(builder ->
 			builder.group(
 
 					TagKey.codec(Registries.BLOCK)

@@ -3,7 +3,7 @@ package choonster.testmod3.init;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.level.storage.loot.predicates.IsChestLoot;
 import choonster.testmod3.world.level.storage.loot.predicates.MatchBlockTag;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
@@ -47,7 +47,7 @@ public class ModLootConditionTypes {
 		isInitialised = true;
 	}
 
-	private static RegistryObject<LootItemConditionType> register(final String name, final Codec<? extends LootItemCondition> codec) {
+	private static RegistryObject<LootItemConditionType> register(final String name, final MapCodec<? extends LootItemCondition> codec) {
 		return LOOT_ITEM_CONDITION_TYPES.register(name, () -> new LootItemConditionType(codec));
 	}
 }

@@ -33,7 +33,7 @@ public class ModItems {
 	private static boolean isInitialised;
 
 	public static final RegistryObject<CuttingAxeItem> WOODEN_AXE = ITEMS.register("wooden_axe",
-			() -> new CuttingAxeItem(Tiers.WOOD, 6.0f, -3.2f, defaultItemProperties())
+			() -> new CuttingAxeItem(Tiers.WOOD, defaultItemProperties().attributes(AxeItem.createAttributes(Tiers.WOOD, 6.0f, -3.2f)))
 	);
 
 	public static final RegistryObject<EntityTestItem> ENTITY_TEST = ITEMS.register("entity_test",
@@ -114,11 +114,11 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<HarvestSwordItem> WOODEN_HARVEST_SWORD = ITEMS.register("wooden_harvest_sword",
-			() -> new HarvestSwordItem(Tiers.WOOD, defaultItemProperties())
+			() -> new HarvestSwordItem(Tiers.WOOD, defaultItemProperties().attributes(HarvestSwordItem.createAttributes(Tiers.WOOD)))
 	);
 
 	public static final RegistryObject<HarvestSwordItem> DIAMOND_HARVEST_SWORD = ITEMS.register("diamond_harvest_sword",
-			() -> new HarvestSwordItem(Tiers.DIAMOND, defaultItemProperties())
+			() -> new HarvestSwordItem(Tiers.DIAMOND, defaultItemProperties().attributes(HarvestSwordItem.createAttributes(Tiers.DIAMOND)))
 	);
 
 	public static final RegistryObject<ClearerItem> CLEARER = ITEMS.register("clearer",
@@ -126,7 +126,7 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<ModBowItem> BOW = ITEMS.register("bow",
-			() -> new ModBowItem(defaultItemProperties().defaultDurability(384))
+			() -> new ModBowItem(defaultItemProperties().durability(384))
 	);
 
 	public static final RegistryObject<ModArrowItem> ARROW = ITEMS.register("arrow",
@@ -262,21 +262,21 @@ public class ModItems {
 	public static final RegistryObject<ReplacementArmourItem> REPLACEMENT_HELMET;
 
 	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_CHESTPLATE = ITEMS.register("replacement_chestplate",
-			() -> new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, ArmorItem.Type.CHESTPLATE, defaultItemProperties())
+			() -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT.getHolder().orElseThrow(), ArmorItem.Type.CHESTPLATE, defaultItemProperties())
 	);
 
 	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_LEGGINGS = ITEMS.register("replacement_leggings",
-			() -> new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, ArmorItem.Type.LEGGINGS, defaultItemProperties())
+			() -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT.getHolder().orElseThrow(), ArmorItem.Type.LEGGINGS, defaultItemProperties())
 	);
 
 	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_BOOTS = ITEMS.register("replacement_boots",
-			() -> new RestrictedArmourItem(ModArmourMaterial.REPLACEMENT, ArmorItem.Type.BOOTS, defaultItemProperties())
+			() -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT.getHolder().orElseThrow(), ArmorItem.Type.BOOTS, defaultItemProperties())
 	);
 
 	static {
 		REPLACEMENT_HELMET = ITEMS.register("replacement_helmet",
 				() -> new ReplacementArmourItem(
-						ModArmourMaterial.REPLACEMENT,
+						ModArmorMaterials.REPLACEMENT.getHolder().orElseThrow(),
 						ArmorItem.Type.HELMET,
 						defaultItemProperties(),
 						ImmutableSet.of(

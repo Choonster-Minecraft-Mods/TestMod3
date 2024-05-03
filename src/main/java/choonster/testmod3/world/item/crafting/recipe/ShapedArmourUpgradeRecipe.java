@@ -1,7 +1,7 @@
 package choonster.testmod3.world.item.crafting.recipe;
 
 import choonster.testmod3.init.ModCrafting;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ArmorItem;
@@ -31,12 +31,12 @@ public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
 	}
 
 	@Override
-	public ItemStack assemble(final CraftingContainer inv, final RegistryAccess registryAccess) {
-		final var output = super.assemble(inv, registryAccess).copy(); // Get the default output
+	public ItemStack assemble(final CraftingContainer container, final HolderLookup.Provider registries) {
+		final var output = super.assemble(container, registries).copy(); // Get the default output
 
 		if (!output.isEmpty()) {
-			for (var i = 0; i < inv.getContainerSize(); i++) { // For each slot in the crafting inventory,
-				final var ingredient = inv.getItem(i); // Get the ingredient in the slot
+			for (var i = 0; i < container.getContainerSize(); i++) { // For each slot in the crafting inventory,
+				final var ingredient = container.getItem(i); // Get the ingredient in the slot
 
 				if (!ingredient.isEmpty() && ingredient.getItem() instanceof ArmorItem) { // If it's an armour item,
 					// Clone its item damage, clamping it to the output's damage range
