@@ -8,8 +8,9 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,10 +33,9 @@ public class MaxHealthSetterBlock extends Block {
 		return CODEC;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public InteractionResult use(final BlockState state, final Level world, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult rayTraceResult) {
-		if (!world.isClientSide) {
+	protected ItemInteractionResult useItemOn(final ItemStack stack, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
+		if (!level.isClientSide) {
 			final var maxHealth = MaxHealthCapability
 					.getMaxHealth(player)
 					.orElseThrow(CapabilityNotPresentException::new);
@@ -53,6 +53,6 @@ public class MaxHealthSetterBlock extends Block {
 			);
 		}
 
-		return InteractionResult.SUCCESS;
+		return ItemInteractionResult.SUCCESS;
 	}
 }

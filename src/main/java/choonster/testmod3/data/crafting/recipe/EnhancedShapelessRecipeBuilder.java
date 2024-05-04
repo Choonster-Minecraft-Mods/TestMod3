@@ -8,6 +8,7 @@ import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -28,7 +29,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
- * An extension of {@link ShapelessRecipeBuilder} that allows the recipe result to have NBT if the recipe type supports it.
+ * An extension of {@link ShapelessRecipeBuilder} that allows the recipe result to have components.
  *
  * @author Choonster
  */
@@ -183,8 +184,12 @@ public abstract class EnhancedShapelessRecipeBuilder<
 		protected void validate(final ResourceLocation id) {
 			super.validate(id);
 
-			if (!result.hasTag()) {
-				throw new IllegalStateException("Enhanced shapeless recipe " + id + " has no NBT - use ShapelessRecipeBuilder instead");
+			final var allComponentsAreStandard = result.getComponents()
+					.stream()
+					.allMatch(typedComponent -> typedComponent.value().equals(DataComponents.COMMON_ITEM_COMPONENTS.get(typedComponent.type())));
+
+			if (!allComponentsAreStandard) {
+				throw new IllegalStateException("Enhanced shapeless recipe " + id + " has no custom components - use ShapedRecipeBuilder instead");
 			}
 		}
 	}

@@ -15,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -56,7 +57,6 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 		return CODEC;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public List<ItemStack> getDrops(final BlockState state, final LootParams.Builder builder) {
 		final var blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
@@ -99,7 +99,7 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 		return new FluidTankBlockEntity(pos, state);
 	}
 
-	public static List<Component> getFluidDataForDisplay(final FluidTankSnapshot[] fluidTankSnapshots) {
+	public static List<Component> getFluidDataForDisplay(final List<FluidTankSnapshot> fluidTankSnapshots) {
 		final List<Component> data = new ArrayList<>();
 
 		var hasFluid = false;
@@ -119,14 +119,12 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 		return data;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public InteractionResult use(final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult rayTraceResult) {
-		final var heldItem = player.getItemInHand(hand);
+	protected ItemInteractionResult useItemOn(final ItemStack stack, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
 		return getFluidHandler(level, pos)
 				.map(fluidHandler -> {
 					// Try fill/empty the held fluid container from the tank
-					final var success = FluidUtil.interactWithFluidHandler(player, hand, level, pos, rayTraceResult.getDirection());
+					final var success = FluidUtil.interactWithFluidHandler(player, hand, level, pos, blockHitResult.getDirection());
 
 					// If the contents changed or this is the off hand, send a chat message to the player
 					if (!level.isClientSide && (success || hand == InteractionHand.OFF_HAND)) {
@@ -135,7 +133,7 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 					}
 
 					// If the held item is a fluid container, stop processing here so it doesn't try to place its contents
-					return heldItem.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent() ? InteractionResult.SUCCESS : InteractionResult.PASS;
+					return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent() ? InteractionResult.SUCCESS : InteractionResult.PASS;
 				})
 				.orElse(InteractionResult.PASS);
 	}

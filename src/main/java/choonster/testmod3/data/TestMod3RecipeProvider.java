@@ -1,6 +1,7 @@
 package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.advancements.criterion.ItemFluidContainerPredicate;
 import choonster.testmod3.data.crafting.ingredient.ConditionalIngredientBuilder;
 import choonster.testmod3.data.crafting.ingredient.MobSpawnerIngredientBuilder;
 import choonster.testmod3.data.crafting.recipe.EnhancedShapedRecipeBuilder;
@@ -8,9 +9,15 @@ import choonster.testmod3.data.crafting.recipe.ShapedArmourUpgradeRecipeBuilder;
 import choonster.testmod3.data.crafting.recipe.ShapelessCuttingRecipeBuilder;
 import choonster.testmod3.data.crafting.recipe.ShapelessFluidContainerRecipeBuilder;
 import choonster.testmod3.init.ModFluids;
+import choonster.testmod3.init.ModItemSubPredicates;
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.util.RegistryUtil;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.PackOutput;
@@ -32,6 +39,8 @@ import net.minecraftforge.common.crafting.conditions.FalseCondition;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -115,7 +124,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 		// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2424619-help-needed-creating-non-pig-mob-spawners
 		{
 			final var guardianSpawner = new ItemStack(Blocks.SPAWNER);
-			
+
 			final var blockEntityTag = new CompoundTag();
 
 			final var entityToSpawn = new CompoundTag();
@@ -192,15 +201,33 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.requires(staticGasContainer)
 					.requires(staticGasContainer)
 					.unlockedBy("has_static_gas_bucket", has(ModFluids.STATIC_GAS.getBucket().get()))
-					/*
 					.unlockedBy("has_static_gas_container", inventoryTrigger(
-							FluidContainerItemPredicate.Builder.create()
-									.fluid(staticGas.getFluid())
-									.amount(MinMaxBounds.Ints.atLeast(staticGas.getAmount()))
-									.build()
+							ItemPredicate.Builder.item().withSubPredicate(
+									ModItemSubPredicates.FLUID_CONTAINER.get(),
+									ItemFluidContainerPredicate.Builder.create()
+											.of(staticGas.getFluid())
+											.withAmount(MinMaxBounds.Ints.atLeast(staticGas.getAmount()))
+											.build()
+							)
 					))
-					*/
 					.save(output, new ResourceLocation(TestMod3.MODID, "cobblestone_from_static_gas"));
 		}
+	}
+
+	private static Criterion<InventoryChangeTrigger.TriggerInstance> inventoryTrigger(final ItemPredicate.Builder... p_299527_) {
+		return inventoryTrigger(
+				Arrays.stream(p_299527_)
+						.map(ItemPredicate.Builder::build)
+						.toArray(ItemPredicate[]::new)
+		);
+	}
+
+	private static Criterion<InventoryChangeTrigger.TriggerInstance> inventoryTrigger(final ItemPredicate... p_297226_) {
+		return CriteriaTriggers.INVENTORY_CHANGED
+				.createCriterion(new InventoryChangeTrigger.TriggerInstance(
+						Optional.empty(),
+						InventoryChangeTrigger.TriggerInstance.Slots.ANY,
+						List.of(p_297226_)
+				));
 	}
 }

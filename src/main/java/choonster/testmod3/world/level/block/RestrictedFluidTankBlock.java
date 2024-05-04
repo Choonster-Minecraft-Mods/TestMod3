@@ -7,8 +7,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -46,9 +47,9 @@ public class RestrictedFluidTankBlock extends FluidTankBlock<RestrictedFluidTank
 	}
 
 	@Override
-	public InteractionResult use(final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult rayTraceResult) {
+	protected ItemInteractionResult useItemOn(final ItemStack stack, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
 		final var heldItem = player.getItemInHand(hand);
-		final var direction = rayTraceResult.getDirection();
+		final var direction = blockHitResult.getDirection();
 
 		if (heldItem.getItem() == Items.STICK) {
 			final var blockEntity = getBlockEntity(level, pos);
@@ -60,14 +61,13 @@ public class RestrictedFluidTankBlock extends FluidTankBlock<RestrictedFluidTank
 					player.sendSystemMessage(Component.translatable(message.getTranslationKey(), direction));
 				}
 
-				return InteractionResult.SUCCESS;
+				return ItemInteractionResult.SUCCESS;
 			}
 		}
 
-		return super.use(state, level, pos, player, hand, rayTraceResult);
+		return super.useItemOn(stack, state, level, pos, player, hand, blockHitResult);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void attack(final BlockState state, final Level level, final BlockPos pos, final Player player) {
 		if (!level.isClientSide) {

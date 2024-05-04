@@ -63,8 +63,6 @@ public class TestMod3 {
 		LOGGER.warn("****************************************");
 
 		event.enqueueWork(() -> {
-			ModCriterion.register();
-
 			BlockDumper.dump();
 		});
 	}
