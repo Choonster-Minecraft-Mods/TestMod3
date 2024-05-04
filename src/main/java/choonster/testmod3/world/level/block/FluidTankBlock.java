@@ -36,7 +36,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * A Fluid Tank block.
@@ -67,7 +66,8 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 					.orElseThrow(CapabilityNotPresentException::new);
 
 			builder.withDynamicDrop(FLUID_TANK_CONTENTS, (stackConsumer) ->
-					Stream.of(FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler))
+					FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler)
+							.stream()
 							.map(fluidTankSnapshot -> ModItems.FLUID_STACK_ITEM.get().withFluidStack(fluidTankSnapshot.contents()))
 							.forEach(stackConsumer)
 			);
