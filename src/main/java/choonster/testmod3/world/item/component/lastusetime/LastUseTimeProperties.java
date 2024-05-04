@@ -3,6 +3,7 @@ package choonster.testmod3.world.item.component.lastusetime;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
 /**
@@ -25,21 +26,11 @@ public record LastUseTimeProperties(long lastUseTime, boolean automaticUpdates) 
 			).apply(builder, LastUseTimeProperties::new)
 	);
 
-	public static StreamCodec<RegistryFriendlyByteBuf, LastUseTimeProperties> NETWORK_CODEC = new StreamCodec<>() {
-		@Override
-		public LastUseTimeProperties decode(final RegistryFriendlyByteBuf buffer) {
-			final var lastUseTime = buffer.readVarLong();
-			final var automaticUpdates = buffer.readBoolean();
-
-			return new LastUseTimeProperties(lastUseTime, automaticUpdates);
-		}
-
-		@Override
-		public void encode(final RegistryFriendlyByteBuf buffer, final LastUseTimeProperties value) {
-			buffer.writeVarLong(value.lastUseTime);
-			buffer.writeBoolean(value.automaticUpdates);
-		}
-	};
-
-	public static final LastUseTimeProperties DEFAULT = new LastUseTimeProperties(0, false);
+	public static StreamCodec<RegistryFriendlyByteBuf, LastUseTimeProperties> NETWORK_CODEC = StreamCodec.composite(
+			ByteBufCodecs.VAR_LONG,
+			LastUseTimeProperties::lastUseTime,
+			ByteBufCodecs.BOOL,
+			LastUseTimeProperties::automaticUpdates,
+			LastUseTimeProperties::new
+	);
 }

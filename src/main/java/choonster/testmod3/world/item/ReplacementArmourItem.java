@@ -13,6 +13,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -229,19 +230,11 @@ public class ReplacementArmourItem extends ArmorItem {
 				).apply(builder, ReplacedArmour::new)
 		);
 
-		public static StreamCodec<RegistryFriendlyByteBuf, ReplacedArmour> STREAM_CODEC = new StreamCodec<>() {
-			@Override
-			public ReplacedArmour decode(final RegistryFriendlyByteBuf buffer) {
-				final var replacedArmour = buffer.readList((b) -> Entry.STREAM_CODEC.decode(buffer));
-
-				return new ReplacedArmour(ImmutableList.copyOf(replacedArmour));
-			}
-
-			@Override
-			public void encode(final RegistryFriendlyByteBuf buffer, final ReplacedArmour value) {
-				buffer.writeCollection(value.replacedArmour, (b, entry) -> Entry.STREAM_CODEC.encode(buffer, entry));
-			}
-		};
+		public static StreamCodec<RegistryFriendlyByteBuf, ReplacedArmour> STREAM_CODEC = StreamCodec.composite(
+				Entry.STREAM_CODEC.apply(ByteBufCodecs.list()),
+				ReplacedArmour::replacedArmour,
+				ReplacedArmour::new
+		);
 
 		public ReplacedArmour(final List<Entry> replacedArmour) {
 			this(ImmutableList.copyOf(replacedArmour));

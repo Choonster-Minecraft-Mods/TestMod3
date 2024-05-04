@@ -7,6 +7,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -169,21 +170,13 @@ public class EntityCheckerItem extends Item {
 				).apply(builder, EntityCheckerProperties::new)
 		);
 
-		public static StreamCodec<RegistryFriendlyByteBuf, EntityCheckerProperties> NETWORK_CODEC = new StreamCodec<>() {
-			@Override
-			public EntityCheckerProperties decode(final RegistryFriendlyByteBuf buffer) {
-				final var radius = buffer.readVarInt();
-				final var cornerModeEnabled = buffer.readBoolean();
-
-				return new EntityCheckerProperties(radius, cornerModeEnabled);
-			}
-
-			@Override
-			public void encode(final RegistryFriendlyByteBuf buffer, final EntityCheckerProperties value) {
-				buffer.writeVarInt(value.radius);
-				buffer.writeBoolean(value.cornerModeEnabled);
-			}
-		};
+		public static StreamCodec<RegistryFriendlyByteBuf, EntityCheckerProperties> NETWORK_CODEC = StreamCodec.composite(
+				ByteBufCodecs.VAR_INT,
+				EntityCheckerProperties::radius,
+				ByteBufCodecs.BOOL,
+				EntityCheckerProperties::cornerModeEnabled,
+				EntityCheckerProperties::new
+		);
 
 		public static EntityCheckerProperties DEFAULT = new EntityCheckerProperties(0, false);
 	}
