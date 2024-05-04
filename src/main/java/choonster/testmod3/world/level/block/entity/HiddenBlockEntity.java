@@ -1,6 +1,6 @@
 package choonster.testmod3.world.level.block.entity;
 
-import choonster.testmod3.client.capability.HiddenBlockManager;
+import choonster.testmod3.client.hiddenblock.HiddenBlockManager;
 import choonster.testmod3.init.ModBlockEntities;
 import choonster.testmod3.world.level.block.HiddenBlock;
 import net.minecraft.core.BlockPos;

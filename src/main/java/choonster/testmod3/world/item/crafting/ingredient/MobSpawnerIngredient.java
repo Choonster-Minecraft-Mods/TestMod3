@@ -2,7 +2,6 @@ package choonster.testmod3.world.item.crafting.ingredient;
 
 import choonster.testmod3.init.ModCrafting;
 import choonster.testmod3.util.RegistryUtil;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -33,27 +32,28 @@ public class MobSpawnerIngredient extends AbstractDelegatingIngredient {
 			).apply(instance, MobSpawnerIngredient::new)
 	);
 
-	// TODO: Convert to MapCodec?
-	public static final Codec<Ingredient> CODEC = DATA_CODEC.flatComapMap(
-			mobSpawnerIngredient -> PartialNBTIngredient.builder()
-					.item(mobSpawnerIngredient.item)
-					.nbt(
-							CompoundTag.builder()
-									.tag(
-											"BlockEntityTag",
-											CompoundTag.builder()
-													.tag(
-															"SpawnData",
-															CompoundTag.builder()
-																	.put("id", RegistryUtil.getKey(mobSpawnerIngredient.entityType).toString())
-																	.build()
-													)
-													.build()
+	public static final MapCodec<Ingredient> CODEC = DATA_CODEC.flatXmap(
+			mobSpawnerIngredient -> DataResult.success(
+					PartialNBTIngredient.builder()
+							.item(mobSpawnerIngredient.item)
+							.nbt(
+									CompoundTag.builder()
+											.tag(
+													"BlockEntityTag",
+													CompoundTag.builder()
+															.tag(
+																	"SpawnData",
+																	CompoundTag.builder()
+																			.put("id", RegistryUtil.getKey(mobSpawnerIngredient.entityType).toString())
+																			.build()
+															)
+															.build()
 
-									)
-									.build()
-					)
-					.build(),
+											)
+											.build()
+							)
+							.build()
+			),
 			ingredient -> ingredient instanceof MobSpawnerIngredient mobSpawnerIngredient ?
 					DataResult.success(mobSpawnerIngredient) :
 					DataResult.error(() -> "Can't convert Ingredient to MobSpawnerIngredient")

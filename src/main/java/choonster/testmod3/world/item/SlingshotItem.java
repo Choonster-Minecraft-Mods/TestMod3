@@ -1,8 +1,6 @@
 package choonster.testmod3.world.item;
 
-import choonster.testmod3.capability.lastusetime.LastUseTime;
-import choonster.testmod3.capability.lastusetime.LastUseTimeCapability;
-import net.minecraft.nbt.CompoundTag;
+import choonster.testmod3.world.item.component.lastusetime.LastUseTime;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -10,8 +8,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * A slingshot that fires Snowballs when used.
@@ -38,16 +34,11 @@ public class SlingshotItem extends SnowballLauncherItem {
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final CompoundTag nbt) {
-		return LastUseTimeCapability.createProvider(new LastUseTime(false));
-	}
-
-	@Override
 	public InteractionResultHolder<ItemStack> use(final Level level, final Player player, final InteractionHand hand) {
 		final var result = super.use(level, player, hand);
 
 		if (result.getResult() == InteractionResult.SUCCESS) {
-			LastUseTimeCapability.updateLastUseTime(player, player.getItemInHand(hand));
+			LastUseTime.updateLastUseTime(player, player.getItemInHand(hand));
 		}
 
 		return result;

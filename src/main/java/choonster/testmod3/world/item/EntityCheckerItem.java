@@ -1,9 +1,13 @@
 package choonster.testmod3.world.item;
 
+import choonster.testmod3.init.ModDataComponents;
 import choonster.testmod3.text.TestMod3Lang;
 import com.mojang.logging.LogUtils;
-import net.minecraft.nbt.CompoundTag;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -39,14 +43,15 @@ public class EntityCheckerItem extends Item {
 		super(properties);
 	}
 
-	/**
-	 * Get the search radius from the {@link ItemStack}.
-	 *
-	 * @param stack The ItemStack
-	 * @return The search radius
-	 */
-	private static int getRadius(final ItemStack stack) {
-		return stack.getOrCreateTag().getInt("Radius");
+	private static EntityCheckerProperties getProperties(final ItemStack stack) {
+		return stack.getOrDefault(
+				ModDataComponents.ENTITY_CHECKER_PROPERTIES.get(),
+				EntityCheckerProperties.DEFAULT
+		);
+	}
+
+	private static void setProperties(final ItemStack stack, final EntityCheckerProperties properties) {
+		stack.set(ModDataComponents.ENTITY_CHECKER_PROPERTIES.get(), properties);
 	}
 
 	/**
@@ -56,23 +61,14 @@ public class EntityCheckerItem extends Item {
 	 * @return The new radius
 	 */
 	private static int incrementRadius(final ItemStack stack, final int amount) {
-		// TODO: DataComponents
-		final CompoundTag tag = stack.getOrCreateTag();
+		final var properties = getProperties(stack);
 
-		final var newRadius = Math.max(tag.getInt("Radius") + amount, 0); // Don't allow negative values
-		tag.putInt("Radius", newRadius);
+		final var newRadius = Math.max(properties.radius + amount, 0); // Don't allow negative values
+		final var newProperties = new EntityCheckerProperties(newRadius, properties.cornerModeEnabled);
+
+		setProperties(stack, newProperties);
 
 		return newRadius;
-	}
-
-	/**
-	 * Is corner mode enabled for the {@link ItemStack}?
-	 *
-	 * @param stack The ItemStack
-	 * @return Is corner mode enabled?
-	 */
-	private static boolean isCornerModeEnabled(final ItemStack stack) {
-		return stack.getOrCreateTag().getBoolean("CornerMode");
 	}
 
 	/**
@@ -82,10 +78,12 @@ public class EntityCheckerItem extends Item {
 	 * @return The new corner mode setting
 	 */
 	private static boolean toggleCornerModeEnabled(final ItemStack stack) {
-		final CompoundTag tag = stack.getOrCreateTag();
+		final var properties = getProperties(stack);
 
-		final var cornerModeEnabled = !tag.getBoolean("CornerMode");
-		tag.putBoolean("CornerMode", cornerModeEnabled);
+		final var cornerModeEnabled = !properties.cornerModeEnabled;
+		final var newProperties = new EntityCheckerProperties(properties.radius, cornerModeEnabled);
+
+		setProperties(stack, newProperties);
 
 		return cornerModeEnabled;
 	}
@@ -119,13 +117,14 @@ public class EntityCheckerItem extends Item {
 			final var player = context.getPlayer();
 			final var heldItem = context.getItemInHand();
 			final var clickedPos = context.getClickedPos();
+			final var properties = getProperties(heldItem);
 
-			final var radius = getRadius(heldItem);
+			final var radius = properties.radius;
 			final AABB boundingBox;
 
 			// Create the AABB based on whether corner mode is enabled.
 			// The AABB will always have the block's y coordinate minus 1 as the minimum coordinate and the block's y coordinate plus 2 as the maximum coordinate.
-			if (isCornerModeEnabled(heldItem)) {
+			if (properties.cornerModeEnabled) {
 				// In corner mode, use the block's x and z coordinates as both the minimum and maximum coordinates of the AABB.
 				boundingBox = new AABB(clickedPos.getX(), clickedPos.getY() - 1, clickedPos.getZ(), clickedPos.getX(), clickedPos.getY() + 2, clickedPos.getZ()).expandTowards(radius, 0, radius);
 			} else {
@@ -147,9 +146,45 @@ public class EntityCheckerItem extends Item {
 
 	@Override
 	public void appendHoverText(final ItemStack stack, final TooltipContext context, final List<Component> tooltip, final TooltipFlag flagIn) {
-		tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_RADIUS.getTranslationKey(), getRadius(stack)));
+		final var properties = getProperties(stack);
 
-		final var cornerMode = isCornerModeEnabled(stack) ? TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_MODE_CORNER : TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_MODE_EDGE;
+		tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_RADIUS.getTranslationKey(), properties.radius));
+
+		final var cornerMode = properties.cornerModeEnabled ? TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_MODE_CORNER : TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_MODE_EDGE;
 		tooltip.add(Component.translatable(cornerMode.getTranslationKey()));
+	}
+
+	public record EntityCheckerProperties(int radius, boolean cornerModeEnabled) {
+		public static Codec<EntityCheckerProperties> CODEC = RecordCodecBuilder.create(builder ->
+				builder.group(
+
+						Codec.INT
+								.fieldOf("radius")
+								.forGetter(EntityCheckerProperties::radius),
+
+						Codec.BOOL
+								.fieldOf("corner_mode_enabled")
+								.forGetter(EntityCheckerProperties::cornerModeEnabled)
+
+				).apply(builder, EntityCheckerProperties::new)
+		);
+
+		public static StreamCodec<RegistryFriendlyByteBuf, EntityCheckerProperties> NETWORK_CODEC = new StreamCodec<>() {
+			@Override
+			public EntityCheckerProperties decode(final RegistryFriendlyByteBuf buffer) {
+				final var radius = buffer.readVarInt();
+				final var cornerModeEnabled = buffer.readBoolean();
+
+				return new EntityCheckerProperties(radius, cornerModeEnabled);
+			}
+
+			@Override
+			public void encode(final RegistryFriendlyByteBuf buffer, final EntityCheckerProperties value) {
+				buffer.writeVarInt(value.radius);
+				buffer.writeBoolean(value.cornerModeEnabled);
+			}
+		};
+
+		public static EntityCheckerProperties DEFAULT = new EntityCheckerProperties(0, false);
 	}
 }

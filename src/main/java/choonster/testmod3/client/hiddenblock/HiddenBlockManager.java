@@ -1,15 +1,12 @@
-package choonster.testmod3.client.capability;
+package choonster.testmod3.client.hiddenblock;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockRevealer;
-import choonster.testmod3.capability.hiddenblockrevealer.HiddenBlockRevealerCapability;
+import choonster.testmod3.init.ModDataComponents;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -34,10 +31,8 @@ public class HiddenBlockManager {
 	 * @return Should hidden blocks be revealed?
 	 */
 	private static boolean shouldHeldItemRevealHiddenBlocks(final Player player) {
-		for (final InteractionHand hand : InteractionHand.values()) {
-			final boolean revealHiddenBlocks = HiddenBlockRevealerCapability.getHiddenBlockRevealer(player.getItemInHand(hand))
-					.map(IHiddenBlockRevealer::revealHiddenBlocks)
-					.orElse(false);
+		for (final var hand : InteractionHand.values()) {
+			final var revealHiddenBlocks = player.getItemInHand(hand).has(ModDataComponents.REVEAL_HIDDEN_BLOCKS.get());
 
 			if (revealHiddenBlocks) {
 				return true;
@@ -49,12 +44,16 @@ public class HiddenBlockManager {
 
 	@SubscribeEvent
 	public static void clientTick(final TickEvent.ClientTickEvent event) {
-		if (event.phase != TickEvent.Phase.END) return;
+		if (event.phase != TickEvent.Phase.END) {
+			return;
+		}
 
-		final LocalPlayer player = Minecraft.getInstance().player;
-		if (player == null) return;
+		final var player = Minecraft.getInstance().player;
+		if (player == null) {
+			return;
+		}
 
-		final boolean checkResult = shouldHeldItemRevealHiddenBlocks(player);
+		final var checkResult = shouldHeldItemRevealHiddenBlocks(player);
 		toggled = lastCheckResult != checkResult;
 		lastCheckResult = checkResult;
 	}
@@ -78,7 +77,7 @@ public class HiddenBlockManager {
 	 */
 	public static void refresh(final Level world, final BlockPos pos) {
 		if (toggled) {
-			final BlockState state = world.getBlockState(pos);
+			final var state = world.getBlockState(pos);
 			world.sendBlockUpdated(pos, state, state, 3);
 		}
 	}

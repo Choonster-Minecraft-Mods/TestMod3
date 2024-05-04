@@ -1,16 +1,18 @@
 package choonster.testmod3.client.item;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.api.capability.lastusetime.ILastUseTime;
-import choonster.testmod3.capability.lastusetime.LastUseTimeCapability;
+import choonster.testmod3.init.ModDataComponents;
+import choonster.testmod3.world.item.component.lastusetime.LastUseTimeProperties;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 
+import java.util.Optional;
+
 /**
- * {@link ClampedItemPropertyFunction} to get the ticks since the last use of the item, as recorded by the item's {@link ILastUseTime} capability.
+ * {@link ClampedItemPropertyFunction} to get the ticks since the last use of the item, as recorded by the item's {@link LastUseTimeProperties} component.
  * <p>
  * Returns 0.0 if the item was last used 0 ticks ago and 1.0 if the item was last used 20 or more ticks ago.
  * Returns 1.0 if the required information isn't available.
@@ -32,8 +34,8 @@ public class TicksSinceLastUseItemPropertyFunction {
 			return 1.0f;
 		}
 
-		return LastUseTimeCapability.getLastUseTime(stack)
-				.map(lastUseTime -> (world.getGameTime() - lastUseTime.get()) / 20.0f)
+		return Optional.ofNullable(stack.get(ModDataComponents.LAST_USE_TIME_PROPERTIES.get()))
+				.map(properties -> (world.getGameTime() - properties.lastUseTime()) / 20.0f)
 				.orElse(1.0f);
 	};
 

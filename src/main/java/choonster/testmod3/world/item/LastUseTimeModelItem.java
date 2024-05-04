@@ -1,8 +1,5 @@
 package choonster.testmod3.world.item;
 
-import choonster.testmod3.capability.lastusetime.LastUseTime;
-import choonster.testmod3.capability.lastusetime.LastUseTimeCapability;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -11,9 +8,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-
-import org.jetbrains.annotations.Nullable;
 
 /**
  * An Item with a different model depending on how long ago it was last used.
@@ -33,10 +27,5 @@ public class LastUseTimeModelItem extends Item {
 	@Override
 	public InteractionResultHolder<ItemStack> use(final Level level, final Player playerIn, final InteractionHand hand) {
 		return new InteractionResultHolder<>(InteractionResult.SUCCESS, playerIn.getItemInHand(hand));
-	}
-
-	@Override
-	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final CompoundTag nbt) {
-		return LastUseTimeCapability.createProvider(new LastUseTime(true));
 	}
 }

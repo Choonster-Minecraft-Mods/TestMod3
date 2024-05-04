@@ -1,11 +1,11 @@
 package choonster.testmod3.world.item.crafting.ingredient;
 
 import choonster.testmod3.init.ModCrafting;
+import choonster.testmod3.world.item.crafting.condition.ConditionMapCodec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.crafting.conditions.ConditionCodec;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
 
@@ -32,10 +32,9 @@ public class ConditionalIngredient extends AbstractDelegatingIngredient {
 			).apply(instance, ConditionalIngredient::new)
 	);
 
-	// TODO: Replace with MapCodec?
-	public static final MapCodec<Ingredient> CODEC = ConditionCodec.checkingDecode(
-			DATA_CODEC.codec().flatComapMap(
-					conditionalIngredient -> conditionalIngredient.ingredient,
+	public static final MapCodec<Ingredient> CODEC = ConditionMapCodec.checkingDecode(
+			DATA_CODEC.flatXmap(
+					conditionalIngredient -> DataResult.success(conditionalIngredient.ingredient),
 					ingredient -> ingredient instanceof ConditionalIngredient conditionalIngredient ?
 							DataResult.success(conditionalIngredient) :
 							DataResult.error(() -> "Can't convert Ingredient to ConditionalIngredient")

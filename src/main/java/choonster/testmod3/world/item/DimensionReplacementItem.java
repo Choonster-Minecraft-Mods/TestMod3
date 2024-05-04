@@ -1,5 +1,6 @@
 package choonster.testmod3.world.item;
 
+import choonster.testmod3.init.ModDataComponents;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
@@ -7,9 +8,9 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -36,13 +37,6 @@ import java.util.stream.Collectors;
  */
 public class DimensionReplacementItem extends Item {
 	private static final Logger LOGGER = LogUtils.getLogger();
-
-	/**
-	 * The NBT key used to indicate that the replacement logic has been run.
-	 * <p>
-	 * This is needed to ensure that items crafted in a dimension without a replacement don't get replaced as soon as the player enters a dimension with a replacement.
-	 */
-	private static final String KEY_REPLACED = "Replaced";
 
 	/**
 	 * The replacement {@link ItemStack} for each {@link DimensionType}.
@@ -79,20 +73,16 @@ public class DimensionReplacementItem extends Item {
 	}
 
 	@Override
-	public void inventoryTick(final ItemStack stack, final Level world, final Entity entity, final int itemSlot, final boolean isSelected) {
-		if (world.isClientSide) {
+	public void inventoryTick(final ItemStack stack, final Level level, final Entity entity, final int itemSlot, final boolean isSelected) {
+		if (level.isClientSide) {
 			return;
 		}
 
-		// TODO: DataComponents
-		final CompoundTag stackTagCompound = stack.getOrCreateTag();
+		if (!stack.has(ModDataComponents.DIMENSION_REPLACER_REPLACED.get())) { // If the replacement logic hasn't been run,
+			stack.set(ModDataComponents.DIMENSION_REPLACER_REPLACED.get(), Unit.INSTANCE); // Mark it as run
 
-		if (!stackTagCompound.getBoolean(KEY_REPLACED)) { // If the replacement logic hasn't been run,
-			stackTagCompound.putBoolean(KEY_REPLACED, true); // Mark it as run
-
-			getReplacement(world).ifPresent(replacement -> { // If there's a replacement for this dimension's type
-				final ItemStack replacementCopy = replacement.copy();
-				replacementCopy.setCount(stack.getCount()); // Copy the stack size from this item
+			getReplacement(level).ifPresent(replacement -> { // If there's a replacement for this dimension's type
+				final var replacementCopy = replacement.copy();
 
 				// Try to replace this item
 				InventoryUtils.forEachEntityInventory(

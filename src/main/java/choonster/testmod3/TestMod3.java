@@ -53,6 +53,7 @@ public class TestMod3 {
 		ModBiomeModifierSerializers.initialise(modEventBus);
 		ModCreativeTabs.initialise(modEventBus);
 		ModArmorMaterials.initialise(modEventBus);
+		ModDataComponents.initialise(modEventBus);
 	}
 
 	@SubscribeEvent

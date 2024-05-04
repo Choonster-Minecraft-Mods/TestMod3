@@ -1,15 +1,14 @@
 package choonster.testmod3.client.item;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockRevealer;
-import choonster.testmod3.capability.hiddenblockrevealer.HiddenBlockRevealerCapability;
+import choonster.testmod3.init.ModDataComponents;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
 /**
- * {@link ClampedItemPropertyFunction} to get whether hidden blocks are being revealed by an item's {@link IHiddenBlockRevealer} capability.
+ * {@link ClampedItemPropertyFunction} to get whether hidden blocks are being revealed by an item's {@link ModDataComponents#REVEAL_HIDDEN_BLOCKS} component.
  */
 public class RevealHiddenBlocksItemPropertyFunction {
 	/**
@@ -21,9 +20,7 @@ public class RevealHiddenBlocksItemPropertyFunction {
 	 * The function.
 	 */
 	private static final ClampedItemPropertyFunction FUNCTION = (stack, level, entity, seed) ->
-			HiddenBlockRevealerCapability.getHiddenBlockRevealer(stack)
-					.map(hiddenBlockRevealer -> hiddenBlockRevealer.revealHiddenBlocks() ? 1 : 0)
-					.orElse(0);
+			stack.has(ModDataComponents.REVEAL_HIDDEN_BLOCKS.get()) ? 1 : 0;
 
 	/**
 	 * Add this function to an {@link Item}.

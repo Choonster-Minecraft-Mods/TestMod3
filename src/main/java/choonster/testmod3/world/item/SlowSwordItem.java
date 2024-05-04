@@ -1,19 +1,15 @@
 package choonster.testmod3.world.item;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 
-import java.lang.reflect.Field;
 import java.util.UUID;
 
 /**
@@ -25,50 +21,58 @@ import java.util.UUID;
  * @author Choonster
  */
 public class SlowSwordItem extends SwordItem {
-	private static final Field NAME = ObfuscationReflectionHelper.findField(AttributeModifier.class, /* name */ "f_303575_");
+	private static final int BASE_ATTACK_DAMAGE = 3;
+	private static final float ATTACK_SPEED = -2.4f;
 
 	public SlowSwordItem(final Tier tier, final Item.Properties properties) {
-		super(tier, 3, -2.4f, properties);
+		super(tier, properties);
 	}
 
-	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(final EquipmentSlot slot, final ItemStack stack) {
-		final var modifiers = ArrayListMultimap.create(super.getAttributeModifiers(slot, stack));
+	public static ItemAttributeModifiers createAttributes(final Tier tier) {
+		final var baseAttributes = SwordItem.createAttributes(tier, BASE_ATTACK_DAMAGE, ATTACK_SPEED);
+		final var builder = ItemAttributeModifiers.builder();
 
-		if (slot == EquipmentSlot.MAINHAND) {
-			replaceModifier(modifiers, Attributes.ATTACK_DAMAGE, BASE_ATTACK_DAMAGE_UUID, 2);
-			replaceModifier(modifiers, Attributes.ATTACK_SPEED, BASE_ATTACK_SPEED_UUID, 1.5);
-		}
+		copyModifier(baseAttributes, builder, Attributes.ATTACK_DAMAGE, BASE_ATTACK_DAMAGE_UUID, EquipmentSlot.MAINHAND, 2);
+		copyModifier(baseAttributes, builder, Attributes.ATTACK_SPEED, BASE_ATTACK_SPEED_UUID, EquipmentSlot.MAINHAND, 1.5);
 
-		return ImmutableMultimap.copyOf(modifiers);
+		return builder.build();
 	}
 
 	/**
-	 * Replace a modifier in the {@link Multimap} with a copy that's had {@code multiplier} applied to its value.
+	 * Copy a modifier from the {@link ItemAttributeModifiers} to the {@link ItemAttributeModifiers.Builder} with {@code multiplier} applied to its value.
 	 *
-	 * @param modifierMultimap The Multimap
-	 * @param attribute        The attribute being modified
-	 * @param id               The ID of the modifier
-	 * @param multiplier       The multiplier to apply
+	 * @param baseAttributes The base attributes to copy from
+	 * @param builder        The builder to copy to
+	 * @param attribute      The attribute being modified
+	 * @param id             The ID of the modifier
+	 * @param slot           The equipment slot to copy the modifier for
+	 * @param multiplier     The multiplier to apply
 	 */
-	private void replaceModifier(final Multimap<Attribute, AttributeModifier> modifierMultimap, final Attribute attribute, final UUID id, final double multiplier) {
-		// Get the modifiers for the specified attribute
-		final var modifiers = modifierMultimap.get(attribute);
-
+	private static void copyModifier(
+			final ItemAttributeModifiers baseAttributes,
+			final ItemAttributeModifiers.Builder builder,
+			final Holder<Attribute> attribute,
+			final UUID id,
+			final EquipmentSlot slot,
+			final double multiplier
+	) {
 		// Find the modifier with the specified ID, if any
-		final var modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getId().equals(id)).findFirst();
+		final var entryOptional = baseAttributes.modifiers()
+				.stream()
+				.filter(entry -> entry.attribute().get() == attribute.get())
+				.filter(entry -> entry.modifier().id().equals(id))
+				.filter(entry -> entry.slot().test(slot))
+				.findFirst();
 
-		modifierOptional.ifPresent(modifier -> { // If it exists,
-			modifiers.remove(modifier); // Remove it
-			modifiers.add(new AttributeModifier(modifier.getId(), getName(modifier), modifier.getAmount() * multiplier, modifier.getOperation())); // Add the new modifier
+		entryOptional.ifPresent(entry -> { // If it exists,
+			final var modifier = entry.modifier();
+
+			// Add the new modifier
+			builder.add(
+					entry.attribute(),
+					new AttributeModifier(modifier.id(), modifier.name(), modifier.amount() * multiplier, modifier.operation()),
+					entry.slot()
+			);
 		});
-	}
-
-	private String getName(final AttributeModifier modifier) {
-		try {
-			return (String) NAME.get(modifier);
-		} catch (final IllegalAccessException e) {
-			throw new RuntimeException("Failed to get name of attribute modifier", e);
-		}
 	}
 }

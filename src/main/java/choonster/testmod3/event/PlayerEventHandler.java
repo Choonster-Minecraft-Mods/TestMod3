@@ -5,6 +5,7 @@ import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -35,8 +36,8 @@ public class PlayerEventHandler {
 		final var player = event.getEntity();
 
 		final var entityData = player.getPersistentData();
-		final var persistedData = entityData.getCompound(Player.PERSISTED_NBT_TAG);
-		entityData.put(Player.PERSISTED_NBT_TAG, persistedData);
+		final var persistedData = entityData.getCompound(ServerPlayer.PERSISTED_NBT_TAG);
+		entityData.put(ServerPlayer.PERSISTED_NBT_TAG, persistedData);
 
 		final var key = new ResourceLocation(TestMod3.MODID, "received_items").toString();
 		final TestMod3Lang message;

@@ -6,6 +6,7 @@ import choonster.testmod3.capability.pigspawner.InfinitePigSpawner;
 import choonster.testmod3.world.entity.BlockDetectionArrow;
 import choonster.testmod3.world.entity.ModArrow;
 import choonster.testmod3.world.item.*;
+import choonster.testmod3.world.item.component.lastusetime.LastUseTimeProperties;
 import choonster.testmod3.world.item.variantgroup.ItemVariantGroup;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -55,7 +57,7 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<EntityInteractionTestItem> ENTITY_INTERACTION_TEST = ITEMS.register("entity_interaction_test",
-			() -> new EntityInteractionTestItem(defaultItemProperties())
+			() -> new EntityInteractionTestItem(defaultItemProperties().component(ModDataComponents.ENTITY_INTERACTION_COUNT.get(), 0))
 	);
 
 	public static final RegistryObject<BlockDestroyerItem> BLOCK_DESTROYER = ITEMS.register("block_destroyer",
@@ -71,7 +73,7 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<LastUseTimeModelItem> MODEL_TEST = ITEMS.register("model_test",
-			() -> new LastUseTimeModelItem(defaultItemProperties())
+			() -> new LastUseTimeModelItem(defaultItemProperties().component(ModDataComponents.LAST_USE_TIME_PROPERTIES.get(), new LastUseTimeProperties(0, true)))
 	);
 
 	public static final RegistryObject<SnowballLauncherItem> SNOWBALL_LAUNCHER = ITEMS.register("snowball_launcher",
@@ -79,7 +81,7 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<SlingshotItem> SLINGSHOT = ITEMS.register("slingshot",
-			() -> new SlingshotItem(defaultItemProperties())
+			() -> new SlingshotItem(defaultItemProperties().component(ModDataComponents.LAST_USE_TIME_PROPERTIES.get(), new LastUseTimeProperties(0, false)))
 	);
 
 	public static final RegistryObject<UnicodeTooltipsItem> UNICODE_TOOLTIPS = ITEMS.register("unicode_tooltips",
@@ -122,7 +124,7 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<ClearerItem> CLEARER = ITEMS.register("clearer",
-			() -> new ClearerItem(defaultItemProperties())
+			() -> new ClearerItem(defaultItemProperties().component(ModDataComponents.CLEARER_MODE.get(), ClearerItem.ClearerMode.WHITELIST))
 	);
 
 	public static final RegistryObject<ModBowItem> BOW = ITEMS.register("bow",
@@ -190,11 +192,11 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<SlowSwordItem> WOODEN_SLOW_SWORD = ITEMS.register("wooden_slow_sword",
-			() -> new SlowSwordItem(Tiers.WOOD, defaultItemProperties())
+			() -> new SlowSwordItem(Tiers.WOOD, defaultItemProperties().attributes(SlowSwordItem.createAttributes(Tiers.WOOD)))
 	);
 
 	public static final RegistryObject<SlowSwordItem> DIAMOND_SLOW_SWORD = ITEMS.register("diamond_slow_sword",
-			() -> new SlowSwordItem(Tiers.DIAMOND, defaultItemProperties())
+			() -> new SlowSwordItem(Tiers.DIAMOND, defaultItemProperties().attributes(SlowSwordItem.createAttributes(Tiers.DIAMOND)))
 	);
 
 	public static final RegistryObject<RitualCheckerItem> RITUAL_CHECKER = ITEMS.register("ritual_checker",
@@ -251,7 +253,7 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<EntityCheckerItem> ENTITY_CHECKER = ITEMS.register("entity_checker",
-			() -> new EntityCheckerItem(defaultItemProperties())
+			() -> new EntityCheckerItem(defaultItemProperties().component(ModDataComponents.ENTITY_CHECKER_PROPERTIES.get(), EntityCheckerItem.EntityCheckerProperties.DEFAULT))
 	);
 
 	public static final RegistryObject<Item> RUBBER = ITEMS.register("rubber",
@@ -293,7 +295,7 @@ public class ModItems {
 	}
 
 	public static final RegistryObject<FluidStackItem> FLUID_STACK_ITEM = ITEMS.register("fluid_stack_item",
-			() -> new FluidStackItem(new Item.Properties())
+			() -> new FluidStackItem(defaultItemProperties().component(ModDataComponents.FLUID_STACK.get(), FluidStack.EMPTY))
 	);
 
 	public static final RegistryObject<ForgeSpawnEggItem> PLAYER_AVOIDING_CREEPER_SPAWN_EGG = ITEMS.register("player_avoiding_creeper_spawn_egg",

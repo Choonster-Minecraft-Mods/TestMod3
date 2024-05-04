@@ -3,8 +3,6 @@ package choonster.testmod3.init;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.network.*;
 import choonster.testmod3.network.capability.fluidhandler.UpdateMenuFluidTankMessage;
-import choonster.testmod3.network.capability.hiddenblock.UpdateMenuHiddenBlockRevealerMessage;
-import choonster.testmod3.network.capability.lastusetime.UpdateMenuLastUseTimeMessage;
 import choonster.testmod3.network.capability.pigspawner.UpdateMenuPigSpawnerFiniteMessage;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.Channel;
@@ -51,18 +49,6 @@ public class ModNetwork {
 				.decoder(UpdateMenuFluidTankMessage::decode)
 				.encoder(UpdateMenuFluidTankMessage::encode)
 				.consumerMainThread(UpdateMenuFluidTankMessage::handle)
-				.add();
-
-		channel.messageBuilder(UpdateMenuHiddenBlockRevealerMessage.class, 8)
-				.decoder(UpdateMenuHiddenBlockRevealerMessage::decode)
-				.encoder(UpdateMenuHiddenBlockRevealerMessage::encode)
-				.consumerMainThread(UpdateMenuHiddenBlockRevealerMessage::handle)
-				.add();
-
-		channel.messageBuilder(UpdateMenuLastUseTimeMessage.class, 10)
-				.decoder(UpdateMenuLastUseTimeMessage::decode)
-				.encoder(UpdateMenuLastUseTimeMessage::encode)
-				.consumerMainThread(UpdateMenuLastUseTimeMessage::handle)
 				.add();
 
 		channel.messageBuilder(UpdateMenuPigSpawnerFiniteMessage.class, 12)

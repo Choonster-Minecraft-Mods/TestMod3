@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import net.minecraft.Util;
@@ -15,8 +16,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ByIdMap;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraft.world.level.material.Fluid;
@@ -24,8 +28,10 @@ import net.minecraftforge.common.IExtensibleEnum;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.function.Supplier;
 
 /**
@@ -131,6 +137,19 @@ public class VanillaCodecs {
 		);
 	});
 
+	private static final IntFunction<EquipmentSlot> ARMOR_EQUIPMENT_SLOT_BY_ID = ByIdMap.continuous(
+			EquipmentSlot::getIndex,
+			Arrays.stream(EquipmentSlot.values())
+					.filter(EquipmentSlot::isArmor)
+					.toArray(EquipmentSlot[]::new),
+			ByIdMap.OutOfBoundsStrategy.ZERO
+	);
+
+	public static final StreamCodec<ByteBuf, EquipmentSlot> ARMOR_ITEM_EQUIPMENT_SLOT_STREAM_CODEC = ByteBufCodecs.idMapper(
+			ARMOR_EQUIPMENT_SLOT_BY_ID,
+			EquipmentSlot::getIndex
+	);
+
 	/**
 	 * Creates a function that converts a name to its corresponding enum value by iterating through the array returned
 	 * by {@code elementsSupplier} until {@code toNameFunction} returns a matching value.
@@ -212,5 +231,9 @@ public class VanillaCodecs {
 				return "ExtensibleEnum[" + toNameFunction + "]";
 			}
 		};
+	}
+
+	private static int armorItemTypeToId(final ArmorItem.Type type) {
+		return type.getSlot().getIndex();
 	}
 }

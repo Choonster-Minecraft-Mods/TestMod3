@@ -1,10 +1,12 @@
 package choonster.testmod3.util;
 
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 
 import java.util.UUID;
 
@@ -32,23 +34,20 @@ public class SwordUpgrades {
 	 */
 	public static ItemStack upgradeSword(final Item item) {
 		// Create an ItemStack of the Item
-		final ItemStack originalStack = new ItemStack(item);
-		final ItemStack outputStack = originalStack.copy();
+		final var stack = new ItemStack(item);
 
-		// Modifiers provided by the Item are completely ignored as soon as any modifiers are added to the ItemStack,
-		// so add the Item's modifiers to the output ItemStack manually
-		for (final EquipmentSlot slot : EquipmentSlot.values()) {
-			originalStack.getAttributeModifiers(slot)
-					.entries()
-					.forEach(entry -> outputStack.addAttributeModifier(entry.getKey(), entry.getValue(), slot));
-		}
+		// Get the modifiers
+		final var modifiers = stack.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
 
 		// Create the attack damage modifier
-		final AttributeModifier attackDamageModifier = new AttributeModifier(MODIFIER_UUID, MODIFIER_NAME, MODIFIER_AMOUNT, AttributeModifier.Operation.ADDITION);
+		final var attackDamageModifier = new AttributeModifier(MODIFIER_UUID, MODIFIER_NAME, MODIFIER_AMOUNT, AttributeModifier.Operation.ADD_VALUE);
 
-		// Add it to the output ItemStack
-		outputStack.addAttributeModifier(Attributes.ATTACK_DAMAGE, attackDamageModifier, EquipmentSlot.MAINHAND);
+		// Add it to the modifiers
+		final var newModifiers = modifiers.withModifierAdded(Attributes.ATTACK_DAMAGE, attackDamageModifier, EquipmentSlotGroup.MAINHAND);
 
-		return outputStack;
+		// Update the ItemStack
+		stack.set(DataComponents.ATTRIBUTE_MODIFIERS, newModifiers);
+
+		return stack;
 	}
 }

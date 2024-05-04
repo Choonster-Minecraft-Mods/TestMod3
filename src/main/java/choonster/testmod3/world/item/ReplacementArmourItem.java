@@ -1,15 +1,19 @@
 package choonster.testmod3.world.item;
 
+import choonster.testmod3.init.ModDataComponents;
+import choonster.testmod3.serialization.VanillaCodecs;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -42,11 +46,6 @@ import java.util.stream.Stream;
 public class ReplacementArmourItem extends ArmorItem {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-	// NBT keys
-	private static final String KEY_REPLACED_ARMOUR = "ReplacedArmour";
-	private static final String KEY_SLOT = "Slot";
-	private static final String KEY_STACK = "Stack";
-
 	/**
 	 * The items to replace the other armour with.
 	 */
@@ -64,23 +63,13 @@ public class ReplacementArmourItem extends ArmorItem {
 	}
 
 	/**
-	 * Get the items to replace the other armour with.
-	 *
-	 * @return The items to replace the other armour with
-	 */
-	public Set<Supplier<ItemStack>> getReplacementItems() {
-		return replacementItems;
-	}
-
-	/**
 	 * Has this item replaced the other armour?
 	 *
 	 * @param stack The ItemStack of this item
 	 * @return Has this item replaced the other armour?
 	 */
 	public static boolean hasReplacedArmour(final ItemStack stack) {
-		// TODO: Replace with DataComponents
-		return stack.getOrCreateTag().contains(KEY_REPLACED_ARMOUR, Tag.TAG_LIST);
+		return stack.has(ModDataComponents.REPLACED_ARMOUR.get());
 	}
 
 	/**
@@ -90,8 +79,7 @@ public class ReplacementArmourItem extends ArmorItem {
 	 * @param entity The entity
 	 */
 	private void replaceArmour(final ItemStack stack, final LivingEntity entity) {
-		final var stackTagCompound = stack.getOrCreateTag();
-		final var replacedArmour = new ListTag();
+		final var replacedArmour = ImmutableList.<ReplacedArmour.Entry>builder();
 
 		// Create a mutable copy of the replacements
 		final var replacements = replacementItems
@@ -110,23 +98,22 @@ public class ReplacementArmourItem extends ArmorItem {
 					optionalReplacement.ifPresent(replacement -> { // If there's a replacement for this armour type,
 						replacements.remove(replacement); // Don't use it for any other armour type
 
-						// Create a compound tag to store the original and add it to the list of replaced armour
-						final var compoundTag = new CompoundTag();
-						replacedArmour.add(compoundTag);
-						compoundTag.putByte(KEY_SLOT, (byte) equipmentSlot.getIndex());
-
-						// If the original item exists, add it to the compound tag
 						final var original = entity.getItemBySlot(equipmentSlot);
-						if (!original.isEmpty()) {
-							compoundTag.put(KEY_STACK, original.serializeNBT());
-						}
+
+						// Create an entry with the slot and the original item
+						final var entry = new ReplacedArmour.Entry(equipmentSlot, original);
+
+						// Add it to the list of replaced armour
+						replacedArmour.add(entry);
 
 						entity.setItemSlot(equipmentSlot, replacement.copy()); // Equip a copy of the replacement
 						LOGGER.info("Equipped replacement {} to {}, replacing {}", replacement, type, original);
 					});
 				});
 
-		stackTagCompound.put(KEY_REPLACED_ARMOUR, replacedArmour); // Save the replaced armour to the ItemStack
+		// Save the replaced armour to the ItemStack
+		final var newReplacedArmor = new ReplacedArmour(replacedArmour.build());
+		stack.set(ModDataComponents.REPLACED_ARMOUR.get(), newReplacedArmor);
 	}
 
 	/**
@@ -136,14 +123,14 @@ public class ReplacementArmourItem extends ArmorItem {
 	 * @param entity The entity
 	 */
 	private void restoreArmour(final ItemStack stack, final LivingEntity entity) {
-		final var stackTagCompound = stack.getOrCreateTag();
-		final var replacedArmour = stackTagCompound.getList(KEY_REPLACED_ARMOUR, Tag.TAG_COMPOUND);
+		final var replacedArmour = stack.getOrDefault(ModDataComponents.REPLACED_ARMOUR.get(), new ReplacedArmour(ImmutableList.of()));
 
-		for (var i = 0; i < replacedArmour.size(); i++) { // For each saved armour item,
-			final var replacedTagCompound = replacedArmour.getCompound(i);
-			final var original = ItemStack.of(replacedTagCompound.getCompound(KEY_STACK)); // Load the original ItemStack from the NBT
+		// For each saved armour item,
+		for (final var entry : replacedArmour.replacedArmour) {
+			// Get the original item and slot
+			final var original = entry.replacedArmour;
+			final var equipmentSlot = entry.slot;
 
-			final var equipmentSlot = EquipmentSlot.byTypeAndIndex(EquipmentSlot.Type.ARMOR, replacedTagCompound.getByte(KEY_SLOT)); // Get the armour slot
 			final var current = entity.getItemBySlot(equipmentSlot);
 
 			// Is the item currently in the slot one of the replacements defined for this item?
@@ -171,11 +158,7 @@ public class ReplacementArmourItem extends ArmorItem {
 			}
 		}
 
-		stackTagCompound.remove(KEY_REPLACED_ARMOUR);
-
-		if (stackTagCompound.isEmpty()) {
-			stack.setTag(null);
-		}
+		stack.remove(ModDataComponents.REPLACED_ARMOUR.get());
 	}
 
 	/**
@@ -232,5 +215,58 @@ public class ReplacementArmourItem extends ArmorItem {
 	public void appendHoverText(final ItemStack stack, final TooltipContext context, final List<Component> tooltip, final TooltipFlag flag) {
 		tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_ARMOUR_REPLACEMENT_EQUIP.getTranslationKey()));
 		tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_ARMOUR_REPLACEMENT_UNEQUIP.getTranslationKey()));
+	}
+
+	public record ReplacedArmour(ImmutableList<Entry> replacedArmour) {
+		public static Codec<ReplacedArmour> CODEC = RecordCodecBuilder.create(builder ->
+				builder.group(
+
+						Entry.CODEC
+								.listOf()
+								.fieldOf("replaced_armour")
+								.forGetter(ReplacedArmour::replacedArmour)
+
+				).apply(builder, ReplacedArmour::new)
+		);
+
+		public static StreamCodec<RegistryFriendlyByteBuf, ReplacedArmour> STREAM_CODEC = new StreamCodec<>() {
+			@Override
+			public ReplacedArmour decode(final RegistryFriendlyByteBuf buffer) {
+				final var replacedArmour = buffer.readList((b) -> Entry.STREAM_CODEC.decode(buffer));
+
+				return new ReplacedArmour(ImmutableList.copyOf(replacedArmour));
+			}
+
+			@Override
+			public void encode(final RegistryFriendlyByteBuf buffer, final ReplacedArmour value) {
+				buffer.writeCollection(value.replacedArmour, (b, entry) -> Entry.STREAM_CODEC.encode(buffer, entry));
+			}
+		};
+
+		public ReplacedArmour(final List<Entry> replacedArmour) {
+			this(ImmutableList.copyOf(replacedArmour));
+		}
+
+		public record Entry(EquipmentSlot slot, ItemStack replacedArmour) {
+			public static Codec<Entry> CODEC = RecordCodecBuilder.create(builder ->
+					builder.group(
+							EquipmentSlot.CODEC
+									.fieldOf("slot")
+									.forGetter(Entry::slot),
+
+							ItemStack.CODEC
+									.fieldOf("replaced_armour")
+									.forGetter(Entry::replacedArmour)
+					).apply(builder, Entry::new)
+			);
+
+			public static StreamCodec<RegistryFriendlyByteBuf, Entry> STREAM_CODEC = StreamCodec.composite(
+					VanillaCodecs.ARMOR_ITEM_EQUIPMENT_SLOT_STREAM_CODEC,
+					Entry::slot,
+					ItemStack.STREAM_CODEC,
+					Entry::replacedArmour,
+					Entry::new
+			);
+		}
 	}
 }

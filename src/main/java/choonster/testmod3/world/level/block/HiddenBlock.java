@@ -1,7 +1,7 @@
 package choonster.testmod3.world.level.block;
 
-import choonster.testmod3.api.capability.hiddenblockrevealer.IHiddenBlockRevealer;
 import choonster.testmod3.init.ModBlockEntities;
+import choonster.testmod3.init.ModDataComponents;
 import choonster.testmod3.world.level.block.entity.HiddenBlockEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * A block that only renders when the player is holding an item with the {@link IHiddenBlockRevealer} capability.
+ * A block that only renders when the player is holding an item with the {@link ModDataComponents#REVEAL_HIDDEN_BLOCKS} component.
  * <p>
  * Test for this thread:
  * http://www.minecraftforge.net/forum/topic/41720-1102-only-render-block-if-player-holds-a-specified-item/

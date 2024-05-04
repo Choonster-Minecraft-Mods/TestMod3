@@ -1,5 +1,6 @@
 package choonster.testmod3.world.item;
 
+import choonster.testmod3.init.ModDataComponents;
 import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -25,8 +26,7 @@ public class EntityInteractionTestItem extends Item {
 	}
 
 	private int getInteractCount(final ItemStack stack) {
-		// TODO: Replace with DataComponent
-		return stack.getOrCreateTag().getInt("Count");
+		return stack.getOrDefault(ModDataComponents.ENTITY_INTERACTION_COUNT.get(), 0);
 	}
 
 	@SuppressWarnings("resource")
@@ -34,7 +34,7 @@ public class EntityInteractionTestItem extends Item {
 	public InteractionResult interactLivingEntity(final ItemStack stack, final Player player, final LivingEntity target, final InteractionHand hand) {
 		if (!player.level().isClientSide) {
 			final var count = getInteractCount(stack) + 1;
-			stack.getOrCreateTag().putInt("Count", count);
+			stack.set(ModDataComponents.ENTITY_INTERACTION_COUNT.get(), count);
 
 			player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_ENTITY_INTERACT_COUNT.getTranslationKey(), count));
 		}

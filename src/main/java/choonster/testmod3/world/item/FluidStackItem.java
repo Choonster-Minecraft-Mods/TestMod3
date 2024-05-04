@@ -1,6 +1,6 @@
 package choonster.testmod3.world.item;
 
-import net.minecraft.nbt.CompoundTag;
+import choonster.testmod3.init.ModDataComponents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -12,8 +12,6 @@ import net.minecraftforge.fluids.FluidStack;
  * @author Choonster
  */
 public class FluidStackItem extends Item {
-	private static final String FLUID_STACK = "FluidStack";
-
 	public FluidStackItem(final Properties properties) {
 		super(properties);
 	}
@@ -21,19 +19,12 @@ public class FluidStackItem extends Item {
 	public ItemStack withFluidStack(final FluidStack fluidStack) {
 		final ItemStack itemStack = new ItemStack(this);
 
-		// TODO: Replace with DataComponents
-		itemStack.getOrCreateTag().put(FLUID_STACK, fluidStack.writeToNBT(new CompoundTag()));
+		itemStack.set(ModDataComponents.FLUID_STACK.get(), fluidStack);
 
 		return itemStack;
 	}
 
 	public FluidStack getFluidStack(final ItemStack itemStack) {
-		final CompoundTag stackTag = itemStack.getOrCreateTag();
-
-		if (stackTag.contains(FLUID_STACK)) {
-			return FluidStack.loadFluidStackFromNBT(stackTag.getCompound(FLUID_STACK));
-		}
-
-		return FluidStack.EMPTY;
+		return itemStack.getOrDefault(ModDataComponents.FLUID_STACK.get(), FluidStack.EMPTY);
 	}
 }
