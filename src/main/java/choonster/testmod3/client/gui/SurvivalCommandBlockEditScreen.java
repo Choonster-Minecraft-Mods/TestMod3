@@ -2,7 +2,6 @@ package choonster.testmod3.client.gui;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.network.SaveSurvivalCommandBlockMessage;
-import choonster.testmod3.world.level.block.entity.SurvivalCommandBlock;
 import choonster.testmod3.world.level.block.entity.SurvivalCommandBlockEntity;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.gui.screens.inventory.CommandBlockEditScreen;
@@ -21,11 +20,11 @@ public class SurvivalCommandBlockEditScreen extends CommandBlockEditScreen {
 	private static final Field CONDITIONAL = ObfuscationReflectionHelper.findField(CommandBlockEditScreen.class, /* conditional */ "f_98379_");
 	private static final Field AUTOEXEC = ObfuscationReflectionHelper.findField(CommandBlockEditScreen.class, /* autoexec */ "f_98380_");
 
-	private final SurvivalCommandBlock survivalCommandBlock;
+	private final SurvivalCommandBlockEntity survivalCommandBlockEntity;
 
 	public SurvivalCommandBlockEditScreen(final SurvivalCommandBlockEntity survivalCommandBlockEntity) {
 		super(survivalCommandBlockEntity);
-		survivalCommandBlock = survivalCommandBlockEntity.getCommandBlock();
+		this.survivalCommandBlockEntity = survivalCommandBlockEntity;
 	}
 
 	@Override
@@ -37,7 +36,7 @@ public class SurvivalCommandBlockEditScreen extends CommandBlockEditScreen {
 
 			TestMod3.network.send(
 					new SaveSurvivalCommandBlockMessage(
-							survivalCommandBlock,
+							survivalCommandBlockEntity,
 							commandEdit.getValue(),
 							mode,
 							conditional,

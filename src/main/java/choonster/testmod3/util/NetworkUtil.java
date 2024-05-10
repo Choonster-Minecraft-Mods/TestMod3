@@ -2,20 +2,15 @@ package choonster.testmod3.util;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.client.gui.ClientScreenManager;
-import choonster.testmod3.client.init.ModScreenFactories;
+import choonster.testmod3.client.gui.ClientScreenType;
+import choonster.testmod3.client.init.ModScreenConstructors;
 import choonster.testmod3.network.OpenClientScreenMessage;
-import io.netty.buffer.Unpooled;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.common.extensions.IForgeServerPlayer;
 import net.minecraftforge.network.PacketDistributor;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Utility methods for networking.
@@ -23,52 +18,19 @@ import java.util.function.Consumer;
  * @author Choonster
  */
 public class NetworkUtil {
-
 	/**
 	 * Requests to open a screen on the client, from the server
 	 * <p>
-	 * The factories are registered with {@link ClientScreenManager} in {@link ModScreenFactories}.
+	 * The factories are registered with {@link ClientScreenManager} in {@link ModScreenConstructors}.
 	 * <p>
 	 * This is similar to {@link IForgeServerPlayer#openMenu} for screens without an {@link AbstractContainerMenu}.
 	 *
-	 * @param player The player to open the screen for
-	 * @param id     The ID of the screen to open.
-	 */
-	public static void openClientScreen(final ServerPlayer player, final ResourceLocation id) {
-		openClientScreen(player, id, buf -> {
-		});
-	}
-
-	/**
-	 * Requests to open a screen on the client, from the server
-	 * <p>
-	 * The factories are registered with {@link ClientScreenManager} in {@link ModScreenFactories}.
-	 * <p>
-	 * This is similar to {@link IForgeServerPlayer#openMenu} for screens without an {@link AbstractContainerMenu}.
-	 *
-	 * @param player The player to open the screen for
-	 * @param id     The ID of the screen to open.
-	 * @param pos    A BlockPos, which will be encoded into the additional data for this request
-	 */
-	public static void openClientScreen(final ServerPlayer player, final ResourceLocation id, final BlockPos pos) {
-		openClientScreen(player, id, buf -> buf.writeBlockPos(pos));
-	}
-
-	/**
-	 * Requests to open a screen on the client, from the server
-	 * <p>
-	 * The factories are registered with {@link ClientScreenManager} in {@link ModScreenFactories}.
-	 * <p>
-	 * This is similar to {@link IForgeServerPlayer#openMenu} for screens without an {@link AbstractContainerMenu}.
-	 * <p>
-	 * The maximum size for {@code extraDataWriter} is 32600 bytes.
-	 *
-	 * @param player          The player to open the screen for
-	 * @param id              The ID of the screen to open.
-	 * @param extraDataWriter Consumer to write any additional data required by the screen
+	 * @param player           The player to open the screen for
+	 * @param clientScreenType The type of the screen to open.
+	 * @param extraData        Consumer to write any additional data required by the screen
 	 */
 	@SuppressWarnings("resource")
-	public static void openClientScreen(final ServerPlayer player, final ResourceLocation id, final Consumer<FriendlyByteBuf> extraDataWriter) {
+	public static <T> void openClientScreen(final ServerPlayer player, final Supplier<ClientScreenType<T>> clientScreenType, final T extraData) {
 		if (player.level().isClientSide) {
 			return;
 		}
@@ -76,52 +38,7 @@ public class NetworkUtil {
 		player.closeContainer();
 		player.containerMenu = player.inventoryMenu;
 
-		final var extraData = new FriendlyByteBuf(Unpooled.buffer());
-		extraDataWriter.accept(extraData);
-		extraData.readerIndex(0); // Reset to the beginning in case the factories read from it
-
-		final var output = new FriendlyByteBuf(Unpooled.buffer());
-		output.writeVarInt(extraData.readableBytes());
-		output.writeBytes(extraData);
-
-		if (output.readableBytes() > 32600 || output.readableBytes() < 1) {
-			throw new IllegalArgumentException("Invalid PacketBuffer for openClientScreen, found " + output.readableBytes() + " bytes");
-		}
-
-		final var message = new OpenClientScreenMessage(id, output);
+		final var message = new OpenClientScreenMessage<>(clientScreenType.get(), extraData);
 		TestMod3.network.send(message, PacketDistributor.PLAYER.with(player));
-	}
-
-	/**
-	 * Writes a nullable {@link Direction} to a {@link FriendlyByteBuf}.
-	 *
-	 * @param facing The facing
-	 * @param buffer The buffer
-	 */
-	public static void writeNullableDirection(@Nullable final Direction facing, final FriendlyByteBuf buffer) {
-		final var hasFacing = facing != null;
-
-		buffer.writeBoolean(hasFacing);
-
-		if (hasFacing) {
-			buffer.writeEnum(facing);
-		}
-	}
-
-	/**
-	 * Reads a nullable {@link Direction} from a {@link FriendlyByteBuf}.
-	 *
-	 * @param buffer The buffer
-	 * @return The facing
-	 */
-	@Nullable
-	public static Direction readNullableDirection(final FriendlyByteBuf buffer) {
-		final var hasFacing = buffer.readBoolean();
-
-		if (hasFacing) {
-			return buffer.readEnum(Direction.class);
-		}
-
-		return null;
 	}
 }

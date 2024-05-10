@@ -3,54 +3,47 @@ package choonster.testmod3.network;
 import choonster.testmod3.capability.lock.LockCapability;
 import choonster.testmod3.client.gui.LockScreen;
 import choonster.testmod3.text.TestMod3Lang;
-import choonster.testmod3.util.NetworkUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.LockCode;
 import net.minecraftforge.event.network.CustomPayloadEvent;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Sent to the server by {@link LockScreen} to set the new lock code.
  *
  * @author Choonster
  */
-public class SetLockCodeMessage {
-	private final BlockPos pos;
-	@Nullable
-	private final Direction facing;
-	private final String lockCode;
+public record SetLockCodeMessage(BlockPos pos, Optional<Direction> direction, String lockCode) {
+	public static final StreamCodec<RegistryFriendlyByteBuf, SetLockCodeMessage> STREAM_CODEC = StreamCodec.composite(
+			BlockPos.STREAM_CODEC,
+			SetLockCodeMessage::pos,
+			ByteBufCodecs.optional(Direction.STREAM_CODEC),
+			SetLockCodeMessage::direction,
+			ByteBufCodecs.STRING_UTF8,
+			SetLockCodeMessage::lockCode,
+			SetLockCodeMessage::new
+	);
 
-	public SetLockCodeMessage(final BlockPos pos, @Nullable final Direction facing, final String lockCode) {
-		this.pos = pos;
-		this.facing = facing;
-		this.lockCode = lockCode;
-	}
-
-	public static SetLockCodeMessage decode(final FriendlyByteBuf buffer) {
-		final var pos = BlockPos.of(buffer.readLong());
-		final var facing = NetworkUtil.readNullableDirection(buffer);
-		final var lockCode = buffer.readUtf(Short.MAX_VALUE);
-
-		return new SetLockCodeMessage(pos, facing, lockCode);
-	}
-
-	public static void encode(final SetLockCodeMessage message, final FriendlyByteBuf buffer) {
-		buffer.writeLong(message.pos.asLong());
-		NetworkUtil.writeNullableDirection(message.facing, buffer);
-		buffer.writeUtf(message.lockCode);
+	public SetLockCodeMessage(final BlockPos pos, @Nullable final Direction direction, final String lockCode) {
+		this(pos, Optional.ofNullable(direction), lockCode);
 	}
 
 	public static void handle(final SetLockCodeMessage message, final CustomPayloadEvent.Context ctx) {
-		final var player = ctx.getSender();
+		final var player = Objects.requireNonNull(ctx.getSender());
 		final var level = player.level();
 
 		player.resetLastActionTime();
 
 		if (level.isAreaLoaded(message.pos, 1)) {
-			LockCapability.getLock(level, message.pos, message.facing).ifPresent((lock) -> {
+			LockCapability.getLock(level, message.pos, message.direction.orElse(null)).ifPresent((lock) -> {
 				if (lock.isLocked()) {
 					player.sendSystemMessage(Component.translatable(TestMod3Lang.LOCK_ALREADY_LOCKED.getTranslationKey()));
 				}

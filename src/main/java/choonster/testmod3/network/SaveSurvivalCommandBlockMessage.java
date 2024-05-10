@@ -2,20 +2,26 @@ package choonster.testmod3.network;
 
 import choonster.testmod3.client.gui.SurvivalCommandBlockEditScreen;
 import choonster.testmod3.init.ModBlocks;
+import choonster.testmod3.serialization.VanillaCodecs;
 import choonster.testmod3.world.level.block.entity.SurvivalCommandBlock;
 import choonster.testmod3.world.level.block.entity.SurvivalCommandBlockEntity;
+import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CommandBlock;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.Nullable;
+import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
+
+import java.util.Objects;
 
 /**
  * Sent by {@link SurvivalCommandBlockEditScreen} to save changes made to a Survival Command Block.
@@ -25,91 +31,69 @@ import org.slf4j.Logger;
  * Test for this thread:
  * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2540671-command-block-replica-issue
  *
+ * @param blockPosOrMinecartEntityId The Survival Command Block's {@link BlockPos} if {@link #type} is
+ *                                   {@link SurvivalCommandBlock.Type#BLOCK}, or the Survival Command Block Minecart's
+ *                                   entityID if {@link #type} is {@link SurvivalCommandBlock.Type#MINECART}.
  * @author Choonster
  */
-public class SaveSurvivalCommandBlockMessage {
+public record SaveSurvivalCommandBlockMessage(
+		SurvivalCommandBlock.Type type,
+		Either<BlockPos, Integer> blockPosOrMinecartEntityId,
+		String command,
+		boolean shouldTrackOutput,
+		CommandBlockEntity.Mode commandBlockMode,
+		boolean conditional,
+		boolean automatic
+) {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-	private final SurvivalCommandBlock.Type type;
-	private final String command;
-	private final boolean shouldTrackOutput;
-	private final CommandBlockEntity.Mode commandBlockMode;
-	private final boolean conditional;
-	private final boolean automatic;
+	public static final StreamCodec<RegistryFriendlyByteBuf, SaveSurvivalCommandBlockMessage> STREAM_CODEC = VanillaCodecs.compositeStreamCodec(
+			SurvivalCommandBlock.Type.STREAM_CODEC,
+			SaveSurvivalCommandBlockMessage::type,
+			ByteBufCodecs.either(BlockPos.STREAM_CODEC, ByteBufCodecs.VAR_INT),
+			SaveSurvivalCommandBlockMessage::blockPosOrMinecartEntityId,
+			ByteBufCodecs.STRING_UTF8,
+			SaveSurvivalCommandBlockMessage::command,
+			ByteBufCodecs.BOOL,
+			SaveSurvivalCommandBlockMessage::shouldTrackOutput,
+			VanillaCodecs.COMMAND_BLOCK_MODE_STREAM_CODEC,
+			SaveSurvivalCommandBlockMessage::commandBlockMode,
+			ByteBufCodecs.BOOL,
+			SaveSurvivalCommandBlockMessage::conditional,
+			ByteBufCodecs.BOOL,
+			SaveSurvivalCommandBlockMessage::automatic,
+			SaveSurvivalCommandBlockMessage::new
+	);
 
-	/**
-	 * The Survival Command Block's {@link BlockPos}. {@code null} if {@link #type} is not {@link SurvivalCommandBlock.Type#BLOCK}.
-	 */
-	@Nullable
-	private BlockPos blockPos;
-
-	/**
-	 * The Survival Command Block Minecart's entityID. -1 if {@link #type} is not {@link SurvivalCommandBlock.Type#MINECART}.
-	 */
-	private int minecartEntityID = -1;
-
-
-	public SaveSurvivalCommandBlockMessage(final SurvivalCommandBlock survivalCommandBlock, final String command, final CommandBlockEntity.Mode commandBlockMode, final boolean conditional, final boolean automatic) {
-		type = survivalCommandBlock.getType();
-		this.command = command;
-		shouldTrackOutput = survivalCommandBlock.isTrackOutput();
-		this.commandBlockMode = commandBlockMode;
-		this.conditional = conditional;
-		this.automatic = automatic;
-	}
-
-	private SaveSurvivalCommandBlockMessage(final SurvivalCommandBlock.Type type, @Nullable final BlockPos blockPos, final int minecartEntityID, final String command, final boolean shouldTrackOutput, final CommandBlockEntity.Mode commandBlockMode, final boolean conditional, final boolean automatic) {
-		this.type = type;
-		this.command = command;
-		this.shouldTrackOutput = shouldTrackOutput;
-		this.commandBlockMode = commandBlockMode;
-		this.conditional = conditional;
-		this.automatic = automatic;
-		this.blockPos = blockPos;
-		this.minecartEntityID = minecartEntityID;
-	}
-
-	public static SaveSurvivalCommandBlockMessage decode(final FriendlyByteBuf buffer) {
-		final var type = buffer.readEnum(SurvivalCommandBlock.Type.class);
-
-		BlockPos blockPos = null;
-		var minecartEntityID = -1;
-
-		switch (type) {
-			case BLOCK -> blockPos = buffer.readBlockPos();
-			case MINECART -> minecartEntityID = buffer.readInt();
+	public SaveSurvivalCommandBlockMessage {
+		if (type == SurvivalCommandBlock.Type.BLOCK && blockPosOrMinecartEntityId.left().isEmpty()) {
+			throw new IllegalArgumentException("Type.BLOCK requires a BlockPos");
+		} else if (type == SurvivalCommandBlock.Type.MINECART && blockPosOrMinecartEntityId.right().isEmpty()) {
+			throw new IllegalArgumentException("Type.MINECART requires an Entity ID");
 		}
+	}
 
-		return new SaveSurvivalCommandBlockMessage(
-				type,
-				blockPos,
-				minecartEntityID,
-				buffer.readUtf(Short.MAX_VALUE),
-				buffer.readBoolean(),
-				buffer.readEnum(CommandBlockEntity.Mode.class),
-				buffer.readBoolean(),
-				buffer.readBoolean()
+	public SaveSurvivalCommandBlockMessage(
+			final SurvivalCommandBlockEntity survivalCommandBlockEntity,
+			final String command,
+			final CommandBlockEntity.Mode commandBlockMode,
+			final boolean conditional,
+			final boolean automatic
+	) {
+		this(
+				survivalCommandBlockEntity.getCommandBlock().getType(),
+				Either.left(survivalCommandBlockEntity.getBlockPos()),
+				command,
+				survivalCommandBlockEntity.getCommandBlock().isTrackOutput(),
+				commandBlockMode,
+				conditional,
+				automatic
 		);
-	}
-
-	public static void encode(final SaveSurvivalCommandBlockMessage message, final FriendlyByteBuf buffer) {
-		buffer.writeEnum(message.type);
-
-		switch (message.type) {
-			case BLOCK -> buffer.writeBlockPos(message.blockPos);
-			case MINECART -> buffer.writeInt(message.minecartEntityID);
-		}
-
-		buffer.writeUtf(message.command);
-		buffer.writeBoolean(message.shouldTrackOutput);
-		buffer.writeEnum(message.commandBlockMode);
-		buffer.writeBoolean(message.conditional);
-		buffer.writeBoolean(message.automatic);
 	}
 
 	@SuppressWarnings("resource")
 	public static void handle(final SaveSurvivalCommandBlockMessage message, final CustomPayloadEvent.Context ctx) {
-		final var player = ctx.getSender();
+		final var player = Objects.requireNonNull(ctx.getSender());
 		final var level = player.level();
 		final var minecraftServer = level.getServer();
 		final var registries = level.registryAccess();
@@ -123,19 +107,21 @@ public class SaveSurvivalCommandBlockMessage {
 				SurvivalCommandBlock survivalCommandBlock = null;
 
 				if (message.type == SurvivalCommandBlock.Type.BLOCK) {
+					final var blockPos = message.blockPosOrMinecartEntityId.left().orElseThrow();
+
 					final RegistryObject<? extends Block> newBlock = switch (message.commandBlockMode) {
 						case SEQUENCE -> ModBlocks.CHAIN_SURVIVAL_COMMAND_BLOCK;
 						case AUTO -> ModBlocks.REPEATING_SURVIVAL_COMMAND_BLOCK;
 						default -> ModBlocks.SURVIVAL_COMMAND_BLOCK;
 					};
 
-					final var existingBlockEntity = level.getBlockEntity(message.blockPos);
+					final var existingBlockEntity = level.getBlockEntity(blockPos);
 
-					final var facing = level.getBlockState(message.blockPos).getValue(CommandBlock.FACING);
+					final var facing = level.getBlockState(blockPos).getValue(CommandBlock.FACING);
 					final var newState = newBlock.get().defaultBlockState().setValue(CommandBlock.FACING, facing).setValue(CommandBlock.CONDITIONAL, message.conditional);
-					level.setBlockAndUpdate(message.blockPos, newState);
+					level.setBlockAndUpdate(blockPos, newState);
 
-					final var newBlockEntity = level.getBlockEntity(message.blockPos);
+					final var newBlockEntity = level.getBlockEntity(blockPos);
 					if (
 							existingBlockEntity instanceof SurvivalCommandBlockEntity &&
 									newBlockEntity instanceof final SurvivalCommandBlockEntity newSurvivalCommandBlockEntity
@@ -145,7 +131,7 @@ public class SaveSurvivalCommandBlockMessage {
 						newSurvivalCommandBlockEntity.setAutomatic(message.automatic);
 					}
 				} else if (message.type == SurvivalCommandBlock.Type.MINECART) {
-					// no-op
+					throw new NotImplementedException();
 				}
 
 				if (survivalCommandBlock != null) {

@@ -2,7 +2,7 @@ package choonster.testmod3.capability.fluidhandler;
 
 import choonster.testmod3.capability.CapabilityContainerListener;
 import choonster.testmod3.init.ModBlocks;
-import choonster.testmod3.network.capability.fluidhandler.UpdateMenuFluidTankMessage;
+import choonster.testmod3.network.capability.UpdateMenuFluidTankMessage;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +16,6 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
  * @author Choonster
  */
 public class FluidTankContainerListener extends CapabilityContainerListener<IFluidHandlerItem> {
-
 	public FluidTankContainerListener(final ServerPlayer player) {
 		super(player, ForgeCapabilities.FLUID_HANDLER_ITEM, null);
 	}

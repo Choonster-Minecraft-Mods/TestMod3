@@ -1,19 +1,20 @@
 package choonster.testmod3.client.gui;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.init.ModClientScreenTypes;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -25,13 +26,15 @@ import java.util.Optional;
 public class ClientScreenManager {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-	private static final Map<ResourceLocation, IScreenConstructor<?>> CONSTRUCTORS = new HashMap<>();
+	private static final Map<ResourceLocation, IScreenConstructor<?, ?>> CONSTRUCTORS = new HashMap<>();
 
-	public static void openScreen(final ResourceLocation id, final FriendlyByteBuf additionalData) {
-		getScreenConstructor(id).ifPresent(f -> f.createAndOpenScreen(id, additionalData, Minecraft.getInstance()));
+	@SuppressWarnings("unchecked")
+	public static <T> void openScreen(final ClientScreenType<T> clientScreenType, final T extraData) {
+		final var id = Objects.requireNonNull(ModClientScreenTypes.REGISTRY.get().getKey(clientScreenType));
+		getScreenConstructor(id).ifPresent(f -> createAndOpenScreen(clientScreenType, extraData, (IScreenConstructor<T, ?>) f));
 	}
 
-	public static <T extends AbstractContainerMenu> Optional<IScreenConstructor<?>> getScreenConstructor(final ResourceLocation id) {
+	public static Optional<IScreenConstructor<?, ?>> getScreenConstructor(final ResourceLocation id) {
 		final var constructor = CONSTRUCTORS.get(id);
 
 		if (constructor == null) {
@@ -42,7 +45,11 @@ public class ClientScreenManager {
 		return Optional.of(constructor);
 	}
 
-	public static <S extends Screen> void registerScreenConstructor(final ResourceLocation id, final IScreenConstructor<S> constructor) {
+	public static <T, S extends Screen> void registerScreenConstructor(
+			final RegistryObject<ClientScreenType<T>> clientScreenType,
+			final IScreenConstructor<T, S> constructor
+	) {
+		final var id = clientScreenType.getId();
 		final var oldConstructor = CONSTRUCTORS.put(id, constructor);
 
 		if (oldConstructor != null) {
@@ -50,13 +57,17 @@ public class ClientScreenManager {
 		}
 	}
 
-	@FunctionalInterface
-	public interface IScreenConstructor<S extends Screen> {
-		default void createAndOpenScreen(final ResourceLocation id, final FriendlyByteBuf additionalData, final Minecraft mc) {
-			final var screen = create(id, additionalData);
-			mc.setScreen(screen);
-		}
+	private static <T, S extends Screen> void createAndOpenScreen(
+			final ClientScreenType<T> clientScreenType,
+			final T additionalData,
+			final IScreenConstructor<T, S> screenConstructor
+	) {
+		final var screen = screenConstructor.create(clientScreenType, additionalData);
+		Minecraft.getInstance().setScreen(screen);
+	}
 
-		S create(ResourceLocation id, FriendlyByteBuf additionalData);
+	@FunctionalInterface
+	public interface IScreenConstructor<T, S extends Screen> {
+		S create(ClientScreenType<T> clientScreenType, T additionalData);
 	}
 }

@@ -1,6 +1,7 @@
 package choonster.testmod3.serialization;
 
 import com.mojang.datafixers.Products;
+import com.mojang.datafixers.util.Function7;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -13,6 +14,7 @@ import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -20,8 +22,8 @@ import net.minecraft.util.ByIdMap;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.IExtensibleEnum;
@@ -137,6 +139,12 @@ public class VanillaCodecs {
 		);
 	});
 
+	public static final StreamCodec<ByteBuf, CommandBlockEntity.Mode> COMMAND_BLOCK_MODE_STREAM_CODEC = Util.make(() -> {
+		final IntFunction<CommandBlockEntity.Mode> idMapper = ByIdMap.continuous(CommandBlockEntity.Mode::ordinal, CommandBlockEntity.Mode.values(), ByIdMap.OutOfBoundsStrategy.ZERO);
+
+		return ByteBufCodecs.idMapper(idMapper, CommandBlockEntity.Mode::ordinal);
+	});
+
 	private static final IntFunction<EquipmentSlot> ARMOR_EQUIPMENT_SLOT_BY_ID = ByIdMap.continuous(
 			EquipmentSlot::getIndex,
 			Arrays.stream(EquipmentSlot.values())
@@ -149,6 +157,64 @@ public class VanillaCodecs {
 			ARMOR_EQUIPMENT_SLOT_BY_ID,
 			EquipmentSlot::getIndex
 	);
+
+	public static final StreamCodec<FriendlyByteBuf, ChunkPos> CHUNK_POS_STREAM_CODEC = new StreamCodec<>() {
+		@Override
+		public ChunkPos decode(final FriendlyByteBuf buf) {
+			return buf.readChunkPos();
+		}
+
+		@Override
+		public void encode(final FriendlyByteBuf buf, final ChunkPos value) {
+			buf.writeChunkPos(value);
+		}
+	};
+
+	/**
+	 * @see StreamCodec#composite
+	 */
+	public static <B, C, T1, T2, T3, T4, T5, T6, T7> StreamCodec<B, C> compositeStreamCodec(
+			final StreamCodec<? super B, T1> codec1,
+			final Function<C, T1> getter1,
+			final StreamCodec<? super B, T2> codec2,
+			final Function<C, T2> getter2,
+			final StreamCodec<? super B, T3> codec3,
+			final Function<C, T3> getter3,
+			final StreamCodec<? super B, T4> codec4,
+			final Function<C, T4> getter4,
+			final StreamCodec<? super B, T5> codec5,
+			final Function<C, T5> getter5,
+			final StreamCodec<? super B, T6> codec6,
+			final Function<C, T6> getter6,
+			final StreamCodec<? super B, T7> codec7,
+			final Function<C, T7> getter7,
+			final Function7<T1, T2, T3, T4, T5, T6, T7, C> constructor
+	) {
+		return new StreamCodec<>() {
+			@Override
+			public C decode(final B buf) {
+				final var t1 = codec1.decode(buf);
+				final var t2 = codec2.decode(buf);
+				final var t3 = codec3.decode(buf);
+				final var t4 = codec4.decode(buf);
+				final var t5 = codec5.decode(buf);
+				final var t6 = codec6.decode(buf);
+				final var t7 = codec7.decode(buf);
+				return constructor.apply(t1, t2, t3, t4, t5, t6, t7);
+			}
+
+			@Override
+			public void encode(final B buf, final C value) {
+				codec1.encode(buf, getter1.apply(value));
+				codec2.encode(buf, getter2.apply(value));
+				codec3.encode(buf, getter3.apply(value));
+				codec4.encode(buf, getter4.apply(value));
+				codec5.encode(buf, getter5.apply(value));
+				codec6.encode(buf, getter6.apply(value));
+				codec7.encode(buf, getter7.apply(value));
+			}
+		};
+	}
 
 	/**
 	 * Creates a function that converts a name to its corresponding enum value by iterating through the array returned
@@ -233,7 +299,4 @@ public class VanillaCodecs {
 		};
 	}
 
-	private static int armorItemTypeToId(final ArmorItem.Type type) {
-		return type.getSlot().getIndex();
-	}
 }

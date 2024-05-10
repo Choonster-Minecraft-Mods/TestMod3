@@ -1,11 +1,11 @@
 package choonster.testmod3.client.init;
 
 import choonster.testmod3.capability.lock.LockCapability;
-import choonster.testmod3.client.gui.ClientScreenIds;
 import choonster.testmod3.client.gui.ClientScreenManager;
 import choonster.testmod3.client.gui.LockScreen;
 import choonster.testmod3.client.gui.SurvivalCommandBlockEditScreen;
 import choonster.testmod3.client.gui.inventory.ModChestScreen;
+import choonster.testmod3.init.ModClientScreenTypes;
 import choonster.testmod3.init.ModMenuTypes;
 import choonster.testmod3.util.CapabilityNotPresentException;
 import choonster.testmod3.world.level.block.entity.SurvivalCommandBlockEntity;
@@ -14,7 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -28,7 +27,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
  * @author Choonster
  */
 @Mod.EventBusSubscriber(bus = Bus.MOD, value = Dist.CLIENT)
-public class ModScreenFactories {
+public class ModScreenConstructors {
 	@SubscribeEvent
 	public static void registerConstructors(final FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
@@ -42,30 +41,22 @@ public class ModScreenFactories {
 	}
 
 	private static void registerClientScreenConstructors() {
-		ClientScreenManager.registerScreenConstructor(ClientScreenIds.SURVIVAL_COMMAND_BLOCK, (id, additionalData) -> {
-			final var pos = additionalData.readBlockPos();
+		ClientScreenManager.registerScreenConstructor(ModClientScreenTypes.SURVIVAL_COMMAND_BLOCK, (id, pos) -> {
 			final var blockEntity = getBlockEntity(pos, SurvivalCommandBlockEntity.class);
 
 			return new SurvivalCommandBlockEditScreen(blockEntity);
 		});
 
-		ClientScreenManager.registerScreenConstructor(ClientScreenIds.LOCK, (id, additionalData) -> {
-			final var world = getClientLevel();
+		ClientScreenManager.registerScreenConstructor(ModClientScreenTypes.LOCK, (id, additionalData) -> {
+			final var level = getClientLevel();
 
-			final var pos = additionalData.readBlockPos();
-			final var hasFacing = additionalData.readBoolean();
+			final var pos = additionalData.pos();
+			final var direction = additionalData.direction().orElse(null);
 
-			final Direction facing;
-			if (hasFacing) {
-				facing = additionalData.readEnum(Direction.class);
-			} else {
-				facing = null;
-			}
-
-			final var lock = LockCapability.getLock(world, pos, facing)
+			final var lock = LockCapability.getLock(level, pos, direction)
 					.orElseThrow(CapabilityNotPresentException::new);
 
-			return new LockScreen(lock, pos, facing);
+			return new LockScreen(lock, pos, direction);
 		});
 	}
 

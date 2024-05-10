@@ -1,6 +1,6 @@
 package choonster.testmod3.world.level.block;
 
-import choonster.testmod3.client.gui.ClientScreenIds;
+import choonster.testmod3.init.ModClientScreenTypes;
 import choonster.testmod3.serialization.VanillaCodecs;
 import choonster.testmod3.util.NetworkUtil;
 import choonster.testmod3.world.level.block.entity.SurvivalCommandBlockEntity;
@@ -80,7 +80,7 @@ public class SurvivalCommandBlock extends CommandBlock {
 		if (blockEntity instanceof SurvivalCommandBlockEntity) {
 			if (!player.getCommandSenderWorld().isClientSide) {
 				final var serverPlayer = (ServerPlayer) player;
-				NetworkUtil.openClientScreen(serverPlayer, ClientScreenIds.SURVIVAL_COMMAND_BLOCK, pos);
+				NetworkUtil.openClientScreen(serverPlayer, ModClientScreenTypes.SURVIVAL_COMMAND_BLOCK, pos);
 				serverPlayer.connection.send(ClientboundBlockEntityDataPacket.create(blockEntity, BlockEntity::saveWithoutMetadata));
 			}
 

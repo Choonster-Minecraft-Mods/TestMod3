@@ -54,6 +54,7 @@ public class TestMod3 {
 		ModCreativeTabs.initialise(modEventBus);
 		ModArmorMaterials.initialise(modEventBus);
 		ModDataComponents.initialise(modEventBus);
+		ModClientScreenTypes.initialise(modEventBus);
 	}
 
 	@SubscribeEvent

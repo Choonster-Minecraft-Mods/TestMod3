@@ -2,7 +2,8 @@ package choonster.testmod3.world.item;
 
 import choonster.testmod3.api.capability.lock.ILock;
 import choonster.testmod3.capability.lock.LockCapability;
-import choonster.testmod3.client.gui.ClientScreenIds;
+import choonster.testmod3.capability.lock.LockScreenData;
+import choonster.testmod3.init.ModClientScreenTypes;
 import choonster.testmod3.util.NetworkUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,10 +29,11 @@ public class KeyItem extends Item {
 						if (lock.isLocked()) {
 							context.getPlayer().sendSystemMessage(Component.translatable("testmod3.lock.already_locked"));
 						} else {
-							NetworkUtil.openClientScreen((ServerPlayer) context.getPlayer(), ClientScreenIds.LOCK, buffer -> {
-								buffer.writeBlockPos(context.getClickedPos());
-								NetworkUtil.writeNullableDirection(context.getClickedFace(), buffer);
-							});
+							NetworkUtil.openClientScreen(
+									(ServerPlayer) context.getPlayer(),
+									ModClientScreenTypes.LOCK,
+									new LockScreenData(context.getClickedPos(), context.getClickedFace())
+							);
 						}
 					}
 
