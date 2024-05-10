@@ -3,8 +3,10 @@ package choonster.testmod3.world.inventory.itemhandler;
 import choonster.testmod3.util.InventoryUtils;
 import com.google.common.base.Preconditions;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -34,12 +36,12 @@ public class LootItemHandler extends ItemStackHandler {
 	protected final Supplier<Level> levelSupplier;
 
 	/**
-	 * The location of the {@link LootTable} to generate loot from.
+	 * The key of the {@link LootTable} to generate loot from.
 	 * <p>
 	 * This will be {@code null} if no {@link LootTable} has been set or loot has already been generated.
 	 */
 	@Nullable
-	protected ResourceLocation lootTableLocation;
+	protected ResourceKey<LootTable> lootTable;
 
 	/**
 	 * The random seed to use when generating loot.
@@ -67,8 +69,8 @@ public class LootItemHandler extends ItemStackHandler {
 	 * @return Was the location written to NBT?
 	 */
 	protected boolean checkLootAndWrite(final CompoundTag compound) {
-		if (lootTableLocation != null) {
-			compound.putString("LootTable", lootTableLocation.toString());
+		if (lootTable != null) {
+			compound.putString("LootTable", lootTable.location().toString());
 
 			if (lootTableSeed != 0L) {
 				compound.putLong("LootTableSeed", lootTableSeed);
@@ -88,7 +90,7 @@ public class LootItemHandler extends ItemStackHandler {
 	 */
 	protected boolean checkLootAndRead(final CompoundTag compound) {
 		if (compound.contains("LootTable", Tag.TAG_STRING)) {
-			lootTableLocation = new ResourceLocation(compound.getString("LootTable"));
+			lootTable = ResourceKey.create(Registries.LOOT_TABLE, new ResourceLocation(compound.getString("LootTable")));
 			lootTableSeed = compound.getLong("LootTableSeed");
 			return true;
 		} else {
@@ -126,10 +128,10 @@ public class LootItemHandler extends ItemStackHandler {
 	 */
 	public void fillWithLoot(@Nullable final Player player) {
 		final var level = levelSupplier.get();
-		if (lootTableLocation != null && level != null && !level.isClientSide) {
+		if (lootTable != null && level != null && !level.isClientSide) {
 			final var server = Preconditions.checkNotNull(level.getServer());
-			final var lootTable = server.getLootData().getLootTable(lootTableLocation);
-			lootTableLocation = null;
+			final var lootTable = server.reloadableRegistries().getLootTable(this.lootTable);
+			this.lootTable = null;
 
 			final var builder = new LootParams.Builder((ServerLevel) level);
 
@@ -179,7 +181,7 @@ public class LootItemHandler extends ItemStackHandler {
 	}
 
 	@Nullable
-	public ResourceLocation getLootTable() {
-		return lootTableLocation;
+	public ResourceKey<LootTable> getLootTable() {
+		return lootTable;
 	}
 }
