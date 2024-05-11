@@ -1,5 +1,6 @@
 package choonster.testmod3.world.item;
 
+import choonster.testmod3.init.ModDataComponents;
 import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -13,7 +14,7 @@ import net.minecraft.world.level.Level;
 import java.util.function.IntFunction;
 
 /**
- * An item that displays a number stored in NBT in its display name.
+ * An item that displays a number stored in a component in its display name.
  *
  * @author Choonster
  */
@@ -26,12 +27,7 @@ public abstract class ScriptsItem extends Item {
 	}
 
 	private static int getNumber(final ItemStack stack) {
-		// TODO: Replace with DataComponents
-		if (stack.hasTag()) {
-			return stack.getTag().getInt("Number");
-		} else {
-			return -1337;
-		}
+		return stack.getOrDefault(ModDataComponents.SCRIPTS_NUMBER.get(), -1337);
 	}
 
 	@Override

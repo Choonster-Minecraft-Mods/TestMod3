@@ -104,6 +104,16 @@ public class ModDataComponents {
 	);
 
 	/**
+	 * The number displayed by {@link ScriptsItem}.
+	 */
+	public static final RegistryObject<DataComponentType<Integer>> SCRIPTS_NUMBER = register("scripts_number",
+			builder -> builder
+					.persistent(Codec.INT)
+					.networkSynchronized(ByteBufCodecs.VAR_INT)
+
+	);
+
+	/**
 	 * Registers the {@link DeferredRegister} instance with the mod event bus.
 	 * <p>
 	 * This should be called during mod construction.

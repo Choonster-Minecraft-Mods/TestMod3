@@ -1,11 +1,11 @@
 package choonster.testmod3.capability.lock;
 
 import choonster.testmod3.api.capability.lock.ILock;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.Nameable;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.LockCode;
+import net.minecraft.world.Nameable;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nonnull;

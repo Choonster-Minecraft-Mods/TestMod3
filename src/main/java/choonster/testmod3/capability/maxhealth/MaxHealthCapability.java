@@ -9,7 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -74,7 +74,7 @@ public final class MaxHealthCapability {
 	 * @return The formatted text.
 	 */
 	public static String formatMaxHealth(final float maxHealth) {
-		return ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(maxHealth);
+		return ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(maxHealth);
 	}
 
 	/**
