@@ -1,18 +1,19 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.util.RegistryUtil;
 import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredient;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
 import choonster.testmod3.world.item.crafting.ingredient.MobSpawnerIngredient;
 import choonster.testmod3.world.item.crafting.ingredient.NeverIngredient;
 import choonster.testmod3.world.item.crafting.recipe.*;
-import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Unit;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
@@ -20,45 +21,35 @@ import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.*;
 import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
-import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.brewing.BrewingRecipeRegisterEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.function.Predicate;
 
 /**
  * Manages this mod's recipes and ingredients and removes recipes.
  */
 public class ModCrafting {
-
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 	public static class Brewing {
-		private static final Logger LOGGER = LogUtils.getLogger();
-
-		private static final Method ADD_MIX = ObfuscationReflectionHelper.findMethod(PotionBrewing.class, /* addMix */ "m_43513_", Potion.class, Item.class, Potion.class);
-
 		/**
 		 * Add this mod's brewing recipes.
 		 *
 		 * @param event The common setup event
 		 */
 		@SubscribeEvent
-		public static void registerBrewingRecipes(final FMLCommonSetupEvent event) {
-			event.enqueueWork(() ->
-					addStandardConversionRecipes(ModPotions.TEST.get(), ModPotions.LONG_TEST.get(), ModPotions.STRONG_TEST.get(), ModItems.ARROW.get())
-			);
+		public static void registerBrewingRecipes(final BrewingRecipeRegisterEvent event) {
+			addStandardConversionRecipes(event.getBuilder(), ModPotions.TEST, ModPotions.LONG_TEST, ModPotions.STRONG_TEST, ModItems.ARROW);
 		}
 
 		/**
@@ -69,19 +60,49 @@ public class ModCrafting {
 		 * <li>Standard + Glowstone = Strong</li>
 		 * </ul>
 		 *
-		 * @param standardPotionType The standard PotionType
-		 * @param longPotionType     The long PotionType
-		 * @param strongPotionType   The strong PotionType
-		 * @param ingredient         The ingredient
+		 * @param builder        The PotionBrewing builder
+		 * @param standardPotion The standard Potion
+		 * @param longPotion     The long Potion
+		 * @param strongPotion   The strong Potion
+		 * @param ingredient     The ingredient
 		 */
-		private static void addStandardConversionRecipes(final Potion standardPotionType, final Potion longPotionType, final Potion strongPotionType, final Item ingredient) {
-			try {
-				ADD_MIX.invoke(null, Potions.AWKWARD, ingredient, standardPotionType);
-				ADD_MIX.invoke(null, standardPotionType, Items.REDSTONE, longPotionType);
-				ADD_MIX.invoke(null, standardPotionType, Items.GLOWSTONE_DUST, strongPotionType);
-			} catch (final IllegalAccessException | InvocationTargetException e) {
-				LOGGER.error("Failed to add potion recipes for potion type {}/ingredient item {}", RegistryUtil.getKey(standardPotionType), RegistryUtil.getKey(ingredient), e);
-			}
+		private static void addStandardConversionRecipes(
+				final PotionBrewing.Builder builder,
+				final Holder<Potion> standardPotion,
+				final Holder<Potion> longPotion,
+				final Holder<Potion> strongPotion,
+				final Item ingredient
+		) {
+			builder.addMix(Potions.AWKWARD, ingredient, standardPotion);
+			builder.addMix(standardPotion, Items.REDSTONE, longPotion);
+			builder.addMix(standardPotion, Items.GLOWSTONE_DUST, strongPotion);
+		}
+
+		/**
+		 * Overload of {@link #addStandardConversionRecipes(PotionBrewing.Builder, Holder, Holder, Holder, Item)} that
+		 * accepts {@link RegistryObject} parameters for convenience.
+		 *
+		 * @param builder        The PotionBrewing builder
+		 * @param standardPotion The standard Potion
+		 * @param longPotion     The long Potion
+		 * @param strongPotion   The strong Potion
+		 * @param ingredient     The ingredient
+		 */
+		@SuppressWarnings("SameParameterValue")
+		private static void addStandardConversionRecipes(
+				final PotionBrewing.Builder builder,
+				final RegistryObject<Potion> standardPotion,
+				final RegistryObject<Potion> longPotion,
+				final RegistryObject<Potion> strongPotion,
+				final RegistryObject<? extends Item> ingredient
+		) {
+			addStandardConversionRecipes(
+					builder,
+					standardPotion.getHolder().orElseThrow(),
+					longPotion.getHolder().orElseThrow(),
+					strongPotion.getHolder().orElseThrow(),
+					ingredient.get()
+			);
 		}
 	}
 
@@ -168,37 +189,58 @@ public class ModCrafting {
 	}
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
-	public static class RecipeRemover {
+	public static class RecipeRemover extends SimplePreparableReloadListener<Unit> {
 		private static final Logger LOGGER = LogUtils.getLogger();
 
-		private static final Field RECIPES = ObfuscationReflectionHelper.findField(RecipeManager.class,  /* recipes */ "f_44007_");
+		private final RecipeManager recipeManager;
+		private final RegistryAccess registryAccess;
+
+		public RecipeRemover(final RecipeManager recipeManager, final RegistryAccess registryAccess) {
+			this.recipeManager = recipeManager;
+			this.registryAccess = registryAccess;
+		}
 
 		/**
-		 * Removes recipes from the server's recipe manager when it starts up.
+		 * Adds this listener to the ResourceManager's list.
 		 *
-		 * @param event The server starting event
+		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void removeRecipes(final ServerStartedEvent event) {
-			final var recipeManager = event.getServer().getRecipeManager();
-			final var registryAccess = event.getServer().registryAccess();
+		public static void addReloadListener(final AddReloadListenerEvent event) {
+			event.addListener(
+					new RecipeRemover(event.getServerResources().getRecipeManager(), event.getRegistryAccess())
+			);
+		}
 
-			removeRecipes(recipeManager, FireworkRocketRecipe.class);
-			removeRecipes(recipeManager, FireworkStarRecipe.class);
-			removeRecipes(recipeManager, FireworkStarFadeRecipe.class);
-			removeRecipes(recipeManager, registryAccess, ModTags.Items.VANILLA_DYES);
-			removeRecipes(recipeManager, registryAccess, ModTags.Items.VANILLA_TERRACOTTA);
+		@Override
+		protected Unit prepare(final ResourceManager resourceManager, final ProfilerFiller profilerFiller) {
+			return Unit.INSTANCE;
+		}
+
+		/**
+		 * Removes recipes from the recipe manager after it's reloaded.
+		 */
+		@Override
+		protected void apply(final Unit unit, final ResourceManager resourceManager, final ProfilerFiller profilerFiller) {
+			final var recipes = new ArrayList<>(recipeManager.getRecipes());
+
+			removeRecipes(recipes, FireworkRocketRecipe.class);
+			removeRecipes(recipes, FireworkStarRecipe.class);
+			removeRecipes(recipes, FireworkStarFadeRecipe.class);
+			removeRecipes(recipes, ModTags.Items.VANILLA_DYES);
+			removeRecipes(recipes, ModTags.Items.VANILLA_TERRACOTTA);
+
+			recipeManager.replaceRecipes(recipes);
 		}
 
 		/**
 		 * Removes all crafting recipes with an output item contained in the specified tag.
 		 *
-		 * @param recipeManager  The recipe manager
-		 * @param registryAccess The registry access
-		 * @param tag            The tag
+		 * @param recipes The recipe list
+		 * @param tag     The tag
 		 */
-		private static void removeRecipes(final RecipeManager recipeManager, final RegistryAccess registryAccess, final TagKey<Item> tag) {
-			final var recipesRemoved = removeRecipes(recipeManager, recipe -> {
+		private void removeRecipes(final Collection<RecipeHolder<?>> recipes, final TagKey<Item> tag) {
+			final var recipesRemoved = removeRecipes(recipes, recipe -> {
 				final var resultItem = recipe.getResultItem(registryAccess);
 				return !resultItem.isEmpty() && resultItem.is(tag);
 			});
@@ -212,11 +254,11 @@ public class ModCrafting {
 		 * Test for this thread:
 		 * https://www.minecraftforge.net/forum/topic/33420-removing-vanilla-recipes/
 		 *
-		 * @param recipeManager The recipe manager
-		 * @param recipeClass   The recipe class
+		 * @param recipes     The recipe list
+		 * @param recipeClass The recipe class
 		 */
-		private static void removeRecipes(final RecipeManager recipeManager, final Class<? extends Recipe<?>> recipeClass) {
-			final var recipesRemoved = removeRecipes(recipeManager, recipeClass::isInstance);
+		private void removeRecipes(final Collection<RecipeHolder<?>> recipes, final Class<? extends Recipe<?>> recipeClass) {
+			final var recipesRemoved = removeRecipes(recipes, recipeClass::isInstance);
 
 			LOGGER.info("Removed {} recipe(s) for class {}", recipesRemoved, recipeClass);
 		}
@@ -224,42 +266,20 @@ public class ModCrafting {
 		/**
 		 * Remove all crafting recipes that match the specified predicate.
 		 *
-		 * @param recipeManager The recipe manager
-		 * @param predicate     The predicate
+		 * @param recipes   The recipe list
+		 * @param predicate The predicate
 		 * @return The number of recipes removed
 		 */
-		private static int removeRecipes(final RecipeManager recipeManager, final Predicate<Recipe<?>> predicate) {
-			final Map<RecipeType<?>, Map<ResourceLocation, RecipeHolder<?>>> existingRecipes;
-			try {
-				@SuppressWarnings("unchecked") final var recipesMap = (Map<RecipeType<?>, Map<ResourceLocation, RecipeHolder<?>>>) RECIPES.get(recipeManager);
-				existingRecipes = recipesMap;
-			} catch (final IllegalAccessException e) {
-				throw new RuntimeException("Couldn't get recipes map while removing recipes", e);
-			}
+		private int removeRecipes(final Collection<RecipeHolder<?>> recipes, final Predicate<Recipe<?>> predicate) {
+			// Get the list of recipes to remove
+			final var recipesToRemove = recipes.stream()
+					.filter(holder -> predicate.test(holder.value()))
+					.toList();
 
-			final var removedCounts = new Object2IntOpenHashMap<RecipeType<?>>();
-			final var newRecipes = ImmutableMap.<RecipeType<?>, Map<ResourceLocation, RecipeHolder<?>>>builder();
+			// Remove the recipes from the list
+			recipes.removeAll(recipesToRemove);
 
-			// For each recipe type, create a new map that doesn't contain the recipes to be removed
-			existingRecipes.forEach((recipeType, existingRecipesForType) -> {
-				final ImmutableMap<ResourceLocation, RecipeHolder<?>> newRecipesForType = existingRecipesForType.entrySet()
-						.stream()
-						.filter(entry -> !predicate.test(entry.getValue().value()))
-						.collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, Map.Entry::getValue));
-
-				removedCounts.put(recipeType, existingRecipesForType.size() - newRecipesForType.size());
-				newRecipes.put(recipeType, newRecipesForType);
-			});
-
-			final var removedCount = removedCounts.values().intStream().reduce(0, Integer::sum);
-
-			try {
-				RECIPES.set(recipeManager, newRecipes.build());
-			} catch (final IllegalAccessException e) {
-				throw new RuntimeException("Couldn't replace recipes map while removing recipes", e);
-			}
-
-			return removedCount;
+			return recipesToRemove.size();
 		}
 	}
 }
