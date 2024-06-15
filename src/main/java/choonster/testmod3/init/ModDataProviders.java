@@ -46,6 +46,8 @@ public class ModDataProviders {
 		// Let blockstate provider see generated item models by passing its existing file helper
 		dataGenerator.addProvider(event.includeClient(), new TestMod3BlockStateProvider(output, itemModelProvider.existingFileHelper));
 
+		dataGenerator.addProvider(event.includeClient(), new TestMod3SoundDefinitionsProvider(output, existingFileHelper));
+
 		dataGenerator.addProvider(event.includeServer(), new TestMod3RecipeProvider(output, lookupProvider));
 		dataGenerator.addProvider(event.includeServer(), TestMod3LootTableProvider.create(output, lookupProvider));
 		dataGenerator.addProvider(event.includeServer(), new TestMod3LootModifierProvider(output, lookupProvider));
@@ -64,7 +66,8 @@ public class ModDataProviders {
 				.add(Registries.CONFIGURED_FEATURE, ModConfiguredFeatures::bootstrap)
 				.add(Registries.PLACED_FEATURE, ModPlacedFeatures::bootstrap)
 				.add(Registries.BIOME, ModBiomes::bootstrap)
-				.add(ForgeRegistries.Keys.BIOME_MODIFIERS, ModBiomeModifiers::bootstrap);
+				.add(ForgeRegistries.Keys.BIOME_MODIFIERS, ModBiomeModifiers::bootstrap)
+				.add(Registries.JUKEBOX_SONG, TestMod3JukeboxSongs::bootstrap);
 
 		return RegistryPatchGenerator.createLookup(lookupProvider, builder);
 	}

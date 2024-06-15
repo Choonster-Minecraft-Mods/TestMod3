@@ -8,6 +8,7 @@ import choonster.testmod3.world.level.storage.loot.modifiers.LootTableLootModifi
 import choonster.testmod3.world.level.storage.loot.predicates.MatchBlockTag;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Items;
@@ -32,22 +33,12 @@ import java.util.concurrent.CompletableFuture;
  * @author Choonster
  */
 public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
-	private final LootItemCondition.Builder SILK_TOUCH = MatchTool.toolMatches(
-			ItemPredicate.Builder.item()
-					.withSubPredicate(
-							ItemSubPredicates.ENCHANTMENTS,
-							ItemEnchantmentsPredicate.enchantments(
-									List.of(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1)))
-							)
-					)
-	);
-
 	public TestMod3LootModifierProvider(final PackOutput output, final CompletableFuture<HolderLookup.Provider> registries) {
 		super(output, TestMod3.MODID, registries);
 	}
 
 	@Override
-	protected void start() {
+	protected void start(final HolderLookup.Provider registries) {
 		// Test for this thread:
 		// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2781780-chest-loot
 		add("loot_table_test", new LootTableLootModifier(
@@ -64,7 +55,7 @@ public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
 		add("spawner_drops", new BlockEntityNBTLootModifier(
 				new LootItemCondition[]{
 						LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.SPAWNER).build(),
-						SILK_TOUCH.build(),
+						hasSilkTouch(registries).build(),
 				}
 		));
 
@@ -83,5 +74,24 @@ public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
 	@Override
 	public String getName() {
 		return "TestMod3LootModifiers";
+	}
+
+	private LootItemCondition.Builder hasSilkTouch(final HolderLookup.Provider registries) {
+		final var enchantments = registries.lookupOrThrow(Registries.ENCHANTMENT);
+
+		return MatchTool.toolMatches(
+				ItemPredicate.Builder.item()
+						.withSubPredicate(
+								ItemSubPredicates.ENCHANTMENTS,
+								ItemEnchantmentsPredicate.enchantments(
+										List.of(
+												new EnchantmentPredicate(
+														enchantments.getOrThrow(Enchantments.SILK_TOUCH),
+														MinMaxBounds.Ints.atLeast(1)
+												)
+										)
+								)
+						)
+		);
 	}
 }

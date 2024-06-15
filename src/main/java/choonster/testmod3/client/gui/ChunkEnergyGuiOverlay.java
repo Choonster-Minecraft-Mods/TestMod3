@@ -5,6 +5,7 @@ import choonster.testmod3.config.TestMod3Config;
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.CapabilityNotPresentException;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.LayeredDraw;
@@ -23,7 +24,7 @@ public class ChunkEnergyGuiOverlay implements LayeredDraw.Layer {
 	}
 
 	@Override
-	public void render(final GuiGraphics guiGraphics, final float partialTick) {
+	public void render(final GuiGraphics guiGraphics, final DeltaTracker timer) {
 		if (minecraft.level == null || minecraft.player == null) {
 			return;
 		}

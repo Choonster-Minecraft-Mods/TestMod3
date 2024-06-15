@@ -16,6 +16,6 @@ public class ModBiomes {
 	public static final ResourceKey<Biome> DESERT_TEST = key("desert_test");
 
 	private static ResourceKey<Biome> key(final String name) {
-		return ResourceKey.create(Registries.BIOME, new ResourceLocation(TestMod3.MODID, name));
+		return ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name));
 	}
 }

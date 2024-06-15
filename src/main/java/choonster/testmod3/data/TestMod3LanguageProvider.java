@@ -138,8 +138,8 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		addItem(ModItems.WOODEN_AXE, "Wooden Cutting Axe");
 		addItem(ModItems.ENTITY_TEST, "Entity Test");
 
-		addItem(ModItems.RECORD_SOLARIS, "Music Disc");
-		add(ModItems.RECORD_SOLARIS.get().getDescriptionId() + ".desc", "Solaris (Path of Exile)");
+		addItem(ModItems.MUSIC_DISC_SOLARIS, "Music Disc");
+		add(ModItems.MUSIC_DISC_SOLARIS.get().getDescriptionId() + ".desc", "Solaris (Path of Exile)");
 
 		addItem(ModItems.HEAVY, "Heavy Item");
 		addItem(ModItems.ENTITY_INTERACTION_TEST, "Entity Interaction Test");

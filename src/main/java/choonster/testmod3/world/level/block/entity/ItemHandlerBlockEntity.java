@@ -84,7 +84,7 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler & IN
 	protected void loadAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
 
-		inventory.deserializeNBT(tag.getCompound("ItemHandler"));
+		inventory.deserializeNBT(registries, tag.getCompound("ItemHandler"));
 		nameHolder.load(tag.getCompound("NameHolder"), registries);
 	}
 
@@ -92,7 +92,7 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler & IN
 	protected void saveAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
 
-		tag.put("ItemHandler", inventory.serializeNBT());
+		tag.put("ItemHandler", inventory.serializeNBT(registries));
 		tag.put("NameHolder", nameHolder.save(new CompoundTag(), registries));
 	}
 

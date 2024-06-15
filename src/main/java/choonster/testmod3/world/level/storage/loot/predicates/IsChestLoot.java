@@ -32,8 +32,8 @@ public class IsChestLoot implements LootItemCondition {
 
 		return lootContext.hasParam(LootContextParams.ORIGIN) &&
 				!lootContext.hasParam(LootContextParams.DAMAGE_SOURCE) &&
-				!lootContext.hasParam(LootContextParams.KILLER_ENTITY) &&
-				!lootContext.hasParam(LootContextParams.DIRECT_KILLER_ENTITY) &&
+				!lootContext.hasParam(LootContextParams.ATTACKING_ENTITY) &&
+				!lootContext.hasParam(LootContextParams.DIRECT_ATTACKING_ENTITY) &&
 				!lootContext.hasParam(LootContextParams.BLOCK_STATE) &&
 				!lootContext.hasParam(LootContextParams.BLOCK_ENTITY) &&
 				!lootContext.hasParam(LootContextParams.TOOL) &&

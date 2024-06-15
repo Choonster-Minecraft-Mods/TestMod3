@@ -6,9 +6,8 @@ import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import org.apache.commons.lang3.function.TriFunction;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An arrow item that spawns the arrow entity specified in the constructor.
@@ -19,20 +18,20 @@ public class ModArrowItem extends ArrowItem {
 	/**
 	 * A factory function to create the arrow entity.
 	 */
-	private final TriFunction<Level, LivingEntity, ItemStack, Arrow> entityFactory;
+	private final ArrowFactory arrowFactory;
 
-	public ModArrowItem(final TriFunction<Level, LivingEntity, ItemStack, Arrow> entityFactory, final Item.Properties properties) {
+	public ModArrowItem(final ArrowFactory arrowFactory, final Item.Properties properties) {
 		super(properties);
-		this.entityFactory = entityFactory;
+		this.arrowFactory = arrowFactory;
 	}
 
 	@Override
-	public AbstractArrow createArrow(final Level level, final ItemStack stack, final LivingEntity shooter) {
-		return entityFactory.apply(level, shooter, stack.copyWithCount(1));
+	public AbstractArrow createArrow(final Level level, final ItemStack stack, final LivingEntity shooter, @Nullable final ItemStack firedFromWeapon) {
+		return arrowFactory.create(level, shooter, stack.copyWithCount(1), firedFromWeapon);
 	}
 
-	@Override
-	public boolean isInfinite(final ItemStack stack, final ItemStack bow, final LivingEntity owner) {
-		return bow.getEnchantmentLevel(Enchantments.INFINITY) > 0;
+	@FunctionalInterface
+	public interface ArrowFactory {
+		Arrow create(final Level level, final LivingEntity shooter, final ItemStack pickupItemStack, @Nullable final ItemStack firedFromWeapon);
 	}
 }

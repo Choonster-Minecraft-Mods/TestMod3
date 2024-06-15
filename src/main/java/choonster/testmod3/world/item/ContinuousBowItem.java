@@ -14,7 +14,6 @@ import net.minecraft.world.level.Level;
  * @author Choonster
  */
 public class ContinuousBowItem extends ModBowItem {
-
 	/**
 	 * The amount to multiply the use time by to determine the charge when firing arrows.
 	 */
@@ -25,20 +24,20 @@ public class ContinuousBowItem extends ModBowItem {
 	}
 
 	@Override
-	public int getUseDuration(final ItemStack stack) {
+	public int getUseDuration(final ItemStack stack, final LivingEntity entity) {
 		return 10;
 	}
 
 	@Override
-	public void releaseUsing(final ItemStack stack, final Level level, final LivingEntity livingEntity, final int timeLeft) {
-		final int charge = (stack.getUseDuration() - timeLeft) * CHARGE_MULTIPLIER;
-		fireArrow(stack, level, livingEntity, livingEntity.getUsedItemHand(), charge);
+	public void releaseUsing(final ItemStack stack, final Level level, final LivingEntity entity, final int timeLeft) {
+		final var charge = (stack.getUseDuration(entity) - timeLeft) * CHARGE_MULTIPLIER;
+		fireArrow(stack, level, entity, charge);
 	}
 
 	@Override
-	public ItemStack finishUsingItem(final ItemStack stack, final Level level, final LivingEntity livingEntity) {
-		final int charge = stack.getUseDuration() * CHARGE_MULTIPLIER;
-		fireArrow(stack, level, livingEntity, livingEntity.getUsedItemHand(), charge);
+	public ItemStack finishUsingItem(final ItemStack stack, final Level level, final LivingEntity entity) {
+		final var charge = stack.getUseDuration(entity) * CHARGE_MULTIPLIER;
+		fireArrow(stack, level, entity, charge);
 
 		return stack;
 	}

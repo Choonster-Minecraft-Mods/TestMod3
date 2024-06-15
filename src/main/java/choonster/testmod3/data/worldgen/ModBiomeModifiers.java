@@ -94,7 +94,7 @@ public class ModBiomeModifiers {
 	}
 
 	private static ResourceKey<BiomeModifier> key(final String name) {
-		return ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS, new ResourceLocation(TestMod3.MODID, name));
+		return ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name));
 	}
 
 	private static HolderSet<Biome> tag(final HolderGetter<Biome> holderGetter, final TagKey<Biome> key) {

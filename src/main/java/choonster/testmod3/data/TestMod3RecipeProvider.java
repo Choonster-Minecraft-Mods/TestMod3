@@ -70,7 +70,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 		{
 			SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModItems.SUBSCRIPTS.get()), RecipeCategory.MISC, ModItems.DIMENSION_REPLACEMENT.get(), 0.35f, 200)
 					.unlockedBy("has_subscripts", has(ModItems.SUBSCRIPTS.get()))
-					.save(output, new ResourceLocation(TestMod3.MODID, "dimension_replacement_from_subscripts"));
+					.save(output, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "dimension_replacement_from_subscripts"));
 		}
 
 		// A recipe with a conditional ingredient whose conditions are never met.
@@ -86,13 +86,13 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					)
 					.define('c', Blocks.COBBLESTONE)
 					.unlockedBy("has_cobblestone", has(Blocks.COBBLESTONE))
-					.save(output, new ResourceLocation(TestMod3.MODID, "conditional_ingredient_test"));
+					.save(output, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "conditional_ingredient_test"));
 		}
 
 		// A recipe whose conditions are never met
 		{
 			final var category = RecipeCategory.BUILDING_BLOCKS;
-			final var id = new ResourceLocation(TestMod3.MODID, "conditional_recipe_test");
+			final var id = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "conditional_recipe_test");
 
 			ConditionalRecipe.builder()
 					.condition(FalseCondition.INSTANCE)
@@ -117,7 +117,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 									.build()
 					)
 					.unlockedBy("has_spawner", has(Blocks.SPAWNER))
-					.save(output, new ResourceLocation(TestMod3.MODID, "fish_from_guardian_spawner"));
+					.save(output, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "fish_from_guardian_spawner"));
 		}
 
 		// Craft a Guardian Spawner from a Raw Cod surrounded by Sticks
@@ -152,7 +152,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.define('C', Items.COD)
 					.unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
 					.unlockedBy("has_cod", has(Items.COD))
-					.save(output, new ResourceLocation(TestMod3.MODID, "guardian_spawner_from_fish_and_sticks"));
+					.save(output, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "guardian_spawner_from_fish_and_sticks"));
 		}
 
 		// Upgrade an Iron Helmet to a Golden Helmet while preserving its damage
@@ -166,29 +166,29 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.define('H', Items.IRON_HELMET)
 					.unlockedBy("has_gold_block", has(Blocks.GOLD_BLOCK))
 					.unlockedBy("has_iron_helmet", has(Items.IRON_HELMET))
-					.save(output, new ResourceLocation(TestMod3.MODID, "golden_helmet_from_iron_helmet"));
+					.save(output, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "golden_helmet_from_iron_helmet"));
 		}
 
 		// Cut an Oak Log into two Oak Planks with a Cutting Axe, damaging the axe
 		{
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, Blocks.OAK_PLANKS, 2)
-					.group(new ResourceLocation("minecraft", "planks").toString())
+					.group(ResourceLocation.withDefaultNamespace("planks").toString())
 					.requires(ModItems.WOODEN_AXE.get())
 					.requires(Blocks.OAK_LOG)
 					.unlockedBy("has_axe", has(ModItems.WOODEN_AXE.get()))
 					.unlockedBy("has_log", has(Blocks.OAK_LOG))
-					.save(output, new ResourceLocation(TestMod3.MODID, "oak_planks_with_mod_axe"));
+					.save(output, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "oak_planks_with_mod_axe"));
 		}
 
 		// Cut an Oak Log into two Oak Planks with a Wooden Axe, damaging the axe
 		{
 			ShapelessCuttingRecipeBuilder.shapelessCuttingRecipe(RecipeCategory.BUILDING_BLOCKS, Blocks.OAK_PLANKS, 2)
-					.group(new ResourceLocation("minecraft", "planks").toString())
+					.group(ResourceLocation.withDefaultNamespace("planks").toString())
 					.requires(Items.WOODEN_AXE)
 					.requires(Blocks.OAK_LOG)
 					.unlockedBy("has_axe", has(Items.WOODEN_AXE))
 					.unlockedBy("has_log", has(Blocks.OAK_LOG))
-					.save(output, new ResourceLocation(TestMod3.MODID, "oak_planks_with_vanilla_axe"));
+					.save(output, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "oak_planks_with_vanilla_axe"));
 		}
 
 		// Craft Cobblestone from three Buckets of Static Gas
@@ -210,7 +210,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 											.build()
 							)
 					))
-					.save(output, new ResourceLocation(TestMod3.MODID, "cobblestone_from_static_gas"));
+					.save(output, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "cobblestone_from_static_gas"));
 		}
 	}
 

@@ -14,7 +14,7 @@ public class RevealHiddenBlocksItemPropertyFunction {
 	/**
 	 * The ID of this function.
 	 */
-	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "reveal_hidden_blocks");
+	public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "reveal_hidden_blocks");
 
 	/**
 	 * The function.

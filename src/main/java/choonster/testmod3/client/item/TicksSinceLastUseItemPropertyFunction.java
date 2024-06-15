@@ -21,7 +21,7 @@ public class TicksSinceLastUseItemPropertyFunction {
 	/**
 	 * The ID of this function.
 	 */
-	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "ticks_since_last_use");
+	public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "ticks_since_last_use");
 
 	/**
 	 * The function.

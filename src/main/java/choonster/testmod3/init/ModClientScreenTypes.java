@@ -25,7 +25,7 @@ import java.util.function.Supplier;
  */
 public class ModClientScreenTypes {
 	public static final ResourceKey<Registry<ClientScreenType<?>>> KEY = ResourceKey.createRegistryKey(
-			new ResourceLocation(TestMod3.MODID, "client_screen_type")
+			ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "client_screen_type")
 	);
 
 	private static final DeferredRegister<ClientScreenType<?>> CLIENT_SCREEN_TYPES = DeferredRegister.create(KEY, TestMod3.MODID);

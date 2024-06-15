@@ -2,6 +2,7 @@ package choonster.testmod3.world.inventory.itemhandler;
 
 import choonster.testmod3.util.InventoryUtils;
 import com.google.common.base.Preconditions;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -90,7 +91,7 @@ public class LootItemHandler extends ItemStackHandler {
 	 */
 	protected boolean checkLootAndRead(final CompoundTag compound) {
 		if (compound.contains("LootTable", Tag.TAG_STRING)) {
-			lootTable = ResourceKey.create(Registries.LOOT_TABLE, new ResourceLocation(compound.getString("LootTable")));
+			lootTable = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(compound.getString("LootTable")));
 			lootTableSeed = compound.getLong("LootTableSeed");
 			return true;
 		} else {
@@ -99,8 +100,8 @@ public class LootItemHandler extends ItemStackHandler {
 	}
 
 	@Override
-	public CompoundTag serializeNBT() {
-		final var tagCompound = super.serializeNBT();
+	public CompoundTag serializeNBT(final HolderLookup.Provider registries) {
+		final var tagCompound = super.serializeNBT(registries);
 
 		if (checkLootAndWrite(tagCompound)) { // If the LootTable location exists, don't write the inventory contents to NBT
 			tagCompound.remove("Items");
@@ -110,12 +111,12 @@ public class LootItemHandler extends ItemStackHandler {
 	}
 
 	@Override
-	public void deserializeNBT(final CompoundTag nbt) {
+	public void deserializeNBT(final HolderLookup.Provider registries, final CompoundTag nbt) {
 		if (checkLootAndRead(nbt)) { // If the LootTable location exists, don't read the inventory contents from NBT
 			setSize(nbt.contains("Size", Tag.TAG_INT) ? nbt.getInt("Size") : stacks.size());
 			onLoad();
 		} else {
-			super.deserializeNBT(nbt);
+			super.deserializeNBT(registries, nbt);
 		}
 	}
 

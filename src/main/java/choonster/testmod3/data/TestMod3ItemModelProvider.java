@@ -87,7 +87,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 		withExistingParent(ModItems.ENTITY_TEST.get(), Items.PORKCHOP);
 
-		withExistingParent(ModItems.RECORD_SOLARIS.get(), Items.MUSIC_DISC_13);
+		withExistingParent(ModItems.MUSIC_DISC_SOLARIS.get(), Items.MUSIC_DISC_13);
 
 		withExistingParent(ModItems.HEAVY.get(), Items.BRICK);
 
@@ -281,7 +281,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 
 	private ResourceLocation itemTexture(final Item item) {
 		final var name = key(item);
-		return new ResourceLocation(name.getNamespace(), ITEM_FOLDER + "/" + name.getPath());
+		return ResourceLocation.fromNamespaceAndPath(name.getNamespace(), ITEM_FOLDER + "/" + name.getPath());
 	}
 
 	private ItemModelBuilder withExistingParent(final Item item, final Item modelItem) {
@@ -357,7 +357,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 		final var fluid = item instanceof BucketItem ? ((BucketItem) item).getFluid() : Fluids.EMPTY;
 
 		getBuilder(name(item))
-				.parent(getExistingFile(new ResourceLocation("forge", "bucket")))
+				.parent(getExistingFile(ResourceLocation.fromNamespaceAndPath("forge", "bucket")))
 				.customLoader(DynamicFluidContainerModelBuilder::begin)
 				.fluid(fluid)
 				.flipGas(true)
@@ -368,7 +368,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 		final var baseTexture = itemTexture(item) + "_base";
 
 		getBuilder(name(item))
-				.parent(getExistingFile(new ResourceLocation("forge", "bucket")))
+				.parent(getExistingFile(ResourceLocation.fromNamespaceAndPath("forge", "bucket")))
 				.texture("base", baseTexture)
 				.texture("particle", baseTexture)
 				.customLoader(DynamicFluidContainerModelBuilder::begin)

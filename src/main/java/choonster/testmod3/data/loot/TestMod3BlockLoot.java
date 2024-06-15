@@ -6,6 +6,7 @@ import choonster.testmod3.world.level.block.FluidTankBlock;
 import choonster.testmod3.world.level.block.RightClickTestBlock;
 import choonster.testmod3.world.level.storage.loot.functions.SetFluidTankContents;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Items;
@@ -26,8 +27,8 @@ import java.util.Set;
  * @author Choonster
  */
 public class TestMod3BlockLoot extends BlockLootSubProvider {
-	public TestMod3BlockLoot() {
-		super(Set.of(), FeatureFlags.REGISTRY.allFlags());
+	public TestMod3BlockLoot(final HolderLookup.Provider registries) {
+		super(Set.of(), FeatureFlags.REGISTRY.allFlags(), registries);
 	}
 
 	@Override

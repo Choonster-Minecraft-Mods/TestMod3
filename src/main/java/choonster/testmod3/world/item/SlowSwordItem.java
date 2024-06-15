@@ -1,6 +1,7 @@
 package choonster.testmod3.world.item;
 
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -9,8 +10,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-
-import java.util.UUID;
 
 /**
  * A sword that's 1.5 times slower than and does twice the damage of vanilla swords.
@@ -32,8 +31,8 @@ public class SlowSwordItem extends SwordItem {
 		final var baseAttributes = SwordItem.createAttributes(tier, BASE_ATTACK_DAMAGE, ATTACK_SPEED);
 		final var builder = ItemAttributeModifiers.builder();
 
-		copyModifier(baseAttributes, builder, Attributes.ATTACK_DAMAGE, BASE_ATTACK_DAMAGE_UUID, EquipmentSlot.MAINHAND, 2);
-		copyModifier(baseAttributes, builder, Attributes.ATTACK_SPEED, BASE_ATTACK_SPEED_UUID, EquipmentSlot.MAINHAND, 1.5);
+		copyModifier(baseAttributes, builder, Attributes.ATTACK_DAMAGE, BASE_ATTACK_DAMAGE_ID, EquipmentSlot.MAINHAND, 2);
+		copyModifier(baseAttributes, builder, Attributes.ATTACK_SPEED, BASE_ATTACK_SPEED_ID, EquipmentSlot.MAINHAND, 1.5);
 
 		return builder.build();
 	}
@@ -52,7 +51,7 @@ public class SlowSwordItem extends SwordItem {
 			final ItemAttributeModifiers baseAttributes,
 			final ItemAttributeModifiers.Builder builder,
 			final Holder<Attribute> attribute,
-			final UUID id,
+			final ResourceLocation id,
 			final EquipmentSlot slot,
 			final double multiplier
 	) {
@@ -70,7 +69,7 @@ public class SlowSwordItem extends SwordItem {
 			// Add the new modifier
 			builder.add(
 					entry.attribute(),
-					new AttributeModifier(modifier.id(), modifier.name(), modifier.amount() * multiplier, modifier.operation()),
+					new AttributeModifier(modifier.id(), modifier.amount() * multiplier, modifier.operation()),
 					entry.slot()
 			);
 		});

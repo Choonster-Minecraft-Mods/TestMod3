@@ -11,6 +11,7 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -24,7 +25,6 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Supplier;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,19 +48,14 @@ public class ReplacementArmourItem extends ArmorItem {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
 	/**
-	 * The items to replace the other armour with.
+	 * The items to replace the other armour with. These functions must return a new ItemStack each time they're called.
 	 */
-	private final Set<Supplier<ItemStack>> replacementItems;
+	private final Set<Function<RegistryAccess, ItemStack>> replacementItems;
 
-	public ReplacementArmourItem(final Holder<ArmorMaterial> material, final ArmorItem.Type type, final Properties properties, final Collection<Supplier<ItemStack>> replacementItems) {
+	public ReplacementArmourItem(final Holder<ArmorMaterial> material, final ArmorItem.Type type, final Properties properties, final Collection<Function<RegistryAccess, ItemStack>> replacementItems) {
 		super(material, type, properties);
 
-		this.replacementItems = ImmutableSet.copyOf(
-				replacementItems
-						.stream()
-						.map(Lazy::of)
-						.collect(Collectors.toSet())
-		);
+		this.replacementItems = ImmutableSet.copyOf(replacementItems);
 	}
 
 	/**
@@ -81,11 +76,12 @@ public class ReplacementArmourItem extends ArmorItem {
 	 */
 	private void replaceArmour(final ItemStack stack, final LivingEntity entity) {
 		final var replacedArmour = ImmutableList.<ReplacedArmour.Entry>builder();
+		final var registryAccess = entity.level().registryAccess();
 
 		// Create a mutable copy of the replacements
 		final var replacements = replacementItems
 				.stream()
-				.map(Supplier::get)
+				.map(f -> f.apply(registryAccess))
 				.collect(Collectors.toSet());
 
 		Stream.of(ArmorItem.Type.values()) // For each armour type,
@@ -107,7 +103,7 @@ public class ReplacementArmourItem extends ArmorItem {
 						// Add it to the list of replaced armour
 						replacedArmour.add(entry);
 
-						entity.setItemSlot(equipmentSlot, replacement.copy()); // Equip a copy of the replacement
+						entity.setItemSlot(equipmentSlot, replacement); // Equip the replacement
 						LOGGER.info("Equipped replacement {} to {}, replacing {}", replacement, type, original);
 					});
 				});
@@ -125,6 +121,7 @@ public class ReplacementArmourItem extends ArmorItem {
 	 */
 	private void restoreArmour(final ItemStack stack, final LivingEntity entity) {
 		final var replacedArmour = stack.getOrDefault(ModDataComponents.REPLACED_ARMOUR.get(), new ReplacedArmour(ImmutableList.of()));
+		final var registryAccess = entity.level().registryAccess();
 
 		// For each saved armour item,
 		for (final var entry : replacedArmour.replacedArmour) {
@@ -137,7 +134,7 @@ public class ReplacementArmourItem extends ArmorItem {
 			// Is the item currently in the slot one of the replacements defined for this item?
 			final var isReplacement = replacementItems
 					.stream()
-					.map(Supplier::get)
+					.map(f -> f.apply(registryAccess))
 					.anyMatch(replacement -> ItemStack.matches(replacement, current));
 
 			if (original.isEmpty()) { // If the original item is empty,

@@ -11,7 +11,7 @@ import net.minecraftforge.network.NetworkProtocol;
 import net.minecraftforge.network.SimpleChannel;
 
 public class ModNetwork {
-	public static final ResourceLocation CHANNEL_NAME = new ResourceLocation(TestMod3.MODID, "network");
+	public static final ResourceLocation CHANNEL_NAME = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "network");
 
 	public static final int NETWORK_VERSION = 4;
 

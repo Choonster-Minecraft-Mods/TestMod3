@@ -1,9 +1,9 @@
 package choonster.testmod3.world.item;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -13,7 +13,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +27,6 @@ import java.util.function.Predicate;
  * @author Choonster
  */
 public class SnowballLauncherItem extends ProjectileWeaponItem {
-
 	/**
 	 * The cooldown of the launcher (in ticks)
 	 */
@@ -48,17 +46,6 @@ public class SnowballLauncherItem extends ProjectileWeaponItem {
 		return COOLDOWN;
 	}
 
-	/**
-	 * Does the player need ammunition to fire the launcher?
-	 *
-	 * @param stack  The launcher ItemStack
-	 * @param player The player to check
-	 * @return True if the player is not in creative mode and the launcher doesn't have the Infinity enchantment
-	 */
-	private boolean isAmmoRequired(final ItemStack stack, final Player player) {
-		return !player.getAbilities().instabuild && stack.getEnchantmentLevel(Enchantments.INFINITY) == 0;
-	}
-
 	@Override
 	public Predicate<ItemStack> getAllSupportedProjectiles() {
 		return stack -> stack.getItem() == Items.SNOWBALL;
@@ -70,42 +57,57 @@ public class SnowballLauncherItem extends ProjectileWeaponItem {
 	}
 
 	@Override
+	protected Projectile createProjectile(final Level level, final LivingEntity shooter, final ItemStack projectile, final ItemStack weapon, final boolean isFullPower) {
+		return new Snowball(level, shooter);
+	}
+
+	@Override
 	protected void shootProjectile(final LivingEntity shooter, final Projectile projectile, final int projectileNumber, final float p_335337_, final float p_332934_, final float yRot, @Nullable final LivingEntity target) {
 		projectile.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot() + yRot, 0.0F, p_335337_, p_332934_);
 	}
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(final Level level, final Player player, final InteractionHand hand) {
-		final ItemStack heldItem = player.getItemInHand(hand);
+		final var heldItem = player.getItemInHand(hand);
 
-		final boolean ammoRequired = isAmmoRequired(heldItem, player);
-		final ItemStack ammo = player.getProjectile(heldItem);
-		final boolean hasAmmo = !ammo.isEmpty();
+		final var projectile = player.getProjectile(heldItem);
+		final var hasAmmo = !projectile.isEmpty();
 
-		if (!ammoRequired || hasAmmo) {
-			final int cooldown = getCooldown(heldItem);
-			if (cooldown > 0) {
-				player.getCooldowns().addCooldown(this, cooldown);
-			}
-
-			level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5f, 0.4f / (level.random.nextFloat() * 0.4f + 0.8f));
-
-			if (!level.isClientSide) {
-				final Snowball entitySnowball = new Snowball(level, player);
-				entitySnowball.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0f, 1.5f, 1.0f);
-				level.addFreshEntity(entitySnowball);
-			}
-
-			if (ammoRequired) {
-				ammo.shrink(1);
-				if (ammo.isEmpty()) {
-					player.getInventory().removeItem(ammo);
-				}
-			}
-
-			return new InteractionResultHolder<>(InteractionResult.SUCCESS, heldItem);
+		if (!player.hasInfiniteMaterials() && !hasAmmo) {
+			return InteractionResultHolder.fail(heldItem);
 		}
 
-		return new InteractionResultHolder<>(InteractionResult.FAIL, heldItem);
+		final var cooldown = getCooldown(heldItem);
+		if (cooldown > 0) {
+			player.getCooldowns().addCooldown(this, cooldown);
+		}
+
+		final var ammo = draw(heldItem, projectile, player);
+		if (level instanceof final ServerLevel serverLevel && !ammo.isEmpty()) {
+			shoot(
+					serverLevel,
+					player,
+					player.getUsedItemHand(),
+					heldItem,
+					ammo,
+					3.0f,
+					1.0f,
+					true,
+					null
+			);
+		}
+
+		level.playSound(
+				null,
+				player.getX(),
+				player.getY(),
+				player.getZ(),
+				SoundEvents.SNOWBALL_THROW,
+				SoundSource.NEUTRAL,
+				0.5f,
+				1.0f / (level.getRandom().nextFloat() * 0.4f + 1.2f) + 0.5f
+		);
+
+		return InteractionResultHolder.consume(heldItem);
 	}
 }

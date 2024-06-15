@@ -47,7 +47,7 @@ public final class PigSpawnerCapability {
 	/**
 	 * The ID of the capability.
 	 */
-	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "pig_spawner");
+	public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "pig_spawner");
 
 	public static final Marker LOG_MARKER = ModLogUtils.getMarker("PIG_SPAWNER");
 

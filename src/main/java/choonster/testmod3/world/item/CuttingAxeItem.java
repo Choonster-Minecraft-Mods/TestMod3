@@ -1,9 +1,11 @@
 package choonster.testmod3.world.item;
 
-import net.minecraft.util.RandomSource;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
+import net.minecraftforge.common.ForgeHooks;
 
 /**
  * An axe that loses durability when used in crafting recipes
@@ -11,8 +13,6 @@ import net.minecraft.world.item.Tier;
  * @author Choonster
  */
 public class CuttingAxeItem extends AxeItem {
-	private final RandomSource random = RandomSource.create();
-
 	public CuttingAxeItem(final Tier tier, final Properties properties) {
 		super(tier, properties);
 	}
@@ -25,7 +25,25 @@ public class CuttingAxeItem extends AxeItem {
 	@Override
 	public ItemStack getCraftingRemainingItem(final ItemStack itemStack) {
 		final var remainingItem = itemStack.copy();
-		remainingItem.hurtAndBreak(1, random, null, () -> remainingItem.setCount(0));
+		final var craftingPlayer = ForgeHooks.getCraftingPlayer();
+
+		// If we have a crafting player available, use hurtAndBreak to process enchantments and stats
+		if (craftingPlayer != null && craftingPlayer.level() instanceof final ServerLevel serverLevel) {
+			remainingItem.hurtAndBreak(
+					1,
+					serverLevel,
+					craftingPlayer instanceof final ServerPlayer serverPlayer ? serverPlayer : null,
+					item -> {
+					}
+			);
+		} else { // Otherwise increase damage directly
+			final var damage = remainingItem.getDamageValue() + 1;
+			remainingItem.setDamageValue(damage);
+			if (damage >= remainingItem.getMaxDamage()) {
+				remainingItem.shrink(1);
+			}
+		}
+
 		return remainingItem;
 	}
 }

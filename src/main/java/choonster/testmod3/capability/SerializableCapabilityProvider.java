@@ -2,11 +2,11 @@ package choonster.testmod3.capability;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -36,13 +36,12 @@ public class SerializableCapabilityProvider<HANDLER> extends SimpleCapabilityPro
 	}
 
 	@Override
-	public Tag serializeNBT() {
-		return serializableInstance.serializeNBT();
+	public Tag serializeNBT(final HolderLookup.Provider registries) {
+		return serializableInstance.serializeNBT(registries);
 	}
 
 	@Override
-	public void deserializeNBT(final Tag tag) {
-		serializableInstance.deserializeNBT(tag);
+	public void deserializeNBT(final HolderLookup.Provider registries, final Tag tag) {
+		serializableInstance.deserializeNBT(registries, tag);
 	}
-
 }

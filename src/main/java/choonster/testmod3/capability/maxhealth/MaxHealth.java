@@ -1,9 +1,12 @@
 package choonster.testmod3.capability.maxhealth;
 
+import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import com.mojang.logging.LogUtils;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.FloatTag;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -14,7 +17,6 @@ import org.slf4j.Logger;
 
 import java.util.Collections;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Default implementation of {@link IMaxHealth}.
@@ -27,12 +29,7 @@ public class MaxHealth implements IMaxHealth, INBTSerializable<FloatTag> {
 	/**
 	 * The ID of the {@link AttributeModifier}.
 	 */
-	protected static final UUID MODIFIER_ID = UUID.fromString("d5d0d878-b3c2-469b-ba89-ac01c0635a9c");
-
-	/**
-	 * The name of the {@link AttributeModifier}.
-	 */
-	protected static final String MODIFIER_NAME = "Bonus Max Health";
+	protected static final ResourceLocation MODIFIER_ID = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "bonus_max_health");
 
 	/**
 	 * The entity this is attached to.
@@ -95,12 +92,12 @@ public class MaxHealth implements IMaxHealth, INBTSerializable<FloatTag> {
 	}
 
 	@Override
-	public FloatTag serializeNBT() {
+	public FloatTag serializeNBT(final HolderLookup.Provider registries) {
 		return FloatTag.valueOf(bonusMaxHealth);
 	}
 
 	@Override
-	public void deserializeNBT(final FloatTag tag) {
+	public void deserializeNBT(final HolderLookup.Provider registries, final FloatTag tag) {
 		bonusMaxHealth = tag.getAsFloat();
 	}
 
@@ -110,7 +107,7 @@ public class MaxHealth implements IMaxHealth, INBTSerializable<FloatTag> {
 	 * @return The AttributeModifier
 	 */
 	protected AttributeModifier createModifier() {
-		return new AttributeModifier(MODIFIER_ID, MODIFIER_NAME, getBonusMaxHealth(), AttributeModifier.Operation.ADD_VALUE);
+		return new AttributeModifier(MODIFIER_ID, getBonusMaxHealth(), AttributeModifier.Operation.ADD_VALUE);
 	}
 
 	/**

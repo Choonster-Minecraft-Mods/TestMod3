@@ -12,7 +12,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;
+import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
 import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
@@ -28,9 +28,9 @@ import java.util.function.BiConsumer;
  *
  * @author Choonster
  */
-public class TestMod3GenericLoot implements LootTableSubProvider {
+public record TestMod3GenericLoot(HolderLookup.Provider registries) implements LootTableSubProvider {
 	@Override
-	public void generate(HolderLookup.Provider lookupProvider, BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
+	public void generate(final BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
 		consumer.accept(
 				ModLootTables.LOOT_TABLE_TEST,
 				LootTable.lootTable()
@@ -52,7 +52,7 @@ public class TestMod3GenericLoot implements LootTableSubProvider {
 																				)
 																		)
 														)
-														.apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0, 1)))
+														.apply(EnchantedCountIncreaseFunction.lootingMultiplier(registries, UniformGenerator.between(0, 1)))
 										)
 										.add(
 												LootItem.lootTableItem(ModItems.ARROW.get())
@@ -88,6 +88,4 @@ public class TestMod3GenericLoot implements LootTableSubProvider {
 						)
 		);
 	}
-
-
 }

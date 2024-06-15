@@ -11,6 +11,7 @@ import choonster.testmod3.world.item.variantgroup.ItemVariantGroup;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.Util;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -48,8 +49,8 @@ public class ModItems {
 	 * Test for this thread:
 	 * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2408066-try-creating-a-music-disc-in-my-1-8-mod-please
 	 */
-	public static final RegistryObject<RecordItem> RECORD_SOLARIS = ITEMS.register("record_solaris",
-			() -> new RecordItem(13, ModSoundEvents.RECORD_SOLARIS, defaultItemProperties(), 9085)
+	public static final RegistryObject<Item> MUSIC_DISC_SOLARIS = ITEMS.register("music_disc_solaris",
+			() -> new Item(defaultItemProperties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(ModJukeboxSongs.SOLARIS))
 	);
 
 	public static final RegistryObject<HeavyItem> HEAVY = ITEMS.register("heavy",
@@ -93,13 +94,13 @@ public class ModItems {
 	public static final RegistryObject<SwapTestItem> SWAP_TEST_B;
 
 	static {
-		final String swapTestA = "swap_test_a";
-		final String swapTestB = "swap_test_b";
+		final var swapTestA = "swap_test_a";
+		final var swapTestB = "swap_test_b";
 
 		// Initialise the fields with lazy references to the items first,
 		// allowing them to be referenced from the constructors below
-		SWAP_TEST_A = RegistryObject.create(new ResourceLocation(TestMod3.MODID, swapTestA), ForgeRegistries.ITEMS);
-		SWAP_TEST_B = RegistryObject.create(new ResourceLocation(TestMod3.MODID, swapTestB), ForgeRegistries.ITEMS);
+		SWAP_TEST_A = RegistryObject.create(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, swapTestA), ForgeRegistries.ITEMS);
+		SWAP_TEST_B = RegistryObject.create(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, swapTestB), ForgeRegistries.ITEMS);
 
 		// Then register the items
 		ITEMS.register(swapTestA,
@@ -282,13 +283,14 @@ public class ModItems {
 						ArmorItem.Type.HELMET,
 						defaultItemProperties(),
 						ImmutableSet.of(
-								() -> {
-									final ItemStack chest = new ItemStack(REPLACEMENT_CHESTPLATE.get());
-									chest.enchant(Enchantments.SHARPNESS, 1);
+								(registryAccess) -> {
+									final var enchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT);
+									final var chest = new ItemStack(REPLACEMENT_CHESTPLATE.get());
+									chest.enchant(enchantments.getOrThrow(Enchantments.SHARPNESS), 1);
 									return chest;
 								},
-								() -> new ItemStack(REPLACEMENT_LEGGINGS.get()),
-								() -> new ItemStack(REPLACEMENT_BOOTS.get())
+								(registryAccess) -> new ItemStack(REPLACEMENT_LEGGINGS.get()),
+								(registryAccess) -> new ItemStack(REPLACEMENT_BOOTS.get())
 						)
 				)
 		);

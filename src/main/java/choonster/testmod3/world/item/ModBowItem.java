@@ -1,16 +1,16 @@
 package choonster.testmod3.world.item;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.ForgeEventFactory;
 
@@ -28,17 +28,6 @@ public class ModBowItem extends BowItem {
 	}
 
 	/**
-	 * Is ammunition required to fire this bow?
-	 *
-	 * @param bow     The bow
-	 * @param shooter The shooter
-	 * @return Is ammunition required?
-	 */
-	protected boolean isAmmoRequired(final ItemStack bow, final Player shooter) {
-		return !shooter.getAbilities().instabuild && bow.getEnchantmentLevel(Enchantments.INFINITY) == 0;
-	}
-
-	/**
 	 * Nock an arrow.
 	 *
 	 * @param bow     The bow ItemStack
@@ -48,110 +37,86 @@ public class ModBowItem extends BowItem {
 	 * @return The result
 	 */
 	protected InteractionResultHolder<ItemStack> nockArrow(final ItemStack bow, final Level world, final Player shooter, final InteractionHand hand) {
-		final boolean hasAmmo = !shooter.getProjectile(bow).isEmpty();
+		final var hasAmmo = !shooter.getProjectile(bow).isEmpty();
 
-		final InteractionResultHolder<ItemStack> ret = ForgeEventFactory.onArrowNock(bow, world, shooter, hand, hasAmmo);
+		final var ret = ForgeEventFactory.onArrowNock(bow, world, shooter, hand, hasAmmo);
 		if (ret != null) {
 			return ret;
 		}
 
-		if (isAmmoRequired(bow, shooter) && !hasAmmo) {
-			return new InteractionResultHolder<>(InteractionResult.FAIL, bow);
+		if (!shooter.hasInfiniteMaterials() && !hasAmmo) {
+			return InteractionResultHolder.fail(bow);
 		} else {
 			shooter.startUsingItem(hand);
-			return new InteractionResultHolder<>(InteractionResult.SUCCESS, bow);
+			return InteractionResultHolder.consume(bow);
 		}
 	}
 
 	/**
-	 * Fire an arrow with the specified charge.
+	 * Fire one or more arrows with the specified charge.
 	 *
-	 * @param bow     The bow ItemStack
+	 * @param bow     The bow
 	 * @param level   The firing player's level
 	 * @param shooter The player firing the bow
-	 * @param hand    The hand used to fire the bow
 	 * @param charge  The charge of the arrow
 	 */
-	void fireArrow(final ItemStack bow, final Level level, final LivingEntity shooter, final InteractionHand hand, int charge) {
+	protected void fireArrow(final ItemStack bow, final Level level, final LivingEntity shooter, int charge) {
 		if (!(shooter instanceof final Player player)) {
 			return;
 		}
 
-		final boolean ammoRequired = isAmmoRequired(bow, player);
-		ItemStack ammo = player.getProjectile(bow);
-
-		charge = ForgeEventFactory.onArrowLoose(bow, level, player, charge, !ammo.isEmpty() || !ammoRequired);
-		if (charge < 0) {
-			return;
-		}
-
-		if (!ammo.isEmpty() || !ammoRequired) {
-			if (ammo.isEmpty()) {
-				ammo = new ItemStack(Items.ARROW);
+		final var projectile = shooter.getProjectile(bow);
+		if (!projectile.isEmpty()) {
+			charge = ForgeEventFactory.onArrowLoose(bow, level, player, charge, true);
+			if (charge < 0) {
+				return;
 			}
 
-			final float arrowVelocity = getPowerForTime(charge);
-
-			if (arrowVelocity >= 0.1) {
-				final boolean isInfinite = player.getAbilities().instabuild || (ammo.getItem() instanceof ArrowItem && ((ArrowItem) ammo.getItem()).isInfinite(ammo, bow, player));
-
-				if (!level.isClientSide) {
-					final ArrowItem arrowItem = (ArrowItem) (ammo.getItem() instanceof ArrowItem ? ammo.getItem() : Items.ARROW);
-
-					AbstractArrow arrowEntity = arrowItem.createArrow(level, ammo, player);
-					arrowEntity = customArrow(arrowEntity);
-					arrowEntity.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0f, arrowVelocity * 3.0f, 1.0f);
-
-					if (arrowVelocity == 1.0f) {
-						arrowEntity.setCritArrow(true);
-					}
-
-					final int powerLevel = bow.getEnchantmentLevel(Enchantments.POWER);
-					if (powerLevel > 0) {
-						arrowEntity.setBaseDamage(arrowEntity.getBaseDamage() + (double) powerLevel * 0.5D + 0.5D);
-					}
-
-					final int punchLevel = bow.getEnchantmentLevel(Enchantments.PUNCH);
-					if (punchLevel > 0) {
-						arrowEntity.setKnockback(punchLevel);
-					}
-
-					if (bow.getEnchantmentLevel(Enchantments.FLAME) > 0) {
-						arrowEntity.igniteForSeconds(100);
-					}
-
-					bow.hurtAndBreak(getDurabilityUse(bow), shooter, LivingEntity.getSlotForHand(hand));
-
-
-					if (isInfinite) {
-						arrowEntity.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
-					}
-
-					level.addFreshEntity(arrowEntity);
-				}
-
-				level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0f, 1.0f / (level.random.nextFloat() * 0.4f + 1.2f) + arrowVelocity * 0.5f);
-
-				if (!isInfinite && !player.getAbilities().instabuild) {
-					ammo.shrink(1);
-					if (ammo.isEmpty()) {
-						player.getInventory().removeItem(ammo);
-					}
-				}
-
-				player.awardStat(Stats.ITEM_USED.get(this));
+			final var power = getPowerForTime(charge);
+			if (power < 0.1) {
+				return;
 			}
+
+			final var ammo = draw(bow, projectile, player);
+			if (level instanceof final ServerLevel serverLevel && !ammo.isEmpty()) {
+				shoot(
+						serverLevel,
+						player,
+						player.getUsedItemHand(),
+						bow,
+						ammo,
+						power * 3.0f,
+						1.0f,
+						power == 1.0f,
+						null
+				);
+			}
+
+			level.playSound(
+					null,
+					player.getX(),
+					player.getY(),
+					player.getZ(),
+					SoundEvents.ARROW_SHOOT,
+					SoundSource.PLAYERS,
+					1.0f,
+					1.0f / (level.getRandom().nextFloat() * 0.4f + 1.2f) + power * 0.5f
+			);
+
+			player.awardStat(Stats.ITEM_USED.get(this));
 		}
 	}
 
 	@Override
-	public void releaseUsing(final ItemStack stack, final Level level, final LivingEntity livingEntity, final int timeLeft) {
-		final int charge = stack.getUseDuration() - timeLeft;
-		fireArrow(stack, level, livingEntity, livingEntity.getUsedItemHand(), charge);
+	public void releaseUsing(final ItemStack stack, final Level level, final LivingEntity entity, final int timeLeft) {
+		if (entity instanceof final Player player) {
+			final var charge = getUseDuration(stack, entity) - timeLeft;
+			fireArrow(stack, level, player, charge);
+		}
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(final Level level, final Player playerIn, final InteractionHand hand) {
-		return nockArrow(playerIn.getItemInHand(hand), level, playerIn, hand);
+	public InteractionResultHolder<ItemStack> use(final Level level, final Player player, final InteractionHand hand) {
+		return nockArrow(player.getItemInHand(hand), level, player, hand);
 	}
 }

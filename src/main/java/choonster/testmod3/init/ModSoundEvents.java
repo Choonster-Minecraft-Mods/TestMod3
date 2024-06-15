@@ -18,7 +18,7 @@ public class ModSoundEvents {
 
 	private static boolean isInitialised;
 
-	public static final RegistryObject<SoundEvent> RECORD_SOLARIS = registerSoundEvent("record.solaris");
+	public static final RegistryObject<SoundEvent> MUSIC_DISC_SOLARIS = registerSoundEvent("music_disc.solaris");
 
 	public static final RegistryObject<SoundEvent> NINE_MM_FIRE = registerSoundEvent("9mm.fire");
 
@@ -49,6 +49,6 @@ public class ModSoundEvents {
 	 * @return A RegistryObject reference to the SoundEvent
 	 */
 	private static RegistryObject<SoundEvent> registerSoundEvent(final String soundName) {
-		return SOUND_EVENTS.register(soundName, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(TestMod3.MODID, soundName)));
+		return SOUND_EVENTS.register(soundName, () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, soundName)));
 	}
 }

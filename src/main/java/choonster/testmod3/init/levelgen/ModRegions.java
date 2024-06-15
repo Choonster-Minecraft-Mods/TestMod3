@@ -16,7 +16,7 @@ import terrablender.api.Regions;
  */
 @Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
 public class ModRegions {
-	public static final ResourceLocation OVERWORLD = new ResourceLocation(TestMod3.MODID, "overworld");
+	public static final ResourceLocation OVERWORLD = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "overworld");
 
 	@SubscribeEvent
 	public static void commonSetup(final FMLCommonSetupEvent event) {

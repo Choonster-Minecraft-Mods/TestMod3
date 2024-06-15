@@ -55,14 +55,14 @@ public abstract class LockableItemHandlerBlockEntity<
 	protected void loadAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
 
-		lock.deserializeNBT(tag.getCompound("Lock"));
+		lock.deserializeNBT(registries, tag.getCompound("Lock"));
 	}
 
 	@Override
 	protected void saveAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
 
-		tag.put("Lock", lock.serializeNBT());
+		tag.put("Lock", lock.serializeNBT(registries));
 	}
 
 	@Nullable

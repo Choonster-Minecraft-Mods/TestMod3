@@ -25,7 +25,7 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class ModTestRegistryEntries {
-	public static final ResourceKey<Registry<TestRegistryEntry>> REGISTRY_KEY = ResourceKey.createRegistryKey(new ResourceLocation(TestMod3.MODID, "test_registry_entry"));
+	public static final ResourceKey<Registry<TestRegistryEntry>> REGISTRY_KEY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "test_registry_entry"));
 
 	private static final DeferredRegister<TestRegistryEntry> TEST_REGISTRY_ENTRIES = DeferredRegister.create(REGISTRY_KEY, TestMod3.MODID);
 

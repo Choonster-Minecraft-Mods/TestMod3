@@ -17,7 +17,7 @@ public class ModTags {
 		public static final TagKey<Block> EMPTY = tag("empty_" + UUID.randomUUID());
 
 		private static TagKey<Block> tag(final String name) {
-			return BlockTags.create(new ResourceLocation(TestMod3.MODID, name));
+			return BlockTags.create(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name));
 		}
 	}
 
@@ -28,11 +28,11 @@ public class ModTags {
 		public static final TagKey<Item> RUBBER = forgeTag("rubber");
 
 		private static TagKey<Item> tag(final String name) {
-			return ItemTags.create(new ResourceLocation(TestMod3.MODID, name));
+			return ItemTags.create(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name));
 		}
 
 		private static TagKey<Item> forgeTag(final String name) {
-			return ItemTags.create(new ResourceLocation(ForgeVersion.MOD_ID, name));
+			return ItemTags.create(ResourceLocation.fromNamespaceAndPath(ForgeVersion.MOD_ID, name));
 		}
 	}
 }

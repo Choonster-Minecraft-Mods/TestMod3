@@ -1,5 +1,6 @@
 package choonster.testmod3.fluid;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -80,12 +81,12 @@ public class ItemFluidTank extends FluidTank implements IFluidHandlerItem, INBTS
 	}
 
 	@Override
-	public CompoundTag serializeNBT() {
+	public CompoundTag serializeNBT(final HolderLookup.Provider registries) {
 		return writeToNBT(new CompoundTag());
 	}
 
 	@Override
-	public void deserializeNBT(final CompoundTag tag) {
+	public void deserializeNBT(final HolderLookup.Provider registries, final CompoundTag tag) {
 		readFromNBT(tag);
 	}
 }

@@ -6,14 +6,15 @@ import choonster.testmod3.util.DebugUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.mojang.logging.LogUtils;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.INBTSerializable;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
@@ -72,12 +73,12 @@ public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinit
 	}
 
 	@Override
-	public IntTag serializeNBT() {
+	public IntTag serializeNBT(final HolderLookup.Provider registries) {
 		return IntTag.valueOf(numPigs);
 	}
 
 	@Override
-	public void deserializeNBT(final IntTag tag) {
+	public void deserializeNBT(final HolderLookup.Provider registries, final IntTag tag) {
 		numPigs = tag.getAsInt();
 	}
 

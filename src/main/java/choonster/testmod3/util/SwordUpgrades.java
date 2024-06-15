@@ -1,6 +1,8 @@
 package choonster.testmod3.util;
 
+import choonster.testmod3.TestMod3;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -8,18 +10,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 
-import java.util.UUID;
-
 public class SwordUpgrades {
 	/**
-	 * The ID of the attack damage modifier. This can be used to look up the modifier in an {@link ItemStack}'s NBT.
+	 * The ID of the attack damage modifier.
 	 */
-	private static final UUID MODIFIER_UUID = UUID.fromString("294093da-54f0-4c1b-9dbb-13b77534a84c");
-
-	/**
-	 * The name of the attack damage modifier.
-	 */
-	private static final String MODIFIER_NAME = "Weapon Upgrade";
+	private static final ResourceLocation MODIFIER_ID = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "weapon_upgrade");
 
 	/**
 	 * The amount of attack damage provided by the modifier.
@@ -40,7 +35,7 @@ public class SwordUpgrades {
 		final var modifiers = stack.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
 
 		// Create the attack damage modifier
-		final var attackDamageModifier = new AttributeModifier(MODIFIER_UUID, MODIFIER_NAME, MODIFIER_AMOUNT, AttributeModifier.Operation.ADD_VALUE);
+		final var attackDamageModifier = new AttributeModifier(MODIFIER_ID, MODIFIER_AMOUNT, AttributeModifier.Operation.ADD_VALUE);
 
 		// Add it to the modifiers
 		final var newModifiers = modifiers.withModifierAdded(Attributes.ATTACK_DAMAGE, attackDamageModifier, EquipmentSlotGroup.MAINHAND);

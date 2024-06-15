@@ -45,7 +45,7 @@ import java.util.List;
 public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEntityBlock<TE> {
 	public static final MapCodec<FluidTankBlock<?>> CODEC = simpleCodec(FluidTankBlock::new);
 
-	public static final ResourceLocation FLUID_TANK_CONTENTS = new ResourceLocation(TestMod3.MODID, "fluid_tank_contents");
+	public static final ResourceLocation FLUID_TANK_CONTENTS = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "fluid_tank_contents");
 
 	public FluidTankBlock(final Block.Properties properties) {
 		super(properties);

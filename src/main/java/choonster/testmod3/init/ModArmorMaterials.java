@@ -71,7 +71,7 @@ public class ModArmorMaterials {
 			final float knockbackResistance,
 			final Supplier<Ingredient> repairIngredient
 	) {
-		final var layers = List.of(new ArmorMaterial.Layer(new ResourceLocation(TestMod3.MODID, name)));
+		final var layers = List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name)));
 
 		return armorMaterial(defense, enchantmentValue, equipSound, toughness, knockbackResistance, repairIngredient, layers);
 	}

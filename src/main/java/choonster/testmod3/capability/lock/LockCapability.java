@@ -34,7 +34,7 @@ public final class LockCapability {
 	/**
 	 * The ID of this capability.
 	 */
-	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "lock");
+	public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "lock");
 
 	public static void register(final RegisterCapabilitiesEvent event) {
 		event.register(ILock.class);

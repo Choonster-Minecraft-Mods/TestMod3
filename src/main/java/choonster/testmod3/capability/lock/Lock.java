@@ -1,6 +1,7 @@
 package choonster.testmod3.capability.lock;
 
 import choonster.testmod3.api.capability.lock.ILock;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.LockCode;
@@ -45,7 +46,7 @@ public class Lock implements ILock, INBTSerializable<CompoundTag> {
 	}
 
 	@Override
-	public CompoundTag serializeNBT() {
+	public CompoundTag serializeNBT(final HolderLookup.Provider registries) {
 		final CompoundTag tagCompound = new CompoundTag();
 
 		code.addToTag(tagCompound);
@@ -54,7 +55,7 @@ public class Lock implements ILock, INBTSerializable<CompoundTag> {
 	}
 
 	@Override
-	public void deserializeNBT(final CompoundTag nbt) {
+	public void deserializeNBT(final HolderLookup.Provider registries, final CompoundTag nbt) {
 		code = LockCode.fromTag(nbt);
 	}
 

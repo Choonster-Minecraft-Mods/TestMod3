@@ -65,7 +65,7 @@ public class ModEntities {
 	 */
 	private static <T extends Entity> RegistryObject<EntityType<T>> registerEntityType(final String name, final Supplier<EntityType.Builder<T>> factory) {
 		return ENTITY_TYPES.register(name,
-				() -> factory.get().build(new ResourceLocation(TestMod3.MODID, name).toString())
+				() -> factory.get().build(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name).toString())
 		);
 	}
 

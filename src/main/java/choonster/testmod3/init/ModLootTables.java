@@ -25,7 +25,7 @@ public class ModLootTables {
 
 
 	private static ResourceKey<LootTable> register(final String name) {
-		return register(ResourceKey.create(Registries.LOOT_TABLE, new ResourceLocation(TestMod3.MODID, name)));
+		return register(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name)));
 	}
 
 	private static ResourceKey<LootTable> register(final ResourceKey<LootTable> p_330139_) {

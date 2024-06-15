@@ -20,7 +20,7 @@ public class ModChestScreen extends AbstractContainerScreen<ModChestMenu> {
 	/**
 	 * The ResourceLocation containing the chest GUI texture.
 	 */
-	private static final ResourceLocation CHEST_GUI_TEXTURE = new ResourceLocation("minecraft", "textures/gui/container/generic_54.png");
+	private static final ResourceLocation CHEST_GUI_TEXTURE = ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png");
 
 	/**
 	 * The number of rows in the chest inventory, used to calculate the window height.

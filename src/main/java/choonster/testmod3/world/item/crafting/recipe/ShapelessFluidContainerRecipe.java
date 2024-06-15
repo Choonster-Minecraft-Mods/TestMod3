@@ -6,12 +6,8 @@ import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredien
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraftforge.common.ForgeHooks;
 
 import java.util.stream.Collectors;
@@ -34,17 +30,17 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getRemainingItems(final CraftingContainer inv) {
+	public NonNullList<ItemStack> getRemainingItems(final CraftingInput input) {
 		final var fluidContainerIngredients = getIngredients()
 				.stream()
 				.filter(ingredient -> ingredient instanceof FluidContainerIngredient)
 				.map(ingredient -> (FluidContainerIngredient) ingredient)
 				.collect(Collectors.toSet());
 
-		final var remainingItems = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
+		final var remainingItems = NonNullList.withSize(input.size(), ItemStack.EMPTY);
 
 		for (var i = 0; i < remainingItems.size(); ++i) {
-			final var stack = inv.getItem(i);
+			final var stack = input.getItem(i);
 
 			if (stack.isEmpty()) {
 				continue;

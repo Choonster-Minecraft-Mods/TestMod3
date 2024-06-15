@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.MissingMappingsEvent;
 import net.minecraftforge.registries.MissingMappingsEvent.Mapping;
 import org.slf4j.Logger;
@@ -42,11 +41,11 @@ final class Remapper<T> {
 	 * @param missingMappings This mod's missing mappings
 	 */
 	private void remapAll(final List<Mapping<T>> missingMappings) {
-		for (final Mapping<T> missingMapping : missingMappings) { // For each missing mapping,
+		for (final var missingMapping : missingMappings) { // For each missing mapping,
 			LOGGER.info("Trying to remap {}", missingMapping.getKey());
 
 			// Try to apply all remapping functions until one performs an action.
-			final boolean remapped = remappingFunctions.stream().anyMatch(mappingPredicate -> mappingPredicate.test(missingMapping));
+			final var remapped = remappingFunctions.stream().anyMatch(mappingPredicate -> mappingPredicate.test(missingMapping));
 
 			if (!remapped) {
 				LOGGER.info("Couldn't remap {}", missingMapping.getKey());
@@ -62,8 +61,8 @@ final class Remapper<T> {
 	 * @return True if the remapping was successful
 	 */
 	private boolean tryRemap(final Mapping<T> missingMapping, final ResourceLocation registryName) {
-		final IForgeRegistry<T> registry = missingMapping.getRegistry();
-		final T value = registry.getValue(registryName);
+		final var registry = missingMapping.getRegistry();
+		final var value = registry.getValue(registryName);
 		if (registry.containsKey(registryName) && value != null) {
 			LOGGER.info("Remapped {} to {}", ResourceKey.create(registry.getRegistryKey(), missingMapping.getKey()), registryName);
 			missingMapping.remap(value);
@@ -87,14 +86,14 @@ final class Remapper<T> {
 	 * @return True if the missing mapping was remapped
 	 */
 	private boolean remapCustomName(final Mapping<T> missingMapping) {
-		final String missingPath = missingMapping.getKey().getPath();
+		final var missingPath = missingMapping.getKey().getPath();
 
 		if (!customNames.containsKey(missingPath)) {
 			return false;
 		}
 
-		final String newPath = customNames.get(missingPath);
-		final ResourceLocation newRegistryName = new ResourceLocation(missingMapping.getKey().getNamespace(), newPath);
+		final var newPath = customNames.get(missingPath);
+		final var newRegistryName = ResourceLocation.fromNamespaceAndPath(missingMapping.getKey().getNamespace(), newPath);
 
 		return tryRemap(missingMapping, newRegistryName);
 	}
@@ -106,7 +105,7 @@ final class Remapper<T> {
 			.build();
 
 	private boolean ignoreName(final Mapping<T> missingMapping) {
-		final String missingPath = missingMapping.getKey().getPath();
+		final var missingPath = missingMapping.getKey().getPath();
 
 		if (!namesToIgnore.contains(missingPath)) {
 			return false;

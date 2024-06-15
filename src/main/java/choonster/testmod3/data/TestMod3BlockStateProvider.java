@@ -46,7 +46,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
 	private static final int DEFAULT_ANGLE_OFFSET = 180;
-	private static final ResourceLocation RENDER_TYPE_CUTOUT = new ResourceLocation("cutout");
+	private static final ResourceLocation RENDER_TYPE_CUTOUT = ResourceLocation.withDefaultNamespace("cutout");
 
 	private final List<String> errors = new ArrayList<>();
 
@@ -599,7 +599,7 @@ public class TestMod3BlockStateProvider extends BlockStateProvider {
 	 * @return The model
 	 */
 	private ModelFile existingMcModel(final String name) {
-		return models().getExistingFile(new ResourceLocation("minecraft", name));
+		return models().getExistingFile(ResourceLocation.withDefaultNamespace(name));
 	}
 
 	private void simpleBlockItem(final Block block) {

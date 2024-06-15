@@ -63,12 +63,12 @@ public class HarvestSwordItem extends TieredItem {
 		return ItemAttributeModifiers.builder()
 				.add(
 						Attributes.ATTACK_DAMAGE,
-						new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", BASE_ATTACK_DAMAGE + tier.getAttackDamageBonus(), AttributeModifier.Operation.ADD_VALUE),
+						new AttributeModifier(BASE_ATTACK_DAMAGE_ID, BASE_ATTACK_DAMAGE + tier.getAttackDamageBonus(), AttributeModifier.Operation.ADD_VALUE),
 						EquipmentSlotGroup.MAINHAND
 				)
 				.add(
 						Attributes.ATTACK_SPEED,
-						new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", ATTACK_SPEED, AttributeModifier.Operation.ADD_VALUE),
+						new AttributeModifier(BASE_ATTACK_SPEED_ID, ATTACK_SPEED, AttributeModifier.Operation.ADD_VALUE),
 						EquipmentSlotGroup.MAINHAND
 				)
 				.build();

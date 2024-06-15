@@ -39,7 +39,7 @@ public final class MaxHealthCapability {
 	/**
 	 * The ID of this capability.
 	 */
-	public static final ResourceLocation ID = new ResourceLocation(TestMod3.MODID, "max_health");
+	public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "max_health");
 
 	public static final Marker LOG_MARKER = ModLogUtils.getMarker("MaxHealth");
 

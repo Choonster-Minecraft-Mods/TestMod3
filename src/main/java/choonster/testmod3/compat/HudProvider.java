@@ -24,7 +24,7 @@ public enum HudProvider {
 
 	HudProvider(final String name) {
 		this.name = name;
-		id = new ResourceLocation(TestMod3.MODID, name);
+		id = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name);
 	}
 
 	public String getName() {

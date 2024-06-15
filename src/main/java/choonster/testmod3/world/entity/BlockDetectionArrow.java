@@ -10,6 +10,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
+import javax.annotation.Nullable;
+
 /**
  * An arrow entity that tells its shooter which block it hit.
  * <p>
@@ -23,8 +25,8 @@ public class BlockDetectionArrow extends ModArrow {
 		super(entityType, level);
 	}
 
-	public BlockDetectionArrow(final Level level, final LivingEntity shooter, final ItemStack pickupItemStack) {
-		super(level, shooter, pickupItemStack);
+	public BlockDetectionArrow(final Level level, final LivingEntity shooter, final ItemStack pickupItemStack, @Nullable final ItemStack firedFromWeapon) {
+		super(level, shooter, pickupItemStack, firedFromWeapon);
 	}
 
 	@Override

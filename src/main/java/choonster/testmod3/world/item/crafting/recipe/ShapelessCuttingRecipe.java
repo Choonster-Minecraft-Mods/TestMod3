@@ -2,14 +2,11 @@ package choonster.testmod3.world.item.crafting.recipe;
 
 import choonster.testmod3.init.ModCrafting;
 import net.minecraft.core.NonNullList;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraftforge.common.ForgeHooks;
 
 /**
@@ -29,17 +26,25 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 
 	private ItemStack damageAxe(final ItemStack stack) {
 		final var craftingPlayer = ForgeHooks.getCraftingPlayer();
-		stack.hurtAndBreak(1, craftingPlayer.getCommandSenderWorld().random, craftingPlayer instanceof final ServerPlayer serverPlayer ? serverPlayer : null, () -> stack.setCount(0));
+
+		if (craftingPlayer.level() instanceof final ServerLevel serverLevel) {
+			stack.hurtAndBreak(
+					1,
+					serverLevel,
+					craftingPlayer instanceof final ServerPlayer serverPlayer ? serverPlayer : null,
+					item -> stack.setCount(0)
+			);
+		}
 
 		return stack;
 	}
 
 	@Override
-	public NonNullList<ItemStack> getRemainingItems(final CraftingContainer inv) {
-		final var remainingItems = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
+	public NonNullList<ItemStack> getRemainingItems(final CraftingInput input) {
+		final var remainingItems = NonNullList.withSize(input.size(), ItemStack.EMPTY);
 
 		for (var i = 0; i < remainingItems.size(); ++i) {
-			final var stack = inv.getItem(i);
+			final var stack = input.getItem(i);
 
 			if (!stack.isEmpty() && stack.getItem() instanceof AxeItem) {
 				remainingItems.set(i, damageAxe(stack.copy()));

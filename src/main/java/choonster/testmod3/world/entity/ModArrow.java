@@ -3,16 +3,15 @@ package choonster.testmod3.world.entity;
 import choonster.testmod3.init.ModEntities;
 import choonster.testmod3.init.ModItems;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
+
+import javax.annotation.Nullable;
 
 /**
  * An arrow entity that behaves like the vanilla arrow but renders with a different texture.
@@ -27,8 +26,8 @@ public class ModArrow extends Arrow implements IEntityAdditionalSpawnData {
 		super(entityType, level);
 	}
 
-	public ModArrow(final Level level, final LivingEntity shooter, final ItemStack pickupItemStack) {
-		super(level, shooter, pickupItemStack);
+	public ModArrow(final Level level, final LivingEntity shooter, final ItemStack pickupItemStack, @Nullable final ItemStack firedFromWeapon) {
+		super(level, shooter, pickupItemStack, firedFromWeapon);
 	}
 
 	@Override
@@ -51,19 +50,12 @@ public class ModArrow extends Arrow implements IEntityAdditionalSpawnData {
 		return new ItemStack(ModItems.ARROW.get());
 	}
 
-	@SuppressWarnings("UnstableApiUsage")
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return ForgeHooks.getEntitySpawnPacket(this);
-	}
-
 	@Override
 	public void writeSpawnData(final FriendlyByteBuf buffer) {
 		final var shooter = getOwner();
 		buffer.writeVarInt(shooter == null ? 0 : shooter.getId());
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	public void readSpawnData(final FriendlyByteBuf additionalData) {
 		final var shooter = level().getEntity(additionalData.readVarInt());

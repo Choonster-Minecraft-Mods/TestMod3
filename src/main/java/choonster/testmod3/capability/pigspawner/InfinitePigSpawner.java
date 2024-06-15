@@ -2,6 +2,7 @@ package choonster.testmod3.capability.pigspawner;
 
 import choonster.testmod3.text.TestMod3Lang;
 import com.google.common.collect.ImmutableList;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -28,13 +29,13 @@ public class InfinitePigSpawner extends BasePigSpawner implements INBTSerializab
 	}
 
 	@Override
-	public CompoundTag serializeNBT() {
+	public CompoundTag serializeNBT(final HolderLookup.Provider registries) {
 		// No-op
 		return new CompoundTag();
 	}
 
 	@Override
-	public void deserializeNBT(final CompoundTag nbt) {
+	public void deserializeNBT(final HolderLookup.Provider registries, final CompoundTag nbt) {
 		// No-op
 	}
 }

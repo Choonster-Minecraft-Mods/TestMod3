@@ -20,8 +20,8 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 public class ModRenderers {
 	@SubscribeEvent
 	public static void register(final EntityRenderersEvent.RegisterRenderers event) {
-		event.registerEntityRenderer(ModEntities.MOD_ARROW.get(), context -> new RenderModArrow(context, new ResourceLocation(TestMod3.MODID, "textures/entity/arrow.png")));
-		event.registerEntityRenderer(ModEntities.BLOCK_DETECTION_ARROW.get(), renderManager -> new RenderModArrow(renderManager, new ResourceLocation(TestMod3.MODID, "textures/entity/block_detection_arrow.png")));
+		event.registerEntityRenderer(ModEntities.MOD_ARROW.get(), context -> new RenderModArrow(context, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "textures/entity/arrow.png")));
+		event.registerEntityRenderer(ModEntities.BLOCK_DETECTION_ARROW.get(), renderManager -> new RenderModArrow(renderManager, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "textures/entity/block_detection_arrow.png")));
 		event.registerEntityRenderer(ModEntities.PLAYER_AVOIDING_CREEPER.get(), CreeperRenderer::new);
 	}
 }
