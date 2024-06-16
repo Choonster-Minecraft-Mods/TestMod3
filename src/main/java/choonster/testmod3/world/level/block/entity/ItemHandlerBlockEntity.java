@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
@@ -32,7 +33,7 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler & IN
 
 	private final LazyOptional<INVENTORY> holder = LazyOptional.of(() -> inventory);
 
-	protected final NameHolder nameHolder = new NameHolder(getDefaultName());
+	private NameHolder nameHolder = new NameHolder(getDefaultName());
 
 	public ItemHandlerBlockEntity(final BlockEntityType<?> blockEntityType, final BlockPos pos, final BlockState state) {
 		super(blockEntityType, pos, state);
@@ -85,7 +86,11 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler & IN
 		super.loadAdditional(tag, registries);
 
 		inventory.deserializeNBT(registries, tag.getCompound("ItemHandler"));
-		nameHolder.load(tag.getCompound("NameHolder"), registries);
+
+		nameHolder = NameHolder.CODEC.parse(
+				registries.createSerializationContext(NbtOps.INSTANCE),
+				tag.getCompound("NameHolder")
+		).getOrThrow();
 	}
 
 	@Override
@@ -93,7 +98,11 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler & IN
 		super.saveAdditional(tag, registries);
 
 		tag.put("ItemHandler", inventory.serializeNBT(registries));
-		tag.put("NameHolder", nameHolder.save(new CompoundTag(), registries));
+
+		tag.put("NameHolder", NameHolder.CODEC.encodeStart(
+				registries.createSerializationContext(NbtOps.INSTANCE),
+				nameHolder
+		).getOrThrow());
 	}
 
 	@Override

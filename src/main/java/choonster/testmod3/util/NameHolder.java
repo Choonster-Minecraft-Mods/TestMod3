@@ -1,12 +1,11 @@
 package choonster.testmod3.util;
 
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.world.Nameable;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 /**
  * A reusable implementation of {@link Nameable}.
@@ -14,6 +13,18 @@ import java.util.Objects;
  * @author Choonster
  */
 public class NameHolder implements Nameable {
+	public static Codec<NameHolder> CODEC = RecordCodecBuilder.create(builder ->
+			builder.group(
+					ComponentSerialization.CODEC
+							.fieldOf("default_name")
+							.forGetter((nameHolder) -> nameHolder.defaultName),
+
+					ComponentSerialization.CODEC
+							.optionalFieldOf("custom_name", null)
+							.forGetter(NameHolder::getCustomName)
+			).apply(builder, NameHolder::new)
+	);
+
 	/**
 	 * The default name.
 	 */
@@ -27,6 +38,11 @@ public class NameHolder implements Nameable {
 
 	public NameHolder(final Component defaultName) {
 		this.defaultName = defaultName.copy();
+	}
+
+	private NameHolder(final Component defaultName, final Component customName) {
+		this(defaultName);
+		this.customName = customName;
 	}
 
 	@Override
@@ -52,20 +68,5 @@ public class NameHolder implements Nameable {
 	 */
 	public void setCustomName(final Component customName) {
 		this.customName = customName.copy();
-	}
-
-	public CompoundTag save(final CompoundTag tag, final HolderLookup.Provider registries) {
-		if (hasCustomName()) {
-			tag.putString("DisplayName", Component.Serializer.toJson(getDisplayName(), registries));
-		}
-
-		return tag;
-	}
-
-	public void load(final CompoundTag tag, final HolderLookup.Provider registries) {
-		if (tag.contains("DisplayName")) {
-			final var customName = Objects.requireNonNull(Component.Serializer.fromJson(tag.getString("DisplayName"), registries));
-			setCustomName(customName);
-		}
 	}
 }
