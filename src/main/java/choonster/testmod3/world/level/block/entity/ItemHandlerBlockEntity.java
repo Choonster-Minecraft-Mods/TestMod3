@@ -1,6 +1,8 @@
 package choonster.testmod3.world.level.block.entity;
 
+import choonster.testmod3.util.CapabilityNotPresentException;
 import choonster.testmod3.util.NameHolder;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -15,7 +17,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
@@ -25,13 +26,10 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param <INVENTORY> The inventory type
  */
-public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler & INBTSerializable<CompoundTag>> extends BlockEntity implements MenuProvider {
-	/**
-	 * The inventory.
-	 */
-	protected final INVENTORY inventory = createInventory();
+public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler> extends BlockEntity implements MenuProvider {
+	private final Codec<INVENTORY> inventoryCodec = createInventoryCodec();
 
-	private final LazyOptional<INVENTORY> holder = LazyOptional.of(() -> inventory);
+	private LazyOptional<INVENTORY> inventoryOptional = LazyOptional.of(this::createEmptyInventory);
 
 	private NameHolder nameHolder = new NameHolder(getDefaultName());
 
@@ -40,11 +38,18 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler & IN
 	}
 
 	/**
-	 * Create and return the inventory.
+	 * Create and return the empty inventory.
 	 *
 	 * @return The inventory
 	 */
-	protected abstract INVENTORY createInventory();
+	protected abstract INVENTORY createEmptyInventory();
+
+	/**
+	 * Create and return a codec for the inventory type.
+	 *
+	 * @return The inventory codec
+	 */
+	protected abstract Codec<INVENTORY> createInventoryCodec();
 
 	/**
 	 * Gets the default name of this BlockEntity.
@@ -65,7 +70,7 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler & IN
 	}
 
 	public INVENTORY getInventory() {
-		return inventory;
+		return inventoryOptional.orElseThrow(CapabilityNotPresentException::new);
 	}
 
 	public Nameable getNameHolder() {
@@ -85,10 +90,18 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler & IN
 	protected void loadAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
 
-		inventory.deserializeNBT(registries, tag.getCompound("ItemHandler"));
+		final var ops = registries.createSerializationContext(NbtOps.INSTANCE);
+
+		final var inventory = inventoryCodec.parse(
+				ops,
+				tag.getCompound("ItemHandler")
+		).getOrThrow();
+
+		inventoryOptional.invalidate();
+		inventoryOptional = LazyOptional.of(() -> inventory);
 
 		nameHolder = NameHolder.CODEC.parse(
-				registries.createSerializationContext(NbtOps.INSTANCE),
+				ops,
 				tag.getCompound("NameHolder")
 		).getOrThrow();
 	}
@@ -97,10 +110,15 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler & IN
 	protected void saveAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
 
-		tag.put("ItemHandler", inventory.serializeNBT(registries));
+		final var ops = registries.createSerializationContext(NbtOps.INSTANCE);
+
+		tag.put("ItemHandler", inventoryCodec.encodeStart(
+				ops,
+				getInventory()
+		).getOrThrow());
 
 		tag.put("NameHolder", NameHolder.CODEC.encodeStart(
-				registries.createSerializationContext(NbtOps.INSTANCE),
+				ops,
 				nameHolder
 		).getOrThrow());
 	}
@@ -108,13 +126,13 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler & IN
 	@Override
 	public void invalidateCaps() {
 		super.invalidateCaps();
-		holder.invalidate();
+		inventoryOptional.invalidate();
 	}
 
 	@Override
 	public <T> LazyOptional<T> getCapability(final Capability<T> capability, @Nullable final Direction facing) {
 		if (capability == ForgeCapabilities.ITEM_HANDLER) {
-			return holder.cast();
+			return inventoryOptional.cast();
 		}
 
 		return super.getCapability(capability, facing);

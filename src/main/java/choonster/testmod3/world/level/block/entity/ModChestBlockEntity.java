@@ -5,8 +5,8 @@ import choonster.testmod3.init.ModBlockEntities;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.world.inventory.IMenuCallbacks;
 import choonster.testmod3.world.inventory.itemhandler.BlockEntityLootItemHandler;
-import choonster.testmod3.world.inventory.itemhandler.LootItemHandler;
 import choonster.testmod3.world.inventory.menu.ModChestMenu;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
@@ -16,7 +16,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -42,13 +41,23 @@ public class ModChestBlockEntity extends LootItemHandlerBlockEntity implements I
 	}
 
 	/**
-	 * Create and return the inventory.
+	 * Create and return the empty inventory.
 	 *
 	 * @return The inventory
 	 */
 	@Override
-	protected LootItemHandler createInventory() {
-		return new BlockEntityLootItemHandler(INVENTORY_SIZE, this);
+	protected BlockEntityLootItemHandler createEmptyInventory() {
+		return BlockEntityLootItemHandler.empty(INVENTORY_SIZE, this);
+	}
+
+	/**
+	 * Create and return a codec for the inventory type.
+	 *
+	 * @return The inventory codec
+	 */
+	@Override
+	protected Codec<BlockEntityLootItemHandler> createInventoryCodec() {
+		return BlockEntityLootItemHandler.codec(INVENTORY_SIZE, this);
 	}
 
 	@Override
@@ -69,7 +78,7 @@ public class ModChestBlockEntity extends LootItemHandlerBlockEntity implements I
 	@Nullable
 	@Override
 	public AbstractContainerMenu createMenu(final int windowID, final Inventory playerInventory, final Player player) {
-		inventory.fillWithLoot(player);
+		getInventory().fillWithLoot(player);
 
 		return new ModChestMenu(windowID, playerInventory, this);
 	}

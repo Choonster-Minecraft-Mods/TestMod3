@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
  * @author Choonster
  */
 public abstract class LockableItemHandlerBlockEntity<
-		INVENTORY extends IItemHandler & INBTSerializable<CompoundTag>,
+		INVENTORY extends IItemHandler,
 		LOCK extends ILock & INBTSerializable<CompoundTag>
 		> extends ItemHandlerBlockEntity<INVENTORY> {
 	/**

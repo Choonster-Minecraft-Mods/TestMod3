@@ -1,14 +1,14 @@
 package choonster.testmod3.world.inventory.itemhandler;
 
+import choonster.testmod3.serialization.VanillaCodecs;
 import choonster.testmod3.util.InventoryUtils;
 import com.google.common.base.Preconditions;
-import net.minecraft.core.HolderLookup;
+import com.mojang.datafixers.Products;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -31,6 +31,56 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class LootItemHandler extends ItemStackHandler {
+	public static LootItemHandler empty(final int size, final Supplier<Level> levelSupplier) {
+		return new LootItemHandler(size, levelSupplier);
+	}
+
+	public static Codec<LootItemHandler> codec(final int size, final Supplier<Level> levelSupplier) {
+		final var lootTableCodec = RecordCodecBuilder.<LootItemHandler>create(builder ->
+				lootTableCodecStart(builder).apply(
+						builder,
+						(lootTable, lootTableSeed) -> new LootItemHandler(size, levelSupplier, lootTable, lootTableSeed)
+				)
+		);
+
+		final var itemsCodec = RecordCodecBuilder.<LootItemHandler>create(builder ->
+				itemsCodecStart(builder, size).apply(
+						builder,
+						(stacks) -> new LootItemHandler(stacks, levelSupplier)
+				)
+		);
+
+		return Codec.withAlternative(lootTableCodec, itemsCodec);
+	}
+
+	protected static <T extends LootItemHandler> Products.P2<
+			RecordCodecBuilder.Mu<T>,
+			ResourceKey<LootTable>,
+			Long
+			> lootTableCodecStart(final RecordCodecBuilder.Instance<T> builder) {
+		return builder.group(
+				ResourceKey.codec(Registries.LOOT_TABLE)
+						.fieldOf("loot_table")
+						.forGetter(LootItemHandler::getLootTable),
+
+				Codec.LONG
+						.optionalFieldOf("loot_table_seed", 0L)
+						.forGetter(lootItemHandler -> lootItemHandler.lootTableSeed)
+
+		);
+	}
+
+	protected static <T extends LootItemHandler> Products.P1<
+			RecordCodecBuilder.Mu<T>,
+			NonNullList<ItemStack>
+			> itemsCodecStart(final RecordCodecBuilder.Instance<T> builder, final int size) {
+		return builder.group(
+				VanillaCodecs.itemListCodec(size)
+						.fieldOf("items")
+						.forGetter(lootItemHandler -> lootItemHandler.stacks)
+		);
+	}
+
 	/**
 	 * The {@link Supplier} to get the {@link Level} from.
 	 */
@@ -49,75 +99,26 @@ public class LootItemHandler extends ItemStackHandler {
 	 */
 	protected long lootTableSeed;
 
-	public LootItemHandler(final Supplier<Level> levelSupplier) {
+	protected LootItemHandler(
+			final int size,
+			final Supplier<Level> levelSupplier,
+			final ResourceKey<LootTable> lootTable,
+			final long lootTableSeed
+	) {
+		super(size);
 		this.levelSupplier = levelSupplier;
+		this.lootTable = lootTable;
+		this.lootTableSeed = lootTableSeed;
 	}
 
-	public LootItemHandler(final int size, final Supplier<Level> levelSupplier) {
+	protected LootItemHandler(final int size, final Supplier<Level> levelSupplier) {
 		super(size);
 		this.levelSupplier = levelSupplier;
 	}
 
-	public LootItemHandler(final NonNullList<ItemStack> stacks, final Supplier<Level> levelSupplier) {
+	protected LootItemHandler(final NonNullList<ItemStack> stacks, final Supplier<Level> levelSupplier) {
 		super(stacks);
 		this.levelSupplier = levelSupplier;
-	}
-
-	/**
-	 * Write the {@link LootTable} location and seed to NBT if they're present.
-	 *
-	 * @param compound The compound tag
-	 * @return Was the location written to NBT?
-	 */
-	protected boolean checkLootAndWrite(final CompoundTag compound) {
-		if (lootTable != null) {
-			compound.putString("LootTable", lootTable.location().toString());
-
-			if (lootTableSeed != 0L) {
-				compound.putLong("LootTableSeed", lootTableSeed);
-			}
-
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Read the {@link LootTable} location and seed from NBT if they're present.
-	 *
-	 * @param compound The compound tag
-	 * @return Was the location read from NBT?
-	 */
-	protected boolean checkLootAndRead(final CompoundTag compound) {
-		if (compound.contains("LootTable", Tag.TAG_STRING)) {
-			lootTable = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(compound.getString("LootTable")));
-			lootTableSeed = compound.getLong("LootTableSeed");
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	@Override
-	public CompoundTag serializeNBT(final HolderLookup.Provider registries) {
-		final var tagCompound = super.serializeNBT(registries);
-
-		if (checkLootAndWrite(tagCompound)) { // If the LootTable location exists, don't write the inventory contents to NBT
-			tagCompound.remove("Items");
-		}
-
-		return tagCompound;
-	}
-
-	@Override
-	public void deserializeNBT(final HolderLookup.Provider registries, final CompoundTag nbt) {
-		if (checkLootAndRead(nbt)) { // If the LootTable location exists, don't read the inventory contents from NBT
-			setSize(nbt.contains("Size", Tag.TAG_INT) ? nbt.getInt("Size") : stacks.size());
-			onLoad();
-		} else {
-			super.deserializeNBT(registries, nbt);
-		}
 	}
 
 	/**

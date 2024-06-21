@@ -1,7 +1,7 @@
 package choonster.testmod3.world.level.block.entity;
 
 import choonster.testmod3.capability.lock.Lock;
-import choonster.testmod3.world.inventory.itemhandler.LootItemHandler;
+import choonster.testmod3.world.inventory.itemhandler.BlockEntityLootItemHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -14,21 +14,20 @@ import net.minecraft.world.level.storage.loot.LootTable;
 
 
 /**
- * A {@link BlockEntity} with a single {@link LootItemHandler} inventory that generates its contents from a {@link LootTable} the first time it's accessed.
+ * A {@link BlockEntity} with a single {@link BlockEntityLootItemHandler} inventory that generates its contents from a {@link LootTable} the first time it's accessed.
  * <p>
  * Locked with a {@link Lock}.
  *
  * @author Choonster
  */
-public abstract class LootItemHandlerBlockEntity extends LockableItemHandlerBlockEntity<LootItemHandler, Lock> {
-
+public abstract class LootItemHandlerBlockEntity extends LockableItemHandlerBlockEntity<BlockEntityLootItemHandler, Lock> {
 	public LootItemHandlerBlockEntity(final BlockEntityType<?> blockEntityType, final BlockPos pos, final BlockState state) {
 		super(blockEntityType, pos, state);
 	}
 
 	@Override
 	public void openGUI(final ServerPlayer player) {
-		if (inventory.getLootTable() != null && player.isSpectator()) {
+		if (getInventory().getLootTable() != null && player.isSpectator()) {
 			player.sendSystemMessage(Component.translatable("container.spectatorCantOpen").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
 		} else {
 			super.openGUI(player);

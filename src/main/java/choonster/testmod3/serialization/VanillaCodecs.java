@@ -12,6 +12,7 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -140,7 +141,7 @@ public class VanillaCodecs {
 	});
 
 	public static final StreamCodec<ByteBuf, CommandBlockEntity.Mode> COMMAND_BLOCK_MODE_STREAM_CODEC = Util.make(() -> {
-		final IntFunction<CommandBlockEntity.Mode> idMapper = ByIdMap.continuous(CommandBlockEntity.Mode::ordinal, CommandBlockEntity.Mode.values(), ByIdMap.OutOfBoundsStrategy.ZERO);
+		final var idMapper = ByIdMap.continuous(CommandBlockEntity.Mode::ordinal, CommandBlockEntity.Mode.values(), ByIdMap.OutOfBoundsStrategy.ZERO);
 
 		return ByteBufCodecs.idMapper(idMapper, CommandBlockEntity.Mode::ordinal);
 	});
@@ -214,6 +215,10 @@ public class VanillaCodecs {
 				codec7.encode(buf, getter7.apply(value));
 			}
 		};
+	}
+
+	public static Codec<NonNullList<ItemStack>> itemListCodec(final int expectedSize) {
+		return new SparseNonNullListCodec<>(ItemStack.CODEC, expectedSize, ItemStack::isEmpty, ItemStack.EMPTY);
 	}
 
 	/**
