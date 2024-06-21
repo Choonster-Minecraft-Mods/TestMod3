@@ -1,13 +1,12 @@
 package choonster.testmod3.capability.lock;
 
 import choonster.testmod3.api.capability.lock.ILock;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.Nameable;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nonnull;
 
@@ -16,17 +15,37 @@ import javax.annotation.Nonnull;
  *
  * @author Choonster
  */
-public class Lock implements ILock, INBTSerializable<CompoundTag> {
+public class Lock implements ILock {
+	public static Lock empty(final Nameable nameProvider) {
+		return new Lock(nameProvider);
+	}
+
+	public static Codec<Lock> codec(final Nameable nameProvider) {
+		return RecordCodecBuilder.create(builder -> builder.group(
+
+						LockCode.CODEC
+								.fieldOf("code")
+								.forGetter(Lock::getLockCode)
+
+				).apply(builder, (code) -> new Lock(code, nameProvider))
+		);
+	}
+
 	/**
 	 * The lock code.
 	 */
 	@Nonnull
-	private LockCode code = LockCode.NO_LOCK;
+	private LockCode code;
 
 	private final Nameable nameProvider;
 
-	public Lock(final Nameable nameProvider) {
+	private Lock(final LockCode code, final Nameable nameProvider) {
+		this.code = code;
 		this.nameProvider = nameProvider;
+	}
+
+	private Lock(final Nameable nameProvider) {
+		this(LockCode.NO_LOCK, nameProvider);
 	}
 
 	@Override
@@ -43,20 +62,6 @@ public class Lock implements ILock, INBTSerializable<CompoundTag> {
 	@Override
 	public void setLockCode(final LockCode code) {
 		this.code = code;
-	}
-
-	@Override
-	public CompoundTag serializeNBT(final HolderLookup.Provider registries) {
-		final CompoundTag tagCompound = new CompoundTag();
-
-		code.addToTag(tagCompound);
-
-		return tagCompound;
-	}
-
-	@Override
-	public void deserializeNBT(final HolderLookup.Provider registries, final CompoundTag nbt) {
-		code = LockCode.fromTag(nbt);
 	}
 
 	@Override

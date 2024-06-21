@@ -66,13 +66,23 @@ public class ModChestBlockEntity extends LootItemHandlerBlockEntity implements I
 	}
 
 	/**
-	 * Create and return the lock.
+	 * Create and return the empty lock.
 	 *
 	 * @return The lock
 	 */
 	@Override
-	protected Lock createLock() {
-		return new Lock(getNameHolder());
+	protected Lock createEmptyLock() {
+		return Lock.empty(getNameHolder());
+	}
+
+	/**
+	 * Create and return a codec for the lock type.
+	 *
+	 * @return The lock codec
+	 */
+	@Override
+	protected Codec<Lock> createLockCodec() {
+		return Lock.codec(getNameHolder());
 	}
 
 	@Nullable

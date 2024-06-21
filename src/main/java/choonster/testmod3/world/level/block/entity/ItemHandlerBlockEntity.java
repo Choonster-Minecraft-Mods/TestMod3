@@ -28,7 +28,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler> extends BlockEntity implements MenuProvider {
 	private final Codec<INVENTORY> inventoryCodec = createInventoryCodec();
-
 	private LazyOptional<INVENTORY> inventoryOptional = LazyOptional.of(this::createEmptyInventory);
 
 	private NameHolder nameHolder = new NameHolder(getDefaultName());
