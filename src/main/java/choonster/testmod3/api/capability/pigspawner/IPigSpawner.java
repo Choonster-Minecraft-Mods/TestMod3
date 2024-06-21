@@ -3,6 +3,7 @@ package choonster.testmod3.api.capability.pigspawner;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.Level;
 
+import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  *
  * @author Choonster
  */
+@AutoRegisterCapability
 public interface IPigSpawner {
 	/**
 	 * Can a pig be spawned at the specified position?

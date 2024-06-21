@@ -10,7 +10,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraftforge.common.capabilities.*;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -24,7 +27,6 @@ import org.slf4j.Marker;
  * @author Choonster
  */
 public final class MaxHealthCapability {
-
 	/**
 	 * The {@link Capability} instance.
 	 */
@@ -42,10 +44,6 @@ public final class MaxHealthCapability {
 	public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "max_health");
 
 	public static final Marker LOG_MARKER = ModLogUtils.getMarker("MaxHealth");
-
-	public static void register(final RegisterCapabilitiesEvent event) {
-		event.register(IMaxHealth.class);
-	}
 
 	/**
 	 * Get the {@link IMaxHealth} from the specified entity.
@@ -92,7 +90,7 @@ public final class MaxHealthCapability {
 		@SubscribeEvent
 		public static void attachCapabilities(final AttachCapabilitiesEvent<Entity> event) {
 			if (event.getObject() instanceof LivingEntity) {
-				final MaxHealth maxHealth = new MaxHealth((LivingEntity) event.getObject());
+				final var maxHealth = new MaxHealth((LivingEntity) event.getObject());
 				event.addCapability(ID, createProvider(maxHealth));
 			}
 		}

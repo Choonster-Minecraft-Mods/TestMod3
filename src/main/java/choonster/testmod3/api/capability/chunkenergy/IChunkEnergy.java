@@ -2,6 +2,7 @@ package choonster.testmod3.api.capability.chunkenergy;
 
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import net.minecraftforge.energy.IEnergyStorage;
 
 /**
@@ -9,6 +10,7 @@ import net.minecraftforge.energy.IEnergyStorage;
  *
  * @author Choonster
  */
+@AutoRegisterCapability
 public interface IChunkEnergy extends IEnergyStorage {
 
 	/**

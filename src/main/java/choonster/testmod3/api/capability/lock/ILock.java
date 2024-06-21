@@ -6,6 +6,7 @@ import net.minecraft.world.LockCode;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 
 /**
  * A capability allowing things to be locked with a {@link LockCode} and only opened by players holding an item with a matching display name.
@@ -14,6 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
  *
  * @author Choonster
  */
+@AutoRegisterCapability
 public interface ILock {
 
 	/**

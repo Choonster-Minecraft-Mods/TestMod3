@@ -9,14 +9,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -36,10 +32,6 @@ public final class LockCapability {
 	 */
 	public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "lock");
 
-	public static void register(final RegisterCapabilitiesEvent event) {
-		event.register(ILock.class);
-	}
-
 	/**
 	 * Get the {@link ILock} from a block.
 	 *
@@ -49,16 +41,16 @@ public final class LockCapability {
 	 * @return A lazy optional containing the ILock, or an empty lazy optional if there isn't one
 	 */
 	public static LazyOptional<ILock> getLock(final LevelReader world, final BlockPos pos, @Nullable final Direction side) {
-		final BlockState state = world.getBlockState(pos);
+		final var state = world.getBlockState(pos);
 
 		if (state.getBlock() instanceof EntityBlock) {
-			final BlockEntity blockEntity = world.getBlockEntity(pos);
+			final var blockEntity = world.getBlockEntity(pos);
 			if (blockEntity != null) {
-				final LazyOptional<ILock> optionalLock = blockEntity.getCapability(LOCK_CAPABILITY, side);
+				final var optionalLock = blockEntity.getCapability(LOCK_CAPABILITY, side);
 				if (optionalLock.isPresent()) {
 					return optionalLock;
-				} else if (blockEntity instanceof BaseContainerBlockEntity) {
-					return LazyOptional.of(() -> new BaseContainerBlockEntityWrapper((BaseContainerBlockEntity) blockEntity));
+				} else if (blockEntity instanceof final BaseContainerBlockEntity baseContainerBlockEntity) {
+					return LazyOptional.of(() -> new BaseContainerBlockEntityWrapper(baseContainerBlockEntity));
 				}
 			}
 		}

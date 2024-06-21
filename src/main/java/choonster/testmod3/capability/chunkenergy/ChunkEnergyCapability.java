@@ -13,7 +13,6 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.level.ChunkWatchEvent;
@@ -47,10 +46,6 @@ public class ChunkEnergyCapability {
 	 * The ID of this capability.
 	 */
 	public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "chunk_energy");
-
-	public static void register(final RegisterCapabilitiesEvent event) {
-		event.register(IChunkEnergy.class);
-	}
 
 	/**
 	 * Get the {@link IChunkEnergy} for the {@link Level} and chunk position.

@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
  * @author Choonster
  */
 public final class FluidHandlerCapability {
-	public static void register() {
+	public static void registerContainerListener() {
 		CapabilityContainerListenerManager.registerListenerFactory(FluidTankContainerListener::new);
 	}
 }

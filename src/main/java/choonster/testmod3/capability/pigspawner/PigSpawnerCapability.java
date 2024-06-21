@@ -16,8 +16,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.capabilities.*;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -52,11 +54,9 @@ public final class PigSpawnerCapability {
 	public static final Marker LOG_MARKER = ModLogUtils.getMarker("PIG_SPAWNER");
 
 	/**
-	 * Register the capability.
+	 * Register the capability container listener.
 	 */
-	public static void register(final RegisterCapabilitiesEvent event) {
-		event.register(IPigSpawner.class);
-
+	public static void registerContainerListener() {
 		CapabilityContainerListenerManager.registerListenerFactory(FinitePigSpawnerContainerListener::new);
 	}
 
@@ -174,10 +174,6 @@ public final class PigSpawnerCapability {
 					.ifPresent(pigSpawner -> trySpawnPig(pigSpawner, level, x, y, z, interactable, target.blockPosition(), event.getEntity()));
 		}
 
-	}
-
-	@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = TestMod3.MODID)
-	private static class ClientEventHandler {
 		/**
 		 * Add the {@link IPigSpawner}'s tooltip lines to the tooltip if the item has the {@link IPigSpawner} capability
 		 *

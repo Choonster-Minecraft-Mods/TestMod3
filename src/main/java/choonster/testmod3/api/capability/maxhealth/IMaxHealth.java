@@ -1,10 +1,13 @@
 package choonster.testmod3.api.capability.maxhealth;
 
+import net.minecraftforge.common.capabilities.AutoRegisterCapability;
+
 /**
  * A capability to provide a max health bonus to an entity.
  *
  * @author Choonster
  */
+@AutoRegisterCapability
 public interface IMaxHealth {
 	/**
 	 * Get the bonus max health.
