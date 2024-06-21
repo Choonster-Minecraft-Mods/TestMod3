@@ -142,12 +142,20 @@ public class ModItems {
 
 	// Capabilities are registered and injected in FMLCommonSetupEvent, which is fired after RegistryEvent.Register.
 	// This means that item constructors can't directly reference Capability fields (e.g. CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY).
-	public static final RegistryObject<PigSpawnerItem> PIG_SPAWNER_FINITE = ITEMS.register("pig_spawner_finite",
-			() -> new PigSpawnerItem(() -> new FinitePigSpawner(20), defaultItemProperties())
+	public static final RegistryObject<PigSpawnerItem<FinitePigSpawner>> PIG_SPAWNER_FINITE = ITEMS.register("pig_spawner_finite",
+			() -> {
+				final var maxNumPigs = 20;
+
+				return new PigSpawnerItem<>(
+						() -> FinitePigSpawner.empty(maxNumPigs),
+						FinitePigSpawner.codec(maxNumPigs),
+						defaultItemProperties()
+				);
+			}
 	);
 
-	public static final RegistryObject<PigSpawnerItem> PIG_SPAWNER_INFINITE = ITEMS.register("pig_spawner_infinite",
-			() -> new PigSpawnerItem(InfinitePigSpawner::new, defaultItemProperties())
+	public static final RegistryObject<PigSpawnerItem<InfinitePigSpawner>> PIG_SPAWNER_INFINITE = ITEMS.register("pig_spawner_infinite",
+			() -> new PigSpawnerItem<>(InfinitePigSpawner::new, InfinitePigSpawner.CODEC, defaultItemProperties())
 	);
 
 	public static final RegistryObject<ContinuousBowItem> CONTINUOUS_BOW = ITEMS.register("continuous_bow",

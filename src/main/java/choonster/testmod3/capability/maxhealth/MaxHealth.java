@@ -3,15 +3,13 @@ package choonster.testmod3.capability.maxhealth;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import com.mojang.logging.LogUtils;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.FloatTag;
+import com.mojang.serialization.Codec;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraftforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -23,13 +21,24 @@ import java.util.Objects;
  *
  * @author Choonster
  */
-public class MaxHealth implements IMaxHealth, INBTSerializable<FloatTag> {
+public class MaxHealth implements IMaxHealth {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
 	/**
 	 * The ID of the {@link AttributeModifier}.
 	 */
 	protected static final ResourceLocation MODIFIER_ID = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "bonus_max_health");
+
+	public static MaxHealth empty(@Nullable final LivingEntity entity) {
+		return new MaxHealth(entity);
+	}
+
+	public static Codec<MaxHealth> codec(@Nullable final LivingEntity entity) {
+		return Codec.FLOAT.xmap(
+				(bonusMaxHealth) -> new MaxHealth(entity, bonusMaxHealth),
+				MaxHealth::getBonusMaxHealth
+		);
+	}
 
 	/**
 	 * The entity this is attached to.
@@ -42,8 +51,13 @@ public class MaxHealth implements IMaxHealth, INBTSerializable<FloatTag> {
 	 */
 	private float bonusMaxHealth;
 
-	public MaxHealth(@Nullable final LivingEntity entity) {
+	private MaxHealth(@Nullable final LivingEntity entity) {
+		this(entity, 0);
+	}
+
+	private MaxHealth(@Nullable final LivingEntity entity, final float bonusMaxHealth) {
 		this.entity = entity;
+		this.bonusMaxHealth = bonusMaxHealth;
 	}
 
 	/**
@@ -89,16 +103,6 @@ public class MaxHealth implements IMaxHealth, INBTSerializable<FloatTag> {
 
 			((ServerLevel) entity.getCommandSenderWorld()).getChunkSource().broadcastAndSend(entity, packet);
 		}
-	}
-
-	@Override
-	public FloatTag serializeNBT(final HolderLookup.Provider registries) {
-		return FloatTag.valueOf(bonusMaxHealth);
-	}
-
-	@Override
-	public void deserializeNBT(final HolderLookup.Provider registries, final FloatTag tag) {
-		bonusMaxHealth = tag.getAsFloat();
 	}
 
 	/**

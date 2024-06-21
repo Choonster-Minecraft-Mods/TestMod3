@@ -13,7 +13,6 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -56,16 +55,6 @@ public final class MaxHealthCapability {
 	}
 
 	/**
-	 * Create a provider for the specified {@link IMaxHealth} instance.
-	 *
-	 * @param maxHealth The IMaxHealth
-	 * @return The provider
-	 */
-	public static ICapabilityProvider createProvider(final IMaxHealth maxHealth) {
-		return new SerializableCapabilityProvider<>(MAX_HEALTH_CAPABILITY, DEFAULT_FACING, maxHealth);
-	}
-
-	/**
 	 * Format a max health value.
 	 *
 	 * @param maxHealth The max health value
@@ -81,7 +70,6 @@ public final class MaxHealthCapability {
 	@SuppressWarnings("unused")
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	private static class EventHandler {
-
 		/**
 		 * Attach the {@link IMaxHealth} capability to all living entities.
 		 *
@@ -89,9 +77,11 @@ public final class MaxHealthCapability {
 		 */
 		@SubscribeEvent
 		public static void attachCapabilities(final AttachCapabilitiesEvent<Entity> event) {
-			if (event.getObject() instanceof LivingEntity) {
-				final var maxHealth = new MaxHealth((LivingEntity) event.getObject());
-				event.addCapability(ID, createProvider(maxHealth));
+			if (event.getObject() instanceof final LivingEntity entity) {
+				final var maxHealth = MaxHealth.empty(entity);
+				final var codec = MaxHealth.codec(entity);
+
+				event.addCapability(ID, new SerializableCapabilityProvider<>(MAX_HEALTH_CAPABILITY, DEFAULT_FACING, maxHealth, codec));
 			}
 		}
 

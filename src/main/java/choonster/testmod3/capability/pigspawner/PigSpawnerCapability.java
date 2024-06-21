@@ -6,6 +6,7 @@ import choonster.testmod3.api.capability.pigspawner.IPigSpawnerInteractable;
 import choonster.testmod3.capability.CapabilityContainerListenerManager;
 import choonster.testmod3.capability.SerializableCapabilityProvider;
 import choonster.testmod3.util.ModLogUtils;
+import com.mojang.serialization.Codec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.core.BlockPos;
@@ -73,11 +74,12 @@ public final class PigSpawnerCapability {
 	/**
 	 * Create a provider for the specified {@link IPigSpawner} instance.
 	 *
-	 * @param pigSpawner The IPigSpawner
+	 * @param pigSpawner The pig spawner
+	 * @param codec      The codec for the pig spawner type
 	 * @return The provider
 	 */
-	public static ICapabilityProvider createProvider(final IPigSpawner pigSpawner) {
-		return new SerializableCapabilityProvider<>(PIG_SPAWNER_CAPABILITY, DEFAULT_FACING, pigSpawner);
+	public static <T extends IPigSpawner> ICapabilityProvider createProvider(final T pigSpawner, final Codec<T> codec) {
+		return new SerializableCapabilityProvider<>(PIG_SPAWNER_CAPABILITY, DEFAULT_FACING, pigSpawner, codec);
 	}
 
 	/**
@@ -85,7 +87,6 @@ public final class PigSpawnerCapability {
 	 */
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	private static class EventHandler {
-
 		/**
 		 * Attach the {@link IPigSpawner} capability to vanilla items.
 		 *
@@ -94,7 +95,11 @@ public final class PigSpawnerCapability {
 		@SubscribeEvent
 		public static void attachCapabilities(final AttachCapabilitiesEvent<ItemStack> event) {
 			if (event.getObject().getItem() == Items.CLAY_BALL) {
-				event.addCapability(ID, createProvider(new FinitePigSpawner(20)));
+				final var maxNumPigs = 20;
+				final var pigSpawner = FinitePigSpawner.empty(maxNumPigs);
+				final var codec = FinitePigSpawner.codec(maxNumPigs);
+
+				event.addCapability(ID, createProvider(pigSpawner, codec));
 			}
 		}
 

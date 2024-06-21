@@ -1,5 +1,6 @@
 package choonster.testmod3.capability;
 
+import choonster.testmod3.util.CapabilityNotPresentException;
 import com.google.common.base.Preconditions;
 import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -10,10 +11,11 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A simple implementation of {@link ICapabilityProvider} that supports a single {@link Capability} handler instance.
  *
+ * @param <HANDLER>        The capability handler type
+ * @param <IMPLEMENTATION> The handler implementation type
  * @author Choonster
  */
-public class SimpleCapabilityProvider<HANDLER> implements ICapabilityProvider {
-
+public class SimpleCapabilityProvider<HANDLER, IMPLEMENTATION extends HANDLER> implements ICapabilityProvider {
 	/**
 	 * The {@link Capability} instance to provide the handler for.
 	 */
@@ -22,24 +24,19 @@ public class SimpleCapabilityProvider<HANDLER> implements ICapabilityProvider {
 	/**
 	 * The {@link Direction} to provide the handler for.
 	 */
+	@Nullable
 	protected final Direction facing;
-
-	/**
-	 * The handler instance to provide.
-	 */
-	protected final HANDLER instance;
 
 	/**
 	 * A lazy optional containing handler instance to provide.
 	 */
-	protected final LazyOptional<HANDLER> lazyOptional;
+	private LazyOptional<IMPLEMENTATION> instanceOptional;
 
-	public SimpleCapabilityProvider(final Capability<HANDLER> capability, @Nullable final Direction facing, final HANDLER instance) {
+	public SimpleCapabilityProvider(final Capability<HANDLER> capability, @Nullable final Direction facing, final IMPLEMENTATION instance) {
 		this.capability = Preconditions.checkNotNull(capability, "capability");
 		this.facing = facing;
-		this.instance = Preconditions.checkNotNull(instance, "instance");
 
-		lazyOptional = LazyOptional.of(() -> this.instance);
+		instanceOptional = LazyOptional.of(() -> instance);
 	}
 
 	/**
@@ -54,7 +51,7 @@ public class SimpleCapabilityProvider<HANDLER> implements ICapabilityProvider {
 	 */
 	@Override
 	public <T> LazyOptional<T> getCapability(final Capability<T> capability, @Nullable final Direction facing) {
-		return getCapability().orEmpty(capability, lazyOptional);
+		return capability == getCapability() ? instanceOptional.cast() : LazyOptional.empty();
 	}
 
 	/**
@@ -81,7 +78,12 @@ public class SimpleCapabilityProvider<HANDLER> implements ICapabilityProvider {
 	 *
 	 * @return A lazy optional containing the handler instance
 	 */
-	public final HANDLER getInstance() {
-		return instance;
+	protected final IMPLEMENTATION getInstance() {
+		return instanceOptional.orElseThrow(CapabilityNotPresentException::new);
+	}
+
+	protected final void replaceInstance(final IMPLEMENTATION newInstance) {
+		instanceOptional.invalidate();
+		instanceOptional = LazyOptional.of(() -> newInstance);
 	}
 }

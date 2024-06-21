@@ -3,12 +3,13 @@ package choonster.testmod3.world.item;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawner;
 import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
 import choonster.testmod3.capability.pigspawner.PigSpawnerCapability;
+import com.mojang.serialization.Codec;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.function.Supplier;
 
 /**
@@ -16,20 +17,26 @@ import java.util.function.Supplier;
  *
  * @author Choonster
  */
-public class PigSpawnerItem extends Item {
+public class PigSpawnerItem<T extends IPigSpawner> extends Item {
 	/**
 	 * A factory to create the {@link IPigSpawner}
 	 */
-	private final Supplier<IPigSpawner> spawnerFactory;
+	private final Supplier<T> spawnerFactory;
 
-	public PigSpawnerItem(final Supplier<IPigSpawner> spawnerFactory, final Item.Properties properties) {
+	/**
+	 * The codec for the {@link IPigSpawner} type
+	 */
+	private final Codec<T> spawnerCodec;
+
+	public PigSpawnerItem(final Supplier<T> spawnerFactory, final Codec<T> spawnerCodec, final Item.Properties properties) {
 		super(properties);
 		this.spawnerFactory = spawnerFactory;
+		this.spawnerCodec = spawnerCodec;
 	}
 
 	@Override
 	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final CompoundTag nbt) {
-		return PigSpawnerCapability.createProvider(spawnerFactory.get());
+		return PigSpawnerCapability.createProvider(spawnerFactory.get(), spawnerCodec);
 	}
 
 	@Override

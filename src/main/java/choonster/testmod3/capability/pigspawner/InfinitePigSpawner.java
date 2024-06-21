@@ -2,12 +2,10 @@ package choonster.testmod3.capability.pigspawner;
 
 import choonster.testmod3.text.TestMod3Lang;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.List;
 
@@ -16,7 +14,10 @@ import java.util.List;
  *
  * @author Choonster
  */
-public class InfinitePigSpawner extends BasePigSpawner implements INBTSerializable<CompoundTag> {
+public class InfinitePigSpawner extends BasePigSpawner {
+	private static final InfinitePigSpawner INSTANCE = new InfinitePigSpawner();
+
+	public static final Codec<InfinitePigSpawner> CODEC = Codec.unit(INSTANCE);
 
 	@Override
 	public boolean canSpawnPig(final Level level, final double x, final double y, final double z) {
@@ -26,16 +27,5 @@ public class InfinitePigSpawner extends BasePigSpawner implements INBTSerializab
 	@Override
 	public List<MutableComponent> getTooltipLines() {
 		return ImmutableList.of(Component.translatable(TestMod3Lang.PIG_SPAWNER_INFINITE_DESC.getTranslationKey()));
-	}
-
-	@Override
-	public CompoundTag serializeNBT(final HolderLookup.Provider registries) {
-		// No-op
-		return new CompoundTag();
-	}
-
-	@Override
-	public void deserializeNBT(final HolderLookup.Provider registries, final CompoundTag nbt) {
-		// No-op
 	}
 }

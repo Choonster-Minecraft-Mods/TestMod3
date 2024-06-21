@@ -3,6 +3,7 @@ package choonster.testmod3.capability.chunkenergy;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.api.capability.chunkenergy.IChunkEnergy;
 import choonster.testmod3.network.UpdateChunkEnergyValueMessage;
+import com.mojang.serialization.Codec;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.energy.EnergyStorage;
@@ -14,6 +15,17 @@ import net.minecraftforge.network.PacketDistributor;
  * @author Choonster
  */
 public class ChunkEnergy extends EnergyStorage implements IChunkEnergy {
+	public static ChunkEnergy createDefault(final int capacity, final Level level, final ChunkPos chunkPos) {
+		return new ChunkEnergy(capacity, level, chunkPos);
+	}
+
+	public static Codec<ChunkEnergy> codec(final int capacity, final Level level, final ChunkPos chunkPos) {
+		return Codec.INT.xmap(
+				(energy) -> new ChunkEnergy(energy, capacity, level, chunkPos),
+				ChunkEnergy::getEnergyStored
+		);
+	}
+
 	/**
 	 * The {@link Level} containing this instance's chunk.
 	 */
@@ -24,11 +36,14 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy {
 	 */
 	private final ChunkPos chunkPos;
 
-	public ChunkEnergy(final int capacity, final Level level, final ChunkPos chunkPos) {
-		super(capacity);
+	private ChunkEnergy(final int capacity, final Level level, final ChunkPos chunkPos) {
+		this(capacity, capacity, level, chunkPos);
+	}
+
+	private ChunkEnergy(final int energy, final int capacity, final Level level, final ChunkPos chunkPos) {
+		super(capacity, capacity, capacity, energy);
 		this.level = level;
 		this.chunkPos = chunkPos;
-		energy = capacity;
 	}
 
 	@Override

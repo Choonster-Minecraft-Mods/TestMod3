@@ -6,12 +6,10 @@ import choonster.testmod3.util.DebugUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.mojang.logging.LogUtils;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.IntTag;
+import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -22,8 +20,19 @@ import java.util.List;
  *
  * @author Choonster
  */
-public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinite, INBTSerializable<IntTag> {
+public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinite {
 	private static final Logger LOGGER = LogUtils.getLogger();
+
+	public static FinitePigSpawner empty(final int maxNumPigs) {
+		return new FinitePigSpawner(maxNumPigs);
+	}
+
+	public static Codec<FinitePigSpawner> codec(final int maxNumPigs) {
+		return Codec.INT.xmap(
+				(numPigs) -> new FinitePigSpawner(numPigs, maxNumPigs),
+				FinitePigSpawner::getNumPigs
+		);
+	}
 
 	/**
 	 * The current number of pigs that can be spawned.
@@ -35,8 +44,14 @@ public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinit
 	 */
 	private final int maxNumPigs;
 
-	public FinitePigSpawner(final int maxNumPigs) {
+	private FinitePigSpawner(final int maxNumPigs) {
+		this(0, maxNumPigs);
+	}
+
+	private FinitePigSpawner(final int numPigs, final int maxNumPigs) {
+		this.numPigs = numPigs;
 		this.maxNumPigs = maxNumPigs;
+
 		LOGGER.debug(PigSpawnerCapability.LOG_MARKER, "Creating finite pig spawner: {}", this, DebugUtil.getStackTrace(10));
 	}
 
@@ -73,16 +88,6 @@ public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinit
 	}
 
 	@Override
-	public IntTag serializeNBT(final HolderLookup.Provider registries) {
-		return IntTag.valueOf(numPigs);
-	}
-
-	@Override
-	public void deserializeNBT(final HolderLookup.Provider registries, final IntTag tag) {
-		numPigs = tag.getAsInt();
-	}
-
-	@Override
 	public boolean equals(@Nullable final Object obj) {
 		if (this == obj) {
 			return true;
@@ -92,17 +97,15 @@ public class FinitePigSpawner extends BasePigSpawner implements IPigSpawnerFinit
 			return false;
 		}
 
-		final FinitePigSpawner that = (FinitePigSpawner) obj;
+		final var that = (FinitePigSpawner) obj;
 
 		return numPigs == that.numPigs && maxNumPigs == that.maxNumPigs;
 	}
 
 	@Override
 	public int hashCode() {
-		int result = numPigs;
+		var result = numPigs;
 		result = 31 * result + maxNumPigs;
 		return result;
 	}
-
-
 }

@@ -25,7 +25,7 @@ import net.minecraftforge.network.PacketDistributor;
  *
  * @author Choonster
  */
-public class ChunkEnergyCapability {
+public final class ChunkEnergyCapability {
 	/**
 	 * The {@link IChunkEnergy} {@link Capability} instance.
 	 */
@@ -74,8 +74,14 @@ public class ChunkEnergyCapability {
 		@SubscribeEvent
 		public static void attachChunkCapabilities(final AttachCapabilitiesEvent<LevelChunk> event) {
 			final var chunk = event.getObject();
-			final var chunkEnergy = new ChunkEnergy(DEFAULT_CAPACITY, chunk.getLevel(), chunk.getPos());
-			event.addCapability(ID, new SerializableCapabilityProvider<>(CHUNK_ENERGY_CHUNK_CAPABILITY, DEFAULT_FACING, chunkEnergy));
+
+			final var level = chunk.getLevel();
+			final var chunkPos = chunk.getPos();
+
+			final var chunkEnergy = ChunkEnergy.createDefault(DEFAULT_CAPACITY, level, chunkPos);
+			final var codec = ChunkEnergy.codec(DEFAULT_CAPACITY, level, chunkPos);
+
+			event.addCapability(ID, new SerializableCapabilityProvider<>(CHUNK_ENERGY_CHUNK_CAPABILITY, DEFAULT_FACING, chunkEnergy, codec));
 		}
 
 		/**
