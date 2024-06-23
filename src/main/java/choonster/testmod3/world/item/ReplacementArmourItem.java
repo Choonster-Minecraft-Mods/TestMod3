@@ -216,7 +216,7 @@ public class ReplacementArmourItem extends ArmorItem {
 	}
 
 	public record ReplacedArmour(ImmutableList<Entry> replacedArmour) {
-		public static Codec<ReplacedArmour> CODEC = RecordCodecBuilder.create(builder ->
+		public static final Codec<ReplacedArmour> CODEC = RecordCodecBuilder.create(builder ->
 				builder.group(
 
 						Entry.CODEC
@@ -227,7 +227,7 @@ public class ReplacementArmourItem extends ArmorItem {
 				).apply(builder, ReplacedArmour::new)
 		);
 
-		public static StreamCodec<RegistryFriendlyByteBuf, ReplacedArmour> STREAM_CODEC = StreamCodec.composite(
+		public static final StreamCodec<RegistryFriendlyByteBuf, ReplacedArmour> STREAM_CODEC = StreamCodec.composite(
 				Entry.STREAM_CODEC.apply(ByteBufCodecs.list()),
 				ReplacedArmour::replacedArmour,
 				ReplacedArmour::new
@@ -238,7 +238,7 @@ public class ReplacementArmourItem extends ArmorItem {
 		}
 
 		public record Entry(EquipmentSlot slot, ItemStack replacedArmour) {
-			public static Codec<Entry> CODEC = RecordCodecBuilder.create(builder ->
+			public static final Codec<Entry> CODEC = RecordCodecBuilder.create(builder ->
 					builder.group(
 							EquipmentSlot.CODEC
 									.fieldOf("slot")
@@ -250,7 +250,7 @@ public class ReplacementArmourItem extends ArmorItem {
 					).apply(builder, Entry::new)
 			);
 
-			public static StreamCodec<RegistryFriendlyByteBuf, Entry> STREAM_CODEC = StreamCodec.composite(
+			public static final StreamCodec<RegistryFriendlyByteBuf, Entry> STREAM_CODEC = StreamCodec.composite(
 					VanillaCodecs.ARMOR_ITEM_EQUIPMENT_SLOT_STREAM_CODEC,
 					Entry::slot,
 					ItemStack.STREAM_CODEC,

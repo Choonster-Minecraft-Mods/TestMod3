@@ -156,7 +156,7 @@ public class EntityCheckerItem extends Item {
 	}
 
 	public record EntityCheckerProperties(int radius, boolean cornerModeEnabled) {
-		public static Codec<EntityCheckerProperties> CODEC = RecordCodecBuilder.create(builder ->
+		public static final Codec<EntityCheckerProperties> CODEC = RecordCodecBuilder.create(builder ->
 				builder.group(
 
 						Codec.INT
@@ -170,7 +170,7 @@ public class EntityCheckerItem extends Item {
 				).apply(builder, EntityCheckerProperties::new)
 		);
 
-		public static StreamCodec<RegistryFriendlyByteBuf, EntityCheckerProperties> NETWORK_CODEC = StreamCodec.composite(
+		public static final StreamCodec<RegistryFriendlyByteBuf, EntityCheckerProperties> NETWORK_CODEC = StreamCodec.composite(
 				ByteBufCodecs.VAR_INT,
 				EntityCheckerProperties::radius,
 				ByteBufCodecs.BOOL,
@@ -178,6 +178,6 @@ public class EntityCheckerItem extends Item {
 				EntityCheckerProperties::new
 		);
 
-		public static EntityCheckerProperties DEFAULT = new EntityCheckerProperties(0, false);
+		public static final EntityCheckerProperties DEFAULT = new EntityCheckerProperties(0, false);
 	}
 }

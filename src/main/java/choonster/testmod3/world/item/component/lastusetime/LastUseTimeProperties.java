@@ -12,7 +12,7 @@ import net.minecraft.network.codec.StreamCodec;
  * @author Choonster
  */
 public record LastUseTimeProperties(long lastUseTime, boolean automaticUpdates) {
-	public static Codec<LastUseTimeProperties> CODEC = RecordCodecBuilder.create(builder ->
+	public static final Codec<LastUseTimeProperties> CODEC = RecordCodecBuilder.create(builder ->
 			builder.group(
 
 					Codec.LONG
@@ -26,7 +26,7 @@ public record LastUseTimeProperties(long lastUseTime, boolean automaticUpdates) 
 			).apply(builder, LastUseTimeProperties::new)
 	);
 
-	public static StreamCodec<RegistryFriendlyByteBuf, LastUseTimeProperties> NETWORK_CODEC = StreamCodec.composite(
+	public static final StreamCodec<RegistryFriendlyByteBuf, LastUseTimeProperties> NETWORK_CODEC = StreamCodec.composite(
 			ByteBufCodecs.VAR_LONG,
 			LastUseTimeProperties::lastUseTime,
 			ByteBufCodecs.BOOL,
