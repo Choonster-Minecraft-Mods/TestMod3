@@ -1,9 +1,9 @@
 package choonster.testmod3.world.level.block;
 
-import choonster.testmod3.api.capability.pigspawner.IPigSpawner;
-import choonster.testmod3.api.capability.pigspawner.IPigSpawnerFinite;
-import choonster.testmod3.api.capability.pigspawner.IPigSpawnerInteractable;
 import choonster.testmod3.text.TestMod3Lang;
+import choonster.testmod3.world.item.component.pigspawner.IPigSpawner;
+import choonster.testmod3.world.item.component.pigspawner.IPigSpawnerFinite;
+import choonster.testmod3.world.item.component.pigspawner.IPigSpawnerInteractable;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.core.BlockPos;
@@ -30,15 +30,17 @@ public class PigSpawnerRefillerBlock extends Block implements IPigSpawnerInterac
 	}
 
 	@Override
-	public boolean interact(final IPigSpawner pigSpawner, final Level world, final BlockPos pos, @Nullable final CommandSource iCommandSender) {
-		if (pigSpawner instanceof final IPigSpawnerFinite pigSpawnerFinite) {
-			pigSpawnerFinite.setNumPigs(pigSpawnerFinite.getMaxNumPigs());
+	public IPigSpawner interact(final IPigSpawner pigSpawner, final Level world, final BlockPos pos, @Nullable final CommandSource commandSource) {
+		if (pigSpawner instanceof final IPigSpawnerFinite finitePigSpawner) {
+			final var newPigSpawner = finitePigSpawner.withNumPigs(finitePigSpawner.maxNumPigs());
 
-			if (iCommandSender != null) {
-				iCommandSender.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_PIG_SPAWNER_REFILLER_REFILLED.getTranslationKey()));
+			if (commandSource != null) {
+				commandSource.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_PIG_SPAWNER_REFILLER_REFILLED.getTranslationKey()));
 			}
+
+			return newPigSpawner;
 		}
 
-		return true;
+		return null;
 	}
 }

@@ -2,6 +2,9 @@ package choonster.testmod3.util;
 
 import choonster.testmod3.TestMod3;
 import com.google.common.base.Preconditions;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -73,6 +76,17 @@ public class RegistryUtil {
 	}
 
 	/**
+	 * Gets the key of the registry entry, throwing an exception if it's not set.
+	 *
+	 * @param entry The registry entry
+	 * @return The key
+	 * @throws NullPointerException If the key is null
+	 */
+	public static <T> ResourceLocation getKey(final Registry<T> registry, final T entry) {
+		return Preconditions.checkNotNull(registry.getKey(entry), "%s has no registry key", entry);
+	}
+
+	/**
 	 * @see #getKey(IForgeRegistry, Object)
 	 */
 	public static ResourceLocation getKey(final Block block) {
@@ -105,5 +119,12 @@ public class RegistryUtil {
 	 */
 	public static ResourceLocation getKey(final Potion potion) {
 		return getKey(ForgeRegistries.POTIONS, potion);
+	}
+
+	/**
+	 * @see #getKey(Registry, Object)
+	 */
+	public static ResourceLocation getKey(final DataComponentType<?> componentType) {
+		return getKey(BuiltInRegistries.DATA_COMPONENT_TYPE, componentType);
 	}
 }

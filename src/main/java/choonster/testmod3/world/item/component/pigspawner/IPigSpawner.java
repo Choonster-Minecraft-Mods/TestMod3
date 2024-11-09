@@ -1,10 +1,13 @@
-package choonster.testmod3.api.capability.pigspawner;
+package choonster.testmod3.world.item.component.pigspawner;
 
+import com.mojang.serialization.Codec;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
-
-import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 /**
@@ -12,8 +15,21 @@ import java.util.List;
  *
  * @author Choonster
  */
-@AutoRegisterCapability
 public interface IPigSpawner {
+	Codec<IPigSpawner> CODEC = PigSpawnerType.CODEC.dispatch(IPigSpawner::getType, PigSpawnerType::getCodec);
+
+	StreamCodec<ByteBuf, IPigSpawner> STREAM_CODEC = PigSpawnerType.STREAM_CODEC.dispatch(
+			IPigSpawner::getType,
+			PigSpawnerType::getStreamCodec
+	);
+
+	/**
+	 * Get the type of this spawner.
+	 *
+	 * @return The type.
+	 */
+	PigSpawnerType getType();
+
 	/**
 	 * Can a pig be spawned at the specified position?
 	 *
@@ -32,9 +48,21 @@ public interface IPigSpawner {
 	 * @param x     The x coordinate
 	 * @param y     The y coordinate
 	 * @param z     The z coordinate
-	 * @return Was the pig successfully spawned?
+	 * @return The new pig spawner state if a pig was successfully spawned, otherwise, null.
 	 */
-	boolean spawnPig(final Level level, final double x, final double y, final double z);
+	@Nullable
+	default IPigSpawner spawnPig(final Level level, final double x, final double y, final double z) {
+		final var pig = EntityType.PIG.create(level);
+
+		if (pig == null) {
+			return null;
+		}
+
+		pig.setPos(x, y, z);
+
+		final var success = level.addFreshEntity(pig);
+		return success ? this : null;
+	}
 
 	/**
 	 * Get the tooltip lines for this spawner. Can be called on the client or server.

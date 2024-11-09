@@ -1,11 +1,11 @@
 package choonster.testmod3.world.level.block;
 
-import choonster.testmod3.capability.pigspawner.PigSpawnerCapability;
+import choonster.testmod3.init.ModDataComponents;
 import choonster.testmod3.util.RegistryUtil;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -14,10 +14,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.ModList;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 /**
@@ -42,7 +40,7 @@ public class ItemDebuggerBlock extends Block {
 	private void logItem(final Level level, final ItemStack stack) {
 		if (!stack.isEmpty()) {
 			LOGGER.info("ItemStack: {}", stack.save(level.registryAccess()));
-			logCapability(stack, PigSpawnerCapability.PIG_SPAWNER_CAPABILITY, Direction.NORTH);
+			logComponent(stack, ModDataComponents.PIG_SPAWNER.get());
 			logFluidHandler(stack);
 
 			final var key = RegistryUtil.getKey(stack.getItem());
@@ -54,10 +52,12 @@ public class ItemDebuggerBlock extends Block {
 		}
 	}
 
-	private <T> void logCapability(final ItemStack stack, final Capability<T> capability, @Nullable final Direction facing) {
-		stack.getCapability(capability, facing).ifPresent(instance ->
-				LOGGER.info("Capability: {} - {}", capability.getName(), instance)
-		);
+	private <T> void logComponent(final ItemStack stack, final DataComponentType<T> componentType) {
+		final var component = stack.get(componentType);
+
+		if (component != null) {
+			LOGGER.info("Component: {} - {}", RegistryUtil.getKey(componentType), component);
+		}
 	}
 
 	private void logFluidHandler(final ItemStack stack) {

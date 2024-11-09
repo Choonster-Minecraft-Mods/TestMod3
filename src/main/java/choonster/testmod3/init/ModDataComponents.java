@@ -4,6 +4,7 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.serialization.VanillaCodecs;
 import choonster.testmod3.world.item.*;
 import choonster.testmod3.world.item.component.lastusetime.LastUseTimeProperties;
+import choonster.testmod3.world.item.component.pigspawner.IPigSpawner;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
@@ -111,6 +112,16 @@ public class ModDataComponents {
 					.persistent(Codec.INT)
 					.networkSynchronized(ByteBufCodecs.VAR_INT)
 
+	);
+
+	/**
+	 * @see IPigSpawner
+	 */
+	public static final RegistryObject<DataComponentType<IPigSpawner>> PIG_SPAWNER = register("pig_spawner",
+			builder -> builder
+					.persistent(IPigSpawner.CODEC)
+					.networkSynchronized(IPigSpawner.STREAM_CODEC)
+					.cacheEncoding()
 	);
 
 	/**

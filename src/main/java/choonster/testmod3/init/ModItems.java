@@ -1,12 +1,12 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.capability.pigspawner.FinitePigSpawner;
-import choonster.testmod3.capability.pigspawner.InfinitePigSpawner;
 import choonster.testmod3.world.entity.BlockDetectionArrow;
 import choonster.testmod3.world.entity.ModArrow;
 import choonster.testmod3.world.item.*;
 import choonster.testmod3.world.item.component.lastusetime.LastUseTimeProperties;
+import choonster.testmod3.world.item.component.pigspawner.FinitePigSpawner;
+import choonster.testmod3.world.item.component.pigspawner.InfinitePigSpawner;
 import choonster.testmod3.world.item.variantgroup.ItemVariantGroup;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -142,20 +142,21 @@ public class ModItems {
 
 	// Capabilities are registered and injected in FMLCommonSetupEvent, which is fired after RegistryEvent.Register.
 	// This means that item constructors can't directly reference Capability fields (e.g. CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY).
-	public static final RegistryObject<PigSpawnerItem<FinitePigSpawner>> PIG_SPAWNER_FINITE = ITEMS.register("pig_spawner_finite",
+	// TODO: Do custom data components work here?
+	public static final RegistryObject<PigSpawnerItem> PIG_SPAWNER_FINITE = ITEMS.register("pig_spawner_finite",
 			() -> {
 				final var maxNumPigs = 20;
 
-				return new PigSpawnerItem<>(
-						() -> FinitePigSpawner.empty(maxNumPigs),
-						FinitePigSpawner.codec(maxNumPigs),
-						defaultItemProperties()
+				return new PigSpawnerItem(
+						defaultItemProperties().component(ModDataComponents.PIG_SPAWNER.get(), FinitePigSpawner.empty(maxNumPigs))
 				);
 			}
 	);
 
-	public static final RegistryObject<PigSpawnerItem<InfinitePigSpawner>> PIG_SPAWNER_INFINITE = ITEMS.register("pig_spawner_infinite",
-			() -> new PigSpawnerItem<>(InfinitePigSpawner::new, InfinitePigSpawner.CODEC, defaultItemProperties())
+	public static final RegistryObject<PigSpawnerItem> PIG_SPAWNER_INFINITE = ITEMS.register("pig_spawner_infinite",
+			() -> new PigSpawnerItem(
+					defaultItemProperties().component(ModDataComponents.PIG_SPAWNER.get(), InfinitePigSpawner.INSTANCE)
+			)
 	);
 
 	public static final RegistryObject<ContinuousBowItem> CONTINUOUS_BOW = ITEMS.register("continuous_bow",
