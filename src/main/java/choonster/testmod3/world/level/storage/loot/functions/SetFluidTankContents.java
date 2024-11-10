@@ -1,8 +1,6 @@
 package choonster.testmod3.world.level.storage.loot.functions;
 
 import choonster.testmod3.init.ModLootFunctionTypes;
-import choonster.testmod3.util.CapabilityNotPresentException;
-import choonster.testmod3.world.item.FluidStackItem;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -17,8 +15,6 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.functions.SetContainerContents;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import java.util.List;
 
@@ -62,6 +58,8 @@ public class SetFluidTankContents extends LootItemConditionalFunction {
 				)
 		);
 
+		// TODO: Item capabilities
+		/*
 		final var fluidHandler = stack
 				.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM, null)
 				.orElseThrow(CapabilityNotPresentException::new);
@@ -70,6 +68,7 @@ public class SetFluidTankContents extends LootItemConditionalFunction {
 				.filter(itemStack -> itemStack.getItem() instanceof FluidStackItem)
 				.map(itemStack -> ((FluidStackItem) itemStack.getItem()).getFluidStack(itemStack))
 				.forEach(fluidStack -> fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE));
+		*/
 
 		return stack;
 	}

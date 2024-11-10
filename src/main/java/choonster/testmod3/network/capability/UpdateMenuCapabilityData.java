@@ -114,6 +114,8 @@ public record UpdateMenuCapabilityData<HANDLER, DATA>(
 		final var direction = this.direction.orElse(null);
 		final var originalStack = menu.getSlot(slotNumber).getItem();
 
+		// TODO: Item capabilities
+		/*
 		originalStack.getCapability(capability, direction1).ifPresent(originalHandler -> {
 			final var newStack = originalStack.copy();
 
@@ -125,6 +127,7 @@ public record UpdateMenuCapabilityData<HANDLER, DATA>(
 				}
 			});
 		});
+		*/
 	}
 
 	/**

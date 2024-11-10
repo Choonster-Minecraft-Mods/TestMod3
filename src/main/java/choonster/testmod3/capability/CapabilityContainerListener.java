@@ -1,6 +1,5 @@
 package choonster.testmod3.capability;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.network.capability.UpdateMenuCapabilityData;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -8,7 +7,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -46,12 +44,15 @@ public abstract class CapabilityContainerListener<HANDLER> implements ContainerL
 			return;
 		}
 
+		// TODO: Item capabilities
+		/*
 		stack.getCapability(capability, facing).ifPresent(handler -> {
 			final var message = createUpdateMessage(menu.containerId, menu.incrementStateId(), slotNumber, handler);
 			if (message.data().hasData()) { // Don't send the message if there's nothing to update
 				TestMod3.network.send(message, PacketDistributor.PLAYER.with(player));
 			}
 		});
+		*/
 	}
 
 	@Override

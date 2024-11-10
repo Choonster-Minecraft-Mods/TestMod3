@@ -1,7 +1,5 @@
 package choonster.testmod3.world.item;
 
-import choonster.testmod3.capability.SerializableCapabilityProvider;
-import choonster.testmod3.fluid.UniversalBucketFluidHandler;
 import choonster.testmod3.util.ModFluidUtil;
 import choonster.testmod3.util.RegistryUtil;
 import com.mojang.datafixers.util.Pair;
@@ -9,7 +7,6 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.locale.Language;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -28,8 +25,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.SoundActions;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.MutableHashedLinkedMap;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.FluidActionResult;
@@ -69,10 +64,13 @@ public class ModBucketItem extends Item {
 		return fillResult.isSuccess() ? fillResult.getResult() : ItemStack.EMPTY;
 	}
 
+	// TODO: Item capabilities
+	/*
 	@Override
 	public int getMaxStackSize(final ItemStack stack) {
 		return getFluid(stack).isEmpty() ? super.getMaxStackSize(stack) : 1;
 	}
+	*/
 
 	public void fillCreativeModeTab(final MutableHashedLinkedMap<ItemStack, CreativeModeTab.TabVisibility> entries) {
 		final var empty = empty();
@@ -255,6 +253,8 @@ public class ModBucketItem extends Item {
 				.orElse(false);
 	}
 
+	// TODO: Item capabilities
+	/*
 	@Nullable
 	@Override
 	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final CompoundTag nbt) {
@@ -268,6 +268,7 @@ public class ModBucketItem extends Item {
 				new UniversalBucketFluidHandler(stack, capacity)
 		);
 	}
+	*/
 
 	private ItemStack empty() {
 		return new ItemStack(this);
