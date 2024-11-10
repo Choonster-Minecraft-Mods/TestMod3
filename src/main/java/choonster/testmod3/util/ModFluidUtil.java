@@ -1,5 +1,6 @@
 package choonster.testmod3.util;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluid;
@@ -7,7 +8,6 @@ import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 /**
@@ -38,15 +38,16 @@ public class ModFluidUtil {
 	 * @return A FluidActionResult holding the filled container if successful
 	 */
 	public static FluidActionResult fillContainer(final ItemStack container, final FluidStack fluidStack) {
-		final ItemStack containerCopy = ItemHandlerHelper.copyStackWithSize(container, 1); // Don't modify the input
+		final var containerCopy = ItemHandlerHelper.copyStackWithSize(container, 1); // Don't modify the input
+		containerCopy.set(DataComponents.MAX_STACK_SIZE, 1);
 
-		final IFluidHandlerItem fluidHandler = FluidUtil
+		final var fluidHandler = FluidUtil
 				.getFluidHandler(containerCopy)
 				.orElseThrow(CapabilityNotPresentException::new);
 
-		final int originalAmount = fluidStack.getAmount();
+		final var originalAmount = fluidStack.getAmount();
 
-		final int amountFilled = fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+		final var amountFilled = fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
 
 		if (amountFilled != originalAmount) {
 			return FluidActionResult.FAILURE;
@@ -66,15 +67,15 @@ public class ModFluidUtil {
 	 * @return A FluidActionResult holding the drained container if successful
 	 */
 	public static FluidActionResult drainContainer(final ItemStack container, final FluidStack fluidStack) {
-		final ItemStack containerCopy = ItemHandlerHelper.copyStackWithSize(container, 1); // Don't modify the input
+		final var containerCopy = ItemHandlerHelper.copyStackWithSize(container, 1); // Don't modify the input
 
-		final IFluidHandlerItem fluidHandler = FluidUtil
+		final var fluidHandler = FluidUtil
 				.getFluidHandler(containerCopy)
 				.orElseThrow(CapabilityNotPresentException::new);
 
-		final int originalAmount = fluidStack.getAmount();
+		final var originalAmount = fluidStack.getAmount();
 
-		final FluidStack fluidDrained = fluidHandler.drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+		final var fluidDrained = fluidHandler.drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);
 
 		if (fluidDrained.getAmount() != originalAmount) {
 			return FluidActionResult.FAILURE;

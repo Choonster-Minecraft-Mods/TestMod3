@@ -1,21 +1,46 @@
 package choonster.testmod3.fluid;
 
 import choonster.testmod3.util.ModFluidUtil;
-import net.minecraft.world.item.ItemStack;
+import choonster.testmod3.world.item.component.fluidhandler.FluidHandlerType;
+import choonster.testmod3.world.item.component.fluidhandler.IFluidHandlerWithType;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+
+import java.util.function.Function;
 
 /**
- * An {@link IFluidHandlerItem} implementation that only allows complete filling/draining and can only be filled with
+ * An {@link IFluidHandlerWithType} implementation that only allows complete filling/draining and can only be filled with
  * fluids that have a bucket registered ({@link Fluid#getBucket()}).
  *
  * @author Choonster
  */
 public class UniversalBucketFluidHandler extends ItemFluidTank {
-	public UniversalBucketFluidHandler(final ItemStack container, final int capacity) {
-		super(container, capacity);
+	public static final MapCodec<UniversalBucketFluidHandler> BUCKET_CODEC = CODEC.xmap(
+			itemFluidTank -> new UniversalBucketFluidHandler(itemFluidTank.getFluid(), itemFluidTank.getCapacity()),
+			Function.identity()
+	);
+
+	public static final StreamCodec<RegistryFriendlyByteBuf, UniversalBucketFluidHandler> BUCKET_STREAM_CODEC = STREAM_CODEC.map(
+			itemFluidTank -> new UniversalBucketFluidHandler(itemFluidTank.getFluid(), itemFluidTank.getCapacity()),
+			Function.identity()
+	);
+
+	public UniversalBucketFluidHandler(final int capacity) {
+		super(capacity);
 		setValidator(ModFluidUtil::hasBucket);
+	}
+
+	protected UniversalBucketFluidHandler(final FluidStack fluid, final int capacity) {
+		super(fluid, capacity);
+		setValidator(ModFluidUtil::hasBucket);
+	}
+
+	@Override
+	public FluidHandlerType getType() {
+		return FluidHandlerType.BUCKET;
 	}
 
 	@Override
