@@ -38,17 +38,16 @@ public class TestMod3LootTableProvider extends LootTableProvider {
 	}
 
 	@Override
-	protected void validate(Registry<LootTable> registry, ValidationContext validationContext, ProblemReporter problemReporter) {
-
+	protected void validate(final Registry<LootTable> registry, final ValidationContext validationContext, final ProblemReporter problemReporter) {
 		final var modLootTableIds = ModLootTables.all();
 
 		for (final var id : Sets.difference(modLootTableIds, registry.keySet())) {
 			validationContext.reportProblem("Missing mod loot table: " + id);
 		}
 
-		registry.holders().forEach((lootTable) -> lootTable.value().validate(
+		registry.listElements().forEach((lootTable) -> lootTable.value().validate(
 				validationContext
-						.setParams(lootTable.value().getParamSet())
+						.setContextKeySet(lootTable.value().getParamSet())
 						.enterElement("{" + lootTable.key().location() + "}", lootTable.key())
 		));
 	}

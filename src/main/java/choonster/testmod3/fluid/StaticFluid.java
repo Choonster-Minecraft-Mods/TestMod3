@@ -1,15 +1,13 @@
 package choonster.testmod3.fluid;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
-
-import net.minecraftforge.fluids.ForgeFlowingFluid.Properties;
 
 /**
  * A fluid that doesn't flow horizontally.

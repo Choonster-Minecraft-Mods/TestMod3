@@ -18,19 +18,28 @@ import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.*;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
@@ -50,15 +59,18 @@ import java.util.concurrent.CompletableFuture;
  * @author Choonster
  */
 public class TestMod3RecipeProvider extends RecipeProvider {
-	public TestMod3RecipeProvider(final PackOutput output, final CompletableFuture<HolderLookup.Provider> registries) {
-		super(output, registries);
+	private final HolderGetter<Item> items;
+
+	public TestMod3RecipeProvider(final HolderLookup.Provider registries, final RecipeOutput output) {
+		super(registries, output);
+		items = registries.lookupOrThrow(Registries.ITEM);
 	}
 
 	@Override
-	protected void buildRecipes(final RecipeOutput output) {
+	protected void buildRecipes() {
 		// Craft a Dimension Replacement item from a Subscripts item and a Superscripts item
 		{
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.DIMENSION_REPLACEMENT.get())
+			shapeless(RecipeCategory.MISC, ModItems.DIMENSION_REPLACEMENT.get())
 					.requires(ModItems.SUBSCRIPTS.get())
 					.requires(ModItems.SUPERSCRIPTS.get())
 					.unlockedBy("has_subscripts", has(ModItems.SUBSCRIPTS.get()))
@@ -68,15 +80,21 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 
 		// Craft a Dimension Replacement item by smelting a Subscripts item
 		{
-			SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModItems.SUBSCRIPTS.get()), RecipeCategory.MISC, ModItems.DIMENSION_REPLACEMENT.get(), 0.35f, 200)
+			SimpleCookingRecipeBuilder.smelting(
+							Ingredient.of(ModItems.SUBSCRIPTS.get()),
+							RecipeCategory.MISC,
+							ModItems.DIMENSION_REPLACEMENT.get(),
+							0.35f,
+							200
+					)
 					.unlockedBy("has_subscripts", has(ModItems.SUBSCRIPTS.get()))
-					.save(output, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "dimension_replacement_from_subscripts"));
+					.save(output, key("dimension_replacement_from_subscripts"));
 		}
 
 		// A recipe with a conditional ingredient whose conditions are never met.
 		// https://github.com/MinecraftForge/MinecraftForge/issues/4359
 		{
-			ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, Blocks.COBBLESTONE)
+			shaped(RecipeCategory.BUILDING_BLOCKS, Blocks.COBBLESTONE)
 					.pattern("Cc")
 					.define(
 							'C',
@@ -86,22 +104,23 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					)
 					.define('c', Blocks.COBBLESTONE)
 					.unlockedBy("has_cobblestone", has(Blocks.COBBLESTONE))
-					.save(output, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "conditional_ingredient_test"));
+					.save(output, key("conditional_ingredient_test"));
 		}
 
 		// A recipe whose conditions are never met
 		{
 			final var category = RecipeCategory.BUILDING_BLOCKS;
-			final var id = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "conditional_recipe_test");
+			final var key = key("conditional_recipe_test");
+			final var id = key.location();
 
 			ConditionalRecipe.builder()
 					.condition(FalseCondition.INSTANCE)
 					.recipe(recipeOutput ->
-							ShapelessRecipeBuilder.shapeless(category, Blocks.OAK_LOG)
+							shapeless(category, Blocks.OAK_LOG)
 									.requires(Items.WOODEN_AXE)
 									.requires(Items.WOODEN_AXE)
 									.unlockedBy("has_axe", has(Items.WOODEN_AXE))
-									.save(recipeOutput, id)
+									.save(recipeOutput, key)
 					)
 					.advancement(id.withPrefix("recipes/" + category.getFolderName() + "/"))
 					.save(output, id);
@@ -110,14 +129,14 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 		// Craft eight Raw Cod from a Guardian Spawner
 		// Test for MobSpawnerIngredient
 		{
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, Items.COD, 8)
+			shapeless(RecipeCategory.FOOD, Items.COD, 8)
 					.requires(
 							MobSpawnerIngredientBuilder.mobSpawnerIngredient(Blocks.SPAWNER)
 									.entity(EntityType.GUARDIAN)
 									.build()
 					)
 					.unlockedBy("has_spawner", has(Blocks.SPAWNER))
-					.save(output, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "fish_from_guardian_spawner"));
+					.save(output, key("fish_from_guardian_spawner"));
 		}
 
 		// Craft a Guardian Spawner from a Raw Cod surrounded by Sticks
@@ -144,7 +163,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 
 			guardianSpawner.set(DataComponents.BLOCK_ENTITY_DATA, CustomData.of(blockEntityTag));
 
-			EnhancedShapedRecipeBuilder.Enhanced.shapedRecipe(RecipeCategory.MISC, guardianSpawner)
+			enhancedShaped(RecipeCategory.MISC, guardianSpawner)
 					.pattern("SSS")
 					.pattern("SCS")
 					.pattern("SSS")
@@ -152,13 +171,13 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.define('C', Items.COD)
 					.unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
 					.unlockedBy("has_cod", has(Items.COD))
-					.save(output, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "guardian_spawner_from_fish_and_sticks"));
+					.save(output, key("guardian_spawner_from_fish_and_sticks"));
 		}
 
 		// Upgrade an Iron Helmet to a Golden Helmet while preserving its damage
 		// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2513998-help-needed-creating-crafting-recipe-with-damaged
 		{
-			ShapedArmourUpgradeRecipeBuilder.shapedArmourUpgradeRecipe(RecipeCategory.COMBAT, Items.GOLDEN_HELMET)
+			shapedArmourUpgrade(RecipeCategory.COMBAT, Items.GOLDEN_HELMET)
 					.pattern("GGG")
 					.pattern("GHG")
 					.pattern("GGG")
@@ -166,29 +185,29 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.define('H', Items.IRON_HELMET)
 					.unlockedBy("has_gold_block", has(Blocks.GOLD_BLOCK))
 					.unlockedBy("has_iron_helmet", has(Items.IRON_HELMET))
-					.save(output, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "golden_helmet_from_iron_helmet"));
+					.save(output, key("golden_helmet_from_iron_helmet"));
 		}
 
 		// Cut an Oak Log into two Oak Planks with a Cutting Axe, damaging the axe
 		{
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, Blocks.OAK_PLANKS, 2)
+			shapeless(RecipeCategory.BUILDING_BLOCKS, Blocks.OAK_PLANKS, 2)
 					.group(ResourceLocation.withDefaultNamespace("planks").toString())
 					.requires(ModItems.WOODEN_AXE.get())
 					.requires(Blocks.OAK_LOG)
 					.unlockedBy("has_axe", has(ModItems.WOODEN_AXE.get()))
 					.unlockedBy("has_log", has(Blocks.OAK_LOG))
-					.save(output, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "oak_planks_with_mod_axe"));
+					.save(output, key("oak_planks_with_mod_axe"));
 		}
 
 		// Cut an Oak Log into two Oak Planks with a Wooden Axe, damaging the axe
 		{
-			ShapelessCuttingRecipeBuilder.shapelessCuttingRecipe(RecipeCategory.BUILDING_BLOCKS, Blocks.OAK_PLANKS, 2)
+			shapelessCuttingRecipe(RecipeCategory.BUILDING_BLOCKS, Blocks.OAK_PLANKS, 2)
 					.group(ResourceLocation.withDefaultNamespace("planks").toString())
 					.requires(Items.WOODEN_AXE)
 					.requires(Blocks.OAK_LOG)
 					.unlockedBy("has_axe", has(Items.WOODEN_AXE))
 					.unlockedBy("has_log", has(Blocks.OAK_LOG))
-					.save(output, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "oak_planks_with_vanilla_axe"));
+					.save(output, key("oak_planks_with_vanilla_axe"));
 		}
 
 		// Craft Cobblestone from three Buckets of Static Gas
@@ -196,7 +215,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 			final var staticGas = new FluidStack(ModFluids.STATIC_GAS.getStill().get(), FluidType.BUCKET_VOLUME);
 			final var staticGasContainer = FluidContainerIngredient.fromFluidStack(staticGas);
 
-			ShapelessFluidContainerRecipeBuilder.shapelessFluidContainerRecipe(RecipeCategory.BUILDING_BLOCKS, Blocks.COBBLESTONE)
+			shapelessFluidContainer(RecipeCategory.BUILDING_BLOCKS, Blocks.COBBLESTONE)
 					.requires(staticGasContainer)
 					.requires(staticGasContainer)
 					.requires(staticGasContainer)
@@ -210,11 +229,47 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 											.build()
 							)
 					))
-					.save(output, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "cobblestone_from_static_gas"));
+					.save(output, key("cobblestone_from_static_gas"));
 		}
 	}
 
-	private static Criterion<InventoryChangeTrigger.TriggerInstance> inventoryTrigger(final ItemPredicate.Builder... p_299527_) {
+
+	private static ResourceKey<Recipe<?>> key(final String name) {
+		return ResourceKey.create(Registries.RECIPE, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name));
+	}
+
+	private EnhancedShapedRecipeBuilder.Enhanced enhancedShaped(
+			final RecipeCategory category,
+			final ItemStack result
+	) {
+		return EnhancedShapedRecipeBuilder.Enhanced.shapedRecipe(items, category, result);
+	}
+
+	private ShapedArmourUpgradeRecipeBuilder shapedArmourUpgrade(
+			final RecipeCategory category,
+			final Item result
+	) {
+		return ShapedArmourUpgradeRecipeBuilder.shapedArmourUpgradeRecipe(items, category, result);
+	}
+
+	private ShapelessCuttingRecipeBuilder shapelessCuttingRecipe(
+			final RecipeCategory category,
+			final ItemLike result,
+			final int count
+	) {
+		return ShapelessCuttingRecipeBuilder.shapelessCuttingRecipe(items, category, result, count);
+	}
+
+	private ShapelessFluidContainerRecipeBuilder shapelessFluidContainer(
+			final RecipeCategory category,
+			final ItemLike result
+	) {
+		return ShapelessFluidContainerRecipeBuilder.shapelessFluidContainerRecipe(items, category, result);
+	}
+
+	private static Criterion<InventoryChangeTrigger.TriggerInstance> inventoryTrigger(
+			final ItemPredicate.Builder... p_299527_
+	) {
 		return inventoryTrigger(
 				Arrays.stream(p_299527_)
 						.map(ItemPredicate.Builder::build)
@@ -222,12 +277,30 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 		);
 	}
 
-	private static Criterion<InventoryChangeTrigger.TriggerInstance> inventoryTrigger(final ItemPredicate... p_297226_) {
+	private static Criterion<InventoryChangeTrigger.TriggerInstance> inventoryTrigger(
+			final ItemPredicate... p_297226_
+	) {
 		return CriteriaTriggers.INVENTORY_CHANGED
 				.createCriterion(new InventoryChangeTrigger.TriggerInstance(
 						Optional.empty(),
 						InventoryChangeTrigger.TriggerInstance.Slots.ANY,
 						List.of(p_297226_)
 				));
+	}
+
+	public static class Runner extends RecipeProvider.Runner {
+		public Runner(final PackOutput output, final CompletableFuture<HolderLookup.Provider> lookupProvider) {
+			super(output, lookupProvider);
+		}
+
+		@Override
+		protected RecipeProvider createRecipeProvider(final HolderLookup.Provider registries, final RecipeOutput output) {
+			return new TestMod3RecipeProvider(registries, output);
+		}
+
+		@Override
+		public String getName() {
+			return "TestMod3 Recipes";
+		}
 	}
 }

@@ -34,7 +34,6 @@ public class ClientPlayerRightClickBlock extends StaticPressurePlateBlock {
 		return CODEC;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void entityInside(final BlockState state, final Level world, final BlockPos pos, final Entity entity) {
 		if (!world.isClientSide) {
@@ -46,7 +45,12 @@ public class ClientPlayerRightClickBlock extends StaticPressurePlateBlock {
 		// If on the client side, the colliding Entity is the client player and the total world time is a multiple of 10
 		if (entity == clientPlayer && world.getGameTime() % 10 == 0) {
 			// Make the player right click
-			entity.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_CLIENT_PLAYER_RIGHT_CLICK_RIGHT_CLICK.getTranslationKey()));
+			clientPlayer.displayClientMessage(
+					Component.translatable(
+							TestMod3Lang.MESSAGE_CLIENT_PLAYER_RIGHT_CLICK_RIGHT_CLICK.getTranslationKey()
+					),
+					false
+			);
 
 			DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientOnlyBlockMethods::pressUseItemKeyBinding);
 		}

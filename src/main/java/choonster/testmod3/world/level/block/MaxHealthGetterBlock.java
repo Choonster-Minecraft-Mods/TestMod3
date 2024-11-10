@@ -7,6 +7,7 @@ import choonster.testmod3.util.CapabilityNotPresentException;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -33,12 +34,12 @@ public class MaxHealthGetterBlock extends Block {
 
 	@Override
 	protected InteractionResult useWithoutItem(final BlockState state, final Level level, final BlockPos pos, final Player player, final BlockHitResult blockHitResult) {
-		if (!level.isClientSide) {
+		if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
 			final var maxHealth = MaxHealthCapability
 					.getMaxHealth(player)
 					.orElseThrow(CapabilityNotPresentException::new);
 
-			player.sendSystemMessage(
+			serverPlayer.sendSystemMessage(
 					Component.translatable(
 							TestMod3Lang.MESSAGE_MAX_HEALTH_GET.getTranslationKey(),
 							player.getDisplayName(),

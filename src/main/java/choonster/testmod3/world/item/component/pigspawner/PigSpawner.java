@@ -4,10 +4,11 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModDataComponents;
 import choonster.testmod3.util.ModLogUtils;
 import net.minecraft.ChatFormatting;
-import net.minecraft.commands.CommandSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -68,7 +69,7 @@ public final class PigSpawner {
 		 * @param z               The z position to spawn the pig at
 		 * @param interactable    The IPigSpawnerInteractable, if any
 		 * @param interactablePos The position of the IPigSpawnerInteractable
-		 * @param commandSource   The command source, if any
+		 * @param player          The player, if any
 		 */
 		private static void trySpawnPig(
 				final ItemStack stack,
@@ -78,13 +79,14 @@ public final class PigSpawner {
 				final double z,
 				@Nullable final IPigSpawnerInteractable interactable,
 				final BlockPos interactablePos,
-				@Nullable final CommandSource commandSource
+				@Nullable final Player player
 		) {
 			if (level.isClientSide) {
 				return;
 			}
 
 			final var pigSpawner = getPigSpawner(stack);
+			final var commandSource = player instanceof final ServerPlayer serverPlayer ? serverPlayer.commandSource() : null;
 
 			if (pigSpawner == null) {
 				return;

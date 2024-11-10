@@ -2,8 +2,8 @@ package choonster.testmod3.client.renderer.entity;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.TippableArrowRenderer;
+import net.minecraft.client.renderer.entity.state.TippableArrowRenderState;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.projectile.Arrow;
 
 public class RenderModArrow extends TippableArrowRenderer {
 	private final ResourceLocation entityTexture;
@@ -14,7 +14,7 @@ public class RenderModArrow extends TippableArrowRenderer {
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(final Arrow entity) {
+	protected ResourceLocation getTextureLocation(final TippableArrowRenderState renderState) {
 		return entityTexture;
 	}
 }

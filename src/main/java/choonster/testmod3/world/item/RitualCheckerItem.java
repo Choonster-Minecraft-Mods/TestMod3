@@ -4,14 +4,12 @@ import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.Optional;
@@ -38,13 +36,13 @@ public class RitualCheckerItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(final Level level, final Player playerIn, final InteractionHand hand) {
-		if (!level.isClientSide) {
+	public InteractionResult use(final Level level, final Player player, final InteractionHand hand) {
+		if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
 			final Component textComponent;
 
-			final Optional<BlockPos> invalidPosition = checkRitual(playerIn);
+			final var invalidPosition = checkRitual(serverPlayer);
 			if (invalidPosition.isPresent()) {
-				final BlockPos pos = invalidPosition.get();
+				final var pos = invalidPosition.get();
 				textComponent = Component.translatable(TestMod3Lang.MESSAGE_RITUAL_CHECKER_FAILURE.getTranslationKey(), pos.getX(), pos.getY(), pos.getZ());
 				textComponent.getStyle().withColor(ChatFormatting.RED);
 			} else {
@@ -52,10 +50,10 @@ public class RitualCheckerItem extends Item {
 				textComponent.getStyle().withColor(ChatFormatting.GREEN);
 			}
 
-			playerIn.sendSystemMessage(textComponent);
+			serverPlayer.sendSystemMessage(textComponent);
 		}
 
-		return new InteractionResultHolder<>(InteractionResult.SUCCESS, playerIn.getItemInHand(hand));
+		return InteractionResult.SUCCESS;
 	}
 
 	/**
@@ -65,8 +63,8 @@ public class RitualCheckerItem extends Item {
 	 * @return The first invalid position, if any.
 	 */
 	private Optional<BlockPos> checkRitual(final Player player) {
-		final Level world = player.getCommandSenderWorld();
-		final BlockPos playerPos = player.blockPosition();
+		final var world = player.getCommandSenderWorld();
+		final var playerPos = player.blockPosition();
 
 		// The block under the player must be obsidian
 		if (!(world.getBlockState(playerPos.below()).getBlock() == Blocks.OBSIDIAN)) {
@@ -74,15 +72,15 @@ public class RitualCheckerItem extends Item {
 		}
 
 		// Iterate from -2,0,-2 to +2,0,+2
-		for (int x = -2; x <= 2; x++) {
-			for (int z = -2; z <= 2; z++) {
+		for (var x = -2; x <= 2; x++) {
+			for (var z = -2; z <= 2; z++) {
 				// If this is the player's position, skip it
 				if (x == 0 && z == 0) {
 					continue;
 				}
 
-				final BlockPos pos = playerPos.offset(x, 0, z);
-				final Block block = world.getBlockState(pos).getBlock();
+				final var pos = playerPos.offset(x, 0, z);
+				final var block = world.getBlockState(pos).getBlock();
 
 				if (Math.abs(x) == 2 || Math.abs(z) == 2) { // If this is the outer layer, the block must be air
 					if (block != Blocks.AIR) {

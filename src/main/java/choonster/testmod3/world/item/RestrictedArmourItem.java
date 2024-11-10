@@ -4,11 +4,15 @@ import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import com.mojang.logging.LogUtils;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
 import org.slf4j.Logger;
@@ -26,7 +30,7 @@ import java.util.List;
 public class RestrictedArmourItem extends ArmorItem {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-	public RestrictedArmourItem(final Holder<ArmorMaterial> material, final ArmorItem.Type type, final Item.Properties properties) {
+	public RestrictedArmourItem(final ArmorMaterial material, final ArmorType type, final Item.Properties properties) {
 		super(material, type, properties);
 	}
 

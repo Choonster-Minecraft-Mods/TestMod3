@@ -10,6 +10,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Set;
+
 public class ModBlockEntities {
 	private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, TestMod3.MODID);
 
@@ -72,15 +74,14 @@ public class ModBlockEntities {
 	 * @param <T>                 The block entity class
 	 * @return A RegistryObject reference to the block entity type
 	 */
-	private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> registerBlockEntityType(final String name, final BlockEntityType.BlockEntitySupplier<T> blockEntitySupplier, final RegistryObject<? extends Block> validBlock) {
-		return BLOCK_ENTITY_TYPES.register(name, () -> {
-			@SuppressWarnings("ConstantConditions")
-			// dataFixerType will always be null until mod data fixers are implemented
-			final var blockEntityType = BlockEntityType.Builder
-					.of(blockEntitySupplier, validBlock.get())
-					.build(null);
-
-			return blockEntityType;
-		});
+	private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> registerBlockEntityType(
+			final String name,
+			final BlockEntityType.BlockEntitySupplier<T> blockEntitySupplier,
+			final RegistryObject<? extends Block> validBlock
+	) {
+		return BLOCK_ENTITY_TYPES.register(
+				name,
+				() -> new BlockEntityType<>(blockEntitySupplier, Set.of(validBlock.get()))
+		);
 	}
 }

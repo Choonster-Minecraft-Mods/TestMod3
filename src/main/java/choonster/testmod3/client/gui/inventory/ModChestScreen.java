@@ -5,6 +5,7 @@ import choonster.testmod3.world.level.block.entity.ModChestBlockEntity;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.ContainerScreen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -45,7 +46,30 @@ public class ModChestScreen extends AbstractContainerScreen<ModChestMenu> {
 	protected void renderBg(final GuiGraphics guiGraphics, final float partialTicks, final int x, final int y) {
 		final var centreX = (width - imageWidth) / 2;
 		final var centreY = (height - imageHeight) / 2;
-		guiGraphics.blit(CHEST_GUI_TEXTURE, centreX, centreY, 0, 0, imageWidth, numRows * 18 + 17);
-		guiGraphics.blit(CHEST_GUI_TEXTURE, centreX, centreY + numRows * 18 + 17, 0, 126, imageWidth, 96);
+
+		guiGraphics.blit(RenderType::guiTextured,
+				CHEST_GUI_TEXTURE,
+				centreX,
+				centreY,
+				0,
+				0,
+				imageWidth,
+				numRows * 18 + 17,
+				256,
+				256
+		);
+
+		guiGraphics.blit(
+				RenderType::guiTextured,
+				CHEST_GUI_TEXTURE,
+				centreX,
+				centreY + numRows * 18 + 17,
+				0,
+				126,
+				imageWidth,
+				96,
+				256,
+				256
+		);
 	}
 }

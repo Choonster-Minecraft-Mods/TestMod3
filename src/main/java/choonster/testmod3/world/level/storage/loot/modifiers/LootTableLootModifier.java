@@ -13,7 +13,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -44,9 +43,9 @@ public class LootTableLootModifier extends LootModifier {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	protected @NotNull ObjectArrayList<ItemStack> doApply(final ObjectArrayList<ItemStack> generatedLoot, final LootContext context) {
+	protected ObjectArrayList<ItemStack> doApply(final LootTable table, final ObjectArrayList<ItemStack> generatedLoot, final LootContext context) {
 		final var lootTable = context.getResolver()
-				.get(Registries.LOOT_TABLE, this.lootTable)
+				.get(this.lootTable)
 				.map(Holder::value)
 				.orElse(LootTable.EMPTY);
 

@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraftforge.common.ForgeHooks;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -20,18 +21,21 @@ import java.util.stream.Collectors;
  * @author Choonster
  */
 public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
+	private final List<Ingredient> ingredients;
+
 	private ShapelessFluidContainerRecipe(
 			final String group,
 			final CraftingBookCategory category,
 			final ItemStack result,
-			final NonNullList<Ingredient> ingredients
+			final List<Ingredient> ingredients
 	) {
 		super(group, category, result, ingredients);
+		this.ingredients = ingredients;
 	}
 
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(final CraftingInput input) {
-		final var fluidContainerIngredients = getIngredients()
+		final var fluidContainerIngredients = ingredients
 				.stream()
 				.filter(ingredient -> ingredient instanceof FluidContainerIngredient)
 				.map(ingredient -> (FluidContainerIngredient) ingredient)
@@ -71,18 +75,18 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 	}
 
 	@Override
-	public RecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<ShapelessRecipe> getSerializer() {
 		return ModCrafting.Recipes.FLUID_CONTAINER_SHAPELESS.get();
 	}
 
-	public static class Serializer extends ShapelessRecipeSerializer<ShapelessFluidContainerRecipe> {
-		private final MapCodec<ShapelessFluidContainerRecipe> codec;
+	public static class Serializer extends ShapelessRecipeSerializer<ShapelessRecipe> {
+		private final MapCodec<ShapelessRecipe> codec;
 
 		public Serializer() {
 			super(ShapelessFluidContainerRecipe::new);
 
 			codec = super.codec().validate(
-					recipe -> recipe.getIngredients()
+					recipe -> ((ShapelessFluidContainerRecipe) recipe).ingredients
 							.stream()
 							.filter(ingredient -> ingredient instanceof FluidContainerIngredient)
 							.findFirst()
@@ -92,7 +96,7 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 		}
 
 		@Override
-		public MapCodec<ShapelessFluidContainerRecipe> codec() {
+		public MapCodec<ShapelessRecipe> codec() {
 			return codec;
 		}
 	}

@@ -2,15 +2,10 @@ package choonster.testmod3.compat.waila;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModItems;
-import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.util.Lazy;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
-import snownee.jade.Jade;
 
 import java.util.function.Supplier;
 
@@ -31,6 +26,7 @@ public class ItemTooltipModNameRemover {
 					.orElseThrow()
 	);
 
+	/*
 	@SubscribeEvent(priority = EventPriority.MONITOR)
 	public static void itemTooltip(final ItemTooltipEvent event) {
 		if (event.getItemStack().getItem() == ModItems.NO_MOD_NAME.get() && ModList.get().isLoaded("jade")) {
@@ -44,4 +40,5 @@ public class ItemTooltipModNameRemover {
 			event.getToolTip().remove(name);
 		}
 	}
+	*/
 }

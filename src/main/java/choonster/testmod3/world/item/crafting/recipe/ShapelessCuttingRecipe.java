@@ -9,6 +9,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraftforge.common.ForgeHooks;
 
+import java.util.List;
+
 /**
  * A shapeless recipe that damages any {@link AxeItem} ingredients.
  *
@@ -19,7 +21,7 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 			final String group,
 			final CraftingBookCategory category,
 			final ItemStack result,
-			final NonNullList<Ingredient> ingredients
+			final List<Ingredient> ingredients
 	) {
 		super(group, category, result, ingredients);
 	}
@@ -57,11 +59,11 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 	}
 
 	@Override
-	public RecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<ShapelessRecipe> getSerializer() {
 		return ModCrafting.Recipes.CUTTING_SHAPELESS.get();
 	}
 
-	public static class Serializer extends ShapelessRecipeSerializer<ShapelessCuttingRecipe> {
+	public static class Serializer extends ShapelessRecipeSerializer<ShapelessRecipe> {
 		public Serializer() {
 			super(ShapelessCuttingRecipe::new);
 		}

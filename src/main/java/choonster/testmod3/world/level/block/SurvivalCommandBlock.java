@@ -84,7 +84,7 @@ public class SurvivalCommandBlock extends CommandBlock {
 				serverPlayer.connection.send(ClientboundBlockEntityDataPacket.create(blockEntity, BlockEntity::saveWithoutMetadata));
 			}
 
-			return InteractionResult.sidedSuccess(level.isClientSide);
+			return InteractionResult.SUCCESS_SERVER;
 		} else {
 			return InteractionResult.PASS;
 		}
@@ -92,9 +92,9 @@ public class SurvivalCommandBlock extends CommandBlock {
 
 	@Override
 	public void setPlacedBy(final Level level, final BlockPos pos, final BlockState state, final LivingEntity placer, final ItemStack stack) {
-		if (!level.isClientSide && level.getBlockEntity(pos) instanceof final SurvivalCommandBlockEntity survivalCommandBlockEntity) {
+		if (level instanceof final ServerLevel serverLevel && serverLevel.getBlockEntity(pos) instanceof final SurvivalCommandBlockEntity survivalCommandBlockEntity) {
 			if (!stack.has(DataComponents.BLOCK_ENTITY_DATA)) {
-				survivalCommandBlockEntity.getCommandBlock().setTrackOutput(level.getGameRules().getBoolean(GameRules.RULE_SENDCOMMANDFEEDBACK));
+				survivalCommandBlockEntity.getCommandBlock().setTrackOutput(serverLevel.getGameRules().getBoolean(GameRules.RULE_SENDCOMMANDFEEDBACK));
 				survivalCommandBlockEntity.setAutomatic(automatic);
 			}
 		}
@@ -107,14 +107,14 @@ public class SurvivalCommandBlock extends CommandBlock {
 	 * {@link SurvivalCommandBlock}#executeChain rather than {@link CommandBlock}#execute and
 	 * {@link CommandBlock}#executeChain, removing the checks for the vanilla Command Block instances.
 	 *
-	 * @param world  The level
+	 * @param level  The level
 	 * @param pos    The position
 	 * @param state  The block state
 	 * @param random The level's RNG
 	 */
 	@Override
-	public void tick(final BlockState state, final ServerLevel world, final BlockPos pos, final RandomSource random) {
-		final var blockEntity = world.getBlockEntity(pos);
+	public void tick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {
+		final var blockEntity = level.getBlockEntity(pos);
 
 		if (blockEntity instanceof final CommandBlockEntity commandBlockEntity) {
 			final var commandBlock = commandBlockEntity.getCommandBlock();
@@ -126,23 +126,23 @@ public class SurvivalCommandBlock extends CommandBlock {
 				commandBlockEntity.markConditionMet();
 
 				if (conditionMet) {
-					execute(state, world, pos, commandBlock, hasCommand);
+					execute(state, level, pos, commandBlock, hasCommand);
 				} else if (commandBlockEntity.isConditional()) {
 					commandBlock.setSuccessCount(0);
 				}
 
 				if (commandBlockEntity.isPowered() || commandBlockEntity.isAutomatic()) {
-					world.scheduleTick(pos, this, 1);
+					level.scheduleTick(pos, this, 1);
 				}
 			} else if (mode == CommandBlockEntity.Mode.REDSTONE) {
 				if (conditionMet) {
-					execute(state, world, pos, commandBlock, hasCommand);
+					execute(state, level, pos, commandBlock, hasCommand);
 				} else if (commandBlockEntity.isConditional()) {
 					commandBlock.setSuccessCount(0);
 				}
 			}
 
-			world.updateNeighbourForOutputSignal(pos, this);
+			level.updateNeighbourForOutputSignal(pos, this);
 		}
 	}
 
@@ -153,41 +153,41 @@ public class SurvivalCommandBlock extends CommandBlock {
 	 * instead of {@link CommandBlock}#executeChain.
 	 *
 	 * @param state             The block state
-	 * @param world             The level
+	 * @param level             The level
 	 * @param pos               The position
 	 * @param commandBlockLogic The Command Block Logic
 	 * @param canTrigger        Can the Command Block trigger?
 	 */
-	private void execute(final BlockState state, final Level world, final BlockPos pos, final BaseCommandBlock commandBlockLogic, final boolean canTrigger) {
+	private void execute(final BlockState state, final ServerLevel level, final BlockPos pos, final BaseCommandBlock commandBlockLogic, final boolean canTrigger) {
 		if (canTrigger) {
-			commandBlockLogic.performCommand(world);
+			commandBlockLogic.performCommand(level);
 		} else {
 			commandBlockLogic.setSuccessCount(0);
 		}
 
-		executeChain(world, pos, state.getValue(FACING));
+		executeChain(level, pos, state.getValue(FACING));
 	}
 
 	/**
 	 * Propagate the update to neighbouring Command Blocks
 	 *
-	 * @param world  The level
+	 * @param level  The level
 	 * @param pos    This block's position
 	 * @param facing The direction of the neighbour to update
 	 */
-	private static void executeChain(final Level world, final BlockPos pos, Direction facing) {
+	private static void executeChain(final ServerLevel level, final BlockPos pos, Direction facing) {
 		final var neighbourPos = pos.mutable();
-		final var gameRules = world.getGameRules();
+		final var gameRules = level.getGameRules();
 
 		int i;
 		BlockState neighbourState;
 
 		for (i = gameRules.getInt(GameRules.RULE_MAX_COMMAND_CHAIN_LENGTH); i-- > 0; facing = neighbourState.getValue(FACING)) {
 			neighbourPos.move(facing);
-			neighbourState = world.getBlockState(neighbourPos);
+			neighbourState = level.getBlockState(neighbourPos);
 
 			final var block = neighbourState.getBlock();
-			final var neighbourBlockEntity = world.getBlockEntity(neighbourPos);
+			final var neighbourBlockEntity = level.getBlockEntity(neighbourPos);
 
 			if (!(neighbourBlockEntity instanceof final CommandBlockEntity neighbourCommandBlockEntity)) {
 				break;
@@ -201,11 +201,11 @@ public class SurvivalCommandBlock extends CommandBlock {
 				final var neighbourCommandBlockLogic = neighbourCommandBlockEntity.getCommandBlock();
 
 				if (neighbourCommandBlockEntity.markConditionMet()) {
-					if (!neighbourCommandBlockLogic.performCommand(world)) {
+					if (!neighbourCommandBlockLogic.performCommand(level)) {
 						break;
 					}
 
-					world.updateNeighbourForOutputSignal(neighbourPos, block);
+					level.updateNeighbourForOutputSignal(neighbourPos, block);
 				} else if (neighbourCommandBlockEntity.isConditional()) {
 					neighbourCommandBlockLogic.setSuccessCount(0);
 				}

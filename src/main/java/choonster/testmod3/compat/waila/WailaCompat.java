@@ -1,18 +1,11 @@
 package choonster.testmod3.compat.waila;
 
-import choonster.testmod3.compat.HudProvider;
-import choonster.testmod3.text.TestMod3Lang;
-import choonster.testmod3.world.level.block.*;
-import snownee.jade.api.IBlockComponentProvider;
-import snownee.jade.api.IWailaClientRegistration;
-import snownee.jade.api.IWailaPlugin;
-import snownee.jade.api.WailaPlugin;
-
 /**
  * Waila compatibility.
  *
  * @author Choonster
  */
+/*
 @WailaPlugin
 public class WailaCompat implements IWailaPlugin {
 	public static final IBlockComponentProvider COLORED_ROTATABLE_BLOCK_FACING = new RotatableProvider(
@@ -64,3 +57,4 @@ public class WailaCompat implements IWailaPlugin {
 		registration.registerBlockComponent(RESTRICTED_FLUID_TANK_ENABLED_FACINGS, RestrictedFluidTankBlock.class);
 	}
 }
+*/

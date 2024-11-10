@@ -5,11 +5,11 @@ import choonster.testmod3.capability.chunkenergy.ChunkEnergyCapability;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.CapabilityNotPresentException;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 /**
@@ -23,15 +23,21 @@ public class ChunkEnergyGetterItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(final Level level, final Player player, final InteractionHand hand) {
-		if (!level.isClientSide) {
+	public InteractionResult use(final Level level, final Player player, final InteractionHand hand) {
+		if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
 			final var chunk = level.getChunkAt(player.blockPosition());
 			final var chunkPos = chunk.getPos();
 
 			final var chunkEnergy = ChunkEnergyCapability.getChunkEnergy(chunk).orElseThrow(CapabilityNotPresentException::new);
-			player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_CHUNK_ENERGY_GET.getTranslationKey(), chunkPos, chunkEnergy.getEnergyStored()));
+			serverPlayer.sendSystemMessage(
+					Component.translatable(
+							TestMod3Lang.MESSAGE_CHUNK_ENERGY_GET.getTranslationKey(),
+							chunkPos,
+							chunkEnergy.getEnergyStored()
+					)
+			);
 		}
 
-		return InteractionResultHolder.success(player.getItemInHand(hand));
+		return InteractionResult.SUCCESS;
 	}
 }

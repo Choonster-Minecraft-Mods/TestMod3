@@ -5,6 +5,7 @@ import choonster.testmod3.init.ModItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -39,18 +40,27 @@ public class BlockDetectionArrow extends ModArrow {
 		return new ItemStack(ModItems.BLOCK_DETECTION_ARROW.get());
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	protected void onHit(final HitResult result) {
 		super.onHit(result);
 
 		final var shooter = getOwner();
 
-		if (result.getType() == HitResult.Type.BLOCK && shooter != null) {
+		if (result.getType() == HitResult.Type.BLOCK && shooter instanceof final Player player) {
 			final var pos = ((BlockHitResult) result).getBlockPos();
 			final var state = level().getBlockState(pos);
 
-			shooter.sendSystemMessage(Component.translatable("[%s] Block at %s,%s,%s: %s", level().isClientSide ? "CLIENT" : "SERVER", pos.getX(), pos.getY(), pos.getZ(), state));
+			player.displayClientMessage(
+					Component.translatable(
+							"[%s] Block at %s,%s,%s: %s",
+							level().isClientSide ? "CLIENT" : "SERVER",
+							pos.getX(),
+							pos.getY(),
+							pos.getZ(),
+							state
+					),
+					false
+			);
 		}
 	}
 }

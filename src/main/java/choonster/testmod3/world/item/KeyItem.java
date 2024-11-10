@@ -24,13 +24,18 @@ public class KeyItem extends Item {
 	@Override
 	public InteractionResult useOn(final UseOnContext context) {
 		return LockCapability.getLock(context.getLevel(), context.getClickedPos(), context.getClickedFace())
-				.map(lock -> {
-					if (!context.getLevel().isClientSide && context.getPlayer() != null) {
+				.<InteractionResult>map(lock -> {
+					if (
+							!context.getLevel().isClientSide
+									&& context.getPlayer() instanceof final ServerPlayer serverPlayer
+					) {
 						if (lock.isLocked()) {
-							context.getPlayer().sendSystemMessage(Component.translatable("testmod3.lock.already_locked"));
+							serverPlayer.sendSystemMessage(
+									Component.translatable("testmod3.lock.already_locked")
+							);
 						} else {
 							NetworkUtil.openClientScreen(
-									(ServerPlayer) context.getPlayer(),
+									serverPlayer,
 									ModClientScreenTypes.LOCK,
 									new LockScreenData(context.getClickedPos(), context.getClickedFace())
 							);

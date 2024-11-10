@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
@@ -52,7 +53,7 @@ public interface IPigSpawner {
 	 */
 	@Nullable
 	default IPigSpawner spawnPig(final Level level, final double x, final double y, final double z) {
-		final var pig = EntityType.PIG.create(level);
+		final var pig = EntityType.PIG.create(level, EntitySpawnReason.SPAWN_ITEM_USE);
 
 		if (pig == null) {
 			return null;

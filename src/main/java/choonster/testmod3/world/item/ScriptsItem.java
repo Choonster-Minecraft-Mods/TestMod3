@@ -3,9 +3,9 @@ package choonster.testmod3.world.item;
 import choonster.testmod3.init.ModDataComponents;
 import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -36,13 +36,21 @@ public abstract class ScriptsItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(final Level level, final Player playerIn, final InteractionHand hand) {
-		final ItemStack heldItem = playerIn.getItemInHand(hand);
+	public InteractionResult use(final Level level, final Player player, final InteractionHand hand) {
+		final ItemStack heldItem = player.getItemInHand(hand);
 
-		if (!level.isClientSide) {
-			playerIn.sendSystemMessage(Component.translatable(String.format(TestMod3Lang.MESSAGE_SCRIPTS_RIGHT_CLICK.getTranslationKey(), getDescriptionId()), scriptFunction.apply(getNumber(heldItem))));
+		if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
+			serverPlayer.sendSystemMessage(
+					Component.translatable(
+							String.format(
+									TestMod3Lang.MESSAGE_SCRIPTS_RIGHT_CLICK.getTranslationKey(),
+									descriptionId
+							),
+							scriptFunction.apply(getNumber(heldItem))
+					)
+			);
 		}
 
-		return new InteractionResultHolder<>(InteractionResult.SUCCESS, heldItem);
+		return InteractionResult.SUCCESS;
 	}
 }

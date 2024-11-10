@@ -8,7 +8,6 @@ import choonster.testmod3.init.levelgen.ModPlacementModifierTypes;
 import choonster.testmod3.util.BlockDumper;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -27,10 +26,10 @@ public class TestMod3 {
 
 	public static final SimpleChannel network = ModNetwork.getNetworkChannel();
 
-	public TestMod3() {
-		TestMod3Config.register(ModLoadingContext.get());
+	public TestMod3(final FMLJavaModLoadingContext context) {
+		TestMod3Config.register(context);
 
-		final var modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		final var modEventBus = context.getModEventBus();
 
 		ModFluids.initialise(modEventBus);
 		ModBlocks.initialise(modEventBus);
@@ -52,7 +51,6 @@ public class TestMod3 {
 		ModArgumentTypes.initialise(modEventBus);
 		ModBiomeModifierSerializers.initialise(modEventBus);
 		ModCreativeTabs.initialise(modEventBus);
-		ModArmorMaterials.initialise(modEventBus);
 		ModDataComponents.initialise(modEventBus);
 		ModClientScreenTypes.initialise(modEventBus);
 	}

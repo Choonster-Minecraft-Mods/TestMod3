@@ -1,13 +1,13 @@
 package choonster.testmod3.data.crafting.ingredient;
 
 import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredient;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 /**
@@ -66,8 +66,9 @@ public class ConditionalIngredientBuilder {
 	 */
 	public ConditionalIngredient build() {
 		if (condition == null) {
-			final var stacks = Arrays.stream(ingredient.getItems())
-					.map(ItemStack::toString)
+			final var stacks = ingredient.items().stream()
+					.map(Holder::get)
+					.map(Item::toString)
 					.collect(Collectors.joining(","));
 
 			throw new IllegalStateException("Conditional ingredient producing [" + stacks + "] has no conditions");

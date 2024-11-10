@@ -1,12 +1,9 @@
 package choonster.testmod3.world.item.crafting.ingredient;
 
 import choonster.testmod3.init.ModCrafting;
-import choonster.testmod3.text.TestMod3Lang;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.Util;
-import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.HolderSet;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -14,7 +11,6 @@ import net.minecraftforge.common.crafting.ingredients.AbstractIngredient;
 import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
 
 import javax.annotation.Nullable;
-import java.util.stream.Stream;
 
 /**
  * An {@link Ingredient} that never matches any {@link ItemStack}.
@@ -29,13 +25,9 @@ public class NeverIngredient extends AbstractIngredient {
 
 	public static final MapCodec<NeverIngredient> CODEC = MapCodec.unit(INSTANCE);
 
+	@SuppressWarnings("deprecation")
 	private NeverIngredient() {
-		super(Stream.of(
-				new ItemValue(Util.make(
-						new ItemStack(Items.BARRIER),
-						stack -> stack.set(DataComponents.CUSTOM_NAME, Component.translatable(TestMod3Lang.INGREDIENT_NEVER_BARRIER_NAME.getTranslationKey()))
-				))
-		));
+		super(HolderSet.direct(Items.BARRIER.builtInRegistryHolder()));
 	}
 
 	@Override

@@ -79,6 +79,11 @@ public class TestMod3ItemTagsProvider extends ItemTagsProvider {
 						Items.BLACK_TERRACOTTA
 				);
 
+		tag(ModTags.Items.REPAIRS_REPLACEMENT_ARMOR)
+				.add(
+						ModItems.ARROW.get()
+				);
+
 		tag(ItemTags.PLANKS)
 				.add(
 						ModBlocks.PLANKS.get().asItem()

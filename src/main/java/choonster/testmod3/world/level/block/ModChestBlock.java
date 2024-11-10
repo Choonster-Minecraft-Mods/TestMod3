@@ -9,7 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -46,7 +46,7 @@ public class ModChestBlock extends BaseEntityBlock<ModChestBlockEntity> {
 
 	public static final MapCodec<ModChestBlock> CODEC = simpleCodec(ModChestBlock::new);
 
-	public static final Property<Direction> FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
+	public static final Property<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
 	public ModChestBlock(final Block.Properties properties) {
 		super(properties);
@@ -62,7 +62,6 @@ public class ModChestBlock extends BaseEntityBlock<ModChestBlockEntity> {
 		builder.add(FACING);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public VoxelShape getShape(final BlockState state, final BlockGetter world, final BlockPos pos, final CollisionContext context) {
 		return SHAPE;
@@ -91,7 +90,7 @@ public class ModChestBlock extends BaseEntityBlock<ModChestBlockEntity> {
 	}
 
 	@Override
-	protected ItemInteractionResult useItemOn(final ItemStack stack, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
+	protected InteractionResult useItemOn(final ItemStack stack, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
 		if (!level.isClientSide && !isBlocked(level, pos)) {
 			final ModChestBlockEntity blockEntity = getBlockEntity(level, pos);
 			if (blockEntity != null) {
@@ -99,7 +98,7 @@ public class ModChestBlock extends BaseEntityBlock<ModChestBlockEntity> {
 			}
 		}
 
-		return ItemInteractionResult.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 
 	/**

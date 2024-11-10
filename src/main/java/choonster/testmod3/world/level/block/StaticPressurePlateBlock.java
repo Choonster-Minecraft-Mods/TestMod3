@@ -3,9 +3,10 @@ package choonster.testmod3.world.level.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,28 +29,40 @@ public abstract class StaticPressurePlateBlock extends Block {
 	@Override
 	protected abstract MapCodec<? extends Block> codec();
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public VoxelShape getShape(final BlockState state, final BlockGetter world, final BlockPos pos, final CollisionContext context) {
 		return SHAPE;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public BlockState updateShape(final BlockState state, final Direction facing, final BlockState facingState, final LevelAccessor world, final BlockPos currentPos, final BlockPos facingPos) {
-		return facing == Direction.DOWN && !state.canSurvive(world, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, facing, facingState, world, currentPos, facingPos);
+	public BlockState updateShape(
+			final BlockState state,
+			final LevelReader level,
+			final ScheduledTickAccess scheduledTickAccess,
+			final BlockPos currentPos,
+			final Direction facing,
+			final BlockPos facingPos,
+			final BlockState facingState,
+			final RandomSource random
+	) {
+		return facing == Direction.DOWN && !state.canSurvive(level, currentPos)
+				? Blocks.AIR.defaultBlockState() :
+				super.updateShape(state, level, scheduledTickAccess, currentPos, facing, facingPos, facingState, random);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean canSurvive(final BlockState state, final LevelReader world, final BlockPos pos) {
-		final BlockPos downPos = pos.below();
+		final var downPos = pos.below();
 		return canSupportRigidBlock(world, downPos) || canSupportCenter(world, downPos, Direction.UP);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public VoxelShape getCollisionShape(final BlockState state, final BlockGetter world, final BlockPos pos, final CollisionContext context) {
+	public VoxelShape getCollisionShape(
+			final BlockState state,
+			final BlockGetter world,
+			final BlockPos pos,
+			final CollisionContext context
+	) {
 		return Shapes.empty();
 	}
 }

@@ -9,12 +9,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -45,21 +45,21 @@ public class ClearerItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(final Level world, final Player player, final InteractionHand hand) {
+	public InteractionResult use(final Level world, final Player player, final InteractionHand hand) {
 		final var heldItem = player.getItemInHand(hand);
 
-		if (!world.isClientSide) {
+		if (!world.isClientSide && player instanceof final ServerPlayer serverPlayer) {
 			final var currentMode = getMode(heldItem);
 
-			if (player.isShiftKeyDown()) {
+			if (serverPlayer.isShiftKeyDown()) {
 				final var newMode = currentMode == ClearerMode.ALL ? ClearerMode.WHITELIST : ClearerMode.ALL;
 				setMode(heldItem, newMode);
-				player.sendSystemMessage(Component.translatable(String.format(TestMod3Lang.MESSAGE_CLEARER_MODE_S.getTranslationKey(), newMode)));
+				serverPlayer.sendSystemMessage(Component.translatable(String.format(TestMod3Lang.MESSAGE_CLEARER_MODE_S.getTranslationKey(), newMode)));
 			} else {
-				final var minX = Mth.floor(player.getX() / 16) * 16;
-				final var minZ = Mth.floor(player.getZ() / 16) * 16;
+				final var minX = Mth.floor(serverPlayer.getX() / 16) * 16;
+				final var minZ = Mth.floor(serverPlayer.getZ() / 16) * 16;
 
-				player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_CLEARER_CLEARING.getTranslationKey(), minX, minZ));
+				serverPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_CLEARER_CLEARING.getTranslationKey(), minX, minZ));
 
 				for (var x = minX; x < minX + 16; x++) {
 					for (var z = minZ; z < minZ + 16; z++) {
@@ -73,15 +73,15 @@ public class ClearerItem extends Item {
 					}
 				}
 
-				final var pos = player.blockPosition();
+				final var pos = serverPlayer.blockPosition();
 				final var state = world.getBlockState(pos);
 				world.sendBlockUpdated(pos, state, state, 3);
 
-				player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_CLEARER_CLEARED.getTranslationKey()));
+				serverPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_CLEARER_CLEARED.getTranslationKey()));
 			}
 		}
 
-		return new InteractionResultHolder<>(InteractionResult.SUCCESS, heldItem);
+		return InteractionResult.SUCCESS;
 	}
 
 	@Override

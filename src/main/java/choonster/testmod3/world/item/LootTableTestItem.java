@@ -2,13 +2,12 @@ package choonster.testmod3.world.item;
 
 import choonster.testmod3.init.ModLootTables;
 import choonster.testmod3.text.TestMod3Lang;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -38,35 +37,37 @@ public class LootTableTestItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(final Level level, final Player player, final InteractionHand hand) {
-		if (!level.isClientSide) {
-			final var lootTable = level
-					.registryAccess()
-					.registry(Registries.LOOT_TABLE)
-					.map(registry -> registry.get(ModLootTables.LOOT_TABLE_TEST))
-					.orElse(LootTable.EMPTY);
+	public InteractionResult use(final Level level, final Player player, final InteractionHand hand) {
+		if (level instanceof final ServerLevel serverLevel && player instanceof final ServerPlayer serverPlayer) {
+			final var lootTable = serverLevel
+					.getServer()
+					.reloadableRegistries()
+					.getLootTable(ModLootTables.LOOT_TABLE_TEST);
 
 			final var state = Blocks.CHEST.defaultBlockState();
 
-			final var lootParams = new LootParams.Builder((ServerLevel) level)
-					.withParameter(LootContextParams.THIS_ENTITY, player)
-					.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player)
-					.withParameter(LootContextParams.ATTACKING_ENTITY, player)
-					.withParameter(LootContextParams.DIRECT_ATTACKING_ENTITY, player)
+			final var lootParams = new LootParams.Builder(serverLevel)
+					.withParameter(LootContextParams.THIS_ENTITY, serverPlayer)
+					.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, serverPlayer)
+					.withParameter(LootContextParams.ATTACKING_ENTITY, serverPlayer)
+					.withParameter(LootContextParams.DIRECT_ATTACKING_ENTITY, serverPlayer)
 					.withParameter(LootContextParams.DAMAGE_SOURCE, level.damageSources().generic())
-					.withParameter(LootContextParams.TOOL, player.getMainHandItem())
-					.withParameter(LootContextParams.ORIGIN, player.position())
+					.withParameter(LootContextParams.TOOL, serverPlayer.getMainHandItem())
+					.withParameter(LootContextParams.ORIGIN, serverPlayer.position())
 					.withParameter(LootContextParams.BLOCK_STATE, state)
-					.withParameter(LootContextParams.BLOCK_ENTITY, Objects.requireNonNull(BlockEntityType.CHEST.create(player.getOnPos(), state)))
+					.withParameter(
+							LootContextParams.BLOCK_ENTITY,
+							Objects.requireNonNull(BlockEntityType.CHEST.create(serverPlayer.getOnPos(), state))
+					)
 					.withParameter(LootContextParams.EXPLOSION_RADIUS, 99.0f)
 					.create(LootContextParamSets.ALL_PARAMS);
 
 			final var itemStacks = lootTable.getRandomItems(lootParams);
 			for (final var itemStack : itemStacks) {
-				ItemHandlerHelper.giveItemToPlayer(player, itemStack);
+				ItemHandlerHelper.giveItemToPlayer(serverPlayer, itemStack);
 			}
 
-			player.inventoryMenu.broadcastChanges();
+			serverPlayer.inventoryMenu.broadcastChanges();
 
 			if (!itemStacks.isEmpty()) {
 				final var lootMessage = getItemStackTextComponent(itemStacks.getFirst());
@@ -76,15 +77,15 @@ public class LootTableTestItem extends Item {
 					lootMessage.append(getItemStackTextComponent(itemStacks.get(i)));
 				});
 
-				final Component chatMessage = Component.translatable(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_BASE.getTranslationKey(), lootMessage);
+				final var chatMessage = Component.translatable(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_BASE.getTranslationKey(), lootMessage);
 
-				player.sendSystemMessage(chatMessage);
+				serverPlayer.sendSystemMessage(chatMessage);
 			} else {
-				player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_NO_LOOT.getTranslationKey()));
+				serverPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_PLAYER_RECEIVED_LOOT_NO_LOOT.getTranslationKey()));
 			}
 		}
 
-		return new InteractionResultHolder<>(InteractionResult.SUCCESS, player.getItemInHand(hand));
+		return InteractionResult.SUCCESS;
 	}
 
 	/**

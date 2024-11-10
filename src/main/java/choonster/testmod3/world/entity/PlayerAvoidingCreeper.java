@@ -57,10 +57,28 @@ public class PlayerAvoidingCreeper extends Creeper {
 				.ifPresent(targetSelector::removeGoal);
 
 		// Avoid players if they have an item in their off hand
-		goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Player.class, 6.0F, 1.0D, 1.2D, PlayerAvoidingCreeper::shouldAvoidEntity));
+		goalSelector.addGoal(
+				3,
+				new AvoidEntityGoal<>(
+						this,
+						Player.class,
+						6.0F,
+						1.0D,
+						1.2D,
+						PlayerAvoidingCreeper::shouldAvoidEntity)
+		);
 
 		// Only attack players without an item in their off hand
-		targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, (player) -> !shouldAvoidEntity(player)));
+		targetSelector.addGoal(1,
+				new NearestAttackableTargetGoal<>(
+						this,
+						Player.class,
+						10,
+						true,
+						false,
+						(entity, level) -> !shouldAvoidEntity(entity)
+				)
+		);
 	}
 
 	/**

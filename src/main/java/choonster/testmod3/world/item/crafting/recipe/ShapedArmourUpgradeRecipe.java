@@ -47,7 +47,7 @@ public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
 	}
 
 	@Override
-	public RecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<ShapedArmourUpgradeRecipe> getSerializer() {
 		return ModCrafting.Recipes.ARMOUR_UPGRADE_SHAPED.get();
 	}
 

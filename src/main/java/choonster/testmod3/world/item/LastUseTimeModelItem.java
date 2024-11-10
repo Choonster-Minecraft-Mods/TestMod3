@@ -2,11 +2,9 @@ package choonster.testmod3.world.item;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemCooldowns;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 /**
@@ -25,7 +23,7 @@ public class LastUseTimeModelItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(final Level level, final Player playerIn, final InteractionHand hand) {
-		return new InteractionResultHolder<>(InteractionResult.SUCCESS, playerIn.getItemInHand(hand));
+	public InteractionResult use(final Level level, final Player playerIn, final InteractionHand hand) {
+		return InteractionResult.SUCCESS;
 	}
 }

@@ -8,12 +8,14 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -48,20 +50,32 @@ public class ItemLootModifier extends LootModifier {
 	private final List<Holder<LootItemFunction>> functions;
 	private final BiFunction<ItemStack, LootContext, ItemStack> compositeFunction;
 
-	private ItemLootModifier(final LootItemCondition[] conditions, final Item item, final List<Holder<LootItemFunction>> functions) {
+	private ItemLootModifier(
+			final LootItemCondition[] conditions,
+			final Item item,
+			final List<Holder<LootItemFunction>> functions
+	) {
 		super(conditions);
 		this.item = item;
 		this.functions = functions;
 		compositeFunction = LootItemFunctions.compose(functions.stream().map(Holder::get).toList());
 	}
 
-	public static ItemLootModifier create(final LootItemCondition[] conditions, final Item item, final List<LootItemFunction> functions) {
+	public static ItemLootModifier create(
+			final LootItemCondition[] conditions,
+			final Item item,
+			final List<LootItemFunction> functions
+	) {
 		return new ItemLootModifier(conditions, item, functions.stream().map(Holder::direct).toList());
 	}
 
 	@Override
-	protected ObjectArrayList<ItemStack> doApply(final ObjectArrayList<ItemStack> generatedLoot, final LootContext context) {
-		final ItemStack stack = new ItemStack(item);
+	protected @NotNull ObjectArrayList<ItemStack> doApply(
+			final LootTable table,
+			final ObjectArrayList<ItemStack> generatedLoot,
+			final LootContext context
+	) {
+		final var stack = new ItemStack(item);
 
 		compositeFunction.apply(stack, context);
 

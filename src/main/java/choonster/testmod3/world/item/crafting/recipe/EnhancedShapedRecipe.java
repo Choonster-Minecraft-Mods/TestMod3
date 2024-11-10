@@ -24,7 +24,7 @@ public class EnhancedShapedRecipe extends ShapedRecipe {
 	}
 
 	@Override
-	public RecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<? extends EnhancedShapedRecipe> getSerializer() {
 		return ModCrafting.Recipes.ENHANCED_SHAPED.get();
 	}
 

@@ -6,8 +6,10 @@ import choonster.testmod3.util.ModFluidUtil;
 import choonster.testmod3.util.RegistryUtil;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.ingredients.AbstractIngredient;
@@ -18,7 +20,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.stream.Stream;
+import java.util.List;
 
 /**
  * An ingredient that matches any fluid container filled with the specified {@link FluidStack}.
@@ -46,10 +48,10 @@ public class FluidContainerIngredient extends AbstractIngredient {
 
 	private final FluidStack fluidStack;
 	@Nullable
-	private ItemStack[] matchingStacks;
+	private List<Holder<Item>> items;
 
 	protected FluidContainerIngredient(final FluidStack fluidStack) {
-		super(Stream.empty());
+		super(HolderSet.empty());
 		this.fluidStack = fluidStack;
 	}
 
@@ -68,37 +70,19 @@ public class FluidContainerIngredient extends AbstractIngredient {
 	}
 
 	@Override
-	public boolean isEmpty() {
-		return getItems().length == 0;
-	}
-
-	@Override
-	public ItemStack[] getItems() {
-		if (matchingStacks == null) {
-			matchingStacks = RegistryUtil.stream(ForgeRegistries.ITEMS)
+	public List<Holder<Item>> items() {
+		if (items == null) {
+			items = RegistryUtil.stream(ForgeRegistries.ITEMS)
 					.map(ItemStack::new)
 					.filter(stack -> FluidUtil.getFluidHandler(stack).isPresent())
 					.map(stack -> ModFluidUtil.fillContainer(stack, fluidStack))
 					.filter(FluidActionResult::isSuccess)
 					.map(FluidActionResult::getResult)
-					.toArray(ItemStack[]::new);
+					.map(ItemStack::getItemHolder)
+					.toList();
 		}
 
-		return matchingStacks;
-	}
-
-	@Override
-	public IntList getStackingIds() {
-		getItems();
-
-		return super.getStackingIds();
-	}
-
-	@Override
-	protected void invalidate() {
-		matchingStacks = null;
-
-		super.invalidate();
+		return items;
 	}
 
 	@Override
@@ -130,7 +114,7 @@ public class FluidContainerIngredient extends AbstractIngredient {
 
 		@Override
 		public FluidContainerIngredient read(final RegistryFriendlyByteBuf buffer) {
-			var fluidStack = VanillaCodecs.FLUID_STACK_STREAM_CODEC.decode(buffer);
+			final var fluidStack = VanillaCodecs.FLUID_STACK_STREAM_CODEC.decode(buffer);
 
 			return new FluidContainerIngredient(fluidStack);
 		}

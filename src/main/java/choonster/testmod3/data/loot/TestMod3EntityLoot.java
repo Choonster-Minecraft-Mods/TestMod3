@@ -4,6 +4,7 @@ import choonster.testmod3.init.ModEntities;
 import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
@@ -36,19 +37,38 @@ public class TestMod3EntityLoot extends EntityLootSubProvider {
 
 	@Override
 	public void generate() {
+		final var entities = registries.lookupOrThrow(Registries.ENTITY_TYPE);
+
 		add(ModEntities.PLAYER_AVOIDING_CREEPER.get(),
 				LootTable.lootTable()
 						.withPool(
 								LootPool.lootPool()
 										.setRolls(ConstantValue.exactly(1.0F))
 										.add(LootItem.lootTableItem(Items.GUNPOWDER)
-												.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
-												.apply(EnchantedCountIncreaseFunction.lootingMultiplier(registries, UniformGenerator.between(0.0F, 1.0F))))
+												.apply(
+														SetItemCountFunction.setCount(
+																UniformGenerator.between(0.0F, 2.0F)
+														)
+												)
+												.apply(
+														EnchantedCountIncreaseFunction.lootingMultiplier(
+																registries,
+																UniformGenerator.between(0.0F, 1.0F)
+														)
+												)
+										)
 						)
 						.withPool(
 								LootPool.lootPool()
 										.add(TagEntry.expandTag(ItemTags.CREEPER_DROP_MUSIC_DISCS))
-										.when(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().of(EntityTypeTags.SKELETONS)))
+										.when(
+												LootItemEntityPropertyCondition.hasProperties(
+														LootContext.EntityTarget.ATTACKER,
+														EntityPredicate.Builder.entity().of(
+																entities, EntityTypeTags.SKELETONS
+														)
+												)
+										)
 						)
 		);
 	}

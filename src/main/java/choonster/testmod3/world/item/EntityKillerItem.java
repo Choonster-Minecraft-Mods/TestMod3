@@ -1,11 +1,13 @@
 package choonster.testmod3.world.item;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.entity.PartEntity;
 
 /**
  * An item that kills an entity when you left-click on it.
@@ -23,17 +25,27 @@ public class EntityKillerItem extends Item {
 	@SuppressWarnings("resource")
 	@Override
 	public boolean onLeftClickEntity(final ItemStack stack, final Player player, final Entity entity) {
-		if (!player.level().isClientSide) {
+		if (
+				player instanceof final ServerPlayer serverPlayer
+						&& player.level() instanceof final ServerLevel serverLevel
+		) {
 			final Entity entityToKill;
 
-			if (entity instanceof final EnderDragonPart enderDragonPart) { // If it's a part of an Ender Dragon, kill the main Ender Dragon entity
-				entityToKill = enderDragonPart.parentMob;
+			// If it's a part of a multipart entity, kill the main entity
+			if (entity instanceof final PartEntity<?> partEntity) {
+				entityToKill = partEntity.getParent();
 			} else {
 				entityToKill = entity;
 			}
 
-			entityToKill.kill();
-			player.sendSystemMessage(Component.translatable("commands.kill.success.single", entityToKill.getDisplayName()));
+			entityToKill.kill(serverLevel);
+
+			serverPlayer.sendSystemMessage(
+					Component.translatable(
+							"commands.kill.success.single",
+							entityToKill.getDisplayName()
+					)
+			);
 		}
 
 		return true;

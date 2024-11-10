@@ -18,6 +18,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.equipment.ArmorMaterials;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.common.ForgeSpawnEggItem;
@@ -36,7 +38,7 @@ public class ModItems {
 	private static boolean isInitialised;
 
 	public static final RegistryObject<CuttingAxeItem> WOODEN_AXE = ITEMS.register("wooden_axe",
-			() -> new CuttingAxeItem(Tiers.WOOD, defaultItemProperties().attributes(AxeItem.createAttributes(Tiers.WOOD, 6.0f, -3.2f)))
+			() -> new CuttingAxeItem(ToolMaterial.WOOD, 6.0f, -3.2f, defaultItemProperties())
 	);
 
 	public static final RegistryObject<EntityTestItem> ENTITY_TEST = ITEMS.register("entity_test",
@@ -117,11 +119,11 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<HarvestSwordItem> WOODEN_HARVEST_SWORD = ITEMS.register("wooden_harvest_sword",
-			() -> new HarvestSwordItem(Tiers.WOOD, defaultItemProperties().attributes(HarvestSwordItem.createAttributes(Tiers.WOOD)))
+			() -> new HarvestSwordItem(ToolMaterial.WOOD, defaultItemProperties())
 	);
 
 	public static final RegistryObject<HarvestSwordItem> DIAMOND_HARVEST_SWORD = ITEMS.register("diamond_harvest_sword",
-			() -> new HarvestSwordItem(Tiers.DIAMOND, defaultItemProperties().attributes(HarvestSwordItem.createAttributes(Tiers.DIAMOND)))
+			() -> new HarvestSwordItem(ToolMaterial.DIAMOND, defaultItemProperties())
 	);
 
 	public static final RegistryObject<ClearerItem> CLEARER = ITEMS.register("clearer",
@@ -202,11 +204,11 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<SlowSwordItem> WOODEN_SLOW_SWORD = ITEMS.register("wooden_slow_sword",
-			() -> new SlowSwordItem(Tiers.WOOD, defaultItemProperties().attributes(SlowSwordItem.createAttributes(Tiers.WOOD)))
+			() -> new SlowSwordItem(ToolMaterial.WOOD, defaultItemProperties())
 	);
 
 	public static final RegistryObject<SlowSwordItem> DIAMOND_SLOW_SWORD = ITEMS.register("diamond_slow_sword",
-			() -> new SlowSwordItem(Tiers.DIAMOND, defaultItemProperties().attributes(SlowSwordItem.createAttributes(Tiers.DIAMOND)))
+			() -> new SlowSwordItem(ToolMaterial.DIAMOND, defaultItemProperties())
 	);
 
 	public static final RegistryObject<RitualCheckerItem> RITUAL_CHECKER = ITEMS.register("ritual_checker",
@@ -255,8 +257,8 @@ public class ModItems {
 
 	public static final RegistryObject<PotionEffectArmourItem> SATURATION_HELMET = ITEMS.register("saturation_helmet",
 			() -> new PotionEffectArmourItem(
-					ArmorMaterials.CHAIN,
-					ArmorItem.Type.HELMET,
+					ArmorMaterials.CHAINMAIL,
+					ArmorType.HELMET,
 					new MobEffectInstance(MobEffects.SATURATION, 1, 0, true, false),
 					defaultItemProperties()
 			)
@@ -274,22 +276,22 @@ public class ModItems {
 	public static final RegistryObject<ReplacementArmourItem> REPLACEMENT_HELMET;
 
 	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_CHESTPLATE = ITEMS.register("replacement_chestplate",
-			() -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT.getHolder().orElseThrow(), ArmorItem.Type.CHESTPLATE, defaultItemProperties())
+			() -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT, ArmorType.CHESTPLATE, defaultItemProperties())
 	);
 
 	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_LEGGINGS = ITEMS.register("replacement_leggings",
-			() -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT.getHolder().orElseThrow(), ArmorItem.Type.LEGGINGS, defaultItemProperties())
+			() -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT, ArmorType.LEGGINGS, defaultItemProperties())
 	);
 
 	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_BOOTS = ITEMS.register("replacement_boots",
-			() -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT.getHolder().orElseThrow(), ArmorItem.Type.BOOTS, defaultItemProperties())
+			() -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT, ArmorType.BOOTS, defaultItemProperties())
 	);
 
 	static {
 		REPLACEMENT_HELMET = ITEMS.register("replacement_helmet",
 				() -> new ReplacementArmourItem(
-						ModArmorMaterials.REPLACEMENT.getHolder().orElseThrow(),
-						ArmorItem.Type.HELMET,
+						ModArmorMaterials.REPLACEMENT,
+						ArmorType.HELMET,
 						defaultItemProperties(),
 						ImmutableSet.of(
 								(registryAccess) -> {

@@ -4,9 +4,10 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -91,12 +92,20 @@ public abstract class BasePipeBlock extends PipeBlock {
 		return neighbourIsValidForThis && thisIsValidForNeighbour;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public BlockState updateShape(BlockState state, final Direction facing, final BlockState facingState, final LevelAccessor world, final BlockPos currentPos, final BlockPos facingPos) {
+	protected BlockState updateShape(
+			BlockState state,
+			final LevelReader level,
+			final ScheduledTickAccess scheduledTickAccess,
+			final BlockPos currentPos,
+			final Direction facing,
+			final BlockPos facingPos,
+			final BlockState facingState,
+			final RandomSource random
+	) {
 		// TODO: This may be incorrect
 		for (final Direction neighbourFacing : Direction.values()) {
-			state = state.setValue(PROPERTY_BY_DIRECTION.get(facing), canConnectTo(state, world, currentPos, neighbourFacing));
+			state = state.setValue(PROPERTY_BY_DIRECTION.get(facing), canConnectTo(state, level, currentPos, neighbourFacing));
 		}
 
 		return state;

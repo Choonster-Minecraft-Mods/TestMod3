@@ -12,7 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -87,22 +87,21 @@ public class ModBucketItem extends Item {
 	@Override
 	public Component getName(final ItemStack stack) {
 		final var fluidStack = getFluid(stack);
-		final var translationKey = getDescriptionId(stack);
 
 		// If the bucket is empty, translate the translation key directly
 		if (fluidStack.isEmpty()) {
-			return Component.translatable(translationKey);
+			return Component.translatable(descriptionId);
 		}
 
 		// If there's a fluid-specific translation, use it
-		final var fluidTranslationKey = translationKey + ".filled." + fluidStack.getTranslationKey();
+		final var fluidTranslationKey = descriptionId + ".filled." + fluidStack.getTranslationKey();
 
 		if (Language.getInstance().has(fluidTranslationKey)) {
 			return Component.translatable(fluidTranslationKey);
 		}
 
 		// Else translate the filled name directly, formatting it with the fluid name
-		return Component.translatable(translationKey + ".filled", fluidStack.getDisplayName());
+		return Component.translatable(descriptionId + ".filled", fluidStack.getDisplayName());
 	}
 
 	@Override
@@ -116,7 +115,7 @@ public class ModBucketItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(final Level level, final Player player, final InteractionHand hand) {
+	public InteractionResult use(final Level level, final Player player, final InteractionHand hand) {
 		final var heldItem = player.getItemInHand(hand);
 		final var fluidStack = getFluid(heldItem);
 		final var isEmpty = fluidStack.isEmpty();
@@ -129,7 +128,7 @@ public class ModBucketItem extends Item {
 		}
 
 		if (rayTrace.getType() != HitResult.Type.BLOCK) {
-			return InteractionResultHolder.pass(heldItem);
+			return InteractionResult.PASS;
 		}
 
 		final var pos = rayTrace.getBlockPos();
@@ -137,7 +136,7 @@ public class ModBucketItem extends Item {
 		final var adjacentPos = pos.relative(direction);
 
 		if (!level.mayInteract(player, pos) || !player.mayUseItemAt(adjacentPos, direction, heldItem)) {
-			return InteractionResultHolder.fail(heldItem);
+			return InteractionResult.FAIL;
 		}
 
 		final ItemStack result;
@@ -146,7 +145,7 @@ public class ModBucketItem extends Item {
 			final var pickUpResult = FluidUtil.tryPickUpFluid(heldItem, player, level, pos, direction);
 
 			if (!pickUpResult.isSuccess()) {
-				return InteractionResultHolder.fail(heldItem);
+				return InteractionResult.FAIL;
 			}
 
 			final var filledBucket = pickUpResult.getResult();
@@ -170,7 +169,7 @@ public class ModBucketItem extends Item {
 			final var placePos = placeResultPair.getSecond();
 
 			if (!placeResult.isSuccess()) {
-				return InteractionResultHolder.fail(heldItem);
+				return InteractionResult.FAIL;
 			}
 
 			if (!level.isClientSide()) {
@@ -183,7 +182,7 @@ public class ModBucketItem extends Item {
 
 		player.awardStat(Stats.ITEM_USED.get(this));
 
-		return InteractionResultHolder.sidedSuccess(result, level.isClientSide());
+		return InteractionResult.SUCCESS_SERVER.heldItemTransformedTo(result);
 	}
 
 	private Pair<FluidActionResult, BlockPos> tryPlaceContainedFluid(

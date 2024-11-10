@@ -5,25 +5,18 @@ import choonster.testmod3.client.init.ModKeyMappings;
 import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import java.util.Collection;
 
 /**
  * Handles the effects of this mod's {@link KeyMapping}s.
@@ -63,21 +56,26 @@ public class KeyMappingHandler {
 	 * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2786461-how-to-get-minecraftserver-instance
 	 */
 	private static void placeHeldBlock() {
-		final LocalPlayer clientPlayer = MINECRAFT.player;
+		final var clientPlayer = MINECRAFT.player;
+		final var gameMode = MINECRAFT.gameMode;
 
-		for (final InteractionHand hand : InteractionHand.values()) {
-			final ItemStack heldItem = clientPlayer.getItemInHand(hand);
-			final int heldItemCount = heldItem.getCount();
+		if (clientPlayer == null || gameMode == null) {
+			return;
+		}
 
-			final BlockPos pos = clientPlayer.blockPosition().below();
-			final BlockHitResult rayTraceResult = new BlockHitResult(new Vec3(0, 0, 0), Direction.UP, pos, false);
+		for (final var hand : InteractionHand.values()) {
+			final var heldItem = clientPlayer.getItemInHand(hand);
+			final var heldItemCount = heldItem.getCount();
 
-			final InteractionResult actionResult = MINECRAFT.gameMode.useItemOn(clientPlayer, hand, rayTraceResult);
+			final var pos = clientPlayer.blockPosition().below();
+			final var rayTraceResult = new BlockHitResult(new Vec3(0, 0, 0), Direction.UP, pos, false);
+
+			final var actionResult = gameMode.useItemOn(clientPlayer, hand, rayTraceResult);
 
 			if (actionResult == InteractionResult.SUCCESS) {
 				clientPlayer.swing(hand);
 
-				if (!heldItem.isEmpty() && (heldItem.getCount() != heldItemCount || MINECRAFT.gameMode.hasInfiniteItems())) {
+				if (!heldItem.isEmpty() && (heldItem.getCount() != heldItemCount || gameMode.hasInfiniteItems())) {
 					MINECRAFT.gameRenderer.itemInHandRenderer.itemUsed(hand);
 				}
 
@@ -93,27 +91,56 @@ public class KeyMappingHandler {
 	 * http://www.minecraftforge.net/forum/index.php?topic=45025.0
 	 */
 	private static void printPotions() {
-		final LocalPlayer clientPlayer = MINECRAFT.player;
+		final var clientPlayer = MINECRAFT.player;
 
-		if (MINECRAFT.hitResult.getType() == HitResult.Type.ENTITY) {
-			final EntityHitResult rayTraceResult = (EntityHitResult) MINECRAFT.hitResult;
-			if (rayTraceResult.getEntity() instanceof LivingEntity) {
-				final Collection<MobEffectInstance> activePotionEffects = ((LivingEntity) rayTraceResult.getEntity()).getActiveEffects();
+		if (clientPlayer == null) {
+			return;
+		}
+
+		if (MINECRAFT.hitResult instanceof final EntityHitResult hitResult) {
+			if (hitResult.getEntity() instanceof final LivingEntity entity) {
+				final var activePotionEffects = entity.getActiveEffects();
 
 				if (activePotionEffects.isEmpty()) {
-					clientPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_POTIONS.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()));
+					clientPlayer.displayClientMessage(
+							Component.translatable(
+									TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_POTIONS.getTranslationKey(),
+									hitResult.getEntity().getDisplayName()
+							),
+							false
+					);
 				} else {
-					clientPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_PRINT_POTIONS_POTIONS.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()));
+					clientPlayer.displayClientMessage(
+							Component.translatable(
+									TestMod3Lang.MESSAGE_PRINT_POTIONS_POTIONS.getTranslationKey(),
+									hitResult.getEntity().getDisplayName()
+							),
+							false
+					);
 
 					activePotionEffects.forEach(
-							potionEffect -> clientPlayer.sendSystemMessage(Component.literal(potionEffect.toString()))
+							potionEffect -> clientPlayer.displayClientMessage(
+									Component.literal(potionEffect.toString()),
+									false
+							)
 					);
 				}
 			} else {
-				clientPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_PRINT_POTIONS_NOT_LIVING.getTranslationKey(), rayTraceResult.getEntity().getDisplayName()));
+				clientPlayer.displayClientMessage(
+						Component.translatable(
+								TestMod3Lang.MESSAGE_PRINT_POTIONS_NOT_LIVING.getTranslationKey(),
+								hitResult.getEntity().getDisplayName()
+						),
+						false
+				);
 			}
 		} else {
-			clientPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_ENTITY.getTranslationKey()));
+			clientPlayer.displayClientMessage(
+					Component.translatable(
+							TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_ENTITY.getTranslationKey()
+					),
+					false
+			);
 		}
 	}
 }

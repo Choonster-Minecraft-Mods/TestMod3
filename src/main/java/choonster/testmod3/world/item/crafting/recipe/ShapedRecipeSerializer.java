@@ -35,7 +35,7 @@ public class ShapedRecipeSerializer<T extends ShapedRecipe> implements RecipeSer
 		codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
 
 				Codec.STRING.optionalFieldOf("group", "")
-						.forGetter(ShapedRecipe::getGroup),
+						.forGetter(ShapedRecipe::group),
 
 				CraftingBookCategory.CODEC
 						.fieldOf("category")
@@ -82,7 +82,7 @@ public class ShapedRecipeSerializer<T extends ShapedRecipe> implements RecipeSer
 	}
 
 	private void toNetwork(final RegistryFriendlyByteBuf buffer, final T recipe) {
-		buffer.writeUtf(recipe.getGroup());
+		buffer.writeUtf(recipe.group());
 		buffer.writeEnum(recipe.category());
 		ShapedRecipePattern.STREAM_CODEC.encode(buffer, getPattern(recipe));
 		ItemStack.STREAM_CODEC.encode(buffer, getResult(recipe));

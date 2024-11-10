@@ -5,8 +5,9 @@ import choonster.testmod3.capability.chunkenergy.ChunkEnergyCapability;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.CapabilityNotPresentException;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -29,7 +30,7 @@ public class ChunkEnergySetterItem extends Item implements ILeftClickEmpty {
 	 * @param player The player
 	 * @param amount The amount to add/remove
 	 */
-	private void addRemoveChunkEnergy(final Level world, final Player player, final int amount) {
+	private void addRemoveChunkEnergy(final Level world, final ServerPlayer player, final int amount) {
 		final var chunk = world.getChunkAt(player.blockPosition());
 		final var chunkPos = chunk.getPos();
 
@@ -37,27 +38,39 @@ public class ChunkEnergySetterItem extends Item implements ILeftClickEmpty {
 
 		if (player.isShiftKeyDown()) {
 			final var energyRemoved = chunkEnergy.extractEnergy(amount, false);
-			player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_CHUNK_ENERGY_REMOVE.getTranslationKey(), energyRemoved, chunkPos));
+			player.sendSystemMessage(
+					Component.translatable(
+							TestMod3Lang.MESSAGE_CHUNK_ENERGY_REMOVE.getTranslationKey(),
+							energyRemoved,
+							chunkPos
+					)
+			);
 		} else {
 			final var energyAdded = chunkEnergy.receiveEnergy(amount, false);
-			player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_CHUNK_ENERGY_ADD.getTranslationKey(), energyAdded, chunkPos));
+			player.sendSystemMessage(
+					Component.translatable(
+							TestMod3Lang.MESSAGE_CHUNK_ENERGY_ADD.getTranslationKey(),
+							energyAdded,
+							chunkPos
+					)
+			);
 		}
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(final Level level, final Player player, final InteractionHand hand) {
-		if (!level.isClientSide) {
-			addRemoveChunkEnergy(level, player, 1);
+	public InteractionResult use(final Level level, final Player player, final InteractionHand hand) {
+		if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
+			addRemoveChunkEnergy(level, serverPlayer, 1);
 		}
 
-		return InteractionResultHolder.success(player.getItemInHand(hand));
+		return InteractionResult.SUCCESS;
 	}
 
 	@Override
 	public void onLeftClickEmpty(final ItemStack stack, final Player player) {
 		final var level = player.getCommandSenderWorld();
-		if (!level.isClientSide) {
-			addRemoveChunkEnergy(level, player, 100);
+		if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
+			addRemoveChunkEnergy(level, serverPlayer, 100);
 		}
 	}
 }

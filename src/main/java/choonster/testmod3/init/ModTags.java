@@ -24,6 +24,7 @@ public class ModTags {
 	public static class Items {
 		public static final TagKey<Item> VANILLA_DYES = tag("vanilla_dyes");
 		public static final TagKey<Item> VANILLA_TERRACOTTA = tag("vanilla_terracotta");
+		public static final TagKey<Item> REPAIRS_REPLACEMENT_ARMOR = tag("repairs_replacement_armor");
 
 		public static final TagKey<Item> RUBBER = forgeTag("rubber");
 

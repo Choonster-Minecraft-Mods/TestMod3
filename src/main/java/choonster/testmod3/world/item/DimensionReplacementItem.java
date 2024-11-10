@@ -66,7 +66,7 @@ public class DimensionReplacementItem extends Item {
 	private Optional<ItemStack> getReplacement(final Level level) {
 		return level
 				.registryAccess()
-				.registryOrThrow(Registries.DIMENSION_TYPE)
+				.lookupOrThrow(Registries.DIMENSION_TYPE)
 				.getResourceKey(level.dimensionType())
 				.map(replacements::get)
 				.map(Supplier::get);

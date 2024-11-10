@@ -4,7 +4,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -57,29 +57,50 @@ public class SnowballLauncherItem extends ProjectileWeaponItem {
 	}
 
 	@Override
-	protected Projectile createProjectile(final Level level, final LivingEntity shooter, final ItemStack projectile, final ItemStack weapon, final boolean isFullPower) {
-		return new Snowball(level, shooter);
+	protected Projectile createProjectile(
+			final Level level,
+			final LivingEntity shooter,
+			final ItemStack projectile,
+			final ItemStack weapon,
+			final boolean isFullPower
+	) {
+		return new Snowball(level, shooter, projectile);
 	}
 
 	@Override
-	protected void shootProjectile(final LivingEntity shooter, final Projectile projectile, final int projectileNumber, final float p_335337_, final float p_332934_, final float yRot, @Nullable final LivingEntity target) {
-		projectile.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot() + yRot, 0.0F, p_335337_, p_332934_);
+	protected void shootProjectile(
+			final LivingEntity shooter,
+			final Projectile projectile,
+			final int projectileNumber,
+			final float p_335337_,
+			final float p_332934_,
+			final float yRot,
+			@Nullable final LivingEntity target
+	) {
+		projectile.shootFromRotation(
+				shooter,
+				shooter.getXRot(),
+				shooter.getYRot() + yRot,
+				0.0F,
+				p_335337_,
+				p_332934_
+		);
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(final Level level, final Player player, final InteractionHand hand) {
+	public InteractionResult use(final Level level, final Player player, final InteractionHand hand) {
 		final var heldItem = player.getItemInHand(hand);
 
 		final var projectile = player.getProjectile(heldItem);
 		final var hasAmmo = !projectile.isEmpty();
 
 		if (!player.hasInfiniteMaterials() && !hasAmmo) {
-			return InteractionResultHolder.fail(heldItem);
+			return InteractionResult.FAIL;
 		}
 
 		final var cooldown = getCooldown(heldItem);
 		if (cooldown > 0) {
-			player.getCooldowns().addCooldown(this, cooldown);
+			player.getCooldowns().addCooldown(heldItem, cooldown);
 		}
 
 		final var ammo = draw(heldItem, projectile, player);
@@ -108,6 +129,6 @@ public class SnowballLauncherItem extends ProjectileWeaponItem {
 				1.0f / (level.getRandom().nextFloat() * 0.4f + 1.2f) + 0.5f
 		);
 
-		return InteractionResultHolder.consume(heldItem);
+		return InteractionResult.CONSUME;
 	}
 }

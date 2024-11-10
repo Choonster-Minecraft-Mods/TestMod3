@@ -4,7 +4,6 @@ import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -47,13 +46,13 @@ public class SwapTestItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(final Level level, final Player playerIn, final InteractionHand hand) {
+	public InteractionResult use(final Level level, final Player playerIn, final InteractionHand hand) {
 		final var otherItem = getOtherItem();
 
 		if (!otherItem.isEmpty() && playerIn.isShiftKeyDown()) {
-			return new InteractionResultHolder<>(InteractionResult.SUCCESS, otherItem.copy());
+			return InteractionResult.SUCCESS.heldItemTransformedTo(otherItem);
 		}
 
-		return new InteractionResultHolder<>(InteractionResult.PASS, playerIn.getItemInHand(hand));
+		return InteractionResult.PASS;
 	}
 }

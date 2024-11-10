@@ -12,7 +12,7 @@ import net.minecraftforge.network.SimpleChannel;
 public class ModNetwork {
 	public static final ResourceLocation CHANNEL_NAME = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "network");
 
-	public static final int NETWORK_VERSION = 5;
+	public static final int NETWORK_VERSION = 6;
 
 	public static SimpleChannel getNetworkChannel() {
 		final var channel = ChannelBuilder.named(CHANNEL_NAME)
@@ -30,7 +30,6 @@ public class ModNetwork {
 				.addMain(SetLockCodeMessage.class, SetLockCodeMessage.STREAM_CODEC, SetLockCodeMessage::handle)
 				.addMain(LeftClickEmptyMessage.class, LeftClickEmptyMessage.STREAM_CODEC, LeftClickEmptyMessage::handle)
 				.clientbound()
-				.addMain(FluidTankContentsMessage.class, FluidTankContentsMessage.STREAM_CODEC, FluidTankContentsMessage::handle)
 				.addMain(UpdateChunkEnergyValueMessage.class, UpdateChunkEnergyValueMessage.STREAM_CODEC, UpdateChunkEnergyValueMessage::handle)
 				.addMain(UpdateMenuFluidTankMessage.class, UpdateMenuFluidTankMessage.STREAM_CODEC, UpdateMenuFluidTankMessage::handle)
 				.addMain(openClientScreenMessageClass, OpenClientScreenMessage.STREAM_CODEC, OpenClientScreenMessage::handle)

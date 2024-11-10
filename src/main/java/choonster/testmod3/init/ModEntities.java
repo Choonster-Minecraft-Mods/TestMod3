@@ -4,6 +4,8 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.entity.BlockDetectionArrow;
 import choonster.testmod3.world.entity.ModArrow;
 import choonster.testmod3.world.entity.PlayerAvoidingCreeper;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -65,7 +67,12 @@ public class ModEntities {
 	 */
 	private static <T extends Entity> RegistryObject<EntityType<T>> registerEntityType(final String name, final Supplier<EntityType.Builder<T>> factory) {
 		return ENTITY_TYPES.register(name,
-				() -> factory.get().build(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name).toString())
+				() -> factory.get().build(
+						ResourceKey.create(
+								Registries.ENTITY_TYPE,
+								ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name)
+						)
+				)
 		);
 	}
 

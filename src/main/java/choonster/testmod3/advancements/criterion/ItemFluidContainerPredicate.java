@@ -6,9 +6,9 @@ import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.NbtPredicate;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
@@ -80,13 +80,14 @@ public record ItemFluidContainerPredicate(
 			return new Builder();
 		}
 
+		@SuppressWarnings("deprecation")
 		public Builder of(final Fluid... fluids) {
-			fluid = HolderSet.direct(BuiltInRegistries.FLUID::createIntrusiveHolder, fluids);
+			fluid = HolderSet.direct(Fluid::builtInRegistryHolder, fluids);
 			return this;
 		}
 
-		public Builder of(final TagKey<Fluid> tagKey) {
-			fluid = BuiltInRegistries.FLUID.getOrCreateTag(tagKey);
+		public Builder of(final HolderGetter<Fluid> getter, final TagKey<Fluid> tagKey) {
+			fluid = getter.getOrThrow(tagKey);
 			return this;
 		}
 

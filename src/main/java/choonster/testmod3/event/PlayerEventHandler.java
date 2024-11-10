@@ -6,7 +6,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -33,7 +32,9 @@ public class PlayerEventHandler {
 	 */
 	@SubscribeEvent
 	public static void playerLoggedIn(final PlayerEvent.PlayerLoggedInEvent event) {
-		final var player = event.getEntity();
+		if (!(event.getEntity() instanceof final ServerPlayer player)) {
+			return;
+		}
 
 		final var entityData = player.getPersistentData();
 		final var persistedData = entityData.getCompound(ServerPlayer.PERSISTED_NBT_TAG);
@@ -52,7 +53,7 @@ public class PlayerEventHandler {
 			message = TestMod3Lang.MESSAGE_LOGIN_FREE_APPLE;
 		}
 
-		final Component textComponent = Component.translatable(message.getTranslationKey());
+		final var textComponent = Component.translatable(message.getTranslationKey());
 		textComponent.getStyle().withColor(ChatFormatting.LIGHT_PURPLE);
 		player.sendSystemMessage(textComponent);
 	}
@@ -62,10 +63,9 @@ public class PlayerEventHandler {
 	 *
 	 * @param event The event
 	 */
-	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void livingDeath(final LivingDeathEvent event) {
-		if (event.getEntity() instanceof final Player player && !event.getEntity().getCommandSenderWorld().isClientSide) {
+		if (event.getEntity() instanceof final ServerPlayer player && !event.getEntity().level().isClientSide) {
 			final var pos = player.blockPosition();
 			player.sendSystemMessage(Component.translatable(
 					TestMod3Lang.MESSAGE_DEATH_COORDINATES.getTranslationKey(),

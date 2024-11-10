@@ -29,9 +29,9 @@ public class ContinuousBowItem extends ModBowItem {
 	}
 
 	@Override
-	public void releaseUsing(final ItemStack stack, final Level level, final LivingEntity entity, final int timeLeft) {
+	public boolean releaseUsing(final ItemStack stack, final Level level, final LivingEntity entity, final int timeLeft) {
 		final var charge = (stack.getUseDuration(entity) - timeLeft) * CHARGE_MULTIPLIER;
-		fireArrow(stack, level, entity, charge);
+		return fireArrow(stack, level, entity, charge);
 	}
 
 	@Override

@@ -7,17 +7,20 @@ import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
@@ -36,99 +39,114 @@ import java.util.Map;
 public abstract class EnhancedShapelessRecipeBuilder<
 		RECIPE extends ShapelessRecipe,
 		BUILDER extends EnhancedShapelessRecipeBuilder<RECIPE, BUILDER>
-		> extends ShapelessRecipeBuilder {
+		> implements RecipeBuilder {
 	private static final Method ENSURE_VALID = ObfuscationReflectionHelper.findMethod(ShapelessRecipeBuilder.class, /* ensureValid */ "m_126207_", ResourceLocation.class);
 	private static final Field CATEGORY = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* category */ "f_244182_");
 	private static final Field GROUP = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* group */ "f_126177_");
 	private static final Field INGREDIENTS = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* ingredients */ "f_126175_");
 	private static final Field CRITERIA = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* criteria */ "f_291209_");
 
+	protected final ShapelessRecipeBuilder innerBuilder;
+
 	protected final ItemStack result;
 	protected final ShapelessRecipeFactory<? extends RECIPE> factory;
 
 	protected EnhancedShapelessRecipeBuilder(
+			final HolderGetter<Item> items,
 			final RecipeCategory category,
 			final ItemStack result,
 			final ShapelessRecipeFactory<? extends RECIPE> factory
 	) {
-		super(category, result.getItem(), result.getCount());
+		innerBuilder = ShapelessRecipeBuilder.shapeless(items, category, result);
 		this.result = result;
 		this.factory = factory;
 	}
 
 	protected EnhancedShapelessRecipeBuilder(
+			final HolderGetter<Item> items,
 			final RecipeCategory category,
 			final ItemStack result,
 			final ShapelessRecipeSerializer<? extends RECIPE> serializer
 	) {
-		this(category, result, serializer.factory());
+		this(items, category, result, serializer.factory());
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public BUILDER requires(final TagKey<Item> tagIn) {
-		return (BUILDER) super.requires(tagIn);
+	public BUILDER requires(final TagKey<Item> tag) {
+		innerBuilder.requires(tag);
+
+		return builder();
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public BUILDER requires(final ItemLike itemIn) {
-		return (BUILDER) super.requires(itemIn);
+	public BUILDER requires(final ItemLike item) {
+		innerBuilder.requires(item);
+
+		return builder();
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public BUILDER requires(final ItemLike itemIn, final int quantity) {
-		return (BUILDER) super.requires(itemIn, quantity);
+	public BUILDER requires(final ItemLike item, final int quantity) {
+		innerBuilder.requires(item, quantity);
+
+		return builder();
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public BUILDER requires(final Ingredient ingredientIn) {
-		return (BUILDER) super.requires(ingredientIn);
+	public BUILDER requires(final Ingredient ingredient) {
+		innerBuilder.requires(ingredient);
+
+		return builder();
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
 	public BUILDER requires(final Ingredient ingredientIn, final int quantity) {
-		return (BUILDER) super.requires(ingredientIn, quantity);
+		innerBuilder.requires(ingredientIn, quantity);
+
+		return builder();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public BUILDER unlockedBy(final String name, final Criterion<?> criterionIn) {
-		return (BUILDER) super.unlockedBy(name, criterionIn);
+	public BUILDER unlockedBy(final String name, final Criterion<?> criterion) {
+		innerBuilder.unlockedBy(name, criterion);
+
+		return builder();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public BUILDER group(@Nullable final String group) {
-		return (BUILDER) super.group(group);
+		innerBuilder.group(group);
+
+		return builder();
 	}
 
+	@Override
+	public Item getResult() {
+		return innerBuilder.getResult();
+	}
+
+	@SuppressWarnings("unchecked")
+	private BUILDER builder() {
+		return (BUILDER) this;
+	}
 
 	/**
 	 * Saves this recipe to the {@link RecipeOutput}.
 	 *
 	 * @param output The recipe output
-	 * @param id     The ID to use for the recipe
+	 * @param key    The ID to use for the recipe
 	 */
 	@Override
-	public void save(final RecipeOutput output, final ResourceLocation id) {
+	public void save(final RecipeOutput output, final ResourceKey<Recipe<?>> key) {
 		try {
 			// Perform the super class's validation
-			ENSURE_VALID.invoke(this, id);
+			ENSURE_VALID.invoke(innerBuilder, key);
 
 			// Perform our validation
-			validate(id);
+			validate(key);
 
 			final var advancement = output
 					.advancement()
-					.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
-					.rewards(AdvancementRewards.Builder.recipe(id))
+					.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(key))
+					.rewards(AdvancementRewards.Builder.recipe(key))
 					.requirements(AdvancementRequirements.Strategy.OR);
 
-			@SuppressWarnings("unchecked") final var criteria = (Map<String, Criterion<?>>) CRITERIA.get(this);
+			@SuppressWarnings("unchecked") final var criteria = (Map<String, Criterion<?>>) CRITERIA.get(innerBuilder);
 			criteria.forEach(advancement::addCriterion);
 
 			var group = (String) GROUP.get(this);
@@ -147,9 +165,9 @@ public abstract class EnhancedShapelessRecipeBuilder<
 					ingredients
 			);
 
-			output.accept(id, recipe, advancement.build(id.withPrefix("recipes/" + category.getFolderName() + "/")));
+			output.accept(key, recipe, advancement.build(key.location().withPrefix("recipes/" + category.getFolderName() + "/")));
 		} catch (final IllegalAccessException | InvocationTargetException e) {
-			throw new RuntimeException("Failed to save shapeless recipe " + id, e);
+			throw new RuntimeException("Failed to save shapeless recipe " + key, e);
 		}
 	}
 
@@ -162,34 +180,35 @@ public abstract class EnhancedShapelessRecipeBuilder<
 		}
 	}
 
-	protected void validate(final ResourceLocation id) {
+	protected void validate(final ResourceKey<Recipe<?>> key) {
 	}
 
 	public static class Enhanced extends EnhancedShapelessRecipeBuilder<ShapelessRecipe, Enhanced> {
-		private Enhanced(final RecipeCategory category, final ItemStack result) {
-			super(category, result, ModCrafting.Recipes.ENHANCED_SHAPELESS.get());
+		private Enhanced(final HolderGetter<Item> items, final RecipeCategory category, final ItemStack result) {
+			super(items, category, result, ModCrafting.Recipes.ENHANCED_SHAPELESS.get());
 		}
 
 		/**
 		 * Creates a new builder for a basic shapeless recipe with NBT.
 		 *
+		 * @param items  The item registry
 		 * @param result The recipe result
 		 * @return The builder
 		 */
-		public static Enhanced shapelessRecipe(final RecipeCategory category, final ItemStack result) {
-			return new Enhanced(category, result);
+		public static Enhanced shapelessRecipe(final HolderGetter<Item> items, final RecipeCategory category, final ItemStack result) {
+			return new Enhanced(items, category, result);
 		}
 
 		@Override
-		protected void validate(final ResourceLocation id) {
-			super.validate(id);
+		protected void validate(final ResourceKey<Recipe<?>> key) {
+			super.validate(key);
 
 			final var allComponentsAreStandard = result.getComponents()
 					.stream()
 					.allMatch(typedComponent -> typedComponent.value().equals(DataComponents.COMMON_ITEM_COMPONENTS.get(typedComponent.type())));
 
 			if (!allComponentsAreStandard) {
-				throw new IllegalStateException("Enhanced shapeless recipe " + id + " has no custom components - use ShapedRecipeBuilder instead");
+				throw new IllegalStateException("Enhanced shapeless recipe " + key + " has no custom components - use ShapedRecipeBuilder instead");
 			}
 		}
 	}

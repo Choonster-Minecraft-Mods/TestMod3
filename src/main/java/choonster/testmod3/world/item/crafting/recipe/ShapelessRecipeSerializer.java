@@ -1,17 +1,20 @@
 package choonster.testmod3.world.item.crafting.recipe;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 /**
  * Base class for {@link ShapelessRecipe} serializers.
@@ -21,9 +24,8 @@ import java.lang.reflect.Field;
  * @author Choonster
  */
 public class ShapelessRecipeSerializer<T extends ShapelessRecipe> implements RecipeSerializer<T> {
-	private static final Field MAX_WIDTH = ObfuscationReflectionHelper.findField(ShapedRecipe.class, "MAX_WIDTH");
-	private static final Field MAX_HEIGHT = ObfuscationReflectionHelper.findField(ShapedRecipe.class, "MAX_HEIGHT");
-	private static final Field RESULT = ObfuscationReflectionHelper.findField(ShapelessRecipe.class, /* result */ "f_44243_");
+	private static final Field INGREDIENTS = ObfuscationReflectionHelper.findField(ShapelessRecipe.class, "ingredients");
+	private static final Field RESULT = ObfuscationReflectionHelper.findField(ShapelessRecipe.class, "result");
 
 	private final ShapelessRecipeFactory<T> factory;
 	private final MapCodec<T> codec;
@@ -35,7 +37,7 @@ public class ShapelessRecipeSerializer<T extends ShapelessRecipe> implements Rec
 		codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
 
 				Codec.STRING.optionalFieldOf("group", "")
-						.forGetter(ShapelessRecipe::getGroup),
+						.forGetter(ShapelessRecipe::group),
 
 				CraftingBookCategory.CODEC
 						.fieldOf("category")
@@ -46,32 +48,24 @@ public class ShapelessRecipeSerializer<T extends ShapelessRecipe> implements Rec
 						.fieldOf("result")
 						.forGetter(ShapelessRecipeSerializer::getResult),
 
-				Ingredient.CODEC_NONEMPTY
+				Ingredient.CODEC
 						.listOf()
 						.fieldOf("ingredients")
-						.flatXmap(ingredients -> {
-							final var nonEmptyIngredients = ingredients
-									.stream()
-									.filter(ingredient -> !ingredient.isEmpty())
-									.toArray(Ingredient[]::new);
-
-							if (nonEmptyIngredients.length == 0) {
-								return DataResult.error(() -> "No ingredients for shapeless recipe");
-							}
-
-							try {
-								return nonEmptyIngredients.length > (int) MAX_WIDTH.get(null) * (int) MAX_HEIGHT.get(null) ?
-										DataResult.error(() -> "Too many ingredients for shapeless recipe") :
-										DataResult.success(NonNullList.of(Ingredient.EMPTY, nonEmptyIngredients));
-							} catch (final IllegalAccessException e) {
-								throw new RuntimeException("Failed to deserialise shapeless recipe", e);
-							}
-						}, DataResult::success)
-						.forGetter(ShapelessRecipe::getIngredients)
+						.forGetter(ShapelessRecipeSerializer::getIngredients)
 
 		).apply(instance, factory::createRecipe));
 
-		streamCodec = StreamCodec.of(this::toNetwork, this::fromNetwork);
+		streamCodec = StreamCodec.composite(
+				ByteBufCodecs.STRING_UTF8,
+				ShapelessRecipe::group,
+				CraftingBookCategory.STREAM_CODEC,
+				ShapelessRecipe::category,
+				ItemStack.STREAM_CODEC,
+				ShapelessRecipeSerializer::getResult,
+				Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()),
+				ShapelessRecipeSerializer::getIngredients,
+				factory::createRecipe
+		);
 	}
 
 	public ShapelessRecipeFactory<T> factory() {
@@ -88,28 +82,13 @@ public class ShapelessRecipeSerializer<T extends ShapelessRecipe> implements Rec
 		return streamCodec;
 	}
 
-	private T fromNetwork(final RegistryFriendlyByteBuf buffer) {
-		final var group = buffer.readUtf();
-		final var category = buffer.readEnum(CraftingBookCategory.class);
-		final var numIngredients = buffer.readVarInt();
-		final var ingredients = NonNullList.withSize(numIngredients, Ingredient.EMPTY);
-
-		ingredients.replaceAll(ignored -> Ingredient.CONTENTS_STREAM_CODEC.decode(buffer));
-
-		final var result = ItemStack.STREAM_CODEC.decode(buffer);
-
-		return factory.createRecipe(group, category, result, ingredients);
-	}
-
-	private void toNetwork(final RegistryFriendlyByteBuf buffer, final T recipe) {
-		buffer.writeUtf(recipe.getGroup());
-		buffer.writeEnum(recipe.category());
-		buffer.writeVarInt(recipe.getIngredients().size());
-
-		recipe.getIngredients()
-				.forEach(ingredient -> Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, ingredient));
-
-		ItemStack.STREAM_CODEC.encode(buffer, getResult(recipe));
+	@SuppressWarnings("unchecked")
+	private static List<Ingredient> getIngredients(final ShapelessRecipe recipe) {
+		try {
+			return (List<Ingredient>) INGREDIENTS.get(recipe);
+		} catch (final IllegalAccessException e) {
+			throw new RuntimeException("Failed to get ingredients from shapeless recipe", e);
+		}
 	}
 
 	private static ItemStack getResult(final ShapelessRecipe recipe) {

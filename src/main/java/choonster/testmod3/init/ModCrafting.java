@@ -15,6 +15,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionBrewing;
@@ -27,11 +28,14 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Predicate;
@@ -192,6 +196,14 @@ public class ModCrafting {
 	public static class RecipeRemover extends SimplePreparableReloadListener<Unit> {
 		private static final Logger LOGGER = LogUtils.getLogger();
 
+		private static final Method APPLY = ObfuscationReflectionHelper.findMethod(
+				RecipeManager.class,
+				"apply",
+				RecipeMap.class,
+				ResourceManager.class,
+				ProfilerFiller.class
+		);
+
 		private final RecipeManager recipeManager;
 		private final RegistryAccess registryAccess;
 
@@ -230,7 +242,13 @@ public class ModCrafting {
 			removeRecipes(recipes, ModTags.Items.VANILLA_DYES);
 			removeRecipes(recipes, ModTags.Items.VANILLA_TERRACOTTA);
 
-			recipeManager.replaceRecipes(recipes);
+			final var recipeMap = RecipeMap.create(recipes);
+
+			try {
+				APPLY.invoke(recipeManager, recipeMap, resourceManager, profilerFiller);
+			} catch (final IllegalAccessException | InvocationTargetException e) {
+				throw new RuntimeException("Failed to replace recipes", e);
+			}
 		}
 
 		/**
@@ -241,7 +259,21 @@ public class ModCrafting {
 		 */
 		private void removeRecipes(final Collection<RecipeHolder<?>> recipes, final TagKey<Item> tag) {
 			final var recipesRemoved = removeRecipes(recipes, recipe -> {
-				final var resultItem = recipe.getResultItem(registryAccess);
+				final var resultItem = switch (recipe) {
+					case final CraftingRecipe craftingRecipe ->
+							craftingRecipe.assemble(CraftingInput.EMPTY, registryAccess);
+
+					case final SingleItemRecipe singleItemRecipe ->
+							singleItemRecipe.assemble(new SingleRecipeInput(ItemStack.EMPTY), registryAccess);
+
+					case final SmithingRecipe smithingRecipe -> smithingRecipe.assemble(
+							new SmithingRecipeInput(ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY),
+							registryAccess
+					);
+
+					case null, default -> ItemStack.EMPTY;
+				};
+
 				return !resultItem.isEmpty() && resultItem.is(tag);
 			});
 

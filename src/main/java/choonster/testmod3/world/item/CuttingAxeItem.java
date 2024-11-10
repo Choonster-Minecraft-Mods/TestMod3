@@ -4,7 +4,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraftforge.common.ForgeHooks;
 
 /**
@@ -13,8 +13,8 @@ import net.minecraftforge.common.ForgeHooks;
  * @author Choonster
  */
 public class CuttingAxeItem extends AxeItem {
-	public CuttingAxeItem(final Tier tier, final Properties properties) {
-		super(tier, properties);
+	public CuttingAxeItem(final ToolMaterial toolMaterial, final float attackDamage, final float attackSpeed, final Properties p_40524_) {
+		super(toolMaterial, attackDamage, attackSpeed, p_40524_);
 	}
 
 	@Override

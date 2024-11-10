@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -100,22 +100,22 @@ public class ColoredRotatableBlock extends Block {
 	}
 
 	@Override
-	protected ItemInteractionResult useItemOn(final ItemStack heldItem, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
+	protected InteractionResult useItemOn(final ItemStack heldItem, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
 		if (!heldItem.isEmpty()) { // If the player is holding dye, change the colour
 			final DyeColor dyeColour = DyeColor.getColor(heldItem);
 			if (dyeColour != null) {
 				final boolean success = recolorBlock(state, level, pos, dyeColour);
 				if (success) {
 					heldItem.shrink(1);
-					return ItemInteractionResult.SUCCESS;
+					return InteractionResult.SUCCESS;
 				}
 			}
 
-			return ItemInteractionResult.FAIL;
+			return InteractionResult.FAIL;
 		} else { // Else rotate the block
 			level.setBlockAndUpdate(pos, rotate(state, level, pos, Rotation.CLOCKWISE_90));
 
-			return ItemInteractionResult.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 	}
 }

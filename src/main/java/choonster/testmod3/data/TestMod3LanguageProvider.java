@@ -1,7 +1,6 @@
 package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
-import choonster.testmod3.compat.waila.WailaCompat;
 import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.init.*;
 import choonster.testmod3.text.TestMod3Lang;
@@ -13,6 +12,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.PackOutput;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
@@ -27,7 +27,6 @@ import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.fluids.FluidType;
 import org.apache.commons.lang3.StringUtils;
-import snownee.jade.api.IJadeProvider;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,7 +59,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		addConfig();
 		addChatMessages();
 		addSubtitles();
-		addJadeProviders();
+//		addJadeProviders();
 		addMisc();
 	}
 
@@ -333,6 +332,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		add(TestMod3Lang.SUBTITLE_ACTION_SADDLE, "Mod saddle equips");
 	}
 
+	/*
 	private void addJadeProviders() {
 		add(WailaCompat.COLORED_ROTATABLE_BLOCK_FACING, "Colored Rotatable Block Facing");
 		add(WailaCompat.COLORED_MULTI_ROTATABLE_BLOCK_FACE_ROTATION, "Colored Multi-Rotatable");
@@ -342,6 +342,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		add(WailaCompat.PLANE_VERTICAL_ROTATION, "Plane Vertical Rotation");
 		add(WailaCompat.RESTRICTED_FLUID_TANK_ENABLED_FACINGS, "Restricted Fluid Tank Enabled Facings");
 	}
+	*/
 
 	private void addMisc() {
 		add("itemGroup." + TestMod3.MODID, "TestMod3");
@@ -404,13 +405,21 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 	private String getPotionItemTranslationKey(final Holder<Potion> potion, final Item item) {
 		final var stack = new ItemStack(item);
 		stack.set(DataComponents.POTION_CONTENTS, new PotionContents(potion));
-		return stack.getDescriptionId();
+
+		var itemName = stack.getItemName();
+		if (itemName.getContents() instanceof TranslatableContents translatableContents) {
+			return translatableContents.getKey();
+		}
+
+		throw new IllegalStateException("Expected %s to be translatable".formatted(itemName));
 	}
 
+	/*
 	private void add(final IJadeProvider provider, final String name) {
 		final var uid = provider.getUid();
 		add("config.jade.plugin_%s.%s".formatted(uid.getNamespace(), uid.getPath()), name);
 	}
+	*/
 
 	private void add(final TestMod3Lang lang, final String value) {
 		add(lang.getTranslationKey(), value);

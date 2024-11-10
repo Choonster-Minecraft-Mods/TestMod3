@@ -10,8 +10,8 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -21,9 +21,10 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -31,6 +32,7 @@ import org.slf4j.Logger;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -52,7 +54,12 @@ public class ReplacementArmourItem extends ArmorItem {
 	 */
 	private final Set<Function<RegistryAccess, ItemStack>> replacementItems;
 
-	public ReplacementArmourItem(final Holder<ArmorMaterial> material, final ArmorItem.Type type, final Properties properties, final Collection<Function<RegistryAccess, ItemStack>> replacementItems) {
+	public ReplacementArmourItem(
+			final ArmorMaterial material,
+			final ArmorType type,
+			final Properties properties,
+			final Collection<Function<RegistryAccess, ItemStack>> replacementItems
+	) {
 		super(material, type, properties);
 
 		this.replacementItems = ImmutableSet.copyOf(replacementItems);
@@ -66,6 +73,15 @@ public class ReplacementArmourItem extends ArmorItem {
 	 */
 	public static boolean hasReplacedArmour(final ItemStack stack) {
 		return stack.has(ModDataComponents.REPLACED_ARMOUR.get());
+	}
+
+	private EquipmentSlot getSlot(final ItemStack stack) {
+		final var equippable = Objects.requireNonNull(
+				stack.get(DataComponents.EQUIPPABLE),
+				() -> "%s isn't equippable".formatted(stack)
+		);
+
+		return equippable.slot();
 	}
 
 	/**
@@ -84,27 +100,29 @@ public class ReplacementArmourItem extends ArmorItem {
 				.map(f -> f.apply(registryAccess))
 				.collect(Collectors.toSet());
 
-		Stream.of(ArmorItem.Type.values()) // For each armour type,
-				.filter(type -> type != getType()) // If it's not this item's armour type,
-				.forEach(type -> {
-					final var equipmentSlot = type.getSlot();
+		final var currentSlot = getSlot(stack);
+
+		Stream.of(ArmorType.values()) // For each armour equipment slot,
+				.map(ArmorType::getSlot)
+				.filter(slot -> slot != currentSlot) // If it's not this item's equipment slot,
+				.forEach(slot -> {
 					final var optionalReplacement = replacements.stream()
-							.filter(replacementStack -> replacementStack.getItem().canEquip(replacementStack, equipmentSlot, entity))
+							.filter(replacementStack -> replacementStack.getItem().canEquip(replacementStack, slot, entity))
 							.findFirst();
 
 					optionalReplacement.ifPresent(replacement -> { // If there's a replacement for this armour type,
 						replacements.remove(replacement); // Don't use it for any other armour type
 
-						final var original = entity.getItemBySlot(equipmentSlot);
+						final var original = entity.getItemBySlot(slot);
 
 						// Create an entry with the slot and the original item
-						final var entry = new ReplacedArmour.Entry(equipmentSlot, original);
+						final var entry = new ReplacedArmour.Entry(slot, original);
 
 						// Add it to the list of replaced armour
 						replacedArmour.add(entry);
 
-						entity.setItemSlot(equipmentSlot, replacement); // Equip the replacement
-						LOGGER.info("Equipped replacement {} to {}, replacing {}", replacement, type, original);
+						entity.setItemSlot(slot, replacement); // Equip the replacement
+						LOGGER.info("Equipped replacement {} to {}, replacing {}", replacement, slot, original);
 					});
 				});
 
@@ -193,7 +211,7 @@ public class ReplacementArmourItem extends ArmorItem {
 			return;
 		}
 
-		if (livingEntity.getItemBySlot(getEquipmentSlot()) == stack) { // If the item is equipped as armour,
+		if (livingEntity.getItemBySlot(getSlot(stack)) == stack) { // If the item is equipped as armour,
 			if (!hasReplacedArmour(stack)) { // And the entity's armour hasn't been replaced,
 				replaceArmour(stack, livingEntity); // Replace the entity's armour
 			}

@@ -9,7 +9,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.LockCode;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
 import javax.annotation.Nullable;
@@ -48,7 +47,10 @@ public record SetLockCodeMessage(BlockPos pos, Optional<Direction> direction, St
 					player.sendSystemMessage(Component.translatable(TestMod3Lang.LOCK_ALREADY_LOCKED.getTranslationKey()));
 				}
 
+				// TODO: Locks use ItemPredicate instead of String now
+				/*
 				lock.setLockCode(new LockCode(message.lockCode));
+				*/
 			});
 		}
 	}

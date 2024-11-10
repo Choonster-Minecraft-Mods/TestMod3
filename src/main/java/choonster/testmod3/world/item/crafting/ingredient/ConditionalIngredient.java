@@ -25,7 +25,7 @@ public class ConditionalIngredient extends AbstractDelegatingIngredient {
 							.fieldOf(ICondition.DEFAULT_FIELD)
 							.forGetter(ingredient -> ingredient.condition),
 
-					Ingredient.CODEC_NONEMPTY
+					Ingredient.CODEC
 							.fieldOf("ingredient")
 							.forGetter(ingredient -> ingredient.ingredient)
 

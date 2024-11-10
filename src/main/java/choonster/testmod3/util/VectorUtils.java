@@ -6,7 +6,6 @@ import it.unimi.dsi.fastutil.objects.Object2DoubleMaps;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import net.minecraft.Util;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Quaternionf;
@@ -29,11 +28,11 @@ public class VectorUtils {
 	 * A cache of the positive facing's direction vector for each axis.
 	 */
 	private static final Map<Direction.Axis, Vector3f> AXIS_DIRECTION_VECTORS = Util.make(() -> {
-		final Map<Direction.Axis, Vector3f> axisVectors = new EnumMap<>(Direction.Axis.class);
+		final var axisVectors = new EnumMap<Direction.Axis, Vector3f>(Direction.Axis.class);
 
-		for (final Direction.Axis axis : Direction.Axis.values()) { // For each axis,
+		for (final var axis : Direction.Axis.values()) { // For each axis,
 			// Get the direction vector of the positive facing of the axis
-			final Vec3i directionVec = Direction.get(Direction.AxisDirection.POSITIVE, axis).getNormal();
+			final var directionVec = Direction.get(Direction.AxisDirection.POSITIVE, axis).getUnitVec3i();
 			axisVectors.put(axis, new Vector3f(directionVec.getX(), directionVec.getY(), directionVec.getZ())); // Add it to the map
 		}
 
@@ -42,9 +41,9 @@ public class VectorUtils {
 
 	private static final Object2DoubleMap<Direction> HORIZONTAL_ROTATIONS = Util.make(() -> {
 		// 90 degrees in radians
-		final double rotationIncrement = Math.toRadians(90);
+		final var rotationIncrement = Math.toRadians(90);
 
-		final Object2DoubleMap<Direction> horizontalRotations = new Object2DoubleOpenHashMap<>();
+		final var horizontalRotations = new Object2DoubleOpenHashMap<Direction>();
 
 		horizontalRotations.put(Direction.NORTH, 0);
 		horizontalRotations.put(Direction.EAST, rotationIncrement);
@@ -62,7 +61,7 @@ public class VectorUtils {
 	 * @return The rotation quaternion
 	 */
 	public static Quaternionf getRotationQuaternion(final Direction.Axis axis, final float radians) {
-		final Vector3f axisDirectionVector = AXIS_DIRECTION_VECTORS.get(axis);
+		final var axisDirectionVector = AXIS_DIRECTION_VECTORS.get(axis);
 
 		return new Quaternionf(axisDirectionVector.x, axisDirectionVector.y, axisDirectionVector.z, radians);
 	}
@@ -76,8 +75,8 @@ public class VectorUtils {
 	 */
 	public static AABB rotateAABB(final AABB axisAlignedBB, final Quaternionf rotationQuaternion) {
 		// Extract the minimum and maximum coordinates of the AABB into vectors
-		final Vector3f minCoords = new Vector3f((float) axisAlignedBB.minX, (float) axisAlignedBB.minY, (float) axisAlignedBB.minZ);
-		final Vector3f maxCoords = new Vector3f((float) axisAlignedBB.maxX, (float) axisAlignedBB.maxY, (float) axisAlignedBB.maxZ);
+		final var minCoords = new Vector3f((float) axisAlignedBB.minX, (float) axisAlignedBB.minY, (float) axisAlignedBB.minZ);
+		final var maxCoords = new Vector3f((float) axisAlignedBB.maxX, (float) axisAlignedBB.maxY, (float) axisAlignedBB.maxZ);
 
 		// Rotate the vectors in-place
 		minCoords.rotate(rotationQuaternion);
@@ -96,7 +95,7 @@ public class VectorUtils {
 	 * @return The rounded and offset AABB
 	 */
 	public static AABB adjustAABBForVoxelShape(final AABB axisAlignedBB) {
-		final AABB roundedAABB = new AABB(
+		final var roundedAABB = new AABB(
 				epsilonRound(axisAlignedBB.minX), epsilonRound(axisAlignedBB.minY), epsilonRound(axisAlignedBB.minZ),
 				epsilonRound(axisAlignedBB.maxX), epsilonRound(axisAlignedBB.maxY), epsilonRound(axisAlignedBB.maxZ)
 		);

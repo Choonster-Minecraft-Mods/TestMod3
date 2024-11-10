@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -64,7 +64,7 @@ public class ColouredSlabBlock extends TestMod3SlabBlock<DyeColor, ColouredSlabB
 	}
 
 	@Override
-	protected ItemInteractionResult useItemOn(final ItemStack heldItem, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
+	protected InteractionResult useItemOn(final ItemStack heldItem, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
 		if (!heldItem.isEmpty()) {
 
 			final DyeColor dyeColour = DyeColor.getColor(heldItem);
@@ -72,11 +72,11 @@ public class ColouredSlabBlock extends TestMod3SlabBlock<DyeColor, ColouredSlabB
 				final boolean success = recolorBlock(state, level, pos, blockHitResult.getDirection(), dyeColour);
 				if (success) {
 					heldItem.shrink(1);
-					return ItemInteractionResult.SUCCESS;
+					return InteractionResult.SUCCESS;
 				}
 			}
 		}
 
-		return ItemInteractionResult.FAIL;
+		return InteractionResult.FAIL;
 	}
 }

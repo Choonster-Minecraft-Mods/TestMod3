@@ -8,16 +8,19 @@ import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.ItemLike;
@@ -37,101 +40,117 @@ import java.util.Map;
 public class EnhancedShapedRecipeBuilder<
 		RECIPE extends ShapedRecipe,
 		BUILDER extends EnhancedShapedRecipeBuilder<RECIPE, BUILDER>
-		> extends ShapedRecipeBuilder {
+		> implements RecipeBuilder {
 	private static final Method ENSURE_VALID = ObfuscationReflectionHelper.findMethod(ShapedRecipeBuilder.class, /* ensureValid */ "m_126143_", ResourceLocation.class);
 	private static final Field CATEGORY = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* category */ "f_243672_");
 	private static final Field GROUP = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* group */ "f_126111_");
 	private static final Field CRITERIA = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* criteria */ "f_291506_");
 	private static final Field SHOW_NOTIFICATION = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* showNotification */ "f_271093_");
 
+	protected final ShapedRecipeBuilder innerBuilder;
+
 	protected final ItemStack result;
 	protected final ShapedRecipeFactory<? extends RECIPE> factory;
 
 	protected EnhancedShapedRecipeBuilder(
+			final HolderGetter<Item> items,
 			final RecipeCategory category,
 			final ItemStack result,
 			final ShapedRecipeFactory<? extends RECIPE> factory
 	) {
-		super(category, result.getItem(), result.getCount());
+		innerBuilder = ShapedRecipeBuilder.shaped(items, category, result.getItem(), result.getCount());
 		this.result = result;
 		this.factory = factory;
 	}
 
 	protected EnhancedShapedRecipeBuilder(
+			final HolderGetter<Item> items,
 			final RecipeCategory category,
 			final ItemStack result,
 			final ShapedRecipeSerializer<? extends RECIPE> serializer
 	) {
-		this(category, result, serializer.factory());
+		this(items, category, result, serializer.factory());
 	}
 
 	/**
 	 * Adds a key to the recipe pattern.
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public BUILDER define(final Character symbol, final TagKey<Item> tagIn) {
-		return (BUILDER) super.define(symbol, tagIn);
+	public BUILDER define(final Character symbol, final TagKey<Item> tag) {
+		innerBuilder.define(symbol, tag);
+
+		return builder();
 	}
 
 	/**
 	 * Adds a key to the recipe pattern.
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public BUILDER define(final Character symbol, final ItemLike itemIn) {
-		return (BUILDER) super.define(symbol, itemIn);
+	public BUILDER define(final Character symbol, final ItemLike item) {
+		innerBuilder.define(symbol, item);
+
+		return builder();
 	}
 
 	/**
 	 * Adds a key to the recipe pattern.
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public BUILDER define(final Character symbol, final Ingredient ingredientIn) {
-		return (BUILDER) super.define(symbol, ingredientIn);
+	public BUILDER define(final Character symbol, final Ingredient ingredient) {
+		innerBuilder.define(symbol, ingredient);
+
+		return builder();
 	}
 
 	/**
 	 * Adds a new entry to the patterns for this recipe.
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
 	public BUILDER pattern(final String pattern) {
-		return (BUILDER) super.pattern(pattern);
+		innerBuilder.pattern(pattern);
+
+		return builder();
 	}
 
 	/**
 	 * Adds a criterion needed to unlock the recipe.
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public BUILDER unlockedBy(final String name, final Criterion<?> criterion) {
-		return (BUILDER) super.unlockedBy(name, criterion);
+		innerBuilder.unlockedBy(name, criterion);
+
+		return builder();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public BUILDER group(@Nullable final String group) {
-		return (BUILDER) super.group(group);
+		innerBuilder.group(group);
+
+		return builder();
+	}
+
+	@Override
+	public Item getResult() {
+		return innerBuilder.getResult();
 	}
 
 	/**
 	 * Override to validate the recipe's ingredients, result or other conditions.
 	 *
-	 * @param id The recipe ID
+	 * @param key The recipe ID
 	 */
-	protected void ensureValid(final ResourceLocation id) {
+	protected void ensureValid(final ResourceKey<Recipe<?>> key) {
+	}
+
+	@SuppressWarnings("unchecked")
+	private BUILDER builder() {
+		return (BUILDER) this;
 	}
 
 	/**
 	 * Saves this recipe to the {@link RecipeOutput}.
 	 */
 	@Override
-	public void save(final RecipeOutput output, final ResourceLocation id) {
+	public void save(final RecipeOutput output, final ResourceKey<Recipe<?>> id) {
 		try {
-			// Perform the super class's validation
-			final var pattern = (ShapedRecipePattern) ENSURE_VALID.invoke(this, id);
+			// Perform the Vanilla class's validation
+			final var pattern = (ShapedRecipePattern) ENSURE_VALID.invoke(innerBuilder, id);
 
 			// Perform our validation
 			ensureValid(id);
@@ -141,17 +160,17 @@ public class EnhancedShapedRecipeBuilder<
 					.rewards(AdvancementRewards.Builder.recipe(id))
 					.requirements(AdvancementRequirements.Strategy.OR);
 
-			@SuppressWarnings("unchecked") final var criteria = (Map<String, Criterion<?>>) CRITERIA.get(this);
+			@SuppressWarnings("unchecked") final var criteria = (Map<String, Criterion<?>>) CRITERIA.get(innerBuilder);
 			criteria.forEach(advancement::addCriterion);
 
-			var group = (String) GROUP.get(this);
+			var group = (String) GROUP.get(innerBuilder);
 			if (group == null) {
 				group = "";
 			}
 
-			final var category = (RecipeCategory) CATEGORY.get(this);
+			final var category = (RecipeCategory) CATEGORY.get(innerBuilder);
 
-			final var showNotification = (boolean) SHOW_NOTIFICATION.get(this);
+			final var showNotification = (boolean) SHOW_NOTIFICATION.get(innerBuilder);
 
 			final var recipe = factory.createRecipe(
 					group,
@@ -161,15 +180,19 @@ public class EnhancedShapedRecipeBuilder<
 					showNotification
 			);
 
-			output.accept(id, recipe, advancement.build(id.withPrefix("recipes/" + category.getFolderName() + "/")));
+			output.accept(
+					id,
+					recipe,
+					advancement.build(id.location().withPrefix("recipes/" + category.getFolderName() + "/"))
+			);
 		} catch (final IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException("Failed to save shaped recipe " + id, e);
 		}
 	}
 
 	public static class Enhanced extends EnhancedShapedRecipeBuilder<EnhancedShapedRecipe, Enhanced> {
-		private Enhanced(final RecipeCategory category, final ItemStack result) {
-			super(category, result, ModCrafting.Recipes.ENHANCED_SHAPED.get());
+		private Enhanced(final HolderGetter<Item> items, final RecipeCategory category, final ItemStack result) {
+			super(items, category, result, ModCrafting.Recipes.ENHANCED_SHAPED.get());
 		}
 
 		/**
@@ -178,20 +201,20 @@ public class EnhancedShapedRecipeBuilder<
 		 * @param result The recipe result
 		 * @return The builder
 		 */
-		public static Enhanced shapedRecipe(final RecipeCategory category, final ItemStack result) {
-			return new Enhanced(category, result);
+		public static Enhanced shapedRecipe(final HolderGetter<Item> items, final RecipeCategory category, final ItemStack result) {
+			return new Enhanced(items, category, result);
 		}
 
 		@Override
-		protected void ensureValid(final ResourceLocation id) {
-			super.ensureValid(id);
- 
+		protected void ensureValid(final ResourceKey<Recipe<?>> key) {
+			super.ensureValid(key);
+
 			final var allComponentsAreStandard = result.getComponents()
 					.stream()
 					.allMatch(typedComponent -> typedComponent.value().equals(DataComponents.COMMON_ITEM_COMPONENTS.get(typedComponent.type())));
 
 			if (!allComponentsAreStandard) {
-				throw new IllegalStateException("Enhanced shaped recipe " + id + " has no custom components - use ShapedRecipeBuilder instead");
+				throw new IllegalStateException("Enhanced shaped recipe " + key + " has no custom components - use ShapedRecipeBuilder instead");
 			}
 		}
 	}

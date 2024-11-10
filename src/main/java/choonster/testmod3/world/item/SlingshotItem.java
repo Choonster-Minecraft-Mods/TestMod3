@@ -2,7 +2,7 @@ package choonster.testmod3.world.item;
 
 import choonster.testmod3.world.item.component.lastusetime.LastUseTime;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -33,10 +33,10 @@ public class SlingshotItem extends SnowballLauncherItem {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(final Level level, final Player player, final InteractionHand hand) {
+	public InteractionResult use(final Level level, final Player player, final InteractionHand hand) {
 		final var result = super.use(level, player, hand);
 
-		if (result.getResult().indicateItemUse()) {
+		if (result.consumesAction()) {
 			LastUseTime.updateLastUseTime(player, player.getItemInHand(hand));
 		}
 

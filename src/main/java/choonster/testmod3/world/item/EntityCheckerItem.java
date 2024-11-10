@@ -9,9 +9,9 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -90,23 +90,23 @@ public class EntityCheckerItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(final Level world, final Player player, final InteractionHand hand) {
+	public InteractionResult use(final Level world, final Player player, final InteractionHand hand) {
 		final var heldItem = player.getItemInHand(hand);
 
-		if (!world.isClientSide) {
-			final var newRadius = incrementRadius(heldItem, player.isShiftKeyDown() ? -1 : 1);
-			player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_ENTITY_CHECKER_RADIUS.getTranslationKey(), newRadius));
+		if (!world.isClientSide && player instanceof final ServerPlayer serverPlayer) {
+			final var newRadius = incrementRadius(heldItem, serverPlayer.isShiftKeyDown() ? -1 : 1);
+			serverPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_ENTITY_CHECKER_RADIUS.getTranslationKey(), newRadius));
 		}
 
-		return new InteractionResultHolder<>(InteractionResult.SUCCESS, heldItem);
+		return InteractionResult.SUCCESS;
 	}
 
 	@Override
 	public boolean onLeftClickEntity(final ItemStack stack, final Player player, final Entity entity) {
-		if (!player.getCommandSenderWorld().isClientSide) {
+		if (!player.level().isClientSide && player instanceof final ServerPlayer serverPlayer) {
 			final var cornerModeEnabled = toggleCornerModeEnabled(stack);
 			final var message = cornerModeEnabled ? TestMod3Lang.MESSAGE_ENTITY_CHECKER_MODE_CORNER : TestMod3Lang.MESSAGE_ENTITY_CHECKER_MODE_EDGE;
-			player.sendSystemMessage(Component.translatable(message.getTranslationKey(), cornerModeEnabled));
+			serverPlayer.sendSystemMessage(Component.translatable(message.getTranslationKey(), cornerModeEnabled));
 		}
 
 		return true;
@@ -114,8 +114,8 @@ public class EntityCheckerItem extends Item {
 
 	@Override
 	public InteractionResult useOn(final UseOnContext context) {
+		final var player = context.getPlayer();
 		if (!context.getLevel().isClientSide) {
-			final var player = context.getPlayer();
 			final var heldItem = context.getItemInHand();
 			final var clickedPos = context.getClickedPos();
 			final var properties = getProperties(heldItem);
@@ -136,9 +136,9 @@ public class EntityCheckerItem extends Item {
 			final var entities = context.getLevel().getEntities(player, boundingBox);
 
 			LOGGER.info("Bounding box: {}", boundingBox);
-			if (player != null) {
-				player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_ENTITY_CHECKER_RESULTS.getTranslationKey(), entities.size()));
-				entities.forEach(entity -> player.sendSystemMessage(Component.literal(entity.toString())));
+			if (player instanceof final ServerPlayer serverPlayer) {
+				serverPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_ENTITY_CHECKER_RESULTS.getTranslationKey(), entities.size()));
+				entities.forEach(entity -> serverPlayer.sendSystemMessage(Component.literal(entity.toString())));
 			}
 		}
 

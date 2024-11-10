@@ -6,8 +6,9 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -47,7 +48,7 @@ public class RestrictedFluidTankBlock extends FluidTankBlock<RestrictedFluidTank
 	}
 
 	@Override
-	protected ItemInteractionResult useItemOn(final ItemStack stack, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
+	protected InteractionResult useItemOn(final ItemStack stack, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
 		final var heldItem = player.getItemInHand(hand);
 		final var direction = blockHitResult.getDirection();
 
@@ -56,12 +57,12 @@ public class RestrictedFluidTankBlock extends FluidTankBlock<RestrictedFluidTank
 			if (blockEntity != null) {
 				final var enabled = blockEntity.toggleFacing(direction);
 
-				if (!level.isClientSide) {
+				if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
 					final var message = enabled ? TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_FACING_ENABLED : TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_FACING_DISABLED;
-					player.sendSystemMessage(Component.translatable(message.getTranslationKey(), direction));
+					serverPlayer.sendSystemMessage(Component.translatable(message.getTranslationKey(), direction));
 				}
 
-				return ItemInteractionResult.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
 		}
 
@@ -70,9 +71,14 @@ public class RestrictedFluidTankBlock extends FluidTankBlock<RestrictedFluidTank
 
 	@Override
 	public void attack(final BlockState state, final Level level, final BlockPos pos, final Player player) {
-		if (!level.isClientSide) {
+		if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
 			final var enabledFacingsString = getEnabledFacingsString(level, pos);
-			player.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_ENABLED_FACINGS.getTranslationKey(), enabledFacingsString));
+			serverPlayer.sendSystemMessage(
+					Component.translatable(
+							TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_ENABLED_FACINGS.getTranslationKey(),
+							enabledFacingsString
+					)
+			);
 		}
 	}
 

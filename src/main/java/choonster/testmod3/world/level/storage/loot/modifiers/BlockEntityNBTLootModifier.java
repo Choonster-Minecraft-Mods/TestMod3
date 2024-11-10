@@ -8,6 +8,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
@@ -17,7 +18,7 @@ import java.util.function.Supplier;
 
 /**
  * A global loot modifier that adds an ItemStack of the harvested block's item with the BlockEntity's NBT stored in the
- * "BlockEntityTag" tag.
+ * "block_entity_data" component.
  *
  * @author Choonster
  */
@@ -34,9 +35,13 @@ public class BlockEntityNBTLootModifier extends LootModifier {
 	}
 
 	@Override
-	protected ObjectArrayList<ItemStack> doApply(final ObjectArrayList<ItemStack> generatedLoot, final LootContext context) {
-		final var state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
-		final var blockEntity = context.getParamOrNull(LootContextParams.BLOCK_ENTITY);
+	protected ObjectArrayList<ItemStack> doApply(
+			final LootTable table,
+			final ObjectArrayList<ItemStack> generatedLoot,
+			final LootContext context
+	) {
+		final var state = context.getOptionalParameter(LootContextParams.BLOCK_STATE);
+		final var blockEntity = context.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
 
 		if (state != null && blockEntity != null) {
 			// Write the BlockEntity to NBT

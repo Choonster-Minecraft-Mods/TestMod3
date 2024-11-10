@@ -35,7 +35,7 @@ public record MatchBlockTag(TagKey<Block> tag) implements LootItemCondition {
 
 	@Override
 	public boolean test(final LootContext lootContext) {
-		final BlockState state = lootContext.getParamOrNull(LootContextParams.BLOCK_STATE);
+		final BlockState state = lootContext.getOptionalParameter(LootContextParams.BLOCK_STATE);
 
 		return state != null && state.is(tag);
 	}

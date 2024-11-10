@@ -30,14 +30,14 @@ public class IsChestLoot implements LootItemCondition {
 		// BlockEntityLockableLoot#fillWithLoot always provides the ORIGIN parameter, sometimes provides THIS_ENTITY and
 		// never provides any other parameter.
 
-		return lootContext.hasParam(LootContextParams.ORIGIN) &&
-				!lootContext.hasParam(LootContextParams.DAMAGE_SOURCE) &&
-				!lootContext.hasParam(LootContextParams.ATTACKING_ENTITY) &&
-				!lootContext.hasParam(LootContextParams.DIRECT_ATTACKING_ENTITY) &&
-				!lootContext.hasParam(LootContextParams.BLOCK_STATE) &&
-				!lootContext.hasParam(LootContextParams.BLOCK_ENTITY) &&
-				!lootContext.hasParam(LootContextParams.TOOL) &&
-				!lootContext.hasParam(LootContextParams.EXPLOSION_RADIUS);
+		return lootContext.hasParameter(LootContextParams.ORIGIN) &&
+				!lootContext.hasParameter(LootContextParams.DAMAGE_SOURCE) &&
+				!lootContext.hasParameter(LootContextParams.ATTACKING_ENTITY) &&
+				!lootContext.hasParameter(LootContextParams.DIRECT_ATTACKING_ENTITY) &&
+				!lootContext.hasParameter(LootContextParams.BLOCK_STATE) &&
+				!lootContext.hasParameter(LootContextParams.BLOCK_ENTITY) &&
+				!lootContext.hasParameter(LootContextParams.TOOL) &&
+				!lootContext.hasParameter(LootContextParams.EXPLOSION_RADIUS);
 	}
 
 	public static LootItemCondition.Builder builder() {
