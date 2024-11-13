@@ -105,12 +105,7 @@ public class ModBucketItem extends Item {
 	}
 
 	@Override
-	public boolean hasCraftingRemainingItem(final ItemStack stack) {
-		return !getFluid(stack).isEmpty();
-	}
-
-	@Override
-	public ItemStack getCraftingRemainingItem(final ItemStack itemStack) {
+	public ItemStack getCraftingRemainder(final ItemStack itemStack) {
 		return empty();
 	}
 

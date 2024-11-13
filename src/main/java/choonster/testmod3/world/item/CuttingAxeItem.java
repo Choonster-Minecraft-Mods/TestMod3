@@ -18,12 +18,7 @@ public class CuttingAxeItem extends AxeItem {
 	}
 
 	@Override
-	public boolean hasCraftingRemainingItem(final ItemStack stack) {
-		return true;
-	}
-
-	@Override
-	public ItemStack getCraftingRemainingItem(final ItemStack itemStack) {
+	public ItemStack getCraftingRemainder(final ItemStack itemStack) {
 		final var remainingItem = itemStack.copy();
 		final var craftingPlayer = ForgeHooks.getCraftingPlayer();
 
