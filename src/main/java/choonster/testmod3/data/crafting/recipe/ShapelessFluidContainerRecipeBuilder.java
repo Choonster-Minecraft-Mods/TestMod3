@@ -17,7 +17,7 @@ import net.minecraft.world.level.ItemLike;
  *
  * @author Choonster
  */
-public class ShapelessFluidContainerRecipeBuilder extends EnhancedShapelessRecipeBuilder<ShapelessFluidContainerRecipe, ShapelessFluidContainerRecipeBuilder> {
+public class ShapelessFluidContainerRecipeBuilder extends BaseShapelessRecipeBuilder<ShapelessFluidContainerRecipe, ShapelessFluidContainerRecipeBuilder> {
 	protected ShapelessFluidContainerRecipeBuilder(
 			final HolderGetter<Item> items,
 			final RecipeCategory category,

@@ -7,7 +7,10 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.common.ForgeHooks;
 
 import java.util.List;
@@ -20,9 +23,7 @@ import java.util.stream.Collectors;
  *
  * @author Choonster
  */
-public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
-	private final List<Ingredient> ingredients;
-
+public class ShapelessFluidContainerRecipe extends BaseShapelessRecipe {
 	private ShapelessFluidContainerRecipe(
 			final String group,
 			final CraftingBookCategory category,
@@ -30,9 +31,9 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 			final List<Ingredient> ingredients
 	) {
 		super(group, category, result, ingredients);
-		this.ingredients = ingredients;
 	}
 
+	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(final CraftingInput input) {
 		final var fluidContainerIngredients = ingredients
@@ -75,18 +76,18 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 	}
 
 	@Override
-	public RecipeSerializer<ShapelessRecipe> getSerializer() {
+	public RecipeSerializer<ShapelessFluidContainerRecipe> getSerializer() {
 		return ModCrafting.Recipes.FLUID_CONTAINER_SHAPELESS.get();
 	}
 
-	public static class Serializer extends ShapelessRecipeSerializer<ShapelessRecipe> {
-		private final MapCodec<ShapelessRecipe> codec;
+	public static class Serializer extends ShapelessRecipeSerializer<ShapelessFluidContainerRecipe> {
+		private final MapCodec<ShapelessFluidContainerRecipe> codec;
 
 		public Serializer() {
 			super(ShapelessFluidContainerRecipe::new);
 
 			codec = super.codec().validate(
-					recipe -> ((ShapelessFluidContainerRecipe) recipe).ingredients
+					recipe -> recipe.ingredients
 							.stream()
 							.filter(ingredient -> ingredient instanceof FluidContainerIngredient)
 							.findFirst()
@@ -96,7 +97,7 @@ public class ShapelessFluidContainerRecipe extends ShapelessRecipe {
 		}
 
 		@Override
-		public MapCodec<ShapelessRecipe> codec() {
+		public MapCodec<ShapelessFluidContainerRecipe> codec() {
 			return codec;
 		}
 	}

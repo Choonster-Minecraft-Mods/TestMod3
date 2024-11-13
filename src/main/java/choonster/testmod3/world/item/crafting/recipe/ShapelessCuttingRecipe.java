@@ -6,7 +6,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.common.ForgeHooks;
 
 import java.util.List;
@@ -16,7 +19,7 @@ import java.util.List;
  *
  * @author Choonster
  */
-public class ShapelessCuttingRecipe extends ShapelessRecipe {
+public class ShapelessCuttingRecipe extends BaseShapelessRecipe {
 	private ShapelessCuttingRecipe(
 			final String group,
 			final CraftingBookCategory category,
@@ -26,6 +29,7 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 		super(group, category, result, ingredients);
 	}
 
+	@SuppressWarnings("UnstableApiUsage")
 	private ItemStack damageAxe(final ItemStack stack) {
 		final var craftingPlayer = ForgeHooks.getCraftingPlayer();
 
@@ -41,6 +45,7 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 		return stack;
 	}
 
+	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(final CraftingInput input) {
 		final var remainingItems = NonNullList.withSize(input.size(), ItemStack.EMPTY);
@@ -59,11 +64,11 @@ public class ShapelessCuttingRecipe extends ShapelessRecipe {
 	}
 
 	@Override
-	public RecipeSerializer<ShapelessRecipe> getSerializer() {
+	public RecipeSerializer<ShapelessCuttingRecipe> getSerializer() {
 		return ModCrafting.Recipes.CUTTING_SHAPELESS.get();
 	}
 
-	public static class Serializer extends ShapelessRecipeSerializer<ShapelessRecipe> {
+	public static class Serializer extends ShapelessRecipeSerializer<ShapelessCuttingRecipe> {
 		public Serializer() {
 			super(ShapelessCuttingRecipe::new);
 		}

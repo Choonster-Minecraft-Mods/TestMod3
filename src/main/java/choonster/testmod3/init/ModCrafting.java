@@ -5,7 +5,10 @@ import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredient;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
 import choonster.testmod3.world.item.crafting.ingredient.MobSpawnerIngredient;
 import choonster.testmod3.world.item.crafting.ingredient.NeverIngredient;
-import choonster.testmod3.world.item.crafting.recipe.*;
+import choonster.testmod3.world.item.crafting.recipe.EnhancedShapedRecipe;
+import choonster.testmod3.world.item.crafting.recipe.ShapedArmourUpgradeRecipe;
+import choonster.testmod3.world.item.crafting.recipe.ShapelessCuttingRecipe;
+import choonster.testmod3.world.item.crafting.recipe.ShapelessFluidContainerRecipe;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -160,10 +163,6 @@ public class ModCrafting {
 
 		public static final RegistryObject<ShapedArmourUpgradeRecipe.Serializer> ARMOUR_UPGRADE_SHAPED = RECIPE_SERIALIZERS.register("armour_upgrade_shaped",
 				ShapedArmourUpgradeRecipe.Serializer::new
-		);
-
-		public static final RegistryObject<EnhancedShapelessRecipe.Serializer> ENHANCED_SHAPELESS = RECIPE_SERIALIZERS.register("enhanced_shapeless",
-				EnhancedShapelessRecipe.Serializer::new
 		);
 
 		public static final RegistryObject<ShapelessCuttingRecipe.Serializer> CUTTING_SHAPELESS = RECIPE_SERIALIZERS.register("cutting_shapeless",

@@ -13,7 +13,7 @@ import net.minecraft.world.level.ItemLike;
  *
  * @author Choonster
  */
-public class ShapelessCuttingRecipeBuilder extends EnhancedShapelessRecipeBuilder<ShapelessCuttingRecipe, ShapelessCuttingRecipeBuilder> {
+public class ShapelessCuttingRecipeBuilder extends BaseShapelessRecipeBuilder<ShapelessCuttingRecipe, ShapelessCuttingRecipeBuilder> {
 	protected ShapelessCuttingRecipeBuilder(final HolderGetter<Item> items, final RecipeCategory category, final ItemStack result) {
 		super(items, category, result, ModCrafting.Recipes.CUTTING_SHAPELESS.get());
 	}

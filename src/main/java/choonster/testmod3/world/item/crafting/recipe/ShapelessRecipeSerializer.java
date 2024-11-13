@@ -11,22 +11,17 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 /**
- * Base class for {@link ShapelessRecipe} serializers.
+ * Base class for {@link BaseShapelessRecipe} serializers.
  * <p>
  * Adapted from {@link ShapelessRecipe.Serializer}.
  *
  * @author Choonster
  */
-public class ShapelessRecipeSerializer<T extends ShapelessRecipe> implements RecipeSerializer<T> {
-	private static final Field INGREDIENTS = ObfuscationReflectionHelper.findField(ShapelessRecipe.class, "ingredients");
-	private static final Field RESULT = ObfuscationReflectionHelper.findField(ShapelessRecipe.class, "result");
-
+public class ShapelessRecipeSerializer<T extends BaseShapelessRecipe> implements RecipeSerializer<T> {
 	private final ShapelessRecipeFactory<T> factory;
 	private final MapCodec<T> codec;
 	private final StreamCodec<RegistryFriendlyByteBuf, T> streamCodec;
@@ -37,33 +32,33 @@ public class ShapelessRecipeSerializer<T extends ShapelessRecipe> implements Rec
 		codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
 
 				Codec.STRING.optionalFieldOf("group", "")
-						.forGetter(ShapelessRecipe::group),
+						.forGetter(BaseShapelessRecipe::group),
 
 				CraftingBookCategory.CODEC
 						.fieldOf("category")
 						.orElse(CraftingBookCategory.MISC)
-						.forGetter(ShapelessRecipe::category),
+						.forGetter(BaseShapelessRecipe::category),
 
 				ItemStack.STRICT_CODEC
 						.fieldOf("result")
-						.forGetter(ShapelessRecipeSerializer::getResult),
+						.forGetter(ShapelessRecipeSerializer::result),
 
 				Ingredient.CODEC
 						.listOf()
 						.fieldOf("ingredients")
-						.forGetter(ShapelessRecipeSerializer::getIngredients)
+						.forGetter(ShapelessRecipeSerializer::ingredients)
 
 		).apply(instance, factory::createRecipe));
 
 		streamCodec = StreamCodec.composite(
 				ByteBufCodecs.STRING_UTF8,
-				ShapelessRecipe::group,
+				BaseShapelessRecipe::group,
 				CraftingBookCategory.STREAM_CODEC,
-				ShapelessRecipe::category,
+				BaseShapelessRecipe::category,
 				ItemStack.STREAM_CODEC,
-				ShapelessRecipeSerializer::getResult,
+				ShapelessRecipeSerializer::result,
 				Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()),
-				ShapelessRecipeSerializer::getIngredients,
+				ShapelessRecipeSerializer::ingredients,
 				factory::createRecipe
 		);
 	}
@@ -82,20 +77,11 @@ public class ShapelessRecipeSerializer<T extends ShapelessRecipe> implements Rec
 		return streamCodec;
 	}
 
-	@SuppressWarnings("unchecked")
-	private static List<Ingredient> getIngredients(final ShapelessRecipe recipe) {
-		try {
-			return (List<Ingredient>) INGREDIENTS.get(recipe);
-		} catch (final IllegalAccessException e) {
-			throw new RuntimeException("Failed to get ingredients from shapeless recipe", e);
-		}
+	private static ItemStack result(final BaseShapelessRecipe recipe) {
+		return recipe.result;
 	}
 
-	private static ItemStack getResult(final ShapelessRecipe recipe) {
-		try {
-			return (ItemStack) RESULT.get(recipe);
-		} catch (final IllegalAccessException e) {
-			throw new RuntimeException("Failed to get result from shapeless recipe", e);
-		}
+	private static List<Ingredient> ingredients(final BaseShapelessRecipe recipe) {
+		return recipe.ingredients;
 	}
 }
