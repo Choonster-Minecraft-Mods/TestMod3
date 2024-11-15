@@ -20,9 +20,18 @@ public abstract class StaticFluid extends ForgeFlowingFluid {
 		super(properties);
 	}
 
+	// This has been made protected with an access transformer
 	@Override
-	protected boolean canSpreadTo(final BlockGetter level, final BlockPos fromPos, final BlockState fromBlockState, final Direction direction, final BlockPos toPos, final BlockState toBlockState, final FluidState toFluidState, final Fluid fluidIn) {
-		return direction.getAxis() == Direction.Axis.Y && super.canSpreadTo(level, fromPos, fromBlockState, direction, toPos, toBlockState, toFluidState, fluidIn);
+	protected boolean canMaybePassThrough(
+			final BlockGetter blockGetter,
+			final BlockPos pos,
+			final BlockState blockState,
+			final Direction direction,
+			final BlockPos targetPos,
+			final BlockState targetBlockState,
+			final FluidState targetFluidState
+	) {
+		return direction.getAxis() == Direction.Axis.Y && super.canMaybePassThrough(blockGetter, pos, blockState, direction, targetPos, targetBlockState, targetFluidState);
 	}
 
 	public static class Flowing extends StaticFluid {

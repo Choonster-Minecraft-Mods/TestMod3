@@ -28,53 +28,128 @@ import java.lang.reflect.Method;
  */
 // TODO: Properly implement portal displacement
 public abstract class PortalDisplacementFluid extends ForgeFlowingFluid {
-	private static final Method CAN_PASS_THROUGH_WALL = ObfuscationReflectionHelper.findMethod(FlowingFluid.class, /* canPassThroughWall */ "m_76061_", Direction.class, BlockGetter.class, BlockPos.class, BlockState.class, BlockPos.class, BlockState.class);
+	private static final Method CAN_PASS_THROUGH_WALL = ObfuscationReflectionHelper.findMethod(
+			FlowingFluid.class,
+			"canPassThroughWall",
+			Direction.class,
+			BlockGetter.class,
+			BlockPos.class,
+			BlockState.class,
+			BlockPos.class,
+			BlockState.class
+	);
+
+	private static final Method CAN_HOLD_SPECIFIC_FLUID = ObfuscationReflectionHelper.findMethod(
+			FlowingFluid.class,
+			"canHoldSpecificFluid",
+			BlockGetter.class,
+			BlockPos.class,
+			BlockState.class,
+			Fluid.class
+	);
 
 	protected PortalDisplacementFluid(final Properties properties) {
 		super(properties);
 	}
 
-	// TODO: Override getSlopeDistance and getSpread to call modified version of canPassThrough
-
+	// This has been made protected with an access transformer
 	@Override
-	protected boolean canSpreadTo(final BlockGetter level, final BlockPos fromPos, final BlockState fromBlockState, final Direction direction, final BlockPos toPos, final BlockState toBlockState, final FluidState toFluidState, final Fluid fluidIn) {
+	protected boolean canMaybePassThrough(
+			final BlockGetter blockGetter,
+			final BlockPos pos,
+			final BlockState blockState,
+			final Direction direction,
+			final BlockPos targetPos,
+			final BlockState targetBlockState,
+			final FluidState targetFluidState
+	) {
+		return !isSourceBlockOfThisType(targetFluidState)
+				&& canHoldAnyFluidAllowPortals(targetBlockState)
+				&& canPassThroughWall(direction, blockGetter, pos, blockState, targetPos, targetBlockState);
+	}
+
+	private static boolean canPassThroughWall(
+			final Direction direction,
+			final BlockGetter blockGetter,
+			final BlockPos pos,
+			final BlockState blockState,
+			final BlockPos targetPos,
+			final BlockState targetBlockState
+	) {
 		try {
-			return toFluidState.canBeReplacedWith(level, toPos, fluidIn, direction) &&
-					(boolean) CAN_PASS_THROUGH_WALL.invoke(this, direction, level, fromPos, fromBlockState, toPos, toBlockState) &&
-					canHoldFluid(level, toPos, toBlockState, fluidIn);
+			return (boolean) CAN_PASS_THROUGH_WALL.invoke(
+					null,
+					direction,
+					blockGetter,
+					pos,
+					blockState,
+					targetPos,
+					targetBlockState
+			);
 		} catch (final IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException("Failed to invoke FlowingFluid.canPassThroughWall", e);
 		}
 	}
 
-	@Override
-	protected boolean canBeReplacedWith(final FluidState state, final BlockGetter world, final BlockPos pos, final Fluid fluidIn, final Direction direction) {
-		final var blockState = world.getBlockState(pos);
-
-		if (blockState.getBlock() == Blocks.NETHER_PORTAL || blockState.getBlock() == Blocks.END_PORTAL || blockState.getBlock() == Blocks.END_GATEWAY) {
-			return true;
-		}
-
-		return super.canBeReplacedWith(state, world, pos, fluidIn, direction);
+	private boolean isSourceBlockOfThisType(final FluidState fluidState) {
+		return fluidState.getType().isSame(this) && fluidState.isSource();
 	}
 
-	@SuppressWarnings("deprecation")
-	private static boolean canHoldFluid(final BlockGetter world, final BlockPos pos, final BlockState state, final Fluid fluid) {
-		final var block = state.getBlock();
+	// TODO: Is this needed?
+//	@Override
+//	protected boolean canBeReplacedWith(final FluidState state, final BlockGetter world, final BlockPos pos, final Fluid fluidIn, final Direction direction) {
+//		final var blockState = world.getBlockState(pos);
+//
+//		if (blockState.getBlock() == Blocks.NETHER_PORTAL || blockState.getBlock() == Blocks.END_PORTAL || blockState.getBlock() == Blocks.END_GATEWAY) {
+//			return true;
+//		}
+//		return super.canBeReplacedWith(state, world, pos, fluidIn, direction);
+//	}
 
-		if (block instanceof final LiquidBlockContainer liquidBlockContainer) {
-			return liquidBlockContainer.canPlaceLiquid(null, world, pos, state, fluid);
-		}
-
-		if (!(block instanceof DoorBlock) && !state.is(BlockTags.SIGNS) && !state.is(Blocks.LADDER) && !state.is(Blocks.SUGAR_CANE) && !state.is(Blocks.BUBBLE_COLUMN)) {
-			if (!state.is(Blocks.STRUCTURE_VOID)) {
-				return !state.blocksMotion();
-			}
-
+	@Override
+	protected boolean isWaterHole(
+			final BlockGetter blockGetter,
+			final BlockPos pos,
+			final BlockState blockState,
+			final BlockPos targetPos,
+			final BlockState targetBlockState
+	) {
+		if (!canPassThroughWall(Direction.DOWN, blockGetter, pos, blockState, targetPos, targetBlockState)) {
 			return false;
 		}
 
-		return false;
+		return targetBlockState.getFluidState().getType().isSame(this)
+				|| canHoldFluidAllowPortals(blockGetter, targetPos, targetBlockState, getFlowing());
+	}
+
+	@SuppressWarnings("deprecation")
+	private static boolean canHoldAnyFluidAllowPortals(final BlockState state) {
+		final var block = state.getBlock();
+		if (block instanceof LiquidBlockContainer) {
+			return true;
+		}
+
+		return !state.blocksMotion()
+				&& !(block instanceof DoorBlock)
+				&& !state.is(BlockTags.SIGNS)
+				&& !state.is(Blocks.LADDER)
+				&& !state.is(Blocks.SUGAR_CANE)
+				&& !state.is(Blocks.BUBBLE_COLUMN)
+				&& !state.is(Blocks.STRUCTURE_VOID);
+	}
+
+	private static boolean canHoldFluidAllowPortals(
+			final BlockGetter blockGetter,
+			final BlockPos pos,
+			final BlockState state,
+			final Fluid fluid
+	) {
+		try {
+			return canHoldAnyFluidAllowPortals(state)
+					&& (boolean) CAN_HOLD_SPECIFIC_FLUID.invoke(null, blockGetter, pos, state, fluid);
+		} catch (final IllegalAccessException | InvocationTargetException e) {
+			throw new RuntimeException("Failed to call canHoldSpecificFluid", e);
+		}
 	}
 
 	public static class Flowing extends PortalDisplacementFluid {
