@@ -43,7 +43,10 @@ public class DimensionReplacementItem extends Item {
 	 */
 	private final Map<ResourceKey<DimensionType>, Supplier<ItemStack>> replacements;
 
-	public DimensionReplacementItem(final Properties properties, final Map<ResourceKey<DimensionType>, Supplier<ItemStack>> replacements) {
+	public DimensionReplacementItem(
+			final Map<ResourceKey<DimensionType>, Supplier<ItemStack>> replacements,
+			final Properties properties
+	) {
 		super(properties);
 
 		this.replacements = ImmutableMap.copyOf(

@@ -56,8 +56,8 @@ public class ReplacementArmourItem extends ArmorItem {
 	public ReplacementArmourItem(
 			final ArmorMaterial material,
 			final ArmorType type,
-			final Properties properties,
-			final Collection<Function<RegistryAccess, ItemStack>> replacementItems
+			final Collection<Function<RegistryAccess, ItemStack>> replacementItems,
+			final Properties properties
 	) {
 		super(material, type, properties);
 

@@ -114,7 +114,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 			final Function<VARIANT, Item.Properties> itemPropertiesFactory, final ItemFactory<VARIANT, BLOCK> itemFactory,
 			final DeferredRegister<Block> blocks, final DeferredRegister<Item> items
 	) {
-		final ImmutableMap.Builder<VARIANT, RegistryObject<BLOCK>> builder = ImmutableMap.builder();
+		final var builder = ImmutableMap.<VARIANT, RegistryObject<BLOCK>>builder();
 
 		variants.forEach(variant -> {
 			final String registryName;
@@ -124,8 +124,11 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 				registryName = variant.getSerializedName() + "_" + groupName;
 			}
 
-			final RegistryObject<BLOCK> block = blocks.register(registryName, () -> {
-				final Block.Properties properties = blockPropertiesFactory.apply(variant);
+			var blockId = blocks.key(registryName);
+			var itemId = items.key(registryName);
+
+			final var block = blocks.register(registryName, () -> {
+				final var properties = blockPropertiesFactory.apply(variant).setId(blockId);
 
 				return blockFactory.createBlock(variant, this, properties);
 			});
@@ -133,7 +136,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 			builder.put(variant, block);
 
 			items.register(registryName, () -> {
-				final Item.Properties properties = itemPropertiesFactory.apply(variant);
+				final var properties = itemPropertiesFactory.apply(variant).setId(itemId);
 
 				return itemFactory.createItem(block.get(), properties, variant);
 			});

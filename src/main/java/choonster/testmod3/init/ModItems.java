@@ -13,7 +13,6 @@ import com.google.common.collect.ImmutableSet;
 import net.minecraft.Util;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.*;
@@ -37,12 +36,14 @@ public class ModItems {
 
 	private static boolean isInitialised;
 
-	public static final RegistryObject<CuttingAxeItem> WOODEN_AXE = ITEMS.register("wooden_axe",
-			() -> new CuttingAxeItem(ToolMaterial.WOOD, 6.0f, -3.2f, defaultItemProperties())
+	public static final RegistryObject<CuttingAxeItem> WOODEN_AXE = registerItem("wooden_axe",
+			(properties) -> new CuttingAxeItem(ToolMaterial.WOOD, 6.0f, -3.2f, properties),
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<EntityTestItem> ENTITY_TEST = ITEMS.register("entity_test",
-			() -> new EntityTestItem(defaultItemProperties())
+	public static final RegistryObject<EntityTestItem> ENTITY_TEST = registerItem("entity_test",
+			EntityTestItem::new,
+			defaultItemProperties()
 	);
 
 	/*
@@ -51,44 +52,54 @@ public class ModItems {
 	 * Test for this thread:
 	 * http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2408066-try-creating-a-music-disc-in-my-1-8-mod-please
 	 */
-	public static final RegistryObject<Item> MUSIC_DISC_SOLARIS = ITEMS.register("music_disc_solaris",
-			() -> new Item(defaultItemProperties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(ModJukeboxSongs.SOLARIS))
+	public static final RegistryObject<Item> MUSIC_DISC_SOLARIS = registerItem("music_disc_solaris",
+			Item::new,
+			defaultItemProperties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(ModJukeboxSongs.SOLARIS)
 	);
 
-	public static final RegistryObject<HeavyItem> HEAVY = ITEMS.register("heavy",
-			() -> new HeavyItem(defaultItemProperties())
+	public static final RegistryObject<HeavyItem> HEAVY = registerItem("heavy",
+			HeavyItem::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<EntityInteractionTestItem> ENTITY_INTERACTION_TEST = ITEMS.register("entity_interaction_test",
-			() -> new EntityInteractionTestItem(defaultItemProperties().component(ModDataComponents.ENTITY_INTERACTION_COUNT.get(), 0))
+	public static final RegistryObject<EntityInteractionTestItem> ENTITY_INTERACTION_TEST = registerItem("entity_interaction_test",
+			EntityInteractionTestItem::new,
+			defaultItemProperties().component(ModDataComponents.ENTITY_INTERACTION_COUNT.get(), 0)
 	);
 
-	public static final RegistryObject<BlockDestroyerItem> BLOCK_DESTROYER = ITEMS.register("block_destroyer",
-			() -> new BlockDestroyerItem(defaultItemProperties())
+	public static final RegistryObject<BlockDestroyerItem> BLOCK_DESTROYER = registerItem("block_destroyer",
+			BlockDestroyerItem::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<SubscriptsItem> SUBSCRIPTS = ITEMS.register("subscripts",
-			() -> new SubscriptsItem(defaultItemProperties())
+	public static final RegistryObject<SubscriptsItem> SUBSCRIPTS = registerItem("subscripts",
+			SubscriptsItem::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<SuperscriptsItem> SUPERSCRIPTS = ITEMS.register("superscripts",
-			() -> new SuperscriptsItem(defaultItemProperties())
+	public static final RegistryObject<SuperscriptsItem> SUPERSCRIPTS = registerItem("superscripts",
+			SuperscriptsItem::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<LastUseTimeModelItem> MODEL_TEST = ITEMS.register("model_test",
-			() -> new LastUseTimeModelItem(defaultItemProperties().component(ModDataComponents.LAST_USE_TIME_PROPERTIES.get(), new LastUseTimeProperties(0, true)))
+	public static final RegistryObject<LastUseTimeModelItem> MODEL_TEST = registerItem("model_test",
+			LastUseTimeModelItem::new,
+			defaultItemProperties().component(ModDataComponents.LAST_USE_TIME_PROPERTIES.get(), new LastUseTimeProperties(0, true))
 	);
 
-	public static final RegistryObject<SnowballLauncherItem> SNOWBALL_LAUNCHER = ITEMS.register("snowball_launcher",
-			() -> new SnowballLauncherItem(defaultItemProperties())
+	public static final RegistryObject<SnowballLauncherItem> SNOWBALL_LAUNCHER = registerItem("snowball_launcher",
+			SnowballLauncherItem::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<SlingshotItem> SLINGSHOT = ITEMS.register("slingshot",
-			() -> new SlingshotItem(defaultItemProperties().component(ModDataComponents.LAST_USE_TIME_PROPERTIES.get(), new LastUseTimeProperties(0, false)))
+	public static final RegistryObject<SlingshotItem> SLINGSHOT = registerItem("slingshot",
+			SlingshotItem::new,
+			defaultItemProperties().component(ModDataComponents.LAST_USE_TIME_PROPERTIES.get(), new LastUseTimeProperties(0, false))
 	);
 
-	public static final RegistryObject<UnicodeTooltipsItem> UNICODE_TOOLTIPS = ITEMS.register("unicode_tooltips",
-			() -> new UnicodeTooltipsItem(defaultItemProperties())
+	public static final RegistryObject<UnicodeTooltipsItem> UNICODE_TOOLTIPS = registerItem("unicode_tooltips",
+			UnicodeTooltipsItem::new,
+			defaultItemProperties()
 	);
 
 	public static final RegistryObject<SwapTestItem> SWAP_TEST_A;
@@ -101,198 +112,227 @@ public class ModItems {
 
 		// Initialise the fields with lazy references to the items first,
 		// allowing them to be referenced from the constructors below
-		SWAP_TEST_A = RegistryObject.create(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, swapTestA), ForgeRegistries.ITEMS);
-		SWAP_TEST_B = RegistryObject.create(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, swapTestB), ForgeRegistries.ITEMS);
+		SWAP_TEST_A = RegistryObject.create(ITEMS.key(swapTestA).location(), ForgeRegistries.ITEMS);
+		SWAP_TEST_B = RegistryObject.create(ITEMS.key(swapTestB).location(), ForgeRegistries.ITEMS);
 
 		// Then register the items
-		ITEMS.register(swapTestA,
-				() -> new SwapTestItem(defaultItemProperties(), () -> new ItemStack(SWAP_TEST_B.get()))
+		registerItem(swapTestA,
+				(properties) -> new SwapTestItem(() -> new ItemStack(SWAP_TEST_B.get()), properties),
+				defaultItemProperties()
 		);
 
-		ITEMS.register(swapTestB,
-				() -> new SwapTestItem(defaultItemProperties(), () -> new ItemStack(SWAP_TEST_A.get()))
+		registerItem(swapTestB,
+				(properties) -> new SwapTestItem(() -> new ItemStack(SWAP_TEST_A.get()), properties),
+				defaultItemProperties()
 		);
 	}
 
-	public static final RegistryObject<BlockDebuggerItem> BLOCK_DEBUGGER = ITEMS.register("block_debugger",
-			() -> new BlockDebuggerItem(defaultItemProperties())
+	public static final RegistryObject<BlockDebuggerItem> BLOCK_DEBUGGER = registerItem("block_debugger",
+			BlockDebuggerItem::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<HarvestSwordItem> WOODEN_HARVEST_SWORD = ITEMS.register("wooden_harvest_sword",
-			() -> new HarvestSwordItem(ToolMaterial.WOOD, defaultItemProperties())
+	public static final RegistryObject<HarvestSwordItem> WOODEN_HARVEST_SWORD = registerItem("wooden_harvest_sword",
+			(properties) -> new HarvestSwordItem(ToolMaterial.WOOD, properties),
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<HarvestSwordItem> DIAMOND_HARVEST_SWORD = ITEMS.register("diamond_harvest_sword",
-			() -> new HarvestSwordItem(ToolMaterial.DIAMOND, defaultItemProperties())
+	public static final RegistryObject<HarvestSwordItem> DIAMOND_HARVEST_SWORD = registerItem("diamond_harvest_sword",
+			(properties) -> new HarvestSwordItem(ToolMaterial.DIAMOND, properties),
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<ClearerItem> CLEARER = ITEMS.register("clearer",
-			() -> new ClearerItem(defaultItemProperties().component(ModDataComponents.CLEARER_MODE.get(), ClearerItem.ClearerMode.WHITELIST))
+	public static final RegistryObject<ClearerItem> CLEARER = registerItem("clearer",
+			ClearerItem::new,
+			defaultItemProperties().component(ModDataComponents.CLEARER_MODE.get(), ClearerItem.ClearerMode.WHITELIST)
 	);
 
-	public static final RegistryObject<ModBowItem> BOW = ITEMS.register("bow",
-			() -> new ModBowItem(defaultItemProperties().durability(384))
+	public static final RegistryObject<ModBowItem> BOW = registerItem("bow",
+			ModBowItem::new,
+			defaultItemProperties().durability(384)
 	);
 
-	public static final RegistryObject<ModArrowItem> ARROW = ITEMS.register("arrow",
-			() -> new ModArrowItem(ModArrow::new, defaultItemProperties())
+	public static final RegistryObject<ModArrowItem> ARROW = registerItem("arrow",
+			(properties) -> new ModArrowItem(ModArrow::new, properties),
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<HeightTesterItem> HEIGHT_TESTER = ITEMS.register("height_tester",
-			() -> new HeightTesterItem(defaultItemProperties())
+	public static final RegistryObject<HeightTesterItem> HEIGHT_TESTER = registerItem("height_tester",
+			HeightTesterItem::new,
+			defaultItemProperties()
 	);
 
 	// Capabilities are registered and injected in FMLCommonSetupEvent, which is fired after RegistryEvent.Register.
 	// This means that item constructors can't directly reference Capability fields (e.g. CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY).
 	// TODO: Do custom data components work here?
-	public static final RegistryObject<PigSpawnerItem> PIG_SPAWNER_FINITE = ITEMS.register("pig_spawner_finite",
-			() -> {
-				final var maxNumPigs = 20;
-
-				return new PigSpawnerItem(
-						defaultItemProperties().component(ModDataComponents.PIG_SPAWNER.get(), FinitePigSpawner.empty(maxNumPigs))
-				);
-			}
+	public static final RegistryObject<PigSpawnerItem> PIG_SPAWNER_FINITE = registerItem("pig_spawner_finite",
+			PigSpawnerItem::new,
+			defaultItemProperties().component(ModDataComponents.PIG_SPAWNER.get(), FinitePigSpawner.empty(20))
 	);
 
-	public static final RegistryObject<PigSpawnerItem> PIG_SPAWNER_INFINITE = ITEMS.register("pig_spawner_infinite",
-			() -> new PigSpawnerItem(
-					defaultItemProperties().component(ModDataComponents.PIG_SPAWNER.get(), InfinitePigSpawner.INSTANCE)
-			)
+	public static final RegistryObject<PigSpawnerItem> PIG_SPAWNER_INFINITE = registerItem("pig_spawner_infinite",
+			PigSpawnerItem::new,
+			defaultItemProperties().component(ModDataComponents.PIG_SPAWNER.get(), InfinitePigSpawner.INSTANCE)
 	);
 
-	public static final RegistryObject<ContinuousBowItem> CONTINUOUS_BOW = ITEMS.register("continuous_bow",
-			() -> new ContinuousBowItem(defaultItemProperties())
+	public static final RegistryObject<ContinuousBowItem> CONTINUOUS_BOW = registerItem("continuous_bow",
+			ContinuousBowItem::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<RespawnerItem> RESPAWNER = ITEMS.register("respawner",
-			() -> new RespawnerItem(defaultItemProperties())
+	public static final RegistryObject<RespawnerItem> RESPAWNER = registerItem("respawner",
+			RespawnerItem::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<LootTableTestItem> LOOT_TABLE_TEST = ITEMS.register("loot_table_test",
-			() -> new LootTableTestItem(defaultItemProperties())
+	public static final RegistryObject<LootTableTestItem> LOOT_TABLE_TEST = registerItem("loot_table_test",
+			LootTableTestItem::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<MaxHealthSetterItem> MAX_HEALTH_SETTER_ITEM = ITEMS.register("max_health_setter_item",
-			() -> new MaxHealthSetterItem(defaultItemProperties())
+	public static final RegistryObject<MaxHealthSetterItem> MAX_HEALTH_SETTER_ITEM = registerItem("max_health_setter_item",
+			MaxHealthSetterItem::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<MaxHealthGetterItem> MAX_HEALTH_GETTER_ITEM = ITEMS.register("max_health_getter_item",
-			() -> new MaxHealthGetterItem(defaultItemProperties())
+	public static final RegistryObject<MaxHealthGetterItem> MAX_HEALTH_GETTER_ITEM = registerItem("max_health_getter_item",
+			MaxHealthGetterItem::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<SoundEffectItem> GUN = ITEMS.register("gun",
-			() -> new SoundEffectItem(ModSoundEvents.NINE_MM_FIRE, defaultItemProperties())
+	public static final RegistryObject<SoundEffectItem> GUN = registerItem("gun",
+			(properties) -> new SoundEffectItem(ModSoundEvents.NINE_MM_FIRE, properties),
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<DimensionReplacementItem> DIMENSION_REPLACEMENT = ITEMS.register("dimension_replacement",
-			() -> new DimensionReplacementItem(
-					defaultItemProperties(),
+	public static final RegistryObject<DimensionReplacementItem> DIMENSION_REPLACEMENT = registerItem("dimension_replacement",
+			(properties) -> new DimensionReplacementItem(
 					Util.make(() -> {
-						final ImmutableMap.Builder<ResourceKey<DimensionType>, Supplier<ItemStack>> builder = ImmutableMap.builder();
+						final var builder = ImmutableMap.<ResourceKey<DimensionType>, Supplier<ItemStack>>builder();
 
 						builder.put(BuiltinDimensionTypes.NETHER, () -> new ItemStack(Items.NETHER_STAR));
 						builder.put(BuiltinDimensionTypes.END, () -> new ItemStack(Items.ENDER_PEARL));
 
 						return builder.build();
-					})
-			)
+					}),
+					properties
+			),
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<SoundEffectItem> SADDLE = ITEMS.register("saddle",
-			() -> new SoundEffectItem(ModSoundEvents.ACTION_SADDLE, defaultItemProperties())
+	public static final RegistryObject<SoundEffectItem> SADDLE = registerItem("saddle",
+			(properties) -> new SoundEffectItem(ModSoundEvents.ACTION_SADDLE, properties),
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<SlowSwordItem> WOODEN_SLOW_SWORD = ITEMS.register("wooden_slow_sword",
-			() -> new SlowSwordItem(ToolMaterial.WOOD, defaultItemProperties())
+	public static final RegistryObject<SlowSwordItem> WOODEN_SLOW_SWORD = registerItem("wooden_slow_sword",
+			(properties) -> new SlowSwordItem(ToolMaterial.WOOD, properties),
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<SlowSwordItem> DIAMOND_SLOW_SWORD = ITEMS.register("diamond_slow_sword",
-			() -> new SlowSwordItem(ToolMaterial.DIAMOND, defaultItemProperties())
+	public static final RegistryObject<SlowSwordItem> DIAMOND_SLOW_SWORD = registerItem("diamond_slow_sword",
+			(properties) -> new SlowSwordItem(ToolMaterial.DIAMOND, properties),
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<RitualCheckerItem> RITUAL_CHECKER = ITEMS.register("ritual_checker",
-			() -> new RitualCheckerItem(defaultItemProperties())
+	public static final RegistryObject<RitualCheckerItem> RITUAL_CHECKER = registerItem("ritual_checker",
+			RitualCheckerItem::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<HiddenBlockRevealerItem> HIDDEN_BLOCK_REVEALER = ITEMS.register("hidden_block_revealer",
-			() -> new HiddenBlockRevealerItem(defaultItemProperties())
+	public static final RegistryObject<HiddenBlockRevealerItem> HIDDEN_BLOCK_REVEALER = registerItem("hidden_block_revealer",
+			HiddenBlockRevealerItem::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<Item> NO_MOD_NAME = ITEMS.register("no_mod_name",
-			() -> new Item(defaultItemProperties())
+	public static final RegistryObject<Item> NO_MOD_NAME = registerItem("no_mod_name",
+			Item::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<KeyItem> KEY = ITEMS.register("key",
-			() -> new KeyItem(defaultItemProperties())
+	public static final RegistryObject<KeyItem> KEY = registerItem("key",
+			KeyItem::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<ModArrowItem> BLOCK_DETECTION_ARROW = ITEMS.register("block_detection_arrow",
-			() -> new ModArrowItem(BlockDetectionArrow::new, defaultItemProperties())
+	public static final RegistryObject<ModArrowItem> BLOCK_DETECTION_ARROW = registerItem("block_detection_arrow",
+			(properties) -> new ModArrowItem(BlockDetectionArrow::new, properties),
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<Item> TRANSLUCENT_ITEM = ITEMS.register("translucent_item",
-			() -> new Item(defaultItemProperties())
+	public static final RegistryObject<Item> TRANSLUCENT_ITEM = registerItem("translucent_item",
+			Item::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<EntityKillerItem> ENTITY_KILLER = ITEMS.register("entity_killer",
-			() -> new EntityKillerItem(defaultItemProperties())
+	public static final RegistryObject<EntityKillerItem> ENTITY_KILLER = registerItem("entity_killer",
+			EntityKillerItem::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<ChunkEnergySetterItem> CHUNK_ENERGY_SETTER = ITEMS.register("chunk_energy_setter",
-			() -> new ChunkEnergySetterItem(defaultItemProperties())
+	public static final RegistryObject<ChunkEnergySetterItem> CHUNK_ENERGY_SETTER = registerItem("chunk_energy_setter",
+			ChunkEnergySetterItem::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<ChunkEnergyGetterItem> CHUNK_ENERGY_GETTER = ITEMS.register("chunk_energy_getter",
-			() -> new ChunkEnergyGetterItem(defaultItemProperties())
+	public static final RegistryObject<ChunkEnergyGetterItem> CHUNK_ENERGY_GETTER = registerItem("chunk_energy_getter",
+			ChunkEnergyGetterItem::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<Item> CHUNK_ENERGY_DISPLAY = ITEMS.register("chunk_energy_display",
-			() -> new Item(defaultItemProperties())
+	public static final RegistryObject<Item> CHUNK_ENERGY_DISPLAY = registerItem("chunk_energy_display",
+			Item::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<Item> BEACON_ITEM = ITEMS.register("beacon_item",
-			() -> new Item(defaultItemProperties())
+	public static final RegistryObject<Item> BEACON_ITEM = registerItem("beacon_item",
+			Item::new,
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<PotionEffectArmourItem> SATURATION_HELMET = ITEMS.register("saturation_helmet",
-			() -> new PotionEffectArmourItem(
+	public static final RegistryObject<PotionEffectArmourItem> SATURATION_HELMET = registerItem("saturation_helmet",
+			(properties) -> new PotionEffectArmourItem(
 					ArmorMaterials.CHAINMAIL,
 					ArmorType.HELMET,
 					new MobEffectInstance(MobEffects.SATURATION, 1, 0, true, false),
-					defaultItemProperties()
-			)
+					properties
+			),
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<EntityCheckerItem> ENTITY_CHECKER = ITEMS.register("entity_checker",
-			() -> new EntityCheckerItem(defaultItemProperties().component(ModDataComponents.ENTITY_CHECKER_PROPERTIES.get(), EntityCheckerItem.EntityCheckerProperties.DEFAULT))
+	public static final RegistryObject<EntityCheckerItem> ENTITY_CHECKER = registerItem("entity_checker",
+			EntityCheckerItem::new,
+			defaultItemProperties().component(ModDataComponents.ENTITY_CHECKER_PROPERTIES.get(), EntityCheckerItem.EntityCheckerProperties.DEFAULT)
 	);
 
-	public static final RegistryObject<Item> RUBBER = ITEMS.register("rubber",
-			() -> new Item(defaultItemProperties())
+	public static final RegistryObject<Item> RUBBER = registerItem("rubber",
+			Item::new,
+			defaultItemProperties()
 	);
 
 
 	public static final RegistryObject<ReplacementArmourItem> REPLACEMENT_HELMET;
 
-	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_CHESTPLATE = ITEMS.register("replacement_chestplate",
-			() -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT, ArmorType.CHESTPLATE, defaultItemProperties())
+	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_CHESTPLATE = registerItem("replacement_chestplate",
+			(properties) -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT, ArmorType.CHESTPLATE, properties),
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_LEGGINGS = ITEMS.register("replacement_leggings",
-			() -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT, ArmorType.LEGGINGS, defaultItemProperties())
+	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_LEGGINGS = registerItem("replacement_leggings",
+			(properties) -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT, ArmorType.LEGGINGS, properties),
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_BOOTS = ITEMS.register("replacement_boots",
-			() -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT, ArmorType.BOOTS, defaultItemProperties())
+	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_BOOTS = registerItem("replacement_boots",
+			(properties) -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT, ArmorType.BOOTS, properties),
+			defaultItemProperties()
 	);
 
 	static {
-		REPLACEMENT_HELMET = ITEMS.register("replacement_helmet",
-				() -> new ReplacementArmourItem(
+		REPLACEMENT_HELMET = registerItem("replacement_helmet",
+				(properties) -> new ReplacementArmourItem(
 						ModArmorMaterials.REPLACEMENT,
 						ArmorType.HELMET,
-						defaultItemProperties(),
 						ImmutableSet.of(
 								(registryAccess) -> {
 									final var enchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT);
@@ -302,25 +342,31 @@ public class ModItems {
 								},
 								(registryAccess) -> new ItemStack(REPLACEMENT_LEGGINGS.get()),
 								(registryAccess) -> new ItemStack(REPLACEMENT_BOOTS.get())
-						)
-				)
+						),
+						properties
+				),
+				defaultItemProperties()
 		);
 	}
 
-	public static final RegistryObject<FluidStackItem> FLUID_STACK_ITEM = ITEMS.register("fluid_stack_item",
-			() -> new FluidStackItem(defaultItemProperties().component(ModDataComponents.FLUID_STACK.get(), FluidStack.EMPTY))
+	public static final RegistryObject<FluidStackItem> FLUID_STACK_ITEM = registerItem("fluid_stack_item",
+			FluidStackItem::new,
+			defaultItemProperties().component(ModDataComponents.FLUID_STACK.get(), FluidStack.EMPTY)
 	);
 
-	public static final RegistryObject<ForgeSpawnEggItem> PLAYER_AVOIDING_CREEPER_SPAWN_EGG = ITEMS.register("player_avoiding_creeper_spawn_egg",
-			() -> new ForgeSpawnEggItem(ModEntities.PLAYER_AVOIDING_CREEPER, 0xda70b, 0, defaultItemProperties())
+	public static final RegistryObject<ForgeSpawnEggItem> PLAYER_AVOIDING_CREEPER_SPAWN_EGG = registerItem("player_avoiding_creeper_spawn_egg",
+			(properties) -> new ForgeSpawnEggItem(ModEntities.PLAYER_AVOIDING_CREEPER, 0xda70b, 0, properties),
+			defaultItemProperties()
 	);
 
-	public static final RegistryObject<ModBucketItem> WOODEN_BUCKET = ITEMS.register("wooden_bucket",
-			() -> new ModBucketItem(defaultItemProperties().stacksTo(16))
+	public static final RegistryObject<ModBucketItem> WOODEN_BUCKET = registerItem("wooden_bucket",
+			ModBucketItem::new,
+			defaultItemProperties().stacksTo(16)
 	);
 
-	public static final RegistryObject<ModBucketItem> STONE_BUCKET = ITEMS.register("stone_bucket",
-			() -> new ModBucketItem(defaultItemProperties().stacksTo(16))
+	public static final RegistryObject<ModBucketItem> STONE_BUCKET = registerItem("stone_bucket",
+			ModBucketItem::new,
+			defaultItemProperties().stacksTo(16)
 	);
 
 
@@ -357,11 +403,39 @@ public class ModItems {
 	}
 
 	/**
+	 * Registers an item.
+	 *
+	 * @param name           The registry name of the item
+	 * @param itemFactory    The factory used to create the item
+	 * @param itemProperties The properties of the item
+	 * @param <ITEM>         The item type
+	 * @return A RegistryObject reference to the item
+	 */
+	private static <ITEM extends Item> RegistryObject<ITEM> registerItem(
+			final String name,
+			final IItemFactory<ITEM> itemFactory,
+			final Item.Properties itemProperties
+	) {
+		final var itemId = ITEMS.key(name);
+
+		return ITEMS.register(name, () -> itemFactory.create(itemProperties.setId(itemId)));
+	}
+
+	/**
 	 * Gets an {@link Item.Properties} instance with the default item properties.
 	 *
 	 * @return The item properties
 	 */
 	private static Item.Properties defaultItemProperties() {
 		return new Item.Properties();
+	}
+
+	/**
+	 * A factory function used to create items.
+	 *
+	 * @param <ITEM>> The item type
+	 */
+	private interface IItemFactory<ITEM extends Item> {
+		ITEM create(Item.Properties properties);
 	}
 }

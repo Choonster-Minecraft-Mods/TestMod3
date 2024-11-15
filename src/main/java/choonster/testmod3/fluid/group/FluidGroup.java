@@ -106,6 +106,8 @@ public class FluidGroup<TYPE extends FluidType, STILL extends Fluid, FLOWING ext
 		protected Consumer<ForgeFlowingFluid.Properties> propertiesCustomiser;
 		@Nullable
 		protected Consumer<BlockBehaviour.Properties> blockPropertiesCustomiser;
+		@Nullable
+		protected Consumer<Item.Properties> bucketPropertiesCustomiser;
 
 		@Nullable
 		protected ForgeFlowingFluid.Properties properties;
@@ -160,6 +162,12 @@ public class FluidGroup<TYPE extends FluidType, STILL extends Fluid, FLOWING ext
 			return this;
 		}
 
+		public Builder<TYPE, STILL, FLOWING, BLOCK, BUCKET> bucketPropertiesCustomiser(final Consumer<Item.Properties> bucketPropertiesCustomiser) {
+			Preconditions.checkNotNull(bucketPropertiesCustomiser, "bucketPropertiesCustomiser");
+			this.bucketPropertiesCustomiser = bucketPropertiesCustomiser;
+			return this;
+		}
+
 		public FluidGroup<TYPE, STILL, FLOWING, BLOCK, BUCKET> build() {
 			return buildImpl(FluidGroup::new);
 		}
@@ -171,19 +179,35 @@ public class FluidGroup<TYPE extends FluidType, STILL extends Fluid, FLOWING ext
 			Preconditions.checkState(blockFactory != null, "Block Factory not provided");
 			Preconditions.checkState(bucketFactory != null, "Bucket Factory not provided");
 
+			final var blockId = blocks.key(name);
+
+			final String bucketRegistryName = name + "_bucket";
+			final var bucketId = items.key(bucketRegistryName);
+
 			final var type = fluidTypes.register(name, typeFactory);
 
 			final var still = fluids.register(name, () -> stillFactory.create(Objects.requireNonNull(properties)));
 			final var flowing = fluids.register("flowing_" + name, () -> flowingFactory.create(Objects.requireNonNull(properties)));
 
 			final var blockProperties = defaultBlockProperties();
-
 			if (blockPropertiesCustomiser != null) {
 				blockPropertiesCustomiser.accept(blockProperties);
 			}
 
-			final var block = blocks.register(name, () -> blockFactory.create(still, blockProperties));
-			final var bucket = items.register(name + "_bucket", () -> bucketFactory.create(still));
+			final var block = blocks.register(
+					name,
+					() -> blockFactory.create(still, blockProperties.setId(blockId))
+			);
+
+			final var bucketProperties = defaultBucketProperties();
+			if (bucketPropertiesCustomiser != null) {
+				bucketPropertiesCustomiser.accept(bucketProperties);
+			}
+
+			final var bucket = items.register(
+					bucketRegistryName,
+					() -> bucketFactory.create(still, bucketProperties.setId(bucketId))
+			);
 
 			properties = new ForgeFlowingFluid.Properties(type, still, flowing)
 					.block(block)
@@ -201,7 +225,13 @@ public class FluidGroup<TYPE extends FluidType, STILL extends Fluid, FLOWING ext
 				GROUP extends FluidGroup<TYPE, STILL, FLOWING, BLOCK, BUCKET>,
 				TYPE extends FluidType, STILL extends Fluid, FLOWING extends Fluid, BLOCK extends LiquidBlock, BUCKET extends Item
 				> {
-			GROUP create(RegistryObject<TYPE> type, RegistryObject<STILL> still, RegistryObject<FLOWING> flowing, RegistryObject<BLOCK> block, RegistryObject<BUCKET> bucket);
+			GROUP create(
+					RegistryObject<TYPE> type,
+					RegistryObject<STILL> still,
+					RegistryObject<FLOWING> flowing,
+					RegistryObject<BLOCK> block,
+					RegistryObject<BUCKET> bucket
+			);
 		}
 	}
 
@@ -234,6 +264,6 @@ public class FluidGroup<TYPE extends FluidType, STILL extends Fluid, FLOWING ext
 
 	@FunctionalInterface
 	public interface IBucketFactory<STILL extends Fluid, BUCKET extends Item> {
-		BUCKET create(Supplier<? extends STILL> fluid);
+		BUCKET create(Supplier<? extends STILL> fluid, Item.Properties properties);
 	}
 }

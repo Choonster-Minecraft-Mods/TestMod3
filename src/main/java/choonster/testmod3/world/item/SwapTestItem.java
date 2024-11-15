@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 public class SwapTestItem extends Item {
 	private final Supplier<ItemStack> otherItem;
 
-	public SwapTestItem(final Item.Properties properties, final Supplier<ItemStack> otherItem) {
+	public SwapTestItem(final Supplier<ItemStack> otherItem, final Properties properties) {
 		super(properties);
 		this.otherItem = Lazy.of(otherItem);
 	}

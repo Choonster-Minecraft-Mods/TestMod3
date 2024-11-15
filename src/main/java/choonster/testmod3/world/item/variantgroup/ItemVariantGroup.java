@@ -108,8 +108,10 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentabl
 				registryName = variant.getSerializedName() + "_" + groupName;
 			}
 
-			final RegistryObject<ITEM> item = items.register(registryName, () -> {
-				final Item.Properties properties = itemPropertiesFactory.apply(variant);
+			var itemId = items.key(registryName);
+
+			final var item = items.register(registryName, () -> {
+				final var properties = itemPropertiesFactory.apply(variant).setId(itemId);
 
 				return itemFactory.createItem(variant, this, properties);
 			});

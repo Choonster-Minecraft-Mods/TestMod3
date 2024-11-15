@@ -26,20 +26,30 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class StandardFluidGroup extends FluidGroup<FluidType, FlowingFluid, FlowingFluid, LiquidBlock, Item> {
-	private StandardFluidGroup(final RegistryObject<FluidType> type, final RegistryObject<FlowingFluid> still, final RegistryObject<FlowingFluid> flowing, final RegistryObject<LiquidBlock> block, final RegistryObject<Item> bucket) {
+	private StandardFluidGroup(
+			final RegistryObject<FluidType> type,
+			final RegistryObject<FlowingFluid> still,
+			final RegistryObject<FlowingFluid> flowing,
+			final RegistryObject<LiquidBlock> block,
+			final RegistryObject<Item> bucket
+	) {
 		super(type, still, flowing, block, bucket);
 	}
 
 	public static class Builder extends FluidGroup.Builder<FluidType, FlowingFluid, FlowingFluid, LiquidBlock, Item> {
-		public Builder(final String name, final DeferredRegister<FluidType> fluidTypes, final DeferredRegister<Fluid> fluids, final DeferredRegister<Block> blocks, final DeferredRegister<Item> items) {
+		public Builder(
+				final String name,
+				final DeferredRegister<FluidType> fluidTypes,
+				final DeferredRegister<Fluid> fluids,
+				final DeferredRegister<Block> blocks,
+				final DeferredRegister<Item> items
+		) {
 			super(name, fluidTypes, fluids, blocks, items);
 
 			stillFactory = ForgeFlowingFluid.Source::new;
 			flowingFactory = ForgeFlowingFluid.Flowing::new;
-
 			blockFactory = LiquidBlock::new;
-
-			bucketFactory = fluid -> new BucketItem(fluid, FluidGroup.defaultBucketProperties());
+			bucketFactory = BucketItem::new;
 		}
 
 		@Override
@@ -75,6 +85,11 @@ public class StandardFluidGroup extends FluidGroup<FluidType, FlowingFluid, Flow
 		@Override
 		public Builder blockPropertiesCustomiser(final Consumer<BlockBehaviour.Properties> blockPropertiesCustomiser) {
 			return (Builder) super.blockPropertiesCustomiser(blockPropertiesCustomiser);
+		}
+
+		@Override
+		public Builder bucketPropertiesCustomiser(final Consumer<Item.Properties> bucketPropertiesCustomiser) {
+			return (Builder) super.bucketPropertiesCustomiser(bucketPropertiesCustomiser);
 		}
 
 		@Override
