@@ -30,7 +30,6 @@ import net.minecraftforge.event.brewing.BrewingRecipeRegisterEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -47,7 +46,7 @@ import java.util.function.Predicate;
  * Manages this mod's recipes and ingredients and removes recipes.
  */
 public class ModCrafting {
-	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	public static class Brewing {
 		/**
 		 * Add this mod's brewing recipes.

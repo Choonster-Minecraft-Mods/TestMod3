@@ -80,7 +80,7 @@ public class ModDataComponents {
 	/**
 	 * Used by {@link HiddenBlockRevealerItem} to indicate whether hidden blocks should be revealed.
 	 */
-	public static final RegistryObject<DataComponentType<Unit>> REVEAL_HIDDEN_BLOCKS = register("REVEAL_HIDDEN_BLOCKS",
+	public static final RegistryObject<DataComponentType<Unit>> REVEAL_HIDDEN_BLOCKS = register("reveal_hidden_blocks",
 			ModDataComponents::unit
 	);
 

@@ -1,7 +1,6 @@
 package choonster.testmod3.world.item;
 
 import choonster.testmod3.init.ModDataComponents;
-import choonster.testmod3.serialization.VanillaCodecs;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
@@ -269,7 +268,7 @@ public class ReplacementArmourItem extends ArmorItem {
 			);
 
 			public static final StreamCodec<RegistryFriendlyByteBuf, Entry> STREAM_CODEC = StreamCodec.composite(
-					VanillaCodecs.ARMOR_ITEM_EQUIPMENT_SLOT_STREAM_CODEC,
+					EquipmentSlot.STREAM_CODEC,
 					Entry::slot,
 					ItemStack.STREAM_CODEC,
 					Entry::replacedArmour,

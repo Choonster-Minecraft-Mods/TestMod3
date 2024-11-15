@@ -22,7 +22,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
@@ -31,10 +30,8 @@ import net.minecraftforge.common.IExtensibleEnum;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.IntFunction;
 import java.util.function.Supplier;
 
 /**
@@ -145,19 +142,6 @@ public class VanillaCodecs {
 
 		return ByteBufCodecs.idMapper(idMapper, CommandBlockEntity.Mode::ordinal);
 	});
-
-	private static final IntFunction<EquipmentSlot> ARMOR_EQUIPMENT_SLOT_BY_ID = ByIdMap.continuous(
-			EquipmentSlot::getIndex,
-			Arrays.stream(EquipmentSlot.values())
-					.filter(EquipmentSlot::isArmor)
-					.toArray(EquipmentSlot[]::new),
-			ByIdMap.OutOfBoundsStrategy.ZERO
-	);
-
-	public static final StreamCodec<ByteBuf, EquipmentSlot> ARMOR_ITEM_EQUIPMENT_SLOT_STREAM_CODEC = ByteBufCodecs.idMapper(
-			ARMOR_EQUIPMENT_SLOT_BY_ID,
-			EquipmentSlot::getIndex
-	);
 
 	public static final StreamCodec<FriendlyByteBuf, ChunkPos> CHUNK_POS_STREAM_CODEC = new StreamCodec<>() {
 		@Override
