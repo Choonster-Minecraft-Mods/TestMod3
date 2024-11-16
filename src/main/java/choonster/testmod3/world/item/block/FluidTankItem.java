@@ -1,15 +1,10 @@
 package choonster.testmod3.world.item.block;
 
-import choonster.testmod3.fluid.FluidTankSnapshot;
-import choonster.testmod3.util.CapabilityNotPresentException;
-import choonster.testmod3.world.level.block.FluidTankBlock;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.util.MutableHashedLinkedMap;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,21 +24,27 @@ public class FluidTankItem extends BlockItem {
 	public void addFluid(final FluidStack fluidStack) {
 		final var filledTank = new ItemStack(this);
 
+		// TODO: Item capabilities
+		/*
 		final var fluidHandler = FluidUtil.getFluidHandler(filledTank)
 				.orElseThrow(CapabilityNotPresentException::new);
 
 		fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+		*/
 
 		tankItems.add(filledTank);
 	}
 
 	@Override
 	public void appendHoverText(final ItemStack stack, final TooltipContext context, final List<Component> tooltip, final TooltipFlag flag) {
+		// TODO: Item capabilities
+		/*
 		final var fluidHandler = FluidUtil.getFluidHandler(stack)
 				.orElseThrow(CapabilityNotPresentException::new);
 
 		final var fluidTankSnapshots = FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler);
 		tooltip.addAll(FluidTankBlock.getFluidDataForDisplay(fluidTankSnapshots));
+		*/
 	}
 
 	public void fillCreativeModeTab(final MutableHashedLinkedMap<ItemStack, CreativeModeTab.TabVisibility> entries) {
