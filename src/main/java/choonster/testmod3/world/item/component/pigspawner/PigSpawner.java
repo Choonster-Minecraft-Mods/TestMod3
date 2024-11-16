@@ -10,7 +10,9 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.GatherComponentsEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,7 +29,7 @@ public final class PigSpawner {
 	public static final Marker LOG_MARKER = ModLogUtils.getMarker("PIG_SPAWNER");
 
 	/**
-	 * Event handler for the {@link IPigSpawner} capability.
+	 * Event handler for {@link IPigSpawner} components.
 	 */
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
 	private static class EventHandler {
@@ -41,21 +43,16 @@ public final class PigSpawner {
 		}
 
 		/**
-		 * Attach the {@link IPigSpawner} capability to vanilla items.
+		 * Attach the {@link IPigSpawner} component to vanilla items.
 		 *
 		 * @param event The event
 		 */
-		// TODO: Attach component to CLAY_BALL
-//		@SubscribeEvent
-//		public static void attachCapabilities(final AttachCapabilitiesEvent<ItemStack> event) {
-//			if (event.getObject().getItem() == Items.CLAY_BALL) {
-//				final var maxNumPigs = 20;
-//				final var pigSpawner = FinitePigSpawner.empty(maxNumPigs);
-//				final var codec = FinitePigSpawner.codec(maxNumPigs);
-//
-//				event.addCapability(ID, createProvider(pigSpawner, codec));
-//			}
-//		}
+		@SubscribeEvent
+		public static void gatherItemComponents(final GatherComponentsEvent.Item event) {
+			if (event.getOwner() == Items.CLAY_BALL) {
+				event.register(ModDataComponents.PIG_SPAWNER.get(), FinitePigSpawner.empty(20));
+			}
+		}
 
 		/**
 		 * Try to spawn a pig at the specified position, if the item has the {@link IPigSpawner} component.

@@ -22,8 +22,11 @@ import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.minecraftforge.event.GatherComponentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -64,7 +67,7 @@ public class ModItems {
 
 	public static final RegistryObject<EntityInteractionTestItem> ENTITY_INTERACTION_TEST = registerItem("entity_interaction_test",
 			EntityInteractionTestItem::new,
-			defaultItemProperties().component(ModDataComponents.ENTITY_INTERACTION_COUNT.get(), 0)
+			defaultItemProperties() // Component registered in EventHandler
 	);
 
 	public static final RegistryObject<BlockDestroyerItem> BLOCK_DESTROYER = registerItem("block_destroyer",
@@ -84,7 +87,7 @@ public class ModItems {
 
 	public static final RegistryObject<LastUseTimeModelItem> MODEL_TEST = registerItem("model_test",
 			LastUseTimeModelItem::new,
-			defaultItemProperties().component(ModDataComponents.LAST_USE_TIME_PROPERTIES.get(), new LastUseTimeProperties(0, true))
+			defaultItemProperties() // Component registered in EventHandler
 	);
 
 	public static final RegistryObject<SnowballLauncherItem> SNOWBALL_LAUNCHER = registerItem("snowball_launcher",
@@ -94,7 +97,7 @@ public class ModItems {
 
 	public static final RegistryObject<SlingshotItem> SLINGSHOT = registerItem("slingshot",
 			SlingshotItem::new,
-			defaultItemProperties().component(ModDataComponents.LAST_USE_TIME_PROPERTIES.get(), new LastUseTimeProperties(0, false))
+			defaultItemProperties() // Component registered in EventHandler
 	);
 
 	public static final RegistryObject<UnicodeTooltipsItem> UNICODE_TOOLTIPS = registerItem("unicode_tooltips",
@@ -144,7 +147,7 @@ public class ModItems {
 
 	public static final RegistryObject<ClearerItem> CLEARER = registerItem("clearer",
 			ClearerItem::new,
-			defaultItemProperties().component(ModDataComponents.CLEARER_MODE.get(), ClearerItem.ClearerMode.WHITELIST)
+			defaultItemProperties() // Component registered in EventHandler
 	);
 
 	public static final RegistryObject<ModBowItem> BOW = registerItem("bow",
@@ -167,12 +170,12 @@ public class ModItems {
 	// TODO: Do custom data components work here?
 	public static final RegistryObject<PigSpawnerItem> PIG_SPAWNER_FINITE = registerItem("pig_spawner_finite",
 			PigSpawnerItem::new,
-			defaultItemProperties().component(ModDataComponents.PIG_SPAWNER.get(), FinitePigSpawner.empty(20))
+			defaultItemProperties() // Component registered in EventHandler
 	);
 
 	public static final RegistryObject<PigSpawnerItem> PIG_SPAWNER_INFINITE = registerItem("pig_spawner_infinite",
 			PigSpawnerItem::new,
-			defaultItemProperties().component(ModDataComponents.PIG_SPAWNER.get(), InfinitePigSpawner.INSTANCE)
+			defaultItemProperties() // Component registered in EventHandler
 	);
 
 	public static final RegistryObject<ContinuousBowItem> CONTINUOUS_BOW = registerItem("continuous_bow",
@@ -302,7 +305,7 @@ public class ModItems {
 
 	public static final RegistryObject<EntityCheckerItem> ENTITY_CHECKER = registerItem("entity_checker",
 			EntityCheckerItem::new,
-			defaultItemProperties().component(ModDataComponents.ENTITY_CHECKER_PROPERTIES.get(), EntityCheckerItem.EntityCheckerProperties.DEFAULT)
+			defaultItemProperties() // Component registered in EventHandler
 	);
 
 	public static final RegistryObject<Item> RUBBER = registerItem("rubber",
@@ -351,7 +354,7 @@ public class ModItems {
 
 	public static final RegistryObject<FluidStackItem> FLUID_STACK_ITEM = registerItem("fluid_stack_item",
 			FluidStackItem::new,
-			defaultItemProperties().component(ModDataComponents.FLUID_STACK.get(), FluidStack.EMPTY)
+			defaultItemProperties() // Component registered in EventHandler
 	);
 
 	public static final RegistryObject<ForgeSpawnEggItem> PLAYER_AVOIDING_CREEPER_SPAWN_EGG = registerItem("player_avoiding_creeper_spawn_egg",
@@ -437,5 +440,46 @@ public class ModItems {
 	 */
 	private interface IItemFactory<ITEM extends Item> {
 		ITEM create(Item.Properties properties);
+	}
+
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
+	private static class EventHandler {
+		/**
+		 * Adds mod components to this mod's items.
+		 * <p>
+		 * Vanilla components are added to this mod's items at registration time,
+		 * components are added to Vanilla items in dedicated event handlers.
+		 */
+		@SubscribeEvent
+		public static void gatherItemComponents(final GatherComponentsEvent.Item event) {
+			final var owner = event.getOwner();
+
+			if (owner == ENTITY_INTERACTION_TEST.get()) {
+				event.register(ModDataComponents.ENTITY_INTERACTION_COUNT.get(), 0);
+			} else if (owner == MODEL_TEST.get()) {
+				event.register(
+						ModDataComponents.LAST_USE_TIME_PROPERTIES.get(),
+						new LastUseTimeProperties(0, true)
+				);
+			} else if (owner == SLINGSHOT.get()) {
+				event.register(
+						ModDataComponents.LAST_USE_TIME_PROPERTIES.get(),
+						new LastUseTimeProperties(0, false)
+				);
+			} else if (owner == CLEARER.get()) {
+				event.register(ModDataComponents.CLEARER_MODE.get(), ClearerItem.ClearerMode.WHITELIST);
+			} else if (owner == PIG_SPAWNER_FINITE.get()) {
+				event.register(ModDataComponents.PIG_SPAWNER.get(), FinitePigSpawner.empty(20));
+			} else if (owner == PIG_SPAWNER_INFINITE.get()) {
+				event.register(ModDataComponents.PIG_SPAWNER.get(), InfinitePigSpawner.INSTANCE);
+			} else if (owner == ENTITY_CHECKER.get()) {
+				event.register(
+						ModDataComponents.ENTITY_CHECKER_PROPERTIES.get(),
+						EntityCheckerItem.EntityCheckerProperties.DEFAULT
+				);
+			} else if (owner == FLUID_STACK_ITEM.get()) {
+				event.register(ModDataComponents.FLUID_STACK.get(), FluidStack.EMPTY);
+			}
+		}
 	}
 }
