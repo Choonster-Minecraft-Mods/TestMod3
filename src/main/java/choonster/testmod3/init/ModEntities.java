@@ -28,11 +28,13 @@ public class ModEntities {
 
 	public static final RegistryObject<EntityType<ModArrow>> MOD_ARROW = registerEntityType("mod_arrow",
 			() -> EntityType.Builder.<ModArrow>of((ModArrow::new), MobCategory.MISC)
+					.noLootTable()
 					.sized(0.5f, 0.5f)
 	);
 
 	public static final RegistryObject<EntityType<BlockDetectionArrow>> BLOCK_DETECTION_ARROW = registerEntityType("block_detection_arrow",
 			() -> EntityType.Builder.<BlockDetectionArrow>of(BlockDetectionArrow::new, MobCategory.MISC)
+					.noLootTable()
 					.sized(0.5f, 0.5f)
 	);
 

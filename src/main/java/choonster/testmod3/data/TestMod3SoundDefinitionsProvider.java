@@ -15,7 +15,7 @@ import net.minecraftforge.common.data.SoundDefinitionsProvider;
  * @author Choonster
  */
 public class TestMod3SoundDefinitionsProvider extends SoundDefinitionsProvider {
-	public TestMod3SoundDefinitionsProvider(PackOutput output, ExistingFileHelper helper) {
+	public TestMod3SoundDefinitionsProvider(final PackOutput output, final ExistingFileHelper helper) {
 		super(output, TestMod3.MODID, helper);
 	}
 
@@ -38,12 +38,12 @@ public class TestMod3SoundDefinitionsProvider extends SoundDefinitionsProvider {
 		add(
 				ModSoundEvents.ACTION_SADDLE,
 				definition()
-						.with(sound("entity.horse.saddle"))
+						.with(sound("mob/horse/leather"))
 						.subtitle(TestMod3Lang.SUBTITLE_ACTION_SADDLE.getTranslationKey())
 		);
 	}
 
-	private SoundDefinition.Sound modSound(String name) {
+	private SoundDefinition.Sound modSound(final String name) {
 		return sound(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name));
 	}
 }

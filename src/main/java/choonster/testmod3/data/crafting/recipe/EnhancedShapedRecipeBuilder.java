@@ -15,7 +15,6 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -41,11 +40,11 @@ public class EnhancedShapedRecipeBuilder<
 		RECIPE extends ShapedRecipe,
 		BUILDER extends EnhancedShapedRecipeBuilder<RECIPE, BUILDER>
 		> implements RecipeBuilder {
-	private static final Method ENSURE_VALID = ObfuscationReflectionHelper.findMethod(ShapedRecipeBuilder.class, /* ensureValid */ "m_126143_", ResourceLocation.class);
-	private static final Field CATEGORY = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* category */ "f_243672_");
-	private static final Field GROUP = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* group */ "f_126111_");
-	private static final Field CRITERIA = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* criteria */ "f_291506_");
-	private static final Field SHOW_NOTIFICATION = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, /* showNotification */ "f_271093_");
+	private static final Method ENSURE_VALID = ObfuscationReflectionHelper.findMethod(ShapedRecipeBuilder.class, "ensureValid", ResourceKey.class);
+	private static final Field CATEGORY = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, "category");
+	private static final Field GROUP = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, "group");
+	private static final Field CRITERIA = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, "criteria");
+	private static final Field SHOW_NOTIFICATION = ObfuscationReflectionHelper.findField(ShapedRecipeBuilder.class, "showNotification");
 
 	protected final ShapedRecipeBuilder innerBuilder;
 
@@ -211,10 +210,15 @@ public class EnhancedShapedRecipeBuilder<
 
 			final var allComponentsAreStandard = result.getComponents()
 					.stream()
-					.allMatch(typedComponent -> typedComponent.value().equals(DataComponents.COMMON_ITEM_COMPONENTS.get(typedComponent.type())));
+					.allMatch(typedComponent -> typedComponent
+							.value()
+							.equals(DataComponents.COMMON_ITEM_COMPONENTS.get(typedComponent.type()))
+					);
 
-			if (!allComponentsAreStandard) {
-				throw new IllegalStateException("Enhanced shaped recipe " + key + " has no custom components - use ShapedRecipeBuilder instead");
+			if (allComponentsAreStandard) {
+				throw new IllegalStateException(
+						"Enhanced shaped recipe " + key + " has no custom components - use ShapedRecipeBuilder instead"
+				);
 			}
 		}
 	}

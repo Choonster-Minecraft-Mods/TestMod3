@@ -42,6 +42,8 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.conditions.FalseCondition;
@@ -145,6 +147,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 			final var guardianSpawner = new ItemStack(Blocks.SPAWNER);
 
 			final var blockEntityTag = new CompoundTag();
+			BlockEntity.addEntityType(blockEntityTag, BlockEntityType.MOB_SPAWNER);
 
 			final var entityToSpawn = new CompoundTag();
 			entityToSpawn.putString("id", RegistryUtil.getKey(EntityType.GUARDIAN).toString());

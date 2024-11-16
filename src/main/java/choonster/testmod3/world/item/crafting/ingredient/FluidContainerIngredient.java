@@ -7,7 +7,6 @@ import choonster.testmod3.util.RegistryUtil;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -51,7 +50,6 @@ public class FluidContainerIngredient extends AbstractIngredient {
 	private List<Holder<Item>> items;
 
 	protected FluidContainerIngredient(final FluidStack fluidStack) {
-		super(HolderSet.empty());
 		this.fluidStack = fluidStack;
 	}
 

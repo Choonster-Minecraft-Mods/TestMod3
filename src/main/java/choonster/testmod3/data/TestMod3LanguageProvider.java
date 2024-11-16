@@ -372,7 +372,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 
 	private void addSpawnEgg(final Supplier<? extends ForgeSpawnEggItem> spawnEggItem) {
 		final var item = spawnEggItem.get();
-		final var entityType = item.getType(null);
+		final var entityType = item.getType(item.getDefaultInstance());
 		add(item, String.format("%s Spawn Egg", ENTITY_TYPE_NAMES.get(entityType)));
 	}
 
@@ -406,8 +406,8 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		final var stack = new ItemStack(item);
 		stack.set(DataComponents.POTION_CONTENTS, new PotionContents(potion));
 
-		var itemName = stack.getItemName();
-		if (itemName.getContents() instanceof TranslatableContents translatableContents) {
+		final var itemName = stack.getItemName();
+		if (itemName.getContents() instanceof final TranslatableContents translatableContents) {
 			return translatableContents.getKey();
 		}
 

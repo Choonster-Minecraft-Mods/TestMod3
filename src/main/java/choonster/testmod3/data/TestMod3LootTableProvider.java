@@ -41,7 +41,7 @@ public class TestMod3LootTableProvider extends LootTableProvider {
 	protected void validate(final Registry<LootTable> registry, final ValidationContext validationContext, final ProblemReporter problemReporter) {
 		final var modLootTableIds = ModLootTables.all();
 
-		for (final var id : Sets.difference(modLootTableIds, registry.keySet())) {
+		for (final var id : Sets.difference(modLootTableIds, registry.registryKeySet())) {
 			validationContext.reportProblem("Missing mod loot table: " + id);
 		}
 

@@ -8,13 +8,11 @@ import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.NonNullList;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -27,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,11 +37,11 @@ public abstract class BaseShapelessRecipeBuilder<
 		RECIPE extends BaseShapelessRecipe,
 		BUILDER extends BaseShapelessRecipeBuilder<RECIPE, BUILDER>
 		> implements RecipeBuilder {
-	private static final Method ENSURE_VALID = ObfuscationReflectionHelper.findMethod(ShapelessRecipeBuilder.class, /* ensureValid */ "m_126207_", ResourceLocation.class);
-	private static final Field CATEGORY = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* category */ "f_244182_");
-	private static final Field GROUP = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* group */ "f_126177_");
-	private static final Field INGREDIENTS = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* ingredients */ "f_126175_");
-	private static final Field CRITERIA = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, /* criteria */ "f_291209_");
+	private static final Method ENSURE_VALID = ObfuscationReflectionHelper.findMethod(ShapelessRecipeBuilder.class, "ensureValid", ResourceKey.class);
+	private static final Field CATEGORY = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, "category");
+	private static final Field GROUP = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, "group");
+	private static final Field INGREDIENTS = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, "ingredients");
+	private static final Field CRITERIA = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, "criteria");
 
 	protected final ShapelessRecipeBuilder innerBuilder;
 
@@ -170,9 +169,9 @@ public abstract class BaseShapelessRecipeBuilder<
 	}
 
 	@SuppressWarnings("unchecked")
-	protected NonNullList<Ingredient> getIngredients() {
+	protected List<Ingredient> getIngredients() {
 		try {
-			return (NonNullList<Ingredient>) INGREDIENTS.get(this);
+			return (List<Ingredient>) INGREDIENTS.get(innerBuilder);
 		} catch (final IllegalAccessException e) {
 			throw new RuntimeException("Failed to get shapeless recipe ingredients", e);
 		}
