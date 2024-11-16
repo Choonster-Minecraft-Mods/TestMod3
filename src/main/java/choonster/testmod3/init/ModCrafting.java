@@ -11,6 +11,7 @@ import choonster.testmod3.world.item.crafting.recipe.ShapelessCuttingRecipe;
 import choonster.testmod3.world.item.crafting.recipe.ShapelessFluidContainerRecipe;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.Holder;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
@@ -205,6 +206,12 @@ public class ModCrafting {
 		private final RecipeManager recipeManager;
 		private final RegistryAccess registryAccess;
 
+		private final CraftingInput craftingInput = CraftingInput.of(
+				3,
+				3,
+				NonNullList.withSize(9, Items.BARRIER.getDefaultInstance())
+		);
+
 		public RecipeRemover(final RecipeManager recipeManager, final RegistryAccess registryAccess) {
 			this.recipeManager = recipeManager;
 			this.registryAccess = registryAccess;
@@ -237,8 +244,11 @@ public class ModCrafting {
 			removeRecipes(recipes, FireworkRocketRecipe.class);
 			removeRecipes(recipes, FireworkStarRecipe.class);
 			removeRecipes(recipes, FireworkStarFadeRecipe.class);
+			// TODO: This fires before tags are bound, causing recipes with tag ingredients to fail
+			/*
 			removeRecipes(recipes, ModTags.Items.VANILLA_DYES);
 			removeRecipes(recipes, ModTags.Items.VANILLA_TERRACOTTA);
+			*/
 
 			final var recipeMap = RecipeMap.create(recipes);
 
@@ -258,8 +268,7 @@ public class ModCrafting {
 		private void removeRecipes(final Collection<RecipeHolder<?>> recipes, final TagKey<Item> tag) {
 			final var recipesRemoved = removeRecipes(recipes, recipe -> {
 				final var resultItem = switch (recipe) {
-					case final CraftingRecipe craftingRecipe ->
-							craftingRecipe.assemble(CraftingInput.EMPTY, registryAccess);
+					case final CraftingRecipe craftingRecipe -> craftingRecipe.assemble(craftingInput, registryAccess);
 
 					case final SingleItemRecipe singleItemRecipe ->
 							singleItemRecipe.assemble(new SingleRecipeInput(ItemStack.EMPTY), registryAccess);
