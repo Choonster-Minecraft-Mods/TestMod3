@@ -32,7 +32,7 @@ public class ChunkEnergySetterItem extends Item implements ILeftClickEmpty {
 	 */
 	private void addRemoveChunkEnergy(final Level world, final ServerPlayer player, final int amount) {
 		final var chunk = world.getChunkAt(player.blockPosition());
-		final var chunkPos = chunk.getPos();
+		final var chunkPos = chunk.getPos().toString();
 
 		final var chunkEnergy = ChunkEnergyCapability.getChunkEnergy(chunk).orElseThrow(CapabilityNotPresentException::new);
 

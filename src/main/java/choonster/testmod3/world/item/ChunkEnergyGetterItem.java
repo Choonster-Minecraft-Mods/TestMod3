@@ -26,7 +26,7 @@ public class ChunkEnergyGetterItem extends Item {
 	public InteractionResult use(final Level level, final Player player, final InteractionHand hand) {
 		if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
 			final var chunk = level.getChunkAt(player.blockPosition());
-			final var chunkPos = chunk.getPos();
+			final var chunkPos = chunk.getPos().toString();
 
 			final var chunkEnergy = ChunkEnergyCapability.getChunkEnergy(chunk).orElseThrow(CapabilityNotPresentException::new);
 			serverPlayer.sendSystemMessage(
