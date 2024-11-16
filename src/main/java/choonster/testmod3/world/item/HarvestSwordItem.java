@@ -94,7 +94,7 @@ public class HarvestSwordItem extends Item {
 				BlockTags.MINEABLE_WITH_HOE,
 				BlockTags.MINEABLE_WITH_PICKAXE,
 				BlockTags.MINEABLE_WITH_SHOVEL
-		).map(tag -> Tool.Rule.minesAndDrops(holderGetter.getOrThrow(BlockTags.MINEABLE_WITH_AXE), toolMaterial.speed()));
+		).map(tag -> Tool.Rule.minesAndDrops(holderGetter.getOrThrow(tag), toolMaterial.speed()));
 
 		rules.addAll(minesAndDrops.iterator());
 
