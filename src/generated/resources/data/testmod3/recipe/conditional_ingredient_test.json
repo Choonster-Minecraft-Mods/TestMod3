@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "type": "testmod3:conditional",
+      "forge:condition": {
+        "type": "forge:false"
+      },
+      "ingredient": "minecraft:cobblestone"
+    },
+    "c": "minecraft:cobblestone"
+  },
+  "pattern": [
+    "Cc"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:cobblestone"
+  }
+}

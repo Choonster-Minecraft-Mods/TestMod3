@@ -1,0 +1,22 @@
+{
+  "9mm.fire": {
+    "sounds": [
+      "testmod3:item/gun/9mm_fire"
+    ],
+    "subtitle": "subtitles.item.testmod3.gun.fire"
+  },
+  "action.saddle": {
+    "sounds": [
+      "mob/horse/leather"
+    ],
+    "subtitle": "subtitles.action.testmod3.saddle"
+  },
+  "music_disc.solaris": {
+    "sounds": [
+      {
+        "name": "testmod3:music_disc/solaris",
+        "stream": true
+      }
+    ]
+  }
+}

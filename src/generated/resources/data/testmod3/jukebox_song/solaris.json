@@ -1,0 +1,8 @@
+{
+  "comparator_output": 13,
+  "description": {
+    "translate": "jukebox_song.testmod3.solaris"
+  },
+  "length_in_seconds": 454.25,
+  "sound_event": "testmod3:music_disc.solaris"
+}

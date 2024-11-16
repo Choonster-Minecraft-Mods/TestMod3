@@ -1,0 +1,28 @@
+{
+  "type": "testmod3:enhanced_shaped",
+  "category": "misc",
+  "key": {
+    "C": "minecraft:cod",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "SSS",
+    "SCS",
+    "SSS"
+  ],
+  "result": {
+    "components": {
+      "minecraft:block_entity_data": {
+        "SpawnData": {
+          "entity": {
+            "id": "minecraft:guardian"
+          }
+        },
+        "SpawnPotentials": [],
+        "id": "minecraft:mob_spawner"
+      }
+    },
+    "count": 1,
+    "id": "minecraft:spawner"
+  }
+}

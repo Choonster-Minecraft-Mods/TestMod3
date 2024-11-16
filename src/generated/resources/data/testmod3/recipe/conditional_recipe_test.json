@@ -1,0 +1,22 @@
+{
+  "type": "forge:conditional",
+  "forge:condition": {
+    "type": "forge:false"
+  },
+  "recipes": [
+    {
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "building",
+        "ingredients": [
+          "minecraft:wooden_axe",
+          "minecraft:wooden_axe"
+        ],
+        "result": {
+          "count": 1,
+          "id": "minecraft:oak_log"
+        }
+      }
+    }
+  ]
+}
