@@ -261,7 +261,7 @@ public class ReplacementArmourItem extends ArmorItem {
 									.fieldOf("slot")
 									.forGetter(Entry::slot),
 
-							ItemStack.CODEC
+							ItemStack.OPTIONAL_CODEC
 									.fieldOf("replaced_armour")
 									.forGetter(Entry::replacedArmour)
 					).apply(builder, Entry::new)
@@ -270,7 +270,7 @@ public class ReplacementArmourItem extends ArmorItem {
 			public static final StreamCodec<RegistryFriendlyByteBuf, Entry> STREAM_CODEC = StreamCodec.composite(
 					EquipmentSlot.STREAM_CODEC,
 					Entry::slot,
-					ItemStack.STREAM_CODEC,
+					ItemStack.OPTIONAL_STREAM_CODEC,
 					Entry::replacedArmour,
 					Entry::new
 			);

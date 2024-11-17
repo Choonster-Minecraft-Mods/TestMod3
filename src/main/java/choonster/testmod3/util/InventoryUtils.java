@@ -31,7 +31,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.Random;
 import java.util.function.Predicate;
 
 /**
@@ -42,8 +41,18 @@ import java.util.function.Predicate;
 public class InventoryUtils {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-	private static final Field RANDOM_SEQUENCE = ObfuscationReflectionHelper.findField(LootTable.class, /* randomSequence */ "f_286958_");
-	private static final Method SHUFFLE_AND_SPLIT_ITEMS = ObfuscationReflectionHelper.findMethod(LootTable.class, /* shuffleAndSplitItems */ "m_79138_", ObjectArrayList.class, int.class, Random.class);
+	private static final Field RANDOM_SEQUENCE = ObfuscationReflectionHelper.findField(
+			LootTable.class,
+			"randomSequence"
+	);
+
+	private static final Method SHUFFLE_AND_SPLIT_ITEMS = ObfuscationReflectionHelper.findMethod(
+			LootTable.class,
+			"shuffleAndSplitItems",
+			ObjectArrayList.class,
+			int.class,
+			RandomSource.class
+	);
 
 	/**
 	 * Fill an {@link IItemHandler} with random loot from a {@link LootTable}.
@@ -54,7 +63,12 @@ public class InventoryUtils {
 	 * @param lootTable   The LootTable to generate loot from
 	 * @param params      The LootParams to use in the loot generation
 	 */
-	public static void fillItemHandlerWithLoot(final IItemHandler itemHandler, final LootTable lootTable, final LootParams params, final long seed) {
+	public static void fillItemHandlerWithLoot(
+			final IItemHandler itemHandler,
+			final LootTable lootTable,
+			final LootParams params,
+			final long seed
+	) {
 		final Optional<ResourceLocation> randomSequence;
 
 		try {
@@ -84,7 +98,7 @@ public class InventoryUtils {
 				return;
 			}
 
-			final int slot = emptySlots.remove(emptySlots.size() - 1);
+			final int slot = emptySlots.removeLast();
 			final var remainder = itemHandler.insertItem(slot, itemStack, false);
 			if (!remainder.isEmpty()) {
 				LOGGER.warn("Couldn't fully insert {} into slot {} of {}, {} items remain.", itemStack, slot, itemHandler, remainder.getCount());
@@ -220,7 +234,11 @@ public class InventoryUtils {
 	 * @param inventoryTypes The inventory types to perform the operation on, in order
 	 * @return The inventory type of the first successful operation, or null if all operations failed
 	 */
-	public static Optional<EntityInventoryType> forEachEntityInventory(final Entity entity, final Predicate<IItemHandler> operation, final EntityInventoryType... inventoryTypes) {
+	public static Optional<EntityInventoryType> forEachEntityInventory(
+			final Entity entity,
+			final Predicate<IItemHandler> operation,
+			final EntityInventoryType... inventoryTypes
+	) {
 		for (final var inventoryType : inventoryTypes) {
 			final boolean result = getInventoryForType(entity, inventoryType)
 					.map(operation::test)
