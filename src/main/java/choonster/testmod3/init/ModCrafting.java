@@ -14,10 +14,10 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.Unit;
+import net.minecraft.util.profiling.Profiler;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -26,7 +26,7 @@ import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.*;
 import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
-import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.brewing.BrewingRecipeRegisterEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -39,8 +39,7 @@ import org.slf4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -192,7 +191,7 @@ public class ModCrafting {
 	}
 
 	@Mod.EventBusSubscriber(modid = TestMod3.MODID)
-	public static class RecipeRemover extends SimplePreparableReloadListener<Unit> {
+	public static class RecipeRemover {
 		private static final Logger LOGGER = LogUtils.getLogger();
 
 		private static final Method APPLY = ObfuscationReflectionHelper.findMethod(
@@ -201,6 +200,10 @@ public class ModCrafting {
 				RecipeMap.class,
 				ResourceManager.class,
 				ProfilerFiller.class
+		);
+
+		private static final Set<RecipeManager> PROCESSED_RECIPE_MANAGERS = Collections.newSetFromMap(
+				new WeakHashMap<>()
 		);
 
 		private final RecipeManager recipeManager;
@@ -218,37 +221,39 @@ public class ModCrafting {
 		}
 
 		/**
-		 * Adds this listener to the ResourceManager's list.
+		 * Removes recipes from the recipe manager if it hasn't already been processed.
 		 *
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void addReloadListener(final AddReloadListenerEvent event) {
-			event.addListener(
-					new RecipeRemover(event.getServerResources().getRecipeManager(), event.getRegistryAccess())
-			);
-		}
+		public static void onDataPackSync(final OnDatapackSyncEvent event) {
+			final var server = event.getPlayerList().getServer();
+			final var recipeManager = server.getRecipeManager();
 
-		@Override
-		protected Unit prepare(final ResourceManager resourceManager, final ProfilerFiller profilerFiller) {
-			return Unit.INSTANCE;
+			if (PROCESSED_RECIPE_MANAGERS.add(recipeManager)) {
+				new RecipeRemover(recipeManager, server.registryAccess()).removeRecipes(
+						server.getResourceManager(),
+						Profiler.get(),
+						server.getWorldData().enabledFeatures()
+				);
+			}
 		}
 
 		/**
 		 * Removes recipes from the recipe manager after it's reloaded.
 		 */
-		@Override
-		protected void apply(final Unit unit, final ResourceManager resourceManager, final ProfilerFiller profilerFiller) {
+		private void removeRecipes(
+				final ResourceManager resourceManager,
+				final ProfilerFiller profilerFiller,
+				final FeatureFlagSet enabledFeatures
+		) {
 			final var recipes = new ArrayList<>(recipeManager.getRecipes());
 
 			removeRecipes(recipes, FireworkRocketRecipe.class);
 			removeRecipes(recipes, FireworkStarRecipe.class);
 			removeRecipes(recipes, FireworkStarFadeRecipe.class);
-			// TODO: This fires before tags are bound, causing recipes with tag ingredients to fail
-			/*
 			removeRecipes(recipes, ModTags.Items.VANILLA_DYES);
 			removeRecipes(recipes, ModTags.Items.VANILLA_TERRACOTTA);
-			*/
 
 			final var recipeMap = RecipeMap.create(recipes);
 
@@ -257,10 +262,12 @@ public class ModCrafting {
 			} catch (final IllegalAccessException | InvocationTargetException e) {
 				throw new RuntimeException("Failed to replace recipes", e);
 			}
+
+			recipeManager.finalizeRecipeLoading(enabledFeatures);
 		}
 
 		/**
-		 * Removes all crafting recipes with an output item contained in the specified tag.
+		 * Removes all recipes with an output item contained in the specified tag.
 		 *
 		 * @param recipes The recipe list
 		 * @param tag     The tag
@@ -288,7 +295,7 @@ public class ModCrafting {
 		}
 
 		/**
-		 * Remove all crafting recipes that are instances of the specified class.
+		 * Remove all recipes that are instances of the specified class.
 		 * <p>
 		 * Test for this thread:
 		 * https://www.minecraftforge.net/forum/topic/33420-removing-vanilla-recipes/
@@ -303,7 +310,7 @@ public class ModCrafting {
 		}
 
 		/**
-		 * Remove all crafting recipes that match the specified predicate.
+		 * Remove all recipes that match the specified predicate.
 		 *
 		 * @param recipes   The recipe list
 		 * @param predicate The predicate
