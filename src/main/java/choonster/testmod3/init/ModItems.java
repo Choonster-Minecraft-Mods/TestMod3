@@ -165,9 +165,6 @@ public class ModItems {
 			defaultItemProperties()
 	);
 
-	// Capabilities are registered and injected in FMLCommonSetupEvent, which is fired after RegistryEvent.Register.
-	// This means that item constructors can't directly reference Capability fields (e.g. CapabilityPigSpawner.PIG_SPAWNER_CAPABILITY).
-	// TODO: Do custom data components work here?
 	public static final RegistryObject<PigSpawnerItem> PIG_SPAWNER_FINITE = registerItem("pig_spawner_finite",
 			PigSpawnerItem::new,
 			defaultItemProperties() // Component registered in EventHandler

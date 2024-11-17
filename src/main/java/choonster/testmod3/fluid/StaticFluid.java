@@ -14,7 +14,6 @@ import net.minecraftforge.fluids.ForgeFlowingFluid;
  *
  * @author Choonster
  */
-// TODO: Properly implement flowing
 public abstract class StaticFluid extends ForgeFlowingFluid {
 	protected StaticFluid(final Properties properties) {
 		super(properties);
@@ -31,7 +30,15 @@ public abstract class StaticFluid extends ForgeFlowingFluid {
 			final BlockState targetBlockState,
 			final FluidState targetFluidState
 	) {
-		return direction.getAxis() == Direction.Axis.Y && super.canMaybePassThrough(blockGetter, pos, blockState, direction, targetPos, targetBlockState, targetFluidState);
+		return direction.getAxis() == Direction.Axis.Y && super.canMaybePassThrough(
+				blockGetter,
+				pos,
+				blockState,
+				direction,
+				targetPos,
+				targetBlockState,
+				targetFluidState
+		);
 	}
 
 	public static class Flowing extends StaticFluid {

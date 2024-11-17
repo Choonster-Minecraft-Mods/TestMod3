@@ -26,7 +26,6 @@ import java.lang.reflect.Method;
  *
  * @author Choonster
  */
-// TODO: Properly implement portal displacement
 public abstract class PortalDisplacementFluid extends ForgeFlowingFluid {
 	private static final Method CAN_PASS_THROUGH_WALL = ObfuscationReflectionHelper.findMethod(
 			FlowingFluid.class,
@@ -94,17 +93,6 @@ public abstract class PortalDisplacementFluid extends ForgeFlowingFluid {
 	private boolean isSourceBlockOfThisType(final FluidState fluidState) {
 		return fluidState.getType().isSame(this) && fluidState.isSource();
 	}
-
-	// TODO: Is this needed?
-//	@Override
-//	protected boolean canBeReplacedWith(final FluidState state, final BlockGetter world, final BlockPos pos, final Fluid fluidIn, final Direction direction) {
-//		final var blockState = world.getBlockState(pos);
-//
-//		if (blockState.getBlock() == Blocks.NETHER_PORTAL || blockState.getBlock() == Blocks.END_PORTAL || blockState.getBlock() == Blocks.END_GATEWAY) {
-//			return true;
-//		}
-//		return super.canBeReplacedWith(state, world, pos, fluidIn, direction);
-//	}
 
 	@Override
 	protected boolean isWaterHole(
