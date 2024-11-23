@@ -135,8 +135,8 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 				registryName = variant.getSerializedName() + "_" + groupName;
 			}
 
-			var blockId = blocks.key(registryName);
-			var itemId = items.key(registryName);
+			final var blockId = blocks.key(registryName);
+			final var itemId = items.key(registryName);
 
 			final var block = blocks.register(registryName, () -> {
 				final var properties = blockPropertiesFactory.apply(variant);
@@ -196,7 +196,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 		@Nullable
 		private IBlockCodecFactory<VARIANT, BLOCK> blockCodecFactory;
 
-		private Function<VARIANT, Item.Properties> itemPropertiesFactory = variant -> new Item.Properties();
+		private Function<VARIANT, Item.Properties> itemPropertiesFactory = variant -> new Item.Properties().useBlockDescriptionPrefix();
 		private ItemFactory<VARIANT, BLOCK> itemFactory = (block, properties, variant) -> new BlockItem(block, properties);
 
 		/**

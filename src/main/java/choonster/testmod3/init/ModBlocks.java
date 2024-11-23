@@ -400,7 +400,7 @@ public class ModBlocks {
 	 * @return The item properties
 	 */
 	private static Item.Properties defaultItemProperties() {
-		return new Item.Properties();
+		return new Item.Properties().useBlockDescriptionPrefix();
 	}
 
 	/**
