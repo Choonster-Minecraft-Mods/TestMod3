@@ -232,30 +232,38 @@ public class ModBlocks {
 	public static final BlockVariantGroup<DyeColor, ColoredRotatableBlock> COLORED_ROTATABLE_BLOCKS = BlockVariantGroup.Builder.<DyeColor, ColoredRotatableBlock>create(BLOCKS, ITEMS)
 			.groupName("rotatable_block")
 			.variants(DyeColor.values())
+			.variantCodec(DyeColor.CODEC)
 			.blockPropertiesFactory(color -> wool().mapColor(color))
 			.blockFactory(ColoredRotatableBlock::new)
+			.blockCodecFactory(ColoredRotatableBlock::codec)
 			.build();
 
 	public static final BlockVariantGroup<DyeColor, ColoredMultiRotatableBlock> COLORED_MULTI_ROTATABLE_BLOCKS = BlockVariantGroup.Builder.<DyeColor, ColoredMultiRotatableBlock>create(BLOCKS, ITEMS)
 			.groupName("multi_rotatable_block")
 			.variants(DyeColor.values())
+			.variantCodec(DyeColor.CODEC)
 			.blockPropertiesFactory(color -> wool().mapColor(color))
 			.blockFactory(ColoredMultiRotatableBlock::new)
+			.blockCodecFactory(ColoredMultiRotatableBlock::codec)
 			.build();
 
 	public static final BlockVariantGroup<VariantsBlock.EnumType, VariantsBlock> VARIANTS_BLOCKS = BlockVariantGroup.Builder.<VariantsBlock.EnumType, VariantsBlock>create(BLOCKS, ITEMS)
 			.groupName("variants_block")
 			.suffix()
 			.variants(VariantsBlock.EnumType.values())
+			.variantCodec(VariantsBlock.EnumType.CODEC)
 			.blockPropertiesFactory(type -> metal())
 			.blockFactory(VariantsBlock::new)
+			.blockCodecFactory(VariantsBlock::codec)
 			.build();
 
 	public static final BlockVariantGroup<DyeColor, ColouredSlabBlock> TERRACOTTA_SLABS = BlockVariantGroup.Builder.<DyeColor, ColouredSlabBlock>create(BLOCKS, ITEMS)
 			.groupName("terracotta_slab")
 			.variants(DyeColor.values())
+			.variantCodec(DyeColor.CODEC)
 			.blockPropertiesFactory(color -> stone().mapColor(color))
 			.blockFactory(ColouredSlabBlock::new)
+			.blockCodecFactory(ColouredSlabBlock::codec)
 			.build();
 
 	/**

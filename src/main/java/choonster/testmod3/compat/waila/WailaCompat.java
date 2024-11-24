@@ -10,7 +10,7 @@ package choonster.testmod3.compat.waila;
 public class WailaCompat implements IWailaPlugin {
 	public static final IBlockComponentProvider COLORED_ROTATABLE_BLOCK_FACING = new RotatableProvider(
 			HudProvider.COLORED_ROTATABLE_BLOCK_FACING.getId(),
-			ColoredRotatableBlock.FACING
+			BaseColoredRotatableBlock.FACING
 	);
 
 	public static final IBlockComponentProvider COLORED_MULTI_ROTATABLE_BLOCK_FACE_ROTATION = new MultiRotatableProvider(

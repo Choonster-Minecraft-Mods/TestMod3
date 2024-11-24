@@ -1,121 +1,62 @@
 package choonster.testmod3.world.level.block;
 
-import choonster.testmod3.world.level.block.variantgroup.BlockVariantGroup;
+import choonster.testmod3.world.level.block.variantgroup.IBlockVariantGroup;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Supplier;
 
 /**
  * A block with 16 colours and 6 facings.
  *
  * @author Choonster
  */
-public class ColoredRotatableBlock extends Block {
-	public static final Property<Direction> FACING = BlockStateProperties.FACING;
+public class ColoredRotatableBlock extends BaseColoredRotatableBlock<ColoredRotatableBlock> {
+	public static Codec<ColoredRotatableBlock> codec(
+			final Supplier<IBlockVariantGroup<DyeColor, ColoredRotatableBlock>> variantGroupSupplier,
+			final MapCodec<IBlockVariantGroup<DyeColor, ColoredRotatableBlock>> variantGroupMapCodec
+	) {
+		return RecordCodecBuilder.create(instance ->
+				instance.group(
+						DyeColor.CODEC
+								.fieldOf("color")
+								.forGetter(BaseColoredRotatableBlock::getColor),
 
-	private final BlockVariantGroup<DyeColor, ? extends ColoredRotatableBlock> variantGroup;
-	private final DyeColor color;
+						Codec.unit(() -> variantGroupSupplier)
+								.fieldOf("variantGroup")
+								.forGetter(block -> block.variantGroup),
+
+						Codec.unit(() -> variantGroupMapCodec)
+								.fieldOf("variantGroupMapCodec")
+								.forGetter(block -> block.variantGroupMapCodec),
+
+						propertiesCodec()
+				).apply(instance, ColoredRotatableBlock::new)
+		);
+	}
+
 	private final MapCodec<ColoredRotatableBlock> codec;
 
-	public ColoredRotatableBlock(final DyeColor color, final BlockVariantGroup<DyeColor, ? extends ColoredRotatableBlock> variantGroup, final Block.Properties properties) {
-		super(properties);
-		this.color = color;
-		this.variantGroup = variantGroup;
+	public ColoredRotatableBlock(
+			final DyeColor color,
+			final Supplier<IBlockVariantGroup<DyeColor, ColoredRotatableBlock>> variantGroup,
+			final MapCodec<IBlockVariantGroup<DyeColor, ColoredRotatableBlock>> variantGroupMapCodec,
+			final Block.Properties properties
+	) {
+		super(color, variantGroup, variantGroupMapCodec, properties);
 
-		codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
-
-				DyeColor.CODEC
-						.fieldOf("color")
-						.forGetter(ColoredRotatableBlock::getColor),
-
-				variantGroup.codec(),
-
-				propertiesCodec()
-
-		).apply(instance, ColoredRotatableBlock::new));
+		codec = IBlockVariantGroup.blockMapCodec(
+				variantGroupMapCodec,
+				BaseColoredRotatableBlock::getVariantGroup,
+				color
+		);
 	}
 
 	@Override
-	protected MapCodec<? extends Block> codec() {
+	public MapCodec<ColoredRotatableBlock> codec() {
 		return codec;
-	}
-
-	@Override
-	protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(FACING);
-	}
-
-	public DyeColor getColor() {
-		return color;
-	}
-
-	public BlockVariantGroup<DyeColor, ? extends ColoredRotatableBlock> getVariantGroup() {
-		return variantGroup;
-	}
-
-	@Nullable
-	@Override
-	public BlockState getStateForPlacement(final BlockPlaceContext context) {
-		return defaultBlockState().setValue(FACING, context.getNearestLookingDirection());
-	}
-
-	private boolean recolorBlock(final BlockState currentState, final LevelAccessor world, final BlockPos pos, final DyeColor color) {
-		final BlockState newState = copyState(currentState, getVariantGroup().getBlock(color).get().defaultBlockState());
-
-		world.setBlock(pos, newState, Block.UPDATE_ALL);
-
-		return true;
-	}
-
-	protected BlockState copyState(final BlockState currentState, final BlockState newState) {
-		return newState.setValue(FACING, currentState.getValue(FACING));
-	}
-
-	@Override
-	public BlockState rotate(final BlockState state, final LevelAccessor world, final BlockPos pos, final Rotation direction) {
-		return state.setValue(FACING, direction.rotate(state.getValue(FACING)));
-	}
-
-	@Override
-	public BlockState mirror(final BlockState state, final Mirror mirror) {
-		return state.setValue(FACING, mirror.mirror(state.getValue(FACING)));
-	}
-
-	@Override
-	protected InteractionResult useItemOn(final ItemStack heldItem, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
-		if (!heldItem.isEmpty()) { // If the player is holding dye, change the colour
-			final DyeColor dyeColour = DyeColor.getColor(heldItem);
-			if (dyeColour != null) {
-				final boolean success = recolorBlock(state, level, pos, dyeColour);
-				if (success) {
-					heldItem.shrink(1);
-					return InteractionResult.SUCCESS;
-				}
-			}
-
-			return InteractionResult.FAIL;
-		} else { // Else rotate the block
-			level.setBlockAndUpdate(pos, rotate(state, level, pos, Rotation.CLOCKWISE_90));
-
-			return InteractionResult.SUCCESS;
-		}
 	}
 }

@@ -1,10 +1,11 @@
 package choonster.testmod3.registry;
 
 import net.minecraft.util.StringRepresentable;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * @author Choonster
@@ -36,7 +37,7 @@ public interface IVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 					return iterator.next();
 				}
 
-				return getVariants().iterator().next();
+				return getVariants().getFirst();
 			}
 		}
 
@@ -48,12 +49,12 @@ public interface IVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 	 *
 	 * @return The variants
 	 */
-	Iterable<VARIANT> getVariants();
+	List<VARIANT> getVariants();
 
 	/**
 	 * Gets this group's entries.
 	 *
 	 * @return The entries
 	 */
-	Collection<RegistryObject<ENTRY>> getEntries();
+	Collection<? extends Supplier<ENTRY>> getEntries();
 }

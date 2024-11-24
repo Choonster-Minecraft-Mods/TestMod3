@@ -1,8 +1,10 @@
 package choonster.testmod3.world.level.block.variantgroup;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -11,30 +13,37 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * A group consisting of a collection of variants with a block registered for each one.
  *
  * @author Choonster
  */
-public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentable, BLOCK extends Block> implements IBlockVariantGroup<VARIANT, BLOCK> {
+public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentable, BLOCK extends Block>
+		implements IBlockVariantGroup<VARIANT, BLOCK> {
 	private final String groupName;
-	private final Iterable<VARIANT> variants;
+	private final List<VARIANT> variants;
 
 	private final Map<VARIANT, RegistryObject<BLOCK>> blocks;
 
+	private final MapCodec<IBlockVariantGroup<VARIANT, BLOCK>> mapCodec;
+
 	private BlockVariantGroup(
-			final String groupName, final boolean isSuffix, final Iterable<VARIANT> variants,
+			final String groupName, final boolean isSuffix, final List<VARIANT> variants, final Codec<VARIANT> variantCodec,
 			final Function<VARIANT, Block.Properties> blockPropertiesFactory, final BlockFactory<VARIANT, BLOCK> blockFactory,
+			final IBlockCodecFactory<VARIANT, BLOCK> blockCodecFactory,
 			final Function<VARIANT, Item.Properties> itemPropertiesFactory, final ItemFactory<VARIANT, BLOCK> itemFactory,
 			final DeferredRegister<Block> blocks, final DeferredRegister<Item> items
 	) {
 		this.groupName = groupName;
 		this.variants = variants;
+
+		mapCodec = IBlockVariantGroup.mapCodec(variants, variantCodec, blockCodecFactory);
 
 		this.blocks = register(
 				groupName, isSuffix, variants,
@@ -60,7 +69,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 	 * @return The variants
 	 */
 	@Override
-	public Iterable<VARIANT> getVariants() {
+	public List<VARIANT> getVariants() {
 		return variants;
 	}
 
@@ -79,6 +88,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 	 *
 	 * @return The blocks map
 	 */
+	@Override
 	public Map<VARIANT, RegistryObject<BLOCK>> getBlocksMap() {
 		return blocks;
 	}
@@ -89,6 +99,8 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 	 * @param variant The variant
 	 * @return The block
 	 */
+	@Nullable
+	@Override
 	public RegistryObject<BLOCK> getBlock(final VARIANT variant) {
 		return blocks.get(variant);
 	}
@@ -98,9 +110,8 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 	 *
 	 * @return The codec
 	 */
-	public <CODEC_BLOCK extends Block> RecordCodecBuilder<CODEC_BLOCK, BlockVariantGroup<VARIANT, BLOCK>> codec() {
-		// TODO: Figure out a real codec for this when block codecs are used somewhere
-		return RecordCodecBuilder.point(this);
+	public MapCodec<IBlockVariantGroup<VARIANT, BLOCK>> mapCodec() {
+		return mapCodec;
 	}
 
 	/**
@@ -128,15 +139,15 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 			var itemId = items.key(registryName);
 
 			final var block = blocks.register(registryName, () -> {
-				final var properties = blockPropertiesFactory.apply(variant).setId(blockId);
+				final var properties = blockPropertiesFactory.apply(variant);
 
-				return blockFactory.createBlock(variant, this, properties);
+				return blockFactory.createBlock(variant, () -> this, mapCodec, properties);
 			});
 
 			builder.put(variant, block);
 
 			items.register(registryName, () -> {
-				final var properties = itemPropertiesFactory.apply(variant).setId(itemId);
+				final var properties = itemPropertiesFactory.apply(variant);
 
 				return itemFactory.createItem(block.get(), properties, variant);
 			});
@@ -147,7 +158,12 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 
 	@FunctionalInterface
 	public interface BlockFactory<VARIANT extends Enum<VARIANT> & StringRepresentable, BLOCK extends Block> {
-		BLOCK createBlock(VARIANT variant, BlockVariantGroup<VARIANT, BLOCK> variantGroup, Block.Properties properties);
+		BLOCK createBlock(
+				VARIANT variant,
+				Supplier<IBlockVariantGroup<VARIANT, BLOCK>> variantGroup,
+				MapCodec<IBlockVariantGroup<VARIANT, BLOCK>> variantGroupMapCodec,
+				Block.Properties properties
+		);
 	}
 
 	/**
@@ -169,12 +185,16 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 		private String groupName;
 		private boolean isSuffix;
 		@Nullable
-		private Iterable<VARIANT> variants;
+		private List<VARIANT> variants;
+		@Nullable
+		private Codec<VARIANT> variantCodec;
 
 		@Nullable
 		private Function<VARIANT, Block.Properties> blockPropertiesFactory;
 		@Nullable
 		private BlockFactory<VARIANT, BLOCK> blockFactory;
+		@Nullable
+		private IBlockCodecFactory<VARIANT, BLOCK> blockCodecFactory;
 
 		private Function<VARIANT, Item.Properties> itemPropertiesFactory = variant -> new Item.Properties();
 		private ItemFactory<VARIANT, BLOCK> itemFactory = (block, properties, variant) -> new BlockItem(block, properties);
@@ -227,9 +247,9 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 		 * @return This builder
 		 * @throws NullPointerException If {@code variants} is {@code null}
 		 */
-		public Builder<VARIANT, BLOCK> variants(final Iterable<VARIANT> variants) {
+		public Builder<VARIANT, BLOCK> variants(final Collection<VARIANT> variants) {
 			Preconditions.checkNotNull(variants, "variants");
-			this.variants = variants;
+			this.variants = ImmutableList.copyOf(variants);
 			return this;
 		}
 
@@ -242,7 +262,19 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 		 */
 		public Builder<VARIANT, BLOCK> variants(final VARIANT[] variants) {
 			Preconditions.checkNotNull(variants, "variants");
-			return variants(Arrays.asList(variants));
+			return variants(ImmutableList.copyOf(variants));
+		}
+
+		/**
+		 * Set the codec for the variants type.
+		 *
+		 * @param variantCodec The variant codec
+		 * @return This builder
+		 */
+		public Builder<VARIANT, BLOCK> variantCodec(final Codec<VARIANT> variantCodec) {
+			Preconditions.checkNotNull(variantCodec, "variantCodec");
+			this.variantCodec = variantCodec;
+			return this;
 		}
 
 		/**
@@ -268,6 +300,19 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 		public Builder<VARIANT, BLOCK> blockFactory(final BlockFactory<VARIANT, BLOCK> blockFactory) {
 			Preconditions.checkNotNull(blockFactory, "blockFactory");
 			this.blockFactory = blockFactory;
+			return this;
+		}
+
+		/**
+		 * Sets the factory function used to create the block codec.
+		 *
+		 * @param blockCodecFactory The block codec factory function
+		 * @return This builder
+		 * @throws NullPointerException If {@code blockCodecFactory} is {@code null}
+		 */
+		public Builder<VARIANT, BLOCK> blockCodecFactory(final IBlockCodecFactory<VARIANT, BLOCK> blockCodecFactory) {
+			Preconditions.checkNotNull(blockCodecFactory, "blockCodecFactory");
+			this.blockCodecFactory = blockCodecFactory;
 			return this;
 		}
 
@@ -307,18 +352,23 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 		 * @return The variant group
 		 * @throws IllegalStateException If the group name hasn't been provided
 		 * @throws IllegalStateException If the variants haven't been provided
-		 * @throws IllegalStateException If the blockPropertiesFactory hasn't been provided
+		 * @throws IllegalStateException If the variant codec hasn't been provided
+		 * @throws IllegalStateException If the block properties factory hasn't been provided
 		 * @throws IllegalStateException If the block factory hasn't been provided
+		 * @throws IllegalStateException If the block codec factory hasn't been provided
 		 */
 		public BlockVariantGroup<VARIANT, BLOCK> build() {
 			Preconditions.checkState(groupName != null, "Group Name not provided");
 			Preconditions.checkState(variants != null, "Variants not provided");
+			Preconditions.checkState(variantCodec != null, "Variant Codec not provided");
 			Preconditions.checkState(blockPropertiesFactory != null, "Block Properties Factory not provided");
 			Preconditions.checkState(blockFactory != null, "Block Factory not provided");
+			Preconditions.checkState(blockCodecFactory != null, "Block Codec Factory not provided");
 
 			return new BlockVariantGroup<>(
-					groupName, isSuffix, variants,
+					groupName, isSuffix, variants, variantCodec,
 					blockPropertiesFactory, blockFactory,
+					blockCodecFactory,
 					itemPropertiesFactory, itemFactory,
 					blocks, items
 			);

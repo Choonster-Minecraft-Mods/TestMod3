@@ -1,6 +1,6 @@
 package choonster.testmod3.world.level.block;
 
-import choonster.testmod3.world.level.block.variantgroup.BlockVariantGroup;
+import choonster.testmod3.world.level.block.variantgroup.IBlockVariantGroup;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -13,6 +13,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
+import java.util.Objects;
+import java.util.function.Supplier;
+
 /**
  * A block with several variants.
  * <p>
@@ -22,26 +25,46 @@ import net.minecraft.world.phys.BlockHitResult;
  * @author Choonster
  */
 public class VariantsBlock extends Block {
-	private final BlockVariantGroup<EnumType, ? extends VariantsBlock> variantGroup;
+	public static Codec<VariantsBlock> codec(
+			final Supplier<IBlockVariantGroup<EnumType, VariantsBlock>> variantGroupSupplier,
+			final MapCodec<IBlockVariantGroup<EnumType, VariantsBlock>> variantGroupMapCodec
+	) {
+		return RecordCodecBuilder.create(instance ->
+				instance.group(
+						EnumType.CODEC
+								.fieldOf("variant")
+								.forGetter(VariantsBlock::getType),
+
+						Codec.unit(() -> variantGroupSupplier)
+								.fieldOf("variantGroup")
+								.forGetter(block -> block.variantGroup),
+
+						Codec.unit(() -> variantGroupMapCodec)
+								.fieldOf("variantGroupMapCodec")
+								.forGetter(block -> block.variantGroupMapCodec),
+
+						propertiesCodec()
+				).apply(instance, VariantsBlock::new)
+		);
+	}
+
+	private final Supplier<IBlockVariantGroup<EnumType, VariantsBlock>> variantGroup;
+	private final MapCodec<IBlockVariantGroup<EnumType, VariantsBlock>> variantGroupMapCodec;
 	private final EnumType type;
 	private final MapCodec<VariantsBlock> codec;
 
-	public VariantsBlock(final EnumType type, final BlockVariantGroup<EnumType, ? extends VariantsBlock> variantGroup, final Block.Properties properties) {
+	public VariantsBlock(
+			final EnumType type,
+			final Supplier<IBlockVariantGroup<EnumType, VariantsBlock>> variantGroup,
+			final MapCodec<IBlockVariantGroup<EnumType, VariantsBlock>> variantGroupMapCodec,
+			final Block.Properties properties
+	) {
 		super(properties);
 		this.type = type;
 		this.variantGroup = variantGroup;
+		this.variantGroupMapCodec = variantGroupMapCodec;
 
-		codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
-
-				EnumType.CODEC
-						.fieldOf("variant")
-						.forGetter(VariantsBlock::getType),
-
-				variantGroup.codec(),
-
-				propertiesCodec()
-
-		).apply(instance, VariantsBlock::new));
+		codec = IBlockVariantGroup.blockMapCodec(variantGroupMapCodec, block -> block.variantGroup.get(), type);
 	}
 
 	@Override
@@ -55,8 +78,10 @@ public class VariantsBlock extends Block {
 
 	@Override
 	protected InteractionResult useWithoutItem(final BlockState state, final Level level, final BlockPos pos, final Player player, final BlockHitResult blockHitResult) {
-		final EnumType newType = variantGroup.cycleVariant(type);
-		final BlockState newState = variantGroup.getBlock(newType).get().defaultBlockState();
+		final var variantGroup = this.variantGroup.get();
+		final var newType = variantGroup.cycleVariant(type);
+		final var newBlock = Objects.requireNonNull(variantGroup.getBlock(newType));
+		final var newState = newBlock.get().defaultBlockState();
 
 		level.setBlockAndUpdate(pos, newState);
 

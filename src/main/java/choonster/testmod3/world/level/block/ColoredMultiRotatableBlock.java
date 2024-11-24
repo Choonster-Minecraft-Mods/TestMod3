@@ -1,7 +1,8 @@
 package choonster.testmod3.world.level.block;
 
 import choonster.testmod3.util.EnumFaceRotation;
-import choonster.testmod3.world.level.block.variantgroup.BlockVariantGroup;
+import choonster.testmod3.world.level.block.variantgroup.IBlockVariantGroup;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
@@ -18,6 +19,8 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
 
+import java.util.function.Supplier;
+
 /**
  * A block with 16 colours, 6 facings and 4 face rotations.
  * <p>
@@ -26,25 +29,47 @@ import net.minecraft.world.phys.BlockHitResult;
  *
  * @author Choonster
  */
-public class ColoredMultiRotatableBlock extends ColoredRotatableBlock {
+public class ColoredMultiRotatableBlock extends BaseColoredRotatableBlock<ColoredMultiRotatableBlock> {
 	public static final Property<EnumFaceRotation> FACE_ROTATION = EnumProperty.create("face_rotation", EnumFaceRotation.class);
+
+	public static Codec<ColoredMultiRotatableBlock> codec(
+			final Supplier<IBlockVariantGroup<DyeColor, ColoredMultiRotatableBlock>> variantGroupSupplier,
+			final MapCodec<IBlockVariantGroup<DyeColor, ColoredMultiRotatableBlock>> variantGroupMapCodec
+	) {
+		return RecordCodecBuilder.create(instance ->
+				instance.group(
+						DyeColor.CODEC
+								.fieldOf("color")
+								.forGetter(BaseColoredRotatableBlock::getColor),
+
+						Codec.unit(() -> variantGroupSupplier)
+								.fieldOf("variantGroup")
+								.forGetter(block -> block.variantGroup),
+
+						Codec.unit(() -> variantGroupMapCodec)
+								.fieldOf("variantGroupMapCodec")
+								.forGetter(block -> block.variantGroupMapCodec),
+
+						propertiesCodec()
+				).apply(instance, ColoredMultiRotatableBlock::new)
+		);
+	}
 
 	private final MapCodec<ColoredMultiRotatableBlock> codec;
 
-	public ColoredMultiRotatableBlock(final DyeColor color, final BlockVariantGroup<DyeColor, ? extends ColoredMultiRotatableBlock> variantGroup, final Block.Properties properties) {
-		super(color, variantGroup, properties);
+	public ColoredMultiRotatableBlock(
+			final DyeColor color,
+			final Supplier<IBlockVariantGroup<DyeColor, ColoredMultiRotatableBlock>> variantGroup,
+			final MapCodec<IBlockVariantGroup<DyeColor, ColoredMultiRotatableBlock>> variantGroupMapCodec,
+			final Block.Properties properties
+	) {
+		super(color, variantGroup, variantGroupMapCodec, properties);
 
-		codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
-
-				DyeColor.CODEC
-						.fieldOf("color")
-						.forGetter(ColoredRotatableBlock::getColor),
-
-				variantGroup.codec(),
-
-				propertiesCodec()
-
-		).apply(instance, ColoredMultiRotatableBlock::new));
+		codec = IBlockVariantGroup.blockMapCodec(
+				variantGroupMapCodec,
+				BaseColoredRotatableBlock::getVariantGroup,
+				color
+		);
 	}
 
 	@Override
@@ -71,7 +96,15 @@ public class ColoredMultiRotatableBlock extends ColoredRotatableBlock {
 	}
 
 	@Override
-	protected InteractionResult useItemOn(final ItemStack heldItem, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
+	protected InteractionResult useItemOn(
+			final ItemStack heldItem,
+			final BlockState state,
+			final Level level,
+			final BlockPos pos,
+			final Player player,
+			final InteractionHand hand,
+			final BlockHitResult blockHitResult
+	) {
 		if (player.isShiftKeyDown()) { // If the player is sneaking, rotate the face
 			rotateFace(level, pos);
 			return InteractionResult.SUCCESS;

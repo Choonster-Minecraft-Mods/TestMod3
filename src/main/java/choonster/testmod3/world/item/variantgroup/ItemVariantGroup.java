@@ -1,6 +1,7 @@
 package choonster.testmod3.world.item.variantgroup;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
@@ -8,8 +9,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -20,12 +21,12 @@ import java.util.function.Function;
  */
 public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentable, ITEM extends Item> implements IItemVariantGroup<VARIANT, ITEM> {
 	private final String groupName;
-	private final Iterable<VARIANT> variants;
+	private final List<VARIANT> variants;
 
 	private final Map<VARIANT, RegistryObject<ITEM>> items;
 
 	private ItemVariantGroup(
-			final String groupName, final boolean isSuffix, final Iterable<VARIANT> variants,
+			final String groupName, final boolean isSuffix, final List<VARIANT> variants,
 			final Function<VARIANT, Item.Properties> itemPropertiesFactory, final ItemFactory<VARIANT, ITEM> itemFactory,
 			final DeferredRegister<Item> items
 	) {
@@ -55,7 +56,7 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentabl
 	 * @return The variants
 	 */
 	@Override
-	public Iterable<VARIANT> getVariants() {
+	public List<VARIANT> getVariants() {
 		return variants;
 	}
 
@@ -140,7 +141,7 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentabl
 		private String groupName;
 		private boolean isSuffix;
 		@Nullable
-		private Iterable<VARIANT> variants;
+		private List<VARIANT> variants;
 
 		private Function<VARIANT, Item.Properties> itemPropertiesFactory = variant -> new Item.Properties();
 		@Nullable
@@ -192,9 +193,9 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentabl
 		 * @return This builder
 		 * @throws NullPointerException If {@code variants} is {@code null}
 		 */
-		public ItemVariantGroup.Builder<VARIANT, ITEM> variants(final Iterable<VARIANT> variants) {
+		public ItemVariantGroup.Builder<VARIANT, ITEM> variants(final Collection<VARIANT> variants) {
 			Preconditions.checkNotNull(variants, "variants");
-			this.variants = variants;
+			this.variants = ImmutableList.copyOf(variants);
 			return this;
 		}
 
@@ -207,7 +208,7 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentabl
 		 */
 		public ItemVariantGroup.Builder<VARIANT, ITEM> variants(final VARIANT[] variants) {
 			Preconditions.checkNotNull(variants, "variants");
-			return variants(Arrays.asList(variants));
+			return variants(ImmutableList.copyOf(variants));
 		}
 
 		/**

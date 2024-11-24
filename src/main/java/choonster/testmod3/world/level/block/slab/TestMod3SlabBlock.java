@@ -1,10 +1,11 @@
 package choonster.testmod3.world.level.block.slab;
 
-import choonster.testmod3.world.level.block.variantgroup.BlockVariantGroup;
+import choonster.testmod3.world.level.block.variantgroup.IBlockVariantGroup;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
+
+import java.util.function.Supplier;
 
 /**
  * Base class for this mod's slab blocks.
@@ -26,7 +27,12 @@ public abstract class TestMod3SlabBlock<
 	/**
 	 * The group this slab belongs to.
 	 */
-	protected final BlockVariantGroup<VARIANT, SLAB> variantGroup;
+	protected final Supplier<IBlockVariantGroup<VARIANT, SLAB>> variantGroup;
+
+	/**
+	 * The map codec for the variant group type.
+	 */
+	protected final MapCodec<IBlockVariantGroup<VARIANT, SLAB>> variantGroupMapCodec;
 
 	/**
 	 * Create a slab block.
@@ -35,15 +41,21 @@ public abstract class TestMod3SlabBlock<
 	 * @param variantGroup The group this slab belongs to
 	 * @param properties   The block properties of this slab
 	 */
-	public TestMod3SlabBlock(final VARIANT variant, final BlockVariantGroup<VARIANT, SLAB> variantGroup, final Block.Properties properties) {
+	public TestMod3SlabBlock(
+			final VARIANT variant,
+			final Supplier<IBlockVariantGroup<VARIANT, SLAB>> variantGroup,
+			final MapCodec<IBlockVariantGroup<VARIANT, SLAB>> variantGroupMapCodec,
+			final Properties properties
+	) {
 		super(properties);
 
 		this.variant = variant;
 		this.variantGroup = variantGroup;
+		this.variantGroupMapCodec = variantGroupMapCodec;
 	}
 
 	@Override
-	public abstract MapCodec<? extends SlabBlock> codec();
+	public abstract MapCodec<? extends SLAB> codec();
 
 	public VARIANT getVariant() {
 		return variant;
