@@ -9,6 +9,5 @@ import net.minecraft.resources.ResourceLocation;
  * @author Choonster
  */
 public class ModEquipmentModels {
-	// TODO: Datagen
 	public static ResourceLocation REPLACEMENT = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "replacement");
 }
