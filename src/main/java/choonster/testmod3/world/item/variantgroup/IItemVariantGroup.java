@@ -3,9 +3,9 @@ package choonster.testmod3.world.item.variantgroup;
 import choonster.testmod3.registry.IVariantGroup;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 
 /**
  * A group consisting of a collection of variants with one or more items registered for each one.
@@ -18,7 +18,7 @@ public interface IItemVariantGroup<VARIANT extends Enum<VARIANT> & StringReprese
 	 *
 	 * @return The items
 	 */
-	default Collection<RegistryObject<ITEM>> getItems() {
+	default Collection<? extends Supplier<ITEM>> getItems() {
 		return getEntries();
 	}
 }

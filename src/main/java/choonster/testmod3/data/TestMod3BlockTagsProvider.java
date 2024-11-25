@@ -10,10 +10,10 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 /**
  * Generates this mod's block tags.
@@ -85,7 +85,7 @@ public class TestMod3BlockTagsProvider extends BlockTagsProvider {
 		return variantGroup
 				.getBlocks()
 				.stream()
-				.map(RegistryObject::get)
+				.map(Supplier::get)
 				.toArray(Block[]::new);
 	}
 }

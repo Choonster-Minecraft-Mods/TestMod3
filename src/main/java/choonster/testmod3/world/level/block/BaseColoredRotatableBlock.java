@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -92,7 +92,7 @@ public abstract class BaseColoredRotatableBlock<T extends BaseColoredRotatableBl
 	}
 
 	@Override
-	protected ItemInteractionResult useItemOn(
+	protected InteractionResult useItemOn(
 			final ItemStack heldItem,
 			final BlockState state,
 			final Level level,
@@ -107,15 +107,15 @@ public abstract class BaseColoredRotatableBlock<T extends BaseColoredRotatableBl
 				final var success = recolorBlock(state, level, pos, dyeColour);
 				if (success) {
 					heldItem.shrink(1);
-					return ItemInteractionResult.SUCCESS;
+					return InteractionResult.SUCCESS;
 				}
 			}
 
-			return ItemInteractionResult.FAIL;
+			return InteractionResult.FAIL;
 		} else { // Else rotate the block
 			level.setBlockAndUpdate(pos, rotate(state, level, pos, Rotation.CLOCKWISE_90));
 
-			return ItemInteractionResult.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 	}
 }

@@ -20,7 +20,6 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.loaders.DynamicFluidContainerModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.util.Lazy;
-import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.function.Supplier;
@@ -260,7 +259,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 		ModItems.VARIANTS_ITEMS
 				.getItems()
 				.stream()
-				.map(RegistryObject::get)
+				.map(Supplier::get)
 				.forEach(this::withGeneratedParentAndDefaultTexture);
 
 		bucketItem(ModFluids.STATIC);
