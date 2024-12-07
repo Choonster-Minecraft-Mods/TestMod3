@@ -21,7 +21,6 @@ import net.minecraft.world.item.equipment.ArmorMaterials;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
-import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.event.GatherComponentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -354,8 +353,8 @@ public class ModItems {
 			defaultItemProperties() // Component registered in EventHandler
 	);
 
-	public static final RegistryObject<ForgeSpawnEggItem> PLAYER_AVOIDING_CREEPER_SPAWN_EGG = registerItem("player_avoiding_creeper_spawn_egg",
-			(properties) -> new ForgeSpawnEggItem(ModEntities.PLAYER_AVOIDING_CREEPER, 0xda70b, 0, properties),
+	public static final RegistryObject<SpawnEggItem> PLAYER_AVOIDING_CREEPER_SPAWN_EGG = registerItem("player_avoiding_creeper_spawn_egg",
+			(properties) -> new SpawnEggItem(ModEntities.PLAYER_AVOIDING_CREEPER.get(), properties), // TODO: Colours = 0xda70b, 0
 			defaultItemProperties()
 	);
 

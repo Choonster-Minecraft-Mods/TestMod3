@@ -66,7 +66,7 @@ public class ConditionalIngredientBuilder {
 	 */
 	public ConditionalIngredient build() {
 		if (condition == null) {
-			final var stacks = ingredient.items().stream()
+			@SuppressWarnings("deprecation") final var stacks = ingredient.items()
 					.map(Holder::get)
 					.map(Item::toString)
 					.collect(Collectors.joining(","));

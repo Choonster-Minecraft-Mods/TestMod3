@@ -10,7 +10,9 @@ import net.minecraft.world.item.Item;
 /**
  * {@link ClampedItemPropertyFunction} to get whether hidden blocks are being revealed by an item's {@link ModDataComponents#REVEAL_HIDDEN_BLOCKS} component.
  */
-public class RevealHiddenBlocksItemPropertyFunction {
+// TODO: Replace with HasComponent
+@Deprecated(forRemoval = true)
+public record RevealHiddenBlocksItemPropertyFunction() {
 	/**
 	 * The ID of this function.
 	 */

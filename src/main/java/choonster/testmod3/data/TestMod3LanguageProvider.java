@@ -15,15 +15,11 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.fluids.FluidType;
 import org.apache.commons.lang3.StringUtils;
@@ -370,9 +366,9 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		ENTITY_TYPE_NAMES.put(key.get(), name);
 	}
 
-	private void addSpawnEgg(final Supplier<? extends ForgeSpawnEggItem> spawnEggItem) {
+	private void addSpawnEgg(final Supplier<? extends SpawnEggItem> spawnEggItem) {
 		final var item = spawnEggItem.get();
-		final var entityType = item.getType(item.getDefaultInstance());
+		final var entityType = item.getDefaultType();
 		add(item, String.format("%s Spawn Egg", ENTITY_TYPE_NAMES.get(entityType)));
 	}
 

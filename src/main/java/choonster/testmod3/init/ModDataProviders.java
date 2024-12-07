@@ -48,7 +48,7 @@ public class ModDataProviders {
 
 		dataGenerator.addProvider(event.includeClient(), new TestMod3SoundDefinitionsProvider(output, existingFileHelper));
 
-		dataGenerator.addProvider(event.includeClient(), new TestMod3EquipmentModelsProvider(output));
+		dataGenerator.addProvider(event.includeClient(), new TestMod3EquipmentAssetProvider(output));
 
 		dataGenerator.addProvider(event.includeServer(), new TestMod3RecipeProvider.Runner(output, lookupProvider));
 		dataGenerator.addProvider(event.includeServer(), TestMod3LootTableProvider.create(output, lookupProvider));

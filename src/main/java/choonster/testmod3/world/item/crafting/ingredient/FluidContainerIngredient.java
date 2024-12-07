@@ -20,6 +20,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * An ingredient that matches any fluid container filled with the specified {@link FluidStack}.
@@ -67,8 +68,9 @@ public class FluidContainerIngredient extends AbstractIngredient {
 		return ModCrafting.Ingredients.FLUID_CONTAINER.get();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public List<Holder<Item>> items() {
+	public Stream<Holder<Item>> items() {
 		if (items == null) {
 			items = RegistryUtil.stream(ForgeRegistries.ITEMS)
 					.map(ItemStack::new)
@@ -80,7 +82,7 @@ public class FluidContainerIngredient extends AbstractIngredient {
 					.toList();
 		}
 
-		return items;
+		return items.stream();
 	}
 
 	@Override

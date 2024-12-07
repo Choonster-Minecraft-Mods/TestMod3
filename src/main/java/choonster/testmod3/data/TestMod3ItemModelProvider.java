@@ -2,7 +2,7 @@ package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.client.item.RevealHiddenBlocksItemPropertyFunction;
-import choonster.testmod3.client.item.TicksSinceLastUseItemPropertyFunction;
+import choonster.testmod3.client.renderer.item.properties.numeric.TicksSinceLastUse;
 import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
@@ -113,7 +113,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 				.forEachOrdered(child ->
 						modelTest
 								.override()
-								.predicate(TicksSinceLastUseItemPropertyFunction.ID, child.getKey() * 20)
+								.predicate(TicksSinceLastUse.ID, child.getKey() * 20)
 								.model(child.getValue())
 								.end()
 				);
@@ -121,7 +121,7 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 		// Add the parent as a fallback that displays when the ticks since last use is >= 60
 		modelTest
 				.override()
-				.predicate(TicksSinceLastUseItemPropertyFunction.ID, 60)
+				.predicate(TicksSinceLastUse.ID, 60)
 				.model(modelTest)
 				.end();
 
@@ -140,14 +140,14 @@ public class TestMod3ItemModelProvider extends ItemModelProvider {
 		// Add the child as an override that displays when the ticks since last use is >= 0 and < 20
 		slingshot
 				.override()
-				.predicate(TicksSinceLastUseItemPropertyFunction.ID, 0)
+				.predicate(TicksSinceLastUse.ID, 0)
 				.model(slingshotPulled)
 				.end();
 
 		// Add the parent as a fallback that displays when the ticks since last use is >= 20
 		slingshot
 				.override()
-				.predicate(TicksSinceLastUseItemPropertyFunction.ID, 1)
+				.predicate(TicksSinceLastUse.ID, 1)
 				.model(slingshot)
 				.end();
 

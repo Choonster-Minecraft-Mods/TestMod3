@@ -41,7 +41,7 @@ public class BannerFeature extends Feature<BannerFeatureConfig> {
 		if (blockEntity instanceof final BannerBlockEntity bannerBlockEntity) {
 			final var bannerItem = new ItemStack(bannerBlock);
 			bannerItem.set(DataComponents.BANNER_PATTERNS, config.patterns());
-			bannerBlockEntity.fromItem(bannerItem, color);
+			bannerBlockEntity.applyComponentsFromItemStack(bannerItem);
 		}
 
 		return true;

@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 /**
- * Registers {@link BlockColor}/{@link ItemColor} handlers for this mod's blocks/items.
+ * Registers {@link BlockColor} handlers for this mod's blocks.
  *
  * @author Choonster
  */
@@ -36,7 +36,7 @@ public class ModColourManager {
 				return BiomeColors.getAverageGrassColor(blockAccess, pos);
 			}
 
-			return GrassColor.get(0.5d, 1.0d);
+			return GrassColor.getDefaultColor();
 		};
 
 		event.register(grassColourHandler, ModBlocks.WATER_GRASS.get());
@@ -51,12 +51,14 @@ public class ModColourManager {
 	public static void registerItemColourHandlers(final RegisterColorHandlersEvent.Item event) {
 		final BlockColors blockColors = event.getBlockColors();
 
+
 		// Use the Block's colour handler for an ItemBlock
 		final ItemColor itemBlockColourHandler = (stack, tintIndex) -> {
 			final BlockState state = ((BlockItem) stack.getItem()).getBlock().defaultBlockState();
 			return blockColors.getColor(state, null, null, tintIndex);
 		};
 
+		// TODO: Replace with GrassColorSource
 		event.register(itemBlockColourHandler, ModBlocks.WATER_GRASS.get());
 	}
 }

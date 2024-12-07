@@ -26,6 +26,6 @@ public class ModArmorMaterials {
 			0,
 			0,
 			ModTags.Items.REPAIRS_REPLACEMENT_ARMOR,
-			ModEquipmentModels.REPLACEMENT
+			ModEquipmentAssets.REPLACEMENT
 	);
 }
