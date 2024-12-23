@@ -8,9 +8,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-
-import java.lang.reflect.Field;
 
 /**
  * Generates Banners with a specific pattern.
@@ -21,8 +18,6 @@ import java.lang.reflect.Field;
  * @author Choonster
  */
 public class BannerFeature extends Feature<BannerFeatureConfig> {
-	private static final Field NAME = ObfuscationReflectionHelper.findField(BannerBlockEntity.class, /* name */ "f_58473_");
-
 	public BannerFeature(final Codec<BannerFeatureConfig> codec) {
 		super(codec);
 	}
