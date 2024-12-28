@@ -17,7 +17,7 @@
     },
     "face_rotation=down,facing=up": {
       "model": "testmod3:block/colored_rotatable/black_multi_rotatable_block_rotated_down",
-      "x": -90
+      "x": 270
     },
     "face_rotation=down,facing=west": {
       "model": "testmod3:block/colored_rotatable/black_multi_rotatable_block_rotated_down",
@@ -40,7 +40,7 @@
     },
     "face_rotation=left,facing=up": {
       "model": "testmod3:block/colored_rotatable/black_multi_rotatable_block_rotated_left",
-      "x": -90
+      "x": 270
     },
     "face_rotation=left,facing=west": {
       "model": "testmod3:block/colored_rotatable/black_multi_rotatable_block_rotated_left",
@@ -63,7 +63,7 @@
     },
     "face_rotation=right,facing=up": {
       "model": "testmod3:block/colored_rotatable/black_multi_rotatable_block_rotated_right",
-      "x": -90
+      "x": 270
     },
     "face_rotation=right,facing=west": {
       "model": "testmod3:block/colored_rotatable/black_multi_rotatable_block_rotated_right",
@@ -86,7 +86,7 @@
     },
     "face_rotation=up,facing=up": {
       "model": "testmod3:block/colored_rotatable/black_multi_rotatable_block",
-      "x": -90
+      "x": 270
     },
     "face_rotation=up,facing=west": {
       "model": "testmod3:block/colored_rotatable/black_multi_rotatable_block",

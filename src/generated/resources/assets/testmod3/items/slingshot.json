@@ -1,0 +1,26 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "entries": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "testmod3:item/slingshot_pulled"
+        },
+        "threshold": 0.0
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "testmod3:item/slingshot"
+        },
+        "threshold": 20.0
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "testmod3:item/slingshot"
+    },
+    "property": "testmod3:ticks_since_last_use"
+  }
+}

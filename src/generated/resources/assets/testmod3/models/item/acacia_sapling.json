@@ -1,4 +1,0 @@
-{
-  "parent": "minecraft:item/acacia_sapling",
-  "render_type": "minecraft:cutout"
-}

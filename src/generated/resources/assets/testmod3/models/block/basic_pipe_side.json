@@ -1,6 +1,6 @@
 {
   "parent": "testmod3:block/pipe/pipe_part",
   "textures": {
-    "side": "minecraft:block/bricks"
+    "texture": "minecraft:block/bricks"
   }
 }

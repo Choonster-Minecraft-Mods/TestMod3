@@ -2,28 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "testmod3:block/basic_pipe_centre",
-        "uvlock": true
-      }
-    },
-    {
-      "apply": {
-        "model": "testmod3:block/basic_pipe_side",
-        "uvlock": true,
-        "x": 90
-      },
-      "when": {
-        "down": "true"
-      }
-    },
-    {
-      "apply": {
-        "model": "testmod3:block/basic_pipe_side",
-        "uvlock": true,
-        "x": -90
-      },
-      "when": {
-        "up": "true"
+        "model": "testmod3:block/basic_pipe_centre"
       }
     },
     {
@@ -33,6 +12,16 @@
       },
       "when": {
         "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "testmod3:block/basic_pipe_side",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east": "true"
       }
     },
     {
@@ -59,10 +48,20 @@
       "apply": {
         "model": "testmod3:block/basic_pipe_side",
         "uvlock": true,
-        "y": 90
+        "x": 270
       },
       "when": {
-        "east": "true"
+        "up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "testmod3:block/basic_pipe_side",
+        "uvlock": true,
+        "x": 90
+      },
+      "when": {
+        "up": "true"
       }
     }
   ]

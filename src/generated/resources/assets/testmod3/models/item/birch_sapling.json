@@ -1,4 +1,0 @@
-{
-  "parent": "minecraft:item/birch_sapling",
-  "render_type": "minecraft:cutout"
-}

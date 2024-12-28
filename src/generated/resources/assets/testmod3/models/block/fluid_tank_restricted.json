@@ -1,3 +1,8 @@
 {
-  "parent": "testmod3:block/fluid_tank"
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "minecraft:block/iron_block",
+    "side": "minecraft:block/glass",
+    "top": "minecraft:block/glass"
+  }
 }

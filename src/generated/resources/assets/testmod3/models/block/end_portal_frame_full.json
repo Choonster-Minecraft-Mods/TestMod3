@@ -2,7 +2,7 @@
   "parent": "minecraft:block/cube_bottom_top",
   "textures": {
     "bottom": "minecraft:block/end_stone",
-    "side": "testmod3:block/end_portal_side_full",
+    "side": "testmod3:block/end_portal_frame_full",
     "top": "minecraft:block/end_portal_frame_top"
   }
 }

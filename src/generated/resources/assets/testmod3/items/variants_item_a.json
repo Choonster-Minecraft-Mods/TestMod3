@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "testmod3:item/variants_item_a"
+  }
+}

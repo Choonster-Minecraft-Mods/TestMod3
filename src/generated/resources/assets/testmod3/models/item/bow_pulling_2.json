@@ -1,5 +1,5 @@
 {
-  "parent": "testmod3:item/bow",
+  "parent": "testmod3:item/simple_model",
   "textures": {
     "layer0": "minecraft:item/bow_pulling_2"
   }

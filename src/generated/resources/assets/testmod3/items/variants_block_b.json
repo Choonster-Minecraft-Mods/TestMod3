@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "testmod3:block/variants_block_b"
+  }
+}

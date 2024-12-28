@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "testmod3:block/colored_rotatable/light_gray_multi_rotatable_block"
+  }
+}

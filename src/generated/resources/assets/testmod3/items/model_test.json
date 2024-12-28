@@ -1,0 +1,40 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "entries": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "testmod3:item/model_test_0"
+        },
+        "threshold": 0.0
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "testmod3:item/model_test_1"
+        },
+        "threshold": 20.0
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "testmod3:item/model_test_2"
+        },
+        "threshold": 40.0
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "testmod3:item/model_test_standby"
+        },
+        "threshold": 60.0
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "testmod3:item/model_test_standby"
+    },
+    "property": "testmod3:ticks_since_last_use"
+  }
+}

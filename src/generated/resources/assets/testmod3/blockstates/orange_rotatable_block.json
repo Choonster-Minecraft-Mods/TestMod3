@@ -17,7 +17,7 @@
     },
     "facing=up": {
       "model": "testmod3:block/colored_rotatable/orange_rotatable_block",
-      "x": -90
+      "x": 270
     },
     "facing=west": {
       "model": "testmod3:block/colored_rotatable/orange_rotatable_block",
