@@ -139,7 +139,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 			final var itemId = items.key(registryName);
 
 			final var block = blocks.register(registryName, () -> {
-				final var properties = blockPropertiesFactory.apply(variant);
+				final var properties = blockPropertiesFactory.apply(variant).setId(blockId);
 
 				return blockFactory.createBlock(variant, () -> this, mapCodec, properties);
 			});
@@ -147,7 +147,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentab
 			builder.put(variant, block);
 
 			items.register(registryName, () -> {
-				final var properties = itemPropertiesFactory.apply(variant);
+				final var properties = itemPropertiesFactory.apply(variant).setId(itemId);
 
 				return itemFactory.createItem(block.get(), properties, variant);
 			});
