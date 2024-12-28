@@ -40,11 +40,7 @@ public class ModDataProviders {
 
 		dataGenerator.addProvider(event.includeClient(), new TestMod3LanguageProvider(output));
 
-		final var itemModelProvider = new TestMod3ItemModelProvider(output, existingFileHelper);
-		dataGenerator.addProvider(event.includeClient(), itemModelProvider);
-
-		// Let blockstate provider see generated item models by passing its existing file helper
-		dataGenerator.addProvider(event.includeClient(), new TestMod3BlockStateProvider(output, itemModelProvider.existingFileHelper));
+		dataGenerator.addProvider(event.includeClient(), new TestMod3ModelProvider(output));
 
 		dataGenerator.addProvider(event.includeClient(), new TestMod3SoundDefinitionsProvider(output, existingFileHelper));
 

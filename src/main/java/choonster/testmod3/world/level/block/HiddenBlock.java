@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -32,7 +31,7 @@ public class HiddenBlock extends BaseEntityBlock<HiddenBlockEntity> {
 	 * <p>
 	 * Only set from {_@link Block#getActualState} on the client side, do not query on the server.
 	 */
-	public static final Property<Boolean> HIDDEN = BooleanProperty.create("hidden");
+	public static final BooleanProperty HIDDEN = BooleanProperty.create("hidden");
 
 	public HiddenBlock(final Block.Properties properties) {
 		super(properties);

@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.TransparentBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
@@ -26,7 +25,7 @@ import net.minecraft.world.phys.BlockHitResult;
  */
 public class RightClickTestBlock extends TransparentBlock {
 	public static final MapCodec<RightClickTestBlock> CODEC = simpleCodec(RightClickTestBlock::new);
-	public static final Property<Boolean> HAS_ENDER_EYE = BooleanProperty.create("has_ender_eye");
+	public static final BooleanProperty HAS_ENDER_EYE = BooleanProperty.create("has_ender_eye");
 
 	public RightClickTestBlock(final Block.Properties properties) {
 		super(properties);

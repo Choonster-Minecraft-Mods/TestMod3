@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.function.Supplier;
@@ -30,7 +29,7 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class ColoredMultiRotatableBlock extends BaseColoredRotatableBlock<ColoredMultiRotatableBlock> {
-	public static final Property<EnumFaceRotation> FACE_ROTATION = EnumProperty.create("face_rotation", EnumFaceRotation.class);
+	public static final EnumProperty<EnumFaceRotation> FACE_ROTATION = EnumProperty.create("face_rotation", EnumFaceRotation.class);
 
 	public static Codec<ColoredMultiRotatableBlock> codec(
 			final Supplier<IBlockVariantGroup<DyeColor, ColoredMultiRotatableBlock>> variantGroupSupplier,

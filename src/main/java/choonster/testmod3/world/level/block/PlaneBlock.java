@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -45,12 +44,12 @@ public class PlaneBlock extends Block {
 	/**
 	 * The block's rotation around the y-axis.
 	 */
-	public static final Property<Direction> HORIZONTAL_ROTATION = EnumProperty.create("horizontal_rotation", Direction.class, Direction.Plane.HORIZONTAL);
+	public static final EnumProperty<Direction> HORIZONTAL_ROTATION = EnumProperty.create("horizontal_rotation", Direction.class, Direction.Plane.HORIZONTAL);
 
 	/**
 	 * The block's rotation around the z-axis.
 	 */
-	public static final Property<VerticalRotation> VERTICAL_ROTATION = EnumProperty.create("vertical_rotation", VerticalRotation.class);
+	public static final EnumProperty<VerticalRotation> VERTICAL_ROTATION = EnumProperty.create("vertical_rotation", VerticalRotation.class);
 
 	public PlaneBlock(final Block.Properties properties) {
 		super(properties);

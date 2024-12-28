@@ -34,11 +34,7 @@ public class ModItemModelProperties {
 	@SubscribeEvent
 	public static void registerItemModelProperties(final FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
-//			RevealHiddenBlocksItemPropertyFunction.registerForItem(ModItems.HIDDEN_BLOCK_REVEALER.get());
 			registerRangeSelect("ticks_since_last_use", TicksSinceLastUse.MAP_CODEC);
-
-//			TicksSinceLastUse.registerForItem(ModItems.MODEL_TEST.get());
-//			TicksSinceLastUse.registerForItem(ModItems.SLINGSHOT.get());
 		});
 	}
 
@@ -75,7 +71,7 @@ public class ModItemModelProperties {
 									RangeSelectItemModelProperties.class,
 									"ID_MAPPER"
 							).get(null);
-			
+
 			RANGE_SELECT_ID_MAPPER = rangeSelectIdMapper;
 		} catch (final IllegalAccessException e) {
 			throw new RuntimeException("Failed to initialise Item Property ID Mappers", e);
