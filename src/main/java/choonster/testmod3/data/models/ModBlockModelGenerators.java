@@ -129,11 +129,11 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		createMirrorPlane();
 
-		createCube(ModBlocks.VANILLA_MODEL_TEST.get(), Blocks.ACACIA_LOG);
+		createCube(ModBlocks.VANILLA_MODEL_TEST.get(), Blocks.ACACIA_LOG, "_top");
 
 		createFullbright();
 
-		createCube(ModBlocks.NORMAL_BRIGHTNESS.get(), ModBlocks.FULLBRIGHT.get());
+		createCube(ModBlocks.NORMAL_BRIGHTNESS.get(), ModBlocks.FULLBRIGHT.get(), "");
 
 		createTrivialCube(ModBlocks.MAX_HEALTH_SETTER.get());
 		createTrivialCube(ModBlocks.MAX_HEALTH_GETTER.get());
@@ -204,10 +204,10 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 	private void createRightClickTest() {
 		final var rightClickTest = ModBlocks.RIGHT_CLICK_TEST.get();
 
-		final var withEnderEye = existingParent(Blocks.WHITE_STAINED_GLASS, "_with_ender_eye")
+		final var withEnderEye = existingParent(Blocks.WHITE_STAINED_GLASS, "", "_with_ender_eye")
 				.create(rightClickTest, new TextureMapping(), modelOutput);
 
-		final var withoutEnderEye = existingParent(Blocks.BLACK_STAINED_GLASS, "_without_ender_eye")
+		final var withoutEnderEye = existingParent(Blocks.BLACK_STAINED_GLASS, "", "_without_ender_eye")
 				.create(rightClickTest, new TextureMapping(), modelOutput);
 
 		blockStateOutput.accept(
@@ -373,7 +373,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 	private void createHidden() {
 		final var block = ModBlocks.HIDDEN.get();
 
-		final var empty = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "empty");
+		final var empty = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/empty");
 		final var hidden = TexturedModel.CUBE.create(block, modelOutput);
 
 		blockStateOutput.accept(
@@ -391,9 +391,9 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 		blockStateOutput.accept(createSimpleBlock(block, model));
 	}
 
-	private void createCube(final Block block, final Block textureBlock) {
+	private void createCube(final Block block, final Block textureBlock, final String textureSuffix) {
 		final var textureMapping = TextureMapping.cube(
-				TextureMapping.getBlockTexture(textureBlock, "_top")
+				TextureMapping.getBlockTexture(textureBlock, textureSuffix)
 		);
 
 		final var model = ModelTemplates.CUBE_ALL.create(block, textureMapping, modelOutput);
@@ -422,7 +422,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		final var centreModel = ModModelTemplates.PIPE_CENTRE.create(block, textureMapping, modelOutput);
 		final var sideModel = ModModelTemplates.PIPE_PART.create(block, textureMapping, modelOutput);
-		final var itemModel = ModModelTemplates.PIPE_INVENTORY.create(block, textureMapping, modelOutput);
+		final var itemModel = ModModelTemplates.PIPE_INVENTORY.create(block.asItem(), textureMapping, modelOutput);
 
 		blockStateOutput.accept(
 				// createFence handles the horizontal properties
@@ -452,7 +452,8 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		final var model = existingParent(parent).create(block, textureMapping, modelOutput);
 
-		final var conditionalModel = existingParent(parent, "_conditional").create(
+		final var suffix = "_conditional";
+		final var conditionalModel = existingParent(parent, suffix, suffix).create(
 				block,
 				textureMapping,
 				modelOutput
@@ -570,10 +571,10 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 		);
 	}
 
-	private static ModelTemplate existingParent(final Block parent, final String suffix) {
+	private static ModelTemplate existingParent(final Block parent, final String parentSuffix, final String templateSuffix) {
 		return new ModelTemplate(
-				Optional.of(ModelLocationUtils.getModelLocation(parent)),
-				Optional.of(suffix)
+				Optional.of(ModelLocationUtils.getModelLocation(parent, parentSuffix)),
+				Optional.of(templateSuffix)
 		);
 	}
 

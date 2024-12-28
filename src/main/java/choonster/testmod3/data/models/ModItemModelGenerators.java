@@ -55,7 +55,7 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 
 	private static final ResourceLocation BUCKET_MODEL = ResourceLocation.fromNamespaceAndPath(
 			"forge",
-			"items/bucket"
+			"item/bucket"
 	);
 
 	public ModItemModelGenerators(
@@ -337,8 +337,8 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 		final var baseTexture = TextureMapping.getItemTexture(item, "_base");
 
 		final var textureMapping = new TextureMapping()
-				.put(ModTextureSlots.BASE, baseTexture)
-				.put(TextureSlot.PARTICLE, baseTexture);
+				.putForced(ModTextureSlots.BASE, baseTexture)
+				.putForced(TextureSlot.PARTICLE, baseTexture);
 
 		final var model = createBucketModel(item, Fluids.EMPTY, textureMapping);
 		itemModelOutput.accept(item, ItemModelUtils.plainModel(model));

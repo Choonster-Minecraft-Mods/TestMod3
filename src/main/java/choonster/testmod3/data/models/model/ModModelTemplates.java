@@ -62,7 +62,7 @@ public class ModModelTemplates {
 					return Pair.of(
 							faceRotation,
 							createMod(
-									"orientable_" + suffix,
+									"orientable" + suffix,
 									suffix,
 									TextureSlot.TOP,
 									TextureSlot.FRONT,
