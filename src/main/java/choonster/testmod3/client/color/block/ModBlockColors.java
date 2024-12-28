@@ -1,14 +1,10 @@
-package choonster.testmod3.client.model;
+package choonster.testmod3.client.color.block;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModBlocks;
 import net.minecraft.client.color.block.BlockColor;
-import net.minecraft.client.color.block.BlockColors;
-import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.renderer.BiomeColors;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.GrassColor;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,8 +17,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
  * @author Choonster
  */
 @Mod.EventBusSubscriber(modid = TestMod3.MODID, value = Dist.CLIENT, bus = Bus.MOD)
-public class ModColourManager {
-
+public class ModBlockColors {
 	/**
 	 * Register the {@link BlockColor} handlers.
 	 *
@@ -40,25 +35,5 @@ public class ModColourManager {
 		};
 
 		event.register(grassColourHandler, ModBlocks.WATER_GRASS.get());
-	}
-
-	/**
-	 * Register the {@link ItemColor} handlers
-	 *
-	 * @param event The event
-	 */
-	@SubscribeEvent
-	public static void registerItemColourHandlers(final RegisterColorHandlersEvent.Item event) {
-		final BlockColors blockColors = event.getBlockColors();
-
-
-		// Use the Block's colour handler for an ItemBlock
-		final ItemColor itemBlockColourHandler = (stack, tintIndex) -> {
-			final BlockState state = ((BlockItem) stack.getItem()).getBlock().defaultBlockState();
-			return blockColors.getColor(state, null, null, tintIndex);
-		};
-
-		// TODO: Replace with GrassColorSource
-		event.register(itemBlockColourHandler, ModBlocks.WATER_GRASS.get());
 	}
 }
