@@ -4,22 +4,22 @@
     {
       "faces": {
         "down": {
-          "texture": "#all"
+          "texture": "#texture"
         },
         "east": {
-          "texture": "#all"
+          "texture": "#texture"
         },
         "north": {
-          "texture": "#all"
+          "texture": "#texture"
         },
         "south": {
-          "texture": "#all"
+          "texture": "#texture"
         },
         "up": {
-          "texture": "#all"
+          "texture": "#texture"
         },
         "west": {
-          "texture": "#all"
+          "texture": "#texture"
         }
       },
       "from": [
@@ -35,6 +35,6 @@
     }
   ],
   "textures": {
-    "particle": "#all"
+    "particle": "#texture"
   }
 }

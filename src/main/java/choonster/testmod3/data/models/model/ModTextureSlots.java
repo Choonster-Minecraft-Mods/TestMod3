@@ -12,19 +12,18 @@ import java.lang.reflect.Method;
  * @author Choonster
  */
 public class ModTextureSlots {
-	public static final TextureSlot BASE = create("base");
-	public static final TextureSlot PLANE = create("plane");
-	public static final TextureSlot CHEST = create("chest");
-
 	private static final Method CREATE = ObfuscationReflectionHelper.findMethod(
 			TextureSlot.class,
 			"create",
 			String.class
 	);
 
+	public static final TextureSlot BASE = create("base");
+	public static final TextureSlot PLANE = create("plane");
+	public static final TextureSlot CHEST = create("chest");
+
 	private static TextureSlot create(final String id) {
 		try {
-			assert CREATE != null;
 			return (TextureSlot) CREATE.invoke(null, id);
 		} catch (final IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException("Failed to create TextureSlot", e);

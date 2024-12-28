@@ -45,7 +45,7 @@ public class ModModelTemplates {
 	 */
 	public static final ModelTemplate PIPE_INVENTORY = createModItem(
 			"pipe/inventory",
-			TextureSlot.ALL
+			TextureSlot.TEXTURE
 	);
 
 	/**
@@ -58,7 +58,7 @@ public class ModModelTemplates {
 						return Pair.of(faceRotation, ModelTemplates.CUBE_ORIENTABLE);
 					}
 
-					var suffix = "rotated_" + faceRotation.getSerializedName();
+					var suffix = "_rotated_" + faceRotation.getSerializedName();
 					return Pair.of(
 							faceRotation,
 							createMod(

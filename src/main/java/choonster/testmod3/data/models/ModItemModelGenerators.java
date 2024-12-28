@@ -9,21 +9,29 @@ import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.init.ModDataComponents;
 import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
+import choonster.testmod3.util.RegistryUtil;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ItemModelOutput;
+import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.model.*;
+import net.minecraft.client.renderer.item.ClientItem;
 import net.minecraft.client.renderer.item.RangeSelectItemModel;
 import net.minecraft.client.renderer.item.properties.numeric.UseDuration;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
@@ -35,6 +43,16 @@ import java.util.stream.IntStream;
  * @author Choonster
  */
 public class ModItemModelGenerators extends ItemModelGenerators {
+	private static final Field ITEM_INFOS = ObfuscationReflectionHelper.findField(
+			ModelProvider.ItemInfoCollector.class,
+			"itemInfos"
+	);
+
+	private static final Field COPIES = ObfuscationReflectionHelper.findField(
+			ModelProvider.ItemInfoCollector.class,
+			"copies"
+	);
+
 	private static final ResourceLocation BUCKET_MODEL = ResourceLocation.fromNamespaceAndPath(
 			"forge",
 			"items/bucket"
@@ -49,17 +67,17 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 
 	@Override
 	public void run() {
-		copy(ModItems.WOODEN_AXE.get(), Items.WOODEN_AXE);
+		generateItemWithExistingParent(ModItems.WOODEN_AXE.get(), Items.WOODEN_AXE);
 
-		copy(ModItems.ENTITY_TEST.get(), Items.PORKCHOP);
+		generateItemWithExistingParent(ModItems.ENTITY_TEST.get(), Items.PORKCHOP);
 
-		copy(ModItems.MUSIC_DISC_SOLARIS.get(), Items.MUSIC_DISC_13);
+		generateItemWithExistingParent(ModItems.MUSIC_DISC_SOLARIS.get(), Items.MUSIC_DISC_13);
 
-		copy(ModItems.HEAVY.get(), Items.BRICK);
+		generateItemWithExistingParent(ModItems.HEAVY.get(), Items.BRICK);
 
-		copy(ModItems.ENTITY_INTERACTION_TEST.get(), Items.BEEF);
+		generateItemWithExistingParent(ModItems.ENTITY_INTERACTION_TEST.get(), Items.BEEF);
 
-		copy(ModItems.BLOCK_DESTROYER.get(), Items.TNT_MINECART);
+		generateItemWithExistingParent(ModItems.BLOCK_DESTROYER.get(), Items.TNT_MINECART);
 
 		generateFlatItem(ModItems.SUBSCRIPTS.get(), ModModelTemplates.SIMPLE_ITEM);
 
@@ -67,39 +85,39 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 
 		generateModelTest();
 
-		copy(ModItems.SNOWBALL_LAUNCHER.get(), Items.FISHING_ROD);
+		generateItemWithExistingParent(ModItems.SNOWBALL_LAUNCHER.get(), Items.FISHING_ROD);
 
 		generateSlingshot();
 
-		copy(ModItems.UNICODE_TOOLTIPS.get(), Items.RABBIT);
+		generateItemWithExistingParent(ModItems.UNICODE_TOOLTIPS.get(), Items.RABBIT);
 
-		copy(ModItems.SWAP_TEST_A.get(), Items.BRICK);
+		generateItemWithExistingParent(ModItems.SWAP_TEST_A.get(), Items.BRICK);
 
-		copy(ModItems.SWAP_TEST_B.get(), Items.NETHER_BRICK);
+		generateItemWithExistingParent(ModItems.SWAP_TEST_B.get(), Items.NETHER_BRICK);
 
-		copy(ModItems.BLOCK_DEBUGGER.get(), Items.NETHER_STAR);
+		generateItemWithExistingParent(ModItems.BLOCK_DEBUGGER.get(), Items.NETHER_STAR);
 
-		copy(ModItems.WOODEN_HARVEST_SWORD.get(), Items.WOODEN_SWORD);
+		generateItemWithExistingParent(ModItems.WOODEN_HARVEST_SWORD.get(), Items.WOODEN_SWORD);
 
-		copy(ModItems.DIAMOND_HARVEST_SWORD.get(), Items.DIAMOND_SWORD);
+		generateItemWithExistingParent(ModItems.DIAMOND_HARVEST_SWORD.get(), Items.DIAMOND_SWORD);
 
-		copy(ModItems.CLEARER.get(), Items.NETHER_STAR);
+		generateItemWithExistingParent(ModItems.CLEARER.get(), Items.NETHER_STAR);
 
 		generateBow(ModItems.BOW.get(), Items.BOW);
 
 		generateFlatItem(ModItems.ARROW.get(), ModelTemplates.FLAT_ITEM);
 
-		copy(ModItems.HEIGHT_TESTER.get(), Items.COMPASS);
+		generateItemWithExistingParent(ModItems.HEIGHT_TESTER.get(), Items.COMPASS);
 
-		copy(ModItems.PIG_SPAWNER_FINITE.get(), Items.PORKCHOP);
+		generateItemWithExistingParent(ModItems.PIG_SPAWNER_FINITE.get(), Items.PORKCHOP);
 
-		copy(ModItems.PIG_SPAWNER_INFINITE.get(), Items.PORKCHOP);
+		generateItemWithExistingParent(ModItems.PIG_SPAWNER_INFINITE.get(), Items.PORKCHOP);
 
 		generateBow(ModItems.CONTINUOUS_BOW.get(), Items.BOW);
 
-		copy(ModItems.RESPAWNER.get(), Items.CLOCK);
+		generateItemWithExistingParent(ModItems.RESPAWNER.get(), Items.CLOCK);
 
-		copy(ModItems.LOOT_TABLE_TEST.get(), Items.GOLD_INGOT);
+		generateItemWithExistingParent(ModItems.LOOT_TABLE_TEST.get(), Items.GOLD_INGOT);
 
 		generateFlatItem(ModItems.MAX_HEALTH_GETTER_ITEM.get(), ModelTemplates.FLAT_ITEM);
 
@@ -109,17 +127,17 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 
 		generateFlatItem(ModItems.DIMENSION_REPLACEMENT.get(), ModModelTemplates.SIMPLE_ITEM);
 
-		copy(ModItems.SADDLE.get(), Items.SADDLE);
+		generateItemWithExistingParent(ModItems.SADDLE.get(), Items.SADDLE);
 
-		copy(ModItems.WOODEN_SLOW_SWORD.get(), Items.WOODEN_SWORD);
+		generateItemWithExistingParent(ModItems.WOODEN_SLOW_SWORD.get(), Items.WOODEN_SWORD);
 
-		copy(ModItems.DIAMOND_SLOW_SWORD.get(), Items.DIAMOND_SWORD);
+		generateItemWithExistingParent(ModItems.DIAMOND_SLOW_SWORD.get(), Items.DIAMOND_SWORD);
 
 		generateRitualChecker();
 
 		generateHiddenBlockRevealer();
 
-		copy(ModItems.NO_MOD_NAME.get(), Items.BREAD);
+		generateItemWithExistingParent(ModItems.NO_MOD_NAME.get(), Items.BREAD);
 
 		generateFlatItem(ModItems.KEY.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
 
@@ -135,21 +153,21 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 
 		generateFlatItem(ModItems.CHUNK_ENERGY_DISPLAY.get(), ModelTemplates.FLAT_ITEM);
 
-		copy(ModItems.BEACON_ITEM.get(), Items.BEACON);
+		generateItemWithExistingParent(ModItems.BEACON_ITEM.get(), Items.BEACON);
 
-		copy(ModItems.SATURATION_HELMET.get(), Items.CHAINMAIL_HELMET);
+		generateItemWithExistingParent(ModItems.SATURATION_HELMET.get(), Items.CHAINMAIL_HELMET);
 
-		copy(ModItems.ENTITY_CHECKER.get(), Items.BONE);
+		generateItemWithExistingParent(ModItems.ENTITY_CHECKER.get(), Items.BONE);
 
 		generateFlatItem(ModItems.RUBBER.get(), ModelTemplates.FLAT_ITEM);
 
-		copy(ModItems.REPLACEMENT_HELMET.get(), Items.CHAINMAIL_HELMET);
+		generateItemWithExistingParent(ModItems.REPLACEMENT_HELMET.get(), Items.CHAINMAIL_HELMET);
 
-		copy(ModItems.REPLACEMENT_CHESTPLATE.get(), Items.CHAINMAIL_CHESTPLATE);
+		generateItemWithExistingParent(ModItems.REPLACEMENT_CHESTPLATE.get(), Items.CHAINMAIL_CHESTPLATE);
 
-		copy(ModItems.REPLACEMENT_LEGGINGS.get(), Items.CHAINMAIL_LEGGINGS);
+		generateItemWithExistingParent(ModItems.REPLACEMENT_LEGGINGS.get(), Items.CHAINMAIL_LEGGINGS);
 
-		copy(ModItems.REPLACEMENT_BOOTS.get(), Items.CHAINMAIL_BOOTS);
+		generateItemWithExistingParent(ModItems.REPLACEMENT_BOOTS.get(), Items.CHAINMAIL_BOOTS);
 
 		generateFlatItem(ModItems.FLUID_STACK_ITEM.get(), ModModelTemplates.EMPTY);
 
@@ -163,13 +181,15 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 				.getItems()
 				.stream()
 				.map(Supplier::get)
-				.forEach(item -> createFlatItemModel(item, ModelTemplates.FLAT_ITEM));
+				.forEach(item -> generateFlatItem(item, ModelTemplates.FLAT_ITEM));
 
 		generateBucket(ModFluids.STATIC);
 		generateBucket(ModFluids.STATIC_GAS);
 		generateBucket(ModFluids.NORMAL);
 		generateBucket(ModFluids.NORMAL_GAS);
 		generateBucket(ModFluids.PORTAL_DISPLACEMENT);
+
+		generateDefaultBlockModels();
 	}
 
 	// Single item model generation
@@ -296,8 +316,8 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 				);
 	}
 
-	private void copy(final Item item, final Item parent) {
-		itemModelOutput.copy(parent, item);
+	private void generateItemWithExistingParent(final Item item, final Item parent) {
+		itemModelOutput.accept(item, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(parent)));
 	}
 
 	private void generateFlatItem(final Item item, final ModelTemplate modelTemplate, final ResourceLocation texture) {
@@ -355,5 +375,34 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 				textureMapping,
 				modelOutput
 		);
+	}
+
+	// Adapted from ModelProvider.ItemInfoCollector#generateDefaultBlockModels
+	private void generateDefaultBlockModels() {
+		if (!(itemModelOutput instanceof final ModelProvider.ItemInfoCollector itemInfoCollector)) {
+			return;
+		}
+
+		final Map<Item, ClientItem> itemInfos;
+		final Map<Item, Item> copies;
+
+		try {
+			@SuppressWarnings("unchecked") final var itemInfosMap = (Map<Item, ClientItem>) ITEM_INFOS.get(itemInfoCollector);
+			@SuppressWarnings("unchecked") final var copiesMap = (Map<Item, Item>) COPIES.get(itemInfoCollector);
+
+			itemInfos = itemInfosMap;
+			copies = copiesMap;
+		} catch (final IllegalAccessException e) {
+			throw new RuntimeException("Failed to get ItemInfoCollector fields", e);
+		}
+
+		RegistryUtil.getModRegistryEntriesStream(ForgeRegistries.ITEMS).forEach(item -> {
+			if (!copies.containsKey(item)) {
+				if (item instanceof final BlockItem blockItem && !itemInfos.containsKey(blockItem)) {
+					final var modelLocation = ModelLocationUtils.getModelLocation(blockItem.getBlock());
+					itemInfoCollector.accept(blockItem, ItemModelUtils.plainModel(modelLocation));
+				}
+			}
+		});
 	}
 }

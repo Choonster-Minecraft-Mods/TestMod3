@@ -15,6 +15,7 @@ import choonster.testmod3.world.level.block.pipe.BasePipeBlock;
 import choonster.testmod3.world.level.block.slab.ColouredSlabBlock;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.Util;
+import net.minecraft.client.color.item.GrassColorSource;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelOutput;
 import net.minecraft.client.data.models.blockstates.*;
@@ -25,7 +26,9 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
@@ -40,6 +43,8 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class ModBlockModelGenerators extends BlockModelGenerators {
+	private static final Field SUFFIX = ObfuscationReflectionHelper.findField(ModelTemplate.class, "suffix");
+
 	private static final String COLORED_ROTATABLE_PREFIX = "block/colored_rotatable/";
 
 	private static final Map<DyeColor, Block> TERRACOTTA_BLOCKS = Util.make(() -> {
@@ -97,7 +102,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 	@Override
 	public void run() {
-		createSimpleBlockWithExistingParent(ModBlocks.WATER_GRASS.get(), Blocks.SHORT_GRASS);
+		createWaterGrass();
 
 		createSimpleBlockWithExistingParent(ModBlocks.LARGE_COLLISION_TEST.get(), Blocks.WHITE_WOOL);
 
@@ -189,6 +194,13 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 	}
 
 	// Single block model generation
+	private void createWaterGrass() {
+		final var block = ModBlocks.WATER_GRASS.get();
+
+		createSimpleBlockWithExistingParent(block, Blocks.SHORT_GRASS);
+		registerSimpleTintedItemModel(block, ModelLocationUtils.getModelLocation(block), new GrassColorSource());
+	}
+
 	private void createRightClickTest() {
 		final var rightClickTest = ModBlocks.RIGHT_CLICK_TEST.get();
 
@@ -241,7 +253,6 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 		);
 	}
 
-
 	private void createEndPortalFrameFull() {
 		final var endPortalFrameFull = ModBlocks.END_PORTAL_FRAME_FULL.get();
 
@@ -252,7 +263,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		final var model = ModelTemplates.CUBE_BOTTOM_TOP.create(endPortalFrameFull, textureMapping, modelOutput);
 
-		createSimpleBlock(endPortalFrameFull, model);
+		blockStateOutput.accept(createSimpleBlock(endPortalFrameFull, model));
 	}
 
 	private void createMirrorPlane() {
@@ -338,7 +349,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		final var model = ModModelTemplates.FULLBRIGHT.create(block, textureMapping, modelOutput);
 
-		createSimpleBlock(block, model);
+		blockStateOutput.accept(createSimpleBlock(block, model));
 	}
 
 	private void createChest() {
@@ -377,7 +388,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		final var model = template.create(block, new TextureMapping(), modelOutput);
 
-		createSimpleBlock(block, model);
+		blockStateOutput.accept(createSimpleBlock(block, model));
 	}
 
 	private void createCube(final Block block, final Block textureBlock) {
@@ -387,7 +398,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		final var model = ModelTemplates.CUBE_ALL.create(block, textureMapping, modelOutput);
 
-		createSimpleBlock(block, model);
+		blockStateOutput.accept(createSimpleBlock(block, model));
 	}
 
 	private void createPressurePlateDownWithTransforms(final Block block, final Block textureBlock) {
@@ -395,7 +406,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		final var model = ModModelTemplates.PRESSURE_PLATE_DOWN_WITH_TRANSFORMS.create(block, textureMapping, modelOutput);
 
-		createSimpleBlock(block, model);
+		blockStateOutput.accept(createSimpleBlock(block, model));
 	}
 
 	private void createFluidTank(final Block block) {
@@ -403,7 +414,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		final var model = ModelTemplates.CUBE_BOTTOM_TOP.create(block, textureMapping, modelOutput);
 
-		createSimpleBlock(block, model);
+		blockStateOutput.accept(createSimpleBlock(block, model));
 	}
 
 	private void createPipeBlock(final BasePipeBlock block, final Block textureBlock) {
@@ -441,10 +452,8 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		final var model = existingParent(parent).create(block, textureMapping, modelOutput);
 
-		final var suffix = "_conditional";
-		final var conditionalModel = existingParent(parent, suffix).createWithSuffix(
+		final var conditionalModel = existingParent(parent, "_conditional").create(
 				block,
-				suffix,
 				textureMapping,
 				modelOutput
 		);
@@ -488,11 +497,13 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		Arrays.stream(EnumFaceRotation.values())
 				.forEach(faceRotation -> {
-					final var modelLocation = RegistryUtil.getKey(block).withPrefix(COLORED_ROTATABLE_PREFIX);
+					final var modelTemplate = ModModelTemplates.ROTATED_ORIENTABLES.get(faceRotation);
 
-					final var model = ModModelTemplates.ROTATED_ORIENTABLES
-							.get(faceRotation)
-							.create(modelLocation, textureMapping, modelOutput);
+					final var modelLocation = RegistryUtil.getKey(block)
+							.withPrefix(COLORED_ROTATABLE_PREFIX)
+							.withSuffix(getSuffix(modelTemplate));
+
+					final var model = modelTemplate.create(modelLocation, textureMapping, modelOutput);
 
 					models.put(faceRotation, model);
 				});
@@ -561,8 +572,17 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 	private static ModelTemplate existingParent(final Block parent, final String suffix) {
 		return new ModelTemplate(
-				Optional.of(ModelLocationUtils.getModelLocation(parent, suffix)),
-				Optional.empty()
+				Optional.of(ModelLocationUtils.getModelLocation(parent)),
+				Optional.of(suffix)
 		);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static String getSuffix(final ModelTemplate modelTemplate) {
+		try {
+			return ((Optional<String>) SUFFIX.get(modelTemplate)).orElse("");
+		} catch (final IllegalAccessException e) {
+			throw new RuntimeException("Failed to get suffix for ModelTemplate", e);
+		}
 	}
 }
