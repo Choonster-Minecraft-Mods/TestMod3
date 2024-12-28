@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 /**
@@ -30,9 +30,8 @@ public class ModItemModelProperties {
 	private static final ExtraCodecs.LateBoundIdMapper<ResourceLocation, MapCodec<? extends ConditionalItemModelProperty>> CONDITIONAL_ID_MAPPER;
 	private static final ExtraCodecs.LateBoundIdMapper<ResourceLocation, MapCodec<? extends RangeSelectItemModelProperty>> RANGE_SELECT_ID_MAPPER;
 
-	// TODO: Refactor if/when Forge adds a proper event for this
 	@SubscribeEvent
-	public static void registerItemModelProperties(final FMLClientSetupEvent event) {
+	public static void registerItemModelProperties(final FMLConstructModEvent event) {
 		event.enqueueWork(() -> {
 			registerRangeSelect("ticks_since_last_use", TicksSinceLastUse.MAP_CODEC);
 		});
