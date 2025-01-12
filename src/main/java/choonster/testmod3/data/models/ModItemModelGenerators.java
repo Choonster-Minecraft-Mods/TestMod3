@@ -22,6 +22,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -107,7 +108,7 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 
 		generateFlatItem(ModItems.ARROW.get(), ModelTemplates.FLAT_ITEM);
 
-		generateItemWithExistingParent(ModItems.HEIGHT_TESTER.get(), Items.COMPASS);
+		generateItemWithExistingParent(ModItems.HEIGHT_TESTER.get(), Items.COMPASS, "_00");
 
 		generateItemWithExistingParent(ModItems.PIG_SPAWNER_FINITE.get(), Items.PORKCHOP);
 
@@ -115,7 +116,7 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 
 		generateBow(ModItems.CONTINUOUS_BOW.get(), Items.BOW);
 
-		generateItemWithExistingParent(ModItems.RESPAWNER.get(), Items.CLOCK);
+		generateItemWithExistingParent(ModItems.RESPAWNER.get(), Items.CLOCK, "_00");
 
 		generateItemWithExistingParent(ModItems.LOOT_TABLE_TEST.get(), Items.GOLD_INGOT);
 
@@ -153,7 +154,7 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 
 		generateFlatItem(ModItems.CHUNK_ENERGY_DISPLAY.get(), ModelTemplates.FLAT_ITEM);
 
-		generateItemWithExistingParent(ModItems.BEACON_ITEM.get(), Items.BEACON);
+		generateItemWithExistingParent(ModItems.BEACON_ITEM.get(), Blocks.BEACON);
 
 		generateItemWithExistingParent(ModItems.SATURATION_HELMET.get(), Items.CHAINMAIL_HELMET);
 
@@ -317,6 +318,14 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 	}
 
 	private void generateItemWithExistingParent(final Item item, final Item parent) {
+		itemModelOutput.accept(item, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(parent)));
+	}
+
+	private void generateItemWithExistingParent(final Item item, final Item parent, final String suffix) {
+		itemModelOutput.accept(item, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(parent, suffix)));
+	}
+
+	private void generateItemWithExistingParent(final Item item, final Block parent) {
 		itemModelOutput.accept(item, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(parent)));
 	}
 

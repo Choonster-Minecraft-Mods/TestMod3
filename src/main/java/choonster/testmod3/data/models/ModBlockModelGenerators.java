@@ -195,15 +195,17 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 	// Single block model generation
 	private void createWaterGrass() {
-		final var block = ModBlocks.WATER_GRASS.get();
+		final var waterGrass = ModBlocks.WATER_GRASS.get();
+		final var shortGrass = Blocks.SHORT_GRASS;
 
-		final var textureMapping = TextureMapping.cross(Blocks.SHORT_GRASS);
+		final var textureMapping = TextureMapping.cross(shortGrass);
 
-		final var model = ModModelTemplates.TINTED_CROSS_CUTOUT.create(block, textureMapping, modelOutput);
+		final var model = ModModelTemplates.TINTED_CROSS_CUTOUT.create(waterGrass, textureMapping, modelOutput);
+		final var itemModel = createFlatItemModelWithBlockTexture(waterGrass.asItem(), shortGrass);
 
-		blockStateOutput.accept(createSimpleBlock(block, model));
+		blockStateOutput.accept(createSimpleBlock(waterGrass, model));
 
-		registerSimpleTintedItemModel(block, ModelLocationUtils.getModelLocation(block), new GrassColorSource());
+		registerSimpleTintedItemModel(waterGrass, itemModel, new GrassColorSource());
 	}
 
 	private void createRightClickTest() {
@@ -225,6 +227,8 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 								)
 						)
 		);
+
+		registerSimpleItemModel(rightClickTest, withoutEnderEye);
 	}
 
 	private void createRotatableLamp() {
