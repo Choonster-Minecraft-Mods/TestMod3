@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/beacon"
+    "model": "minecraft:block/beacon"
   }
 }
