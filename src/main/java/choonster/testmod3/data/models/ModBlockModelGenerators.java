@@ -144,19 +144,19 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		createHidden();
 
-		createPipeBlock(ModBlocks.BASIC_PIPE.get(), Blocks.BRICKS);
-		createPipeBlock(ModBlocks.FLUID_PIPE.get(), Blocks.GLASS);
+		createPipeBlock(ModBlocks.BASIC_PIPE.get(), Blocks.BRICKS, false);
+		createPipeBlock(ModBlocks.FLUID_PIPE.get(), Blocks.GLASS, true);
 
 		createCommandBlock(ModBlocks.SURVIVAL_COMMAND_BLOCK.get(), Blocks.COMMAND_BLOCK);
 		createCommandBlock(ModBlocks.REPEATING_SURVIVAL_COMMAND_BLOCK.get(), Blocks.REPEATING_COMMAND_BLOCK);
 		createCommandBlock(ModBlocks.CHAIN_SURVIVAL_COMMAND_BLOCK.get(), Blocks.CHAIN_COMMAND_BLOCK);
 
-		createSimpleBlockWithExistingParent(ModBlocks.OAK_SAPLING.get(), Blocks.OAK_SAPLING);
-		createSimpleBlockWithExistingParent(ModBlocks.SPRUCE_SAPLING.get(), Blocks.SPRUCE_SAPLING);
-		createSimpleBlockWithExistingParent(ModBlocks.BIRCH_SAPLING.get(), Blocks.BIRCH_SAPLING);
-		createSimpleBlockWithExistingParent(ModBlocks.JUNGLE_SAPLING.get(), Blocks.JUNGLE_SAPLING);
-		createSimpleBlockWithExistingParent(ModBlocks.ACACIA_SAPLING.get(), Blocks.ACACIA_SAPLING);
-		createSimpleBlockWithExistingParent(ModBlocks.DARK_OAK_SAPLING.get(), Blocks.DARK_OAK_SAPLING);
+		createCrossCutoutBlock(ModBlocks.OAK_SAPLING.get(), Blocks.OAK_SAPLING);
+		createCrossCutoutBlock(ModBlocks.SPRUCE_SAPLING.get(), Blocks.SPRUCE_SAPLING);
+		createCrossCutoutBlock(ModBlocks.BIRCH_SAPLING.get(), Blocks.BIRCH_SAPLING);
+		createCrossCutoutBlock(ModBlocks.JUNGLE_SAPLING.get(), Blocks.JUNGLE_SAPLING);
+		createCrossCutoutBlock(ModBlocks.ACACIA_SAPLING.get(), Blocks.ACACIA_SAPLING);
+		createCrossCutoutBlock(ModBlocks.DARK_OAK_SAPLING.get(), Blocks.DARK_OAK_SAPLING);
 
 		createSimpleBlockWithExistingParent(ModBlocks.INVISIBLE.get(), Blocks.STONE);
 
@@ -197,7 +197,12 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 	private void createWaterGrass() {
 		final var block = ModBlocks.WATER_GRASS.get();
 
-		createSimpleBlockWithExistingParent(block, Blocks.SHORT_GRASS);
+		final var textureMapping = TextureMapping.cross(Blocks.SHORT_GRASS);
+
+		final var model = ModModelTemplates.TINTED_CROSS_CUTOUT.create(block, textureMapping, modelOutput);
+
+		blockStateOutput.accept(createSimpleBlock(block, model));
+
 		registerSimpleTintedItemModel(block, ModelLocationUtils.getModelLocation(block), new GrassColorSource());
 	}
 
@@ -284,16 +289,16 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 				TextureMapping.getBlockTexture(block, planeSuffix + tSuffix)
 		);
 
-		final var mirrorPlane = ModModelTemplates.PLANE.create(block, textureMapping, modelOutput);
+		final var mirrorPlane = ModModelTemplates.PLANE_CUTOUT.create(block, textureMapping, modelOutput);
 
-		final var mirrorPlaneT = ModModelTemplates.PLANE.createWithSuffix(
+		final var mirrorPlaneT = ModModelTemplates.PLANE_CUTOUT.createWithSuffix(
 				block,
 				tSuffix,
 				tTextureMapping,
 				modelOutput
 		);
 
-		final var mirrorPlaneSide = ModModelTemplates.PLANE_SIDE.create(block, textureMapping, modelOutput);
+		final var mirrorPlaneSide = ModModelTemplates.PLANE_SIDE_CUTOUT.create(block, textureMapping, modelOutput);
 
 		final var properties = PropertyDispatch.properties(PlaneBlock.HORIZONTAL_ROTATION, PlaneBlock.VERTICAL_ROTATION);
 
@@ -412,17 +417,22 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 	private void createFluidTank(final Block block) {
 		final var textureMapping = ModTextureMappings.cubeBottomTop(Blocks.GLASS, Blocks.IRON_BLOCK, Blocks.GLASS);
 
-		final var model = ModelTemplates.CUBE_BOTTOM_TOP.create(block, textureMapping, modelOutput);
+		final var model = ModModelTemplates.CUBE_BOTTOM_TOP_CUTOUT.create(block, textureMapping, modelOutput);
 
 		blockStateOutput.accept(createSimpleBlock(block, model));
 	}
 
-	private void createPipeBlock(final BasePipeBlock block, final Block textureBlock) {
+	private void createPipeBlock(final BasePipeBlock block, final Block textureBlock, final boolean cutout) {
 		final var textureMapping = TextureMapping.defaultTexture(textureBlock);
 
-		final var centreModel = ModModelTemplates.PIPE_CENTRE.create(block, textureMapping, modelOutput);
-		final var sideModel = ModModelTemplates.PIPE_PART.create(block, textureMapping, modelOutput);
-		final var itemModel = ModModelTemplates.PIPE_INVENTORY.create(block.asItem(), textureMapping, modelOutput);
+		final var centreModel = (cutout ? ModModelTemplates.PIPE_CENTRE_CUTOUT : ModModelTemplates.PIPE_CENTRE)
+				.create(block, textureMapping, modelOutput);
+
+		final var sideModel = (cutout ? ModModelTemplates.PIPE_PART_CUTOUT : ModModelTemplates.PIPE_PART)
+				.create(block, textureMapping, modelOutput);
+
+		final var itemModel = (cutout ? ModModelTemplates.PIPE_INVENTORY_CUTOUT : ModModelTemplates.PIPE_INVENTORY)
+				.create(block.asItem(), textureMapping, modelOutput);
 
 		blockStateOutput.accept(
 				// createFence handles the horizontal properties
@@ -464,6 +474,17 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 						.with(createBooleanModelDispatch(BlockStateProperties.CONDITIONAL, conditionalModel, model))
 						.with(createFacingDispatch())
 		);
+	}
+
+	private void createCrossCutoutBlock(final Block block, final Block textureBlock) {
+		final var textureMapping = TextureMapping.cross(textureBlock);
+
+		final var model = ModModelTemplates.CROSS_CUTOUT.create(block, textureMapping, modelOutput);
+		final var itemModel = createFlatItemModelWithBlockTexture(block.asItem(), textureBlock);
+
+		blockStateOutput.accept(createSimpleBlock(block, model));
+
+		registerSimpleItemModel(block, itemModel);
 	}
 
 	private void createColoredRotatableBlock(final ColoredRotatableBlock block) {

@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
  * @author Choonster
  */
 public class ModModelTemplates {
+	private static final ResourceLocation CUTOUT = ResourceLocation.withDefaultNamespace("cutout");
+
 	/**
 	 * Centre cube of the pipe model.
 	 */
@@ -44,6 +46,32 @@ public class ModModelTemplates {
 	 * Inventory model for pipe blocks.
 	 */
 	public static final ModelTemplate PIPE_INVENTORY = createModItem(
+			"pipe/inventory",
+			TextureSlot.TEXTURE
+	);
+
+	/**
+	 * Centre cube of the pipe model.
+	 */
+	public static final ModelTemplate PIPE_CENTRE_CUTOUT = createCutoutMod(
+			"pipe/pipe_centre",
+			"_centre",
+			TextureSlot.TEXTURE
+	);
+
+	/**
+	 * North side of the pipe model. Can be rotated for other sides.
+	 */
+	public static final ModelTemplate PIPE_PART_CUTOUT = createCutoutMod(
+			"pipe/pipe_part",
+			"_side",
+			TextureSlot.TEXTURE
+	);
+
+	/**
+	 * Inventory model for pipe blocks.
+	 */
+	public static final ModelTemplate PIPE_INVENTORY_CUTOUT = createCutoutModItem(
 			"pipe/inventory",
 			TextureSlot.TEXTURE
 	);
@@ -84,14 +112,14 @@ public class ModModelTemplates {
 			TextureSlot.TEXTURE
 	);
 
-	public static final ModelTemplate PLANE = createMod(
+	public static final ModelTemplate PLANE_CUTOUT = createCutoutMod(
 			"plane",
 			TextureSlot.SIDE,
 			ModTextureSlots.BASE,
 			ModTextureSlots.PLANE
 	);
 
-	public static final ModelTemplate PLANE_SIDE = createMod(
+	public static final ModelTemplate PLANE_SIDE_CUTOUT = createCutoutMod(
 			"plane_side",
 			"_side",
 			TextureSlot.SIDE,
@@ -120,40 +148,124 @@ public class ModModelTemplates {
 
 	public static final ModelTemplate EMPTY = create();
 
+	public static final ModelTemplate CUBE_BOTTOM_TOP_CUTOUT = createCutoutMc(
+			"cube_bottom_top",
+			TextureSlot.TOP,
+			TextureSlot.BOTTOM,
+			TextureSlot.SIDE
+	);
+
+	public static final ModelTemplate CROSS_CUTOUT = createCutoutMc(
+			"cross",
+			TextureSlot.CROSS
+	);
+
+	public static final ModelTemplate TINTED_CROSS_CUTOUT = createCutoutMc(
+			"tinted_cross",
+			TextureSlot.CROSS
+	);
 
 	private static ModelTemplate create(final TextureSlot... requiredSlots) {
 		return new ModelTemplate(Optional.empty(), Optional.empty(), requiredSlots);
 	}
 
 	private static ModelTemplate createMc(final String model, final TextureSlot... requiredSlots) {
-		return new ModelTemplate(Optional.of(ResourceLocation.withDefaultNamespace("block/" + model)), Optional.empty(), requiredSlots);
+		return new ModelTemplate(
+				Optional.of(ResourceLocation.withDefaultNamespace("block/" + model)),
+				Optional.empty(),
+				requiredSlots
+		);
 	}
 
 	private static ModelTemplate createMcItem(final String model, final TextureSlot... requiredSlots) {
-		return new ModelTemplate(Optional.of(ResourceLocation.withDefaultNamespace("item/" + model)), Optional.empty(), requiredSlots);
+		return new ModelTemplate(
+				Optional.of(ResourceLocation.withDefaultNamespace("item/" + model)),
+				Optional.empty(),
+				requiredSlots
+		);
 	}
 
 	private static ModelTemplate createMcItem(final String model, final String suffix, final TextureSlot... requiredSlots) {
-		return new ModelTemplate(Optional.of(ResourceLocation.withDefaultNamespace("item/" + model)), Optional.of(suffix), requiredSlots);
+		return new ModelTemplate(
+				Optional.of(ResourceLocation.withDefaultNamespace("item/" + model)),
+				Optional.of(suffix),
+				requiredSlots
+		);
 	}
 
 	private static ModelTemplate createMc(final String model, final String suffix, final TextureSlot... requiredSlots) {
-		return new ModelTemplate(Optional.of(ResourceLocation.withDefaultNamespace("block/" + model)), Optional.of(suffix), requiredSlots);
+		return new ModelTemplate(
+				Optional.of(ResourceLocation.withDefaultNamespace("block/" + model)),
+				Optional.of(suffix),
+				requiredSlots
+		);
 	}
 
 	private static ModelTemplate createMod(final String model, final TextureSlot... requiredSlots) {
-		return new ModelTemplate(Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/" + model)), Optional.empty(), requiredSlots);
+		return new ModelTemplate(
+				Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/" + model)),
+				Optional.empty(),
+				requiredSlots
+		);
 	}
 
 	private static ModelTemplate createModItem(final String model, final TextureSlot... requiredSlots) {
-		return new ModelTemplate(Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "item/" + model)), Optional.empty(), requiredSlots);
+		return new ModelTemplate(
+				Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "item/" + model)),
+				Optional.empty(),
+				requiredSlots
+		);
 	}
 
 	private static ModelTemplate createModItem(final String model, final String suffix, final TextureSlot... requiredSlots) {
-		return new ModelTemplate(Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "item/" + model)), Optional.of(suffix), requiredSlots);
+		return new ModelTemplate(
+				Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "item/" + model)),
+				Optional.of(suffix),
+				requiredSlots
+		);
 	}
 
 	private static ModelTemplate createMod(final String model, final String suffix, final TextureSlot... requiredSlots) {
-		return new ModelTemplate(Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/" + model)), Optional.of(suffix), requiredSlots);
+		return new ModelTemplate(
+				Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/" + model)),
+				Optional.of(suffix),
+				requiredSlots
+		);
+	}
+
+	private static ModelTemplate createCutoutMc(final String model, final TextureSlot... requiredSlots) {
+		return new RenderTypeModelTemplate(
+				Optional.of(ResourceLocation.withDefaultNamespace("block/" + model)),
+				Optional.empty(),
+				CUTOUT,
+				requiredSlots
+		);
+	}
+
+	private static ModelTemplate createCutoutMod(final String model, final TextureSlot... requiredSlots) {
+		return new RenderTypeModelTemplate(
+				Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/" + model)),
+				Optional.empty(),
+				CUTOUT,
+				requiredSlots
+		);
+	}
+
+	private static ModelTemplate createCutoutMod(final String model, final String suffix, final TextureSlot... requiredSlots) {
+		return new RenderTypeModelTemplate(
+				Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/" + model)),
+				Optional.of(suffix),
+				CUTOUT,
+				requiredSlots
+		);
+	}
+
+	private static ModelTemplate createCutoutModItem(final String model, final TextureSlot... requiredSlots) {
+		return new RenderTypeModelTemplate(
+				Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "item/" + model)),
+				Optional.empty(),
+				CUTOUT,
+				requiredSlots
+		);
 	}
 }
