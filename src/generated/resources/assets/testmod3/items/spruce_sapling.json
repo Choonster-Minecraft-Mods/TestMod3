@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "testmod3:block/spruce_sapling"
+    "model": "testmod3:item/spruce_sapling"
   }
 }

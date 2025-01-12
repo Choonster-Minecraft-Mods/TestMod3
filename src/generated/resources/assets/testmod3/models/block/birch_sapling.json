@@ -1,3 +1,7 @@
 {
-  "parent": "minecraft:block/birch_sapling"
+  "parent": "minecraft:block/cross",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "cross": "minecraft:block/birch_sapling"
+  }
 }

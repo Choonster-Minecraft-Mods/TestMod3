@@ -1,3 +1,7 @@
 {
-  "parent": "minecraft:block/jungle_sapling"
+  "parent": "minecraft:block/cross",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "cross": "minecraft:block/jungle_sapling"
+  }
 }
