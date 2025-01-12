@@ -92,10 +92,15 @@ public final class MaxHealthCapability {
 		 */
 		@SubscribeEvent
 		public static void playerClone(final PlayerEvent.Clone event) {
-			final var oldMaxHealth = getMaxHealth(event.getOriginal()).orElseThrow(CapabilityNotPresentException::new);
+			final var original = event.getOriginal();
+			original.reviveCaps();
+
+			final var oldMaxHealth = getMaxHealth(original).orElseThrow(CapabilityNotPresentException::new);
 			final var newMaxHealth = getMaxHealth(event.getEntity()).orElseThrow(CapabilityNotPresentException::new);
 
 			newMaxHealth.setBonusMaxHealth(oldMaxHealth.getBonusMaxHealth());
+
+			original.invalidateCaps();
 		}
 
 		/**
