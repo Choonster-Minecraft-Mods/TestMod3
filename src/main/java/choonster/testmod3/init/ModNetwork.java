@@ -2,7 +2,6 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.network.*;
-import choonster.testmod3.network.capability.UpdateMenuFluidTankMessage;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.Channel;
 import net.minecraftforge.network.ChannelBuilder;
@@ -12,7 +11,7 @@ import net.minecraftforge.network.SimpleChannel;
 public class ModNetwork {
 	public static final ResourceLocation CHANNEL_NAME = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "network");
 
-	public static final int NETWORK_VERSION = 6;
+	public static final int NETWORK_VERSION = 7;
 
 	public static SimpleChannel getNetworkChannel() {
 		final var channel = ChannelBuilder.named(CHANNEL_NAME)
@@ -31,7 +30,6 @@ public class ModNetwork {
 				.addMain(LeftClickEmptyMessage.class, LeftClickEmptyMessage.STREAM_CODEC, LeftClickEmptyMessage::handle)
 				.clientbound()
 				.addMain(UpdateChunkEnergyValueMessage.class, UpdateChunkEnergyValueMessage.STREAM_CODEC, UpdateChunkEnergyValueMessage::handle)
-				.addMain(UpdateMenuFluidTankMessage.class, UpdateMenuFluidTankMessage.STREAM_CODEC, UpdateMenuFluidTankMessage::handle)
 				.addMain(openClientScreenMessageClass, OpenClientScreenMessage.STREAM_CODEC, OpenClientScreenMessage::handle)
 				.build();
 
