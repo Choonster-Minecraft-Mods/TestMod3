@@ -13,9 +13,8 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
  * @author Choonster
  */
 public class UniversalBucketFluidHandler extends ItemFluidTank {
-	public UniversalBucketFluidHandler(final ItemStack container, final int capacity) {
-		super(container, capacity);
-		setValidator(ModFluidUtil::hasBucket);
+	public UniversalBucketFluidHandler(final int capacity, final ItemStack container) {
+		super(capacity, ModFluidUtil::hasBucket, container);
 	}
 
 	@Override

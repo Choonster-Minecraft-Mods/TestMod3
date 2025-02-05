@@ -247,19 +247,15 @@ public class ModBucketItem extends Item {
 				.orElse(false);
 	}
 
-	// TODO: Item capabilities
 	/*
 	@Nullable
 	@Override
-	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final CompoundTag nbt) {
-		if (ForgeCapabilities.FLUID_HANDLER_ITEM == null) {
-			return null;
-		}
-
-		return new SerializableCapabilityProvider<>(
+	public ICapabilityProvider getCapabilityProvider() {
+		// TODO: No way to access the ItemStack here
+		return new SimpleCapabilityProvider<>(
 				ForgeCapabilities.FLUID_HANDLER_ITEM,
 				null,
-				new UniversalBucketFluidHandler(stack, capacity)
+				new UniversalBucketFluidHandler(capacity, stack)
 		);
 	}
 	*/

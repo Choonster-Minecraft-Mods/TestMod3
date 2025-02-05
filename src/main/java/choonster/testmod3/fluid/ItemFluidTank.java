@@ -1,37 +1,44 @@
 package choonster.testmod3.fluid;
 
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import choonster.testmod3.init.ModDataComponents;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Predicate;
+
 /**
- * An implementation of {@link IFluidHandlerItem} that stores its contents as a {@link FluidStack} in memory rather than
- * storing them in the vanilla {@link ItemStack} NBT.
+ * An implementation of {@link IFluidHandlerItem} that stores its contents as a {@link FluidStack} component.
  *
  * @author Choonster
  */
-public class ItemFluidTank extends FluidTank implements IFluidHandlerItem, INBTSerializable<CompoundTag> {
+public class ItemFluidTank extends BaseFluidTank implements IFluidHandlerItem {
 	private final ItemStack container;
 
-	public ItemFluidTank(final ItemStack container, final int capacity) {
+	public ItemFluidTank(final int capacity, final ItemStack container) {
 		super(capacity);
 		this.container = container;
 	}
 
-	/**
-	 * Get the container currently acted on by this fluid handler.
-	 * The ItemStack may be different from its initial state, in the case of fluid containers that have different items
-	 * for their filled and empty states.
-	 * May be an empty item if the container was drained and is consumable.
-	 */
+	public ItemFluidTank(final int capacity, final Predicate<FluidStack> validator, final ItemStack container) {
+		super(capacity, validator);
+		this.container = container;
+	}
+
 	@Override
 	public ItemStack getContainer() {
 		return container;
+	}
+
+	@Override
+	public FluidStack getFluid() {
+		return container.getOrDefault(ModDataComponents.CONTAINED_FLUID.get(), FluidStack.EMPTY);
+	}
+
+	@Override
+	protected void setFluid(final FluidStack stack) {
+		container.set(ModDataComponents.CONTAINED_FLUID.get(), stack);
 	}
 
 	@Override
@@ -66,27 +73,18 @@ public class ItemFluidTank extends FluidTank implements IFluidHandlerItem, INBTS
 		if (this == obj) {
 			return true;
 		}
+
 		if (obj == null || getClass() != obj.getClass()) {
 			return false;
 		}
 
-		final FluidTank that = ((FluidTank) obj);
+		final var that = ((ItemFluidTank) obj);
 
 		return getFluid().equals(that.getFluid());
 	}
 
 	@Override
 	public int hashCode() {
-		return fluid.hashCode();
-	}
-
-	@Override
-	public CompoundTag serializeNBT(final HolderLookup.Provider registries) {
-		return writeToNBT(new CompoundTag());
-	}
-
-	@Override
-	public void deserializeNBT(final HolderLookup.Provider registries, final CompoundTag tag) {
-		readFromNBT(tag);
+		return getFluid().hashCode();
 	}
 }

@@ -1,6 +1,7 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.fluid.ItemFluidTank;
 import choonster.testmod3.serialization.VanillaCodecs;
 import choonster.testmod3.world.item.*;
 import choonster.testmod3.world.item.component.lastusetime.LastUseTimeProperties;
@@ -121,6 +122,16 @@ public class ModDataComponents {
 			builder -> builder
 					.persistent(IPigSpawner.CODEC)
 					.networkSynchronized(IPigSpawner.STREAM_CODEC)
+					.cacheEncoding()
+	);
+
+	/**
+	 * @see ItemFluidTank
+	 */
+	public static final RegistryObject<DataComponentType<FluidStack>> CONTAINED_FLUID = register("contained_fluid",
+			builder -> builder
+					.persistent(FluidStack.CODEC)
+					.networkSynchronized(VanillaCodecs.FLUID_STACK_OPTIONAL_STREAM_CODEC)
 					.cacheEncoding()
 	);
 
