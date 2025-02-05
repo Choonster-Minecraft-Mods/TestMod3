@@ -5,6 +5,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 /**
  * Utility methods for {@link Fluid}s.
@@ -34,25 +37,21 @@ public class ModFluidUtil {
 	 * @return A FluidActionResult holding the filled container if successful
 	 */
 	public static FluidActionResult fillContainer(final ItemStack container, final FluidStack fluidStack) {
-		// TODO: Item capabilities
-		/*
-		final ItemStack containerCopy = ItemHandlerHelper.copyStackWithSize(container, 1); // Don't modify the input
+		final var containerCopy = ItemHandlerHelper.copyStackWithSize(container, 1); // Don't modify the input
 
-		final IFluidHandlerItem fluidHandler = FluidUtil
+		final var fluidHandler = FluidUtil
 				.getFluidHandler(containerCopy)
 				.orElseThrow(CapabilityNotPresentException::new);
 
-		final int originalAmount = fluidStack.getAmount();
+		final var originalAmount = fluidStack.getAmount();
 
-		final int amountFilled = fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+		final var amountFilled = fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
 
 		if (amountFilled != originalAmount) {
 			return FluidActionResult.FAILURE;
 		}
 
 		return new FluidActionResult(fluidHandler.getContainer());
-		*/
-		return FluidActionResult.FAILURE;
 	}
 
 	/**
@@ -66,24 +65,20 @@ public class ModFluidUtil {
 	 * @return A FluidActionResult holding the drained container if successful
 	 */
 	public static FluidActionResult drainContainer(final ItemStack container, final FluidStack fluidStack) {
-		// TODO: Item capabilities
-		/*
-		final ItemStack containerCopy = ItemHandlerHelper.copyStackWithSize(container, 1); // Don't modify the input
+		final var containerCopy = ItemHandlerHelper.copyStackWithSize(container, 1); // Don't modify the input
 
-		final IFluidHandlerItem fluidHandler = FluidUtil
+		final var fluidHandler = FluidUtil
 				.getFluidHandler(containerCopy)
 				.orElseThrow(CapabilityNotPresentException::new);
 
-		final int originalAmount = fluidStack.getAmount();
+		final var originalAmount = fluidStack.getAmount();
 
-		final FluidStack fluidDrained = fluidHandler.drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+		final var fluidDrained = fluidHandler.drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);
 
 		if (fluidDrained.getAmount() != originalAmount) {
 			return FluidActionResult.FAILURE;
 		}
 
 		return new FluidActionResult(fluidHandler.getContainer());
-		*/
-		return FluidActionResult.FAILURE;
 	}
 }

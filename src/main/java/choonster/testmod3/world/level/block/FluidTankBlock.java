@@ -146,12 +146,10 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 								.forEach(serverPlayer::sendSystemMessage);
 					}
 
-					// TODO: Item capabilities
-					/*
 					// If the held item is a fluid container, stop processing here so it doesn't try to place its contents
-					return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent() ? InteractionResult.SUCCESS : InteractionResult.PASS;
-					*/
-					return InteractionResult.SUCCESS;
+					return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()
+							? InteractionResult.SUCCESS
+							: InteractionResult.PASS;
 				})
 				.orElse(InteractionResult.PASS);
 	}
