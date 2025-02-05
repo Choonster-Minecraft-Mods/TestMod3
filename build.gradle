@@ -190,9 +190,6 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
-    // Hack fix for now, force jopt-simple to be exactly 5.0.4 because Mojang ships that version, but some transitive dependencies request 6.0+
-    implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -265,6 +262,10 @@ tasks.register('javadocJar', Jar) {
 artifacts {
     archives javadocJar
 }
+
+// IntelliJ no longer downloads javadocs and sources by default.
+// This tells Gradle to force IDEA to do it.
+idea.module { downloadJavadoc = downloadSources = true }
 
 eclipse {
     // Run everytime eclipse builds the code
