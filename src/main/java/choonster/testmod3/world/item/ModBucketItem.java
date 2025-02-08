@@ -1,11 +1,14 @@
 package choonster.testmod3.world.item;
 
+import choonster.testmod3.capability.SimpleCapabilityProvider;
+import choonster.testmod3.fluid.UniversalBucketFluidHandler;
 import choonster.testmod3.util.ModFluidUtil;
 import choonster.testmod3.util.RegistryUtil;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,6 +28,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.SoundActions;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.MutableHashedLinkedMap;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.FluidActionResult;
@@ -63,14 +68,6 @@ public class ModBucketItem extends Item {
 		final var fillResult = ModFluidUtil.fillContainer(stack, fluidStack);
 		return fillResult.isSuccess() ? fillResult.getResult() : ItemStack.EMPTY;
 	}
-
-	// TODO: Item capabilities
-	/*
-	@Override
-	public int getMaxStackSize(final ItemStack stack) {
-		return getFluid(stack).isEmpty() ? super.getMaxStackSize(stack) : 1;
-	}
-	*/
 
 	public void fillCreativeModeTab(final MutableHashedLinkedMap<ItemStack, CreativeModeTab.TabVisibility> entries) {
 		final var empty = empty();
@@ -144,6 +141,7 @@ public class ModBucketItem extends Item {
 			}
 
 			final var filledBucket = pickUpResult.getResult();
+			filledBucket.set(DataComponents.MAX_STACK_SIZE, 1);
 
 			if (!level.isClientSide()) {
 				CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer) player, filledBucket);
@@ -247,18 +245,15 @@ public class ModBucketItem extends Item {
 				.orElse(false);
 	}
 
-	/*
 	@Nullable
 	@Override
-	public ICapabilityProvider getCapabilityProvider() {
-		// TODO: No way to access the ItemStack here
+	public ICapabilityProvider getCapabilityProvider(final ItemStack stack) {
 		return new SimpleCapabilityProvider<>(
 				ForgeCapabilities.FLUID_HANDLER_ITEM,
 				null,
 				new UniversalBucketFluidHandler(capacity, stack)
 		);
 	}
-	*/
 
 	private ItemStack empty() {
 		return new ItemStack(this);

@@ -1,15 +1,21 @@
 package choonster.testmod3.world.item.block;
 
+import choonster.testmod3.capability.SimpleCapabilityProvider;
 import choonster.testmod3.fluid.FluidTankSnapshot;
+import choonster.testmod3.fluid.ItemFluidTank;
 import choonster.testmod3.util.CapabilityNotPresentException;
 import choonster.testmod3.world.level.block.FluidTankBlock;
+import choonster.testmod3.world.level.block.entity.FluidTankBlockEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.MutableHashedLinkedMap;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,15 +60,13 @@ public class FluidTankItem extends BlockItem {
 		);
 	}
 
-	// TODO: Item capabilities
-	/*
+	@Nullable
 	@Override
-	public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final CompoundTag nbt) {
-		if (ForgeCapabilities.FLUID_HANDLER_ITEM == null) {
-			return null;
-		}
-
-		return new SerializableCapabilityProvider<>(ForgeCapabilities.FLUID_HANDLER_ITEM, null, new ItemFluidTank(stack, FluidTankBlockEntity.CAPACITY));
+	public ICapabilityProvider getCapabilityProvider(final ItemStack stack) {
+		return new SimpleCapabilityProvider<>(
+				ForgeCapabilities.FLUID_HANDLER_ITEM,
+				null,
+				new ItemFluidTank(FluidTankBlockEntity.CAPACITY, stack)
+		);
 	}
-	*/
 }
