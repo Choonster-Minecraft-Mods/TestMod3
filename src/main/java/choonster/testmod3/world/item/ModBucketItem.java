@@ -43,8 +43,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A bucket that uses a single {@link Item} for all possible fluids (including the empty fluid).
  * <p>
- * The contained fluid is stored as a {@link FluidStack} in-memory rather than being written to the {@link ItemStack}'s
- * NBT.
+ * The contained fluid is stored as a {@link FluidStack} component.
  * <p>
  * Test for this thread:
  * https://forums.minecraftforge.net/topic/60374-re-skinned-universal-bucket/
