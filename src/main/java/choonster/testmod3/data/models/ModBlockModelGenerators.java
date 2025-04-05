@@ -334,29 +334,20 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 		final var mirrorPlaneSide = plainVariant(ModModelTemplates.PLANE_SIDE_CUTOUT.create(block, textureMapping, modelOutput));
 
 		blockStateOutput.accept(
-				MultiVariantGenerator.dispatch(block)
-						.with(
-								PropertyDispatch.initial(PlaneBlock.HORIZONTAL_ROTATION, PlaneBlock.VERTICAL_ROTATION)
-										.generate((horizontalRotation, verticalRotation) -> {
-											if (horizontalRotation == Direction.NORTH && verticalRotation == PlaneBlock.VerticalRotation.UP) {
-												return mirrorPlaneT;
-											} else if (verticalRotation == PlaneBlock.VerticalRotation.SIDE) {
-												return mirrorPlaneSide;
-											} else {
-												return mirrorPlane;
-											}
-										})
-						)
-						.with(
-								PropertyDispatch.modify(PlaneBlock.HORIZONTAL_ROTATION, PlaneBlock.VERTICAL_ROTATION)
-										.generate((horizontalRotation, verticalRotation) ->
-												switch (verticalRotation) {
-													case UP, SIDE -> HORIZONTAL_FACING.get(horizontalRotation);
-													default ->
-															X_ROT_180.then(HORIZONTAL_FACING_ALT.get(horizontalRotation));
-												}
-										)
-						)
+				MultiVariantGenerator.dispatch(block).with(
+						PropertyDispatch.initial(PlaneBlock.HORIZONTAL_ROTATION, PlaneBlock.VERTICAL_ROTATION)
+								.generate((horizontalRotation, verticalRotation) -> {
+									if (horizontalRotation == Direction.NORTH && verticalRotation == PlaneBlock.VerticalRotation.UP) {
+										return mirrorPlaneT;
+									} else if (verticalRotation == PlaneBlock.VerticalRotation.SIDE) {
+										return mirrorPlaneSide.with(HORIZONTAL_FACING.get(horizontalRotation));
+									} else if (verticalRotation == PlaneBlock.VerticalRotation.UP) {
+										return mirrorPlane.with(HORIZONTAL_FACING.get(horizontalRotation));
+									} else {
+										return mirrorPlane.with(X_ROT_180).with(HORIZONTAL_FACING_ALT.get(horizontalRotation));
+									}
+								})
+				)
 		);
 
 		registerSimpleItemModel(block, mirrorPlaneTModel);
