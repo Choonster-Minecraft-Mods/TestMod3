@@ -37,13 +37,13 @@ public class PlayerEventHandler {
 		}
 
 		final var entityData = player.getPersistentData();
-		final var persistedData = entityData.getCompound(ServerPlayer.PERSISTED_NBT_TAG);
+		final var persistedData = entityData.getCompoundOrEmpty(ServerPlayer.PERSISTED_NBT_TAG);
 		entityData.put(ServerPlayer.PERSISTED_NBT_TAG, persistedData);
 
 		final var key = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "received_items").toString();
 		final TestMod3Lang message;
 
-		if (persistedData.getBoolean(key)) {
+		if (persistedData.getBooleanOr(key, false)) {
 			message = TestMod3Lang.MESSAGE_LOGIN_ALREADY_RECEIVED;
 		} else {
 			persistedData.putBoolean(key, true);

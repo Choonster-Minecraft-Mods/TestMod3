@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -20,6 +21,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.Map;
@@ -76,7 +78,7 @@ public class DimensionReplacementItem extends Item {
 	}
 
 	@Override
-	public void inventoryTick(final ItemStack stack, final Level level, final Entity entity, final int itemSlot, final boolean isSelected) {
+	public void inventoryTick(final ItemStack stack, final Level level, final Entity entity, @Nullable final EquipmentSlot slot, final int slotIndex) {
 		if (level.isClientSide) {
 			return;
 		}
@@ -90,10 +92,10 @@ public class DimensionReplacementItem extends Item {
 				// Try to replace this item
 				InventoryUtils.forEachEntityInventory(
 						entity,
-						inventory -> tryReplaceItem(inventory, itemSlot, stack, replacementCopy),
+						inventory -> tryReplaceItem(inventory, slotIndex, stack, replacementCopy),
 						EntityInventoryType.MAIN, EntityInventoryType.HAND
 				).ifPresent(successfulInventoryType ->
-						LOGGER.info("Replaced item in slot {} of {}'s {} inventory with {}", itemSlot, entity.getName(), successfulInventoryType, replacementCopy.getHoverName())
+						LOGGER.info("Replaced item in slot {} of {}'s {} inventory with {}", slotIndex, entity.getName(), successfulInventoryType, replacementCopy.getHoverName())
 				);
 			});
 		}

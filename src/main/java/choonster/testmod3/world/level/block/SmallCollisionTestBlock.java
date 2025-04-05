@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -44,17 +45,26 @@ public class SmallCollisionTestBlock extends Block {
 		return CODEC;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public VoxelShape getCollisionShape(final BlockState state, final BlockGetter level, final BlockPos pos, final CollisionContext selectionContext) {
+	public VoxelShape getCollisionShape(
+			final BlockState state,
+			final BlockGetter level,
+			final BlockPos pos,
+			final CollisionContext selectionContext
+	) {
 		return COLLISION_SHAPE;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public void entityInside(final BlockState state, final Level level, final BlockPos pos, final Entity entity) {
-		if (entity instanceof LivingEntity) {
-			((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 10, 0));
+	protected void entityInside(
+			final BlockState state,
+			final Level level,
+			final BlockPos pos,
+			final Entity entity,
+			final InsideBlockEffectApplier insideBlockEffectApplier
+	) {
+		if (entity instanceof final LivingEntity livingEntity) {
+			livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 10, 0));
 		}
 	}
 }

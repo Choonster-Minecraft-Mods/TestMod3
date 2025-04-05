@@ -7,7 +7,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,15 +35,21 @@ public class ClientPlayerRightClickBlock extends StaticPressurePlateBlock {
 	}
 
 	@Override
-	public void entityInside(final BlockState state, final Level world, final BlockPos pos, final Entity entity) {
-		if (!world.isClientSide) {
+	protected void entityInside(
+			final BlockState state,
+			final Level level,
+			final BlockPos pos,
+			final Entity entity,
+			final InsideBlockEffectApplier insideBlockEffectApplier
+	) {
+		if (!level.isClientSide) {
 			return;
 		}
 
-		final Player clientPlayer = ClientUtil.getClientPlayer();
+		final var clientPlayer = ClientUtil.getClientPlayer();
 
 		// If on the client side, the colliding Entity is the client player and the total world time is a multiple of 10
-		if (entity == clientPlayer && world.getGameTime() % 10 == 0) {
+		if (entity == clientPlayer && level.getGameTime() % 10 == 0) {
 			// Make the player right click
 			clientPlayer.displayClientMessage(
 					Component.translatable(

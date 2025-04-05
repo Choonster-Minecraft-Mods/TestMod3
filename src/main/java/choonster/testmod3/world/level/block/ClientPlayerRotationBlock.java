@@ -6,7 +6,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -55,14 +55,19 @@ public class ClientPlayerRotationBlock extends StaticPressurePlateBlock {
 		return CODEC;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public void entityInside(final BlockState state, final Level world, final BlockPos pos, final Entity entity) {
-		if (!world.isClientSide) {
+	protected void entityInside(
+			final BlockState state,
+			final Level level,
+			final BlockPos pos,
+			final Entity entity,
+			final InsideBlockEffectApplier insideBlockEffectApplier
+	) {
+		if (!level.isClientSide) {
 			return;
 		}
 
-		final Player clientPlayer = ClientUtil.getClientPlayer();
+		final var clientPlayer = ClientUtil.getClientPlayer();
 
 		if (entity == clientPlayer) {
 			if (Mth.equal(Math.abs(entity.getXRot()), 90.0f)) {
@@ -70,6 +75,7 @@ public class ClientPlayerRotationBlock extends StaticPressurePlateBlock {
 				LOGGER.info("Switching pitch direction! Now pitching {}.", isPitchingUp ? "up" : "down");
 			}
 
+			// TODO: Do we need DistExecutor?
 			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> entity.turn(ROTATION_YAW, isPitchingUp ? ROTATION_PITCH : -ROTATION_PITCH));
 		}
 	}

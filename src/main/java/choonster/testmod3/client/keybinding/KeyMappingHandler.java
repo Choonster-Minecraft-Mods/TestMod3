@@ -75,7 +75,7 @@ public class KeyMappingHandler {
 			if (actionResult == InteractionResult.SUCCESS) {
 				clientPlayer.swing(hand);
 
-				if (!heldItem.isEmpty() && (heldItem.getCount() != heldItemCount || gameMode.hasInfiniteItems())) {
+				if (!heldItem.isEmpty() && (heldItem.getCount() != heldItemCount || clientPlayer.hasInfiniteMaterials())) {
 					MINECRAFT.gameRenderer.itemInHandRenderer.itemUsed(hand);
 				}
 

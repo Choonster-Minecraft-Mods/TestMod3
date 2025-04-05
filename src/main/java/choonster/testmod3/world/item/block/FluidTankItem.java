@@ -8,17 +8,18 @@ import choonster.testmod3.world.level.block.FluidTankBlock;
 import choonster.testmod3.world.level.block.entity.FluidTankBlockEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.MutableHashedLinkedMap;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * A Fluid Tank item.
@@ -35,21 +36,29 @@ public class FluidTankItem extends BlockItem {
 	public void addFluid(final FluidStack fluidStack) {
 		final var filledTank = new ItemStack(this);
 
-		final var fluidHandler = FluidUtil.getFluidHandler(filledTank)
-				.orElseThrow(CapabilityNotPresentException::new);
-
-		fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+		// TODO: Uncomment when Forge reimplements IFluidHandler - https://github.com/MinecraftForge/MinecraftForge/issues/10408
+//		final var fluidHandler = FluidUtil.getFluidHandler(filledTank)
+//				.orElseThrow(CapabilityNotPresentException::new);
+//
+//		fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
 
 		tankItems.add(filledTank);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void appendHoverText(final ItemStack stack, final TooltipContext context, final List<Component> tooltip, final TooltipFlag flag) {
+	public void appendHoverText(
+			final ItemStack stack,
+			final TooltipContext context,
+			final TooltipDisplay display,
+			final Consumer<Component> tooltip,
+			final TooltipFlag flag
+	) {
 		final var fluidHandler = FluidUtil.getFluidHandler(stack)
 				.orElseThrow(CapabilityNotPresentException::new);
 
 		final var fluidTankSnapshots = FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler);
-		tooltip.addAll(FluidTankBlock.getFluidDataForDisplay(fluidTankSnapshots));
+		FluidTankBlock.getFluidDataForDisplay(fluidTankSnapshots).forEach(tooltip);
 	}
 
 	public void fillCreativeModeTab(final MutableHashedLinkedMap<ItemStack, CreativeModeTab.TabVisibility> entries) {

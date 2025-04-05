@@ -93,7 +93,7 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler> ext
 
 		final var inventory = inventoryCodec.parse(
 				ops,
-				tag.getCompound("ItemHandler")
+				tag.getCompoundOrEmpty("ItemHandler")
 		).getOrThrow();
 
 		inventoryOptional.invalidate();
@@ -101,7 +101,7 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler> ext
 
 		nameHolder = NameHolder.CODEC.parse(
 				ops,
-				tag.getCompound("NameHolder")
+				tag.getCompoundOrEmpty("NameHolder")
 		).getOrThrow();
 	}
 

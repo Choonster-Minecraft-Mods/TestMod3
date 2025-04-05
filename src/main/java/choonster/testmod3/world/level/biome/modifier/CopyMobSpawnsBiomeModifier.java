@@ -1,6 +1,7 @@
 package choonster.testmod3.world.level.biome.modifier;
 
 import choonster.testmod3.init.levelgen.ModBiomeModifierSerializers;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EntityType;
@@ -30,16 +31,22 @@ public record CopyMobSpawnsBiomeModifier(
 
 		builder.getMobSpawnSettings()
 				.getSpawner(sourceType.getCategory())
+				.build()
+				.unwrap()
 				.stream()
-				.filter(spawnerData -> spawnerData.type == sourceType)
-				.map(spawnerData -> new MobSpawnSettings.SpawnerData(
-						destinationType,
-						spawnerData.getWeight(),
-						spawnerData.minCount,
-						spawnerData.maxCount
+				.filter(weighted -> weighted.value().type() == sourceType)
+				.map(weighted -> Pair.of(
+						weighted.weight(),
+						new MobSpawnSettings.SpawnerData(
+								destinationType,
+								weighted.value().minCount(),
+								weighted.value().maxCount()
+						)
 				))
-				.toList()
-				.forEach(spawnerData -> builder.getMobSpawnSettings().addSpawn(destinationType.getCategory(), spawnerData));
+				.forEach(pair ->
+						builder.getMobSpawnSettings()
+								.addSpawn(destinationType.getCategory(), pair.getFirst(), pair.getSecond())
+				);
 	}
 
 	@Override

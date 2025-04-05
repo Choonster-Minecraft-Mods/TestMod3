@@ -10,6 +10,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -21,8 +23,8 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.PlayerArmorInvWrapper;
-import net.minecraftforge.items.wrapper.PlayerOffhandInvWrapper;
+import net.minecraftforge.items.wrapper.EntityArmorInvWrapper;
+import net.minecraftforge.items.wrapper.EntityHandsInvWrapper;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Field;
@@ -184,11 +186,11 @@ public class InventoryUtils {
 	 * @return A lazy optional containing the hand inventory, if any
 	 */
 	public static LazyOptional<IItemHandler> getHandInventory(final Entity entity) {
-		if (entity instanceof final Player player) {
-			return LazyOptional.of(() -> new PlayerOffhandInvWrapper(player.getInventory()));
+		if (entity instanceof final LivingEntity livingEntity) {
+			return LazyOptional.of(() -> new EntityHandsInvWrapper(livingEntity));
 		}
 
-		return entity.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.UP);
+		return LazyOptional.empty();
 	}
 
 	/**
@@ -200,11 +202,11 @@ public class InventoryUtils {
 	 * @return A lazy optional containing the inventory, if any
 	 */
 	public static LazyOptional<IItemHandler> getArmourInventory(final Entity entity) {
-		if (entity instanceof final Player player) {
-			return LazyOptional.of(() -> new PlayerArmorInvWrapper(player.getInventory()));
+		if (entity instanceof final LivingEntity livingEntity) {
+			return LazyOptional.of(() -> new EntityArmorInvWrapper(livingEntity));
 		}
 
-		return entity.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.NORTH);
+		return LazyOptional.empty();
 	}
 
 	/**
@@ -227,7 +229,7 @@ public class InventoryUtils {
 	 * <p>
 	 * Only performs the operation on inventory types that exist for the entity.
 	 * <p>
-	 * This is mainly useful in {@link Item#inventoryTick(ItemStack, Level, Entity, int, boolean)}, where the item can be in any of the player's inventories.
+	 * This is mainly useful in {@link Item#inventoryTick(ItemStack, Level, Entity, EquipmentSlot, int)}, where the item can be in any of the player's inventories.
 	 *
 	 * @param entity         The entity
 	 * @param operation      The operation to perform

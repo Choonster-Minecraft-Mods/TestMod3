@@ -8,10 +8,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.Lazy;
 
-import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -34,14 +35,21 @@ public class SwapTestItem extends Item {
 		return otherItem.get();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void appendHoverText(final ItemStack stack, final TooltipContext context, final List<Component> tooltip, final TooltipFlag flag) {
+	public void appendHoverText(
+			final ItemStack stack,
+			final TooltipContext context,
+			final TooltipDisplay display,
+			final Consumer<Component> tooltip,
+			final TooltipFlag flag
+	) {
 		final var otherItem = getOtherItem();
 
 		if (!otherItem.isEmpty()) {
-			tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_SWAP_TEST_WITH_ITEM.getTranslationKey(), otherItem.getHoverName()));
+			tooltip.accept(Component.translatable(TestMod3Lang.ITEM_DESC_SWAP_TEST_WITH_ITEM.getTranslationKey(), otherItem.getHoverName()));
 		} else {
-			tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_SWAP_TEST_WITHOUT_ITEM.getTranslationKey()));
+			tooltip.accept(Component.translatable(TestMod3Lang.ITEM_DESC_SWAP_TEST_WITHOUT_ITEM.getTranslationKey()));
 		}
 	}
 

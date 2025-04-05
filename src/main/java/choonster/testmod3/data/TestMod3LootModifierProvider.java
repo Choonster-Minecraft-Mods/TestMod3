@@ -6,8 +6,13 @@ import choonster.testmod3.world.level.storage.loot.modifiers.BlockEntityNBTLootM
 import choonster.testmod3.world.level.storage.loot.modifiers.ItemLootModifier;
 import choonster.testmod3.world.level.storage.loot.modifiers.LootTableLootModifier;
 import choonster.testmod3.world.level.storage.loot.predicates.MatchBlockTag;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.critereon.DataComponentMatchers;
+import net.minecraft.advancements.critereon.EnchantmentPredicate;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.predicates.DataComponentPredicates;
+import net.minecraft.core.component.predicates.EnchantmentsPredicate;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
@@ -81,16 +86,20 @@ public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
 
 		return MatchTool.toolMatches(
 				ItemPredicate.Builder.item()
-						.withSubPredicate(
-								ItemSubPredicates.ENCHANTMENTS,
-								ItemEnchantmentsPredicate.enchantments(
-										List.of(
-												new EnchantmentPredicate(
-														enchantments.getOrThrow(Enchantments.SILK_TOUCH),
-														MinMaxBounds.Ints.atLeast(1)
+						.withComponents(
+								DataComponentMatchers.Builder.components()
+										.partial(
+												DataComponentPredicates.ENCHANTMENTS,
+												EnchantmentsPredicate.enchantments(
+														List.of(
+																new EnchantmentPredicate(
+																		enchantments.getOrThrow(Enchantments.SILK_TOUCH),
+																		MinMaxBounds.Ints.atLeast(1)
+																)
+														)
 												)
 										)
-								)
+										.build()
 						)
 		);
 	}

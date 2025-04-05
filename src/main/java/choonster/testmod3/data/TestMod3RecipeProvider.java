@@ -8,13 +8,14 @@ import choonster.testmod3.data.crafting.recipe.EnhancedShapedRecipeBuilder;
 import choonster.testmod3.data.crafting.recipe.ShapedArmourUpgradeRecipeBuilder;
 import choonster.testmod3.data.crafting.recipe.ShapelessCuttingRecipeBuilder;
 import choonster.testmod3.data.crafting.recipe.ShapelessFluidContainerRecipeBuilder;
+import choonster.testmod3.init.ModDataComponentPredicates;
 import choonster.testmod3.init.ModFluids;
-import choonster.testmod3.init.ModItemSubPredicates;
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.util.RegistryUtil;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.DataComponentMatchers;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
@@ -224,11 +225,15 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 					.requires(staticGasContainer)
 					.unlockedBy("has_static_gas_bucket", has(ModFluids.STATIC_GAS.getBucket().get()))
 					.unlockedBy("has_static_gas_container", inventoryTrigger(
-							ItemPredicate.Builder.item().withSubPredicate(
-									ModItemSubPredicates.FLUID_CONTAINER.get(),
-									ItemFluidContainerPredicate.Builder.create()
-											.of(staticGas.getFluid())
-											.withAmount(MinMaxBounds.Ints.atLeast(staticGas.getAmount()))
+							ItemPredicate.Builder.item().withComponents(
+									DataComponentMatchers.Builder.components()
+											.partial(
+													ModDataComponentPredicates.FLUID_CONTAINER.get(),
+													ItemFluidContainerPredicate.Builder.create()
+															.of(staticGas.getFluid())
+															.withAmount(MinMaxBounds.Ints.atLeast(staticGas.getAmount()))
+															.build()
+											)
 											.build()
 							)
 					))

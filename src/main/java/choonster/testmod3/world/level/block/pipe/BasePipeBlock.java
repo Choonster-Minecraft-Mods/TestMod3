@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
@@ -14,7 +13,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -28,7 +26,8 @@ import java.util.function.BiFunction;
 public abstract class BasePipeBlock extends PipeBlock {
 	private static final Direction[] FACING_VALUES = Direction.values();
 
-	protected final ImmutableList<VoxelShape> shapes;
+	// TODO: Remove
+//	protected final ImmutableList<VoxelShape> shapes;
 
 	/**
 	 * Gets the connected property for the specified direction.
@@ -41,13 +40,13 @@ public abstract class BasePipeBlock extends PipeBlock {
 	}
 
 	public BasePipeBlock(final BlockBehaviour.Properties properties) {
-		this(4, 4, properties);
+		this(4, properties);
 	}
 
-	public BasePipeBlock(final float coreSize, final float extensionWidth, final BlockBehaviour.Properties properties) {
-		super(0, properties);
+	public BasePipeBlock(final float coreSize, final BlockBehaviour.Properties properties) {
+		super(coreSize * 2, properties);
 
-		shapes = makeShapes(coreSize, extensionWidth);
+		//shapes = makeShapes(coreSize, extensionWidth);
 	}
 
 	@Override
@@ -115,10 +114,10 @@ public abstract class BasePipeBlock extends PipeBlock {
 		return state.getValue(PROPERTY_BY_DIRECTION.get(facing));
 	}
 
-	@Override
-	public VoxelShape getShape(final BlockState state, final BlockGetter level, final BlockPos pos, final CollisionContext context) {
-		return shapes.get(getAABBIndex(state));
-	}
+//	@Override
+//	public VoxelShape getShape(final BlockState state, final BlockGetter level, final BlockPos pos, final CollisionContext context) {
+//		return shapes.get(getAABBIndex(state));
+//	}
 
 	/**
 	 * Creates a list containing a VoxelShape for every possible combination of facing properties.

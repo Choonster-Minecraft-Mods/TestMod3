@@ -66,7 +66,7 @@ public abstract class LockableItemHandlerBlockEntity<INVENTORY extends IItemHand
 
 		final var lock = lockCodec.parse(
 				ops,
-				tag.getCompound("ItemHandler")
+				tag.getCompoundOrEmpty("ItemHandler")
 		).getOrThrow();
 
 		lockOptional.invalidate();

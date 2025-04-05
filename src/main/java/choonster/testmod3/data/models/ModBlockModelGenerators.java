@@ -18,8 +18,13 @@ import net.minecraft.Util;
 import net.minecraft.client.color.item.GrassColorSource;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelOutput;
-import net.minecraft.client.data.models.blockstates.*;
+import net.minecraft.client.data.models.MultiVariant;
+import net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerator;
+import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
+import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.*;
+import net.minecraft.client.renderer.block.model.VariantMutator;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
@@ -29,10 +34,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -69,31 +71,38 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 	});
 
 	/**
-	 * Equivalent to {@link BlockModelGenerators#createHorizontalFacingDispatch()}
+	 * Equivalent to {@link BlockModelGenerators}{@code #ROTATION_HORIZONTAL_FACING}
 	 */
-	private static final Map<Direction, VariantProperties.Rotation> HORIZONTAL_FACING = Util.make(() -> {
-		var map = new EnumMap<Direction, VariantProperties.Rotation>(Direction.class);
-		map.put(Direction.EAST, VariantProperties.Rotation.R90);
-		map.put(Direction.SOUTH, VariantProperties.Rotation.R180);
-		map.put(Direction.WEST, VariantProperties.Rotation.R270);
-		map.put(Direction.NORTH, VariantProperties.Rotation.R0);
+	private static final Map<Direction, VariantMutator> HORIZONTAL_FACING = Util.make(() -> {
+		var map = new EnumMap<Direction, VariantMutator>(Direction.class);
+		map.put(Direction.EAST, Y_ROT_90);
+		map.put(Direction.SOUTH, Y_ROT_180);
+		map.put(Direction.WEST, Y_ROT_270);
+		map.put(Direction.NORTH, NOP);
 		return ImmutableMap.copyOf(map);
 	});
 
 	/**
-	 * Equivalent to {@link BlockModelGenerators#createHorizontalFacingDispatchAlt()}
+	 * Equivalent to {@link BlockModelGenerators}{@code #ROTATION_HORIZONTAL_FACING_ALT}
 	 */
-	private static final Map<Direction, VariantProperties.Rotation> HORIZONTAL_FACING_ALT = Util.make(() -> {
-		var map = new EnumMap<Direction, VariantProperties.Rotation>(Direction.class);
-		map.put(Direction.SOUTH, VariantProperties.Rotation.R0);
-		map.put(Direction.WEST, VariantProperties.Rotation.R90);
-		map.put(Direction.NORTH, VariantProperties.Rotation.R180);
-		map.put(Direction.EAST, VariantProperties.Rotation.R270);
+	private static final Map<Direction, VariantMutator> HORIZONTAL_FACING_ALT = Util.make(() -> {
+		var map = new EnumMap<Direction, VariantMutator>(Direction.class);
+		map.put(Direction.SOUTH, NOP);
+		map.put(Direction.WEST, Y_ROT_90);
+		map.put(Direction.NORTH, Y_ROT_180);
+		map.put(Direction.EAST, Y_ROT_270);
 		return ImmutableMap.copyOf(map);
 	});
 
+
+	private static final PropertyDispatch<VariantMutator> ROTATION_FACING = getDispatch("ROTATION_FACING");
+
+	private static final PropertyDispatch<VariantMutator> ROTATION_HORIZONTAL_FACING = getDispatch(
+			"ROTATION_HORIZONTAL_FACING"
+	);
+
 	public ModBlockModelGenerators(
-			final Consumer<BlockStateGenerator> blockStateOutput,
+			final Consumer<BlockModelDefinitionGenerator> blockStateOutput,
 			final ItemModelOutput itemModelOutput,
 			final BiConsumer<ResourceLocation, ModelInstance> modelOutput
 	) {
@@ -200,7 +209,10 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		final var textureMapping = TextureMapping.cross(shortGrass);
 
-		final var model = ModModelTemplates.TINTED_CROSS_CUTOUT.create(waterGrass, textureMapping, modelOutput);
+		final var model = plainVariant(
+				ModModelTemplates.TINTED_CROSS_CUTOUT.create(waterGrass, textureMapping, modelOutput)
+		);
+
 		final var itemModel = createFlatItemModelWithBlockTexture(waterGrass.asItem(), shortGrass);
 
 		blockStateOutput.accept(createSimpleBlock(waterGrass, model));
@@ -211,14 +223,23 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 	private void createRightClickTest() {
 		final var rightClickTest = ModBlocks.RIGHT_CLICK_TEST.get();
 
-		final var withEnderEye = existingParent(Blocks.WHITE_STAINED_GLASS, "", "_with_ender_eye")
-				.create(rightClickTest, new TextureMapping(), modelOutput);
+		final var withEnderEyeLocation = existingParent(
+				Blocks.WHITE_STAINED_GLASS,
+				"",
+				"_with_ender_eye"
+		).create(rightClickTest, new TextureMapping(), modelOutput);
 
-		final var withoutEnderEye = existingParent(Blocks.BLACK_STAINED_GLASS, "", "_without_ender_eye")
-				.create(rightClickTest, new TextureMapping(), modelOutput);
+		final var withoutEnderEyeLocation = existingParent(
+				Blocks.BLACK_STAINED_GLASS,
+				"",
+				"_without_ender_eye"
+		).create(rightClickTest, new TextureMapping(), modelOutput);
+
+		final var withEnderEye = plainVariant(withEnderEyeLocation);
+		final var withoutEnderEye = plainVariant(withoutEnderEyeLocation);
 
 		blockStateOutput.accept(
-				MultiVariantGenerator.multiVariant(rightClickTest)
+				MultiVariantGenerator.dispatch(rightClickTest)
 						.with(
 								createBooleanModelDispatch(
 										RightClickTestBlock.HAS_ENDER_EYE,
@@ -228,29 +249,33 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 						)
 		);
 
-		registerSimpleItemModel(rightClickTest, withoutEnderEye);
+		registerSimpleItemModel(rightClickTest, withoutEnderEyeLocation);
 	}
 
 	private void createRotatableLamp() {
 		final var rotatableLamp = ModBlocks.ROTATABLE_LAMP.get();
 		final var redstoneLamp = Blocks.REDSTONE_LAMP;
 
-		final var off = ModelTemplates.CUBE_ORIENTABLE.create(
-				rotatableLamp,
-				ModTextureMappings.orientableSingle(rotatableLamp, redstoneLamp),
-				modelOutput
+		final var off = plainVariant(
+				ModelTemplates.CUBE_ORIENTABLE.create(
+						rotatableLamp,
+						ModTextureMappings.orientableSingle(rotatableLamp, redstoneLamp),
+						modelOutput
+				)
 		);
 
 		final var suffix = "_on";
-		final var on = ModelTemplates.CUBE_ORIENTABLE.createWithSuffix(
-				rotatableLamp,
-				suffix,
-				ModTextureMappings.orientableSingle(rotatableLamp, redstoneLamp, suffix),
-				modelOutput
+		final var on = plainVariant(
+				ModelTemplates.CUBE_ORIENTABLE.createWithSuffix(
+						rotatableLamp,
+						suffix,
+						ModTextureMappings.orientableSingle(rotatableLamp, redstoneLamp, suffix),
+						modelOutput
+				)
 		);
 
 		blockStateOutput.accept(
-				MultiVariantGenerator.multiVariant(rotatableLamp)
+				MultiVariantGenerator.dispatch(rotatableLamp)
 						.with(
 								createBooleanModelDispatch(
 										RotatableLampBlock.LIT,
@@ -258,7 +283,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 										off
 								)
 						)
-						.with(createFacingDispatch())
+						.with(ROTATION_FACING)
 		);
 	}
 
@@ -270,7 +295,9 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 				.put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(Blocks.END_STONE))
 				.put(TextureSlot.TOP, TextureMapping.getBlockTexture(Blocks.END_PORTAL_FRAME, "_top"));
 
-		final var model = ModelTemplates.CUBE_BOTTOM_TOP.create(endPortalFrameFull, textureMapping, modelOutput);
+		final var model = plainVariant(
+				ModelTemplates.CUBE_BOTTOM_TOP.create(endPortalFrameFull, textureMapping, modelOutput)
+		);
 
 		blockStateOutput.accept(createSimpleBlock(endPortalFrameFull, model));
 	}
@@ -293,62 +320,46 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 				TextureMapping.getBlockTexture(block, planeSuffix + tSuffix)
 		);
 
-		final var mirrorPlane = ModModelTemplates.PLANE_CUTOUT.create(block, textureMapping, modelOutput);
+		final var mirrorPlane = plainVariant(ModModelTemplates.PLANE_CUTOUT.create(block, textureMapping, modelOutput));
 
-		final var mirrorPlaneT = ModModelTemplates.PLANE_CUTOUT.createWithSuffix(
+		final var mirrorPlaneTModel = ModModelTemplates.PLANE_CUTOUT.createWithSuffix(
 				block,
 				tSuffix,
 				tTextureMapping,
 				modelOutput
 		);
 
-		final var mirrorPlaneSide = ModModelTemplates.PLANE_SIDE_CUTOUT.create(block, textureMapping, modelOutput);
+		final var mirrorPlaneT = plainVariant(mirrorPlaneTModel);
 
-		final var properties = PropertyDispatch.properties(PlaneBlock.HORIZONTAL_ROTATION, PlaneBlock.VERTICAL_ROTATION);
-
-		for (final var state : block.getStateDefinition().getPossibleStates()) {
-			final var horizontalRotation = state.getValue(PlaneBlock.HORIZONTAL_ROTATION);
-			final var verticalRotation = state.getValue(PlaneBlock.VERTICAL_ROTATION);
-
-			if (horizontalRotation == Direction.NORTH && verticalRotation == PlaneBlock.VerticalRotation.UP) {
-				properties.select(
-						horizontalRotation,
-						verticalRotation,
-						Variant.variant()
-								.with(VariantProperties.MODEL, mirrorPlaneT)
-				);
-			} else if (verticalRotation == PlaneBlock.VerticalRotation.SIDE) {
-				properties.select(
-						horizontalRotation,
-						verticalRotation,
-						Variant.variant()
-								.with(VariantProperties.MODEL, mirrorPlaneSide)
-								.with(VariantProperties.Y_ROT, HORIZONTAL_FACING.get(horizontalRotation))
-				);
-			} else if (verticalRotation == PlaneBlock.VerticalRotation.UP) {
-				properties.select(
-						horizontalRotation,
-						verticalRotation,
-						Variant.variant()
-								.with(VariantProperties.Y_ROT, HORIZONTAL_FACING.get(horizontalRotation))
-				);
-			} else {
-				properties.select(
-						horizontalRotation,
-						verticalRotation,
-						Variant.variant()
-								.with(VariantProperties.X_ROT, VariantProperties.Rotation.R180)
-								.with(VariantProperties.Y_ROT, HORIZONTAL_FACING_ALT.get(horizontalRotation))
-				);
-			}
-		}
+		final var mirrorPlaneSide = plainVariant(ModModelTemplates.PLANE_SIDE_CUTOUT.create(block, textureMapping, modelOutput));
 
 		blockStateOutput.accept(
-				MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, mirrorPlane))
-						.with(properties)
+				MultiVariantGenerator.dispatch(block)
+						.with(
+								PropertyDispatch.initial(PlaneBlock.HORIZONTAL_ROTATION, PlaneBlock.VERTICAL_ROTATION)
+										.generate((horizontalRotation, verticalRotation) -> {
+											if (horizontalRotation == Direction.NORTH && verticalRotation == PlaneBlock.VerticalRotation.UP) {
+												return mirrorPlaneT;
+											} else if (verticalRotation == PlaneBlock.VerticalRotation.SIDE) {
+												return mirrorPlaneSide;
+											} else {
+												return mirrorPlane;
+											}
+										})
+						)
+						.with(
+								PropertyDispatch.modify(PlaneBlock.HORIZONTAL_ROTATION, PlaneBlock.VERTICAL_ROTATION)
+										.generate((horizontalRotation, verticalRotation) ->
+												switch (verticalRotation) {
+													case UP, SIDE -> HORIZONTAL_FACING.get(horizontalRotation);
+													default ->
+															X_ROT_180.then(HORIZONTAL_FACING_ALT.get(horizontalRotation));
+												}
+										)
+						)
 		);
 
-		registerSimpleItemModel(block, mirrorPlaneT);
+		registerSimpleItemModel(block, mirrorPlaneTModel);
 	}
 
 	private void createFullbright() {
@@ -356,7 +367,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		final var textureMapping = TextureMapping.cube(block);
 
-		final var model = ModModelTemplates.FULLBRIGHT.create(block, textureMapping, modelOutput);
+		final var model = plainVariant(ModModelTemplates.FULLBRIGHT.create(block, textureMapping, modelOutput));
 
 		blockStateOutput.accept(createSimpleBlock(block, model));
 	}
@@ -371,22 +382,22 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 				)
 				.put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(Blocks.OAK_PLANKS));
 
-		final var model = ModModelTemplates.CHEST.create(block, textureMapping, modelOutput);
+		final var model = plainVariant(ModModelTemplates.CHEST.create(block, textureMapping, modelOutput));
 
 		blockStateOutput.accept(
-				MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, model))
-						.with(createHorizontalFacingDispatch())
+				MultiVariantGenerator.dispatch(block, model)
+						.with(ROTATION_HORIZONTAL_FACING)
 		);
 	}
 
 	private void createHidden() {
 		final var block = ModBlocks.HIDDEN.get();
 
-		final var empty = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/empty");
-		final var hidden = TexturedModel.CUBE.create(block, modelOutput);
+		final var empty = plainVariant(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/empty"));
+		final var hidden = plainVariant(TexturedModel.CUBE.create(block, modelOutput));
 
 		blockStateOutput.accept(
-				MultiVariantGenerator.multiVariant(block)
+				MultiVariantGenerator.dispatch(block)
 						.with(createBooleanModelDispatch(HiddenBlock.HIDDEN, empty, hidden))
 		);
 	}
@@ -395,7 +406,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 	private void createSimpleBlockWithExistingParent(final Block block, final Block parent) {
 		final var template = existingParent(parent);
 
-		final var model = template.create(block, new TextureMapping(), modelOutput);
+		final var model = plainVariant(template.create(block, new TextureMapping(), modelOutput));
 
 		blockStateOutput.accept(createSimpleBlock(block, model));
 	}
@@ -405,7 +416,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 				TextureMapping.getBlockTexture(textureBlock, textureSuffix)
 		);
 
-		final var model = ModelTemplates.CUBE_ALL.create(block, textureMapping, modelOutput);
+		final var model = plainVariant(ModelTemplates.CUBE_ALL.create(block, textureMapping, modelOutput));
 
 		blockStateOutput.accept(createSimpleBlock(block, model));
 	}
@@ -413,7 +424,9 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 	private void createPressurePlateDownWithTransforms(final Block block, final Block textureBlock) {
 		final var textureMapping = TextureMapping.defaultTexture(textureBlock);
 
-		final var model = ModModelTemplates.PRESSURE_PLATE_DOWN_WITH_TRANSFORMS.create(block, textureMapping, modelOutput);
+		final var model = plainVariant(
+				ModModelTemplates.PRESSURE_PLATE_DOWN_WITH_TRANSFORMS.create(block, textureMapping, modelOutput)
+		);
 
 		blockStateOutput.accept(createSimpleBlock(block, model));
 	}
@@ -421,7 +434,9 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 	private void createFluidTank(final Block block) {
 		final var textureMapping = ModTextureMappings.cubeBottomTop(Blocks.GLASS, Blocks.IRON_BLOCK, Blocks.GLASS);
 
-		final var model = ModModelTemplates.CUBE_BOTTOM_TOP_CUTOUT.create(block, textureMapping, modelOutput);
+		final var model = plainVariant(
+				ModModelTemplates.CUBE_BOTTOM_TOP_CUTOUT.create(block, textureMapping, modelOutput)
+		);
 
 		blockStateOutput.accept(createSimpleBlock(block, model));
 	}
@@ -429,11 +444,15 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 	private void createPipeBlock(final BasePipeBlock block, final Block textureBlock, final boolean cutout) {
 		final var textureMapping = TextureMapping.defaultTexture(textureBlock);
 
-		final var centreModel = (cutout ? ModModelTemplates.PIPE_CENTRE_CUTOUT : ModModelTemplates.PIPE_CENTRE)
-				.create(block, textureMapping, modelOutput);
+		final var centreModel = plainVariant(
+				(cutout ? ModModelTemplates.PIPE_CENTRE_CUTOUT : ModModelTemplates.PIPE_CENTRE)
+						.create(block, textureMapping, modelOutput)
+		);
 
-		final var sideModel = (cutout ? ModModelTemplates.PIPE_PART_CUTOUT : ModModelTemplates.PIPE_PART)
-				.create(block, textureMapping, modelOutput);
+		final var sideModel = plainVariant(
+				(cutout ? ModModelTemplates.PIPE_PART_CUTOUT : ModModelTemplates.PIPE_PART)
+						.create(block, textureMapping, modelOutput)
+		);
 
 		final var itemModel = (cutout ? ModModelTemplates.PIPE_INVENTORY_CUTOUT : ModModelTemplates.PIPE_INVENTORY)
 				.create(block.asItem(), textureMapping, modelOutput);
@@ -442,20 +461,17 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 				// createFence handles the horizontal properties
 				((MultiPartGenerator) createFence(block, centreModel, sideModel))
 						.with(
-								Condition.condition().term(BlockStateProperties.UP, true),
-								Variant.variant()
-										.with(VariantProperties.MODEL, sideModel)
-										.with(VariantProperties.X_ROT, VariantProperties.Rotation.R270)
-										.with(VariantProperties.UV_LOCK, true)
+								condition().term(BlockStateProperties.UP, true),
+								sideModel
+										.with(X_ROT_270)
+										.with(UV_LOCK)
 						)
 						.with(
-								Condition.condition().term(BlockStateProperties.UP, true),
-								Variant.variant()
-										.with(VariantProperties.MODEL, sideModel)
-										.with(VariantProperties.X_ROT, VariantProperties.Rotation.R90)
-										.with(VariantProperties.UV_LOCK, true)
+								condition().term(BlockStateProperties.UP, true),
+								sideModel
+										.with(X_ROT_90)
+										.with(UV_LOCK)
 						)
-
 		);
 
 		registerSimpleItemModel(block, itemModel);
@@ -464,26 +480,28 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 	private void createCommandBlock(final Block block, final Block parent) {
 		final var textureMapping = new TextureMapping();
 
-		final var model = existingParent(parent).create(block, textureMapping, modelOutput);
+		final var model = plainVariant(existingParent(parent).create(block, textureMapping, modelOutput));
 
 		final var suffix = "_conditional";
-		final var conditionalModel = existingParent(parent, suffix, suffix).create(
-				block,
-				textureMapping,
-				modelOutput
+		final var conditionalModel = plainVariant(
+				existingParent(parent, suffix, suffix).create(
+						block,
+						textureMapping,
+						modelOutput
+				)
 		);
 
 		blockStateOutput.accept(
-				MultiVariantGenerator.multiVariant(block)
+				MultiVariantGenerator.dispatch(block)
 						.with(createBooleanModelDispatch(BlockStateProperties.CONDITIONAL, conditionalModel, model))
-						.with(createFacingDispatch())
+						.with(ROTATION_FACING)
 		);
 	}
 
 	private void createCrossCutoutBlock(final Block block, final Block textureBlock) {
 		final var textureMapping = TextureMapping.cross(textureBlock);
 
-		final var model = ModModelTemplates.CROSS_CUTOUT.create(block, textureMapping, modelOutput);
+		final var model = plainVariant(ModModelTemplates.CROSS_CUTOUT.create(block, textureMapping, modelOutput));
 		final var itemModel = createFlatItemModelWithBlockTexture(block.asItem(), textureBlock);
 
 		blockStateOutput.accept(createSimpleBlock(block, model));
@@ -494,23 +512,24 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 	private void createColoredRotatableBlock(final ColoredRotatableBlock block) {
 		final var textureMapping = ModTextureMappings.coloredRotatable(block.getColor(), "_front");
 
-		final var model = ModelTemplates.CUBE_ORIENTABLE.create(
+		final var modelLocation = ModelTemplates.CUBE_ORIENTABLE.create(
 				RegistryUtil.getKey(block).withPrefix(COLORED_ROTATABLE_PREFIX),
 				textureMapping,
 				modelOutput
 		);
 
+		final var model = plainVariant(modelLocation);
+
 		blockStateOutput.accept(
 				MultiVariantGenerator
-						.multiVariant(
+						.dispatch(
 								block,
-								Variant.variant()
-										.with(VariantProperties.MODEL, model)
+								model
 						)
-						.with(createFacingDispatch())
+						.with(ROTATION_FACING)
 		);
 
-		registerSimpleItemModel(block, model);
+		registerSimpleItemModel(block, modelLocation);
 	}
 
 	private void createColoredMultiRotatableBlock(final ColoredMultiRotatableBlock block) {
@@ -519,7 +538,8 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 				"_front_multi"
 		);
 
-		final var models = new EnumMap<EnumFaceRotation, ResourceLocation>(EnumFaceRotation.class);
+		final var modelLocations = new EnumMap<EnumFaceRotation, ResourceLocation>(EnumFaceRotation.class);
+		final var models = new EnumMap<EnumFaceRotation, MultiVariant>(EnumFaceRotation.class);
 
 		Arrays.stream(EnumFaceRotation.values())
 				.forEach(faceRotation -> {
@@ -530,27 +550,22 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 							.withSuffix(getSuffix(modelTemplate));
 
 					final var model = modelTemplate.create(modelLocation, textureMapping, modelOutput);
+					final var variant = plainVariant(model);
 
-					models.put(faceRotation, model);
+					modelLocations.put(faceRotation, model);
+					models.put(faceRotation, variant);
 				});
 
 		blockStateOutput.accept(
-				MultiVariantGenerator.multiVariant(block)
+				MultiVariantGenerator.dispatch(block)
 						.with(
-								PropertyDispatch.property(ColoredMultiRotatableBlock.FACE_ROTATION)
-										.generate(
-												faceRotation ->
-														Variant.variant()
-																.with(
-																		VariantProperties.MODEL,
-																		models.get(faceRotation)
-																)
-										)
+								PropertyDispatch.initial(ColoredMultiRotatableBlock.FACE_ROTATION)
+										.generate(models::get)
 						)
-						.with(createFacingDispatch())
+						.with(ROTATION_FACING)
 		);
 
-		registerSimpleItemModel(block, models.get(EnumFaceRotation.UP));
+		registerSimpleItemModel(block, modelLocations.get(EnumFaceRotation.UP));
 	}
 
 	private void createColouredSlab(final ColouredSlabBlock block) {
@@ -558,19 +573,21 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		final var textureMapping = TextureMapping.cube(modelBlock);
 
-		final var bottom = ModelTemplates.SLAB_BOTTOM.create(block, textureMapping, modelOutput);
-		final var top = ModelTemplates.SLAB_TOP.create(block, textureMapping, modelOutput);
+		final var bottomLocation = ModelTemplates.SLAB_BOTTOM.create(block, textureMapping, modelOutput);
+		final var bottom = plainVariant(bottomLocation);
+		final var top = plainVariant(ModelTemplates.SLAB_TOP.create(block, textureMapping, modelOutput));
+		final var doubleSlab = plainVariant(ModelLocationUtils.getModelLocation(modelBlock));
 
 		blockStateOutput.accept(
 				BlockModelGenerators.createSlab(
 						block,
 						bottom,
 						top,
-						ModelLocationUtils.getModelLocation(modelBlock)
+						doubleSlab
 				)
 		);
 
-		registerSimpleItemModel(block, bottom);
+		registerSimpleItemModel(block, bottomLocation);
 	}
 
 	private void createFluidBlock(final FluidGroup<?, ?, ?, ?, ?> fluidGroup) {
@@ -583,7 +600,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		final var textureMapping = TextureMapping.particle(basicFluidType.getStillTexture());
 
-		final var model = ModelTemplates.PARTICLE_ONLY.create(block, textureMapping, modelOutput);
+		final var model = plainVariant(ModelTemplates.PARTICLE_ONLY.create(block, textureMapping, modelOutput));
 
 		blockStateOutput.accept(createSimpleBlock(block, model));
 	}
@@ -610,5 +627,11 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 		} catch (final IllegalAccessException e) {
 			throw new RuntimeException("Failed to get suffix for ModelTemplate", e);
 		}
+	}
+
+	private static PropertyDispatch<VariantMutator> getDispatch(final String fieldName) {
+		return Objects.requireNonNull(
+				ObfuscationReflectionHelper.getPrivateValue(BlockModelGenerators.class, null, fieldName)
+		);
 	}
 }

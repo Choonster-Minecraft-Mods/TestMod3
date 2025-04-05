@@ -19,20 +19,22 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -45,7 +47,7 @@ import java.util.stream.Stream;
  *
  * @author Choonster
  */
-public class ReplacementArmourItem extends ArmorItem {
+public class ReplacementArmourItem extends Item {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
 	/**
@@ -54,12 +56,10 @@ public class ReplacementArmourItem extends ArmorItem {
 	private final Set<Function<RegistryAccess, ItemStack>> replacementItems;
 
 	public ReplacementArmourItem(
-			final ArmorMaterial material,
-			final ArmorType type,
 			final Collection<Function<RegistryAccess, ItemStack>> replacementItems,
 			final Properties properties
 	) {
-		super(material, type, properties);
+		super(properties);
 
 		this.replacementItems = ImmutableSet.copyOf(replacementItems);
 	}
@@ -197,16 +197,16 @@ public class ReplacementArmourItem extends ArmorItem {
 	/**
 	 * Called every tick while the item is in a player's inventory (including while worn).
 	 *
-	 * @param stack      The ItemStack of this item
-	 * @param world      The entity's world
-	 * @param entity     The entity
-	 * @param itemSlot   The slot containing this item
-	 * @param isSelected Is the entity holding this item?
+	 * @param stack     The ItemStack of this item
+	 * @param level     The entity's level
+	 * @param entity    The entity
+	 * @param slot      The equipment slot of this item
+	 * @param slotIndex The slot containing this item
 	 */
 	@Override
-	public void inventoryTick(final ItemStack stack, final Level world, final Entity entity, final int itemSlot, final boolean isSelected) {
+	public void inventoryTick(final ItemStack stack, final Level level, final Entity entity, @Nullable final EquipmentSlot slot, final int slotIndex) {
 		// If this isn't the server or the entity isn't living, do nothing
-		if (world.isClientSide || !(entity instanceof final LivingEntity livingEntity)) {
+		if (level.isClientSide || !(entity instanceof final LivingEntity livingEntity)) {
 			return;
 		}
 
@@ -218,18 +218,25 @@ public class ReplacementArmourItem extends ArmorItem {
 			// Try to restore the entity's armour
 			InventoryUtils.forEachEntityInventory(
 					entity,
-					inventory -> tryRestoreArmour(inventory, itemSlot, stack, livingEntity),
+					inventory -> tryRestoreArmour(inventory, slotIndex, stack, livingEntity),
 					EntityInventoryType.MAIN, EntityInventoryType.HAND
 			).ifPresent(successfulInventoryType ->
-					LOGGER.info("Restored saved armour for slot {} of {}'s {} inventory", itemSlot, entity.getName(), successfulInventoryType)
+					LOGGER.info("Restored saved armour for slot {} of {}'s {} inventory", slotIndex, entity.getName(), successfulInventoryType)
 			);
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void appendHoverText(final ItemStack stack, final TooltipContext context, final List<Component> tooltip, final TooltipFlag flag) {
-		tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_ARMOUR_REPLACEMENT_EQUIP.getTranslationKey()));
-		tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_ARMOUR_REPLACEMENT_UNEQUIP.getTranslationKey()));
+	public void appendHoverText(
+			final ItemStack stack,
+			final TooltipContext context,
+			final TooltipDisplay display,
+			final Consumer<Component> tooltip,
+			final TooltipFlag flag
+	) {
+		tooltip.accept(Component.translatable(TestMod3Lang.ITEM_DESC_ARMOUR_REPLACEMENT_EQUIP.getTranslationKey()));
+		tooltip.accept(Component.translatable(TestMod3Lang.ITEM_DESC_ARMOUR_REPLACEMENT_UNEQUIP.getTranslationKey()));
 	}
 
 	public record ReplacedArmour(ImmutableList<Entry> replacedArmour) {

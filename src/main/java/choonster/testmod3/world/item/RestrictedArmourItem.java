@@ -6,18 +6,18 @@ import choonster.testmod3.util.InventoryUtils.EntityInventoryType;
 import com.mojang.logging.LogUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.equipment.ArmorMaterial;
-import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * An armour item that will be deleted as soon as it's unequipped (i.e. in a player's inventory or on the ground).
@@ -27,32 +27,32 @@ import java.util.List;
  *
  * @author Choonster
  */
-public class RestrictedArmourItem extends ArmorItem {
+public class RestrictedArmourItem extends Item {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-	public RestrictedArmourItem(final ArmorMaterial material, final ArmorType type, final Item.Properties properties) {
-		super(material, type, properties);
+	public RestrictedArmourItem(final Item.Properties properties) {
+		super(properties);
 	}
 
 	/**
 	 * Called every tick while the item is in a player's inventory (including while worn).
 	 *
-	 * @param stack      The ItemStack of this item
-	 * @param world      The entity's world
-	 * @param entity     The entity
-	 * @param itemSlot   The slot containing this item
-	 * @param isSelected Is the entity holding this item?
+	 * @param stack     The ItemStack of this item
+	 * @param level     The entity's level
+	 * @param entity    The entity
+	 * @param slot      The equipment slot of this item
+	 * @param slotIndex The slot containing this item
 	 */
 	@Override
-	public void inventoryTick(final ItemStack stack, final Level world, final Entity entity, final int itemSlot, final boolean isSelected) {
-		if (!world.isClientSide) { // If this is the server,
+	public void inventoryTick(final ItemStack stack, final Level level, final Entity entity, @Nullable final EquipmentSlot slot, final int slotIndex) {
+		if (!level.isClientSide) { // If this is the server,
 			// Try to remove the item from the entity's inventories
 			InventoryUtils.forEachEntityInventory(
 					entity,
-					inventory -> tryRemoveStack(inventory, itemSlot, stack),
+					inventory -> tryRemoveStack(inventory, slotIndex, stack),
 					EntityInventoryType.MAIN, EntityInventoryType.HAND
 			).ifPresent(successfulInventoryType ->
-					LOGGER.info("Restricted armour deleted from slot {} of {}'s {} inventory", itemSlot, entity.getName(), successfulInventoryType)
+					LOGGER.info("Restricted armour deleted from slot {} of {}'s {} inventory", slotIndex, entity.getName(), successfulInventoryType)
 			);
 		}
 	}
@@ -81,8 +81,15 @@ public class RestrictedArmourItem extends ArmorItem {
 		return true; // Skip the rest of the update
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void appendHoverText(final ItemStack stack, final TooltipContext context, final List<Component> tooltip, final TooltipFlag flag) {
-		tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_ARMOUR_RESTRICTED.getTranslationKey()));
+	public void appendHoverText(
+			final ItemStack stack,
+			final TooltipContext context,
+			final TooltipDisplay tooltipDisplay,
+			final Consumer<Component> tooltip,
+			final TooltipFlag flag
+	) {
+		tooltip.accept(Component.translatable(TestMod3Lang.ITEM_DESC_ARMOUR_RESTRICTED.getTranslationKey()));
 	}
 }

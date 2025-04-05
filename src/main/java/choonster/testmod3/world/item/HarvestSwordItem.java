@@ -5,8 +5,6 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ToolMaterial;
@@ -51,6 +49,11 @@ public class HarvestSwordItem extends Item {
 	 */
 	private static final float ATTACK_SPEED = -2.4f;
 
+	/**
+	 * The amount of time to disable blocking after an attack
+	 */
+	private static final float DISABLE_BLOCKING_FOR_SECONDS = 0.0f;
+
 	public HarvestSwordItem(final ToolMaterial toolMaterial, final Item.Properties properties) {
 		super(applyToolProperties(toolMaterial, properties));
 	}
@@ -58,28 +61,23 @@ public class HarvestSwordItem extends Item {
 	@Override
 	public boolean canPerformAction(final ItemStack stack, final ToolAction toolAction) {
 		return Stream.of(
-				ToolActions.DEFAULT_SWORD_ACTIONS,
-				ToolActions.DEFAULT_PICKAXE_ACTIONS,
 				ToolActions.DEFAULT_AXE_ACTIONS,
 				ToolActions.DEFAULT_SHOVEL_ACTIONS
 		).anyMatch(toolActions -> toolActions.contains(toolAction));
 	}
 
-	@Override
-	public boolean hurtEnemy(final ItemStack p_40994_, final LivingEntity p_40995_, final LivingEntity p_40996_) {
-		return true;
-	}
+	private static Item.Properties applyToolProperties(final ToolMaterial toolMaterial, Item.Properties properties) {
+		properties = toolMaterial.applyToolProperties(
+				properties,
+				BlockTags.MINEABLE_WITH_PICKAXE,
+				BASE_ATTACK_DAMAGE,
+				ATTACK_SPEED,
+				DISABLE_BLOCKING_FOR_SECONDS
+		);
 
-	@Override
-	public void postHurtEnemy(final ItemStack p_345276_, final LivingEntity p_342379_, final LivingEntity p_342949_) {
-		// Only reduce the durability by 1 point (like swords do) instead of 2 (like tools do)
-		p_345276_.hurtAndBreak(1, p_342949_, EquipmentSlot.MAINHAND);
-	}
+		properties = toolMaterial.applySwordProperties(properties, BASE_ATTACK_DAMAGE, ATTACK_SPEED);
 
-	private static Item.Properties applyToolProperties(final ToolMaterial toolMaterial, final Item.Properties properties) {
-		return toolMaterial
-				.applyToolProperties(properties, BlockTags.MINEABLE_WITH_PICKAXE, BASE_ATTACK_DAMAGE, ATTACK_SPEED)
-				.component(DataComponents.TOOL, createToolProperties(toolMaterial));
+		return properties.component(DataComponents.TOOL, createToolProperties(toolMaterial));
 	}
 
 	@SuppressWarnings("deprecation")
@@ -99,8 +97,9 @@ public class HarvestSwordItem extends Item {
 		rules.addAll(minesAndDrops.iterator());
 
 		rules.add(Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), DIG_SPEED_COBWEB));
+		rules.add(Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE));
 		rules.add(Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), DIG_SPEED_SWORD));
 
-		return new Tool(rules.build(), DIG_SPEED_DEFAULT, 1);
+		return new Tool(rules.build(), DIG_SPEED_DEFAULT, 1, true);
 	}
 }

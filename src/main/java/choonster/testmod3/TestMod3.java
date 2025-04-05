@@ -53,7 +53,7 @@ public class TestMod3 {
 		ModCreativeTabs.initialise(modEventBus);
 		ModDataComponents.initialise(modEventBus);
 		ModClientScreenTypes.initialise(modEventBus);
-		ModItemSubPredicates.initialise(modEventBus);
+		ModDataComponentPredicates.initialise(modEventBus);
 	}
 
 	@SubscribeEvent

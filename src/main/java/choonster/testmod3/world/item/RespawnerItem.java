@@ -26,8 +26,9 @@ public class RespawnerItem extends Item {
 		}
 
 		final var serverPlayer = (ServerPlayer) player;
-		final var respawnPosition = serverPlayer.getRespawnPosition();
-		final var respawnLevel = serverPlayer.server.getLevel(serverPlayer.getRespawnDimension());
+		final var respawnConfig = serverPlayer.getRespawnConfig();
+		final var respawnPosition = respawnConfig != null ? respawnConfig.pos() : null;
+		final var respawnLevel = respawnConfig != null ? serverPlayer.server.getLevel(respawnConfig.dimension()) : null;
 
 		if (respawnPosition == null || respawnLevel == null) {
 			serverPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_RESPAWNER_NO_SPAWN_LOCATION.getTranslationKey()));

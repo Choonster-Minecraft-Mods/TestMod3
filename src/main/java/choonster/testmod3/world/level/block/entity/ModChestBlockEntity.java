@@ -3,6 +3,7 @@ package choonster.testmod3.world.level.block.entity;
 import choonster.testmod3.capability.lock.Lock;
 import choonster.testmod3.init.ModBlockEntities;
 import choonster.testmod3.text.TestMod3Lang;
+import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.world.inventory.IMenuCallbacks;
 import choonster.testmod3.world.inventory.itemhandler.BlockEntityLootItemHandler;
 import choonster.testmod3.world.inventory.menu.ModChestMenu;
@@ -122,5 +123,12 @@ public class ModChestBlockEntity extends LootItemHandlerBlockEntity implements I
 	@Override
 	public boolean isUsableByPlayer(final Player player) {
 		return level.getBlockEntity(worldPosition) == this && player.distanceToSqr(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5) <= 64;
+	}
+
+	@Override
+	public void preRemoveSideEffects(final BlockPos p_397404_, final BlockState p_395805_) {
+		if (level != null) {
+			InventoryUtils.dropItemHandlerContents(level, worldPosition, getInventory());
+		}
 	}
 }

@@ -291,12 +291,11 @@ public class ModItems {
 
 	public static final RegistryObject<PotionEffectArmourItem> SATURATION_HELMET = registerItem("saturation_helmet",
 			(properties) -> new PotionEffectArmourItem(
-					ArmorMaterials.CHAINMAIL,
-					ArmorType.HELMET,
 					new MobEffectInstance(MobEffects.SATURATION, 1, 0, true, false),
 					properties
 			),
 			defaultItemProperties()
+					.humanoidArmor(ArmorMaterials.CHAINMAIL, ArmorType.HELMET)
 	);
 
 	public static final RegistryObject<EntityCheckerItem> ENTITY_CHECKER = registerItem("entity_checker",
@@ -313,25 +312,26 @@ public class ModItems {
 	public static final RegistryObject<ReplacementArmourItem> REPLACEMENT_HELMET;
 
 	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_CHESTPLATE = registerItem("replacement_chestplate",
-			(properties) -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT, ArmorType.CHESTPLATE, properties),
+			RestrictedArmourItem::new,
 			defaultItemProperties()
+					.humanoidArmor(ModArmorMaterials.REPLACEMENT, ArmorType.CHESTPLATE)
 	);
 
 	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_LEGGINGS = registerItem("replacement_leggings",
-			(properties) -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT, ArmorType.LEGGINGS, properties),
+			RestrictedArmourItem::new,
 			defaultItemProperties()
+					.humanoidArmor(ModArmorMaterials.REPLACEMENT, ArmorType.LEGGINGS)
 	);
 
 	public static final RegistryObject<RestrictedArmourItem> REPLACEMENT_BOOTS = registerItem("replacement_boots",
-			(properties) -> new RestrictedArmourItem(ModArmorMaterials.REPLACEMENT, ArmorType.BOOTS, properties),
+			RestrictedArmourItem::new,
 			defaultItemProperties()
+					.humanoidArmor(ModArmorMaterials.REPLACEMENT, ArmorType.BOOTS)
 	);
 
 	static {
 		REPLACEMENT_HELMET = registerItem("replacement_helmet",
 				(properties) -> new ReplacementArmourItem(
-						ModArmorMaterials.REPLACEMENT,
-						ArmorType.HELMET,
 						ImmutableSet.of(
 								(registryAccess) -> {
 									final var enchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT);
@@ -345,6 +345,7 @@ public class ModItems {
 						properties
 				),
 				defaultItemProperties()
+						.humanoidArmor(ModArmorMaterials.REPLACEMENT, ArmorType.HELMET)
 		);
 	}
 

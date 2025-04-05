@@ -2,13 +2,14 @@ package choonster.testmod3.advancements.criterion;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.NbtPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
@@ -28,7 +29,7 @@ public record ItemFluidContainerPredicate(
 		Optional<HolderSet<Fluid>> fluid,
 		MinMaxBounds.Ints amount,
 		Optional<NbtPredicate> nbt
-) implements ItemSubPredicate {
+) implements DataComponentPredicate {
 	public static Codec<ItemFluidContainerPredicate> CODEC = RecordCodecBuilder.create(builder ->
 			builder.group(
 
@@ -47,8 +48,13 @@ public record ItemFluidContainerPredicate(
 			).apply(builder, ItemFluidContainerPredicate::new)
 	);
 
+	// TODO: Reimplement if/when Forge reimplements IFluidHandler - https://github.com/MinecraftForge/MinecraftForge/issues/10408
 	@Override
-	public boolean matches(final ItemStack item) {
+	public boolean matches(final DataComponentGetter getter) {
+		if (!(getter instanceof final ItemStack item)) {
+			return false;
+		}
+
 		final var fluidContained = FluidUtil.getFluidContained(item);
 		if (fluidContained.isEmpty()) {
 			return false;

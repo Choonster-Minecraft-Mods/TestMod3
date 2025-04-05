@@ -3,7 +3,6 @@ package choonster.testmod3.world.item.crafting.recipe;
 import choonster.testmod3.init.ModCrafting;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 
@@ -34,7 +33,7 @@ public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
 			for (var i = 0; i < input.size(); i++) { // For each slot in the crafting inventory,
 				final var ingredient = input.getItem(i); // Get the ingredient in the slot
 
-				if (!ingredient.isEmpty() && ingredient.getItem() instanceof ArmorItem) { // If it's an armour item,
+				if (!ingredient.isEmpty() && ingredient.isDamageableItem()) { // If it's a damageable item,
 					// Clone its item damage, clamping it to the output's damage range
 					final var newDamage = Mth.clamp(ingredient.getDamageValue(), 0, output.getMaxDamage());
 					output.setDamageValue(newDamage);

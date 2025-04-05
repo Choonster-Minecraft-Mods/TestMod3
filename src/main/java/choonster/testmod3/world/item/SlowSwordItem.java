@@ -1,21 +1,14 @@
 package choonster.testmod3.world.item;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.InvocationTargetException;
@@ -49,26 +42,6 @@ public class SlowSwordItem extends Item {
 		);
 
 		replaceAttributes(toolMaterial, properties);
-	}
-
-	@Override
-	public boolean canAttackBlock(final BlockState p_43291_, final Level p_43292_, final BlockPos p_43293_, final Player p_43294_) {
-		return !p_43294_.isCreative();
-	}
-
-	@Override
-	public boolean hurtEnemy(final ItemStack p_43278_, final LivingEntity p_43279_, final LivingEntity p_43280_) {
-		return true;
-	}
-
-	@Override
-	public void postHurtEnemy(final ItemStack p_342189_, final LivingEntity p_344347_, final LivingEntity p_343888_) {
-		p_342189_.hurtAndBreak(1, p_343888_, EquipmentSlot.MAINHAND);
-	}
-
-	@Override
-	public boolean canPerformAction(final ItemStack stack, final net.minecraftforge.common.ToolAction toolAction) {
-		return ToolActions.DEFAULT_SWORD_ACTIONS.contains(toolAction);
 	}
 
 	private static Item.Properties replaceAttributes(final ToolMaterial toolMaterial, final Item.Properties properties) {

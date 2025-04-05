@@ -82,14 +82,16 @@ public class SurvivalCommandBlockEntity extends CommandBlockEntity {
 	}
 
 	@Override
-	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+	protected void loadAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
 
-		getCommandBlock().load(tag.getCompound("SurvivalCommandBlockLogic"), registries);
+		tag.getCompound("SurvivalCommandBlockLogic").ifPresent(
+				t -> getCommandBlock().load(t, registries)
+		);
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+	protected void saveAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
 
 		tag.put("SurvivalCommandBlockLogic", getCommandBlock().save(new CompoundTag(), registries));

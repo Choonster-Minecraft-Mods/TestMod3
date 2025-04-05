@@ -172,7 +172,7 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 
 		generateFlatItem(ModItems.FLUID_STACK_ITEM.get(), ModModelTemplates.EMPTY);
 
-		generateSpawnEgg(ModItems.PLAYER_AVOIDING_CREEPER_SPAWN_EGG.get(), 0xda70b, 0);
+		generateItemWithExistingParent(ModItems.PLAYER_AVOIDING_CREEPER_SPAWN_EGG.get(), Items.CREEPER_SPAWN_EGG);
 
 		generateBucket(ModItems.WOODEN_BUCKET.get());
 

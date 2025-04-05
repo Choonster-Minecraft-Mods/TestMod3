@@ -5,12 +5,10 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.equipment.ArmorMaterial;
-import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -22,11 +20,11 @@ import java.util.Objects;
  *
  * @author Choonster
  */
-public class PotionEffectArmourItem extends ArmorItem {
+public class PotionEffectArmourItem extends Item {
 	private final MobEffectInstance mobEffectInstance;
 
-	public PotionEffectArmourItem(final ArmorMaterial material, final ArmorType type, final MobEffectInstance mobEffectInstance, final Item.Properties properties) {
-		super(material, type, properties);
+	public PotionEffectArmourItem(final MobEffectInstance mobEffectInstance, final Item.Properties properties) {
+		super(properties);
 		this.mobEffectInstance = mobEffectInstance;
 	}
 
@@ -40,7 +38,7 @@ public class PotionEffectArmourItem extends ArmorItem {
 	}
 
 	@Override
-	public void inventoryTick(final ItemStack stack, final Level level, final Entity entity, final int itemSlot, final boolean isSelected) {
+	public void inventoryTick(final ItemStack stack, final Level level, final Entity entity, @Nullable final EquipmentSlot slot, final int slotIndex) {
 		if (
 				entity instanceof final LivingEntity livingEntity && // If the entity is living,
 						!livingEntity.hasEffect(mobEffectInstance.getEffect()) && // The effect isn't currently active,

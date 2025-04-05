@@ -67,19 +67,20 @@ public class RestrictedFluidTankBlockEntity extends BaseFluidTankBlockEntity {
 	}
 
 	@Override
-	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+	protected void loadAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
 
 		enabledFacings.clear();
 
-		final var enabledFacingIndices = tag.getIntArray("EnabledFacings");
-		for (final var index : enabledFacingIndices) {
-			enabledFacings.add(Direction.from3DDataValue(index));
-		}
+		tag.getIntArray("EnabledFacings").ifPresent(enabledFacingIndices -> {
+			for (final var index : enabledFacingIndices) {
+				enabledFacings.add(Direction.from3DDataValue(index));
+			}
+		});
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+	protected void saveAdditional(final CompoundTag tag, final HolderLookup.Provider provider) {
 		super.saveAdditional(tag, provider);
 
 		final var enabledFacingIndices = enabledFacings.stream()

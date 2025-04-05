@@ -17,12 +17,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import org.slf4j.Logger;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * An item that lists the entities within the specified horizontal square radius of either the block's northwest corner
@@ -145,14 +146,21 @@ public class EntityCheckerItem extends Item {
 		return InteractionResult.SUCCESS;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void appendHoverText(final ItemStack stack, final TooltipContext context, final List<Component> tooltip, final TooltipFlag flagIn) {
+	public void appendHoverText(
+			final ItemStack stack,
+			final TooltipContext context,
+			final TooltipDisplay display,
+			final Consumer<Component> tooltip,
+			final TooltipFlag flag
+	) {
 		final var properties = getProperties(stack);
 
-		tooltip.add(Component.translatable(TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_RADIUS.getTranslationKey(), properties.radius));
+		tooltip.accept(Component.translatable(TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_RADIUS.getTranslationKey(), properties.radius));
 
 		final var cornerMode = properties.cornerModeEnabled ? TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_MODE_CORNER : TestMod3Lang.ITEM_DESC_ENTITY_CHECKER_MODE_EDGE;
-		tooltip.add(Component.translatable(cornerMode.getTranslationKey()));
+		tooltip.accept(Component.translatable(cornerMode.getTranslationKey()));
 	}
 
 	public record EntityCheckerProperties(int radius, boolean cornerModeEnabled) {

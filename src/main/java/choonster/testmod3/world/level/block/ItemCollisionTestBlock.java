@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -45,17 +46,21 @@ public class ItemCollisionTestBlock extends Block {
 		return CODEC;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public void entityInside(final BlockState state, final Level world, final BlockPos pos, final Entity entityIn) {
-		super.entityInside(state, world, pos, entityIn);
+	protected void entityInside(
+			final BlockState state,
+			final Level level,
+			final BlockPos pos,
+			final Entity entity,
+			final InsideBlockEffectApplier insideBlockEffectApplier
+	) {
+		super.entityInside(state, level, pos, entity, insideBlockEffectApplier);
 
-		if (!world.isClientSide && entityIn instanceof ItemEntity) {
-			LOGGER.info("Collision at {}: {}", pos, entityIn);
+		if (!level.isClientSide && entity instanceof ItemEntity) {
+			LOGGER.info("Collision at {}: {}", pos, entity);
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public VoxelShape getShape(final BlockState state, final BlockGetter world, final BlockPos pos, final CollisionContext context) {
 		return SHAPE;

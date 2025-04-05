@@ -1,12 +1,11 @@
 package choonster.testmod3.world.level.block;
 
-import choonster.testmod3.util.CapabilityNotPresentException;
-import choonster.testmod3.util.InventoryUtils;
 import choonster.testmod3.world.level.block.entity.ModChestBlockEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -30,7 +29,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -151,19 +149,12 @@ public class ModChestBlock extends BaseEntityBlock<ModChestBlockEntity> {
 	}
 
 	@Override
-	public void onRemove(final BlockState state, final Level world, final BlockPos pos, final BlockState newState, final boolean isMoving) {
-		if (state.getBlock() != newState.getBlock()) {
-			final var blockEntity = getBlockEntity(world, pos);
-			if (blockEntity != null) {
-				final var itemHandler = blockEntity
-						.getCapability(ForgeCapabilities.ITEM_HANDLER, null)
-						.orElseThrow(CapabilityNotPresentException::new);
-
-				InventoryUtils.dropItemHandlerContents(world, pos, itemHandler);
-				world.updateNeighbourForOutputSignal(pos, this);
-			}
-
-			super.onRemove(state, world, pos, newState, isMoving);
-		}
+	protected void affectNeighborsAfterRemoval(
+			final BlockState state,
+			final ServerLevel level,
+			final BlockPos pos,
+			final boolean isMoving
+	) {
+		level.updateNeighbourForOutputSignal(pos, this);
 	}
 }

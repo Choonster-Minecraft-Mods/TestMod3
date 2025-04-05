@@ -41,9 +41,9 @@ public class ModBiomeModifiers {
 				ADD_GUARDIAN_SPAWN_TO_OCEANS,
 				AddSpawnsBiomeModifier.singleSpawn(
 						tag(biomes, BiomeTags.IS_OCEAN),
+						100,
 						new MobSpawnSettings.SpawnerData(
 								EntityType.GUARDIAN,
-								100,
 								5,
 								20
 						)
