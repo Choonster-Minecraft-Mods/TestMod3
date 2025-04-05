@@ -37,6 +37,10 @@ public class ModFluidUtil {
 	 * @return A FluidActionResult holding the filled container if successful
 	 */
 	public static FluidActionResult fillContainer(final ItemStack container, final FluidStack fluidStack) {
+		return FluidActionResult.FAILURE;
+
+		// TODO: Uncomment when Forge reimplements IFluidHandler - https://github.com/MinecraftForge/MinecraftForge/issues/10408
+		/*
 		final var containerCopy = ItemHandlerHelper.copyStackWithSize(container, 1); // Don't modify the input
 
 		final var fluidHandler = FluidUtil
@@ -52,6 +56,7 @@ public class ModFluidUtil {
 		}
 
 		return new FluidActionResult(fluidHandler.getContainer());
+		*/
 	}
 
 	/**

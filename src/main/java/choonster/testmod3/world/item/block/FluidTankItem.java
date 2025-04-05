@@ -1,10 +1,7 @@
 package choonster.testmod3.world.item.block;
 
 import choonster.testmod3.capability.SimpleCapabilityProvider;
-import choonster.testmod3.fluid.FluidTankSnapshot;
 import choonster.testmod3.fluid.ItemFluidTank;
-import choonster.testmod3.util.CapabilityNotPresentException;
-import choonster.testmod3.world.level.block.FluidTankBlock;
 import choonster.testmod3.world.level.block.entity.FluidTankBlockEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
@@ -14,7 +11,6 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.MutableHashedLinkedMap;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -54,11 +50,14 @@ public class FluidTankItem extends BlockItem {
 			final Consumer<Component> tooltip,
 			final TooltipFlag flag
 	) {
+		// TODO: Uncomment when Forge reimplements IFluidHandler - https://github.com/MinecraftForge/MinecraftForge/issues/10408
+		/*
 		final var fluidHandler = FluidUtil.getFluidHandler(stack)
 				.orElseThrow(CapabilityNotPresentException::new);
 
 		final var fluidTankSnapshots = FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler);
 		FluidTankBlock.getFluidDataForDisplay(fluidTankSnapshots).forEach(tooltip);
+		*/
 	}
 
 	public void fillCreativeModeTab(final MutableHashedLinkedMap<ItemStack, CreativeModeTab.TabVisibility> entries) {
