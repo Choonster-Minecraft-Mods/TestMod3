@@ -1,10 +1,12 @@
 {
   "type": "forge:add_spawns",
   "biomes": "#minecraft:is_ocean",
-  "spawners": {
-    "type": "minecraft:guardian",
-    "maxCount": 20,
-    "minCount": 5,
-    "weight": 100
-  }
+  "spawners": [
+    {
+      "type": "minecraft:guardian",
+      "maxCount": 20,
+      "minCount": 5,
+      "weight": 100
+    }
+  ]
 }

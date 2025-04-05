@@ -19,16 +19,14 @@
       "y": 180
     },
     "horizontal_rotation=north,vertical_rotation=side": {
-      "model": "testmod3:block/mirror_plane_side",
-      "y": 0
+      "model": "testmod3:block/mirror_plane_side"
     },
     "horizontal_rotation=north,vertical_rotation=up": {
       "model": "testmod3:block/mirror_plane_t"
     },
     "horizontal_rotation=south,vertical_rotation=down": {
       "model": "testmod3:block/mirror_plane",
-      "x": 180,
-      "y": 0
+      "x": 180
     },
     "horizontal_rotation=south,vertical_rotation=side": {
       "model": "testmod3:block/mirror_plane_side",
