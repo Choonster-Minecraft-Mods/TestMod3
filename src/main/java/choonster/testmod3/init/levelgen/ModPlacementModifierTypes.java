@@ -5,7 +5,7 @@ import choonster.testmod3.world.level.levelgen.placement.InChunksDivisibleBy16Fi
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.bus.BusGroup;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -32,14 +32,14 @@ public class ModPlacementModifierTypes {
 	 * <p>
 	 * This should be called during mod construction.
 	 *
-	 * @param modEventBus The mod event bus
+	 * @param modBusGroup The mod bus group
 	 */
-	public static void initialise(final IEventBus modEventBus) {
+	public static void initialise(final BusGroup modBusGroup) {
 		if (isInitialised) {
 			throw new IllegalStateException("Already initialised");
 		}
 
-		PLACEMENT_MODIFIER_TYPES.register(modEventBus);
+		PLACEMENT_MODIFIER_TYPES.register(modBusGroup);
 
 		isInitialised = true;
 	}

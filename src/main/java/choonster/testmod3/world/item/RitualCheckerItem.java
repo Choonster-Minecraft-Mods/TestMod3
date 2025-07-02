@@ -63,11 +63,11 @@ public class RitualCheckerItem extends Item {
 	 * @return The first invalid position, if any.
 	 */
 	private Optional<BlockPos> checkRitual(final Player player) {
-		final var world = player.getCommandSenderWorld();
+		final var level = player.level();
 		final var playerPos = player.blockPosition();
 
 		// The block under the player must be obsidian
-		if (!(world.getBlockState(playerPos.below()).getBlock() == Blocks.OBSIDIAN)) {
+		if (!(level.getBlockState(playerPos.below()).getBlock() == Blocks.OBSIDIAN)) {
 			return Optional.of(playerPos.below());
 		}
 
@@ -80,18 +80,15 @@ public class RitualCheckerItem extends Item {
 				}
 
 				final var pos = playerPos.offset(x, 0, z);
-				final var block = world.getBlockState(pos).getBlock();
+				final var block = level.getBlockState(pos).getBlock();
 
 				if (Math.abs(x) == 2 || Math.abs(z) == 2) { // If this is the outer layer, the block must be air
 					if (block != Blocks.AIR) {
 						return Optional.of(pos);
 					}
 
-				} else { // If this is the inner layer, the block must be redstone
-					if (block != Blocks.REDSTONE_WIRE) {
-						return Optional.of(pos);
-					}
-
+				} else if (block != Blocks.REDSTONE_WIRE) {  // If this is the inner layer, the block must be redstone
+					return Optional.of(pos);
 				}
 			}
 		}

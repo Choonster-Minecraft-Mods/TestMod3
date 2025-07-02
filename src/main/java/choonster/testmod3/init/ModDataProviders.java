@@ -13,7 +13,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.registries.RegistryPatchGenerator;
 import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -50,9 +50,8 @@ public class ModDataProviders {
 		dataGenerator.addProvider(event.includeServer(), TestMod3LootTableProvider.create(output, lookupProvider));
 		dataGenerator.addProvider(event.includeServer(), new TestMod3LootModifierProvider(output, lookupProvider));
 
-		final var blockTagsProvider = new TestMod3BlockTagsProvider(output, lookupProvider, existingFileHelper);
-		dataGenerator.addProvider(event.includeServer(), blockTagsProvider);
-		dataGenerator.addProvider(event.includeServer(), new TestMod3ItemTagsProvider(output, lookupProvider, blockTagsProvider.contentsGetter(), existingFileHelper));
+		dataGenerator.addProvider(event.includeServer(), new TestMod3BlockTagsProvider(output, lookupProvider, existingFileHelper));
+		dataGenerator.addProvider(event.includeServer(), new TestMod3ItemTagsProvider(output, lookupProvider, existingFileHelper));
 		dataGenerator.addProvider(event.includeServer(), new TestMod3BiomeTagsProvider(output, lookupProvider, existingFileHelper));
 		dataGenerator.addProvider(event.includeServer(), new TestMod3FluidTagsProvider(output, lookupProvider, existingFileHelper));
 

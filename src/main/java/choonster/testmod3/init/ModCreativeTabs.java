@@ -10,8 +10,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.bus.BusGroup;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -54,14 +54,14 @@ public class ModCreativeTabs {
 	 * <p>
 	 * This should be called during mod construction.
 	 *
-	 * @param modEventBus The mod event bus
+	 * @param modBusGroup The mod bus group
 	 */
-	public static void initialise(final IEventBus modEventBus) {
+	public static void initialise(final BusGroup modBusGroup) {
 		if (isInitialised) {
 			throw new IllegalStateException("Already initialised");
 		}
 
-		CREATIVE_MODE_TABS.register(modEventBus);
+		CREATIVE_MODE_TABS.register(modBusGroup);
 
 		isInitialised = true;
 	}

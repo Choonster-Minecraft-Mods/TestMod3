@@ -5,34 +5,30 @@ import choonster.testmod3.config.TestMod3Config;
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.CapabilityNotPresentException;
-import net.minecraft.client.DeltaTracker;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 
 /**
  * Displays the chunk energy in the player's current chunk.
  *
  * @author Choonster
  */
-public class ChunkEnergyGuiOverlay implements LayeredDraw.Layer {
-	private final Minecraft minecraft;
+public final class ChunkEnergyGuiOverlay {
+	@SubscribeEvent
+	public static void onScreenRenderPost(final ScreenEvent.Render.Post event) {
+		final var minecraft = event.getScreen().getMinecraft();
 
-	public ChunkEnergyGuiOverlay(final Minecraft minecraft) {
-		this.minecraft = minecraft;
-	}
-
-	@Override
-	public void render(final GuiGraphics guiGraphics, final DeltaTracker timer) {
-		if (minecraft.level == null || minecraft.player == null) {
+		if (minecraft == null || minecraft.level == null || minecraft.player == null) {
 			return;
 		}
 
 		final var player = minecraft.player;
-		if (player.getMainHandItem().getItem() != ModItems.CHUNK_ENERGY_DISPLAY.get() && player.getOffhandItem().getItem() != ModItems.CHUNK_ENERGY_DISPLAY.get()) {
+		if (!player.getMainHandItem().is(ModItems.CHUNK_ENERGY_DISPLAY.get()) && player.getOffhandItem().is(ModItems.CHUNK_ENERGY_DISPLAY.get())) {
 			return;
 		}
+
+		final var guiGraphics = event.getGuiGraphics();
 
 		final var chunkEnergy = ChunkEnergyCapability
 				.getChunkEnergy(minecraft.level.getChunkAt(minecraft.player.blockPosition()))

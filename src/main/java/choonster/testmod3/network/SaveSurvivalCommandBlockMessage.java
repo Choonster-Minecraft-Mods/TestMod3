@@ -12,12 +12,12 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.util.StringUtil;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CommandBlock;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
+import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 
@@ -91,14 +91,13 @@ public record SaveSurvivalCommandBlockMessage(
 		);
 	}
 
-	@SuppressWarnings("resource")
 	public static void handle(final SaveSurvivalCommandBlockMessage message, final CustomPayloadEvent.Context ctx) {
 		final var player = Objects.requireNonNull(ctx.getSender());
 		final var level = player.level();
-		final var minecraftServer = level.getServer();
+		final var server = level.getServer();
 		final var registries = level.registryAccess();
 
-		if (minecraftServer != null && !minecraftServer.isCommandBlockEnabled()) {
+		if (!server.isCommandBlockEnabled()) {
 			player.sendSystemMessage(Component.translatable("advMode.notEnabled"));
 		} else if (!player.hasPermissions(2)) {
 			player.sendSystemMessage(Component.translatable("advMode.notAllowed"));
@@ -109,7 +108,7 @@ public record SaveSurvivalCommandBlockMessage(
 				if (message.type == SurvivalCommandBlock.Type.BLOCK) {
 					final var blockPos = message.blockPosOrMinecartEntityId.left().orElseThrow();
 
-					final RegistryObject<? extends Block> newBlock = switch (message.commandBlockMode) {
+					final var newBlock = switch (message.commandBlockMode) {
 						case SEQUENCE -> ModBlocks.CHAIN_SURVIVAL_COMMAND_BLOCK;
 						case AUTO -> ModBlocks.REPEATING_SURVIVAL_COMMAND_BLOCK;
 						default -> ModBlocks.SURVIVAL_COMMAND_BLOCK;
@@ -126,9 +125,15 @@ public record SaveSurvivalCommandBlockMessage(
 							existingBlockEntity instanceof SurvivalCommandBlockEntity &&
 									newBlockEntity instanceof final SurvivalCommandBlockEntity newSurvivalCommandBlockEntity
 					) {
-						newSurvivalCommandBlockEntity.loadWithComponents(existingBlockEntity.saveWithoutMetadata(registries), registries);
-						survivalCommandBlock = newSurvivalCommandBlockEntity.getCommandBlock();
-						newSurvivalCommandBlockEntity.setAutomatic(message.automatic);
+						final var existingData = existingBlockEntity.saveWithoutMetadata(registries);
+
+						try (var problems = new ProblemReporter.ScopedCollector(newBlockEntity.problemPath(), LOGGER)) {
+							var existingInput = TagValueInput.create(problems, registries, existingData);
+
+							newSurvivalCommandBlockEntity.loadWithComponents(existingInput);
+							survivalCommandBlock = newSurvivalCommandBlockEntity.getCommandBlock();
+							newSurvivalCommandBlockEntity.setAutomatic(message.automatic);
+						}
 					}
 				} else if (message.type == SurvivalCommandBlock.Type.MINECART) {
 					throw new NotImplementedException();

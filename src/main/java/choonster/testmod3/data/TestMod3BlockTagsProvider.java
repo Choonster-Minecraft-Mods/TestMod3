@@ -66,19 +66,8 @@ public class TestMod3BlockTagsProvider extends BlockTagsProvider {
 						ModBlocks.PLANKS.get()
 				);
 
-		tag(ModTags.Blocks.SAPLINGS)
-				.add(
-						ModBlocks.OAK_SAPLING.get(),
-						ModBlocks.SPRUCE_SAPLING.get(),
-						ModBlocks.BIRCH_SAPLING.get(),
-						ModBlocks.JUNGLE_SAPLING.get(),
-						ModBlocks.ACACIA_SAPLING.get(),
-						ModBlocks.DARK_OAK_SAPLING.get()
-				);
-
 		tag(BlockTags.SAPLINGS)
 				.addTag(ModTags.Blocks.SAPLINGS);
-
 	}
 
 	private Block[] getBlocks(final BlockVariantGroup<?, ?> variantGroup) {

@@ -68,7 +68,7 @@ public class ChunkEnergySetterItem extends Item implements ILeftClickEmpty {
 
 	@Override
 	public void onLeftClickEmpty(final ItemStack stack, final Player player) {
-		final var level = player.getCommandSenderWorld();
+		final var level = player.level();
 		if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
 			addRemoveChunkEnergy(level, serverPlayer, 100);
 		}

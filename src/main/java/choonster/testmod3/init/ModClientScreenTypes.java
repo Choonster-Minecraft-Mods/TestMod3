@@ -10,7 +10,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.bus.BusGroup;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
@@ -52,14 +52,14 @@ public class ModClientScreenTypes {
 	 * <p>
 	 * This should be called during mod construction.
 	 *
-	 * @param modEventBus The mod event bus
+	 * @param modBusGroup The mod bus group
 	 */
-	public static void initialise(final IEventBus modEventBus) {
+	public static void initialise(final BusGroup modBusGroup) {
 		if (isInitialised) {
 			throw new IllegalStateException("Already initialised");
 		}
 
-		CLIENT_SCREEN_TYPES.register(modEventBus);
+		CLIENT_SCREEN_TYPES.register(modBusGroup);
 
 		isInitialised = true;
 	}

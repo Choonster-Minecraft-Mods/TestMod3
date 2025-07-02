@@ -22,7 +22,7 @@ public class TestMod3PackMetadataGenerator {
 						PackMetadataSection.TYPE,
 						new PackMetadataSection(
 								Component.translatable(TestMod3Lang.PACK_DESCRIPTION_TESTMOD3.getTranslationKey()),
-								DetectedVersion.BUILT_IN.getPackVersion(PackType.CLIENT_RESOURCES),
+								DetectedVersion.BUILT_IN.packVersion(PackType.CLIENT_RESOURCES),
 								Optional.empty()
 						)
 				);

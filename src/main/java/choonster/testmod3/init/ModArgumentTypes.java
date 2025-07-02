@@ -6,7 +6,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.bus.BusGroup;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -32,14 +32,14 @@ public class ModArgumentTypes {
 	 * <p>
 	 * This should be called during mod construction.
 	 *
-	 * @param modEventBus The mod event bus
+	 * @param modBusGroup The mod bus group
 	 */
-	public static void initialise(final IEventBus modEventBus) {
+	public static void initialise(final BusGroup modBusGroup) {
 		if (isInitialised) {
 			throw new IllegalStateException("Already initialised");
 		}
 
-		COMMAND_ARGUMENT_TYPES.register(modEventBus);
+		COMMAND_ARGUMENT_TYPES.register(modBusGroup);
 
 		isInitialised = true;
 	}

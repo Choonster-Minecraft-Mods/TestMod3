@@ -15,7 +15,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 /**
@@ -30,14 +30,10 @@ public class KeyMappingHandler {
 	/**
 	 * Handle the effects of this mod's {@link KeyMapping}s.
 	 *
-	 * @param event The event
+	 * @param ignoredEvent The event
 	 */
 	@SubscribeEvent
-	public static void clientTick(final TickEvent.ClientTickEvent event) {
-		if (event.phase != TickEvent.Phase.END) {
-			return;
-		}
-
+	public static void clientTick(final TickEvent.ClientTickEvent.Post ignoredEvent) {
 		if (ModKeyMappings.PLACE_HELD_BLOCK.isDown()) {
 			placeHeldBlock();
 		}

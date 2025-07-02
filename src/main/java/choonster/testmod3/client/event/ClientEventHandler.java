@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.scores.Team;
@@ -19,7 +18,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.network.PacketDistributor;
@@ -60,12 +59,12 @@ public class ClientEventHandler {
 	 * Test for this thread:
 	 * https://www.minecraftforge.net/forum/topic/35880-solved189-multiplayer-anti-afk/
 	 *
-	 * @param event The event
+	 * @param ignoredEvent The event
 	 */
 	@SubscribeEvent
-	public static void clientPostTick(final TickEvent.ClientTickEvent event) {
-		if (event.phase == TickEvent.Phase.END && MINECRAFT.player != null && MINECRAFT.level != null) {
-			final Player player = MINECRAFT.player;
+	public static void clientPostTick(final TickEvent.ClientTickEvent.Post ignoredEvent) {
+		if (MINECRAFT.player != null && MINECRAFT.level != null) {
+			final var player = MINECRAFT.player;
 			if (MINECRAFT.level.getBlockState(player.blockPosition().below()).getBlock() == Blocks.IRON_BLOCK) {
 				player.turn(5, 0);
 			}
@@ -115,11 +114,7 @@ public class ClientEventHandler {
 	 * Makes {@link AbstractMinecart} entities glow on the client.
 	 */
 	@SubscribeEvent
-	public static void clientPreTick(final TickEvent.ClientTickEvent event) {
-		if (event.phase != TickEvent.Phase.START) {
-			return;
-		}
-
+	public static void clientPreTick(final TickEvent.ClientTickEvent.Pre ignoredEvent) {
 		try {
 			for (final var minecart : glowingMinecarts) {
 				SET_SHARED_FLAG.invoke(minecart, FLAG_GLOWING, true);
@@ -135,7 +130,6 @@ public class ClientEventHandler {
 	 *
 	 * @param event The event
 	 */
-	@SuppressWarnings("InstantiationOfUtilityClass")
 	@SubscribeEvent
 	public static void leftClickEmpty(final PlayerInteractEvent.LeftClickEmpty event) {
 		final var player = event.getEntity();

@@ -78,16 +78,15 @@ public class SurvivalCommandBlock extends CommandBlock {
 	protected InteractionResult useWithoutItem(final BlockState state, final Level level, final BlockPos pos, final Player player, final BlockHitResult blockHitResult) {
 		final var blockEntity = level.getBlockEntity(pos);
 		if (blockEntity instanceof SurvivalCommandBlockEntity) {
-			if (!player.getCommandSenderWorld().isClientSide) {
-				final var serverPlayer = (ServerPlayer) player;
+			if (player instanceof final ServerPlayer serverPlayer) {
 				NetworkUtil.openClientScreen(serverPlayer, ModClientScreenTypes.SURVIVAL_COMMAND_BLOCK, pos);
 				serverPlayer.connection.send(ClientboundBlockEntityDataPacket.create(blockEntity, BlockEntity::saveWithoutMetadata));
 			}
 
 			return InteractionResult.SUCCESS_SERVER;
-		} else {
-			return InteractionResult.PASS;
 		}
+		
+		return InteractionResult.PASS;
 	}
 
 	@Override

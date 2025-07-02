@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.bus.BusGroup;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -271,15 +271,15 @@ public class ModBlocks {
 	 * <p>
 	 * This should be called during mod construction.
 	 *
-	 * @param modEventBus The mod event bus
+	 * @param modBusGroup The mod bus group
 	 */
-	public static void initialise(final IEventBus modEventBus) {
+	public static void initialise(final BusGroup modBusGroup) {
 		if (isInitialised) {
 			throw new IllegalStateException("Already initialised");
 		}
 
-		BLOCKS.register(modEventBus);
-		ITEMS.register(modEventBus);
+		BLOCKS.register(modBusGroup);
+		ITEMS.register(modBusGroup);
 
 		isInitialised = true;
 	}

@@ -1,18 +1,24 @@
 package choonster.testmod3.world.level.storage.loot.modifiers;
 
 import com.google.common.base.Suppliers;
+import com.mojang.logging.LogUtils;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
+import org.slf4j.Logger;
 
 import java.util.function.Supplier;
 
@@ -23,6 +29,8 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class BlockEntityNBTLootModifier extends LootModifier {
+	private static final Logger LOGGER = LogUtils.getLogger();
+
 	public static final Supplier<MapCodec<BlockEntityNBTLootModifier>> CODEC = Suppliers.memoize(() ->
 			RecordCodecBuilder.mapCodec(inst ->
 					codecStart(inst)
@@ -40,21 +48,28 @@ public class BlockEntityNBTLootModifier extends LootModifier {
 			final ObjectArrayList<ItemStack> generatedLoot,
 			final LootContext context
 	) {
-		final var state = context.getOptionalParameter(LootContextParams.BLOCK_STATE);
-		final var blockEntity = context.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+		final var tableKey = ResourceKey.create(Registries.LOOT_TABLE, context.getQueriedLootTableId());
+		final var tablePathElement = new ProblemReporter.RootElementPathElement(tableKey);
 
-		if (state != null && blockEntity != null) {
-			// Write the BlockEntity to NBT
-			final var blockEntityTag = blockEntity.saveWithId(context.getLevel().registryAccess());
+		try (final var problems = new ProblemReporter.ScopedCollector(tablePathElement, LOGGER)) {
+			final var state = context.getOptionalParameter(LootContextParams.BLOCK_STATE);
+			final var blockEntity = context.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
 
-			// Store the BlockEntity data in the ItemStack
-			final var stack = new ItemStack(state.getBlock());
-			stack.set(DataComponents.BLOCK_ENTITY_DATA, CustomData.of(blockEntityTag));
+			if (state != null && blockEntity != null) {
+				// Write the BlockEntity to NBT
+				var blockEntityOutput = TagValueOutput.createWithContext(problems, context.getLevel().registryAccess());
 
-			generatedLoot.add(stack);
+				blockEntity.saveWithId(blockEntityOutput);
+
+				// Store the BlockEntity data in the ItemStack
+				final var stack = new ItemStack(state.getBlock());
+				stack.set(DataComponents.BLOCK_ENTITY_DATA, CustomData.of(blockEntityOutput.buildResult()));
+
+				generatedLoot.add(stack);
+			}
+
+			return generatedLoot;
 		}
-
-		return generatedLoot;
 	}
 
 	@Override

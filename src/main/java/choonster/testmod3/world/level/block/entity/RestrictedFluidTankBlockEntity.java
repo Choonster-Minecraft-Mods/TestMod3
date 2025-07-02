@@ -3,9 +3,9 @@ package choonster.testmod3.world.level.block.entity;
 import choonster.testmod3.init.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -67,12 +67,12 @@ public class RestrictedFluidTankBlockEntity extends BaseFluidTankBlockEntity {
 	}
 
 	@Override
-	protected void loadAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
-		super.loadAdditional(tag, registries);
+	protected void loadAdditional(ValueInput input) {
+		super.loadAdditional(input);
 
 		enabledFacings.clear();
 
-		tag.getIntArray("EnabledFacings").ifPresent(enabledFacingIndices -> {
+		input.getIntArray("EnabledFacings").ifPresent(enabledFacingIndices -> {
 			for (final var index : enabledFacingIndices) {
 				enabledFacings.add(Direction.from3DDataValue(index));
 			}
@@ -80,14 +80,14 @@ public class RestrictedFluidTankBlockEntity extends BaseFluidTankBlockEntity {
 	}
 
 	@Override
-	protected void saveAdditional(final CompoundTag tag, final HolderLookup.Provider provider) {
-		super.saveAdditional(tag, provider);
+	protected void saveAdditional(ValueOutput output) {
+		super.saveAdditional(output);
 
 		final var enabledFacingIndices = enabledFacings.stream()
 				.mapToInt(Direction::get3DDataValue)
 				.toArray();
 
-		tag.putIntArray("EnabledFacings", enabledFacingIndices);
+		output.putIntArray("EnabledFacings", enabledFacingIndices);
 	}
 
 	@Override

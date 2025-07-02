@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = TestMod3.MODID)
@@ -32,10 +32,8 @@ public class BlockEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void breakSpeed(final PlayerEvent.BreakSpeed event) {
-		if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getEntity())) {
-			event.setCanceled(true);
-		}
+	public static boolean breakSpeed(final PlayerEvent.BreakSpeed event) {
+		return isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getEntity());
 	}
 
 	/**
@@ -44,9 +42,7 @@ public class BlockEventHandler {
 	 * @param event The event
 	 */
 	@SubscribeEvent
-	public static void breakBlock(final BlockEvent.BreakEvent event) {
-		if (isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getPlayer())) {
-			event.setCanceled(true);
-		}
+	public static boolean breakBlock(final BlockEvent.BreakEvent event) {
+		return isPlayerHarvestingLogWithoutCorrectTool(event.getState(), event.getPlayer());
 	}
 }

@@ -28,8 +28,8 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.brewing.BrewingRecipeRegisterEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.bus.BusGroup;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.DeferredRegister;
@@ -138,14 +138,14 @@ public class ModCrafting {
 		 * <p>
 		 * This should be called during mod construction.
 		 *
-		 * @param modEventBus The mod event bus
+		 * @param modBusGroup The mod bus group
 		 */
-		public static void initialise(final IEventBus modEventBus) {
+		public static void initialise(final BusGroup modBusGroup) {
 			if (isInitialised) {
 				throw new IllegalStateException("Already initialised");
 			}
 
-			INGREDIENT_SERIALIZERS.register(modEventBus);
+			INGREDIENT_SERIALIZERS.register(modBusGroup);
 
 			isInitialised = true;
 		}
@@ -177,14 +177,14 @@ public class ModCrafting {
 		 * <p>
 		 * This should be called during mod construction.
 		 *
-		 * @param modEventBus The mod event bus
+		 * @param modBusGroup The mod bus group
 		 */
-		public static void initialise(final IEventBus modEventBus) {
+		public static void initialise(final BusGroup modBusGroup) {
 			if (isInitialised) {
 				throw new IllegalStateException("Already initialised");
 			}
 
-			RECIPE_SERIALIZERS.register(modEventBus);
+			RECIPE_SERIALIZERS.register(modBusGroup);
 
 			isInitialised = true;
 		}

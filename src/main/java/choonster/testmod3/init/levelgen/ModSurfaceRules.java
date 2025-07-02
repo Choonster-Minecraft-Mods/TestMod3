@@ -3,7 +3,7 @@ package choonster.testmod3.init.levelgen;
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.world.level.levelgen.surfacerule.TestMod3OverworldSurfaceRuleData;
 import net.minecraft.world.level.levelgen.SurfaceRules;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;

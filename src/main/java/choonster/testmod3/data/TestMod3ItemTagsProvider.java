@@ -6,9 +6,11 @@ import choonster.testmod3.init.ModItems;
 import choonster.testmod3.init.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.data.tags.TagAppender;
+import net.minecraft.data.tags.VanillaItemTagsProvider;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -21,24 +23,28 @@ import java.util.concurrent.CompletableFuture;
  *
  * @author Choonster
  */
-public class TestMod3ItemTagsProvider extends ItemTagsProvider {
+public class TestMod3ItemTagsProvider extends VanillaItemTagsProvider {
 	public TestMod3ItemTagsProvider(
 			final PackOutput output,
 			final CompletableFuture<HolderLookup.Provider> lookupProvider,
-			final CompletableFuture<TagsProvider.TagLookup<Block>> blockTags,
 			@Nullable final ExistingFileHelper existingFileHelper
 	) {
-		super(output, lookupProvider, blockTags, TestMod3.MODID, existingFileHelper);
+		super(output, lookupProvider, TestMod3.MODID, existingFileHelper);
 	}
 
 	@Override
 	protected void addTags(final HolderLookup.Provider p_256380_) {
+		(new TestMod3BlockItemTagsProvider() {
+			@Override
+			protected TagAppender<Block, Block> tag(final TagKey<Block> blockTagKey, final TagKey<Item> itemTagKey) {
+				return new VanillaItemTagsProvider.BlockToItemConverter(TestMod3ItemTagsProvider.this.tag(itemTagKey));
+			}
+		}).run();
+
 		tag(ItemTags.ARROWS).add(
 				ModItems.ARROW.get(),
 				ModItems.BLOCK_DETECTION_ARROW.get()
 		);
-
-		copy(ModTags.Blocks.SAPLINGS, ItemTags.SAPLINGS);
 
 		tag(ModTags.Items.VANILLA_DYES)
 				.add(

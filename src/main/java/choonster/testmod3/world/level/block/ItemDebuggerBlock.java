@@ -6,6 +6,8 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -39,7 +41,11 @@ public class ItemDebuggerBlock extends Block {
 
 	private void logItem(final Level level, final ItemStack stack) {
 		if (!stack.isEmpty()) {
-			LOGGER.info("ItemStack: {}", stack.save(level.registryAccess()));
+			LOGGER.info(
+					"ItemStack: {}",
+					ItemStack.CODEC.encodeStart(RegistryOps.create(NbtOps.INSTANCE, level.registryAccess()), stack)
+			);
+			
 			logComponent(stack, ModDataComponents.PIG_SPAWNER.get());
 			logFluidHandler(stack);
 

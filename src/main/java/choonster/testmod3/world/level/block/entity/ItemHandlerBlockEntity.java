@@ -5,9 +5,6 @@ import choonster.testmod3.util.NameHolder;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
@@ -15,6 +12,8 @@ import net.minecraft.world.Nameable;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -63,7 +62,7 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler> ext
 	 * @param player The player
 	 */
 	public void openGUI(final ServerPlayer player) {
-		if (!level.isClientSide) {
+		if (level != null && !level.isClientSide) {
 			player.openMenu(this, getBlockPos());
 		}
 	}
@@ -86,40 +85,23 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler> ext
 	}
 
 	@Override
-	protected void loadAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
-		super.loadAdditional(tag, registries);
+	protected void loadAdditional(final ValueInput input) {
+		super.loadAdditional(input);
 
-		final var ops = registries.createSerializationContext(NbtOps.INSTANCE);
-
-		final var inventory = inventoryCodec.parse(
-				ops,
-				tag.getCompoundOrEmpty("ItemHandler")
-		).getOrThrow();
+		final var inventory = input.read("ItemHandler", inventoryCodec).orElseThrow();
 
 		inventoryOptional.invalidate();
 		inventoryOptional = LazyOptional.of(() -> inventory);
 
-		nameHolder = NameHolder.CODEC.parse(
-				ops,
-				tag.getCompoundOrEmpty("NameHolder")
-		).getOrThrow();
+		nameHolder = input.read("NameHolder", NameHolder.CODEC).orElseThrow();
 	}
 
 	@Override
-	protected void saveAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
-		super.saveAdditional(tag, registries);
+	protected void saveAdditional(final ValueOutput output) {
+		super.saveAdditional(output);
 
-		final var ops = registries.createSerializationContext(NbtOps.INSTANCE);
-
-		tag.put("ItemHandler", inventoryCodec.encodeStart(
-				ops,
-				getInventory()
-		).getOrThrow());
-
-		tag.put("NameHolder", NameHolder.CODEC.encodeStart(
-				ops,
-				nameHolder
-		).getOrThrow());
+		output.store("ItemHandler", inventoryCodec, getInventory());
+		output.store("NameHolder", NameHolder.CODEC, nameHolder);
 	}
 
 	@Override

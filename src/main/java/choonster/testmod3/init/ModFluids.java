@@ -18,8 +18,8 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.common.SoundActions;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.bus.BusGroup;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fml.common.Mod;
@@ -132,17 +132,17 @@ public class ModFluids {
 	 * <p>
 	 * This should be called during mod construction.
 	 *
-	 * @param modEventBus The mod event bus
+	 * @param modBusGroup The mod bus group
 	 */
-	public static void initialise(final IEventBus modEventBus) {
+	public static void initialise(final BusGroup modBusGroup) {
 		if (isInitialised) {
 			throw new IllegalStateException("Already initialised");
 		}
 
-		FLUID_TYPES.register(modEventBus);
-		FLUIDS.register(modEventBus);
-		BLOCKS.register(modEventBus);
-		ITEMS.register(modEventBus);
+		FLUID_TYPES.register(modBusGroup);
+		FLUIDS.register(modBusGroup);
+		BLOCKS.register(modBusGroup);
+		ITEMS.register(modBusGroup);
 
 		isInitialised = true;
 	}

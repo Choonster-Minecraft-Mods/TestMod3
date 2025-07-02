@@ -97,11 +97,11 @@ public class MaxHealth implements IMaxHealth {
 	 */
 	@Override
 	public void synchronise() {
-		if (entity != null && !entity.getCommandSenderWorld().isClientSide) {
+		if (entity != null && entity.level() instanceof final ServerLevel serverLevel) {
 			final var entityMaxHealthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
 			final var packet = new ClientboundUpdateAttributesPacket(entity.getId(), Collections.singleton(entityMaxHealthAttribute));
 
-			((ServerLevel) entity.getCommandSenderWorld()).getChunkSource().broadcastAndSend(entity, packet);
+			serverLevel.getChunkSource().broadcastAndSend(entity, packet);
 		}
 	}
 

@@ -10,6 +10,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.ValidationContext;
@@ -42,13 +43,20 @@ public class TestMod3LootTableProvider extends LootTableProvider {
 		final var modLootTableIds = ModLootTables.all();
 
 		for (final var id : Sets.difference(modLootTableIds, registry.registryKeySet())) {
-			validationContext.reportProblem("Missing mod loot table: " + id);
+			validationContext.reportProblem(new MissingModTableProblem(id));
 		}
 
 		registry.listElements().forEach((lootTable) -> lootTable.value().validate(
 				validationContext
 						.setContextKeySet(lootTable.value().getParamSet())
-						.enterElement("{" + lootTable.key().location() + "}", lootTable.key())
+						.enterElement(new ProblemReporter.RootElementPathElement(lootTable.key()), lootTable.key())
 		));
+	}
+
+	public record MissingModTableProblem(ResourceKey<LootTable> id) implements ProblemReporter.Problem {
+		@Override
+		public String description() {
+			return "Missing mod table: " + id.location();
+		}
 	}
 }

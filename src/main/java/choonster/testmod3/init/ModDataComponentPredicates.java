@@ -5,7 +5,7 @@ import choonster.testmod3.advancements.criterion.ItemFluidContainerPredicate;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.registries.Registries;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.bus.BusGroup;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -29,14 +29,14 @@ public class ModDataComponentPredicates {
 	 * <p>
 	 * This should be called during mod construction.
 	 *
-	 * @param modEventBus The mod event bus
+	 * @param modBusGroup The mod bus group
 	 */
-	public static void initialise(final IEventBus modEventBus) {
+	public static void initialise(final BusGroup modBusGroup) {
 		if (isInitialised) {
 			throw new IllegalStateException("Already initialised");
 		}
 
-		ITEM_SUB_PREDICATE_TYPES.register(modEventBus);
+		ITEM_SUB_PREDICATE_TYPES.register(modBusGroup);
 
 		isInitialised = true;
 	}

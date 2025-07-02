@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
@@ -49,11 +49,11 @@ public class ItemCombinationHandler {
 	}
 
 	@SubscribeEvent
-	public static void onWorldTick(final TickEvent.LevelTickEvent event) {
+	public static void onWorldTick(final TickEvent.LevelTickEvent.Post event) {
 		final var level = event.level;
 
-		// If this is the END phase on the server,
-		if (event.phase == TickEvent.Phase.END && !level.isClientSide) {
+		// If this is on the server,
+		if (!level.isClientSide) {
 			// Handle each loaded EntityItem with an input item
 			StreamSupport.stream(((ServerLevel) level).getAllEntities().spliterator(), false)
 					.filter(isMatchingItemEntity(INPUTS))
@@ -73,7 +73,7 @@ public class ItemCombinationHandler {
 			return;
 		}
 
-		final var level = entityItem.getCommandSenderWorld();
+		final var level = entityItem.level();
 
 		final Set<Item> remainingInputs = new HashSet<>(INPUTS); // Create a mutable copy of the input set to track which items have been found
 		final List<ItemEntity> matchingEntityItems = new ArrayList<>(); // Create a list to track the item entities containing the input items

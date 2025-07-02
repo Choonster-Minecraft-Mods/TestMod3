@@ -17,7 +17,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.items.IItemHandler;
@@ -59,7 +58,7 @@ public class DimensionReplacementItem extends Item {
 						.collect(Collectors.toMap(Pair::getFirst, Pair::getSecond))
 		);
 
-		MinecraftForge.EVENT_BUS.addListener(this::itemTooltip);
+		ItemTooltipEvent.BUS.addListener(this::itemTooltip);
 	}
 
 	/**

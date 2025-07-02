@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
@@ -44,15 +44,15 @@ public class SnowBuildup {
 	private static final Random random = new Random();
 
 	@SubscribeEvent
-	public static void onWorldTick(final TickEvent.LevelTickEvent event) {
+	public static void onWorldTick(final TickEvent.LevelTickEvent.Post event) {
 		if (event.level.isClientSide) {
 			return;
 		}
 
 		final var level = (ServerLevel) event.level;
 
-		// If this is the post tick, the level's total time (number of ticks) is divisible by NUM_TICKS, and it's raining/snowing,
-		if (event.phase != TickEvent.Phase.END || level.getGameTime() % NUM_TICKS != 0 || !level.isRaining()) {
+		// If the level's total time (number of ticks) is divisible by NUM_TICKS, and it's raining/snowing,
+		if (level.getGameTime() % NUM_TICKS != 0 || !level.isRaining()) {
 			return;
 		}
 

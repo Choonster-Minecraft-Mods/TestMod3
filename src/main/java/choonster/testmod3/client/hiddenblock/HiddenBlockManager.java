@@ -9,7 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 /**
@@ -43,11 +43,7 @@ public class HiddenBlockManager {
 	}
 
 	@SubscribeEvent
-	public static void clientTick(final TickEvent.ClientTickEvent event) {
-		if (event.phase != TickEvent.Phase.END) {
-			return;
-		}
-
+	public static void clientTick(final TickEvent.ClientTickEvent.Post ignoredEvent) {
 		final var player = Minecraft.getInstance().player;
 		if (player == null) {
 			return;

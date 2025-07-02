@@ -3,13 +3,13 @@ package choonster.testmod3.world.level.block.entity;
 import choonster.testmod3.init.ModBlockEntities;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
@@ -82,19 +82,17 @@ public class SurvivalCommandBlockEntity extends CommandBlockEntity {
 	}
 
 	@Override
-	protected void loadAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
-		super.loadAdditional(tag, registries);
+	protected void loadAdditional(final ValueInput input) {
+		super.loadAdditional(input);
 
-		tag.getCompound("SurvivalCommandBlockLogic").ifPresent(
-				t -> getCommandBlock().load(t, registries)
+		input.child("SurvivalCommandBlockLogic").ifPresent(
+				child -> getCommandBlock().load(child)
 		);
 	}
 
 	@Override
-	protected void saveAdditional(final CompoundTag tag, final HolderLookup.Provider registries) {
-		super.saveAdditional(tag, registries);
-
-		tag.put("SurvivalCommandBlockLogic", getCommandBlock().save(new CompoundTag(), registries));
+	protected void saveAdditional(final ValueOutput output) {
+		getCommandBlock().save(output.child("SurvivalCommandBlockLogic"));
 	}
 
 	@Override

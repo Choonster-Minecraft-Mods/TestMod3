@@ -7,7 +7,7 @@ import choonster.testmod3.init.levelgen.ModFeatures;
 import choonster.testmod3.init.levelgen.ModPlacementModifierTypes;
 import choonster.testmod3.util.BlockDumper;
 import com.mojang.logging.LogUtils;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -29,7 +29,7 @@ public class TestMod3 {
 	public TestMod3(final FMLJavaModLoadingContext context) {
 		TestMod3Config.register(context);
 
-		final var modEventBus = context.getModEventBus();
+		final var modEventBus = context.getModBusGroup();
 
 		ModFluids.initialise(modEventBus);
 		ModBlocks.initialise(modEventBus);

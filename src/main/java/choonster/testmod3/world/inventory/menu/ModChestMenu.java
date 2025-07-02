@@ -3,16 +3,12 @@ package choonster.testmod3.world.inventory.menu;
 import choonster.testmod3.init.ModMenuTypes;
 import choonster.testmod3.world.inventory.IMenuCallbacks;
 import choonster.testmod3.world.level.block.entity.ModChestBlockEntity;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
@@ -52,32 +48,32 @@ public class ModChestMenu extends AbstractContainerMenu {
 
 		numRows = chestInventory.getSlots() / SLOTS_PER_ROW;
 
-		final int chestOffset = (numRows - 4) * 18;
+		final var chestOffset = (numRows - 4) * 18;
 
-		for (int row = 0; row < numRows; ++row) {
-			for (int col = 0; col < SLOTS_PER_ROW; ++col) {
+		for (var row = 0; row < numRows; ++row) {
+			for (var col = 0; col < SLOTS_PER_ROW; ++col) {
 				addSlot(new SlotItemHandler(chestInventory, col + row * SLOTS_PER_ROW, 8 + col * 18, 18 + row * 18));
 			}
 		}
 
-		for (int row = 0; row < 3; ++row) {
-			for (int col = 0; col < SLOTS_PER_ROW; ++col) {
+		for (var row = 0; row < 3; ++row) {
+			for (var col = 0; col < SLOTS_PER_ROW; ++col) {
 				addSlot(new SlotItemHandler(playerInventoryItemHandler, col + row * SLOTS_PER_ROW + SLOTS_PER_ROW, 8 + col * 18, 103 + row * 18 + chestOffset));
 			}
 		}
 
-		for (int col = 0; col < SLOTS_PER_ROW; ++col) {
+		for (var col = 0; col < SLOTS_PER_ROW; ++col) {
 			addSlot(new SlotItemHandler(playerInventoryItemHandler, col, 8 + col * 18, 161 + chestOffset));
 		}
 	}
 
 	@Override
 	public ItemStack quickMoveStack(final Player player, final int index) {
-		final Slot slot = slots.get(index);
+		final var slot = slots.get(index);
 
-		if (slot != null && slot.hasItem()) {
-			final ItemStack stack = slot.getItem();
-			final ItemStack originalStack = stack.copy();
+		if (slot.hasItem()) {
+			final var stack = slot.getItem();
+			final var originalStack = stack.copy();
 
 			if (index < numRows * SLOTS_PER_ROW) {
 				if (!moveItemStackTo(stack, numRows * SLOTS_PER_ROW, slots.size(), true)) {
@@ -123,15 +119,15 @@ public class ModChestMenu extends AbstractContainerMenu {
 	public static class Factory implements IContainerFactory<ModChestMenu> {
 		@Override
 		public ModChestMenu create(final int windowId, final Inventory inv, final FriendlyByteBuf data) {
-			final BlockPos pos = data.readBlockPos();
-			final Level world = inv.player.getCommandSenderWorld();
-			final BlockEntity blockEntity = world.getBlockEntity(pos);
+			final var pos = data.readBlockPos();
+			final var level = inv.player.level();
+			final var blockEntity = level.getBlockEntity(pos);
 
-			if (!(blockEntity instanceof ModChestBlockEntity)) {
+			if (!(blockEntity instanceof final ModChestBlockEntity modChestBlockEntity)) {
 				throw new IllegalStateException("Invalid block at " + pos);
 			}
 
-			return new ModChestMenu(windowId, inv, (ModChestBlockEntity) blockEntity);
+			return new ModChestMenu(windowId, inv, modChestBlockEntity);
 		}
 	}
 }

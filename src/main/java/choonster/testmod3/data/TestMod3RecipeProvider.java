@@ -13,6 +13,7 @@ import choonster.testmod3.init.ModFluids;
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.util.RegistryUtil;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
+import com.mojang.logging.LogUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.DataComponentMatchers;
@@ -29,10 +30,9 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -45,11 +45,13 @@ import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.conditions.FalseCondition;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
+import org.slf4j.Logger;
 
 import java.util.Arrays;
 import java.util.List;
@@ -62,6 +64,8 @@ import java.util.concurrent.CompletableFuture;
  * @author Choonster
  */
 public class TestMod3RecipeProvider extends RecipeProvider {
+	private static final Logger LOGGER = LogUtils.getLogger();
+
 	private final HolderGetter<Item> items;
 
 	public TestMod3RecipeProvider(final HolderLookup.Provider registries, final RecipeOutput output) {
@@ -144,28 +148,26 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 
 		// Craft a Guardian Spawner from a Raw Cod surrounded by Sticks
 		// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2424619-help-needed-creating-non-pig-mob-spawners
-		{
+		try (final var problems = new ProblemReporter.ScopedCollector(LOGGER)) {
 			final var guardianSpawner = new ItemStack(Blocks.SPAWNER);
 
-			final var blockEntityTag = new CompoundTag();
-			BlockEntity.addEntityType(blockEntityTag, BlockEntityType.MOB_SPAWNER);
+			final var blockEntityOutput = TagValueOutput.createWithContext(problems, registries);
+
+			BlockEntity.addEntityType(blockEntityOutput, BlockEntityType.MOB_SPAWNER);
 
 			final var entityToSpawn = new CompoundTag();
 			entityToSpawn.putString("id", RegistryUtil.getKey(EntityType.GUARDIAN).toString());
 
-			final var spawnData = new SpawnData(entityToSpawn, Optional.empty(), Optional.empty());
-
-			blockEntityTag.put(
-					"SpawnData",
-					SpawnData.CODEC
-							.encodeStart(NbtOps.INSTANCE, spawnData)
-							.getOrThrow(message -> new IllegalStateException("Invalid SpawnData: " + message))
+			final var spawnData = new SpawnData(
+					entityToSpawn,
+					Optional.empty(),
+					Optional.empty()
 			);
 
-			final var spawnPotentials = new ListTag();
-			blockEntityTag.put("SpawnPotentials", spawnPotentials);
+			blockEntityOutput.store("SpawnData", SpawnData.CODEC, spawnData);
+			blockEntityOutput.childrenList("SpawnPotentials");
 
-			guardianSpawner.set(DataComponents.BLOCK_ENTITY_DATA, CustomData.of(blockEntityTag));
+			guardianSpawner.set(DataComponents.BLOCK_ENTITY_DATA, CustomData.of(blockEntityOutput.buildResult()));
 
 			enhancedShaped(RecipeCategory.MISC, guardianSpawner)
 					.pattern("SSS")
