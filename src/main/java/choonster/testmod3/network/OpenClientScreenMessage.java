@@ -6,10 +6,8 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.extensions.IForgeServerPlayer;
 import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.minecraftforge.fml.DistExecutor;
 
 /**
  * Sent by the server to open a client-side {@link Screen}.
@@ -49,6 +47,6 @@ public record OpenClientScreenMessage<DATA>(ClientScreenType<DATA> clientScreenT
 	}
 
 	private static <T> void handleInternal(final OpenClientScreenMessage<T> message) {
-		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientScreenManager.openScreen(message.clientScreenType, message.extraData));
+		ClientScreenManager.openScreen(message.clientScreenType, message.extraData);
 	}
 }

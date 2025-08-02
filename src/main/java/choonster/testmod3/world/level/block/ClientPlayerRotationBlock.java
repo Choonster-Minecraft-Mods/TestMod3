@@ -10,8 +10,6 @@ import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import org.slf4j.Logger;
 
 /**
@@ -75,8 +73,7 @@ public class ClientPlayerRotationBlock extends StaticPressurePlateBlock {
 				LOGGER.info("Switching pitch direction! Now pitching {}.", isPitchingUp ? "up" : "down");
 			}
 
-			// TODO: Do we need DistExecutor?
-			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> entity.turn(ROTATION_YAW, isPitchingUp ? ROTATION_PITCH : -ROTATION_PITCH));
+			entity.turn(ROTATION_YAW, isPitchingUp ? ROTATION_PITCH : -ROTATION_PITCH);
 		}
 	}
 }

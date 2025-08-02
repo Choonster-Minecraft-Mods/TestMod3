@@ -1,9 +1,10 @@
 package choonster.testmod3.world.level.block;
 
-import choonster.testmod3.client.block.ClientOnlyBlockMethods;
 import choonster.testmod3.client.util.ClientUtil;
 import choonster.testmod3.text.TestMod3Lang;
 import com.mojang.serialization.MapCodec;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -11,8 +12,6 @@ import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 
 /**
  * A block that forces a player to right-click (from the client side) every 10 ticks (0.5 seconds) while standing on it.
@@ -58,7 +57,7 @@ public class ClientPlayerRightClickBlock extends StaticPressurePlateBlock {
 					false
 			);
 
-			DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientOnlyBlockMethods::pressUseItemKeyBinding);
+			KeyMapping.click(Minecraft.getInstance().options.keyUse.getKey());
 		}
 	}
 }

@@ -1,9 +1,7 @@
 package choonster.testmod3.client.util;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -23,6 +21,6 @@ public class ClientUtil {
 	 */
 	@Nullable
 	public static Player getClientPlayer() {
-		return DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> ClientOnlyMethods::getClientPlayer);
+		return Minecraft.getInstance().player;
 	}
 }

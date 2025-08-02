@@ -7,8 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 
 /**
  * Runs client-side updates for {@link HiddenBlock}.
@@ -22,7 +20,7 @@ public class HiddenBlockEntity extends BlockEntity {
 
 	public static void tick(final Level level, final BlockPos pos, final BlockState state, final HiddenBlockEntity blockEntity) {
 		if (level.isClientSide) {
-			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> HiddenBlockManager.refresh(level, pos));
+			HiddenBlockManager.refresh(level, pos);
 		}
 	}
 }
