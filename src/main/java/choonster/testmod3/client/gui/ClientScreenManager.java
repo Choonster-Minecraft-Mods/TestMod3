@@ -1,14 +1,10 @@
 package choonster.testmod3.client.gui;
 
-import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModClientScreenTypes;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
@@ -22,7 +18,6 @@ import java.util.Optional;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber(modid = TestMod3.MODID, value = Dist.CLIENT, bus = Bus.MOD)
 public class ClientScreenManager {
 	private static final Logger LOGGER = LogUtils.getLogger();
 

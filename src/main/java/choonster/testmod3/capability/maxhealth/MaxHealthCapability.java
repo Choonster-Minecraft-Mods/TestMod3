@@ -7,7 +7,6 @@ import choonster.testmod3.util.CapabilityNotPresentException;
 import choonster.testmod3.util.ModLogUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraftforge.common.capabilities.Capability;
@@ -76,7 +75,7 @@ public final class MaxHealthCapability {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void attachCapabilities(final AttachCapabilitiesEvent<Entity> event) {
+		public static void attachCapabilities(final AttachCapabilitiesEvent.Entities event) {
 			if (event.getObject() instanceof final LivingEntity entity) {
 				final var maxHealth = MaxHealth.empty(entity);
 				final var codec = MaxHealth.codec(entity);

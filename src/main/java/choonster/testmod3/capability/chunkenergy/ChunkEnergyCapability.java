@@ -72,7 +72,7 @@ public final class ChunkEnergyCapability {
 	@SuppressWarnings("unused")
 	private static class EventHandler {
 		@SubscribeEvent
-		public static void attachChunkCapabilities(final AttachCapabilitiesEvent<LevelChunk> event) {
+		public static void attachChunkCapabilities(final AttachCapabilitiesEvent.LevelChunks event) {
 			final var chunk = event.getObject();
 
 			final var level = chunk.getLevel();

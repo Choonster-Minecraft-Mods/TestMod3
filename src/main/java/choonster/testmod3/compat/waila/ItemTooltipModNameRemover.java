@@ -2,10 +2,8 @@ package choonster.testmod3.compat.waila;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModItems;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
 
 import java.util.function.Supplier;
 
@@ -17,7 +15,7 @@ import java.util.function.Supplier;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = TestMod3.MODID)
+//@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = TestMod3.MODID)
 public class ItemTooltipModNameRemover {
 	private static final Supplier<String> MOD_NAME = Lazy.of(() ->
 			ModList.get()
