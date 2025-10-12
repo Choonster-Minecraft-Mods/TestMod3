@@ -37,7 +37,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
@@ -153,7 +153,8 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 
 			final var blockEntityOutput = TagValueOutput.createWithContext(problems, registries);
 
-			BlockEntity.addEntityType(blockEntityOutput, BlockEntityType.MOB_SPAWNER);
+			final var blockEntityType = BlockEntityType.MOB_SPAWNER;
+			BlockEntity.addEntityType(blockEntityOutput, blockEntityType);
 
 			final var entityToSpawn = new CompoundTag();
 			entityToSpawn.putString("id", RegistryUtil.getKey(EntityType.GUARDIAN).toString());
@@ -167,7 +168,10 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 			blockEntityOutput.store("SpawnData", SpawnData.CODEC, spawnData);
 			blockEntityOutput.childrenList("SpawnPotentials");
 
-			guardianSpawner.set(DataComponents.BLOCK_ENTITY_DATA, CustomData.of(blockEntityOutput.buildResult()));
+			guardianSpawner.set(
+					DataComponents.BLOCK_ENTITY_DATA,
+					TypedEntityData.of(blockEntityType, blockEntityOutput.buildResult())
+			);
 
 			enhancedShaped(RecipeCategory.MISC, guardianSpawner)
 					.pattern("SSS")

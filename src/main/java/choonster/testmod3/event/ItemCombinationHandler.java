@@ -50,10 +50,10 @@ public class ItemCombinationHandler {
 
 	@SubscribeEvent
 	public static void onWorldTick(final TickEvent.LevelTickEvent.Post event) {
-		final var level = event.level;
+		final var level = event.level();
 
 		// If this is on the server,
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			// Handle each loaded EntityItem with an input item
 			StreamSupport.stream(((ServerLevel) level).getAllEntities().spliterator(), false)
 					.filter(isMatchingItemEntity(INPUTS))

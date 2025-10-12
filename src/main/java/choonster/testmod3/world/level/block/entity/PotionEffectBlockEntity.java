@@ -26,7 +26,7 @@ public class PotionEffectBlockEntity extends BlockEntity {
 	}
 
 	public static void tick(final Level level, final BlockPos pos, final BlockState state, final PotionEffectBlockEntity blockEntity) {
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			final var areaToSearch = new AABB(pos).inflate(RADIUS);
 			final var entities = level.getEntitiesOfClass(LivingEntity.class, areaToSearch);
 

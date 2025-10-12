@@ -23,7 +23,7 @@ public class HeightTesterItem extends Item {
 
 	@Override
 	public InteractionResult use(final Level world, final Player player, final InteractionHand hand) {
-		if (!world.isClientSide && player instanceof final ServerPlayer serverPlayer) {
+		if (!world.isClientSide() && player instanceof final ServerPlayer serverPlayer) {
 			final var pos = serverPlayer.blockPosition();
 
 			serverPlayer.sendSystemMessage(

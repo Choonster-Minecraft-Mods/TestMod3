@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber(modid = TestMod3.MODID, value = Dist.CLIENT, bus = Bus.MOD)
+@Mod.EventBusSubscriber(modid = TestMod3.MODID, value = Dist.CLIENT, bus = Bus.FORGE)
 public class ModRenderers {
 	@SubscribeEvent
 	public static void register(final EntityRenderersEvent.RegisterRenderers event) {
@@ -35,7 +35,7 @@ public class ModRenderers {
 						ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "textures/entity/block_detection_arrow.png")
 				)
 		);
-		
+
 		event.registerEntityRenderer(ModEntities.PLAYER_AVOIDING_CREEPER.get(), CreeperRenderer::new);
 	}
 }

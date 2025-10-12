@@ -39,9 +39,10 @@ public class ClientPlayerRightClickBlock extends StaticPressurePlateBlock {
 			final Level level,
 			final BlockPos pos,
 			final Entity entity,
-			final InsideBlockEffectApplier insideBlockEffectApplier
+			final InsideBlockEffectApplier insideBlockEffectApplier,
+			final boolean _unknown
 	) {
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			return;
 		}
 

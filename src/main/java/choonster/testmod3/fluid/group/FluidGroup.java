@@ -238,7 +238,7 @@ public class FluidGroup<TYPE extends FluidType, STILL extends Fluid, FLOWING ext
 	public static Block.Properties defaultBlockProperties() {
 		return Block.Properties.of()
 				.replaceable()
-				.noCollission()
+				.noCollision()
 				.strength(100)
 				.pushReaction(PushReaction.DESTROY)
 				.noLootTable()

@@ -37,7 +37,7 @@ public class RitualCheckerItem extends Item {
 
 	@Override
 	public InteractionResult use(final Level level, final Player player, final InteractionHand hand) {
-		if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
+		if (!level.isClientSide() && player instanceof final ServerPlayer serverPlayer) {
 			final Component textComponent;
 
 			final var invalidPosition = checkRitual(serverPlayer);

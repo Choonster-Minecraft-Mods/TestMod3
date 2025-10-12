@@ -101,7 +101,7 @@ public class MaxHealth implements IMaxHealth {
 			final var entityMaxHealthAttribute = entity.getAttribute(Attributes.MAX_HEALTH);
 			final var packet = new ClientboundUpdateAttributesPacket(entity.getId(), Collections.singleton(entityMaxHealthAttribute));
 
-			serverLevel.getChunkSource().broadcastAndSend(entity, packet);
+			serverLevel.getChunkSource().sendToTrackingPlayers(entity, packet);
 		}
 	}
 

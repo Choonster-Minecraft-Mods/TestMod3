@@ -34,7 +34,7 @@ public class MaxHealthGetterBlock extends Block {
 
 	@Override
 	protected InteractionResult useWithoutItem(final BlockState state, final Level level, final BlockPos pos, final Player player, final BlockHitResult blockHitResult) {
-		if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
+		if (!level.isClientSide() && player instanceof final ServerPlayer serverPlayer) {
 			final var maxHealth = MaxHealthCapability
 					.getMaxHealth(player)
 					.orElseThrow(CapabilityNotPresentException::new);

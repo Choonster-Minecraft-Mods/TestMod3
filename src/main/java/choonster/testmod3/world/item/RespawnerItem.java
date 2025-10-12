@@ -2,6 +2,7 @@ package choonster.testmod3.world.item;
 
 import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -20,19 +21,19 @@ public class RespawnerItem extends Item {
 	}
 
 	@Override
-	public InteractionResult use(final Level world, final Player player, final InteractionHand hand) {
-		if (world.isClientSide) {
+	public InteractionResult use(final Level level, final Player player, final InteractionHand hand) {
+		if (level.isClientSide() || !(level instanceof final ServerLevel serverLevel)) {
 			return InteractionResult.SUCCESS;
 		}
 
 		final var serverPlayer = (ServerPlayer) player;
-		final var server = serverPlayer.getServer();
+		final var server = serverLevel.getServer();
 
 		final var respawnConfig = serverPlayer.getRespawnConfig();
-		final var respawnPosition = respawnConfig != null ? respawnConfig.pos() : null;
+		final var respawnPosition = respawnConfig != null ? respawnConfig.respawnData().pos() : null;
 
-		final var respawnLevel = server != null && respawnConfig != null
-				? server.getLevel(respawnConfig.dimension())
+		final var respawnLevel = respawnConfig != null
+				? server.getLevel(respawnConfig.respawnData().dimension())
 				: null;
 
 		if (respawnPosition == null || respawnLevel == null) {

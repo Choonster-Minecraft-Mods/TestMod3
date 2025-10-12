@@ -78,7 +78,7 @@ public final class PigSpawner {
 				final BlockPos interactablePos,
 				@Nullable final Player player
 		) {
-			if (level.isClientSide) {
+			if (level.isClientSide()) {
 				return;
 			}
 

@@ -94,7 +94,7 @@ public class EntityCheckerItem extends Item {
 	public InteractionResult use(final Level world, final Player player, final InteractionHand hand) {
 		final var heldItem = player.getItemInHand(hand);
 
-		if (!world.isClientSide && player instanceof final ServerPlayer serverPlayer) {
+		if (!world.isClientSide() && player instanceof final ServerPlayer serverPlayer) {
 			final var newRadius = incrementRadius(heldItem, serverPlayer.isShiftKeyDown() ? -1 : 1);
 			serverPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_ENTITY_CHECKER_RADIUS.getTranslationKey(), newRadius));
 		}
@@ -104,7 +104,7 @@ public class EntityCheckerItem extends Item {
 
 	@Override
 	public boolean onLeftClickEntity(final ItemStack stack, final Player player, final Entity entity) {
-		if (!player.level().isClientSide && player instanceof final ServerPlayer serverPlayer) {
+		if (!player.level().isClientSide() && player instanceof final ServerPlayer serverPlayer) {
 			final var cornerModeEnabled = toggleCornerModeEnabled(stack);
 			final var message = cornerModeEnabled ? TestMod3Lang.MESSAGE_ENTITY_CHECKER_MODE_CORNER : TestMod3Lang.MESSAGE_ENTITY_CHECKER_MODE_EDGE;
 			serverPlayer.sendSystemMessage(Component.translatable(message.getTranslationKey(), cornerModeEnabled));
@@ -116,7 +116,7 @@ public class EntityCheckerItem extends Item {
 	@Override
 	public InteractionResult useOn(final UseOnContext context) {
 		final var player = context.getPlayer();
-		if (!context.getLevel().isClientSide) {
+		if (!context.getLevel().isClientSide()) {
 			final var heldItem = context.getItemInHand();
 			final var clickedPos = context.getClickedPos();
 			final var properties = getProperties(heldItem);

@@ -45,7 +45,7 @@ public class RestrictedArmourItem extends Item {
 	 */
 	@Override
 	public void inventoryTick(final ItemStack stack, final Level level, final Entity entity, @Nullable final EquipmentSlot slot, final int slotIndex) {
-		if (!level.isClientSide && (slot == null || !slot.isArmor())) { // If this is the server, and it's not an armour slot,
+		if (!level.isClientSide() && (slot == null || !slot.isArmor())) { // If this is the server, and it's not an armour slot,
 			// Try to remove the item from the entity's inventories
 			InventoryUtils.forEachEntityInventory(
 					entity,

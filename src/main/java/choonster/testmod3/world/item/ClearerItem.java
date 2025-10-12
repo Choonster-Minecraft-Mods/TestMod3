@@ -48,7 +48,7 @@ public class ClearerItem extends Item {
 	public InteractionResult use(final Level world, final Player player, final InteractionHand hand) {
 		final var heldItem = player.getItemInHand(hand);
 
-		if (!world.isClientSide && player instanceof final ServerPlayer serverPlayer) {
+		if (!world.isClientSide() && player instanceof final ServerPlayer serverPlayer) {
 			final var currentMode = getMode(heldItem);
 
 			if (serverPlayer.isShiftKeyDown()) {

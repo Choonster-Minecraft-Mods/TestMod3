@@ -52,11 +52,12 @@ public class ItemCollisionTestBlock extends Block {
 			final Level level,
 			final BlockPos pos,
 			final Entity entity,
-			final InsideBlockEffectApplier insideBlockEffectApplier
+			final InsideBlockEffectApplier insideBlockEffectApplier,
+			final boolean _unknown
 	) {
-		super.entityInside(state, level, pos, entity, insideBlockEffectApplier);
+		super.entityInside(state, level, pos, entity, insideBlockEffectApplier, _unknown);
 
-		if (!level.isClientSide && entity instanceof ItemEntity) {
+		if (!level.isClientSide() && entity instanceof ItemEntity) {
 			LOGGER.info("Collision at {}: {}", pos, entity);
 		}
 	}

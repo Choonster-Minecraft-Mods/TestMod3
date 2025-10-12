@@ -5,7 +5,7 @@ import choonster.testmod3.world.item.component.lastusetime.LastUseTimeProperties
 import com.mojang.serialization.MapCodec;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.properties.numeric.RangeSelectItemModelProperty;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ItemOwner;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,10 +24,10 @@ public record TicksSinceLastUse() implements RangeSelectItemModelProperty {
 	public float get(
 			final ItemStack stack,
 			@Nullable final ClientLevel clientLevel,
-			@Nullable final LivingEntity entity,
+			@Nullable final ItemOwner itemOwner,
 			final int seed
 	) {
-		final var level = clientLevel != null ? clientLevel : entity != null ? entity.level() : null;
+		final var level = clientLevel != null ? clientLevel : itemOwner != null ? itemOwner.level() : null;
 
 		if (level == null) {
 			return -1;

@@ -89,8 +89,8 @@ public class ModChestBlock extends BaseEntityBlock<ModChestBlockEntity> {
 
 	@Override
 	protected InteractionResult useItemOn(final ItemStack stack, final BlockState state, final Level level, final BlockPos pos, final Player player, final InteractionHand hand, final BlockHitResult blockHitResult) {
-		if (!level.isClientSide && !isBlocked(level, pos)) {
-			final ModChestBlockEntity blockEntity = getBlockEntity(level, pos);
+		if (!level.isClientSide() && !isBlocked(level, pos)) {
+			final var blockEntity = getBlockEntity(level, pos);
 			if (blockEntity != null) {
 				blockEntity.openGUI((ServerPlayer) player);
 			}

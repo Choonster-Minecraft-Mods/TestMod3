@@ -31,7 +31,7 @@ public class NetworkUtil {
 	 */
 	@SuppressWarnings("resource")
 	public static <T> void openClientScreen(final ServerPlayer player, final Supplier<ClientScreenType<T>> clientScreenType, final T extraData) {
-		if (player.level().isClientSide) {
+		if (player.level().isClientSide()) {
 			return;
 		}
 

@@ -78,7 +78,7 @@ public class ModEntities {
 		);
 	}
 
-	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.FORGE)
 	public static class RegistrationHandler {
 		@SubscribeEvent
 		public static void registerAttributes(final EntityAttributeCreationEvent event) {

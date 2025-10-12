@@ -70,7 +70,6 @@ public enum TestMod3Lang {
 	ITEM_DESC_UNICODE_TOOLTIPS_3("item", "unicode_tooltips.3.desc"),
 
 	// Key bindings
-	KEY_CATEGORY_GENERAL("key.category", "general"),
 	KEY_PLACE_HELD_BLOCK("key", "place_held_block"),
 	KEY_PRINT_POTIONS("key", "print_potions"),
 

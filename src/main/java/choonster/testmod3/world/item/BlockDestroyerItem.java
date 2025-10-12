@@ -30,7 +30,7 @@ public class BlockDestroyerItem extends Item {
 			final BlockPos pos,
 			final LivingEntity livingEntity
 	) {
-		if (!level.isClientSide && livingEntity instanceof final ServerPlayer serverPlayer) {
+		if (!level.isClientSide() && livingEntity instanceof final ServerPlayer serverPlayer) {
 			if (state.getBlock() == Blocks.WHEAT && state.getValue(CropBlock.AGE) >= 6) {
 				serverPlayer.sendSystemMessage(
 						Component.translatable(

@@ -26,7 +26,7 @@ public class MaxHealthGetterItem extends Item {
 	@SuppressWarnings("resource")
 	@Override
 	public InteractionResult interactLivingEntity(final ItemStack stack, final Player player, final LivingEntity target, final InteractionHand hand) {
-		if (!player.level().isClientSide && player instanceof final ServerPlayer serverPlayer) {
+		if (!player.level().isClientSide() && player instanceof final ServerPlayer serverPlayer) {
 			final var maxHealth = MaxHealthCapability
 					.getMaxHealth(target)
 					.orElseThrow(CapabilityNotPresentException::new);

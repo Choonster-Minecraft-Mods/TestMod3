@@ -139,7 +139,7 @@ public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEnt
 					final var success = FluidUtil.interactWithFluidHandler(player, hand, level, pos, blockHitResult.getDirection());
 
 					// If the contents changed or this is the off hand, send a chat message to the player
-					if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer && (success || hand == InteractionHand.OFF_HAND)) {
+					if (!level.isClientSide() && player instanceof final ServerPlayer serverPlayer && (success || hand == InteractionHand.OFF_HAND)) {
 						final var fluidTankSnapshots = FluidTankSnapshot.getSnapshotsFromFluidHandler(fluidHandler);
 
 						FluidTankBlock.getFluidDataForDisplay(fluidTankSnapshots)

@@ -206,7 +206,7 @@ public class ReplacementArmourItem extends Item {
 	@Override
 	public void inventoryTick(final ItemStack stack, final Level level, final Entity entity, @Nullable final EquipmentSlot slot, final int slotIndex) {
 		// If this isn't the server or the entity isn't living, do nothing
-		if (level.isClientSide || !(entity instanceof final LivingEntity livingEntity)) {
+		if (level.isClientSide() || !(entity instanceof final LivingEntity livingEntity)) {
 			return;
 		}
 

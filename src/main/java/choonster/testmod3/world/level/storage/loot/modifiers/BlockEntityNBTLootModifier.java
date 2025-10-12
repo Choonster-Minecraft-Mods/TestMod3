@@ -10,7 +10,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -57,13 +57,16 @@ public class BlockEntityNBTLootModifier extends LootModifier {
 
 			if (state != null && blockEntity != null) {
 				// Write the BlockEntity to NBT
-				var blockEntityOutput = TagValueOutput.createWithContext(problems, context.getLevel().registryAccess());
+				final var blockEntityOutput = TagValueOutput.createWithContext(problems, context.getLevel().registryAccess());
 
 				blockEntity.saveWithId(blockEntityOutput);
 
 				// Store the BlockEntity data in the ItemStack
 				final var stack = new ItemStack(state.getBlock());
-				stack.set(DataComponents.BLOCK_ENTITY_DATA, CustomData.of(blockEntityOutput.buildResult()));
+				stack.set(
+						DataComponents.BLOCK_ENTITY_DATA,
+						TypedEntityData.of(blockEntity.getType(), blockEntityOutput.buildResult())
+				);
 
 				generatedLoot.add(stack);
 			}

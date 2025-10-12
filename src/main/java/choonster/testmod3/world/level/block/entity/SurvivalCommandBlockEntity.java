@@ -1,6 +1,7 @@
 package choonster.testmod3.world.level.block.entity;
 
 import choonster.testmod3.init.ModBlockEntities;
+import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -47,9 +48,9 @@ public class SurvivalCommandBlockEntity extends CommandBlockEntity {
 		}
 
 		@Override
-		public CommandSourceStack createCommandSourceStack() {
+		public CommandSourceStack createCommandSourceStack(final CommandSource commandSource) {
 			return new CommandSourceStack(
-					this,
+					commandSource,
 					new Vec3(worldPosition.getX() + 0.5d, worldPosition.getY() + 0.5d, worldPosition.getZ() + 0.5D),
 					Vec2.ZERO,
 					getLevel(),

@@ -78,7 +78,7 @@ public class DimensionReplacementItem extends Item {
 
 	@Override
 	public void inventoryTick(final ItemStack stack, final Level level, final Entity entity, @Nullable final EquipmentSlot slot, final int slotIndex) {
-		if (level.isClientSide) {
+		if (level.isClientSide()) {
 			return;
 		}
 

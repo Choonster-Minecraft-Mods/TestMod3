@@ -19,7 +19,7 @@ public class HiddenBlockEntity extends BlockEntity {
 	}
 
 	public static void tick(final Level level, final BlockPos pos, final BlockState state, final HiddenBlockEntity blockEntity) {
-		if (level.isClientSide) {
+		if (level.isClientSide()) {
 			HiddenBlockManager.refresh(level, pos);
 		}
 	}

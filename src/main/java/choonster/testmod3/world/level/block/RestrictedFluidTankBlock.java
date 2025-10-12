@@ -57,7 +57,7 @@ public class RestrictedFluidTankBlock extends FluidTankBlock<RestrictedFluidTank
 			if (blockEntity != null) {
 				final var enabled = blockEntity.toggleFacing(direction);
 
-				if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
+				if (!level.isClientSide() && player instanceof final ServerPlayer serverPlayer) {
 					final var message = enabled ? TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_FACING_ENABLED : TestMod3Lang.MESSAGE_FLUID_TANK_RESTRICTED_FACING_DISABLED;
 					serverPlayer.sendSystemMessage(Component.translatable(message.getTranslationKey(), direction));
 				}
@@ -71,7 +71,7 @@ public class RestrictedFluidTankBlock extends FluidTankBlock<RestrictedFluidTank
 
 	@Override
 	public void attack(final BlockState state, final Level level, final BlockPos pos, final Player player) {
-		if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
+		if (!level.isClientSide() && player instanceof final ServerPlayer serverPlayer) {
 			final var enabledFacingsString = getEnabledFacingsString(level, pos);
 			serverPlayer.sendSystemMessage(
 					Component.translatable(

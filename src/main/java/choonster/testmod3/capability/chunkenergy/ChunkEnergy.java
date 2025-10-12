@@ -95,7 +95,7 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy {
 		final var level = getLevel();
 		final var chunkPos = getChunkPos();
 
-		if (level.isClientSide) {
+		if (level.isClientSide()) {
 			return;
 		}
 

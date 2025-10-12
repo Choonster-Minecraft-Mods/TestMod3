@@ -83,7 +83,7 @@ public class ClientEventHandler {
 	public static void entityJoinLevel(final EntityJoinLevelEvent event) {
 		final var level = event.getLevel();
 
-		if (level.isClientSide && event.getEntity() instanceof final AbstractMinecart minecart) {
+		if (level.isClientSide() && event.getEntity() instanceof final AbstractMinecart minecart) {
 			final var scoreboard = level.getScoreboard();
 
 			var team = scoreboard.getPlayerTeam(TestMod3.MODID);
@@ -105,7 +105,7 @@ public class ClientEventHandler {
 	public static void entityLeaveWorld(final EntityLeaveLevelEvent event) {
 		final var level = event.getLevel();
 
-		if (level.isClientSide && event.getEntity() instanceof final AbstractMinecart minecart) {
+		if (level.isClientSide() && event.getEntity() instanceof final AbstractMinecart minecart) {
 			glowingMinecarts.remove(minecart);
 		}
 	}

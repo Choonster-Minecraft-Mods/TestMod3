@@ -9,6 +9,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,7 +18,6 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
 
 /**
  * Allows a player to lock an {@link ILock}.
@@ -75,24 +76,24 @@ public class LockScreen extends Screen {
 
 	private void onDone() {
 		TestMod3.network.send(new SetLockCodeMessage(pos, facing, lockCodeTextField.getValue()), PacketDistributor.SERVER.noArg());
-		minecraft.setScreen(null);
+		onClose();
 	}
 
 	@Override
-	public boolean keyPressed(final int keyCode, final int scanCode, final int modifiers) {
-		if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
-			return super.keyPressed(keyCode, scanCode, modifiers);
-		} else if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) {
+	public boolean keyPressed(final KeyEvent event) {
+		if (event.isEscape()) {
+			return super.keyPressed(event);
+		} else if (event.isConfirmation()) {
 			onDone();
 			return true;
 		}
 
-		return lockCodeTextField.keyPressed(keyCode, scanCode, modifiers);
+		return lockCodeTextField.keyPressed(event) || super.keyPressed(event);
 	}
 
 	@Override
-	public boolean mouseClicked(final double mouseX, final double mouseY, final int mouseButton) {
-		return lockCodeTextField.mouseClicked(mouseX, mouseY, mouseButton) || super.mouseClicked(mouseX, mouseY, mouseButton);
+	public boolean mouseClicked(final MouseButtonEvent event, final boolean repeat) {
+		return lockCodeTextField.mouseClicked(event, repeat) || super.mouseClicked(event, repeat);
 	}
 
 	@Override

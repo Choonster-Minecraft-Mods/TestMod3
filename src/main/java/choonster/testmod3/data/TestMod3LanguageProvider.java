@@ -1,17 +1,20 @@
 package choonster.testmod3.data;
 
 import choonster.testmod3.TestMod3;
+import choonster.testmod3.client.init.ModKeyMappings;
 import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.init.*;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.EnumFaceRotation;
 import choonster.testmod3.world.item.ModBucketItem;
 import choonster.testmod3.world.level.block.PlaneBlock;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.PackOutput;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EntityType;
@@ -26,6 +29,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -308,7 +312,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 	}
 
 	private void addKeyBindings() {
-		add(TestMod3Lang.KEY_CATEGORY_GENERAL, "TestMod3");
+		add(ModKeyMappings.CATEGORY, "TestMod3");
 		add(TestMod3Lang.KEY_PLACE_HELD_BLOCK, "Place Held Block");
 		add(TestMod3Lang.KEY_PRINT_POTIONS, "Print Potions");
 	}
@@ -368,7 +372,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 
 	private void addSpawnEgg(final Supplier<? extends SpawnEggItem> spawnEggItem) {
 		final var item = spawnEggItem.get();
-		final var entityType = item.getDefaultType();
+		final var entityType = Objects.requireNonNull(spawnEggItem.get().getType(item.getDefaultInstance()));
 		add(item, String.format("%s Spawn Egg", ENTITY_TYPE_NAMES.get(entityType)));
 	}
 
@@ -403,11 +407,15 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		stack.set(DataComponents.POTION_CONTENTS, new PotionContents(potion));
 
 		final var itemName = stack.getItemName();
-		if (itemName.getContents() instanceof final TranslatableContents translatableContents) {
-			return translatableContents.getKey();
-		}
+		return getTranslationKey(itemName);
+	}
 
-		throw new IllegalStateException("Expected %s to be translatable".formatted(itemName));
+
+	private void add(final KeyMapping.Category category, final String name) {
+		final var label = category.label();
+		final var key = getTranslationKey(label);
+
+		add(key, name);
 	}
 
 	/*
@@ -431,5 +439,13 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 
 	private String translate(final String key) {
 		return I18n.get(key);
+	}
+
+	private static String getTranslationKey(final Component component) {
+		if (component.getContents() instanceof final TranslatableContents translatableContents) {
+			return translatableContents.getKey();
+		}
+
+		throw new IllegalStateException("Expected %s to be translatable".formatted(component));
 	}
 }

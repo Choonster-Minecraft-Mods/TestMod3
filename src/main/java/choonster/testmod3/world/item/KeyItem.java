@@ -26,7 +26,7 @@ public class KeyItem extends Item {
 		return LockCapability.getLock(context.getLevel(), context.getClickedPos(), context.getClickedFace())
 				.<InteractionResult>map(lock -> {
 					if (
-							!context.getLevel().isClientSide
+							!context.getLevel().isClientSide()
 									&& context.getPlayer() instanceof final ServerPlayer serverPlayer
 					) {
 						if (lock.isLocked()) {

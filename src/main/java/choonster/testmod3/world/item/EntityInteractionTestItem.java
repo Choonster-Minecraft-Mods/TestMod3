@@ -31,7 +31,7 @@ public class EntityInteractionTestItem extends Item {
 
 	@Override
 	public InteractionResult interactLivingEntity(final ItemStack stack, final Player player, final LivingEntity target, final InteractionHand hand) {
-		if (!player.level().isClientSide && player instanceof final ServerPlayer serverPlayer) {
+		if (!player.level().isClientSide() && player instanceof final ServerPlayer serverPlayer) {
 			final var count = getInteractCount(stack) + 1;
 			stack.set(ModDataComponents.ENTITY_INTERACTION_COUNT.get(), count);
 
@@ -45,7 +45,7 @@ public class EntityInteractionTestItem extends Item {
 	public InteractionResult use(final Level world, final Player player, final InteractionHand hand) {
 		final var heldItem = player.getItemInHand(hand);
 
-		if (!player.level().isClientSide && player instanceof final ServerPlayer serverPlayer) {
+		if (!player.level().isClientSide() && player instanceof final ServerPlayer serverPlayer) {
 			final var count = getInteractCount(heldItem);
 
 			serverPlayer.sendSystemMessage(Component.translatable(TestMod3Lang.MESSAGE_ENTITY_INTERACT_COUNT.getTranslationKey(), count));

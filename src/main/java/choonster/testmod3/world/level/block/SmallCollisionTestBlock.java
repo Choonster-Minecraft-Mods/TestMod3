@@ -61,7 +61,8 @@ public class SmallCollisionTestBlock extends Block {
 			final Level level,
 			final BlockPos pos,
 			final Entity entity,
-			final InsideBlockEffectApplier insideBlockEffectApplier
+			final InsideBlockEffectApplier insideBlockEffectApplier,
+			final boolean _unknown
 	) {
 		if (entity instanceof final LivingEntity livingEntity) {
 			livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 10, 0));

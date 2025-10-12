@@ -59,7 +59,7 @@ public class ChunkEnergySetterItem extends Item implements ILeftClickEmpty {
 
 	@Override
 	public InteractionResult use(final Level level, final Player player, final InteractionHand hand) {
-		if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
+		if (!level.isClientSide() && player instanceof final ServerPlayer serverPlayer) {
 			addRemoveChunkEnergy(level, serverPlayer, 1);
 		}
 
@@ -69,7 +69,7 @@ public class ChunkEnergySetterItem extends Item implements ILeftClickEmpty {
 	@Override
 	public void onLeftClickEmpty(final ItemStack stack, final Player player) {
 		final var level = player.level();
-		if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
+		if (!level.isClientSide() && player instanceof final ServerPlayer serverPlayer) {
 			addRemoveChunkEnergy(level, serverPlayer, 100);
 		}
 	}

@@ -53,7 +53,7 @@ public class BlockDetectionArrow extends ModArrow {
 			player.displayClientMessage(
 					Component.translatable(
 							"[%s] Block at %s,%s,%s: %s",
-							level().isClientSide ? "CLIENT" : "SERVER",
+							level().isClientSide() ? "CLIENT" : "SERVER",
 							pos.getX(),
 							pos.getY(),
 							pos.getZ(),

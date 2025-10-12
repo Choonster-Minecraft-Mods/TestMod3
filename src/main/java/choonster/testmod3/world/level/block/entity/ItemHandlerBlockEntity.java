@@ -62,7 +62,7 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler> ext
 	 * @param player The player
 	 */
 	public void openGUI(final ServerPlayer player) {
-		if (level != null && !level.isClientSide) {
+		if (level != null && !level.isClientSide()) {
 			player.openMenu(this, getBlockPos());
 		}
 	}

@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
  *
  * @author Choonster
  */
-@Mod.EventBusSubscriber(modid = TestMod3.MODID, value = Dist.CLIENT, bus = Bus.MOD)
+@Mod.EventBusSubscriber(modid = TestMod3.MODID, value = Dist.CLIENT, bus = Bus.FORGE)
 public class ModBlockColors {
 	/**
 	 * Register the {@link BlockColor} handlers.

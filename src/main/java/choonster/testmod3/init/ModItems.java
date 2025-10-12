@@ -353,7 +353,7 @@ public class ModItems {
 	);
 
 	public static final RegistryObject<SpawnEggItem> PLAYER_AVOIDING_CREEPER_SPAWN_EGG = registerItem("player_avoiding_creeper_spawn_egg",
-			(properties) -> new SpawnEggItem(ModEntities.PLAYER_AVOIDING_CREEPER.get(), properties),
+			(properties) -> new SpawnEggItem(properties.spawnEgg(ModEntities.PLAYER_AVOIDING_CREEPER.get())),
 			ModItems::defaultItemProperties
 	);
 

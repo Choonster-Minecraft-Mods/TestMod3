@@ -130,7 +130,7 @@ public class LootItemHandler extends ItemStackHandler {
 	 */
 	public void fillWithLoot(@Nullable final Player player) {
 		final var level = levelSupplier.get();
-		if (lootTable != null && level != null && !level.isClientSide) {
+		if (lootTable != null && level != null && !level.isClientSide()) {
 			final var server = Preconditions.checkNotNull(level.getServer());
 			final var lootTable = server.reloadableRegistries().getLootTable(this.lootTable);
 			this.lootTable = null;

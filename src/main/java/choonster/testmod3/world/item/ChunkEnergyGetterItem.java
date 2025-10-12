@@ -24,7 +24,7 @@ public class ChunkEnergyGetterItem extends Item {
 
 	@Override
 	public InteractionResult use(final Level level, final Player player, final InteractionHand hand) {
-		if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
+		if (!level.isClientSide() && player instanceof final ServerPlayer serverPlayer) {
 			final var chunk = level.getChunkAt(player.blockPosition());
 			final var chunkPos = chunk.getPos().toString();
 

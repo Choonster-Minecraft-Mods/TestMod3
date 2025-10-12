@@ -72,7 +72,7 @@ public class ModCreativeTabs {
 				.forEach(output::accept);
 	}
 
-	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD)
+	@Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.FORGE)
 	public static class RegistrationHandler {
 		@SubscribeEvent
 		public static void buildContents(final BuildCreativeModeTabContentsEvent event) {

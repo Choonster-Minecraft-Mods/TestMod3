@@ -39,7 +39,7 @@ public abstract class ScriptsItem extends Item {
 	public InteractionResult use(final Level level, final Player player, final InteractionHand hand) {
 		final ItemStack heldItem = player.getItemInHand(hand);
 
-		if (!level.isClientSide && player instanceof final ServerPlayer serverPlayer) {
+		if (!level.isClientSide() && player instanceof final ServerPlayer serverPlayer) {
 			serverPlayer.sendSystemMessage(
 					Component.translatable(
 							String.format(

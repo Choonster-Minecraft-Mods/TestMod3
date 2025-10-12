@@ -65,7 +65,7 @@ public class EntityTestItem extends Item {
 			return InteractionResult.FAIL;
 		}
 
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			level.addFreshEntity(pig);
 		}
 
