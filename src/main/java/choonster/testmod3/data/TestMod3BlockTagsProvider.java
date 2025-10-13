@@ -6,7 +6,10 @@ import choonster.testmod3.init.ModTags;
 import choonster.testmod3.world.level.block.variantgroup.BlockVariantGroup;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.TagAppender;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -31,6 +34,13 @@ public class TestMod3BlockTagsProvider extends BlockTagsProvider {
 
 	@Override
 	protected void addTags(final HolderLookup.Provider p_256380_) {
+		(new TestMod3BlockItemTagsProvider() {
+			@Override
+			protected TagAppender<Block, Block> tag(final TagKey<Block> blockTagKey, final TagKey<Item> itemTagKey) {
+				return TestMod3BlockTagsProvider.this.tag(blockTagKey);
+			}
+		}).run();
+
 		tag(BlockTags.MINEABLE_WITH_PICKAXE)
 				.add(
 						ModBlocks.RIGHT_CLICK_TEST.get(),
