@@ -15,21 +15,12 @@ import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
  */
 public class TestMod3PackMetadataGenerator {
 	public static PackMetadataGenerator create(final PackOutput output) {
-		final var description = Component.translatable(TestMod3Lang.PACK_DESCRIPTION_TESTMOD3.getTranslationKey());
-
 		return new PackMetadataGenerator(output)
 				.add(
 						PackMetadataSection.CLIENT_TYPE,
 						new PackMetadataSection(
-								description,
+								Component.translatable(TestMod3Lang.PACK_DESCRIPTION_TESTMOD3.getTranslationKey()),
 								DetectedVersion.BUILT_IN.packVersion(PackType.CLIENT_RESOURCES).minorRange()
-						)
-				)
-				.add(
-						PackMetadataSection.SERVER_TYPE,
-						new PackMetadataSection(
-								description,
-								DetectedVersion.BUILT_IN.packVersion(PackType.SERVER_DATA).minorRange()
 						)
 				);
 	}
