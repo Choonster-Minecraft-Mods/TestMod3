@@ -10,7 +10,7 @@ plugins {
     id 'net.minecraftforge.jarjar' version '0.2.3'
 }
 
-final def commitId = GitVersion.getGitCommit(layout.projectDirectory.asFile).orElse("NOGIT");
+final def commitId = GitVersion.getGitCommit(layout.projectDirectory.asFile).orElse("NOGIT")
 
 mod_version = "${minecraft_version}-${mod_version}-${commitId}"
 
