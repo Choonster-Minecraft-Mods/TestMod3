@@ -59,7 +59,7 @@ class BlockVariantGroupMapCodec<VARIANT extends Enum<VARIANT> & StringRepresenta
 	public <T> DataResult<IBlockVariantGroup<VARIANT, BLOCK>> decode(final DynamicOps<T> ops, final MapLike<T> input) {
 		final var variantGroupObject = new MutableObject<IBlockVariantGroup<VARIANT, BLOCK>>();
 
-		final var blocksMapCodec = getBlocksMapCodec(variantGroupObject::getValue);
+		final var blocksMapCodec = getBlocksMapCodec(variantGroupObject);
 
 		final var groupName = groupNameCodec.decode(ops, input);
 		final var variants = variantsListCodec.decode(ops, input);
