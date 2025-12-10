@@ -61,10 +61,10 @@ public abstract class LockableItemHandlerBlockEntity<INVENTORY extends IItemHand
 	protected void loadAdditional(final ValueInput input) {
 		super.loadAdditional(input);
 
-		final var lock = input.read("ItemHandler", lockCodec).orElseThrow();
-
-		lockOptional.invalidate();
-		lockOptional = LazyOptional.of(() -> lock);
+		input.read("ItemHandler", lockCodec).ifPresent(lock -> {
+			lockOptional.invalidate();
+			lockOptional = LazyOptional.of(() -> lock);
+		});
 	}
 
 	@Override

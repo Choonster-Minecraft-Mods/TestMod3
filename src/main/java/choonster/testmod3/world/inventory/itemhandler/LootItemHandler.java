@@ -5,6 +5,7 @@ import choonster.testmod3.util.InventoryUtils;
 import com.google.common.base.Preconditions;
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -60,13 +62,22 @@ public class LootItemHandler extends ItemStackHandler {
 			> lootTableCodecStart(final RecordCodecBuilder.Instance<T> builder) {
 		return builder.group(
 				ResourceKey.codec(Registries.LOOT_TABLE)
-						.fieldOf("loot_table")
+						.optionalFieldOf("loot_table")
+						.flatXmap(
+								optionalResourceKey ->
+										optionalResourceKey
+												.map(DataResult::success)
+												.orElseGet(() -> DataResult.error(() -> "loot_table field not present")),
+								resourceKey ->
+										resourceKey != null
+												? DataResult.success(Optional.of(resourceKey))
+												: DataResult.error(() -> "loot_table field not present")
+						)
 						.forGetter(LootItemHandler::getLootTable),
 
 				Codec.LONG
 						.optionalFieldOf("loot_table_seed", 0L)
 						.forGetter(lootItemHandler -> lootItemHandler.lootTableSeed)
-
 		);
 	}
 

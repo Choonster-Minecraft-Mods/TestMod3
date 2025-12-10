@@ -88,12 +88,14 @@ public abstract class ItemHandlerBlockEntity<INVENTORY extends IItemHandler> ext
 	protected void loadAdditional(final ValueInput input) {
 		super.loadAdditional(input);
 
-		final var inventory = input.read("ItemHandler", inventoryCodec).orElseThrow();
+		input.read("ItemHandler", inventoryCodec)
+				.ifPresent(inventory -> {
+					inventoryOptional.invalidate();
+					inventoryOptional = LazyOptional.of(() -> inventory);
+				});
 
-		inventoryOptional.invalidate();
-		inventoryOptional = LazyOptional.of(() -> inventory);
-
-		nameHolder = input.read("NameHolder", NameHolder.CODEC).orElseThrow();
+		input.read("NameHolder", NameHolder.CODEC)
+				.ifPresent(nameHolder -> this.nameHolder = nameHolder);
 	}
 
 	@Override

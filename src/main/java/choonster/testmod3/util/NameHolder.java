@@ -7,6 +7,8 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.world.Nameable;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 /**
  * A reusable implementation of {@link Nameable}.
  *
@@ -20,9 +22,13 @@ public class NameHolder implements Nameable {
 							.forGetter((nameHolder) -> nameHolder.defaultName),
 
 					ComponentSerialization.CODEC
-							.optionalFieldOf("custom_name", null)
-							.forGetter(NameHolder::getCustomName)
-			).apply(builder, NameHolder::new)
+							.optionalFieldOf("custom_name")
+							.forGetter(nameHolder -> Optional.ofNullable(nameHolder.customName))
+			).apply(
+					builder,
+					(defaultName, customName) ->
+							new NameHolder(defaultName, customName.orElse(null))
+			)
 	);
 
 	/**
@@ -40,7 +46,7 @@ public class NameHolder implements Nameable {
 		this.defaultName = defaultName.copy();
 	}
 
-	private NameHolder(final Component defaultName, final Component customName) {
+	private NameHolder(final Component defaultName, @Nullable final Component customName) {
 		this(defaultName);
 		this.customName = customName;
 	}
