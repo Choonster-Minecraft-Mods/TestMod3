@@ -25,5 +25,8 @@ jobs:
           restore-keys: |
             v2-${{ runner.os }}-gradle-
 
+      - name: Sync Mavenizer
+        run: ./gradlew syncMavenizer
+
       - name: Build with Gradle
-        run: ./gradlew syncMavenizer build
+        run: ./gradlew build
