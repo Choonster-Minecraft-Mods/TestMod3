@@ -1,9 +1,9 @@
 package choonster.testmod3.gradle;
 
-import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.Config;
+import org.eclipse.jgit.storage.file.FileBasedConfig;
+import org.eclipse.jgit.util.FS;
 import org.eclipse.jgit.util.SystemReader;
-
-import java.util.Objects;
 
 /**
  * A {@link SystemReader} implementation that disables reading of system config.
@@ -16,11 +16,19 @@ class NoSystemConfigSystemReader extends SystemReader.Delegate {
 	}
 
 	@Override
-	public String getenv(final String variable) {
-		if (Objects.equals(variable, Constants.GIT_CONFIG_NOSYSTEM_KEY)) {
-			return "true";
-		}
+	public FileBasedConfig openSystemConfig(final Config parent, final FS fs) {
+		// Based on the SystemReader.Default#openSystemConfig implementation
+		return new FileBasedConfig(parent, null, fs) {
+			@Override
+			public void load() {
+				// empty, do not load
+			}
 
-		return super.getenv(variable);
+			@Override
+			public boolean isOutdated() {
+				// regular class would bomb here
+				return false;
+			}
+		};
 	}
 }
