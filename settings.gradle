@@ -1,13 +1,15 @@
+// NOTE: When ForgeGradle 7 is stabilized, it will be uploaded to the Gradle Plugin Portal.
+//       This block will be removed when that happens.
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        maven {
-            name = 'MinecraftForge'
-            url = 'https://maven.minecraftforge.net/'
-        }
+        maven { url = 'https://maven.minecraftforge.net' }
+        //mavenLocal()
     }
 }
 
 plugins {
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.10.0'
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
 }
+
+rootProject.name = 'TestMod3'
