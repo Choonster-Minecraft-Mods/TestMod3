@@ -4,7 +4,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
@@ -122,7 +121,6 @@ public abstract class BaseFluidTank implements IFluidHandler, IFluidTank {
 		return filled;
 	}
 
-	@NotNull
 	@Override
 	public FluidStack drain(final FluidStack resource, final FluidAction action) {
 		if (resource.isEmpty() || !resource.isFluidEqual(getFluid())) {
@@ -132,7 +130,6 @@ public abstract class BaseFluidTank implements IFluidHandler, IFluidTank {
 		return drain(resource.getAmount(), action);
 	}
 
-	@NotNull
 	@Override
 	public FluidStack drain(final int maxDrain, final FluidAction action) {
 		final var fluid = getFluid();

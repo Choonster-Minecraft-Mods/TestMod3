@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 /**
@@ -90,7 +91,7 @@ public class SurvivalCommandBlock extends CommandBlock {
 	}
 
 	@Override
-	public void setPlacedBy(final Level level, final BlockPos pos, final BlockState state, final LivingEntity placer, final ItemStack stack) {
+	public void setPlacedBy(final Level level, final BlockPos pos, final BlockState state, @Nullable final LivingEntity placer, final ItemStack stack) {
 		if (level instanceof final ServerLevel serverLevel && serverLevel.getBlockEntity(pos) instanceof final SurvivalCommandBlockEntity survivalCommandBlockEntity) {
 			if (!stack.has(DataComponents.BLOCK_ENTITY_DATA)) {
 				survivalCommandBlockEntity.getCommandBlock().setTrackOutput(serverLevel.getGameRules().get(GameRules.SEND_COMMAND_FEEDBACK));

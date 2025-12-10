@@ -3,8 +3,8 @@ package choonster.testmod3.world.level.block.variantgroup;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Block;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;

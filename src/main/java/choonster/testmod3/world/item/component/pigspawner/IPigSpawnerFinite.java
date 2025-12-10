@@ -1,7 +1,7 @@
 package choonster.testmod3.world.item.component.pigspawner;
 
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A spawner that can only spawn a finite number of pigs.

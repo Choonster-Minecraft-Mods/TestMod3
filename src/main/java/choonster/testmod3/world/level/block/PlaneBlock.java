@@ -25,8 +25,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
+import org.jspecify.annotations.Nullable;
 
 import java.util.stream.IntStream;
 
@@ -154,7 +154,6 @@ public class PlaneBlock extends Block {
 				.setValue(HORIZONTAL_ROTATION, horizontalRotation)
 				.setValue(VERTICAL_ROTATION, verticalRotation);
 	}
-
 
 	@Override
 	public VoxelShape getShape(final BlockState state, final BlockGetter level, final BlockPos pos, final CollisionContext context) {

@@ -10,7 +10,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -67,7 +67,7 @@ public class RestrictedFluidTankBlockEntity extends BaseFluidTankBlockEntity {
 	}
 
 	@Override
-	protected void loadAdditional(ValueInput input) {
+	protected void loadAdditional(final ValueInput input) {
 		super.loadAdditional(input);
 
 		enabledFacings.clear();
@@ -80,7 +80,7 @@ public class RestrictedFluidTankBlockEntity extends BaseFluidTankBlockEntity {
 	}
 
 	@Override
-	protected void saveAdditional(ValueOutput output) {
+	protected void saveAdditional(final ValueOutput output) {
 		super.saveAdditional(output);
 
 		final var enabledFacingIndices = enabledFacings.stream()

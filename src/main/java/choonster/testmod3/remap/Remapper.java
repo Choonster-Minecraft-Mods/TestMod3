@@ -4,8 +4,8 @@ import choonster.testmod3.TestMod3;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
@@ -62,7 +62,7 @@ final class Remapper<T> {
 	 */
 	private boolean tryRemap(final Mapping<T> missingMapping, final Identifier registryName) {
 		final var registry = missingMapping.getRegistry();
-		final var value = registry.getValue(registryName);
+		final T value = registry.getValue(registryName);
 		if (registry.containsKey(registryName) && value != null) {
 			LOGGER.info("Remapped {} to {}", ResourceKey.create(registry.getRegistryKey(), missingMapping.getKey()), registryName);
 			missingMapping.remap(value);

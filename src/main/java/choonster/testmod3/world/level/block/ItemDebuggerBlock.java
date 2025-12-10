@@ -45,7 +45,7 @@ public class ItemDebuggerBlock extends Block {
 					"ItemStack: {}",
 					ItemStack.CODEC.encodeStart(RegistryOps.create(NbtOps.INSTANCE, level.registryAccess()), stack)
 			);
-			
+
 			logComponent(stack, ModDataComponents.PIG_SPAWNER.get());
 			logFluidHandler(stack);
 
@@ -59,7 +59,7 @@ public class ItemDebuggerBlock extends Block {
 	}
 
 	private <T> void logComponent(final ItemStack stack, final DataComponentType<T> componentType) {
-		final var component = stack.get(componentType);
+		final T component = stack.get(componentType);
 
 		if (component != null) {
 			LOGGER.info("Component: {} - {}", RegistryUtil.getKey(componentType), component);

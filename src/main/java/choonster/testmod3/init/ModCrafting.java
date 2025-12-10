@@ -285,7 +285,7 @@ public class ModCrafting {
 							registryAccess
 					);
 
-					case null, default -> ItemStack.EMPTY;
+					default -> ItemStack.EMPTY;
 				};
 
 				return !resultItem.isEmpty() && resultItem.is(tag);

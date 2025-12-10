@@ -15,7 +15,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -70,7 +69,7 @@ public class ItemLootModifier extends LootModifier {
 	}
 
 	@Override
-	protected @NotNull ObjectArrayList<ItemStack> doApply(
+	protected ObjectArrayList<ItemStack> doApply(
 			final LootTable table,
 			final ObjectArrayList<ItemStack> generatedLoot,
 			final LootContext context

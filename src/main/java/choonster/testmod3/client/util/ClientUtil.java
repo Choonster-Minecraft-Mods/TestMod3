@@ -2,7 +2,7 @@ package choonster.testmod3.client.util;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Client-specific utility methods designed to be called from common code.

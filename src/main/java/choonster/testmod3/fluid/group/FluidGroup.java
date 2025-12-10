@@ -13,7 +13,7 @@ import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -109,8 +109,7 @@ public class FluidGroup<TYPE extends FluidType, STILL extends Fluid, FLOWING ext
 		@Nullable
 		protected Consumer<Item.Properties> bucketPropertiesCustomiser;
 
-		@Nullable
-		protected ForgeFlowingFluid.Properties properties;
+		protected ForgeFlowingFluid.@Nullable Properties properties;
 
 		public Builder(final String name, final DeferredRegister<FluidType> fluidTypes, final DeferredRegister<Fluid> fluids, final DeferredRegister<Block> blocks, final DeferredRegister<Item> items) {
 			this.name = name;

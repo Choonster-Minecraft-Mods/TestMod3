@@ -6,8 +6,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.ingredients.AbstractIngredient;
 import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
-
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Base class for an ingredient that can be serialized during data generation and deserializes to another ingredient
@@ -39,12 +38,12 @@ public abstract class AbstractDelegatingIngredient extends AbstractIngredient {
 		}
 
 		@Override
-		public void write(RegistryFriendlyByteBuf buffer, Ingredient value) {
+		public void write(final RegistryFriendlyByteBuf buffer, final Ingredient value) {
 			throw new UnsupportedOperationException("Can't write to FriendlyByteBuf, use the Ingredient's own IIngredientSerializer instead");
 		}
 
 		@Override
-		public Ingredient read(RegistryFriendlyByteBuf buffer) {
+		public Ingredient read(final RegistryFriendlyByteBuf buffer) {
 			throw new UnsupportedOperationException("Can't read from FriendlyByteBuf, use the Ingredient's own IIngredientSerializer instead");
 		}
 	}

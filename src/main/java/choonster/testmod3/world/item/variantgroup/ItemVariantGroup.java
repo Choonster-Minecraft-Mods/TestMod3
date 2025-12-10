@@ -7,7 +7,7 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -109,7 +109,7 @@ public class ItemVariantGroup<VARIANT extends Enum<VARIANT> & StringRepresentabl
 				registryName = variant.getSerializedName() + "_" + groupName;
 			}
 
-			var itemId = items.key(registryName);
+			final var itemId = items.key(registryName);
 
 			final var item = items.register(registryName, () -> {
 				final var properties = itemPropertiesFactory.apply(variant).setId(itemId);

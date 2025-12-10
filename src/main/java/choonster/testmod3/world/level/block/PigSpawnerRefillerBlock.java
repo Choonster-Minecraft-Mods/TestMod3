@@ -10,7 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A block that refills any {@link IPigSpawnerFinite} that interacts with it.
@@ -29,6 +29,7 @@ public class PigSpawnerRefillerBlock extends Block implements IPigSpawnerInterac
 		return CODEC;
 	}
 
+	@Nullable
 	@Override
 	public IPigSpawner interact(final IPigSpawner pigSpawner, final Level world, final BlockPos pos, @Nullable final CommandSource commandSource) {
 		if (pigSpawner instanceof final IPigSpawnerFinite finitePigSpawner) {

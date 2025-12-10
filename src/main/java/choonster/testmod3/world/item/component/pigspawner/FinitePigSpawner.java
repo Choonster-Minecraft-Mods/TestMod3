@@ -14,6 +14,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.Level;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -80,6 +81,7 @@ public record FinitePigSpawner(int numPigs, int maxNumPigs) implements IPigSpawn
 		return numPigs() > 0;
 	}
 
+	@Nullable
 	@Override
 	public IPigSpawnerFinite spawnPig(final Level level, final double x, final double y, final double z) {
 		final var success = IPigSpawnerFinite.super.spawnPig(level, x, y, z) != null;

@@ -79,7 +79,7 @@ public class ConditionMapCodec {
 
 		@Override
 		public <T> DataResult<Optional<A>> decode(final DynamicOps<T> ops, final MapLike<T> input) {
-			final var conditionRaw = input.get(key);
+			final T conditionRaw = input.get(key);
 			if (conditionRaw == null) {
 				return normal.decode(ops, input).map(Optional::of);
 			}

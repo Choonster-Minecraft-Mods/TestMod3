@@ -4,7 +4,7 @@ import choonster.testmod3.init.ModDataComponents;
 import choonster.testmod3.world.item.component.pigspawner.IPigSpawnerFinite;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A pig spawner item.

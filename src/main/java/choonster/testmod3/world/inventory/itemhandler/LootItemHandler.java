@@ -20,7 +20,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -63,7 +63,7 @@ public class LootItemHandler extends ItemStackHandler {
 		return builder.group(
 				ResourceKey.codec(Registries.LOOT_TABLE)
 						.optionalFieldOf("loot_table")
-						.flatXmap(
+						.<@Nullable ResourceKey<LootTable>>flatXmap(
 								optionalResourceKey ->
 										optionalResourceKey
 												.map(DataResult::success)
@@ -95,7 +95,7 @@ public class LootItemHandler extends ItemStackHandler {
 	/**
 	 * The {@link Supplier} to get the {@link Level} from.
 	 */
-	protected final Supplier<Level> levelSupplier;
+	protected final Supplier<@Nullable Level> levelSupplier;
 
 	/**
 	 * The key of the {@link LootTable} to generate loot from.
@@ -112,7 +112,7 @@ public class LootItemHandler extends ItemStackHandler {
 
 	protected LootItemHandler(
 			final int size,
-			final Supplier<Level> levelSupplier,
+			final Supplier<@Nullable Level> levelSupplier,
 			final ResourceKey<LootTable> lootTable,
 			final long lootTableSeed
 	) {
@@ -122,12 +122,12 @@ public class LootItemHandler extends ItemStackHandler {
 		this.lootTableSeed = lootTableSeed;
 	}
 
-	protected LootItemHandler(final int size, final Supplier<Level> levelSupplier) {
+	protected LootItemHandler(final int size, final Supplier<@Nullable Level> levelSupplier) {
 		super(size);
 		this.levelSupplier = levelSupplier;
 	}
 
-	protected LootItemHandler(final NonNullList<ItemStack> stacks, final Supplier<Level> levelSupplier) {
+	protected LootItemHandler(final NonNullList<ItemStack> stacks, final Supplier<@Nullable Level> levelSupplier) {
 		super(stacks);
 		this.levelSupplier = levelSupplier;
 	}

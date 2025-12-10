@@ -8,8 +8,6 @@ import net.minecraft.world.LockCode;
 import net.minecraft.world.Nameable;
 import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nonnull;
-
 /**
  * Default implementation of {@link ILock}.
  *
@@ -34,7 +32,6 @@ public class Lock implements ILock {
 	/**
 	 * The lock code.
 	 */
-	@Nonnull
 	private LockCode code;
 
 	private final Nameable nameProvider;

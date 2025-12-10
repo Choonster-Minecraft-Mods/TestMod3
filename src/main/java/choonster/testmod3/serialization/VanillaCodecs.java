@@ -29,6 +29,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.IExtensibleEnum;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -214,7 +215,7 @@ public class VanillaCodecs {
 	 * @param <E>              The enum type
 	 * @return The function
 	 */
-	private static <E extends Enum<E>> Function<String, ? extends E> createFromNameFunction(
+	private static <E extends Enum<E>> Function<String, ? extends @Nullable E> createFromNameFunction(
 			final Supplier<E[]> elementsSupplier,
 			final Function<E, String> toNameFunction
 	) {
@@ -262,7 +263,7 @@ public class VanillaCodecs {
 	 */
 	private static <E extends Enum<E> & IExtensibleEnum> Codec<E> createExtensibleEnumCodec(
 			final Function<E, String> toNameFunction,
-			final Function<String, ? extends E> fromNameFunction
+			final Function<String, ? extends @Nullable E> fromNameFunction
 	) {
 		return new Codec<>() {
 			@Override
@@ -287,5 +288,4 @@ public class VanillaCodecs {
 			}
 		};
 	}
-
 }
