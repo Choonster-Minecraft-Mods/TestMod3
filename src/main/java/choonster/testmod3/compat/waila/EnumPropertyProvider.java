@@ -7,13 +7,13 @@ package choonster.testmod3.compat.waila;
  */
 /*
 public class EnumPropertyProvider<T extends Enum<T> & StringRepresentable> implements IBlockComponentProvider {
-	protected final ResourceLocation uid;
+	protected final Identifier uid;
 	protected final int defaultPriority;
 	protected final Property<T> property;
 	protected final String tooltipTranslationKey;
 	protected final String valueTranslationKeyPrefix;
 
-	public EnumPropertyProvider(final ResourceLocation uid, final int defaultPriority, final Property<T> property, final String tooltipTranslationKey, final String valueTranslationKeyPrefix) {
+	public EnumPropertyProvider(final Identifier uid, final int defaultPriority, final Property<T> property, final String tooltipTranslationKey, final String valueTranslationKeyPrefix) {
 		this.uid = uid;
 		this.defaultPriority = defaultPriority;
 		this.property = property;
@@ -22,7 +22,7 @@ public class EnumPropertyProvider<T extends Enum<T> & StringRepresentable> imple
 	}
 
 	@Override
-	public ResourceLocation getUid() {
+	public Identifier getUid() {
 		return uid;
 	}
 

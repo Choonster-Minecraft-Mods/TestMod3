@@ -6,10 +6,10 @@ import choonster.testmod3.world.level.storage.loot.modifiers.BlockEntityNBTLootM
 import choonster.testmod3.world.level.storage.loot.modifiers.ItemLootModifier;
 import choonster.testmod3.world.level.storage.loot.modifiers.LootTableLootModifier;
 import choonster.testmod3.world.level.storage.loot.predicates.MatchBlockTag;
-import net.minecraft.advancements.critereon.DataComponentMatchers;
-import net.minecraft.advancements.critereon.EnchantmentPredicate;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.criterion.DataComponentMatchers;
+import net.minecraft.advancements.criterion.EnchantmentPredicate;
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.predicates.DataComponentPredicates;
 import net.minecraft.core.component.predicates.EnchantmentsPredicate;
@@ -49,7 +49,7 @@ public class TestMod3LootModifierProvider extends GlobalLootModifierProvider {
 		add("loot_table_test", new LootTableLootModifier(
 				new LootItemCondition[]{
 						LootItemRandomChanceCondition.randomChance(0.5f).build(),
-						LootTableIdCondition.builder(BuiltInLootTables.SIMPLE_DUNGEON.location()).build(),
+						LootTableIdCondition.builder(BuiltInLootTables.SIMPLE_DUNGEON.identifier()).build(),
 				},
 				ModLootTables.LOOT_TABLE_TEST
 		));

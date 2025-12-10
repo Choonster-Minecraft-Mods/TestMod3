@@ -2,7 +2,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0.36,6.2)'
+    id 'net.minecraftforge.gradle' version '[6.0.46,6.2)'
     id 'org.ajoberstar.grgit' version '5.2.0'
     id 'org.spongepowered.mixin' version '0.7.+'
 }
@@ -197,7 +197,7 @@ dependencies {
     // TODO: Jade doesn't support Forge any more
 //    implementation fg.deobf("curse.maven:jade-324717:${jade_file_id}")
 
-    implementation "com.github.glitchfiend:TerraBlender-forge:1.21.9-${terrablender_version}"
+//    implementation "com.github.glitchfiend:TerraBlender-forge:1.21.9-${terrablender_version}"
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar

@@ -6,6 +6,7 @@ import net.minecraft.world.LockCode;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 
 /**
@@ -47,10 +48,17 @@ public interface ILock {
 	/**
 	 * Try to open this lock, notifying the player if they can't.
 	 *
-	 * @param player The player opening the lock
+	 * @param player   The player opening the lock
+	 * @param position The position of the lock
 	 * @return Was the player allowed to open the lock?
 	 */
-	default boolean tryOpen(final Player player) {
-		return BaseContainerBlockEntity.canUnlock(player, getLockCode(), getDisplayName());
+	default boolean tryOpen(final Player player, Vec3 position) {
+		if (!getLockCode().canUnlock(player)) {
+			BaseContainerBlockEntity.sendChestLockedNotifications(position, player, getDisplayName());
+
+			return false;
+		}
+
+		return true;
 	}
 }

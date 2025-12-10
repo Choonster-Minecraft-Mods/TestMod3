@@ -2,7 +2,7 @@ package choonster.testmod3.data.models.model;
 
 import com.google.gson.JsonObject;
 import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Map;
 import java.util.Optional;
@@ -14,13 +14,13 @@ import java.util.Optional;
  * @author Choonster
  */
 public class RenderTypeModelTemplate extends BaseModelTemplate {
-	private final ResourceLocation renderTypeHint;
+	private final Identifier renderTypeHint;
 
 	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 	public RenderTypeModelTemplate(
-			final Optional<ResourceLocation> model,
+			final Optional<Identifier> model,
 			final Optional<String> suffix,
-			final ResourceLocation renderTypeHint,
+			final Identifier renderTypeHint,
 			final TextureSlot... requiredSlots
 	) {
 		super(model, suffix, requiredSlots);
@@ -28,7 +28,7 @@ public class RenderTypeModelTemplate extends BaseModelTemplate {
 	}
 
 	@Override
-	protected JsonObject createModel(final Map<TextureSlot, ResourceLocation> textureMap) {
+	protected JsonObject createModel(final Map<TextureSlot, Identifier> textureMap) {
 		final var output = super.createModel(textureMap);
 
 		output.addProperty("render_type", renderTypeHint.toString());

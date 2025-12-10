@@ -1,7 +1,7 @@
 package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.eventbus.api.bus.BusGroup;
 import net.minecraftforge.registries.DeferredRegister;
@@ -49,6 +49,6 @@ public class ModSoundEvents {
 	 * @return A RegistryObject reference to the SoundEvent
 	 */
 	private static RegistryObject<SoundEvent> registerSoundEvent(final String soundName) {
-		return SOUND_EVENTS.register(soundName, () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, soundName)));
+		return SOUND_EVENTS.register(soundName, () -> SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(TestMod3.MODID, soundName)));
 	}
 }

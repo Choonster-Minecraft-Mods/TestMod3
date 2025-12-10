@@ -10,10 +10,10 @@ import choonster.testmod3.world.item.component.pigspawner.InfinitePigSpawner;
 import choonster.testmod3.world.item.variantgroup.ItemVariantGroup;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.Util;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.*;
@@ -117,8 +117,8 @@ public class ModItems {
 
 		// Initialise the fields with lazy references to the items first,
 		// allowing them to be referenced from the constructors below
-		SWAP_TEST_A = RegistryObject.create(ITEMS.key(swapTestA).location(), ForgeRegistries.ITEMS);
-		SWAP_TEST_B = RegistryObject.create(ITEMS.key(swapTestB).location(), ForgeRegistries.ITEMS);
+		SWAP_TEST_A = RegistryObject.create(ITEMS.key(swapTestA).identifier(), ForgeRegistries.ITEMS);
+		SWAP_TEST_B = RegistryObject.create(ITEMS.key(swapTestB).identifier(), ForgeRegistries.ITEMS);
 
 		// Then register the items
 		registerItem(swapTestA,

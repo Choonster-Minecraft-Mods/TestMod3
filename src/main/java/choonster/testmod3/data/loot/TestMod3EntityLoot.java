@@ -2,7 +2,7 @@ package choonster.testmod3.data.loot;
 
 import choonster.testmod3.init.ModEntities;
 import choonster.testmod3.util.RegistryUtil;
-import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.criterion.EntityPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.EntityLootSubProvider;

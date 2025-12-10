@@ -183,7 +183,7 @@ public class ModBucketItem extends Item {
 	) {
 		final var fluid = fluidStack.getFluid();
 
-		if (level.dimensionType().ultraWarm() && fluid.getFluidType().isVaporizedOnPlacement(level, pos, fluidStack)) {
+		if (fluid.getFluidType().isVaporizedOnPlacement(level, pos, fluidStack)) {
 			fluid.getFluidType().onVaporize(player, level, pos, fluidStack);
 
 			return Pair.of(new FluidActionResult(empty()), pos);

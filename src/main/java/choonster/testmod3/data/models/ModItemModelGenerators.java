@@ -17,7 +17,7 @@ import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.item.ClientItem;
 import net.minecraft.client.renderer.item.RangeSelectItemModel;
 import net.minecraft.client.renderer.item.properties.numeric.UseDuration;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
@@ -54,14 +54,14 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 			"copies"
 	);
 
-	private static final ResourceLocation BUCKET_MODEL = ResourceLocation.fromNamespaceAndPath(
+	private static final Identifier BUCKET_MODEL = Identifier.fromNamespaceAndPath(
 			"forge",
 			"item/bucket"
 	);
 
 	public ModItemModelGenerators(
 			final ItemModelOutput itemModelOutput,
-			final BiConsumer<ResourceLocation, ModelInstance> modelOutput
+			final BiConsumer<Identifier, ModelInstance> modelOutput
 	) {
 		super(itemModelOutput, modelOutput);
 	}
@@ -249,7 +249,7 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 		generateFlatItem(
 				ModItems.RITUAL_CHECKER.get(),
 				ModelTemplates.FLAT_HANDHELD_ITEM,
-				ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "item/banner_base")
+				Identifier.fromNamespaceAndPath(TestMod3.MODID, "item/banner_base")
 		);
 	}
 
@@ -329,7 +329,7 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 		itemModelOutput.accept(item, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(parent)));
 	}
 
-	private void generateFlatItem(final Item item, final ModelTemplate modelTemplate, final ResourceLocation texture) {
+	private void generateFlatItem(final Item item, final ModelTemplate modelTemplate, final Identifier texture) {
 		final var model = modelTemplate.create(item, TextureMapping.layer0(texture), modelOutput);
 		itemModelOutput.accept(item, ItemModelUtils.plainModel(model));
 	}
@@ -354,7 +354,7 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 	}
 
 	// Item model creation
-	private ResourceLocation createFlatItemModel(
+	private Identifier createFlatItemModel(
 			final Item item,
 			final Item textureItem,
 			final String suffix,
@@ -367,7 +367,7 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 		);
 	}
 
-	private ResourceLocation createBucketModel(
+	private Identifier createBucketModel(
 			final Item item,
 			final Fluid fluid,
 			final TextureMapping textureMapping

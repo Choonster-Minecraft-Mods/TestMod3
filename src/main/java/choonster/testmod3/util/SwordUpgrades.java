@@ -2,7 +2,7 @@ package choonster.testmod3.util;
 
 import choonster.testmod3.TestMod3;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -14,7 +14,7 @@ public class SwordUpgrades {
 	/**
 	 * The ID of the attack damage modifier.
 	 */
-	private static final ResourceLocation MODIFIER_ID = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "weapon_upgrade");
+	private static final Identifier MODIFIER_ID = Identifier.fromNamespaceAndPath(TestMod3.MODID, "weapon_upgrade");
 
 	/**
 	 * The amount of attack damage provided by the modifier.

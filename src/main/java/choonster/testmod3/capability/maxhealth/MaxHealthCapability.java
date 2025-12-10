@@ -6,7 +6,7 @@ import choonster.testmod3.capability.SerializableCapabilityProvider;
 import choonster.testmod3.util.CapabilityNotPresentException;
 import choonster.testmod3.util.ModLogUtils;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraftforge.common.capabilities.Capability;
@@ -39,7 +39,7 @@ public final class MaxHealthCapability {
 	/**
 	 * The ID of this capability.
 	 */
-	public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "max_health");
+	public static final Identifier ID = Identifier.fromNamespaceAndPath(TestMod3.MODID, "max_health");
 
 	public static final Marker LOG_MARKER = ModLogUtils.getMarker("MaxHealth");
 

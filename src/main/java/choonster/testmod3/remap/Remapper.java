@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
@@ -60,7 +60,7 @@ final class Remapper<T> {
 	 * @param registryName   The registry name to remap to
 	 * @return True if the remapping was successful
 	 */
-	private boolean tryRemap(final Mapping<T> missingMapping, final ResourceLocation registryName) {
+	private boolean tryRemap(final Mapping<T> missingMapping, final Identifier registryName) {
 		final var registry = missingMapping.getRegistry();
 		final var value = registry.getValue(registryName);
 		if (registry.containsKey(registryName) && value != null) {
@@ -93,7 +93,7 @@ final class Remapper<T> {
 		}
 
 		final var newPath = customNames.get(missingPath);
-		final var newRegistryName = ResourceLocation.fromNamespaceAndPath(missingMapping.getKey().getNamespace(), newPath);
+		final var newRegistryName = Identifier.fromNamespaceAndPath(missingMapping.getKey().getNamespace(), newPath);
 
 		return tryRemap(missingMapping, newRegistryName);
 	}

@@ -5,7 +5,6 @@ import choonster.testmod3.network.SaveSurvivalCommandBlockMessage;
 import choonster.testmod3.world.level.block.entity.SurvivalCommandBlockEntity;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.gui.screens.inventory.CommandBlockEditScreen;
-import net.minecraft.world.level.BaseCommandBlock;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.network.PacketDistributor;
@@ -28,11 +27,11 @@ public class SurvivalCommandBlockEditScreen extends CommandBlockEditScreen {
 	}
 
 	@Override
-	protected void populateAndSendPacket(final BaseCommandBlock commandBlock) {
+	protected void populateAndSendPacket() {
 		try {
-			final CommandBlockEntity.Mode mode = (CommandBlockEntity.Mode) MODE.get(this);
-			final boolean conditional = (boolean) CONDITIONAL.get(this);
-			final boolean autoexec = (boolean) AUTOEXEC.get(this);
+			final var mode = (CommandBlockEntity.Mode) MODE.get(this);
+			final var conditional = (boolean) CONDITIONAL.get(this);
+			final var autoexec = (boolean) AUTOEXEC.get(this);
 
 			TestMod3.network.send(
 					new SaveSurvivalCommandBlockMessage(

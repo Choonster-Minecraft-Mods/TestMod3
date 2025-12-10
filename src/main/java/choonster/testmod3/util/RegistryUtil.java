@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
@@ -71,7 +71,7 @@ public class RegistryUtil {
 	 * @return The key
 	 * @throws NullPointerException If the key is null
 	 */
-	public static <T> ResourceLocation getKey(final IForgeRegistry<T> registry, final T entry) {
+	public static <T> Identifier getKey(final IForgeRegistry<T> registry, final T entry) {
 		return Preconditions.checkNotNull(registry.getKey(entry), "%s has no registry key", entry);
 	}
 
@@ -82,49 +82,49 @@ public class RegistryUtil {
 	 * @return The key
 	 * @throws NullPointerException If the key is null
 	 */
-	public static <T> ResourceLocation getKey(final Registry<T> registry, final T entry) {
+	public static <T> Identifier getKey(final Registry<T> registry, final T entry) {
 		return Preconditions.checkNotNull(registry.getKey(entry), "%s has no registry key", entry);
 	}
 
 	/**
 	 * @see #getKey(IForgeRegistry, Object)
 	 */
-	public static ResourceLocation getKey(final Block block) {
+	public static Identifier getKey(final Block block) {
 		return getKey(ForgeRegistries.BLOCKS, block);
 	}
 
 	/**
 	 * @see #getKey(IForgeRegistry, Object)
 	 */
-	public static ResourceLocation getKey(final Item item) {
+	public static Identifier getKey(final Item item) {
 		return getKey(ForgeRegistries.ITEMS, item);
 	}
 
 	/**
 	 * @see #getKey(IForgeRegistry, Object)
 	 */
-	public static ResourceLocation getKey(final EntityType<?> entityType) {
+	public static Identifier getKey(final EntityType<?> entityType) {
 		return getKey(ForgeRegistries.ENTITY_TYPES, entityType);
 	}
 
 	/**
 	 * @see #getKey(IForgeRegistry, Object)
 	 */
-	public static ResourceLocation getKey(final Fluid fluid) {
+	public static Identifier getKey(final Fluid fluid) {
 		return getKey(ForgeRegistries.FLUIDS, fluid);
 	}
 
 	/**
 	 * @see #getKey(IForgeRegistry, Object)
 	 */
-	public static ResourceLocation getKey(final Potion potion) {
+	public static Identifier getKey(final Potion potion) {
 		return getKey(ForgeRegistries.POTIONS, potion);
 	}
 
 	/**
 	 * @see #getKey(Registry, Object)
 	 */
-	public static ResourceLocation getKey(final DataComponentType<?> componentType) {
+	public static Identifier getKey(final DataComponentType<?> componentType) {
 		return getKey(BuiltInRegistries.DATA_COMPONENT_TYPE, componentType);
 	}
 }

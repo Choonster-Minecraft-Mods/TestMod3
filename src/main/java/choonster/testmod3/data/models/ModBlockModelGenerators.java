@@ -14,7 +14,6 @@ import choonster.testmod3.world.level.block.*;
 import choonster.testmod3.world.level.block.pipe.BasePipeBlock;
 import choonster.testmod3.world.level.block.slab.ColouredSlabBlock;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.Util;
 import net.minecraft.client.color.item.GrassColorSource;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelOutput;
@@ -26,7 +25,8 @@ import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.block.model.VariantMutator;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -104,7 +104,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 	public ModBlockModelGenerators(
 			final Consumer<BlockModelDefinitionGenerator> blockStateOutput,
 			final ItemModelOutput itemModelOutput,
-			final BiConsumer<ResourceLocation, ModelInstance> modelOutput
+			final BiConsumer<Identifier, ModelInstance> modelOutput
 	) {
 		super(blockStateOutput, itemModelOutput, modelOutput);
 	}
@@ -369,7 +369,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 		final var textureMapping = new TextureMapping()
 				.put(
 						ModTextureSlots.CHEST,
-						ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/chest/wood")
+						Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/chest/wood")
 				)
 				.put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(Blocks.OAK_PLANKS));
 
@@ -384,7 +384,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 	private void createHidden() {
 		final var block = ModBlocks.HIDDEN.get();
 
-		final var empty = plainVariant(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/empty"));
+		final var empty = plainVariant(Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/empty"));
 		final var hidden = plainVariant(TexturedModel.CUBE.create(block, modelOutput));
 
 		blockStateOutput.accept(
@@ -529,7 +529,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 				"_front_multi"
 		);
 
-		final var modelLocations = new EnumMap<EnumFaceRotation, ResourceLocation>(EnumFaceRotation.class);
+		final var modelLocations = new EnumMap<EnumFaceRotation, Identifier>(EnumFaceRotation.class);
 		final var models = new EnumMap<EnumFaceRotation, MultiVariant>(EnumFaceRotation.class);
 
 		Arrays.stream(EnumFaceRotation.values())

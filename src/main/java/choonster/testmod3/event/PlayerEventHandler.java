@@ -4,7 +4,7 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -40,7 +40,7 @@ public class PlayerEventHandler {
 		final var persistedData = entityData.getCompoundOrEmpty(ServerPlayer.PERSISTED_NBT_TAG);
 		entityData.put(ServerPlayer.PERSISTED_NBT_TAG, persistedData);
 
-		final var key = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "received_items").toString();
+		final var key = Identifier.fromNamespaceAndPath(TestMod3.MODID, "received_items").toString();
 		final TestMod3Lang message;
 
 		if (persistedData.getBooleanOr(key, false)) {

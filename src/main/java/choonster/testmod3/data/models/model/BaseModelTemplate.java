@@ -8,7 +8,7 @@ import net.minecraft.client.data.models.model.ModelInstance;
 import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Map;
 import java.util.Optional;
@@ -23,11 +23,11 @@ import java.util.function.Function;
  */
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class BaseModelTemplate extends ModelTemplate {
-	protected final Optional<ResourceLocation> model;
+	protected final Optional<Identifier> model;
 	protected final Optional<String> suffix;
 	protected final Set<TextureSlot> requiredSlots;
 
-	public BaseModelTemplate(final Optional<ResourceLocation> model, final Optional<String> suffix, final TextureSlot... requiredSlots) {
+	public BaseModelTemplate(final Optional<Identifier> model, final Optional<String> suffix, final TextureSlot... requiredSlots) {
 		super(model, suffix, requiredSlots);
 		this.model = model;
 		this.suffix = suffix;
@@ -35,17 +35,17 @@ public class BaseModelTemplate extends ModelTemplate {
 	}
 
 	@Override
-	public ResourceLocation create(
-			final ResourceLocation modelLocation,
+	public Identifier create(
+			final Identifier modelLocation,
 			final TextureMapping textureMapping,
-			final BiConsumer<ResourceLocation, ModelInstance> modelOutput
+			final BiConsumer<Identifier, ModelInstance> modelOutput
 	) {
 		final var map = createMap(textureMapping);
 		modelOutput.accept(modelLocation, () -> createModel(map));
 		return modelLocation;
 	}
 
-	protected JsonObject createModel(final Map<TextureSlot, ResourceLocation> textureMap) {
+	protected JsonObject createModel(final Map<TextureSlot, Identifier> textureMap) {
 		final var output = new JsonObject();
 
 		model.ifPresent(model -> output.addProperty("parent", model.toString()));
@@ -64,7 +64,7 @@ public class BaseModelTemplate extends ModelTemplate {
 		return output;
 	}
 
-	private Map<TextureSlot, ResourceLocation> createMap(final TextureMapping textureMapping) {
+	private Map<TextureSlot, Identifier> createMap(final TextureMapping textureMapping) {
 		return Streams.concat(
 				requiredSlots.stream(), textureMapping.getForced()
 		).collect(ImmutableMap.toImmutableMap(Function.identity(), textureMapping::get));

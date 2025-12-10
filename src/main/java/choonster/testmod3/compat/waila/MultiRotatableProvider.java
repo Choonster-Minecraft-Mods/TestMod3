@@ -9,7 +9,7 @@ import choonster.testmod3.util.EnumFaceRotation;
  */
 /*
 public class MultiRotatableProvider extends EnumPropertyProvider<EnumFaceRotation> {
-	public MultiRotatableProvider(final ResourceLocation uid, final Property<EnumFaceRotation> property) {
+	public MultiRotatableProvider(final Identifier uid, final Property<EnumFaceRotation> property) {
 		super(
 				uid,
 				TooltipPosition.BODY,

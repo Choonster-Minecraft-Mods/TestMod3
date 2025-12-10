@@ -3,7 +3,7 @@ package choonster.testmod3.data.models.model;
 import choonster.testmod3.TestMod3;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 
@@ -37,7 +37,7 @@ public class ModTextureMappings {
 	}
 
 	public static TextureMapping coloredRotatable(final DyeColor color, final String frontSuffix) {
-		final var side = ResourceLocation.fromNamespaceAndPath(
+		final var side = Identifier.fromNamespaceAndPath(
 				TestMod3.MODID,
 				COLORED_ROTATABLE_PREFIX + color.getSerializedName()
 		);

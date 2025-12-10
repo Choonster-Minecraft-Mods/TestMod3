@@ -93,7 +93,7 @@ public class ModPotions {
 		final String fullName = namePrefix != null ? namePrefix + name : name;
 
 		return POTIONS.register(fullName, () -> {
-			// Based on net.minecraft.util.Util.makeTranslationKey. This ensures that the base name is valid in ResourceLocation paths.
+			// Based on net.minecraft.util.Util.makeTranslationKey. This ensures that the base name is valid in Identifier paths.
 			final String potionBaseName = TestMod3.MODID + "." + name.replace('/', '.');
 
 			return new Potion(potionBaseName, effectInstanceFactory.get());

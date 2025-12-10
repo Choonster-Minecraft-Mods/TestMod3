@@ -5,7 +5,7 @@ import choonster.testmod3.api.capability.maxhealth.IMaxHealth;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -27,7 +27,7 @@ public class MaxHealth implements IMaxHealth {
 	/**
 	 * The ID of the {@link AttributeModifier}.
 	 */
-	protected static final ResourceLocation MODIFIER_ID = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "bonus_max_health");
+	protected static final Identifier MODIFIER_ID = Identifier.fromNamespaceAndPath(TestMod3.MODID, "bonus_max_health");
 
 	public static MaxHealth empty(@Nullable final LivingEntity entity) {
 		return new MaxHealth(entity);

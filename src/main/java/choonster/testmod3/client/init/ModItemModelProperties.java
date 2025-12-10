@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.item.properties.numeric.RangeSelectItemMode
 import net.minecraft.client.renderer.item.properties.numeric.RangeSelectItemModelProperty;
 import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperties;
 import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperty;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
@@ -26,9 +26,9 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
  */
 @Mod.EventBusSubscriber(modid = TestMod3.MODID, bus = Bus.MOD, value = Dist.CLIENT)
 public class ModItemModelProperties {
-	private static final ExtraCodecs.LateBoundIdMapper<ResourceLocation, MapCodec<? extends SelectItemModelProperty.Type<?, ?>>> SELECT_ID_MAPPER;
-	private static final ExtraCodecs.LateBoundIdMapper<ResourceLocation, MapCodec<? extends ConditionalItemModelProperty>> CONDITIONAL_ID_MAPPER;
-	private static final ExtraCodecs.LateBoundIdMapper<ResourceLocation, MapCodec<? extends RangeSelectItemModelProperty>> RANGE_SELECT_ID_MAPPER;
+	private static final ExtraCodecs.LateBoundIdMapper<Identifier, MapCodec<? extends SelectItemModelProperty.Type<?, ?>>> SELECT_ID_MAPPER;
+	private static final ExtraCodecs.LateBoundIdMapper<Identifier, MapCodec<? extends ConditionalItemModelProperty>> CONDITIONAL_ID_MAPPER;
+	private static final ExtraCodecs.LateBoundIdMapper<Identifier, MapCodec<? extends RangeSelectItemModelProperty>> RANGE_SELECT_ID_MAPPER;
 
 	@SubscribeEvent
 	public static void registerItemModelProperties(final FMLConstructModEvent event) {
@@ -41,13 +41,13 @@ public class ModItemModelProperties {
 			final String name,
 			final MapCodec<T> mapCodec
 	) {
-		RANGE_SELECT_ID_MAPPER.put(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name), mapCodec);
+		RANGE_SELECT_ID_MAPPER.put(Identifier.fromNamespaceAndPath(TestMod3.MODID, name), mapCodec);
 	}
 
 	static {
 		try {
 			@SuppressWarnings("unchecked") final var selectIdMapper =
-					(ExtraCodecs.LateBoundIdMapper<ResourceLocation, MapCodec<? extends SelectItemModelProperty.Type<?, ?>>>)
+					(ExtraCodecs.LateBoundIdMapper<Identifier, MapCodec<? extends SelectItemModelProperty.Type<?, ?>>>)
 							ObfuscationReflectionHelper.findField(
 									SelectItemModelProperties.class,
 									"ID_MAPPER"
@@ -56,7 +56,7 @@ public class ModItemModelProperties {
 			SELECT_ID_MAPPER = selectIdMapper;
 
 			@SuppressWarnings("unchecked") final var conditionalIdMapper =
-					(ExtraCodecs.LateBoundIdMapper<ResourceLocation, MapCodec<? extends ConditionalItemModelProperty>>)
+					(ExtraCodecs.LateBoundIdMapper<Identifier, MapCodec<? extends ConditionalItemModelProperty>>)
 							ObfuscationReflectionHelper.findField(
 									ConditionalItemModelProperties.class,
 									"ID_MAPPER"
@@ -65,7 +65,7 @@ public class ModItemModelProperties {
 			CONDITIONAL_ID_MAPPER = conditionalIdMapper;
 
 			@SuppressWarnings("unchecked") final var rangeSelectIdMapper =
-					(ExtraCodecs.LateBoundIdMapper<ResourceLocation, MapCodec<? extends RangeSelectItemModelProperty>>)
+					(ExtraCodecs.LateBoundIdMapper<Identifier, MapCodec<? extends RangeSelectItemModelProperty>>)
 							ObfuscationReflectionHelper.findField(
 									RangeSelectItemModelProperties.class,
 									"ID_MAPPER"

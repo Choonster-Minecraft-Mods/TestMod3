@@ -6,7 +6,7 @@ import choonster.testmod3.world.item.crafting.recipe.ShapelessRecipeSerializer;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -162,7 +162,7 @@ public abstract class BaseShapelessRecipeBuilder<
 					ingredients
 			);
 
-			output.accept(key, recipe, advancement.build(key.location().withPrefix("recipes/" + category.getFolderName() + "/")));
+			output.accept(key, recipe, advancement.build(key.identifier().withPrefix("recipes/" + category.getFolderName() + "/")));
 		} catch (final IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException("Failed to save shapeless recipe " + key, e);
 		}

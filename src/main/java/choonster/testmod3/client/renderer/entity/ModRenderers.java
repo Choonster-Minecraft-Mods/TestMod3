@@ -4,7 +4,7 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModEntities;
 import net.minecraft.client.renderer.entity.CreeperRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
@@ -24,7 +24,7 @@ public class ModRenderers {
 				ModEntities.MOD_ARROW.get(),
 				context -> new RenderModArrow(
 						context,
-						ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "textures/entity/arrow.png")
+						Identifier.fromNamespaceAndPath(TestMod3.MODID, "textures/entity/arrow.png")
 				)
 		);
 
@@ -32,7 +32,7 @@ public class ModRenderers {
 				ModEntities.BLOCK_DETECTION_ARROW.get(),
 				renderManager -> new RenderModArrow(
 						renderManager,
-						ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "textures/entity/block_detection_arrow.png")
+						Identifier.fromNamespaceAndPath(TestMod3.MODID, "textures/entity/block_detection_arrow.png")
 				)
 		);
 

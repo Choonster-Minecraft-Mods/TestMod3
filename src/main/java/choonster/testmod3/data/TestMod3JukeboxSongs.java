@@ -2,11 +2,11 @@ package choonster.testmod3.data;
 
 import choonster.testmod3.init.ModJukeboxSongs;
 import choonster.testmod3.init.ModSoundEvents;
-import net.minecraft.Util;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Util;
 import net.minecraft.world.item.JukeboxSong;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -29,7 +29,7 @@ public class TestMod3JukeboxSongs {
 	) {
 		context.register(
 				key,
-				new JukeboxSong(soundEvent.getHolder().orElseThrow(), Component.translatable(Util.makeDescriptionId("jukebox_song", key.location())), lengthInSeconds, comparatorOutput)
+				new JukeboxSong(soundEvent.getHolder().orElseThrow(), Component.translatable(Util.makeDescriptionId("jukebox_song", key.identifier())), lengthInSeconds, comparatorOutput)
 		);
 	}
 }

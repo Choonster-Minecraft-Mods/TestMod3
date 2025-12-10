@@ -5,7 +5,9 @@ import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.permissions.LevelBasedPermissionSet;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CommandBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,32 +34,24 @@ public class SurvivalCommandBlockEntity extends CommandBlockEntity {
 		}
 
 		@Override
-		public void onUpdated() {
-			final BlockState state = getLevel().getBlockState(worldPosition);
-			getLevel().sendBlockUpdated(worldPosition, state, state, Block.UPDATE_ALL);
+		public void onUpdated(final ServerLevel level) {
+			final var state = level.getBlockState(worldPosition);
+			level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_ALL);
 		}
 
 		@Override
-		public ServerLevel getLevel() {
-			return (ServerLevel) level;
-		}
-
-		@Override
-		public Vec3 getPosition() {
-			return new Vec3(worldPosition.getX() + 0.5D, worldPosition.getY() + 0.5D, worldPosition.getZ() + 0.5D);
-		}
-
-		@Override
-		public CommandSourceStack createCommandSourceStack(final CommandSource commandSource) {
+		public CommandSourceStack createCommandSourceStack(final ServerLevel level, final CommandSource commandSource) {
+			final var facing = getBlockState().getValue(CommandBlock.FACING);
+			
 			return new CommandSourceStack(
 					commandSource,
-					new Vec3(worldPosition.getX() + 0.5d, worldPosition.getY() + 0.5d, worldPosition.getZ() + 0.5D),
-					Vec2.ZERO,
-					getLevel(),
-					2,
+					Vec3.atCenterOf(worldPosition),
+					new Vec2(0.0F, facing.toYRot()),
+					level,
+					LevelBasedPermissionSet.GAMEMASTER,
 					getName().getString(),
 					getName(),
-					getLevel().getServer(),
+					level.getServer(),
 					null
 			);
 		}

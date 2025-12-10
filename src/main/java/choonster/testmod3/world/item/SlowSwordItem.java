@@ -1,7 +1,7 @@
 package choonster.testmod3.world.item;
 
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -76,7 +76,7 @@ public class SlowSwordItem extends Item {
 			final ItemAttributeModifiers baseAttributes,
 			final ItemAttributeModifiers.Builder builder,
 			final Holder<Attribute> attribute,
-			final ResourceLocation id,
+			final Identifier id,
 			final EquipmentSlot slot,
 			final double multiplier
 	) {

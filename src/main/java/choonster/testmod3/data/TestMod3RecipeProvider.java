@@ -16,10 +16,10 @@ import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredien
 import com.mojang.logging.LogUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.DataComponentMatchers;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.criterion.DataComponentMatchers;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
@@ -30,8 +30,8 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -118,7 +118,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 		{
 			final var category = RecipeCategory.BUILDING_BLOCKS;
 			final var key = key("conditional_recipe_test");
-			final var id = key.location();
+			final var id = key.identifier();
 
 			ConditionalRecipe.builder()
 					.condition(FalseCondition.INSTANCE)
@@ -201,7 +201,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 		// Cut an Oak Log into two Oak Planks with a Cutting Axe, damaging the axe
 		{
 			shapeless(RecipeCategory.BUILDING_BLOCKS, Blocks.OAK_PLANKS, 2)
-					.group(ResourceLocation.withDefaultNamespace("planks").toString())
+					.group(Identifier.withDefaultNamespace("planks").toString())
 					.requires(ModItems.WOODEN_AXE.get())
 					.requires(Blocks.OAK_LOG)
 					.unlockedBy("has_axe", has(ModItems.WOODEN_AXE.get()))
@@ -212,7 +212,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 		// Cut an Oak Log into two Oak Planks with a Wooden Axe, damaging the axe
 		{
 			shapelessCuttingRecipe(RecipeCategory.BUILDING_BLOCKS, Blocks.OAK_PLANKS, 2)
-					.group(ResourceLocation.withDefaultNamespace("planks").toString())
+					.group(Identifier.withDefaultNamespace("planks").toString())
 					.requires(Items.WOODEN_AXE)
 					.requires(Blocks.OAK_LOG)
 					.unlockedBy("has_axe", has(Items.WOODEN_AXE))
@@ -249,7 +249,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 
 
 	private static ResourceKey<Recipe<?>> key(final String name) {
-		return ResourceKey.create(Registries.RECIPE, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name));
+		return ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(TestMod3.MODID, name));
 	}
 
 	private EnhancedShapedRecipeBuilder.Enhanced enhancedShaped(

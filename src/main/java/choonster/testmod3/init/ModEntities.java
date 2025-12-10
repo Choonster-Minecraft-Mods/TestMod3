@@ -6,7 +6,7 @@ import choonster.testmod3.world.entity.ModArrow;
 import choonster.testmod3.world.entity.PlayerAvoidingCreeper;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -72,7 +72,7 @@ public class ModEntities {
 				() -> factory.get().build(
 						ResourceKey.create(
 								Registries.ENTITY_TYPE,
-								ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name)
+								Identifier.fromNamespaceAndPath(TestMod3.MODID, name)
 						)
 				)
 		);

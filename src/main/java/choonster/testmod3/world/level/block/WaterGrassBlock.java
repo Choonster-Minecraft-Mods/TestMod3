@@ -1,8 +1,8 @@
 package choonster.testmod3.world.level.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Util;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.BaseCoralPlantTypeBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;

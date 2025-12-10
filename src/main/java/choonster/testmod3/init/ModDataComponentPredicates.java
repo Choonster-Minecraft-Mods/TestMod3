@@ -45,6 +45,6 @@ public class ModDataComponentPredicates {
 			final String name,
 			final Codec<T> codec
 	) {
-		return ITEM_SUB_PREDICATE_TYPES.register(name, () -> new DataComponentPredicate.Type<>(codec));
+		return ITEM_SUB_PREDICATE_TYPES.register(name, () -> new DataComponentPredicate.ConcreteType<>(codec));
 	}
 }

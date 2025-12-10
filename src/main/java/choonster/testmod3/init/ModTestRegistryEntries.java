@@ -5,7 +5,7 @@ import choonster.testmod3.registry.TestRegistryEntry;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraftforge.eventbus.api.bus.BusGroup;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,7 +25,7 @@ import java.util.function.Supplier;
  * @author Choonster
  */
 public class ModTestRegistryEntries {
-	public static final ResourceKey<Registry<TestRegistryEntry>> REGISTRY_KEY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "test_registry_entry"));
+	public static final ResourceKey<Registry<TestRegistryEntry>> REGISTRY_KEY = ResourceKey.createRegistryKey(Identifier.fromNamespaceAndPath(TestMod3.MODID, "test_registry_entry"));
 
 	private static final DeferredRegister<TestRegistryEntry> TEST_REGISTRY_ENTRIES = DeferredRegister.create(REGISTRY_KEY, TestMod3.MODID);
 

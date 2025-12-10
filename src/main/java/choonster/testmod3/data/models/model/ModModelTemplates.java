@@ -4,11 +4,11 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.util.EnumFaceRotation;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.Util;
 import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
 
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * @author Choonster
  */
 public class ModModelTemplates {
-	private static final ResourceLocation CUTOUT = ResourceLocation.withDefaultNamespace("cutout");
+	private static final Identifier CUTOUT = Identifier.withDefaultNamespace("cutout");
 
 	/**
 	 * Centre cube of the pipe model.
@@ -171,7 +171,7 @@ public class ModModelTemplates {
 
 	private static ModelTemplate createMc(final String model, final TextureSlot... requiredSlots) {
 		return new ModelTemplate(
-				Optional.of(ResourceLocation.withDefaultNamespace("block/" + model)),
+				Optional.of(Identifier.withDefaultNamespace("block/" + model)),
 				Optional.empty(),
 				requiredSlots
 		);
@@ -179,7 +179,7 @@ public class ModModelTemplates {
 
 	private static ModelTemplate createMcItem(final String model, final TextureSlot... requiredSlots) {
 		return new ModelTemplate(
-				Optional.of(ResourceLocation.withDefaultNamespace("item/" + model)),
+				Optional.of(Identifier.withDefaultNamespace("item/" + model)),
 				Optional.empty(),
 				requiredSlots
 		);
@@ -187,7 +187,7 @@ public class ModModelTemplates {
 
 	private static ModelTemplate createMcItem(final String model, final String suffix, final TextureSlot... requiredSlots) {
 		return new ModelTemplate(
-				Optional.of(ResourceLocation.withDefaultNamespace("item/" + model)),
+				Optional.of(Identifier.withDefaultNamespace("item/" + model)),
 				Optional.of(suffix),
 				requiredSlots
 		);
@@ -195,7 +195,7 @@ public class ModModelTemplates {
 
 	private static ModelTemplate createMc(final String model, final String suffix, final TextureSlot... requiredSlots) {
 		return new ModelTemplate(
-				Optional.of(ResourceLocation.withDefaultNamespace("block/" + model)),
+				Optional.of(Identifier.withDefaultNamespace("block/" + model)),
 				Optional.of(suffix),
 				requiredSlots
 		);
@@ -203,7 +203,7 @@ public class ModModelTemplates {
 
 	private static ModelTemplate createMod(final String model, final TextureSlot... requiredSlots) {
 		return new ModelTemplate(
-				Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/" + model)),
+				Optional.of(Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/" + model)),
 				Optional.empty(),
 				requiredSlots
 		);
@@ -211,7 +211,7 @@ public class ModModelTemplates {
 
 	private static ModelTemplate createModItem(final String model, final TextureSlot... requiredSlots) {
 		return new ModelTemplate(
-				Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "item/" + model)),
+				Optional.of(Identifier.fromNamespaceAndPath(TestMod3.MODID, "item/" + model)),
 				Optional.empty(),
 				requiredSlots
 		);
@@ -219,7 +219,7 @@ public class ModModelTemplates {
 
 	private static ModelTemplate createModItem(final String model, final String suffix, final TextureSlot... requiredSlots) {
 		return new ModelTemplate(
-				Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "item/" + model)),
+				Optional.of(Identifier.fromNamespaceAndPath(TestMod3.MODID, "item/" + model)),
 				Optional.of(suffix),
 				requiredSlots
 		);
@@ -227,7 +227,7 @@ public class ModModelTemplates {
 
 	private static ModelTemplate createMod(final String model, final String suffix, final TextureSlot... requiredSlots) {
 		return new ModelTemplate(
-				Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/" + model)),
+				Optional.of(Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/" + model)),
 				Optional.of(suffix),
 				requiredSlots
 		);
@@ -235,7 +235,7 @@ public class ModModelTemplates {
 
 	private static ModelTemplate createCutoutMc(final String model, final TextureSlot... requiredSlots) {
 		return new RenderTypeModelTemplate(
-				Optional.of(ResourceLocation.withDefaultNamespace("block/" + model)),
+				Optional.of(Identifier.withDefaultNamespace("block/" + model)),
 				Optional.empty(),
 				CUTOUT,
 				requiredSlots
@@ -244,7 +244,7 @@ public class ModModelTemplates {
 
 	private static ModelTemplate createCutoutMod(final String model, final TextureSlot... requiredSlots) {
 		return new RenderTypeModelTemplate(
-				Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/" + model)),
+				Optional.of(Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/" + model)),
 				Optional.empty(),
 				CUTOUT,
 				requiredSlots
@@ -253,7 +253,7 @@ public class ModModelTemplates {
 
 	private static ModelTemplate createCutoutMod(final String model, final String suffix, final TextureSlot... requiredSlots) {
 		return new RenderTypeModelTemplate(
-				Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/" + model)),
+				Optional.of(Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/" + model)),
 				Optional.of(suffix),
 				CUTOUT,
 				requiredSlots
@@ -262,7 +262,7 @@ public class ModModelTemplates {
 
 	private static ModelTemplate createCutoutModItem(final String model, final TextureSlot... requiredSlots) {
 		return new RenderTypeModelTemplate(
-				Optional.of(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "item/" + model)),
+				Optional.of(Identifier.fromNamespaceAndPath(TestMod3.MODID, "item/" + model)),
 				Optional.empty(),
 				CUTOUT,
 				requiredSlots

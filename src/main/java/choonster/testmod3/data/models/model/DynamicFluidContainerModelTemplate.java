@@ -3,7 +3,7 @@ package choonster.testmod3.data.models.model;
 import choonster.testmod3.util.RegistryUtil;
 import com.google.gson.JsonObject;
 import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.material.Fluid;
 
 import java.util.Map;
@@ -16,7 +16,7 @@ import java.util.Optional;
  */
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class DynamicFluidContainerModelTemplate extends BaseModelTemplate {
-	private static final ResourceLocation LOADER = ResourceLocation.fromNamespaceAndPath(
+	private static final Identifier LOADER = Identifier.fromNamespaceAndPath(
 			"forge",
 			"fluid_container"
 	);
@@ -25,7 +25,7 @@ public class DynamicFluidContainerModelTemplate extends BaseModelTemplate {
 	private final boolean flipGas;
 
 	public DynamicFluidContainerModelTemplate(
-			final Optional<ResourceLocation> model,
+			final Optional<Identifier> model,
 			final Optional<String> suffix,
 			final Fluid fluid,
 			final boolean flipGas,
@@ -37,7 +37,7 @@ public class DynamicFluidContainerModelTemplate extends BaseModelTemplate {
 	}
 
 	@Override
-	protected JsonObject createModel(final Map<TextureSlot, ResourceLocation> textureMap) {
+	protected JsonObject createModel(final Map<TextureSlot, Identifier> textureMap) {
 		final JsonObject output = super.createModel(textureMap);
 
 		output.addProperty("loader", LOADER.toString());

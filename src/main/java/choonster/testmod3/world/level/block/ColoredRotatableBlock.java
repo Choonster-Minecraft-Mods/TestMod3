@@ -25,11 +25,11 @@ public class ColoredRotatableBlock extends BaseColoredRotatableBlock<ColoredRota
 								.fieldOf("color")
 								.forGetter(BaseColoredRotatableBlock::getColor),
 
-						Codec.unit(() -> variantGroupSupplier)
+						MapCodec.unitCodec(() -> variantGroupSupplier)
 								.fieldOf("variantGroup")
 								.forGetter(block -> block.variantGroup),
 
-						Codec.unit(() -> variantGroupMapCodec)
+						MapCodec.unitCodec(() -> variantGroupMapCodec)
 								.fieldOf("variantGroupMapCodec")
 								.forGetter(block -> block.variantGroupMapCodec),
 

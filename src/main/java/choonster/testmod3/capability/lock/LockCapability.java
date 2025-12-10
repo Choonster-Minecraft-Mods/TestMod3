@@ -5,7 +5,7 @@ import choonster.testmod3.api.capability.lock.ILock;
 import choonster.testmod3.capability.lock.wrapper.BaseContainerBlockEntityWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
@@ -30,7 +30,7 @@ public final class LockCapability {
 	/**
 	 * The ID of this capability.
 	 */
-	public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "lock");
+	public static final Identifier ID = Identifier.fromNamespaceAndPath(TestMod3.MODID, "lock");
 
 	/**
 	 * Get the {@link ILock} from a block.

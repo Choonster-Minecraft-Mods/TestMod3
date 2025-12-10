@@ -9,7 +9,7 @@ import choonster.testmod3.world.level.block.PlaneBlock;
  */
 /*
 public class VerticalRotatableProvider extends EnumPropertyProvider<PlaneBlock.VerticalRotation> {
-	public VerticalRotatableProvider(final ResourceLocation uid, final Property<PlaneBlock.VerticalRotation> property) {
+	public VerticalRotatableProvider(final Identifier uid, final Property<PlaneBlock.VerticalRotation> property) {
 		super(
 				uid,
 				TooltipPosition.BODY,

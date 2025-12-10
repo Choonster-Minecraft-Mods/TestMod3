@@ -5,7 +5,7 @@ import choonster.testmod3.util.RegistryUtil;
 import choonster.testmod3.world.level.block.FluidTankBlock;
 import choonster.testmod3.world.level.block.RightClickTestBlock;
 import choonster.testmod3.world.level.storage.loot.functions.SetFluidTankContents;
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;

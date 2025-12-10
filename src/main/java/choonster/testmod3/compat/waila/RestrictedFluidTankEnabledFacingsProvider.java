@@ -9,14 +9,14 @@ import choonster.testmod3.world.level.block.entity.RestrictedFluidTankBlockEntit
  */
 /*
 public class RestrictedFluidTankEnabledFacingsProvider implements IBlockComponentProvider {
-	private final ResourceLocation uid;
+	private final Identifier uid;
 
-	public RestrictedFluidTankEnabledFacingsProvider(final ResourceLocation uid) {
+	public RestrictedFluidTankEnabledFacingsProvider(final Identifier uid) {
 		this.uid = uid;
 	}
 
 	@Override
-	public ResourceLocation getUid() {
+	public Identifier getUid() {
 		return uid;
 	}
 

@@ -52,7 +52,7 @@ public abstract class LockableItemHandlerBlockEntity<INVENTORY extends IItemHand
 
 	@Override
 	public void openGUI(final ServerPlayer player) {
-		if (getLock().tryOpen(player)) {
+		if (getLock().tryOpen(player, getBlockPos().getCenter())) {
 			super.openGUI(player);
 		}
 	}
@@ -68,7 +68,7 @@ public abstract class LockableItemHandlerBlockEntity<INVENTORY extends IItemHand
 	}
 
 	@Override
-	protected void saveAdditional(ValueOutput output) {
+	protected void saveAdditional(final ValueOutput output) {
 		super.saveAdditional(output);
 
 		output.store("Lock", lockCodec, getLock());

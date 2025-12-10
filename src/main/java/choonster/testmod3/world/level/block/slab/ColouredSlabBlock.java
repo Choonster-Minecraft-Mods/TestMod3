@@ -38,11 +38,11 @@ public class ColouredSlabBlock extends TestMod3SlabBlock<DyeColor, ColouredSlabB
 								.fieldOf("variant")
 								.forGetter(TestMod3SlabBlock::getVariant),
 
-						Codec.unit(() -> variantGroupSupplier)
+						MapCodec.unitCodec(() -> variantGroupSupplier)
 								.fieldOf("variantGroup")
 								.forGetter(block -> block.variantGroup),
 
-						Codec.unit(() -> variantGroupMapCodec)
+						MapCodec.unitCodec(() -> variantGroupMapCodec)
 								.fieldOf("variantGroupMapCodec")
 								.forGetter(block -> block.variantGroupMapCodec),
 

@@ -8,7 +8,7 @@ import choonster.testmod3.fluid.group.FluidGroup;
 import choonster.testmod3.fluid.group.StandardFluidGroup;
 import choonster.testmod3.world.item.block.FluidTankItem;
 import choonster.testmod3.world.level.block.entity.FluidTankBlockEntity;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -41,8 +41,8 @@ public class ModFluids {
 
 	public static final FluidGroup<FluidType, FlowingFluid, FlowingFluid, LiquidBlock, Item> STATIC = standardGroup("static")
 			.typeFactory(() -> new BasicFluidType(
-					ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_static_still"),
-					ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_static_still"),
+					Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_static_still"),
+					Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_static_still"),
 					FluidType.Properties.create()
 							.lightLevel(10)
 							.density(800)
@@ -59,8 +59,8 @@ public class ModFluids {
 	// TODO: Implement gases
 	public static final FluidGroup<FluidType, FlowingFluid, FlowingFluid, LiquidBlock, Item> STATIC_GAS = standardGroup("static_gas")
 			.typeFactory(() -> new BasicFluidType(
-					ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_static_gas_still"),
-					ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_static_gas_still"),
+					Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_static_gas_still"),
+					Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_static_gas_still"),
 					FluidType.Properties.create()
 							.lightLevel(10)
 							.density(-800)
@@ -76,8 +76,8 @@ public class ModFluids {
 
 	public static final FluidGroup<FluidType, FlowingFluid, FlowingFluid, LiquidBlock, Item> NORMAL = standardGroup("normal")
 			.typeFactory(() -> new BasicFluidType(
-					ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_normal_still"),
-					ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_normal_flow"),
+					Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_normal_still"),
+					Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_normal_flow"),
 					FluidType.Properties.create()
 							.lightLevel(10)
 							.density(800)
@@ -91,8 +91,8 @@ public class ModFluids {
 
 	public static final FluidGroup<FluidType, FlowingFluid, FlowingFluid, LiquidBlock, Item> NORMAL_GAS = standardGroup("normal_gas")
 			.typeFactory(() -> new BasicFluidType(
-					ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_normal_gas_still"),
-					ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_normal_gas_flow"),
+					Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_normal_gas_still"),
+					Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_normal_gas_flow"),
 					FluidType.Properties.create()
 							.lightLevel(10)
 							.density(-1600)
@@ -106,8 +106,8 @@ public class ModFluids {
 
 	public static final FluidGroup<FluidType, FlowingFluid, FlowingFluid, LiquidBlock, Item> PORTAL_DISPLACEMENT = standardGroup("portal_displacement")
 			.typeFactory(() -> new BasicFluidType(
-					ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_portal_displacement_still"),
-					ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_portal_displacement_flow"),
+					Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_portal_displacement_still"),
+					Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/fluid_portal_displacement_flow"),
 					FluidType.Properties.create()
 							.lightLevel(10)
 							.density(1600)

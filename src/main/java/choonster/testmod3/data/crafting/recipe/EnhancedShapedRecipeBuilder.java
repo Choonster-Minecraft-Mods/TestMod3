@@ -7,7 +7,7 @@ import choonster.testmod3.world.item.crafting.recipe.ShapedRecipeSerializer;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.recipes.RecipeBuilder;
@@ -182,7 +182,7 @@ public class EnhancedShapedRecipeBuilder<
 			output.accept(
 					id,
 					recipe,
-					advancement.build(id.location().withPrefix("recipes/" + category.getFolderName() + "/"))
+					advancement.build(id.identifier().withPrefix("recipes/" + category.getFolderName() + "/"))
 			);
 		} catch (final IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException("Failed to save shaped recipe " + id, e);

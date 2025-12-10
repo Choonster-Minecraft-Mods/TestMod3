@@ -4,7 +4,7 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.init.ModSoundEvents;
 import choonster.testmod3.text.TestMod3Lang;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.SoundDefinition;
 import net.minecraftforge.common.data.SoundDefinitionsProvider;
@@ -44,6 +44,6 @@ public class TestMod3SoundDefinitionsProvider extends SoundDefinitionsProvider {
 	}
 
 	private SoundDefinition.Sound modSound(final String name) {
-		return sound(ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name));
+		return sound(Identifier.fromNamespaceAndPath(TestMod3.MODID, name));
 	}
 }

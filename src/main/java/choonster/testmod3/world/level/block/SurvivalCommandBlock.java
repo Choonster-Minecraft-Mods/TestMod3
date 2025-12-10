@@ -21,12 +21,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BaseCommandBlock;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CommandBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.CommandBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.phys.BlockHitResult;
 import org.slf4j.Logger;
 
@@ -85,7 +85,7 @@ public class SurvivalCommandBlock extends CommandBlock {
 
 			return InteractionResult.SUCCESS_SERVER;
 		}
-		
+
 		return InteractionResult.PASS;
 	}
 
@@ -93,7 +93,7 @@ public class SurvivalCommandBlock extends CommandBlock {
 	public void setPlacedBy(final Level level, final BlockPos pos, final BlockState state, final LivingEntity placer, final ItemStack stack) {
 		if (level instanceof final ServerLevel serverLevel && serverLevel.getBlockEntity(pos) instanceof final SurvivalCommandBlockEntity survivalCommandBlockEntity) {
 			if (!stack.has(DataComponents.BLOCK_ENTITY_DATA)) {
-				survivalCommandBlockEntity.getCommandBlock().setTrackOutput(serverLevel.getGameRules().getBoolean(GameRules.RULE_SENDCOMMANDFEEDBACK));
+				survivalCommandBlockEntity.getCommandBlock().setTrackOutput(serverLevel.getGameRules().get(GameRules.SEND_COMMAND_FEEDBACK));
 				survivalCommandBlockEntity.setAutomatic(automatic);
 			}
 		}
@@ -181,7 +181,7 @@ public class SurvivalCommandBlock extends CommandBlock {
 		int i;
 		BlockState neighbourState;
 
-		for (i = gameRules.getInt(GameRules.RULE_MAX_COMMAND_CHAIN_LENGTH); i-- > 0; facing = neighbourState.getValue(FACING)) {
+		for (i = gameRules.get(GameRules.MAX_COMMAND_SEQUENCE_LENGTH); i-- > 0; facing = neighbourState.getValue(FACING)) {
 			neighbourPos.move(facing);
 			neighbourState = level.getBlockState(neighbourPos);
 
@@ -212,7 +212,7 @@ public class SurvivalCommandBlock extends CommandBlock {
 		}
 
 		if (i <= 0) {
-			final var maxCommandChainLength = Math.max(gameRules.getInt(GameRules.RULE_MAX_COMMAND_CHAIN_LENGTH), 0);
+			final var maxCommandChainLength = Math.max(gameRules.get(GameRules.MAX_COMMAND_SEQUENCE_LENGTH), 0);
 			LOGGER.warn("Command Block chain tried to execute more than {} steps!", maxCommandChainLength);
 		}
 	}

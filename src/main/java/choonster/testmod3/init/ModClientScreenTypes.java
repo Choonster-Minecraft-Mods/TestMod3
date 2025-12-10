@@ -9,7 +9,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraftforge.eventbus.api.bus.BusGroup;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -25,7 +25,7 @@ import java.util.function.Supplier;
  */
 public class ModClientScreenTypes {
 	public static final ResourceKey<Registry<ClientScreenType<?>>> KEY = ResourceKey.createRegistryKey(
-			ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "client_screen_type")
+			Identifier.fromNamespaceAndPath(TestMod3.MODID, "client_screen_type")
 	);
 
 	private static final DeferredRegister<ClientScreenType<?>> CLIENT_SCREEN_TYPES = DeferredRegister.create(KEY, TestMod3.MODID);

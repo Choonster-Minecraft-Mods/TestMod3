@@ -2,11 +2,11 @@ package choonster.testmod3.util;
 
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.Util;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
@@ -71,10 +71,10 @@ public class InventoryUtils {
 			final LootParams params,
 			final long seed
 	) {
-		final Optional<ResourceLocation> randomSequence;
+		final Optional<Identifier> randomSequence;
 
 		try {
-			@SuppressWarnings("unchecked") final var localRandomSequence = (Optional<ResourceLocation>) RANDOM_SEQUENCE.get(lootTable);
+			@SuppressWarnings("unchecked") final var localRandomSequence = (Optional<Identifier>) RANDOM_SEQUENCE.get(lootTable);
 			randomSequence = localRandomSequence;
 		} catch (final IllegalAccessException e) {
 			throw new RuntimeException("Failed to get random sequence while generating loot", e);

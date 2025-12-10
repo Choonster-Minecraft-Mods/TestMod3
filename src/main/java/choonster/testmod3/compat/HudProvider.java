@@ -1,7 +1,7 @@
 package choonster.testmod3.compat;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /**
  * IDs for Jade providers.
@@ -20,18 +20,18 @@ public enum HudProvider {
 	;
 
 	private final String name;
-	private final ResourceLocation id;
+	private final Identifier id;
 
 	HudProvider(final String name) {
 		this.name = name;
-		id = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name);
+		id = Identifier.fromNamespaceAndPath(TestMod3.MODID, name);
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public ResourceLocation getId() {
+	public Identifier getId() {
 		return id;
 	}
 }

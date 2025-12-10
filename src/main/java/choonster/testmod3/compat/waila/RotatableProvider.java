@@ -9,11 +9,11 @@ import net.minecraft.core.Direction;
  */
 /*
 public class RotatableProvider extends EnumPropertyProvider<Direction> {
-	public RotatableProvider(final ResourceLocation uid, final Property<Direction> property) {
+	public RotatableProvider(final Identifier uid, final Property<Direction> property) {
 		this(uid, property, TestMod3Lang.DESC_ROTATABLE_FACING.getTranslationKey());
 	}
 
-	public RotatableProvider(final ResourceLocation uid, final Property<Direction> property, final String tooltipTranslationKey) {
+	public RotatableProvider(final Identifier uid, final Property<Direction> property, final String tooltipTranslationKey) {
 		super(
 				uid,
 				TooltipPosition.BODY,

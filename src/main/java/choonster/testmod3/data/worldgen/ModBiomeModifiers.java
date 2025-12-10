@@ -8,7 +8,7 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -94,7 +94,7 @@ public class ModBiomeModifiers {
 	}
 
 	private static ResourceKey<BiomeModifier> key(final String name) {
-		return ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, name));
+		return ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS, Identifier.fromNamespaceAndPath(TestMod3.MODID, name));
 	}
 
 	private static HolderSet<Biome> tag(final HolderGetter<Biome> holderGetter, final TagKey<Biome> key) {

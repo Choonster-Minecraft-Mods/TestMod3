@@ -2,14 +2,14 @@ package choonster.testmod3.init;
 
 import choonster.testmod3.TestMod3;
 import choonster.testmod3.network.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraftforge.network.Channel;
 import net.minecraftforge.network.ChannelBuilder;
 import net.minecraftforge.network.NetworkProtocol;
 import net.minecraftforge.network.SimpleChannel;
 
 public class ModNetwork {
-	public static final ResourceLocation CHANNEL_NAME = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "network");
+	public static final Identifier CHANNEL_NAME = Identifier.fromNamespaceAndPath(TestMod3.MODID, "network");
 
 	public static final int NETWORK_VERSION = 7;
 

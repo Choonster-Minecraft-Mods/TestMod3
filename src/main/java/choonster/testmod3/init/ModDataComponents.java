@@ -7,6 +7,7 @@ import choonster.testmod3.world.item.*;
 import choonster.testmod3.world.item.component.lastusetime.LastUseTimeProperties;
 import choonster.testmod3.world.item.component.pigspawner.IPigSpawner;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -158,7 +159,7 @@ public class ModDataComponents {
 
 	private static DataComponentType.Builder<Unit> unit(final DataComponentType.Builder<Unit> builder) {
 		return builder
-				.persistent(Codec.unit(Unit.INSTANCE))
+				.persistent(MapCodec.unitCodec(Unit.INSTANCE))
 				.networkSynchronized(StreamCodec.unit(Unit.INSTANCE));
 	}
 }

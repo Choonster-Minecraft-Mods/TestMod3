@@ -6,7 +6,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 
 import java.util.HashMap;
@@ -49,7 +49,7 @@ public class TestMod3EquipmentAssetProvider implements DataProvider {
 
 	private static EquipmentClientInfo onlyHumanoid(final String textureName) {
 		return EquipmentClientInfo.builder()
-				.addHumanoidLayers(ResourceLocation.withDefaultNamespace(textureName))
+				.addHumanoidLayers(Identifier.withDefaultNamespace(textureName))
 				.build();
 	}
 }

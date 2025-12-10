@@ -10,7 +10,7 @@ import choonster.testmod3.world.level.block.entity.FluidTankBlockEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -42,7 +42,7 @@ import java.util.List;
 public class FluidTankBlock<TE extends BaseFluidTankBlockEntity> extends BaseEntityBlock<TE> {
 	public static final MapCodec<FluidTankBlock<?>> CODEC = simpleCodec(FluidTankBlock::new);
 
-	public static final ResourceLocation FLUID_TANK_CONTENTS = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "fluid_tank_contents");
+	public static final Identifier FLUID_TANK_CONTENTS = Identifier.fromNamespaceAndPath(TestMod3.MODID, "fluid_tank_contents");
 
 	public FluidTankBlock(final Block.Properties properties) {
 		super(properties);

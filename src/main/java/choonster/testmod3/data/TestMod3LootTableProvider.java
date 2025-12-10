@@ -56,7 +56,7 @@ public class TestMod3LootTableProvider extends LootTableProvider {
 	public record MissingModTableProblem(ResourceKey<LootTable> id) implements ProblemReporter.Problem {
 		@Override
 		public String description() {
-			return "Missing mod table: " + id.location();
+			return "Missing mod table: " + id.identifier();
 		}
 	}
 }

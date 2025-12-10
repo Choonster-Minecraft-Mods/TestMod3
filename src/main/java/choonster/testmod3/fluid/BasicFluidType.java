@@ -1,6 +1,6 @@
 package choonster.testmod3.fluid;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidType;
 
@@ -12,20 +12,20 @@ import java.util.function.Consumer;
  * @author Choonster
  */
 public class BasicFluidType extends FluidType {
-	private final ResourceLocation stillTexture;
-	private final ResourceLocation flowingTexture;
+	private final Identifier stillTexture;
+	private final Identifier flowingTexture;
 
-	public BasicFluidType(final ResourceLocation stillTexture, final ResourceLocation flowingTexture, final Properties properties) {
+	public BasicFluidType(final Identifier stillTexture, final Identifier flowingTexture, final Properties properties) {
 		super(properties);
 		this.stillTexture = stillTexture;
 		this.flowingTexture = flowingTexture;
 	}
 
-	public ResourceLocation getStillTexture() {
+	public Identifier getStillTexture() {
 		return stillTexture;
 	}
 
-	public ResourceLocation getFlowingTexture() {
+	public Identifier getFlowingTexture() {
 		return flowingTexture;
 	}
 
@@ -33,12 +33,12 @@ public class BasicFluidType extends FluidType {
 	public void initializeClient(final Consumer<IClientFluidTypeExtensions> consumer) {
 		consumer.accept(new IClientFluidTypeExtensions() {
 			@Override
-			public ResourceLocation getStillTexture() {
+			public Identifier getStillTexture() {
 				return stillTexture;
 			}
 
 			@Override
-			public ResourceLocation getFlowingTexture() {
+			public Identifier getFlowingTexture() {
 				return flowingTexture;
 			}
 		});

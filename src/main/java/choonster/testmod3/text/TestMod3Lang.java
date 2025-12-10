@@ -1,8 +1,8 @@
 package choonster.testmod3.text;
 
 import choonster.testmod3.TestMod3;
-import net.minecraft.Util;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
 
 /**
  * Adapted from Mekanism's APILang under the following license:
@@ -138,7 +138,7 @@ public enum TestMod3Lang {
 	private final String key;
 
 	TestMod3Lang(final String type, final String path) {
-		this(Util.makeDescriptionId(type, ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, path)));
+		this(Util.makeDescriptionId(type, Identifier.fromNamespaceAndPath(TestMod3.MODID, path)));
 	}
 
 	TestMod3Lang(final String key) {

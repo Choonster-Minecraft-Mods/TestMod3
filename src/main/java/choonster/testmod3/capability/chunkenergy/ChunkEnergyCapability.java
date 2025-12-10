@@ -6,7 +6,7 @@ import choonster.testmod3.capability.SerializableCapabilityProvider;
 import choonster.testmod3.network.UpdateChunkEnergyValueMessage;
 import choonster.testmod3.util.CapabilityNotPresentException;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -45,7 +45,7 @@ public final class ChunkEnergyCapability {
 	/**
 	 * The ID of this capability.
 	 */
-	public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TestMod3.MODID, "chunk_energy");
+	public static final Identifier ID = Identifier.fromNamespaceAndPath(TestMod3.MODID, "chunk_energy");
 
 	/**
 	 * Get the {@link IChunkEnergy} for the {@link Level} and chunk position.

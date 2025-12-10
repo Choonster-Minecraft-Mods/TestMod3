@@ -4,7 +4,7 @@ import choonster.testmod3.init.ModClientScreenTypes;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
@@ -21,7 +21,7 @@ import java.util.Optional;
 public class ClientScreenManager {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-	private static final Map<ResourceLocation, IScreenConstructor<?, ?>> CONSTRUCTORS = new HashMap<>();
+	private static final Map<Identifier, IScreenConstructor<?, ?>> CONSTRUCTORS = new HashMap<>();
 
 	@SuppressWarnings("unchecked")
 	public static <T> void openScreen(final ClientScreenType<T> clientScreenType, final T extraData) {
@@ -29,7 +29,7 @@ public class ClientScreenManager {
 		getScreenConstructor(id).ifPresent(f -> createAndOpenScreen(clientScreenType, extraData, (IScreenConstructor<T, ?>) f));
 	}
 
-	public static Optional<IScreenConstructor<?, ?>> getScreenConstructor(final ResourceLocation id) {
+	public static Optional<IScreenConstructor<?, ?>> getScreenConstructor(final Identifier id) {
 		final var constructor = CONSTRUCTORS.get(id);
 
 		if (constructor == null) {
