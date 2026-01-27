@@ -28,7 +28,7 @@ println "Java: ${providers.systemProperty('java.version').get()}, " +
 minecraft {
     mappings channel: mapping_channel, version: mapping_version
 
-    accessTransformers = true
+    accessTransformer = true
 
     runs {
         configureEach {
