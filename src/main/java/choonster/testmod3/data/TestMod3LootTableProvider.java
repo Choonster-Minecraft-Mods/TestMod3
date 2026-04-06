@@ -12,8 +12,9 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.ValidationContext;
+import net.minecraft.world.level.storage.loot.ValidationContextSource;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 import java.util.List;
@@ -39,18 +40,14 @@ public class TestMod3LootTableProvider extends LootTableProvider {
 	}
 
 	@Override
-	protected void validate(final Registry<LootTable> registry, final ValidationContext validationContext, final ProblemReporter problemReporter) {
+	protected void validate(final Registry<LootTable> map, final ValidationContextSource context, final ProblemReporter report) {
 		final var modLootTableIds = ModLootTables.all();
 
-		for (final var id : Sets.difference(modLootTableIds, registry.registryKeySet())) {
-			validationContext.reportProblem(new MissingModTableProblem(id));
+		for (final var id : Sets.difference(modLootTableIds, map.registryKeySet())) {
+			report.report(new MissingModTableProblem(id));
 		}
-
-		registry.listElements().forEach((lootTable) -> lootTable.value().validate(
-				validationContext
-						.setContextKeySet(lootTable.value().getParamSet())
-						.enterElement(new ProblemReporter.RootElementPathElement(lootTable.key()), lootTable.key())
-		));
+		
+		LootDataType.TABLE.runValidation(context, map);
 	}
 
 	public record MissingModTableProblem(ResourceKey<LootTable> id) implements ProblemReporter.Problem {

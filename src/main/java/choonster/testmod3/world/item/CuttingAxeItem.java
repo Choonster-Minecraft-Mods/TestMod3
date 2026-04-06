@@ -2,9 +2,7 @@ package choonster.testmod3.world.item;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.*;
 import net.minecraftforge.common.ForgeHooks;
 
 /**
@@ -18,7 +16,7 @@ public class CuttingAxeItem extends AxeItem {
 	}
 
 	@Override
-	public ItemStack getCraftingRemainder(final ItemStack itemStack) {
+	public ItemStackTemplate getCraftingRemainder(final ItemStack itemStack) {
 		final var remainingItem = itemStack.copy();
 		final var craftingPlayer = ForgeHooks.getCraftingPlayer();
 
@@ -39,6 +37,8 @@ public class CuttingAxeItem extends AxeItem {
 			}
 		}
 
-		return remainingItem;
+		return remainingItem.isEmpty()
+				? new ItemStackTemplate(Items.AIR)
+				: ItemStackTemplate.fromNonEmptyStack(remainingItem);
 	}
 }

@@ -46,8 +46,8 @@ public class TestMod3 {
 		ModBlockEntities.initialise(modEventBus);
 		ModTestRegistryEntries.initialise(modEventBus);
 		ModPlacementModifierTypes.initialise(modEventBus);
-		ModLootConditionTypes.initialise(modEventBus);
-		ModLootFunctionTypes.initialise(modEventBus);
+		ModLootItemConditions.initialise(modEventBus);
+		ModLootItemFunctions.initialise(modEventBus);
 		ModArgumentTypes.initialise(modEventBus);
 		ModBiomeModifierSerializers.initialise(modEventBus);
 		ModCreativeTabs.initialise(modEventBus);

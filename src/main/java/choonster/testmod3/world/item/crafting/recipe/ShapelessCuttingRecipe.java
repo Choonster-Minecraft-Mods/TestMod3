@@ -1,13 +1,17 @@
 package choonster.testmod3.world.item.crafting.recipe;
 
 import choonster.testmod3.init.ModCrafting;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.NonNullList;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.common.ForgeHooks;
@@ -20,13 +24,22 @@ import java.util.List;
  * @author Choonster
  */
 public class ShapelessCuttingRecipe extends BaseShapelessRecipe {
-	private ShapelessCuttingRecipe(
-			final String group,
-			final CraftingBookCategory category,
-			final ItemStack result,
+	public static final MapCodec<ShapelessCuttingRecipe> MAP_CODEC =
+			ShapelessRecipeCodecs.mapCodec(ShapelessCuttingRecipe::new);
+
+	public static final StreamCodec<RegistryFriendlyByteBuf, ShapelessCuttingRecipe> STREAM_CODEC =
+			ShapelessRecipeCodecs.streamCodec(ShapelessCuttingRecipe::new);
+
+	public static final RecipeSerializer<ShapelessCuttingRecipe> SERIALIZER =
+			new RecipeSerializer<>(MAP_CODEC, STREAM_CODEC);
+
+	public ShapelessCuttingRecipe(
+			final CommonInfo commonInfo,
+			final CraftingRecipe.CraftingBookInfo bookInfo,
+			final ItemStackTemplate result,
 			final List<Ingredient> ingredients
 	) {
-		super(group, category, result, ingredients);
+		super(commonInfo, bookInfo, result, ingredients);
 	}
 
 	@SuppressWarnings("UnstableApiUsage")
@@ -66,11 +79,5 @@ public class ShapelessCuttingRecipe extends BaseShapelessRecipe {
 	@Override
 	public RecipeSerializer<ShapelessCuttingRecipe> getSerializer() {
 		return ModCrafting.Recipes.CUTTING_SHAPELESS.get();
-	}
-
-	public static class Serializer extends ShapelessRecipeSerializer<ShapelessCuttingRecipe> {
-		public Serializer() {
-			super(ShapelessCuttingRecipe::new);
-		}
 	}
 }

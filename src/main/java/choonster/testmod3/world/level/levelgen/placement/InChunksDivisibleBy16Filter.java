@@ -27,9 +27,9 @@ public class InChunksDivisibleBy16Filter extends PlacementFilter {
 
 	@Override
 	protected boolean shouldPlace(final PlacementContext context, final RandomSource random, final BlockPos pos) {
-		final ChunkPos chunkPos = new ChunkPos(pos);
+		final var chunkPos = ChunkPos.containing(pos);
 
-		return chunkPos.x % 16 == 0 && chunkPos.z % 16 == 0;
+		return chunkPos.x() % 16 == 0 && chunkPos.z() % 16 == 0;
 	}
 
 	@Override

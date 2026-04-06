@@ -17,6 +17,7 @@ import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.item.ClientItem;
 import net.minecraft.client.renderer.item.RangeSelectItemModel;
 import net.minecraft.client.renderer.item.properties.numeric.UseDuration;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
@@ -249,7 +250,7 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 		generateFlatItem(
 				ModItems.RITUAL_CHECKER.get(),
 				ModelTemplates.FLAT_HANDHELD_ITEM,
-				Identifier.fromNamespaceAndPath(TestMod3.MODID, "item/banner_base")
+				new Material(Identifier.fromNamespaceAndPath(TestMod3.MODID, "item/banner_base"))
 		);
 	}
 
@@ -329,7 +330,7 @@ public class ModItemModelGenerators extends ItemModelGenerators {
 		itemModelOutput.accept(item, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(parent)));
 	}
 
-	private void generateFlatItem(final Item item, final ModelTemplate modelTemplate, final Identifier texture) {
+	private void generateFlatItem(final Item item, final ModelTemplate modelTemplate, final Material texture) {
 		final var model = modelTemplate.create(item, TextureMapping.layer0(texture), modelOutput);
 		itemModelOutput.accept(item, ItemModelUtils.plainModel(model));
 	}

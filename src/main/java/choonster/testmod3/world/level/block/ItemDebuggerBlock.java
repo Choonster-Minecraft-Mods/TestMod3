@@ -50,7 +50,7 @@ public class ItemDebuggerBlock extends Block {
 			logFluidHandler(stack);
 
 			final var key = RegistryUtil.getKey(stack.getItem());
-			final var modName = ModList.get().getModContainerById(key.getNamespace())
+			final var modName = ModList.getModContainerById(key.getNamespace())
 					.map(modContainer -> modContainer.getModInfo().getDisplayName())
 					.orElse("Unknown - No ModContainer");
 

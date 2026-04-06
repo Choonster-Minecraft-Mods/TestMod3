@@ -1,10 +1,15 @@
 package choonster.testmod3.world.item.crafting.recipe;
 
 import choonster.testmod3.init.ModCrafting;
-import net.minecraft.core.HolderLookup;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapedRecipePattern;
 
 /**
  * A shaped recipe class that copies the item damage of the first armour ingredient to the output. The damage is clamped to the output item's damage range.
@@ -14,20 +19,28 @@ import net.minecraft.world.item.crafting.*;
  *
  * @author Choonster
  */
-public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
-	private ShapedArmourUpgradeRecipe(
-			final String group,
-			final CraftingBookCategory category,
+public class ShapedArmourUpgradeRecipe extends BaseShapedRecipe {
+	public static final MapCodec<ShapedArmourUpgradeRecipe> MAP_CODEC =
+			ShapedRecipeCodecs.mapCodec(ShapedArmourUpgradeRecipe::new);
+
+	public static final StreamCodec<RegistryFriendlyByteBuf, ShapedArmourUpgradeRecipe> STREAM_CODEC =
+			ShapedRecipeCodecs.streamCodec(ShapedArmourUpgradeRecipe::new);
+
+	public static final RecipeSerializer<ShapedArmourUpgradeRecipe> SERIALIZER =
+			new RecipeSerializer<>(MAP_CODEC, STREAM_CODEC);
+
+	public ShapedArmourUpgradeRecipe(
+			final CommonInfo commonInfo,
+			final CraftingBookInfo bookInfo,
 			final ShapedRecipePattern pattern,
-			final ItemStack result,
-			final boolean showNotification
+			final ItemStackTemplate result
 	) {
-		super(group, category, pattern, result, showNotification);
+		super(commonInfo, bookInfo, pattern, result);
 	}
 
 	@Override
-	public ItemStack assemble(final CraftingInput input, final HolderLookup.Provider registries) {
-		final var output = super.assemble(input, registries).copy(); // Get the default output
+	public ItemStack assemble(final CraftingInput input) {
+		final var output = super.assemble(input); // Get the default output
 
 		if (!output.isEmpty()) {
 			for (var i = 0; i < input.size(); i++) { // For each slot in the crafting inventory,
@@ -48,11 +61,5 @@ public class ShapedArmourUpgradeRecipe extends ShapedRecipe {
 	@Override
 	public RecipeSerializer<ShapedArmourUpgradeRecipe> getSerializer() {
 		return ModCrafting.Recipes.ARMOUR_UPGRADE_SHAPED.get();
-	}
-
-	public static class Serializer extends ShapedRecipeSerializer<ShapedArmourUpgradeRecipe> {
-		public Serializer() {
-			super(ShapedArmourUpgradeRecipe::new);
-		}
 	}
 }

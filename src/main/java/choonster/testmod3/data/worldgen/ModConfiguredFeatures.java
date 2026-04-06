@@ -7,8 +7,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPattern;
@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.entity.BannerPatterns;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public class ModConfiguredFeatures {
 
 		register(context, BANNER, ModFeatures.BANNER.get(),
 				new BannerFeatureConfig(
-						DyeColor.PINK,
+						BlockStateProvider.simple(Blocks.PINK_BANNER),
 						new BannerPatternLayers.Builder()
 								.add(pattern(patterns, BannerPatterns.GRADIENT_UP), DyeColor.MAGENTA)
 								.add(pattern(patterns, BannerPatterns.FLOWER), DyeColor.BLACK)

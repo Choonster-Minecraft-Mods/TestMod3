@@ -10,7 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.ingredients.IIngredientSerializer;
-import net.minecraftforge.common.crafting.ingredients.PartialNBTIngredient;
+import net.minecraftforge.common.crafting.ingredients.NBTIngredient;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
@@ -34,7 +34,7 @@ public class MobSpawnerIngredient extends AbstractDelegatingIngredient {
 
 	public static final MapCodec<Ingredient> CODEC = DATA_CODEC.flatXmap(
 			mobSpawnerIngredient -> DataResult.success(
-					PartialNBTIngredient.builder()
+					NBTIngredient.builder()
 							.item(mobSpawnerIngredient.item)
 							.nbt(
 									CompoundTag.builder()

@@ -8,6 +8,7 @@ import net.minecraft.client.data.models.model.ModelInstance;
 import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 
 import java.util.Map;
@@ -45,7 +46,7 @@ public class BaseModelTemplate extends ModelTemplate {
 		return modelLocation;
 	}
 
-	protected JsonObject createModel(final Map<TextureSlot, Identifier> textureMap) {
+	protected JsonObject createModel(final Map<TextureSlot, Material> textureMap) {
 		final var output = new JsonObject();
 
 		model.ifPresent(model -> output.addProperty("parent", model.toString()));
@@ -64,7 +65,7 @@ public class BaseModelTemplate extends ModelTemplate {
 		return output;
 	}
 
-	private Map<TextureSlot, Identifier> createMap(final TextureMapping textureMapping) {
+	private Map<TextureSlot, Material> createMap(final TextureMapping textureMapping) {
 		return Streams.concat(
 				requiredSlots.stream(), textureMapping.getForced()
 		).collect(ImmutableMap.toImmutableMap(Function.identity(), textureMapping::get));

@@ -23,7 +23,8 @@ import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.*;
-import net.minecraft.client.renderer.block.model.VariantMutator;
+import net.minecraft.client.renderer.block.dispatch.VariantMutator;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
@@ -369,7 +370,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 		final var textureMapping = new TextureMapping()
 				.put(
 						ModTextureSlots.CHEST,
-						Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/chest/wood")
+						new Material(Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/chest/wood"))
 				)
 				.put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(Blocks.OAK_PLANKS));
 
@@ -589,7 +590,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		final var block = fluidGroup.getBlock().get();
 
-		final var textureMapping = TextureMapping.particle(basicFluidType.getStillTexture());
+		final var textureMapping = TextureMapping.particle(new Material(basicFluidType.getStillTexture()));
 
 		final var model = plainVariant(ModelTemplates.PARTICLE_ONLY.create(block, textureMapping, modelOutput));
 

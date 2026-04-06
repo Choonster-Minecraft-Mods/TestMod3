@@ -137,7 +137,7 @@ public final class PigSpawner {
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void entityInteract(final PlayerInteractEvent.EntityInteract event) {
+		public static void entityInteract(final PlayerInteractEvent.EntityInteractSpecific event) {
 			final var level = event.getLevel();
 
 			final var target = event.getTarget();

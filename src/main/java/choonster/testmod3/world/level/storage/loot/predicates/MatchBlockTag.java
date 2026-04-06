@@ -1,6 +1,5 @@
 package choonster.testmod3.world.level.storage.loot.predicates;
 
-import choonster.testmod3.init.ModLootConditionTypes;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.Registries;
@@ -10,7 +9,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 /**
  * A condition that matches when the {@link Block} is in the specified tag.
@@ -29,8 +27,8 @@ public record MatchBlockTag(TagKey<Block> tag) implements LootItemCondition {
 	);
 
 	@Override
-	public LootItemConditionType getType() {
-		return ModLootConditionTypes.MATCH_BLOCK_TAG.get();
+	public MapCodec<? extends LootItemCondition> codec() {
+		return CODEC;
 	}
 
 	@Override

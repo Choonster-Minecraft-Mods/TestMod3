@@ -3,6 +3,7 @@ package choonster.testmod3.data.models.model;
 import choonster.testmod3.util.RegistryUtil;
 import com.google.gson.JsonObject;
 import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.material.Fluid;
 
@@ -37,7 +38,7 @@ public class DynamicFluidContainerModelTemplate extends BaseModelTemplate {
 	}
 
 	@Override
-	protected JsonObject createModel(final Map<TextureSlot, Identifier> textureMap) {
+	protected JsonObject createModel(final Map<TextureSlot, Material> textureMap) {
 		final JsonObject output = super.createModel(textureMap);
 
 		output.addProperty("loader", LOADER.toString());

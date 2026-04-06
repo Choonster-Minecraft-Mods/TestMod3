@@ -99,8 +99,8 @@ public class ChunkEnergy extends EnergyStorage implements IChunkEnergy {
 			return;
 		}
 
-		if (level.hasChunk(chunkPos.x, chunkPos.z)) {  // Don't load the chunk when reading from NBT
-			final var chunk = level.getChunk(chunkPos.x, chunkPos.z);
+		if (level.hasChunk(chunkPos.x(), chunkPos.z())) {  // Don't load the chunk when reading from NBT
+			final var chunk = level.getChunk(chunkPos.x(), chunkPos.z());
 			chunk.markUnsaved();
 			TestMod3.network.send(new UpdateChunkEnergyValueMessage(this), PacketDistributor.TRACKING_CHUNK.with(chunk));
 		}

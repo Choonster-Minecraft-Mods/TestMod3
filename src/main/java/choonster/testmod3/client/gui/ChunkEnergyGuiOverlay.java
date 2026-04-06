@@ -5,7 +5,7 @@ import choonster.testmod3.config.TestMod3Config;
 import choonster.testmod3.init.ModItems;
 import choonster.testmod3.text.TestMod3Lang;
 import choonster.testmod3.util.CapabilityNotPresentException;
-import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 
@@ -28,14 +28,19 @@ public final class ChunkEnergyGuiOverlay {
 			return;
 		}
 
-		final var guiGraphics = event.getGuiGraphics();
+		final var graphics = event.getGuiGraphics();
 
 		final var chunkEnergy = ChunkEnergyCapability
 				.getChunkEnergy(minecraft.level.getChunkAt(minecraft.player.blockPosition()))
 				.orElseThrow(CapabilityNotPresentException::new);
 
-		final var text = I18n.get(TestMod3Lang.CHUNK_ENERGY_HUD.getTranslationKey(), chunkEnergy.getEnergyStored(), chunkEnergy.getMaxEnergyStored());
+		final var text = Component.translatable(
+				TestMod3Lang.CHUNK_ENERGY_HUD.getTranslationKey(),
+				chunkEnergy.getEnergyStored(),
+				chunkEnergy.getMaxEnergyStored()
+		);
+		
 		final var hudPos = TestMod3Config.CLIENT.chunkEnergyHUDPos;
-		guiGraphics.drawString(minecraft.font, text, hudPos.x.get(), hudPos.y.get(), 0xFFFFFF);
+		graphics.text(minecraft.font, text, hudPos.x.get(), hudPos.y.get(), 0xFFFFFF);
 	}
 }

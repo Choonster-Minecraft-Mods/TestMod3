@@ -1,4 +1,4 @@
-import choonster.testmod3.gradle.GitVersion;
+import choonster.testmod3.gradle.GitVersion
 
 plugins {
     id 'java'
@@ -6,7 +6,7 @@ plugins {
     id 'eclipse'
     id 'maven-publish'
     id 'net.minecraftforge.accesstransformers' version '5.0.3'
-    id 'net.minecraftforge.gradle' version '[7.0,8.0)'
+    id 'net.minecraftforge.gradle' version '[7.0.19,8.0)'
     id 'net.minecraftforge.jarjar' version '0.2.3'
 }
 
@@ -18,43 +18,31 @@ version = mod_version
 group = mod_group_id
 base.archivesName = mod_id
 
-// Mojang ships Java 21 to end users in 1.20.5+, so your mod should target Java 21.
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+// Mojang ships Java 25 to end users in 26.1+, so your mod should target Java 25.
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 println "Java: ${providers.systemProperty('java.version').get()}, " +
         "JVM: ${providers.systemProperty('java.vm.version').get()} (${providers.systemProperty('java.vendor').get()}), " +
         "Arch: ${providers.systemProperty('os.arch').get()}"
 
 minecraft {
-    mappings channel: mapping_channel, version: mapping_version
-
     accessTransformer = true
 
     runs {
         configureEach {
-            workingDir.convention layout.projectDirectory.dir('run')
-
-            //systemProperty 'forge.logging.markers', 'REGISTRIES'
-
-            systemProperty 'forge.logging.console.level', 'debug'
+            workingDir = layout.projectDirectory.dir('run')
 
             systemProperty 'eventbus.api.strictRuntimeChecks', 'true'
-
-            //args "-mixin.config=${mod_id}.mixins.json"
-        }
-
-        register('client') {
             systemProperty 'forge.enabledGameTestNamespaces', mod_id
         }
+
+        register('client')
 
         register('server') {
-            systemProperty 'forge.enabledGameTestNamespaces', mod_id
             args '--nogui'
         }
 
-        register('gameTestServer') {
-            systemProperty 'forge.enabledGameTestNamespaces', mod_id
-        }
+        register('gameTestServer')
 
         register('data') {
             workingDir = layout.projectDirectory.dir('run-data')
@@ -75,7 +63,7 @@ jarJar.register() {
 }
 
 repositories {
-    maven minecraft.mavenizer
+    minecraft.mavenizer(it)
     maven fg.forgeMaven
     maven fg.minecraftLibsMaven
 
@@ -132,7 +120,7 @@ dependencies {
     // Forge 1.21.6+ uses EventBus 7, which shifts most of its runtime validation to compile-time via an annotation processor
     // to improve performance in production environments. This line is required to enable said compile-time validation
     // in your development environment, helping you catch issues early.
-    annotationProcessor 'net.minecraftforge:eventbus-validator:7.0-beta.12'
+    annotationProcessor 'net.minecraftforge:eventbus-validator:7.0.1'
 
     // Compile against the JEI API but do not include it at runtime
 //    compileOnly fg.deobf("mezz.jei:jei-1.21.1-common-api:${jei_version}")
@@ -159,7 +147,9 @@ dependencies {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    // Use the UTF-8 charset for Java compilation
+    // This is done by default in Java 18+, but this ensures it no matter the Java or Gradle version
+    options.encoding = 'UTF-8'
     options.compilerArgs.addAll(['-Xlint:unchecked', '-Xlint:deprecation'])
 }
 

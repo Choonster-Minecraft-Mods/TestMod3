@@ -2,20 +2,13 @@ package choonster.testmod3.data.crafting.recipe;
 
 import choonster.testmod3.world.item.crafting.recipe.BaseShapelessRecipe;
 import choonster.testmod3.world.item.crafting.recipe.ShapelessRecipeFactory;
-import choonster.testmod3.world.item.crafting.recipe.ShapelessRecipeSerializer;
-import net.minecraft.advancements.AdvancementRequirements;
-import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.data.recipes.RecipeBuilder;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
@@ -23,10 +16,7 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 
 /**
  * An extensible wrapper of {@link ShapelessRecipeBuilder} for {@link BaseShapelessRecipe} classes.
@@ -37,35 +27,27 @@ public abstract class BaseShapelessRecipeBuilder<
 		RECIPE extends BaseShapelessRecipe,
 		BUILDER extends BaseShapelessRecipeBuilder<RECIPE, BUILDER>
 		> implements RecipeBuilder {
-	private static final Method ENSURE_VALID = ObfuscationReflectionHelper.findMethod(ShapelessRecipeBuilder.class, "ensureValid", ResourceKey.class);
-	private static final Field CATEGORY = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, "category");
 	private static final Field GROUP = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, "group");
 	private static final Field INGREDIENTS = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, "ingredients");
-	private static final Field CRITERIA = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, "criteria");
+	private static final Field ADVANCEMENT_BUILDER = ObfuscationReflectionHelper.findField(ShapelessRecipeBuilder.class, "advancementBuilder");
 
 	protected final ShapelessRecipeBuilder innerBuilder;
 
-	protected final ItemStack result;
+	protected final RecipeCategory category;
+	protected final ItemStackTemplate result;
 	protected final ShapelessRecipeFactory<? extends RECIPE> factory;
 
 	protected BaseShapelessRecipeBuilder(
 			final HolderGetter<Item> items,
 			final RecipeCategory category,
-			final ItemStack result,
+			final ItemStackTemplate result,
 			final ShapelessRecipeFactory<? extends RECIPE> factory
 	) {
 		innerBuilder = ShapelessRecipeBuilder.shapeless(items, category, result);
+
+		this.category = category;
 		this.result = result;
 		this.factory = factory;
-	}
-
-	protected BaseShapelessRecipeBuilder(
-			final HolderGetter<Item> items,
-			final RecipeCategory category,
-			final ItemStack result,
-			final ShapelessRecipeSerializer<? extends RECIPE> serializer
-	) {
-		this(items, category, result, serializer.factory());
 	}
 
 	public BUILDER requires(final TagKey<Item> tag) {
@@ -113,8 +95,8 @@ public abstract class BaseShapelessRecipeBuilder<
 	}
 
 	@Override
-	public Item getResult() {
-		return innerBuilder.getResult();
+	public ResourceKey<Recipe<?>> defaultId() {
+		return RecipeBuilder.getDefaultRecipeId(result);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -126,45 +108,32 @@ public abstract class BaseShapelessRecipeBuilder<
 	 * Saves this recipe to the {@link RecipeOutput}.
 	 *
 	 * @param output The recipe output
-	 * @param key    The ID to use for the recipe
+	 * @param id     The ID to use for the recipe
 	 */
 	@Override
-	public void save(final RecipeOutput output, final ResourceKey<Recipe<?>> key) {
+	public void save(final RecipeOutput output, final ResourceKey<Recipe<?>> id) {
 		try {
-			// Perform the Vanilla class's validation
-			ENSURE_VALID.invoke(innerBuilder, key);
-
 			// Perform our validation
-			validate(key);
+			validate(id);
 
-			final var advancement = output
-					.advancement()
-					.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(key))
-					.rewards(AdvancementRewards.Builder.recipe(key))
-					.requirements(AdvancementRequirements.Strategy.OR);
-
-			@SuppressWarnings("unchecked") final var criteria = (Map<String, Criterion<?>>) CRITERIA.get(innerBuilder);
-			criteria.forEach(advancement::addCriterion);
-
-			var group = (String) GROUP.get(innerBuilder);
-			if (group == null) {
-				group = "";
-			}
-
-			final var category = (RecipeCategory) CATEGORY.get(innerBuilder);
+			final var group = (String) GROUP.get(innerBuilder);
 
 			final var ingredients = getIngredients();
 
+			final var craftingBookInfo = RecipeBuilder.createCraftingBookInfo(category, group);
+
 			final var recipe = factory.createRecipe(
-					group,
-					RecipeBuilder.determineBookCategory(category),
+					RecipeBuilder.createCraftingCommonInfo(true),
+					craftingBookInfo,
 					result,
 					ingredients
 			);
 
-			output.accept(key, recipe, advancement.build(key.identifier().withPrefix("recipes/" + category.getFolderName() + "/")));
-		} catch (final IllegalAccessException | InvocationTargetException e) {
-			throw new RuntimeException("Failed to save shapeless recipe " + key, e);
+			final var advancementBuilder = (RecipeUnlockAdvancementBuilder) ADVANCEMENT_BUILDER.get(innerBuilder);
+
+			output.accept(id, recipe, advancementBuilder.build(output, id, category));
+		} catch (final IllegalAccessException e) {
+			throw new RuntimeException("Failed to save shapeless recipe " + id, e);
 		}
 	}
 

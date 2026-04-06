@@ -2,7 +2,7 @@ package choonster.testmod3.client.gui.inventory;
 
 import choonster.testmod3.world.inventory.menu.ModChestMenu;
 import choonster.testmod3.world.level.block.entity.ModChestBlockEntity;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.ContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -21,50 +21,44 @@ public class ModChestScreen extends AbstractContainerScreen<ModChestMenu> {
 	/**
 	 * The Identifier containing the chest GUI texture.
 	 */
-	private static final Identifier CHEST_GUI_TEXTURE = Identifier.withDefaultNamespace("textures/gui/container/generic_54.png");
+	private static final Identifier CONTAINER_BACKGROUND = Identifier.withDefaultNamespace("textures/gui/container/generic_54.png");
 
 	/**
 	 * The number of rows in the chest inventory, used to calculate the window height.
 	 */
-	private final int numRows;
+	private final int containerRows;
 
-	public ModChestScreen(final ModChestMenu container, final Inventory playerInventory, final Component title) {
-		super(container, playerInventory, title);
-
-		numRows = container.getNumRows();
-		imageHeight = 114 + numRows * 18;
+	public ModChestScreen(final ModChestMenu menu, final Inventory playerInventory, final Component title) {
+		super(menu, playerInventory, title, 176, 114 + menu.getRowCount() * 18);
+		containerRows = this.menu.getRowCount();
 		inventoryLabelY = imageHeight - 94;
 	}
 
 	@Override
-	public void render(final GuiGraphics guiGraphics, final int mouseX, final int mouseY, final float partialTicks) {
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
-		renderTooltip(guiGraphics, mouseX, mouseY);
-	}
+	public void extractBackground(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float a) {
+		super.extractBackground(graphics, mouseX, mouseY, a);
 
-	@Override
-	protected void renderBg(final GuiGraphics guiGraphics, final float partialTicks, final int x, final int y) {
 		final var centreX = (width - imageWidth) / 2;
 		final var centreY = (height - imageHeight) / 2;
 
-		guiGraphics.blit(
+		graphics.blit(
 				RenderPipelines.GUI_TEXTURED,
-				CHEST_GUI_TEXTURE,
+				CONTAINER_BACKGROUND,
 				centreX,
 				centreY,
 				0,
 				0,
 				imageWidth,
-				numRows * 18 + 17,
+				containerRows * 18 + 17,
 				256,
 				256
 		);
 
-		guiGraphics.blit(
+		graphics.blit(
 				RenderPipelines.GUI_TEXTURED,
-				CHEST_GUI_TEXTURE,
+				CONTAINER_BACKGROUND,
 				centreX,
-				centreY + numRows * 18 + 17,
+				centreY + containerRows * 18 + 17,
 				0,
 				126,
 				imageWidth,

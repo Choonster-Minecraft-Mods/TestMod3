@@ -18,8 +18,7 @@ import java.util.function.Supplier;
 //@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = TestMod3.MODID)
 public class ItemTooltipModNameRemover {
 	private static final Supplier<String> MOD_NAME = Lazy.of(() ->
-			ModList.get()
-					.getModContainerById(TestMod3.MODID)
+			ModList.getModContainerById(TestMod3.MODID)
 					.map(c -> c.getModInfo().getDisplayName())
 					.orElseThrow()
 	);

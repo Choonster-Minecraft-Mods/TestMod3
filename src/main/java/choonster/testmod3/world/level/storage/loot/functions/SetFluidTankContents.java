@@ -1,6 +1,5 @@
 package choonster.testmod3.world.level.storage.loot.functions;
 
-import choonster.testmod3.init.ModLootFunctionTypes;
 import choonster.testmod3.util.CapabilityNotPresentException;
 import choonster.testmod3.world.item.FluidStackItem;
 import com.google.common.collect.Lists;
@@ -14,7 +13,6 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntries;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.functions.SetContainerContents;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -75,8 +73,8 @@ public class SetFluidTankContents extends LootItemConditionalFunction {
 	}
 
 	@Override
-	public LootItemFunctionType<SetFluidTankContents> getType() {
-		return ModLootFunctionTypes.SET_FLUID_TANK_CONTENTS.get();
+	public MapCodec<? extends LootItemConditionalFunction> codec() {
+		return CODEC;
 	}
 
 	public static Builder builder() {

@@ -4,7 +4,7 @@ import choonster.testmod3.TestMod3;
 import choonster.testmod3.advancements.criterion.ItemFluidContainerPredicate;
 import choonster.testmod3.data.crafting.ingredient.ConditionalIngredientBuilder;
 import choonster.testmod3.data.crafting.ingredient.MobSpawnerIngredientBuilder;
-import choonster.testmod3.data.crafting.recipe.EnhancedShapedRecipeBuilder;
+import choonster.testmod3.data.crafting.recipe.BaseShapedRecipeBuilder;
 import choonster.testmod3.data.crafting.recipe.ShapedArmourUpgradeRecipeBuilder;
 import choonster.testmod3.data.crafting.recipe.ShapelessCuttingRecipeBuilder;
 import choonster.testmod3.data.crafting.recipe.ShapelessFluidContainerRecipeBuilder;
@@ -14,14 +14,12 @@ import choonster.testmod3.init.ModItems;
 import choonster.testmod3.util.RegistryUtil;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
 import com.mojang.logging.LogUtils;
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.criterion.DataComponentMatchers;
-import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
@@ -35,9 +33,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.TypedEntityData;
+import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
@@ -53,8 +52,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import org.slf4j.Logger;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -90,6 +87,7 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 			SimpleCookingRecipeBuilder.smelting(
 							Ingredient.of(ModItems.SUBSCRIPTS.get()),
 							RecipeCategory.MISC,
+							CookingBookCategory.MISC,
 							ModItems.DIMENSION_REPLACEMENT.get(),
 							0.35f,
 							200
@@ -149,8 +147,6 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 		// Craft a Guardian Spawner from a Raw Cod surrounded by Sticks
 		// http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2424619-help-needed-creating-non-pig-mob-spawners
 		try (final var problems = new ProblemReporter.ScopedCollector(LOGGER)) {
-			final var guardianSpawner = new ItemStack(Blocks.SPAWNER);
-
 			final var blockEntityOutput = TagValueOutput.createWithContext(problems, registries);
 
 			final var blockEntityType = BlockEntityType.MOB_SPAWNER;
@@ -168,12 +164,19 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 			blockEntityOutput.store("SpawnData", SpawnData.CODEC, spawnData);
 			blockEntityOutput.childrenList("SpawnPotentials");
 
-			guardianSpawner.set(
-					DataComponents.BLOCK_ENTITY_DATA,
-					TypedEntityData.of(blockEntityType, blockEntityOutput.buildResult())
+			final var components = DataComponentPatch.builder()
+					.set(
+							DataComponents.BLOCK_ENTITY_DATA,
+							TypedEntityData.of(blockEntityType, blockEntityOutput.buildResult())
+					)
+					.build();
+
+			final var guardianSpawner = new ItemStackTemplate(
+					Blocks.SPAWNER.asItem(),
+					components
 			);
 
-			enhancedShaped(RecipeCategory.MISC, guardianSpawner)
+			shaped(RecipeCategory.MISC, guardianSpawner)
 					.pattern("SSS")
 					.pattern("SCS")
 					.pattern("SSS")
@@ -252,11 +255,11 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 		return ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(TestMod3.MODID, name));
 	}
 
-	private EnhancedShapedRecipeBuilder.Enhanced enhancedShaped(
+	private BaseShapedRecipeBuilder.Shaped shaped(
 			final RecipeCategory category,
-			final ItemStack result
+			final ItemStackTemplate result
 	) {
-		return EnhancedShapedRecipeBuilder.Enhanced.shapedRecipe(items, category, result);
+		return BaseShapedRecipeBuilder.Shaped.shapedRecipe(items, category, result);
 	}
 
 	private ShapedArmourUpgradeRecipeBuilder shapedArmourUpgrade(
@@ -279,27 +282,6 @@ public class TestMod3RecipeProvider extends RecipeProvider {
 			final ItemLike result
 	) {
 		return ShapelessFluidContainerRecipeBuilder.shapelessFluidContainerRecipe(items, category, result);
-	}
-
-	private static Criterion<InventoryChangeTrigger.TriggerInstance> inventoryTrigger(
-			final ItemPredicate.Builder... p_299527_
-	) {
-		return inventoryTrigger(
-				Arrays.stream(p_299527_)
-						.map(ItemPredicate.Builder::build)
-						.toArray(ItemPredicate[]::new)
-		);
-	}
-
-	private static Criterion<InventoryChangeTrigger.TriggerInstance> inventoryTrigger(
-			final ItemPredicate... p_297226_
-	) {
-		return CriteriaTriggers.INVENTORY_CHANGED
-				.createCriterion(new InventoryChangeTrigger.TriggerInstance(
-						Optional.empty(),
-						InventoryChangeTrigger.TriggerInstance.Slots.ANY,
-						List.of(p_297226_)
-				));
 	}
 
 	public static class Runner extends RecipeProvider.Runner {

@@ -98,44 +98,40 @@ public class KeyMappingHandler {
 				final var activePotionEffects = entity.getActiveEffects();
 
 				if (activePotionEffects.isEmpty()) {
-					clientPlayer.displayClientMessage(
+
+					clientPlayer.sendSystemMessage(
 							Component.translatable(
 									TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_POTIONS.getTranslationKey(),
 									hitResult.getEntity().getDisplayName()
-							),
-							false
+							)
 					);
 				} else {
-					clientPlayer.displayClientMessage(
+					clientPlayer.sendSystemMessage(
 							Component.translatable(
 									TestMod3Lang.MESSAGE_PRINT_POTIONS_POTIONS.getTranslationKey(),
 									hitResult.getEntity().getDisplayName()
-							),
-							false
+							)
 					);
 
 					activePotionEffects.forEach(
-							potionEffect -> clientPlayer.displayClientMessage(
-									Component.literal(potionEffect.toString()),
-									false
+							potionEffect -> clientPlayer.sendSystemMessage(
+									Component.literal(potionEffect.toString())
 							)
 					);
 				}
 			} else {
-				clientPlayer.displayClientMessage(
+				clientPlayer.sendSystemMessage(
 						Component.translatable(
 								TestMod3Lang.MESSAGE_PRINT_POTIONS_NOT_LIVING.getTranslationKey(),
 								hitResult.getEntity().getDisplayName()
-						),
-						false
+						)
 				);
 			}
 		} else {
-			clientPlayer.displayClientMessage(
+			clientPlayer.sendSystemMessage(
 					Component.translatable(
 							TestMod3Lang.MESSAGE_PRINT_POTIONS_NO_ENTITY.getTranslationKey()
-					),
-					false
+					)
 			);
 		}
 	}

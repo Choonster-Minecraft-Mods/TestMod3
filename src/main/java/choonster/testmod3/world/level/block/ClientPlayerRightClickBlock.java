@@ -51,11 +51,10 @@ public class ClientPlayerRightClickBlock extends StaticPressurePlateBlock {
 		// If on the client side, the colliding Entity is the client player and the total world time is a multiple of 10
 		if (entity == clientPlayer && level.getGameTime() % 10 == 0) {
 			// Make the player right click
-			clientPlayer.displayClientMessage(
+			clientPlayer.sendSystemMessage(
 					Component.translatable(
 							TestMod3Lang.MESSAGE_CLIENT_PLAYER_RIGHT_CLICK_RIGHT_CLICK.getTranslationKey()
-					),
-					false
+					)
 			);
 
 			KeyMapping.click(Minecraft.getInstance().options.keyUse.getKey());

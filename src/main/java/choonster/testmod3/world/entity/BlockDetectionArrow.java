@@ -49,7 +49,7 @@ public class BlockDetectionArrow extends ModArrow {
 			final var pos = ((BlockHitResult) result).getBlockPos();
 			final var state = level().getBlockState(pos);
 
-			player.displayClientMessage(
+			player.sendSystemMessage(
 					Component.translatable(
 							"[%s] Block at %s,%s,%s: %s",
 							level().isClientSide() ? "CLIENT" : "SERVER",
@@ -57,8 +57,7 @@ public class BlockDetectionArrow extends ModArrow {
 							pos.getY(),
 							pos.getZ(),
 							state
-					),
-					false
+					)
 			);
 		}
 	}

@@ -1,21 +1,22 @@
 package choonster.testmod3.world.item.crafting.recipe;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
+import net.minecraftforge.common.crafting.IShapedRecipe;
 
 /**
- * Represents a factory or constructor for {@link ShapedRecipe} classes.
+ * Represents a factory or constructor for {@link BaseShapedRecipe}/{@link ShapedRecipe} classes.
  *
  * @author Choonster
  */
-public interface ShapedRecipeFactory<T extends ShapedRecipe> {
+public interface ShapedRecipeFactory<T extends IShapedRecipe<?>> {
 	T createRecipe(
-			String group,
-			CraftingBookCategory category,
+			Recipe.CommonInfo commonInfo,
+			CraftingRecipe.CraftingBookInfo bookInfo,
 			ShapedRecipePattern pattern,
-			ItemStack result,
-			boolean showNotification
+			ItemStackTemplate result
 	);
 }

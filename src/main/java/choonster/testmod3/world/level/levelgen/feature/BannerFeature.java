@@ -3,7 +3,6 @@ package choonster.testmod3.world.level.levelgen.feature;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.BannerBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -28,13 +27,12 @@ public class BannerFeature extends Feature<BannerFeatureConfig> {
 		final var origin = context.origin();
 		final var config = context.config();
 
-		final var color = config.color();
-		final var bannerBlock = BannerBlock.byColor(color);
-		level.setBlock(origin, bannerBlock.defaultBlockState(), Block.UPDATE_ALL);
+		final var bannerState = config.bannerProvider().getState(level, context.random(), origin);
+		level.setBlock(origin, bannerState, Block.UPDATE_ALL);
 
 		final var blockEntity = level.getBlockEntity(origin);
 		if (blockEntity instanceof final BannerBlockEntity bannerBlockEntity) {
-			final var bannerItem = new ItemStack(bannerBlock);
+			final var bannerItem = new ItemStack(bannerState.getBlock());
 			bannerItem.set(DataComponents.BANNER_PATTERNS, config.patterns());
 			bannerBlockEntity.applyComponentsFromItemStack(bannerItem);
 		}

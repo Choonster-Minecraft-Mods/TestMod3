@@ -1,7 +1,6 @@
 package choonster.testmod3.util;
 
 import choonster.testmod3.TestMod3;
-import com.google.common.base.Charsets;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Items;
@@ -10,6 +9,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Dumps the translation keys and the output of the {@link BlockItem}'s {@link Object#toString()} method for all of this mod's blocks.
@@ -22,7 +22,7 @@ public class BlockDumper {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
 	public static void dump() {
-		try (final var writer = new PrintWriter("TestMod3_BlockDump_" + (FMLEnvironment.dist.isClient() ? "Client" : "Server") + ".txt", Charsets.UTF_8)) {
+		try (final var writer = new PrintWriter("TestMod3_BlockDump_" + (FMLEnvironment.dist.isClient() ? "Client" : "Server") + ".txt", StandardCharsets.UTF_8)) {
 			writer.println("Name - toString");
 
 			RegistryUtil.stream(ForgeRegistries.BLOCKS)

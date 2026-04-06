@@ -1,6 +1,5 @@
 package choonster.testmod3.data.crafting.recipe;
 
-import choonster.testmod3.init.ModCrafting;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
 import choonster.testmod3.world.item.crafting.recipe.ShapelessFluidContainerRecipe;
 import com.google.gson.JsonSyntaxException;
@@ -8,7 +7,7 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 
@@ -21,9 +20,9 @@ public class ShapelessFluidContainerRecipeBuilder extends BaseShapelessRecipeBui
 	protected ShapelessFluidContainerRecipeBuilder(
 			final HolderGetter<Item> items,
 			final RecipeCategory category,
-			final ItemStack result
+			final ItemStackTemplate result
 	) {
-		super(items, category, result, ModCrafting.Recipes.FLUID_CONTAINER_SHAPELESS.get());
+		super(items, category, result, ShapelessFluidContainerRecipe::new);
 	}
 
 	/**
@@ -37,7 +36,7 @@ public class ShapelessFluidContainerRecipeBuilder extends BaseShapelessRecipeBui
 			final HolderGetter<Item> items, final RecipeCategory category,
 			final ItemLike result
 	) {
-		return shapelessFluidContainerRecipe(items, category, new ItemStack(result));
+		return shapelessFluidContainerRecipe(items, category, new ItemStackTemplate(result.asItem()));
 	}
 
 	/**
@@ -50,7 +49,7 @@ public class ShapelessFluidContainerRecipeBuilder extends BaseShapelessRecipeBui
 	public static ShapelessFluidContainerRecipeBuilder shapelessFluidContainerRecipe(
 			final HolderGetter<Item> items,
 			final RecipeCategory category,
-			final ItemStack result
+			final ItemStackTemplate result
 	) {
 		return new ShapelessFluidContainerRecipeBuilder(items, category, result);
 	}

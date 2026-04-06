@@ -1,12 +1,11 @@
 package choonster.testmod3.data.crafting.recipe;
 
-import choonster.testmod3.init.ModCrafting;
 import choonster.testmod3.world.item.crafting.recipe.ShapedArmourUpgradeRecipe;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 
@@ -15,13 +14,13 @@ import net.minecraft.world.level.ItemLike;
  *
  * @author Choonster
  */
-public class ShapedArmourUpgradeRecipeBuilder extends EnhancedShapedRecipeBuilder<ShapedArmourUpgradeRecipe, ShapedArmourUpgradeRecipeBuilder> {
+public class ShapedArmourUpgradeRecipeBuilder extends BaseShapedRecipeBuilder<ShapedArmourUpgradeRecipe, ShapedArmourUpgradeRecipeBuilder> {
 	protected ShapedArmourUpgradeRecipeBuilder(
 			final HolderGetter<Item> items,
 			final RecipeCategory category,
-			final ItemStack result
+			final ItemStackTemplate result
 	) {
-		super(items, category, result, ModCrafting.Recipes.ARMOUR_UPGRADE_SHAPED.get());
+		super(items, category, result, ShapedArmourUpgradeRecipe::new);
 	}
 
 	/**
@@ -36,7 +35,7 @@ public class ShapedArmourUpgradeRecipeBuilder extends EnhancedShapedRecipeBuilde
 			final RecipeCategory category,
 			final ItemLike result
 	) {
-		return shapedArmourUpgradeRecipe(items, category, new ItemStack(result));
+		return shapedArmourUpgradeRecipe(items, category, new ItemStackTemplate(result.asItem()));
 	}
 
 	/**
@@ -49,7 +48,7 @@ public class ShapedArmourUpgradeRecipeBuilder extends EnhancedShapedRecipeBuilde
 	public static ShapedArmourUpgradeRecipeBuilder shapedArmourUpgradeRecipe(
 			final HolderGetter<Item> items,
 			final RecipeCategory category,
-			final ItemStack result
+			final ItemStackTemplate result
 	) {
 		return new ShapedArmourUpgradeRecipeBuilder(items, category, result);
 	}
@@ -63,7 +62,7 @@ public class ShapedArmourUpgradeRecipeBuilder extends EnhancedShapedRecipeBuilde
 	protected void ensureValid(final ResourceKey<Recipe<?>> key) {
 		super.ensureValid(key);
 
-		if (!result.isDamageableItem()) {
+		if (!result.create().isDamageableItem()) {
 			throw new IllegalStateException("Shaped Armour Upgrade Recipe " + key + " must have damageable result");
 		}
 	}

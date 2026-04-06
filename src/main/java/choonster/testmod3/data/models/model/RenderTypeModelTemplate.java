@@ -2,6 +2,7 @@ package choonster.testmod3.data.models.model;
 
 import com.google.gson.JsonObject;
 import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 
 import java.util.Map;
@@ -28,7 +29,7 @@ public class RenderTypeModelTemplate extends BaseModelTemplate {
 	}
 
 	@Override
-	protected JsonObject createModel(final Map<TextureSlot, Identifier> textureMap) {
+	protected JsonObject createModel(final Map<TextureSlot, Material> textureMap) {
 		final var output = super.createModel(textureMap);
 
 		output.addProperty("render_type", renderTypeHint.toString());

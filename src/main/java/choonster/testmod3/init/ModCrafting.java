@@ -5,14 +5,12 @@ import choonster.testmod3.world.item.crafting.ingredient.ConditionalIngredient;
 import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredient;
 import choonster.testmod3.world.item.crafting.ingredient.MobSpawnerIngredient;
 import choonster.testmod3.world.item.crafting.ingredient.NeverIngredient;
-import choonster.testmod3.world.item.crafting.recipe.EnhancedShapedRecipe;
 import choonster.testmod3.world.item.crafting.recipe.ShapedArmourUpgradeRecipe;
 import choonster.testmod3.world.item.crafting.recipe.ShapelessCuttingRecipe;
 import choonster.testmod3.world.item.crafting.recipe.ShapelessFluidContainerRecipe;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.profiling.Profiler;
@@ -156,20 +154,16 @@ public class ModCrafting {
 
 		private static boolean isInitialised;
 
-		public static final RegistryObject<EnhancedShapedRecipe.Serializer> ENHANCED_SHAPED = RECIPE_SERIALIZERS.register("enhanced_shaped",
-				EnhancedShapedRecipe.Serializer::new
+		public static final RegistryObject<RecipeSerializer<ShapedArmourUpgradeRecipe>> ARMOUR_UPGRADE_SHAPED = RECIPE_SERIALIZERS.register("armour_upgrade_shaped",
+				() -> ShapedArmourUpgradeRecipe.SERIALIZER
 		);
 
-		public static final RegistryObject<ShapedArmourUpgradeRecipe.Serializer> ARMOUR_UPGRADE_SHAPED = RECIPE_SERIALIZERS.register("armour_upgrade_shaped",
-				ShapedArmourUpgradeRecipe.Serializer::new
+		public static final RegistryObject<RecipeSerializer<ShapelessCuttingRecipe>> CUTTING_SHAPELESS = RECIPE_SERIALIZERS.register("cutting_shapeless",
+				() -> ShapelessCuttingRecipe.SERIALIZER
 		);
 
-		public static final RegistryObject<ShapelessCuttingRecipe.Serializer> CUTTING_SHAPELESS = RECIPE_SERIALIZERS.register("cutting_shapeless",
-				ShapelessCuttingRecipe.Serializer::new
-		);
-
-		public static final RegistryObject<ShapelessFluidContainerRecipe.Serializer> FLUID_CONTAINER_SHAPELESS = RECIPE_SERIALIZERS.register("fluid_container_shapeless",
-				ShapelessFluidContainerRecipe.Serializer::new
+		public static final RegistryObject<RecipeSerializer<ShapelessFluidContainerRecipe>> FLUID_CONTAINER_SHAPELESS = RECIPE_SERIALIZERS.register("fluid_container_shapeless",
+				() -> ShapelessFluidContainerRecipe.SERIALIZER
 		);
 
 		/**
@@ -207,7 +201,6 @@ public class ModCrafting {
 		);
 
 		private final RecipeManager recipeManager;
-		private final RegistryAccess registryAccess;
 
 		private final CraftingInput craftingInput = CraftingInput.of(
 				3,
@@ -215,9 +208,8 @@ public class ModCrafting {
 				NonNullList.withSize(9, Items.BARRIER.getDefaultInstance())
 		);
 
-		public RecipeRemover(final RecipeManager recipeManager, final RegistryAccess registryAccess) {
+		public RecipeRemover(final RecipeManager recipeManager) {
 			this.recipeManager = recipeManager;
-			this.registryAccess = registryAccess;
 		}
 
 		/**
@@ -231,7 +223,7 @@ public class ModCrafting {
 			final var recipeManager = server.getRecipeManager();
 
 			if (PROCESSED_RECIPE_MANAGERS.add(recipeManager)) {
-				new RecipeRemover(recipeManager, server.registryAccess()).removeRecipes(
+				new RecipeRemover(recipeManager).removeRecipes(
 						server.getResourceManager(),
 						Profiler.get(),
 						server.getWorldData().enabledFeatures()
@@ -275,14 +267,13 @@ public class ModCrafting {
 		private void removeRecipes(final Collection<RecipeHolder<?>> recipes, final TagKey<Item> tag) {
 			final var recipesRemoved = removeRecipes(recipes, recipe -> {
 				final var resultItem = switch (recipe) {
-					case final CraftingRecipe craftingRecipe -> craftingRecipe.assemble(craftingInput, registryAccess);
+					case final CraftingRecipe craftingRecipe -> craftingRecipe.assemble(craftingInput);
 
 					case final SingleItemRecipe singleItemRecipe ->
-							singleItemRecipe.assemble(new SingleRecipeInput(ItemStack.EMPTY), registryAccess);
+							singleItemRecipe.assemble(new SingleRecipeInput(ItemStack.EMPTY));
 
 					case final SmithingRecipe smithingRecipe -> smithingRecipe.assemble(
-							new SmithingRecipeInput(ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY),
-							registryAccess
+							new SmithingRecipeInput(ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY)
 					);
 
 					default -> ItemStack.EMPTY;

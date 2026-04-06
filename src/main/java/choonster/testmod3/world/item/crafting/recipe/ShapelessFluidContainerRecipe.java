@@ -6,8 +6,10 @@ import choonster.testmod3.world.item.crafting.ingredient.FluidContainerIngredien
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.NonNullList;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -24,13 +26,30 @@ import java.util.stream.Collectors;
  * @author Choonster
  */
 public class ShapelessFluidContainerRecipe extends BaseShapelessRecipe {
-	private ShapelessFluidContainerRecipe(
-			final String group,
-			final CraftingBookCategory category,
-			final ItemStack result,
+	public static final MapCodec<ShapelessFluidContainerRecipe> CODEC =
+			ShapelessRecipeCodecs.mapCodec(ShapelessFluidContainerRecipe::new)
+					.validate(
+							recipe -> recipe.ingredients
+									.stream()
+									.filter(ingredient -> ingredient instanceof FluidContainerIngredient)
+									.findFirst()
+									.map(_ -> DataResult.success(recipe))
+									.orElseGet(() -> DataResult.error(() -> "Recipe must have at least one testmod3:fluid_container ingredient"))
+					);
+
+	public static final StreamCodec<RegistryFriendlyByteBuf, ShapelessFluidContainerRecipe> STREAM_CODEC =
+			ShapelessRecipeCodecs.streamCodec(ShapelessFluidContainerRecipe::new);
+
+	public static final RecipeSerializer<ShapelessFluidContainerRecipe> SERIALIZER =
+			new RecipeSerializer<>(CODEC, STREAM_CODEC);
+
+	public ShapelessFluidContainerRecipe(
+			final CommonInfo commonInfo,
+			final CraftingBookInfo bookInfo,
+			final ItemStackTemplate result,
 			final List<Ingredient> ingredients
 	) {
-		super(group, category, result, ingredients);
+		super(commonInfo, bookInfo, result, ingredients);
 	}
 
 	@SuppressWarnings("UnstableApiUsage")
@@ -78,27 +97,5 @@ public class ShapelessFluidContainerRecipe extends BaseShapelessRecipe {
 	@Override
 	public RecipeSerializer<ShapelessFluidContainerRecipe> getSerializer() {
 		return ModCrafting.Recipes.FLUID_CONTAINER_SHAPELESS.get();
-	}
-
-	public static class Serializer extends ShapelessRecipeSerializer<ShapelessFluidContainerRecipe> {
-		private final MapCodec<ShapelessFluidContainerRecipe> codec;
-
-		public Serializer() {
-			super(ShapelessFluidContainerRecipe::new);
-
-			codec = super.codec().validate(
-					recipe -> recipe.ingredients
-							.stream()
-							.filter(ingredient -> ingredient instanceof FluidContainerIngredient)
-							.findFirst()
-							.map(ingredient -> DataResult.success(recipe))
-							.orElseGet(() -> DataResult.error(() -> "Recipe must have at least one testmod3:fluid_container ingredient"))
-			);
-		}
-
-		@Override
-		public MapCodec<ShapelessFluidContainerRecipe> codec() {
-			return codec;
-		}
 	}
 }

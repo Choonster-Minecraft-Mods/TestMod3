@@ -35,7 +35,7 @@ public class ModChestMenu extends AbstractContainerMenu {
 	/**
 	 * The number of rows in the chest inventory.
 	 */
-	private final int numRows;
+	private final int containerRows;
 
 	public ModChestMenu(final int windowID, final Inventory playerInventory, final ModChestBlockEntity blockEntity) {
 		super(ModMenuTypes.CHEST.get(), windowID);
@@ -46,11 +46,11 @@ public class ModChestMenu extends AbstractContainerMenu {
 		final IItemHandler playerInventoryItemHandler = new PlayerMainInvWrapper(playerInventory);
 		final IItemHandler chestInventory = blockEntity.getInventory();
 
-		numRows = chestInventory.getSlots() / SLOTS_PER_ROW;
+		containerRows = chestInventory.getSlots() / SLOTS_PER_ROW;
 
-		final var chestOffset = (numRows - 4) * 18;
+		final var chestOffset = (containerRows - 4) * 18;
 
-		for (var row = 0; row < numRows; ++row) {
+		for (var row = 0; row < containerRows; ++row) {
 			for (var col = 0; col < SLOTS_PER_ROW; ++col) {
 				addSlot(new SlotItemHandler(chestInventory, col + row * SLOTS_PER_ROW, 8 + col * 18, 18 + row * 18));
 			}
@@ -75,11 +75,11 @@ public class ModChestMenu extends AbstractContainerMenu {
 			final var stack = slot.getItem();
 			final var originalStack = stack.copy();
 
-			if (index < numRows * SLOTS_PER_ROW) {
-				if (!moveItemStackTo(stack, numRows * SLOTS_PER_ROW, slots.size(), true)) {
+			if (index < containerRows * SLOTS_PER_ROW) {
+				if (!moveItemStackTo(stack, containerRows * SLOTS_PER_ROW, slots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!moveItemStackTo(stack, 0, numRows * SLOTS_PER_ROW, false)) {
+			} else if (!moveItemStackTo(stack, 0, containerRows * SLOTS_PER_ROW, false)) {
 				return ItemStack.EMPTY;
 			}
 
@@ -112,8 +112,8 @@ public class ModChestMenu extends AbstractContainerMenu {
 	 *
 	 * @return The number of rows in the chest inventory
 	 */
-	public int getNumRows() {
-		return numRows;
+	public int getRowCount() {
+		return containerRows;
 	}
 
 	public static class Factory implements IContainerFactory<ModChestMenu> {

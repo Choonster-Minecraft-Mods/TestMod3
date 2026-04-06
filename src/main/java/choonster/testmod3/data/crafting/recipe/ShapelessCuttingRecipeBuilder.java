@@ -1,11 +1,10 @@
 package choonster.testmod3.data.crafting.recipe;
 
-import choonster.testmod3.init.ModCrafting;
 import choonster.testmod3.world.item.crafting.recipe.ShapelessCuttingRecipe;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.ItemLike;
 
 /**
@@ -14,8 +13,8 @@ import net.minecraft.world.level.ItemLike;
  * @author Choonster
  */
 public class ShapelessCuttingRecipeBuilder extends BaseShapelessRecipeBuilder<ShapelessCuttingRecipe, ShapelessCuttingRecipeBuilder> {
-	protected ShapelessCuttingRecipeBuilder(final HolderGetter<Item> items, final RecipeCategory category, final ItemStack result) {
-		super(items, category, result, ModCrafting.Recipes.CUTTING_SHAPELESS.get());
+	protected ShapelessCuttingRecipeBuilder(final HolderGetter<Item> items, final RecipeCategory category, final ItemStackTemplate result) {
+		super(items, category, result, ShapelessCuttingRecipe::new);
 	}
 
 	/**
@@ -30,7 +29,7 @@ public class ShapelessCuttingRecipeBuilder extends BaseShapelessRecipeBuilder<Sh
 			final RecipeCategory category,
 			final ItemLike result
 	) {
-		return shapelessCuttingRecipe(items, category, new ItemStack(result));
+		return shapelessCuttingRecipe(items, category, new ItemStackTemplate(result.asItem()));
 	}
 
 	/**
@@ -47,7 +46,7 @@ public class ShapelessCuttingRecipeBuilder extends BaseShapelessRecipeBuilder<Sh
 			final ItemLike result,
 			final int count
 	) {
-		return shapelessCuttingRecipe(items, category, new ItemStack(result, count));
+		return shapelessCuttingRecipe(items, category, new ItemStackTemplate(result.asItem(), count));
 	}
 
 	/**
@@ -60,7 +59,7 @@ public class ShapelessCuttingRecipeBuilder extends BaseShapelessRecipeBuilder<Sh
 	public static ShapelessCuttingRecipeBuilder shapelessCuttingRecipe(
 			final HolderGetter<Item> items,
 			final RecipeCategory category,
-			final ItemStack result
+			final ItemStackTemplate result
 	) {
 		return new ShapelessCuttingRecipeBuilder(items, category, result);
 	}

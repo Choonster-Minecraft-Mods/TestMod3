@@ -55,7 +55,7 @@ public final class ChunkEnergyCapability {
 	 * @return A lazy optional containing the IChunkEnergy, if any
 	 */
 	public static LazyOptional<IChunkEnergy> getChunkEnergy(final Level level, final ChunkPos chunkPos) {
-		return getChunkEnergy(level.getChunk(chunkPos.x, chunkPos.z));
+		return getChunkEnergy(level.getChunk(chunkPos.x(), chunkPos.z()));
 	}
 
 	/**

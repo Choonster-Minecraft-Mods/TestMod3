@@ -1,8 +1,8 @@
 package choonster.testmod3.world.item.crafting.recipe;
 
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.level.Level;
@@ -15,21 +15,30 @@ import java.util.List;
  * @author Choonster
  */
 public abstract class BaseShapelessRecipe implements CraftingRecipe {
-	final ItemStack result;
+	final CommonInfo commonInfo;
+	final CraftingBookInfo bookInfo;
+	final ItemStackTemplate result;
 	final List<Ingredient> ingredients;
 
 	private final ShapelessRecipe innerRecipe;
 
 	protected BaseShapelessRecipe(
-			final String group,
-			final CraftingBookCategory category,
-			final ItemStack result,
+			final CommonInfo commonInfo,
+			final CraftingBookInfo bookInfo,
+			final ItemStackTemplate result,
 			final List<Ingredient> ingredients
 	) {
+		this.commonInfo = commonInfo;
+		this.bookInfo = bookInfo;
 		this.result = result;
 		this.ingredients = ingredients;
 
-		innerRecipe = new ShapelessRecipe(group, category, result, ingredients);
+		innerRecipe = new ShapelessRecipe(commonInfo, bookInfo, result, ingredients);
+	}
+
+	@Override
+	public boolean showNotification() {
+		return innerRecipe.showNotification();
 	}
 
 	@Override
@@ -53,8 +62,8 @@ public abstract class BaseShapelessRecipe implements CraftingRecipe {
 	}
 
 	@Override
-	public ItemStack assemble(final CraftingInput input, final HolderLookup.Provider registries) {
-		return innerRecipe.assemble(input, registries);
+	public ItemStack assemble(final CraftingInput input) {
+		return innerRecipe.assemble(input);
 	}
 
 	@Override

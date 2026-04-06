@@ -42,12 +42,6 @@ import java.util.function.Supplier;
  */
 public class VanillaCodecs {
 	/**
-	 * Replace with {@link ItemStack#STRICT_CODEC}
-	 */
-	@Deprecated(forRemoval = true)
-	public static final Codec<ItemStack> RECIPE_RESULT = ItemStack.STRICT_CODEC;
-
-	/**
 	 * Prepares a Codec for {@link FluidStack} that uses lowercase field names, suitable for use in recipes/ingredients.
 	 */
 	public static Products.P3<

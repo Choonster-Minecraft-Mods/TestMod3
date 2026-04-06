@@ -78,7 +78,7 @@ public class FluidContainerIngredient extends AbstractIngredient {
 					.map(stack -> ModFluidUtil.fillContainer(stack, fluidStack))
 					.filter(FluidActionResult::isSuccess)
 					.map(FluidActionResult::getResult)
-					.map(ItemStack::getItemHolder)
+					.map(ItemStack::typeHolder)
 					.toList();
 		}
 

@@ -1,8 +1,9 @@
 package choonster.testmod3.world.item.crafting.recipe;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 
 import java.util.List;
 
@@ -13,9 +14,9 @@ import java.util.List;
  */
 public interface ShapelessRecipeFactory<T extends BaseShapelessRecipe> {
 	T createRecipe(
-			String group,
-			CraftingBookCategory category,
-			ItemStack result,
+			Recipe.CommonInfo commonInfo,
+			CraftingRecipe.CraftingBookInfo bookInfo,
+			ItemStackTemplate result,
 			List<Ingredient> ingredients
 	);
 }

@@ -3,6 +3,7 @@ package choonster.testmod3.data.models.model;
 import choonster.testmod3.TestMod3;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
@@ -45,9 +46,9 @@ public class ModTextureMappings {
 		final var front = side.withSuffix(frontSuffix);
 
 		return new TextureMapping()
-				.put(TextureSlot.SIDE, side)
-				.put(TextureSlot.FRONT, front)
-				.put(TextureSlot.TOP, side);
+				.put(TextureSlot.SIDE, new Material(side))
+				.put(TextureSlot.FRONT, new Material(front))
+				.put(TextureSlot.TOP, new Material(side));
 	}
 
 }
