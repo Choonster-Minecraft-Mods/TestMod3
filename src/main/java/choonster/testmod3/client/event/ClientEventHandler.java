@@ -31,8 +31,8 @@ import java.util.List;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = TestMod3.MODID)
 public class ClientEventHandler {
 	@SuppressWarnings("DataFlowIssue")
-	private static final int FLAG_GLOWING = ObfuscationReflectionHelper.getPrivateValue(Entity.class, null, /* FLAG_GLOWING */ "f_146806_");
-	private static final Method SET_SHARED_FLAG = ObfuscationReflectionHelper.findMethod(Entity.class, /* setSharedFlag */"m_20115_", int.class, boolean.class);
+	private static final int FLAG_GLOWING = ObfuscationReflectionHelper.getPrivateValue(Entity.class, null, "FLAG_GLOWING");
+	private static final Method SET_SHARED_FLAG = ObfuscationReflectionHelper.findMethod(Entity.class, "setSharedFlag", int.class, boolean.class);
 
 	private static final Minecraft MINECRAFT = Minecraft.getInstance();
 

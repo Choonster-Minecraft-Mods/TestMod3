@@ -39,7 +39,7 @@ public class ModBlocks {
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TestMod3.MODID);
 	private static final DeferredRegister<MapCodec<? extends Block>> BLOCK_TYPES = DeferredRegister.create(Registries.BLOCK_TYPE, TestMod3.MODID);
 
-	private static final Method CODEC = ObfuscationReflectionHelper.findMethod(Block.class, /* codec */ "m_304657_");
+	private static final Method CODEC = ObfuscationReflectionHelper.findMethod(Block.class, "codec");
 
 	private static boolean isInitialised = false;
 

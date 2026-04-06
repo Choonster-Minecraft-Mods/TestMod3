@@ -25,7 +25,7 @@ import java.util.Set;
  * @author Choonster
  */
 public class PlayerAvoidingCreeper extends Creeper {
-	private static final Field AVAILABLE_GOALS = ObfuscationReflectionHelper.findField(GoalSelector.class, /* availableGoals */ "f_25345_");
+	private static final Field AVAILABLE_GOALS = ObfuscationReflectionHelper.findField(GoalSelector.class, "availableGoals");
 
 	public PlayerAvoidingCreeper(final EntityType<? extends Creeper> entityType, final Level world) {
 		super(entityType, world);
