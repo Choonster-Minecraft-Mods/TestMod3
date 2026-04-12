@@ -3,10 +3,8 @@ package choonster.testmod3.data.crafting.recipe;
 import choonster.testmod3.world.item.crafting.recipe.ShapedArmourUpgradeRecipe;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 
 /**
@@ -51,19 +49,5 @@ public class ShapedArmourUpgradeRecipeBuilder extends BaseShapedRecipeBuilder<Sh
 			final ItemStackTemplate result
 	) {
 		return new ShapedArmourUpgradeRecipeBuilder(items, category, result);
-	}
-
-	/**
-	 * Validates that the recipe result is damageable.
-	 *
-	 * @param key The recipe ID
-	 */
-	@Override
-	protected void ensureValid(final ResourceKey<Recipe<?>> key) {
-		super.ensureValid(key);
-
-		if (!result.create().isDamageableItem()) {
-			throw new IllegalStateException("Shaped Armour Upgrade Recipe " + key + " must have damageable result");
-		}
 	}
 }

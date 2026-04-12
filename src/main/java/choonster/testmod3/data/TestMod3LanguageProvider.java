@@ -12,13 +12,15 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -29,7 +31,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -211,7 +212,7 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		add(TestMod3Lang.ITEM_DESC_ARMOUR_RESTRICTED, "Disappears if unequipped");
 
 		addItem(ModItems.FLUID_STACK_ITEM, "FluidStack Item");
-		addSpawnEgg(ModItems.PLAYER_AVOIDING_CREEPER_SPAWN_EGG);
+		addSpawnEgg(ModItems.PLAYER_AVOIDING_CREEPER_SPAWN_EGG, ModEntities.PLAYER_AVOIDING_CREEPER);
 		addBucket(ModItems.WOODEN_BUCKET, "Wooden Bucket");
 		addBucket(ModItems.STONE_BUCKET, "Stone Bucket");
 
@@ -370,10 +371,9 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 		ENTITY_TYPE_NAMES.put(key.get(), name);
 	}
 
-	private void addSpawnEgg(final Supplier<? extends SpawnEggItem> spawnEggItem) {
+	private void addSpawnEgg(final Supplier<? extends SpawnEggItem> spawnEggItem, final Supplier<? extends EntityType<?>> entityType) {
 		final var item = spawnEggItem.get();
-		final var entityType = Objects.requireNonNull(spawnEggItem.get().getType(item.getDefaultInstance()));
-		add(item, String.format("%s Spawn Egg", ENTITY_TYPE_NAMES.get(entityType)));
+		add(item, String.format("%s Spawn Egg", ENTITY_TYPE_NAMES.get(entityType.get())));
 	}
 
 	private void addBucket(final Supplier<? extends ModBucketItem> bucketItem, final String name) {
@@ -403,13 +403,10 @@ public class TestMod3LanguageProvider extends LanguageProvider {
 	}
 
 	private String getPotionItemTranslationKey(final Holder<Potion> potion, final Item item) {
-		final var stack = new ItemStack(item);
-		stack.set(DataComponents.POTION_CONTENTS, new PotionContents(potion));
-
-		final var itemName = stack.getItemName();
-		return getTranslationKey(itemName);
+		final var potionContents = new PotionContents(potion);
+		final var name = potionContents.getName(item.getDescriptionId() + ".effect.");
+		return getTranslationKey(name);
 	}
-
 
 	private void add(final KeyMapping.Category category, final String name) {
 		final var label = category.label();
