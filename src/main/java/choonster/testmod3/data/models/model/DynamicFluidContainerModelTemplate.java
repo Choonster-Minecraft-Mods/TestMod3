@@ -38,8 +38,8 @@ public class DynamicFluidContainerModelTemplate extends BaseModelTemplate {
 	}
 
 	@Override
-	protected JsonObject createModel(final Map<TextureSlot, Material> textureMap) {
-		final JsonObject output = super.createModel(textureMap);
+	protected JsonObject createModel(final Map<TextureSlot, Material> slots) {
+		final var output = super.createModel(slots);
 
 		output.addProperty("loader", LOADER.toString());
 		output.addProperty("fluid", RegistryUtil.getKey(fluid).toString());

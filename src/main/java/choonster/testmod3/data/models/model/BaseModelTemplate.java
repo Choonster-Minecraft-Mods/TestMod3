@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Streams;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.client.data.models.model.ModelInstance;
 import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.TextureMapping;
@@ -38,31 +39,31 @@ public class BaseModelTemplate extends ModelTemplate {
 	@Override
 	public Identifier create(
 			final Identifier modelLocation,
-			final TextureMapping textureMapping,
+			final TextureMapping textures,
 			final BiConsumer<Identifier, ModelInstance> modelOutput
 	) {
-		final var map = createMap(textureMapping);
-		modelOutput.accept(modelLocation, () -> createModel(map));
+		final var slots = createMap(textures);
+		modelOutput.accept(modelLocation, () -> createModel(slots));
 		return modelLocation;
 	}
 
-	protected JsonObject createModel(final Map<TextureSlot, Material> textureMap) {
-		final var output = new JsonObject();
+	protected JsonObject createModel(final Map<TextureSlot, Material> slots) {
+		final var object = new JsonObject();
+		 
+		model.ifPresent(m -> object.addProperty("parent", m.toString()));
 
-		model.ifPresent(model -> output.addProperty("parent", model.toString()));
+		if (!slots.isEmpty()) {
+			final var textureObj = new JsonObject();
 
-		if (!textureMap.isEmpty()) {
-			final var textures = new JsonObject();
+			slots.forEach((slot, value) -> {
+				final var valueJson = Material.CODEC.encodeStart(JsonOps.INSTANCE, value).getOrThrow();
+				textureObj.add(slot.getId(), valueJson);
+			});
 
-			textureMap.forEach(
-					(slot, texture) ->
-							textures.addProperty(slot.getId(), texture.toString())
-			);
-
-			output.add("textures", textures);
+			object.add("textures", textureObj);
 		}
 
-		return output;
+		return object;
 	}
 
 	private Map<TextureSlot, Material> createMap(final TextureMapping textureMapping) {
