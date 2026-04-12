@@ -23,22 +23,14 @@ import java.util.function.Consumer;
  * @author Choonster
  */
 public class FluidTankItem extends BlockItem {
-	private final List<ItemStack> tankItems = new ArrayList<>();
+	private final List<FluidStack> creativeModeTabFluids = new ArrayList<>();
 
 	public FluidTankItem(final Block block, final Item.Properties properties) {
 		super(block, properties);
 	}
 
 	public void addFluid(final FluidStack fluidStack) {
-		final var filledTank = new ItemStack(this);
-
-		// TODO: Uncomment when Forge reimplements IFluidHandler - https://github.com/MinecraftForge/MinecraftForge/issues/10408
-//		final var fluidHandler = FluidUtil.getFluidHandler(filledTank)
-//				.orElseThrow(CapabilityNotPresentException::new);
-//
-//		fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
-
-		tankItems.add(filledTank);
+		creativeModeTabFluids.add(fluidStack);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -63,9 +55,17 @@ public class FluidTankItem extends BlockItem {
 	public void fillCreativeModeTab(final MutableHashedLinkedMap<ItemStack, CreativeModeTab.TabVisibility> entries) {
 		final var empty = new ItemStack(this);
 
-		tankItems.forEach(stack ->
-				entries.putAfter(empty, stack, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS)
-		);
+		creativeModeTabFluids.forEach(fluidStack -> {
+			final var filledTank = new ItemStack(this);
+
+			// TODO: Uncomment when Forge reimplements IFluidHandler - https://github.com/MinecraftForge/MinecraftForge/issues/10408
+//		final var fluidHandler = FluidUtil.getFluidHandler(filledTank)
+//				.orElseThrow(CapabilityNotPresentException::new);
+//
+//		fluidHandler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+
+			entries.putAfter(empty, filledTank, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+		});
 	}
 
 	@Nullable
