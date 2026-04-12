@@ -1,7 +1,15 @@
 {
   "type": "testmod3:banner",
   "config": {
-    "color": "pink",
+    "banner_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:pink_banner",
+        "Properties": {
+          "rotation": "8"
+        }
+      }
+    },
     "patterns": [
       {
         "color": "magenta",
