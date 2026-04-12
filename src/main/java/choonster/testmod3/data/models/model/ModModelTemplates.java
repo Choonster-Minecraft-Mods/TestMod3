@@ -22,8 +22,6 @@ import java.util.stream.Collectors;
  * @author Choonster
  */
 public class ModModelTemplates {
-	private static final Identifier CUTOUT = Identifier.withDefaultNamespace("cutout");
-
 	/**
 	 * Centre cube of the pipe model.
 	 */
@@ -46,32 +44,6 @@ public class ModModelTemplates {
 	 * Inventory model for pipe blocks.
 	 */
 	public static final ModelTemplate PIPE_INVENTORY = createModItem(
-			"pipe/inventory",
-			TextureSlot.TEXTURE
-	);
-
-	/**
-	 * Centre cube of the pipe model.
-	 */
-	public static final ModelTemplate PIPE_CENTRE_CUTOUT = createCutoutMod(
-			"pipe/pipe_centre",
-			"_centre",
-			TextureSlot.TEXTURE
-	);
-
-	/**
-	 * North side of the pipe model. Can be rotated for other sides.
-	 */
-	public static final ModelTemplate PIPE_PART_CUTOUT = createCutoutMod(
-			"pipe/pipe_part",
-			"_side",
-			TextureSlot.TEXTURE
-	);
-
-	/**
-	 * Inventory model for pipe blocks.
-	 */
-	public static final ModelTemplate PIPE_INVENTORY_CUTOUT = createCutoutModItem(
 			"pipe/inventory",
 			TextureSlot.TEXTURE
 	);
@@ -112,14 +84,14 @@ public class ModModelTemplates {
 			TextureSlot.TEXTURE
 	);
 
-	public static final ModelTemplate PLANE_CUTOUT = createCutoutMod(
+	public static final ModelTemplate PLANE = createMod(
 			"plane",
 			TextureSlot.SIDE,
 			ModTextureSlots.BASE,
 			ModTextureSlots.PLANE
 	);
 
-	public static final ModelTemplate PLANE_SIDE_CUTOUT = createCutoutMod(
+	public static final ModelTemplate PLANE_SIDE = createMod(
 			"plane_side",
 			"_side",
 			TextureSlot.SIDE,
@@ -147,23 +119,6 @@ public class ModModelTemplates {
 	);
 
 	public static final ModelTemplate EMPTY = create();
-
-	public static final ModelTemplate CUBE_BOTTOM_TOP_CUTOUT = createCutoutMc(
-			"cube_bottom_top",
-			TextureSlot.TOP,
-			TextureSlot.BOTTOM,
-			TextureSlot.SIDE
-	);
-
-	public static final ModelTemplate CROSS_CUTOUT = createCutoutMc(
-			"cross",
-			TextureSlot.CROSS
-	);
-
-	public static final ModelTemplate TINTED_CROSS_CUTOUT = createCutoutMc(
-			"tinted_cross",
-			TextureSlot.CROSS
-	);
 
 	private static ModelTemplate create(final TextureSlot... requiredSlots) {
 		return new ModelTemplate(Optional.empty(), Optional.empty(), requiredSlots);
@@ -229,42 +184,6 @@ public class ModModelTemplates {
 		return new ModelTemplate(
 				Optional.of(Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/" + model)),
 				Optional.of(suffix),
-				requiredSlots
-		);
-	}
-
-	private static ModelTemplate createCutoutMc(final String model, final TextureSlot... requiredSlots) {
-		return new RenderTypeModelTemplate(
-				Optional.of(Identifier.withDefaultNamespace("block/" + model)),
-				Optional.empty(),
-				CUTOUT,
-				requiredSlots
-		);
-	}
-
-	private static ModelTemplate createCutoutMod(final String model, final TextureSlot... requiredSlots) {
-		return new RenderTypeModelTemplate(
-				Optional.of(Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/" + model)),
-				Optional.empty(),
-				CUTOUT,
-				requiredSlots
-		);
-	}
-
-	private static ModelTemplate createCutoutMod(final String model, final String suffix, final TextureSlot... requiredSlots) {
-		return new RenderTypeModelTemplate(
-				Optional.of(Identifier.fromNamespaceAndPath(TestMod3.MODID, "block/" + model)),
-				Optional.of(suffix),
-				CUTOUT,
-				requiredSlots
-		);
-	}
-
-	private static ModelTemplate createCutoutModItem(final String model, final TextureSlot... requiredSlots) {
-		return new RenderTypeModelTemplate(
-				Optional.of(Identifier.fromNamespaceAndPath(TestMod3.MODID, "item/" + model)),
-				Optional.empty(),
-				CUTOUT,
 				requiredSlots
 		);
 	}

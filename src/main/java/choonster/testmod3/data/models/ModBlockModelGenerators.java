@@ -154,8 +154,8 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		createHidden();
 
-		createPipeBlock(ModBlocks.BASIC_PIPE.get(), Blocks.BRICKS, false);
-		createPipeBlock(ModBlocks.FLUID_PIPE.get(), Blocks.GLASS, true);
+		createPipeBlock(ModBlocks.BASIC_PIPE.get(), Blocks.BRICKS);
+		createPipeBlock(ModBlocks.FLUID_PIPE.get(), Blocks.GLASS);
 
 		createCommandBlock(ModBlocks.SURVIVAL_COMMAND_BLOCK.get(), Blocks.COMMAND_BLOCK);
 		createCommandBlock(ModBlocks.REPEATING_SURVIVAL_COMMAND_BLOCK.get(), Blocks.REPEATING_COMMAND_BLOCK);
@@ -211,7 +211,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 		final var textureMapping = TextureMapping.cross(shortGrass);
 
 		final var model = plainVariant(
-				ModModelTemplates.TINTED_CROSS_CUTOUT.create(waterGrass, textureMapping, modelOutput)
+				ModelTemplates.TINTED_CROSS.create(waterGrass, textureMapping, modelOutput)
 		);
 
 		final var itemModel = createFlatItemModelWithBlockTexture(waterGrass.asItem(), shortGrass);
@@ -321,9 +321,9 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 				TextureMapping.getBlockTexture(block, planeSuffix + tSuffix)
 		);
 
-		final var mirrorPlane = plainVariant(ModModelTemplates.PLANE_CUTOUT.create(block, textureMapping, modelOutput));
+		final var mirrorPlane = plainVariant(ModModelTemplates.PLANE.create(block, textureMapping, modelOutput));
 
-		final var mirrorPlaneTModel = ModModelTemplates.PLANE_CUTOUT.createWithSuffix(
+		final var mirrorPlaneTModel = ModModelTemplates.PLANE.createWithSuffix(
 				block,
 				tSuffix,
 				tTextureMapping,
@@ -332,7 +332,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 
 		final var mirrorPlaneT = plainVariant(mirrorPlaneTModel);
 
-		final var mirrorPlaneSide = plainVariant(ModModelTemplates.PLANE_SIDE_CUTOUT.create(block, textureMapping, modelOutput));
+		final var mirrorPlaneSide = plainVariant(ModModelTemplates.PLANE_SIDE.create(block, textureMapping, modelOutput));
 
 		blockStateOutput.accept(
 				MultiVariantGenerator.dispatch(block).with(
@@ -427,26 +427,26 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 		final var textureMapping = ModTextureMappings.cubeBottomTop(Blocks.GLASS, Blocks.IRON_BLOCK, Blocks.GLASS);
 
 		final var model = plainVariant(
-				ModModelTemplates.CUBE_BOTTOM_TOP_CUTOUT.create(block, textureMapping, modelOutput)
+				ModelTemplates.CUBE_BOTTOM_TOP.create(block, textureMapping, modelOutput)
 		);
 
 		blockStateOutput.accept(createSimpleBlock(block, model));
 	}
 
-	private void createPipeBlock(final BasePipeBlock block, final Block textureBlock, final boolean cutout) {
+	private void createPipeBlock(final BasePipeBlock block, final Block textureBlock) {
 		final var textureMapping = TextureMapping.defaultTexture(textureBlock);
 
 		final var centreModel = plainVariant(
-				(cutout ? ModModelTemplates.PIPE_CENTRE_CUTOUT : ModModelTemplates.PIPE_CENTRE)
+				ModModelTemplates.PIPE_CENTRE
 						.create(block, textureMapping, modelOutput)
 		);
 
 		final var sideModel = plainVariant(
-				(cutout ? ModModelTemplates.PIPE_PART_CUTOUT : ModModelTemplates.PIPE_PART)
+				ModModelTemplates.PIPE_PART
 						.create(block, textureMapping, modelOutput)
 		);
 
-		final var itemModel = (cutout ? ModModelTemplates.PIPE_INVENTORY_CUTOUT : ModModelTemplates.PIPE_INVENTORY)
+		final var itemModel = ModModelTemplates.PIPE_INVENTORY
 				.create(block.asItem(), textureMapping, modelOutput);
 
 		blockStateOutput.accept(
@@ -493,7 +493,7 @@ public class ModBlockModelGenerators extends BlockModelGenerators {
 	private void createCrossCutoutBlock(final Block block, final Block textureBlock) {
 		final var textureMapping = TextureMapping.cross(textureBlock);
 
-		final var model = plainVariant(ModModelTemplates.CROSS_CUTOUT.create(block, textureMapping, modelOutput));
+		final var model = plainVariant(ModelTemplates.CROSS.create(block, textureMapping, modelOutput));
 		final var itemModel = createFlatItemModelWithBlockTexture(block.asItem(), textureBlock);
 
 		blockStateOutput.accept(createSimpleBlock(block, model));
