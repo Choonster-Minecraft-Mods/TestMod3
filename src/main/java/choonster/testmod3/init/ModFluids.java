@@ -154,6 +154,13 @@ public class ModFluids {
 		return ITEMS.getEntries();
 	}
 
+	/**
+	 * @return A collection of this mod's fluid types in the order of their registration.
+	 */
+	public static Collection<RegistryObject<FluidType>> orderedFluidType() {
+		return FLUID_TYPES.getEntries();
+	}
+
 	private static StandardFluidGroup.Builder standardGroup(final String name) {
 		return new StandardFluidGroup.Builder(name, FLUID_TYPES, FLUIDS, BLOCKS, ITEMS);
 	}

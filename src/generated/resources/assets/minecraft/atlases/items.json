@@ -1,0 +1,29 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "testmod3:block/fluid_static_still",
+      "sprite": "testmod3:item/fluid_static_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "testmod3:block/fluid_static_gas_still",
+      "sprite": "testmod3:item/fluid_static_gas_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "testmod3:block/fluid_normal_still",
+      "sprite": "testmod3:item/fluid_normal_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "testmod3:block/fluid_normal_gas_still",
+      "sprite": "testmod3:item/fluid_normal_gas_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "testmod3:block/fluid_portal_displacement_still",
+      "sprite": "testmod3:item/fluid_portal_displacement_still"
+    }
+  ]
+}
